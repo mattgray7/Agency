@@ -1,0 +1,5 @@
+{% if user %}
+	<p>Username is {{ user.username }}</p>
+{% elif username %}
+	No user with name {{ username }} found.
+{% endif %}
