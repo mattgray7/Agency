@@ -1,5 +1,5 @@
-{% if user %}
-	<p>Username is {{ user.username }}</p>
-{% elif username %}
-	No user with name {{ username }} found.
+{% if userAccount %}
+	<p>Username is {{ userAccount.username }}</p>
+{% elif userNoAccount %}
+	No user with name {{ userNoAccount }} found.
 {% endif %}

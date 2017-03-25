@@ -1,7 +1,7 @@
 from django.shortcuts import render
 
 # Create your views here.
-from django.http import HttpResponseRedirect, HttpResponse
+from django.http import HttpResponseRedirect, HttpResponse, JsonResponse
 from django.urls import reverse
 from models import User, Posting
 
@@ -10,13 +10,20 @@ def home(request):
     return render(request, 'AgencyApp/home.html', context={"welcomeMsg": "Welcome to The "
                                                                          "Agency"})
 
+def createProfile(request):
+    return render(request, 'AgencyApp/createProfile.html', {})
+
+def getWelcomeMsg(request):
+    return JsonResponse({"response": "finished welcome msg"})
+
 def profile(request, username):
     context = {}
     try:
         user = User.objects.get(username=username)
-        context = {"user": user}
+        context = {"userAccount": user}
     except:
-        context = {"username": username}
+        context = {"userNoAccount": username}
+    print "context is {0}".format(context)
     return render(request, 'AgencyApp/profile.html', context)
 
 def jobs(request):

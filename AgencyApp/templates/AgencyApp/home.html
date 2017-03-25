@@ -1,3 +1,30 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<script>
+function getWelcomeMsg(){ 
+	console.log("getting welcome msg")
+	$.ajax({
+		url : "/ajax/getWelcomeMsg/",
+		data : {"foo": "bar"},
+		type : 'POST',
+		dataType: "json",
+		success : function(data) {
+			console.log(data.response);
+		}
+	});
+}
+</script>
+
+
+<div id="demo">
+	<!--<form method="post">
+		{% csrf_token %}-->
+		<button type="submit" onclick="getWelcomeMsg()">Get Welcome Message</button>
+	<!--</form>-->
+</div>
+
 {% if welcomeMsg %}
 	{{ welcomeMsg }}
 {% endif %}
@@ -9,3 +36,5 @@
 	<li>(not done)View existing users</li>
 	<li>(not done) Looking for a crew</li>
 </ul>
+
+{% endblock %}
