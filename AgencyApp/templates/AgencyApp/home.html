@@ -17,24 +17,25 @@ function getWelcomeMsg(){
 }
 </script>
 
+<h1>Welcome to The Agency!</h1>
 
+<!--
 <div id="demo">
-	<!--<form method="post">
-		{% csrf_token %}-->
+	<form method="post">
+		{% csrf_token %}
 		<button type="submit" onclick="getWelcomeMsg()">Get Welcome Message</button>
-	<!--</form>-->
+	</form>
 </div>
 
 {% if welcomeMsg %}
 	{{ welcomeMsg }}
 {% endif %}
 
-<!-- TODO add check if user is returning -->
 <h3> New to The Agency? </h3>
 <ul>
 	<li><a href="/theagency/jobs"> Looking for work</a></li>
 	<li>(not done)View existing users</li>
 	<li>(not done) Looking for a crew</li>
-</ul>
+</ul>-->
 
 {% endblock %}

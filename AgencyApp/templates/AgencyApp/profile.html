@@ -1,5 +1,9 @@
-{% if userAccount %}
-	<p>Username is {{ userAccount.username }}</p>
-{% elif userNoAccount %}
-	No user with name {{ userNoAccount }} found.
-{% endif %}
+{% extends "base.html" %}
+
+{% block content %}
+	{% if userAccount %}
+		<p>Username is {{ userAccount.username }}</p>
+	{% elif userNoAccount %}
+		No user with name {{ userNoAccount }} found.
+	{% endif %}
+{% endblock %}

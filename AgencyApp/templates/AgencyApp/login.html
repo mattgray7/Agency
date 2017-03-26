@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+	<script>
+	function enableLogin(){
+		if (document.getElementById("email").value.trim() != "" &&
+			document.getElementById("password").value.trim() != "") {
+			document.getElementById("loginButton").disabled="";
+		}
+	}
+
+	/*function loginUser(){
+		$.ajax({
+			url : "/ajax/",
+			data : {"method": "loginUser",
+					"email": document.getElementById("email").value.trim(),
+					"password": document.getElementById("password").value.trim()
+					},
+			type : 'POST',
+			dataType: "json",
+			success : function(data) {
+				console.log(data.success);
+			}
+	});
+	}*/
+	</script>
+
+	<form method='post' action="/login/">
+		{% csrf_token %}
+		{{ form }}
+		<!--<ul>
+			<li><input type="text" placeholder="Email" id="email" name="email" onkeyup="enableLogin();"required></li>
+			<li><input type="password" placeholder="Password" id="password" name="password" onkeyup="enableLogin();"required></li>
+			<li><button type="submit" id="loginButton" disabled="disabled">Login</button></li>
+		</ul>-->
+		<input type="submit" value="Login" />
+	</form>
+	<br><a href='/create'>Create an account</a>
+{% endblock %}
