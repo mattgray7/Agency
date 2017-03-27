@@ -30,7 +30,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'AgencyApp.apps.AgencyappConfig',
+    'AgencyApp.python.apps.AgencyappConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

@@ -18,6 +18,6 @@ from django.contrib import admin
 
 urlpatterns = [
 	#TODO only use one urls.py file
-	url(r'^', include('AgencyApp.urls')),
+	url(r'^', include('AgencyApp.python.urls')),
     url(r'^admin/login/', admin.site.urls),
 ]

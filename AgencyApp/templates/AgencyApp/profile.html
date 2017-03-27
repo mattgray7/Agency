@@ -1,9 +1,9 @@
 {% extends "base.html" %}
 
 {% block content %}
-	{% if userAccount %}
+	{% if accountFound %}
 		<p>Username is {{ userAccount.username }}</p>
-	{% elif userNoAccount %}
-		No user with name {{ userNoAccount }} found.
+	{% else %}
+		No user with name {{ username }} found.
 	{% endif %}
 {% endblock %}
