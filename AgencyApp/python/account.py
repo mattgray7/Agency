@@ -10,24 +10,26 @@ from models import UserAccount
 
 
 def loginUser(request):
+    errors = []
     if request.method == 'POST':
         # Form submitted
         form = LoginForm(request.POST)
         if form.is_valid():
             username = _getProfileNameFromEmail(form.cleaned_data.get('email'))
             if username is None:
-                print "User account not found with email {0}.".format(form.cleaned_data.get('email'))
+                errors.append("{0} is not a registered email.".format(form.cleaned_data.get('email')))
             else:
                 user = authenticate(username=username, password=form.cleaned_data.get('password'))
                 if user is not None:
                     login(request, user)
                     return HttpResponseRedirect('/')
                 else:
-                    print "Invalid USER"
+                    errors.append("Email and password do not match.")
 
-    # login page navigated to 
-    form = LoginForm()
-    return render(request, 'AgencyApp/account/login.html', {'form': form})
+    context = {"form": LoginForm()}
+    if errors:
+        context["errors"] = errors
+    return render(request, 'AgencyApp/account/login.html', context)
 
 
 def logoutUser(request):
@@ -41,19 +43,22 @@ def createUser(request):
         # Form submitted
         form = CreateAccountForm(request.POST)
         if form.is_valid():
-            if form.cleaned_data.get('password') != form.cleaned_data.get('passwordConfirm'):
-                errors.append("Passwords don't match.")
+            if _emailIsRegistered(form.cleaned_data.get('email')):
+                errors.append("Email already in use.")
             else:
-                username = _getProfileNameFromName(form.cleaned_data.get('firstName'),
-                                                      form.cleaned_data.get('lastName'))
-                if not _emailIsRegistered(form.cleaned_data.get('email')):
+                if form.cleaned_data.get('password') != form.cleaned_data.get('passwordConfirm'):
+                    errors.append("Passwords don't match.")
+                else:
+                    username = _getProfileNameFromName(form.cleaned_data.get('firstName'),
+                                                          form.cleaned_data.get('lastName'))
+                    
                     user = User.objects.create_user(username=username,
                                                     email=form.cleaned_data.get('email'), 
                                                     password=form.cleaned_data.get('password'),
                                                     first_name=form.cleaned_data.get('firstName'),
                                                     last_name=form.cleaned_data.get('lastName'))
                     userAccount = UserAccount(email=form.cleaned_data.get('email'),
-                                              username=username)
+                                                username=username)
                     saveSuccess = True
                     try:
                         user.save()
@@ -71,17 +76,14 @@ def createUser(request):
                         print "Successfully created account."
                         login(request, user)
                         print "Successfully logged in."
-                    return HttpResponseRedirect('/')
-                else:
-                    errors.append("Email already in use.")
-
-    else:
-        errors.append("Request is not post")
+                        return HttpResponseRedirect('/')
 
     print "Create account errors: {0}".format(errors)
 
-    form = CreateAccountForm()
-    return render(request, 'AgencyApp/account/create.html', {'form': form})
+    context = {"form": CreateAccountForm()}
+    if errors:
+        context["errors"] = errors
+    return render(request, 'AgencyApp/account/create.html', context)
 
 
 def _emailIsRegistered(email):
