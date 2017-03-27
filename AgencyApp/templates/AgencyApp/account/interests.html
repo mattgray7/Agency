@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
-	<h2>Basic Info</h2>
+	<h2>Looking for...</h2>
 	{% if errors %}
 		<ul>
 			{% for error in errors %}
@@ -9,7 +9,7 @@
 			{% endfor %}
 		</ul>
 	{% endif %}
-	<form method='post' action="/create/basic/">
+	<form method='post' action="/create/interests/">
 		{% csrf_token %}
 		{{ form.as_p }}
 		<input type="submit" value="Next" />

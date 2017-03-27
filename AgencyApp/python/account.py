@@ -6,8 +6,9 @@ from django.db import IntegrityError
 
 # Create your views here.
 from django.http import HttpResponseRedirect
-from forms import LoginForm, CreateAccountForm
-from models import UserAccount
+from forms import LoginForm, CreateAccountForm, SelectInterestsForm, SelectProfessionsForm, AddBackgroundForm
+from models import UserAccount, Professions
+from helpers import getMessageFromKey, capitalizeName
 
 
 def loginUser(request):
@@ -23,6 +24,8 @@ def loginUser(request):
                 user = authenticate(username=username, password=form.cleaned_data.get('password'))
                 if user is not None:
                     login(request, user)
+                    #TODO use dict
+                    #messages.add_message(request, messages.INFO, {"status": "login_success"})
                     messages.add_message(request, messages.INFO, "login_success")
                     return HttpResponseRedirect('/')
                 else:
@@ -51,8 +54,8 @@ def createUser(request):
                 if form.cleaned_data.get('password') != form.cleaned_data.get('passwordConfirm'):
                     errors.append("Passwords don't match.")
                 else:
-                    firstName = _capitalizeName(form.cleaned_data.get('firstName'))
-                    lastName = _capitalizeName(form.cleaned_data.get('lastName'))
+                    firstName = capitalizeName(form.cleaned_data.get('firstName'))
+                    lastName = capitalizeName(form.cleaned_data.get('lastName'))
                     username = _getProfileNameFromName(firstName.lower(), lastName.lower())
                     
                     user = User.objects.create_user(username=username,
@@ -61,7 +64,8 @@ def createUser(request):
                                                     first_name=firstName,
                                                     last_name=lastName)
                     userAccount = UserAccount(email=form.cleaned_data.get('email'),
-                                                username=username)
+                                              username=username,
+                                              setupComplete=False)
                     saveSuccess = True
                     try:
                         user.save()
@@ -77,11 +81,13 @@ def createUser(request):
                             #TODO delete account from User db
                     if saveSuccess:
                         print "Successfully created account."
-                        login(request, user)
-                        print "Successfully logged in."
+                        #login(request, user)
+                        #print "Successfully logged in."
 
-                        messages.add_message(request, messages.INFO, "create_success")
-                        return HttpResponseRedirect('/')
+                        #TODO use dict
+                        #messages.add_message(request, messages.INFO, {"username": username})
+                        messages.add_message(request, messages.INFO, username)
+                        return HttpResponseRedirect('/create/interests/')
 
     print "Create account errors: {0}".format(errors)
 
@@ -91,27 +97,118 @@ def createUser(request):
     return render(request, 'AgencyApp/account/create.html', context)
 
 
-def _capitalizeName(name):
-    """Capitalizes first letter of names (eg matt->Matt, smith-pelly->Smith-Pelly, 
-       deBrincat->DeBrincat)
+def selectInterests(request):
+    errors = []
+    if request.method == "POST":
+        form = SelectInterestsForm(request.POST)
+        if form.is_valid():
+            workSelected = form.cleaned_data.get('work', False)
+            crewSelected = form.cleaned_data.get('crew', False)
+            collabSelected = form.cleaned_data.get('collaboration', False)
+            if not workSelected and not crewSelected and not collabSelected:
+                errors.append("You must choose at least one option you are interested in.")
+            else:
+                username = getMessageFromKey(request, "username")
+                userAccount = UserAccount.objects.get(username=username)
+                userAccount.workInterest = workSelected
+                userAccount.crewInterest = crewSelected
+                userAccount.collaborationInterest = collabSelected
+                try:
+                    userAccount.save()
+                except:
+                    errors.append("Could not connect to UserAccount database")
+                else:
+                    print "User successfully saved with work:{0}, crew:{1}, collab:{2}".format(workSelected, crewSelected, collabSelected)
 
-    :param str name: The name to capitalize
-    :return str: The capitalized name
-    """
-    finalName = ''
-    first = True
-    for char in name:
-        if first:
-            finalName += char.upper()
-            first = False
-        elif char in ['-', ' ']:
-            finalName += char
-            first=True
-        else:
-            finalName += char
-    return finalName
+                user = User.objects.get(username=username)
+                #TODO when to log user in
+                login(request, user)
+                #TODO use dict
+                messages.add_message(request, messages.INFO, username)
+
+                if workSelected:
+                    return HttpResponseRedirect('/create/professions')
+                else:
+                    return HttpResponseRedirect('/create/finish')
+
+                return HttpResponseRedirect('/')
+    context = {"form": SelectInterestsForm()}
+    if errors:
+        context["errors"] = errors
+    return render(request, 'AgencyApp/account/interests.html', context)
+
+def selectProfessions(request):
+    errors = []
+    if request.method == "POST":
+        form = SelectProfessionsForm(request.POST)
+        if form.is_valid():
+            actor = form.cleaned_data.get('actor', False)
+            director = form.cleaned_data.get('director', False)
+            writer = form.cleaned_data.get('writer', False)
+            cinematographer = form.cleaned_data.get('cinematographer', False)
+            other = form.cleaned_data.get('work', '')
+
+            if actor == director == writer == cinematographer == False and other == "":
+                errors.append("You must select what line of work you are looking for.")
+            else:
+                #username = getMessageFromKey(request, "username")
+                username = request.user.username
+                professions = Professions(username=username, actor=actor, director=director,
+                                          cinematographer=cinematographer, other=other)
+                #TODO check if user profession already exists?
+                try:
+                    professions.save()
+                except:
+                    errors.append("Could not connect to Profession db.")
+                else:
+                    return HttpResponseRedirect('/create/background')
+    context = {"form": SelectProfessionsForm()}
+    if errors:
+        context["errors"] = errors
+    return render(request, 'AgencyApp/account/professions.html', context)
 
 
+def addBackground(request):
+    errors = []
+    if request.method == "POST":
+        form = AddBackgroundForm(request.POST)
+        if form.is_valid():
+            pic = form.cleaned_data.get('profilePicture')
+            reel = form.cleaned_data.get('reel')
+            imdb = form.cleaned_data.get('imdb')
+            bio = form.cleaned_data.get('bio')
+
+            #username = getMessageFromKey(request, "username")
+            username = request.user.username
+
+            userAccount = UserAccount.objects.get(username=username)
+            userAccount.profilePicture = pic
+            userAccount.reelLink = reel
+            userAccount.imdbLink = imdb
+            userAccount.bio = bio
+            
+            try:
+                userAccount.save()
+            except:
+                errors.append("Could not connect to UserAccount db.")
+            else:
+                return HttpResponseRedirect('/create/finish')
+    context = {"form": AddBackgroundForm()}
+    if errors:
+        context["errors"] = errors
+    return render(request, 'AgencyApp/account/background.html', context)
+
+def finish(request):
+    user = UserAccount.objects.get(username=request.user.username)
+    context = {}
+    if user.workInterest:
+        context["work"] = True
+    if user.crewInterest:
+        context["crew"] = True
+    if user.collaborationInterest:
+        context["collaboration"] = True
+    print "Sending finish with context {0}".format(context)
+    return render(request, 'AgencyApp/account/finish.html', context)
 
 def _emailIsRegistered(email):
     existingUsers = User.objects.filter(email=email)

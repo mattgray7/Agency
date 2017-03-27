@@ -22,6 +22,8 @@ function getWelcomeMsg(){
 			<h1> Welcome back {{ request.user.first_name }}</h1>
 		{% elif status == "create_success" %}
 			<h1> Your account was created successfully!</h1>
+		{% else %}
+			<h1>Here is your Agency feed:</h1>
 		{% endif %}
 	{% else %}
 		<h1>Here is your Agency feed:</h1>

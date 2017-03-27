@@ -2,11 +2,13 @@ from django.shortcuts import render
 from django.contrib.auth.models import User
 from django.contrib import messages
 from models import UserAccount
+from helpers import getMessageFromKey
 import account
 
 def home(request):
-    statusMessages = messages.get_messages(request)
     status = None
+    status = getMessageFromKey(request, "status")
+    """
     for message in statusMessages:
         #TODO use an enum
         if message.message == "login_success":
@@ -14,7 +16,7 @@ def home(request):
             break
         elif message.message == "create_success":
             status = message.message
-            break
+            break"""
     print "status is {0}".format(status)
     return render(request, 'AgencyApp/home.html', context={"status": status})
 
@@ -24,8 +26,20 @@ def login(request):
 def logout(request):
     return account.logoutUser(request)
 
-def createAccount(request):
+def create_account(request):
     return account.createUser(request)
+
+def create_selectInterests(request):
+    return account.selectInterests(request)
+
+def create_selectProfessions(request):
+    return account.selectProfessions(request)
+
+def create_addBackground(request):
+    return account.addBackground(request)
+
+def create_finish(request):
+    return account.finish(request)
 
 def profile(request, username):
     context = {"userAccount": None, "accountFound": False, "username": username}

@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block content %}
+	<h2>Your account setup is complete! What's next?</h2>
+	<ul>
+		{% if work %}
+			<li><a href="/">Browse available work opportunities</a></li>
+		{% endif %}
+		{% if crew %}
+			<li><a href="/">Browse users looking for work</a></li>
+		{% endif %}
+		{% if collaboration %}
+			<li><a href="/">Browse users looking to collaborate</a></li>
+		{% endif %}
+		<li><a href='/{{ request.user.username }}'>Improve profile</a></li>
+	</ul>
+
+{% endblock %}
