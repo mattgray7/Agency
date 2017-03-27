@@ -2,7 +2,7 @@
 
 {% block content %}
 
-<script>
+<!--<script>
 function getWelcomeMsg(){ 
 	console.log("getting welcome msg")
 	$.ajax({
@@ -15,27 +15,21 @@ function getWelcomeMsg(){
 		}
 	});
 }
-</script>
-
-<h1>Welcome to The Agency!</h1>
-
-<!--
-<div id="demo">
-	<form method="post">
-		{% csrf_token %}
-		<button type="submit" onclick="getWelcomeMsg()">Get Welcome Message</button>
-	</form>
-</div>
-
-{% if welcomeMsg %}
-	{{ welcomeMsg }}
+</script>-->
+{% if request.user.is_authenticated %}
+	{% if status %}
+		{% if status == "login_success" %}
+			<h1> Welcome back {{ request.user.first_name }}</h1>
+		{% elif status == "create_success" %}
+			<h1> Your account was created successfully!</h1>
+		{% endif %}
+	{% else %}
+		<h1>Here is your Agency feed:</h1>
+	{% endif %}
+{% else %}
+	<h1>Welcome to The Agency!</h1>
 {% endif %}
 
-<h3> New to The Agency? </h3>
-<ul>
-	<li><a href="/theagency/jobs"> Looking for work</a></li>
-	<li>(not done)View existing users</li>
-	<li>(not done) Looking for a crew</li>
-</ul>-->
+
 
 {% endblock %}

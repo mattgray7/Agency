@@ -1,12 +1,22 @@
 from django.shortcuts import render
 from django.contrib.auth.models import User
-
+from django.contrib import messages
 from models import UserAccount
 import account
 
 def home(request):
-    return render(request, 'AgencyApp/home.html', context={"welcomeMsg": "Welcome to The "
-                                                                         "Agency"})
+    statusMessages = messages.get_messages(request)
+    status = None
+    for message in statusMessages:
+        #TODO use an enum
+        if message.message == "login_success":
+            status = message.message
+            break
+        elif message.message == "create_success":
+            status = message.message
+            break
+    print "status is {0}".format(status)
+    return render(request, 'AgencyApp/home.html', context={"status": status})
 
 def login(request):
     return account.loginUser(request)

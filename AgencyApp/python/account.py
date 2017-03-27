@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
+from django.contrib import messages
 from django.db import IntegrityError
 
 # Create your views here.
@@ -22,6 +23,7 @@ def loginUser(request):
                 user = authenticate(username=username, password=form.cleaned_data.get('password'))
                 if user is not None:
                     login(request, user)
+                    messages.add_message(request, messages.INFO, "login_success")
                     return HttpResponseRedirect('/')
                 else:
                     errors.append("Email and password do not match.")
@@ -49,14 +51,15 @@ def createUser(request):
                 if form.cleaned_data.get('password') != form.cleaned_data.get('passwordConfirm'):
                     errors.append("Passwords don't match.")
                 else:
-                    username = _getProfileNameFromName(form.cleaned_data.get('firstName'),
-                                                          form.cleaned_data.get('lastName'))
+                    firstName = _capitalizeName(form.cleaned_data.get('firstName'))
+                    lastName = _capitalizeName(form.cleaned_data.get('lastName'))
+                    username = _getProfileNameFromName(firstName.lower(), lastName.lower())
                     
                     user = User.objects.create_user(username=username,
                                                     email=form.cleaned_data.get('email'), 
                                                     password=form.cleaned_data.get('password'),
-                                                    first_name=form.cleaned_data.get('firstName'),
-                                                    last_name=form.cleaned_data.get('lastName'))
+                                                    first_name=firstName,
+                                                    last_name=lastName)
                     userAccount = UserAccount(email=form.cleaned_data.get('email'),
                                                 username=username)
                     saveSuccess = True
@@ -76,6 +79,8 @@ def createUser(request):
                         print "Successfully created account."
                         login(request, user)
                         print "Successfully logged in."
+
+                        messages.add_message(request, messages.INFO, "create_success")
                         return HttpResponseRedirect('/')
 
     print "Create account errors: {0}".format(errors)
@@ -84,6 +89,28 @@ def createUser(request):
     if errors:
         context["errors"] = errors
     return render(request, 'AgencyApp/account/create.html', context)
+
+
+def _capitalizeName(name):
+    """Capitalizes first letter of names (eg matt->Matt, smith-pelly->Smith-Pelly, 
+       deBrincat->DeBrincat)
+
+    :param str name: The name to capitalize
+    :return str: The capitalized name
+    """
+    finalName = ''
+    first = True
+    for char in name:
+        if first:
+            finalName += char.upper()
+            first = False
+        elif char in ['-', ' ']:
+            finalName += char
+            first=True
+        else:
+            finalName += char
+    return finalName
+
 
 
 def _emailIsRegistered(email):
