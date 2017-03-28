@@ -41,6 +41,9 @@ def create_addBackground(request):
 def create_finish(request):
     return account.finish(request)
 
+def browse(request):
+    return render(request, "AgencyApp/browse.html", {})
+
 def profile(request, username):
     context = {"userAccount": None, "accountFound": False, "username": username}
     try:

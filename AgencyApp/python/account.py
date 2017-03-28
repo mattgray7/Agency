@@ -10,9 +10,12 @@ from forms import LoginForm, CreateAccountForm, SelectInterestsForm, SelectProfe
 from models import UserAccount, Professions
 from helpers import getMessageFromKey, capitalizeName
 
+import cgi
+
 
 def loginUser(request):
     errors = []
+    context = {}
     if request.method == 'POST':
         # Form submitted
         form = LoginForm(request.POST)
@@ -27,11 +30,21 @@ def loginUser(request):
                     #TODO use dict
                     #messages.add_message(request, messages.INFO, {"status": "login_success"})
                     messages.add_message(request, messages.INFO, "login_success")
+                    print form.cleaned_data.get('sourcePage')
                     return HttpResponseRedirect('/')
                 else:
                     errors.append("Email and password do not match.")
-
-    context = {"form": LoginForm()}
+        else:
+            if request.POST.get("source"):
+                sourcePage = request.POST.get("source")
+                context["form"] = LoginForm(initial={'sourcePage': sourcePage})
+                if sourcePage == "createPost":
+                    errors.append("You must login to create a post.")
+                elif sourcePage == "createEvent":
+                    errors.append("You must login to create an event.")
+    
+    if not context.get("form"):
+        context["form"] = LoginForm()
     if errors:
         context["errors"] = errors
     return render(request, 'AgencyApp/account/login.html', context)
