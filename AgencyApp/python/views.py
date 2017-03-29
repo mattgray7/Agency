@@ -3,7 +3,10 @@ from django.contrib.auth.models import User
 from django.contrib import messages
 from models import UserAccount
 from helpers import getMessageFromKey
+
 import account
+import event
+import choose
 
 def home(request):
     status = None
@@ -40,6 +43,12 @@ def create_addBackground(request):
 
 def create_finish(request):
     return account.finish(request)
+
+def create_event(request):
+    return event.create(request)
+
+def choose_postType(request):
+    return choose.postType(request)
 
 def browse(request):
     return render(request, "AgencyApp/browse.html", {})

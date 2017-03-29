@@ -10,8 +10,9 @@ from forms import LoginForm, CreateAccountForm, SelectInterestsForm, SelectProfe
 from models import UserAccount, Professions
 from helpers import getMessageFromKey, capitalizeName
 
-import cgi
 
+createPostString = "createPost"
+createEventString = "createEvent"
 
 def loginUser(request):
     errors = []
@@ -29,8 +30,11 @@ def loginUser(request):
                     login(request, user)
                     #TODO use dict
                     #messages.add_message(request, messages.INFO, {"status": "login_success"})
-                    messages.add_message(request, messages.INFO, "login_success")
-                    print form.cleaned_data.get('sourcePage')
+                    sourcePage = form.cleaned_data.get('sourcePage')
+                    if sourcePage == createPostString:
+                        return HttpResponseRedirect('/create/post/choose')
+                    elif sourcePage == createEventString:
+                        return HttpResponseRedirect('/create/event/')
                     return HttpResponseRedirect('/')
                 else:
                     errors.append("Email and password do not match.")
@@ -38,9 +42,9 @@ def loginUser(request):
             if request.POST.get("source"):
                 sourcePage = request.POST.get("source")
                 context["form"] = LoginForm(initial={'sourcePage': sourcePage})
-                if sourcePage == "createPost":
+                if sourcePage == createPostString:
                     errors.append("You must login to create a post.")
-                elif sourcePage == "createEvent":
+                elif sourcePage == createEventString:
                     errors.append("You must login to create an event.")
     
     if not context.get("form"):
