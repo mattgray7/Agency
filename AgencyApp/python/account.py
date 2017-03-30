@@ -24,27 +24,26 @@ def loginUser(request, context):
             else:
                 user = authenticate(username=username, password=form.cleaned_data.get('password'))
                 if user is not None:
+                    # Login was a success
                     login(request, user)
-                    loginSource = form.cleaned_data.get('loginSource')
+                    loginDestination = form.cleaned_data.get('loginSuccessDestination')
 
-                    if loginSource == constants.CREATE_POST:
-                        messages.add_message(request, messages.INFO, "source:{0}".format(constants.LOGIN_SUCCESS))
+                    messages.add_message(request, messages.INFO, "source:{0}".format(constants.LOGIN))
+                    if loginDestination == constants.CREATE_POST:
                         return HttpResponseRedirect('/create/post/choose')
-                    elif loginSource == constants.CREATE_EVENT:
-                        messages.add_message(request, messages.INFO, "source:{0}".format(constants.LOGIN_SUCCESS))
+                    elif loginDestination == constants.CREATE_EVENT:
                         return HttpResponseRedirect('/create/event/')
                     else:
-                        messages.add_message(request, messages.INFO, "source:{0}".format(constants.TOOLBAR_LOGIN))
                         return HttpResponseRedirect('/')
                 else:
                     errors.append("Email and password do not match.")
         else:
-            if request.POST.get("source"):
-                loginSource = request.POST.get("source")
-                context["form"] = LoginForm(initial={'loginSource': loginSource})
-                if loginSource == constants.CREATE_POST:
+            if request.POST.get("loginSuccessDestination"):
+                loginSuccessDestination = request.POST.get("loginSuccessDestination")
+                context["form"] = LoginForm(initial={'loginSuccessDestination': loginSuccessDestination})
+                if loginSuccessDestination == constants.CREATE_POST:
                     errors.append("You must login to create a post.")
-                elif loginSource == constants.CREATE_EVENT:
+                elif loginSuccessDestination == constants.CREATE_EVENT:
                     errors.append("You must login to create an event.")
     
     if not context.get("form"):

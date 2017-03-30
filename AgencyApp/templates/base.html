@@ -42,7 +42,7 @@
             <form action="/" method="post">
                 {% csrf_token %}
                 <input type="hidden" name="source" value="{{ toolbarSources.home }}">
-                <input type="submit" value="Van Film Connect">
+                <input type="submit" value="Van Film Collective">
             </form>
             {% if request.user.is_authenticated %}
                 <a href='/{{ request.user.username }}'>{{ request.user.first_name }} {{ request.user.last_name }}</a><br>

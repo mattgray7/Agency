@@ -5,7 +5,7 @@
 
 {% if request.user.is_authenticated %}
 	<script>userLoggedIn = true;</script>
-	{% if source == possibleSources.toolbarLogin %}
+	{% if source == possibleSources.login %}
 		<h3> Welcome back {{ request.user.first_name }}!</h3>
 	{% endif %}
 	<h1>What to do you want to do?</h1>
@@ -62,31 +62,31 @@ function viewPosts(){
 
 function createEventPost(){
 	if(!userLoggedIn){
-		var form = createForm("{{ possibleSources.event }}", "/login/");
+		var form = createForm("loginSuccessDestination", "{{ possibleDestinations.event }}", "/login/");
 	}else{
-		var form = createForm("{{ possibleSources.home }}", "/create/event/")
+		var form = createForm("source", "{{ possibleDestinations.home }}", "/create/event/")
 	}
 	form.submit()
 }
 
 function createWorkPost(){
 	if(!userLoggedIn){
-		var form = createForm("{{ possibleSources.post }}", "/login/");
+		var form = createForm("loginSuccessDestination", "{{ possibleDestinations.post }}", "/login/");
 	}else{
-		var form = createForm("{{ possibleSources.home }}", "/create/post/choose/")
+		var form = createForm("source", "{{ possibleDestinations.home }}", "/create/post/choose/")
 	}
 	form.submit()
 }
 
-function createForm(source, destination){
+function createForm(formName, formValue, destination){
 	var form = document.createElement("form");
 	form.setAttribute('method', "post");
 	form.setAttribute('action', destination);
 
 	var sourceInput = document.createElement("input");
 	sourceInput.setAttribute("type", "hidden");
-	sourceInput.setAttribute("name", "source");
-	sourceInput.setAttribute("value", source)
+	sourceInput.setAttribute("name", formName);
+	sourceInput.setAttribute("value", formValue)
 	form.appendChild(sourceInput)
 
 	var csrfInput = document.createElement("input");

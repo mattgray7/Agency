@@ -14,7 +14,7 @@ def postType(request, context):
 	else:
 		source = helpers.getMessageFromKey(request, "source")
 	context["source"]=  source
-	context["possibleSources"] = {"login": constants.LOGIN_SUCCESS,
+	context["possibleSources"] = {"login": constants.LOGIN,
 			   					  "home": constants.HOME
 			   					  }
 	return render(request, 'AgencyApp/choose/postType.html', context)
