@@ -67,7 +67,7 @@ function viewEvents(){
 }
 
 function createEventPost(){
-	var form = createLoginForm("createEvent");
+	var form = createLoginForm("{{ sources.event }}");
 	form.submit()
 }
 
@@ -76,7 +76,7 @@ function viewPosts(){
 }
 
 function createWorkPost(){
-	var form = createLoginForm("createPost");
+	var form = createLoginForm("{{ sources.post }}");
 	form.submit()
 }
 

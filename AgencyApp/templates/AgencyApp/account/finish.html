@@ -4,22 +4,22 @@
 	<h2>Your account setup is complete! What's next?</h2>
 	<form action="/create/event/" method="post" name="firstCreateEventForm">
 		{% csrf_token %}
-		<input type="hidden" name="source" value="firstCreateEvent" />
+		<input type="hidden" name="source" value="{{ sources.event }}" />
 		<input type="submit" value="Create event" />
 	</form>
 	<form action="/create/post/choose/" method="post" name="firstCreatePostForm">
 		{% csrf_token %}
-		<input type="hidden" name="source" value="firstCreatePost" />
+		<input type="hidden" name="source" value="{{ sources.post }}" />
 		<input type="submit" value="Create job/collaboration post" />
 	</form>
 	<form action="/{{ request.user.username }}/" method="post" name="firstImproveAccountForm">
 		{% csrf_token %}
-		<input type="hidden" name="source" value="firstImproveAccount" />
+		<input type="hidden" name="source" value="{{ sources.profile }}" />
 		<input type="submit" value="Improve profile" />
 	</form>
 	<form action="/browse/" method="post" name="firstBrowseForm">
 		{% csrf_token %}
-		<input type="hidden" name="source" value="firstBrowse" />
+		<input type="hidden" name="source" value="{{ sources.browse }}" />
 		<input type="submit" value="Browse event and job posts" />
 	</form>
 {% endblock %}

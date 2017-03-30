@@ -4,6 +4,7 @@ from django.contrib import messages
 from models import UserAccount
 from helpers import getMessageFromKey
 
+import AgencyApp.python as constants
 import account
 import event
 import choose
@@ -21,7 +22,9 @@ def home(request):
             status = message.message
             break"""
     print "status is {0}".format(status)
-    return render(request, 'AgencyApp/home.html', context={"status": status})
+    return render(request, 'AgencyApp/home.html', context={"status": status,
+                                                           "sources": {"post": constants.CREATE_POST,
+                                                                       "event": constants.CREATE_EVENT}})
 
 def login(request):
     return account.loginUser(request)

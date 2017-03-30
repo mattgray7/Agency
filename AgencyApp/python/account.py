@@ -10,9 +10,7 @@ from forms import LoginForm, CreateAccountForm, SelectInterestsForm, SelectProfe
 from models import UserAccount, Professions
 from helpers import getMessageFromKey, capitalizeName
 
-
-createPostString = "createPost"
-createEventString = "createEvent"
+import AgencyApp.python as constants
 
 def loginUser(request):
     errors = []
@@ -31,9 +29,9 @@ def loginUser(request):
                     #TODO use dict
                     #messages.add_message(request, messages.INFO, {"status": "login_success"})
                     sourcePage = form.cleaned_data.get('sourcePage')
-                    if sourcePage == createPostString:
+                    if sourcePage == constants.CREATE_POST:
                         return HttpResponseRedirect('/create/post/choose')
-                    elif sourcePage == createEventString:
+                    elif sourcePage == constants.CREATE_EVENT:
                         return HttpResponseRedirect('/create/event/')
                     return HttpResponseRedirect('/')
                 else:
@@ -42,9 +40,9 @@ def loginUser(request):
             if request.POST.get("source"):
                 sourcePage = request.POST.get("source")
                 context["form"] = LoginForm(initial={'sourcePage': sourcePage})
-                if sourcePage == createPostString:
+                if sourcePage == constants.CREATE_POST:
                     errors.append("You must login to create a post.")
-                elif sourcePage == createEventString:
+                elif sourcePage == constants.CREATE_EVENT:
                     errors.append("You must login to create an event.")
     
     if not context.get("form"):
@@ -116,7 +114,13 @@ def createAccount(request):
 
 def finish(request):
     user = UserAccount.objects.get(username=request.user.username)
-    context = {}
+    # TODO use one source per page, do the check for which source on the actual page
+    context = {"sources": {"post": constants.FIRST_CREATE_POST_VIEW,
+                           "event": constants.FIRST_CREATE_EVENT_VIEW,
+                           "profile": constants.FIRST_IMPROVE_PROFILE_VIEW,
+                           "browse": constants.FIRST_BROWSE_VIEW
+                           }
+              }
     return render(request, 'AgencyApp/account/finish.html', context)
 
 
