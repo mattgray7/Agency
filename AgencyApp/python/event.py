@@ -5,7 +5,7 @@ from django.contrib import messages
 # Create your views here.
 from django.http import HttpResponseRedirect
 
-import AgencyApp.python as constants
+import constants
 import helpers
 
 def create(request):

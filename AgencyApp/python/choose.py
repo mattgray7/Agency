@@ -6,7 +6,7 @@ from django.contrib import messages
 from django.http import HttpResponseRedirect
 
 import helpers
-import AgencyApp.python as constants
+import constants
 
 def postType(request):
 	if request.POST:

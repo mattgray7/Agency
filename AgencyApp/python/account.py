@@ -10,7 +10,7 @@ from forms import LoginForm, CreateAccountForm, SelectInterestsForm, SelectProfe
 from models import UserAccount, Professions
 from helpers import getMessageFromKey, capitalizeName
 
-import AgencyApp.python as constants
+import constants
 
 def loginUser(request):
     errors = []

@@ -4,7 +4,7 @@ from django.contrib import messages
 from models import UserAccount
 from helpers import getMessageFromKey
 
-import AgencyApp.python as constants
+import constants
 import helpers
 import account
 import event
