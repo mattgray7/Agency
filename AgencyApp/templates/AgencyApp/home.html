@@ -80,15 +80,15 @@ function createWorkPost(){
 	form.submit()
 }
 
-function createLoginForm(sourceString){
+function createLoginForm(loginSource){
 	var form = document.createElement("form");
 	form.setAttribute('method',"post");
 	form.setAttribute('action',"/login/");
 
 	var source = document.createElement("input");
 	source.setAttribute("type", "hidden");
-	source.setAttribute("name", "source");
-	source.setAttribute("value", sourceString)
+	source.setAttribute("name", "loginSource");
+	source.setAttribute("value", loginSource)
 	form.appendChild(source)
 
 	var csrf = document.createElement("input");

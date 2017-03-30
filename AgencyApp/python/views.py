@@ -12,16 +12,6 @@ import choose
 def home(request):
     status = None
     status = getMessageFromKey(request, "status")
-    """
-    for message in statusMessages:
-        #TODO use an enum
-        if message.message == "login_success":
-            status = message.message
-            break
-        elif message.message == "create_success":
-            status = message.message
-            break"""
-    print "status is {0}".format(status)
     return render(request, 'AgencyApp/home.html', context={"status": status,
                                                            "sources": {"post": constants.CREATE_POST,
                                                                        "event": constants.CREATE_EVENT}})

@@ -28,21 +28,21 @@ def loginUser(request):
                     login(request, user)
                     #TODO use dict
                     #messages.add_message(request, messages.INFO, {"status": "login_success"})
-                    sourcePage = form.cleaned_data.get('sourcePage')
-                    if sourcePage == constants.CREATE_POST:
+                    loginSource = form.cleaned_data.get('loginSource')
+                    if loginSource == constants.CREATE_POST:
                         return HttpResponseRedirect('/create/post/choose')
-                    elif sourcePage == constants.CREATE_EVENT:
+                    elif loginSource == constants.CREATE_EVENT:
                         return HttpResponseRedirect('/create/event/')
                     return HttpResponseRedirect('/')
                 else:
                     errors.append("Email and password do not match.")
         else:
-            if request.POST.get("source"):
-                sourcePage = request.POST.get("source")
-                context["form"] = LoginForm(initial={'sourcePage': sourcePage})
-                if sourcePage == constants.CREATE_POST:
+            if request.POST.get("loginSource"):
+                loginSource = request.POST.get("loginSource")
+                context["form"] = LoginForm(initial={'loginSource': loginSource})
+                if loginSource == constants.CREATE_POST:
                     errors.append("You must login to create a post.")
-                elif sourcePage == constants.CREATE_EVENT:
+                elif loginSource == constants.CREATE_EVENT:
                     errors.append("You must login to create an event.")
     
     if not context.get("form"):
@@ -97,7 +97,6 @@ def createAccount(request):
                     if saveSuccess:
                         print "Successfully created account."
                         login(request, user)
-                        #print "Successfully logged in."
 
                         #TODO use dict
                         #messages.add_message(request, messages.INFO, {"username": username})
@@ -115,12 +114,7 @@ def createAccount(request):
 def finish(request):
     user = UserAccount.objects.get(username=request.user.username)
     # TODO use one source per page, do the check for which source on the actual page
-    context = {"sources": {"post": constants.FIRST_CREATE_POST_VIEW,
-                           "event": constants.FIRST_CREATE_EVENT_VIEW,
-                           "profile": constants.FIRST_IMPROVE_PROFILE_VIEW,
-                           "browse": constants.FIRST_BROWSE_VIEW
-                           }
-              }
+    context = {"source": constants.FINISH_BASIC_ACCOUNT_CREATION}
     return render(request, 'AgencyApp/account/finish.html', context)
 
 
