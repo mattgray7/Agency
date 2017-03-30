@@ -9,51 +9,48 @@ import helpers
 import account
 import event
 import choose
+import home
 
-def home(request):
-    if request.POST:
-        source = request.POST.get("source")
-    else:
-        source = helpers.getMessageFromKey(request, "source")
-    return render(request, 'AgencyApp/home.html', context={"source": source,
-                                                           "possibleSources": {"post": constants.CREATE_POST,
-                                                                               "event": constants.CREATE_EVENT,
-                                                                               "home": constants.HOME,
-                                                                               "toolbarLogin": constants.TOOLBAR_LOGIN,
-                                                                               "toolbarHome": constants.TOOLBAR_HOME}})
+baseContext = helpers.getBaseContext()
+
+def displayHome(request):
+    return home.display(request, baseContext)
 
 def login(request):
-    return account.loginUser(request)
+    return account.loginUser(request, baseContext)
 
 def logout(request):
-    return account.logoutUser(request)
+    return account.logoutUser(request, baseContext)
 
 def create_account(request):
-    return account.createAccount(request)
+    return account.createAccount(request, baseContext)
 
 def create_selectInterests(request):
-    return account.selectInterests(request)
+    return account.selectInterests(request, baseContext)
 
 def create_selectProfessions(request):
-    return account.selectProfessions(request)
+    return account.selectProfessions(request, baseContext)
 
 def create_addBackground(request):
-    return account.addBackground(request)
+    return account.addBackground(request, baseContext)
 
 def create_accountFinish(request):
-    return account.finish(request)
+    return account.finish(request, baseContext)
 
 def create_event(request):
-    return event.create(request)
+    return event.create(request, baseContext)
 
 def choose_postType(request):
-    return choose.postType(request)
+    return choose.postType(request, baseContext)
 
 def browse(request):
-    return render(request, "AgencyApp/browse.html", {})
+    return render(request, "AgencyApp/browse.html", baseContext)
 
 def profile(request, username):
-    context = {"userAccount": None, "accountFound": False, "username": username}
+    context = baseContext
+    context["userAccount"] = None
+    context["accountFound"] =False
+    context["username"] = username
     try:
         user = User.objects.get(username=request.user.username)
     except User.DoesNotExist:

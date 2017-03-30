@@ -12,9 +12,8 @@ from helpers import getMessageFromKey, capitalizeName
 
 import constants
 
-def loginUser(request):
+def loginUser(request, context):
     errors = []
-    context = {}
     if request.method == 'POST':
         # Form submitted
         form = LoginForm(request.POST)
@@ -55,12 +54,12 @@ def loginUser(request):
     return render(request, 'AgencyApp/account/login.html', context)
 
 
-def logoutUser(request):
+def logoutUser(request, context):
     logout(request)
     return HttpResponseRedirect('/')
 
 
-def createAccount(request):
+def createAccount(request, context):
     errors = []
     if request.method == 'POST':
         # Form submitted
@@ -106,20 +105,19 @@ def createAccount(request):
 
     print "Create account errors: {0}".format(errors)
 
-    context = {"form": CreateAccountForm()}
+    context["form"] = CreateAccountForm()
     if errors:
         context["errors"] = errors
     return render(request, 'AgencyApp/account/create.html', context)
 
 
-def finish(request):
+def finish(request, context):
     user = UserAccount.objects.get(username=request.user.username)
-    # TODO use one source per page, do the check for which source on the actual page
-    context = {"source": constants.FINISH_BASIC_ACCOUNT_CREATION}
+    context["source"] = constants.FINISH_BASIC_ACCOUNT_CREATION
     return render(request, 'AgencyApp/account/finish.html', context)
 
 
-def selectInterests(request):
+def selectInterests(request, context):
     errors = []
     if request.method == "POST":
         form = SelectInterestsForm(request.POST)
@@ -153,12 +151,12 @@ def selectInterests(request):
                     return HttpResponseRedirect('/create/finish')
 
                 return HttpResponseRedirect('/')
-    context = {"form": SelectInterestsForm()}
+    context["form"] = SelectInterestsForm()
     if errors:
         context["errors"] = errors
     return render(request, 'AgencyApp/account/interests.html', context)
 
-def selectProfessions(request):
+def selectProfessions(request, context):
     errors = []
     if request.method == "POST":
         form = SelectProfessionsForm(request.POST)
@@ -183,13 +181,13 @@ def selectProfessions(request):
                     errors.append("Could not connect to Profession db.")
                 else:
                     return HttpResponseRedirect('/create/background')
-    context = {"form": SelectProfessionsForm()}
+    context["form"] = SelectProfessionsForm()
     if errors:
         context["errors"] = errors
     return render(request, 'AgencyApp/account/professions.html', context)
 
 
-def addBackground(request):
+def addBackground(request, context):
     errors = []
     if request.method == "POST":
         form = AddBackgroundForm(request.POST)
@@ -214,7 +212,7 @@ def addBackground(request):
                 errors.append("Could not connect to UserAccount db.")
             else:
                 return HttpResponseRedirect('/create/finish')
-    context = {"form": AddBackgroundForm()}
+    context["form"] = AddBackgroundForm()
     if errors:
         context["errors"] = errors
     return render(request, 'AgencyApp/account/background.html', context)

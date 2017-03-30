@@ -1,4 +1,15 @@
 from django.contrib import messages
+import constants
+
+
+def getBaseContext():
+    """Returns context required by the base template.
+
+    :return dict: Context required by base.html
+    """
+    return {"toolbarSources": {"login": constants.TOOLBAR_LOGIN,
+                               "home": constants.TOOLBAR_HOME}
+           }
 
 
 def getMessageFromKey(request, key):

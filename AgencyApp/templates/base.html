@@ -41,7 +41,7 @@
         {% block header %}
             <form action="/" method="post">
                 {% csrf_token %}
-                <input type="hidden" name="source" value="homeToolbar">
+                <input type="hidden" name="source" value="{{ toolbarSources.home }}">
                 <input type="submit" value="Van Film Connect">
             </form>
             {% if request.user.is_authenticated %}
@@ -50,7 +50,7 @@
             {% else %}
                 <form action="/login/" method="post">
                     {% csrf_token %}
-                    <input type="hidden" name="source" value="loginToolbar">
+                    <input type="hidden" name="source" value="{{ toolbarSources.login }}">
                     <input type="submit" value="Login">
                 </form>
             {% endif %}

@@ -3,7 +3,7 @@ import views
 from django.conf.urls import url
 
 urlpatterns = [
-    url(r'^$', views.home, name='home'),
+    url(r'^$', views.displayHome, name='displayHome'),
 
     # Create account
     url(r'^create/account/basic/$', views.create_account, name='create_account'),
