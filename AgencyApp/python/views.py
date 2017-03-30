@@ -30,7 +30,7 @@ def logout(request):
     return account.logoutUser(request)
 
 def create_account(request):
-    return account.createUser(request)
+    return account.createAccount(request)
 
 def create_selectInterests(request):
     return account.selectInterests(request)
@@ -41,7 +41,7 @@ def create_selectProfessions(request):
 def create_addBackground(request):
     return account.addBackground(request)
 
-def create_finish(request):
+def create_accountFinish(request):
     return account.finish(request)
 
 def create_event(request):

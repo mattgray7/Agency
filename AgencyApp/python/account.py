@@ -59,7 +59,7 @@ def logoutUser(request):
     return HttpResponseRedirect('/')
 
 
-def createUser(request):
+def createAccount(request):
     errors = []
     if request.method == 'POST':
         # Form submitted
@@ -98,13 +98,13 @@ def createUser(request):
                             #TODO delete account from User db
                     if saveSuccess:
                         print "Successfully created account."
-                        #login(request, user)
+                        login(request, user)
                         #print "Successfully logged in."
 
                         #TODO use dict
                         #messages.add_message(request, messages.INFO, {"username": username})
                         messages.add_message(request, messages.INFO, username)
-                        return HttpResponseRedirect('/create/interests/')
+                        return HttpResponseRedirect('/create/account/finish/')
 
     print "Create account errors: {0}".format(errors)
 
@@ -112,6 +112,12 @@ def createUser(request):
     if errors:
         context["errors"] = errors
     return render(request, 'AgencyApp/account/create.html', context)
+
+
+def finish(request):
+    user = UserAccount.objects.get(username=request.user.username)
+    context = {}
+    return render(request, 'AgencyApp/account/finish.html', context)
 
 
 def selectInterests(request):
@@ -214,18 +220,6 @@ def addBackground(request):
     if errors:
         context["errors"] = errors
     return render(request, 'AgencyApp/account/background.html', context)
-
-def finish(request):
-    user = UserAccount.objects.get(username=request.user.username)
-    context = {}
-    if user.workInterest:
-        context["work"] = True
-    if user.crewInterest:
-        context["crew"] = True
-    if user.collaborationInterest:
-        context["collaboration"] = True
-    print "Sending finish with context {0}".format(context)
-    return render(request, 'AgencyApp/account/finish.html', context)
 
 def _emailIsRegistered(email):
     existingUsers = User.objects.filter(email=email)
