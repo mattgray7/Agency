@@ -1,5 +1,10 @@
 {% extends "base.html" %}
 
 {% block content %}
-	<h1>You are creating an event!</h1>
+
+{% if source == possibleSource.login %}
+	<h1>You just logged in!</h1>
+{% endif %}
+
+<h1>You are creating an event!</h1>
 {% endblock %}

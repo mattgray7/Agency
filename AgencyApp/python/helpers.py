@@ -11,19 +11,10 @@ def getMessageFromKey(request, key):
     messagesList = messages.get_messages(request)
     for message in messagesList:
     	# TODO convert unicode messages.messages to dict
-    	"""if key in message.message.keys():
-    		print "Observed message:{0}".format(message.message)
-    		return message.message[key]"""
-    	return message.message
+    	splitted = message.message.split(":")
+        if splitted[0] == key:
+            return splitted[1]
     return None
-    """for message in messages:
-        #TODO use an enum
-        if message.message == "login_success":
-            status = message.message
-            break
-        elif message.message == "create_success":
-            status = message.message
-            break"""
 
 
 def capitalizeName(name):

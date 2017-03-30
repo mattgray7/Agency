@@ -8,3 +8,4 @@ FIRST_BROWSE_VIEW = "firstBrowse"
 FIRST_IMPROVE_PROFILE_VIEW = "firstImproveAccount"
 
 FINISH_BASIC_ACCOUNT_CREATION = "finishBasicAccountCreation"
+LOGIN_SUCCESS = "loginSuccess"

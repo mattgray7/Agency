@@ -1,7 +1,11 @@
 {% extends "base.html" %}
 
 {% block content %}
-	<h1>What type of post do you want to write?</h1>
-	<button>Looking for actors/crew members</button><br><br>
-	<button>Looking for collaborators</button>
+{% if source == possibleSources.login %}
+	<h3> You just logged in!</h3>
+{% endif %}
+
+<h1>What type of post do you want to write?</h1>
+<button>Looking for actors/crew members</button><br><br>
+<button>Looking for collaborators</button>
 {% endblock %}

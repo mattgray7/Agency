@@ -26,9 +26,10 @@ def loginUser(request):
                 user = authenticate(username=username, password=form.cleaned_data.get('password'))
                 if user is not None:
                     login(request, user)
-                    #TODO use dict
-                    #messages.add_message(request, messages.INFO, {"status": "login_success"})
                     loginSource = form.cleaned_data.get('loginSource')
+                    
+                    messages.add_message(request, messages.INFO, "source:{0}".format(constants.LOGIN_SUCCESS))
+
                     if loginSource == constants.CREATE_POST:
                         return HttpResponseRedirect('/create/post/choose')
                     elif loginSource == constants.CREATE_EVENT:
@@ -98,9 +99,7 @@ def createAccount(request):
                         print "Successfully created account."
                         login(request, user)
 
-                        #TODO use dict
-                        #messages.add_message(request, messages.INFO, {"username": username})
-                        messages.add_message(request, messages.INFO, username)
+                        messages.add_message(request, messages.INFO, "username:{0}".format(username))
                         return HttpResponseRedirect('/create/account/finish/')
 
     print "Create account errors: {0}".format(errors)
@@ -143,9 +142,8 @@ def selectInterests(request):
 
                 user = User.objects.get(username=username)
                 #TODO when to log user in
-                login(request, user)
-                #TODO use dict
-                messages.add_message(request, messages.INFO, username)
+                #login(request, user)
+                messages.add_message(request, messages.INFO, "username:{0}".format(username))
 
                 if workSelected:
                     return HttpResponseRedirect('/create/professions')
