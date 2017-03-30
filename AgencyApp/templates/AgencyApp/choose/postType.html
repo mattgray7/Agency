@@ -2,7 +2,9 @@
 
 {% block content %}
 {% if source == possibleSources.login %}
-	<h3> You just logged in!</h3>
+	<h3> Welcome back {{ request.user.first_name }}!</h3>
+{% elif source == possibleSources.home %}
+	<h5> You got here from main menu </h5>
 {% endif %}
 
 <h1>What type of post do you want to write?</h1>

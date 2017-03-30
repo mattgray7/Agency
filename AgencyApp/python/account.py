@@ -27,19 +27,21 @@ def loginUser(request):
                 if user is not None:
                     login(request, user)
                     loginSource = form.cleaned_data.get('loginSource')
-                    
-                    messages.add_message(request, messages.INFO, "source:{0}".format(constants.LOGIN_SUCCESS))
 
                     if loginSource == constants.CREATE_POST:
+                        messages.add_message(request, messages.INFO, "source:{0}".format(constants.LOGIN_SUCCESS))
                         return HttpResponseRedirect('/create/post/choose')
                     elif loginSource == constants.CREATE_EVENT:
+                        messages.add_message(request, messages.INFO, "source:{0}".format(constants.LOGIN_SUCCESS))
                         return HttpResponseRedirect('/create/event/')
-                    return HttpResponseRedirect('/')
+                    else:
+                        messages.add_message(request, messages.INFO, "source:{0}".format(constants.TOOLBAR_LOGIN))
+                        return HttpResponseRedirect('/')
                 else:
                     errors.append("Email and password do not match.")
         else:
-            if request.POST.get("loginSource"):
-                loginSource = request.POST.get("loginSource")
+            if request.POST.get("source"):
+                loginSource = request.POST.get("source")
                 context["form"] = LoginForm(initial={'loginSource': loginSource})
                 if loginSource == constants.CREATE_POST:
                     errors.append("You must login to create a post.")

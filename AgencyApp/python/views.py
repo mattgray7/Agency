@@ -5,16 +5,22 @@ from models import UserAccount
 from helpers import getMessageFromKey
 
 import AgencyApp.python as constants
+import helpers
 import account
 import event
 import choose
 
 def home(request):
-    status = None
-    status = getMessageFromKey(request, "status")
-    return render(request, 'AgencyApp/home.html', context={"status": status,
-                                                           "sources": {"post": constants.CREATE_POST,
-                                                                       "event": constants.CREATE_EVENT}})
+    if request.POST:
+        source = request.POST.get("source")
+    else:
+        source = helpers.getMessageFromKey(request, "source")
+    return render(request, 'AgencyApp/home.html', context={"source": source,
+                                                           "possibleSources": {"post": constants.CREATE_POST,
+                                                                               "event": constants.CREATE_EVENT,
+                                                                               "home": constants.HOME,
+                                                                               "toolbarLogin": constants.TOOLBAR_LOGIN,
+                                                                               "toolbarHome": constants.TOOLBAR_HOME}})
 
 def login(request):
     return account.loginUser(request)

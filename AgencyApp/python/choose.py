@@ -9,8 +9,13 @@ import helpers
 import AgencyApp.python as constants
 
 def postType(request):
-	source = helpers.getMessageFromKey(request, "source")
+	if request.POST:
+		source = request.POST.get("source")
+	else:
+		source = helpers.getMessageFromKey(request, "source")
+	print "source is {0}".format(source)
 	context = {"source": source,
-			   "possibleSources": {"login": constants.LOGIN_SUCCESS}
+			   "possibleSources": {"login": constants.LOGIN_SUCCESS,
+			   					   "home": constants.HOME}
 			   }
-	return render(request, 'AgencyApp/choose/postType.html', {})
+	return render(request, 'AgencyApp/choose/postType.html', context)

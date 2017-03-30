@@ -9,7 +9,12 @@ import AgencyApp.python as constants
 import helpers
 
 def create(request):
-	source = helpers.getMessageFromKey(request, "source")
-	context = {"possibleSources": {"login": constants.LOGIN_SUCCESS},
-			   "source": source}
-	return render(request, 'AgencyApp/event/create.html', {})
+	if request.POST:
+		source = request.POST.get("source")
+	else:
+		source = helpers.getMessageFromKey(request, "source")
+	context = {"source": source,
+			   "possibleSources": {"login": constants.LOGIN_SUCCESS,
+			   					   "home": constants.HOME}
+			   }
+	return render(request, 'AgencyApp/event/create.html', context)

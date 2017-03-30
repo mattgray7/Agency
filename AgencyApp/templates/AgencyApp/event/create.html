@@ -2,8 +2,10 @@
 
 {% block content %}
 
-{% if source == possibleSource.login %}
-	<h1>You just logged in!</h1>
+{% if source == possibleSources.login %}
+	<h3>Welcome back {{ request.user.first_name }}!</h3>
+{% elif source == possibleSources.home %}
+	<h5> You got here from main menu </h5>
 {% endif %}
 
 <h1>You are creating an event!</h1>

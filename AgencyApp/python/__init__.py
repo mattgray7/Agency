@@ -9,3 +9,7 @@ FIRST_IMPROVE_PROFILE_VIEW = "firstImproveAccount"
 
 FINISH_BASIC_ACCOUNT_CREATION = "finishBasicAccountCreation"
 LOGIN_SUCCESS = "loginSuccess"
+HOME = "home"
+
+TOOLBAR_LOGIN = "toolbarLogin"
+TOOLBAR_HOME = "toolbarHome"
