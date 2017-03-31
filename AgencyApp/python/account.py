@@ -11,6 +11,7 @@ from models import UserAccount, Professions
 from helpers import getMessageFromKey, capitalizeName
 
 import constants
+import helpers
 
 def loginUser(request, context):
     errors = []
@@ -99,7 +100,8 @@ def createAccount(request, context):
                         print "Successfully created account."
                         login(request, user)
 
-                        messages.add_message(request, messages.INFO, "username:{0}".format(username))
+                        messages.add_message(request, messages.INFO,
+                                             "source:{0}".format(constants.CREATE_BASIC_ACCOUNT_FINISH))
                         return HttpResponseRedirect('/create/account/finish/')
 
     context["form"] = CreateAccountForm()
@@ -110,8 +112,12 @@ def createAccount(request, context):
 
 
 def finish(request, context):
-    user = UserAccount.objects.get(username=request.user.username)
-    context["source"] = constants.FINISH_BASIC_ACCOUNT_CREATION
+    if request.POST:
+        source = request.POST.get("source")
+    else:
+        source = helpers.getMessageFromKey(request, "source")
+    context["source"] = source
+    context["possibleSources"] = {"finish": constants.CREATE_BASIC_ACCOUNT_FINISH}
     return render(request, 'AgencyApp/account/finish.html', context)
 
 

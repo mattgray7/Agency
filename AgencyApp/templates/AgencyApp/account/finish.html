@@ -2,24 +2,24 @@
 
 {% block content %}
 	<h2>Your account setup is complete! What's next?</h2>
-	<form action="/create/event/" method="post" name="firstCreateEventForm">
+	<form action="/create/event/" method="post">
 		{% csrf_token %}
-		<input type="hidden" name="source" value="{{ sources.event }}" />
+		<input type="hidden" name="source" value="{{ possibleSources.finish }}" />
 		<input type="submit" value="Create event" />
 	</form>
-	<form action="/create/post/choose/" method="post" name="firstCreatePostForm">
+	<form action="/create/post/choose/" method="post">
 		{% csrf_token %}
-		<input type="hidden" name="source" value="{{ sources.post }}" />
+		<input type="hidden" name="source" value="{{ possibleSources.finish }}" />
 		<input type="submit" value="Create job/collaboration post" />
 	</form>
-	<form action="/{{ request.user.username }}/" method="post" name="firstImproveAccountForm">
+	<form action="/{{ request.user.username }}/" method="post">
 		{% csrf_token %}
-		<input type="hidden" name="source" value="{{ sources.profile }}" />
+		<input type="hidden" name="source" value="{{ possibleSources.finish }}" />
 		<input type="submit" value="Improve profile" />
 	</form>
-	<form action="/browse/" method="post" name="firstBrowseForm">
+	<form action="/browse/" method="post">
 		{% csrf_token %}
-		<input type="hidden" name="source" value="{{ sources.browse }}" />
+		<input type="hidden" name="source" value="{{ possibleSources.finish }}" />
 		<input type="submit" value="Browse event and job posts" />
 	</form>
 {% endblock %}
