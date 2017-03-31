@@ -102,10 +102,9 @@ def createAccount(request, context):
                         messages.add_message(request, messages.INFO, "username:{0}".format(username))
                         return HttpResponseRedirect('/create/account/finish/')
 
-    print "Create account errors: {0}".format(errors)
-
     context["form"] = CreateAccountForm()
     if errors:
+        print "Create account errors: {0}".format(errors)
         context["errors"] = errors
     return render(request, 'AgencyApp/account/create.html', context)
 

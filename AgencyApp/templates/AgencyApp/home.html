@@ -34,6 +34,8 @@ function getWelcomeMsg(){
 
 var mainChoice = "<button onclick='eventsChosen();' value='Events'>Events (View and create events in your community)</button><br><br><button onclick='jobsChosen();' value='Jobs'>Jobs (Find a job, crew members, or others looking to collaborate)</button><br>";
 
+var createAccountButton = "<br><button onclick='createAccount()'; value='Create account'>Create account</button>";
+
 var eventChoice = "<button onclick='viewEvents();'> View events in your community</button><br><br><button onclick='createEventPost();'>Create event</button><br><br><button onclick='displayFirstChoice();'>Back</button>";
 
 var jobChoice = "<button onclick='viewPosts();'> View job postings and creative profiles</button><br><br><button onclick='createWorkPost();'>Create job post</button><br><br><button onclick='displayFirstChoice();'>Back</button>";
@@ -41,7 +43,12 @@ var jobChoice = "<button onclick='viewPosts();'> View job postings and creative 
 window.onload = displayMainChoice();
 
 function displayMainChoice(){
-	document.getElementById('mainChoice').innerHTML = mainChoice;
+	if (userLoggedIn){
+		var toDisplay = mainChoice;
+	}else{
+		var toDisplay = mainChoice + createAccountButton;
+	}
+	document.getElementById('mainChoice').innerHTML = toDisplay;
 }
 
 function eventsChosen(){
@@ -60,11 +67,16 @@ function viewPosts(){
 	window.location = '/browse';
 }
 
+function createAccount(){
+	var form = createForm("source", "{{ possibleSources.home }}", "/create/account/basic/");
+	form.submit();
+}
+
 function createEventPost(){
 	if(!userLoggedIn){
 		var form = createForm("loginSuccessDestination", "{{ possibleDestinations.event }}", "/login/");
 	}else{
-		var form = createForm("source", "{{ possibleDestinations.home }}", "/create/event/")
+		var form = createForm("source", "{{ possibleSources.home }}", "/create/event/")
 	}
 	form.submit()
 }
@@ -73,7 +85,7 @@ function createWorkPost(){
 	if(!userLoggedIn){
 		var form = createForm("loginSuccessDestination", "{{ possibleDestinations.post }}", "/login/");
 	}else{
-		var form = createForm("source", "{{ possibleDestinations.home }}", "/create/post/choose/")
+		var form = createForm("source", "{{ possibleSources.home }}", "/create/post/choose/")
 	}
 	form.submit()
 }
