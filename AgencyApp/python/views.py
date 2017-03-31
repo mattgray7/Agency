@@ -11,43 +11,43 @@ import event
 import choose
 import home
 
-baseContext = helpers.getBaseContext()
+getBaseContext = helpers.getBaseContext
 
 def displayHome(request):
-    return home.display(request, baseContext)
+    return home.display(request, getBaseContext())
 
 def login(request):
-    return account.loginUser(request, baseContext)
+    return account.loginUser(request, getBaseContext())
 
 def logout(request):
-    return account.logoutUser(request, baseContext)
+    return account.logoutUser(request, getBaseContext())
 
 def create_account(request):
-    return account.createAccount(request, baseContext)
+    return account.createAccount(request, getBaseContext())
 
 def create_selectInterests(request):
-    return account.selectInterests(request, baseContext)
+    return account.selectInterests(request, getBaseContext())
 
 def create_selectProfessions(request):
-    return account.selectProfessions(request, baseContext)
+    return account.selectProfessions(request, getBaseContext())
 
 def create_addBackground(request):
-    return account.addBackground(request, baseContext)
+    return account.addBackground(request, getBaseContext())
 
 def create_accountFinish(request):
-    return account.finish(request, baseContext)
+    return account.finish(request, getBaseContext())
 
 def create_event(request):
-    return event.create(request, baseContext)
+    return event.create(request, getBaseContext())
 
 def choose_postType(request):
-    return choose.postType(request, baseContext)
+    return choose.postType(request, getBaseContext())
 
 def browse(request):
-    return render(request, "AgencyApp/browse.html", baseContext)
+    return render(request, "AgencyApp/browse.html", getBaseContext())
 
 def profile(request, username):
-    context = baseContext
+    context = getBaseContext()
     context["userAccount"] = None
     context["accountFound"] =False
     context["username"] = username

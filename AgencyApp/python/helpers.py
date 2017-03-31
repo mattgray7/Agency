@@ -9,7 +9,7 @@ def getBaseContext():
     """
     return {"toolbarSources": {"login": constants.TOOLBAR_LOGIN,
                                "home": constants.TOOLBAR_HOME}
-           }
+            }
 
 
 def getMessageFromKey(request, key):
