@@ -6,6 +6,8 @@ CREATE_EVENT = "createEvent"
 
 TOOLBAR_LOGIN = "toolbarLogin"
 TOOLBAR_HOME = "toolbarHome"
+TOOLBAR_LOGOUT = "toolbarLogout"
+TOOLBAR_PROFILE = "toolbarProfile"
 
 FIRST_CREATE_EVENT_VIEW = "firstCreateEventView"
 FIRST_CREATE_POST_VIEW = "firstCreatePostView"

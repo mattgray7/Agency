@@ -8,7 +8,9 @@ def getBaseContext():
     :return dict: Context required by base.html
     """
     return {"toolbarSources": {"login": constants.TOOLBAR_LOGIN,
-                               "home": constants.TOOLBAR_HOME}
+                               "home": constants.TOOLBAR_HOME,
+                               "logout": constants.TOOLBAR_LOGOUT,
+                               "profile": constants.TOOLBAR_PROFILE}
             }
 
 

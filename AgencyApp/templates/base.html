@@ -45,8 +45,16 @@
                 <input type="submit" value="Van Film Collective">
             </form>
             {% if request.user.is_authenticated %}
-                <a href='/{{ request.user.username }}'>{{ request.user.first_name }} {{ request.user.last_name }}</a><br>
-                <a href='/logout'>Logout</a>
+                <form action="/{{ request.user.username }}/" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="source" value="{{ toolbarSources.profile }}">
+                    <input type="submit" value="{{ request.user.first_name }} {{ request.user.last_name }}">
+                </form>
+                <form action="/logout/" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="source" value="{{ toolbarSources.logout }}">
+                    <input type="submit" value="Logout">
+                </form>
             {% else %}
                 <form action="/login/" method="post">
                     {% csrf_token %}
