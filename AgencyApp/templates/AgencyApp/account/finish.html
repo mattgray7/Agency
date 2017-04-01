@@ -12,7 +12,7 @@
 		<input type="hidden" name="source" value="{{ possibleSources.finish }}" />
 		<input type="submit" value="Create job/collaboration post" />
 	</form>
-	<form action="/{{ request.user.username }}/" method="post">
+	<form action="/create/account/choose-interests/" method="post">
 		{% csrf_token %}
 		<input type="hidden" name="source" value="{{ possibleSources.finish }}" />
 		<input type="submit" value="Improve profile" />

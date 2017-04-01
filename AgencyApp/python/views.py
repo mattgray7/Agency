@@ -22,8 +22,11 @@ def login(request):
 def logout(request):
     return account.logoutUser(request, getBaseContext())
 
-def create_account(request):
+def createAccount(request):
     return account.createAccount(request, getBaseContext())
+
+def addPicture(request):
+    return account.addPicture(request, getBaseContext())
 
 def create_selectInterests(request):
     return account.selectInterests(request, getBaseContext())
@@ -34,13 +37,13 @@ def create_selectProfessions(request):
 def create_addBackground(request):
     return account.addBackground(request, getBaseContext())
 
-def create_accountFinish(request):
+def createAccountFinish(request):
     return account.finish(request, getBaseContext())
 
-def create_event(request):
+def createEvent(request):
     return event.create(request, getBaseContext())
 
-def choose_postType(request):
+def choosePostType(request):
     return choose.postType(request, getBaseContext())
 
 def browse(request):

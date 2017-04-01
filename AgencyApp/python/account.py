@@ -102,7 +102,7 @@ def createAccount(request, context):
 
                         messages.add_message(request, messages.INFO,
                                              "source:{0}".format(constants.CREATE_BASIC_ACCOUNT_FINISH))
-                        return HttpResponseRedirect('/create/account/finish/')
+                        return HttpResponseRedirect('/account/create/finish/')
 
     context["form"] = CreateAccountForm()
     if errors:
