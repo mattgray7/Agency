@@ -12,10 +12,10 @@
 		<input type="hidden" name="source" value="{{ possibleSources.finish }}" />
 		<input type="submit" value="Create job/collaboration post" />
 	</form>
-	<form action="/create/account/choose-interests/" method="post">
+	<form action="/account/edit/interests/" method="post">
 		{% csrf_token %}
 		<input type="hidden" name="source" value="{{ possibleSources.finish }}" />
-		<input type="submit" value="Improve profile" />
+		<input type="submit" value="Setup profile" />
 	</form>
 	<form action="/browse/" method="post">
 		{% csrf_token %}

@@ -6,4 +6,17 @@
 	{% else %}
 		No user with name {{ username }} found.
 	{% endif %}
+
+	{% if request.user.is_authenticated %}
+		<form action="/account/edit/interests/" method="post">
+			{% csrf_token %}
+			<input type="hidden" name="source" value="{{ possibleSources.profile }}" />
+			<input type="submit" value="Edit profile interests" />
+		</form>
+		<form action="/account/edit/picture/" method="post">
+			{% csrf_token %}
+			<input type="hidden" name="source" value="{{ possibleSources.profile }}" />
+			<input type="submit" value="Edit profile picture" />
+		</form>
+	{% endif %}
 {% endblock %}

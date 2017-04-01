@@ -2,15 +2,20 @@ from django.contrib import messages
 import constants
 
 
-def getBaseContext():
+def getBaseContext(request):
     """Returns context required by the base template.
 
     :return dict: Context required by base.html
     """
+    if request.POST:
+        source = request.POST.get("source")
+    else:
+        source = getMessageFromKey(request, "source")
     return {"toolbarSources": {"login": constants.TOOLBAR_LOGIN,
                                "home": constants.TOOLBAR_HOME,
                                "logout": constants.TOOLBAR_LOGOUT,
-                               "profile": constants.TOOLBAR_PROFILE}
+                               "profile": constants.TOOLBAR_PROFILE},
+            "source": source
             }
 
 

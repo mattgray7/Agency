@@ -6,7 +6,7 @@ from django.db import IntegrityError
 
 # Create your views here.
 from django.http import HttpResponseRedirect
-from forms import LoginForm, CreateAccountForm, SelectInterestsForm, SelectProfessionsForm, AddBackgroundForm
+from forms import LoginForm, CreateAccountForm, EditInterestsForm, EditPictureForm, SelectProfessionsForm
 from models import UserAccount, Professions
 from helpers import getMessageFromKey, capitalizeName
 
@@ -112,28 +112,26 @@ def createAccount(request, context):
 
 
 def finish(request, context):
-    if request.POST:
-        source = request.POST.get("source")
-    else:
-        source = helpers.getMessageFromKey(request, "source")
-    context["source"] = source
     context["possibleSources"] = {"finish": constants.CREATE_BASIC_ACCOUNT_FINISH}
     return render(request, 'AgencyApp/account/finish.html', context)
 
 
-def selectInterests(request, context):
+def editInterests(request, context):
     errors = []
+    userAccount = UserAccount.objects.get(username=request.user.username)
+    editDestination = constants.PROFILE
+
     if request.method == "POST":
-        form = SelectInterestsForm(request.POST)
-        if form.is_valid():
-            workSelected = form.cleaned_data.get('work', False)
-            crewSelected = form.cleaned_data.get('crew', False)
-            collabSelected = form.cleaned_data.get('collaboration', False)
-            if not workSelected and not crewSelected and not collabSelected:
-                errors.append("You must choose at least one option you are interested in.")
-            else:
-                username = getMessageFromKey(request, "username")
-                userAccount = UserAccount.objects.get(username=username)
+        form = EditInterestsForm(request.POST)
+        #fromProfile = request.POST.get("source") == constants.PROFILE
+        #fromCreateAccountFinish = request.POST.get("source") == constants.CREATE_BASIC_ACCOUNT_FINISH
+        formSubmitted = request.POST.get("source") not in [constants.CREATE_BASIC_ACCOUNT_FINISH,
+                                                           constants.PROFILE]
+        if formSubmitted:
+            if form.is_valid():
+                workSelected = form.cleaned_data.get('work', False)
+                crewSelected = form.cleaned_data.get('crew', False)
+                collabSelected = form.cleaned_data.get('collaboration', False)
                 userAccount.workInterest = workSelected
                 userAccount.crewInterest = crewSelected
                 userAccount.collaborationInterest = collabSelected
@@ -141,24 +139,51 @@ def selectInterests(request, context):
                     userAccount.save()
                 except:
                     errors.append("Could not connect to UserAccount database")
+
+                # TODO redirect to profession page if looking for work selected
+                if form.cleaned_data.get('editDestination') == constants.EDIT_PROFILE_PICTURE:
+                    return HttpResponseRedirect('/account/edit/picture/')
                 else:
-                    print "User successfully saved with work:{0}, crew:{1}, collab:{2}".format(workSelected, crewSelected, collabSelected)
+                    return HttpResponseRedirect('/{0}/'.format(request.user.username))
+        else:
+            source = request.POST.get("source")   
+            if source == constants.CREATE_BASIC_ACCOUNT_FINISH:
+                editDestination = constants.EDIT_PROFILE_PICTURE
+                print "setting edit interest destination to edit profile picture"
 
-                user = User.objects.get(username=username)
-                #TODO when to log user in
-                #login(request, user)
-                messages.add_message(request, messages.INFO, "username:{0}".format(username))
-
-                if workSelected:
-                    return HttpResponseRedirect('/create/professions')
-                else:
-                    return HttpResponseRedirect('/create/finish')
-
-                return HttpResponseRedirect('/')
-    context["form"] = SelectInterestsForm()
+    context["form"] = EditInterestsForm(initial={"work": userAccount.workInterest,
+                                                 "crew": userAccount.crewInterest,
+                                                 "collaboration": userAccount.collaborationInterest,
+                                                 "editDestination": editDestination})
     if errors:
         context["errors"] = errors
+    # fromProfile will go here
     return render(request, 'AgencyApp/account/interests.html', context)
+
+
+def editPicture(request, context):
+    errors = []
+    if request.method == "POST":
+        form = EditPictureForm(request.POST)
+        formSubmitted = request.POST.get("source") not in [constants.PROFILE]
+        if formSubmitted:
+            if form.is_valid():
+                pic = form.cleaned_data.get('profilePicture')
+                userAccount = UserAccount.objects.get(username=request.user.username)
+                userAccount.profilePicture = pic
+                
+                try:
+                    userAccount.save()
+                except:
+                    errors.append("Could not connect to UserAccount db.")
+                else:
+                    return HttpResponseRedirect('/{0}/'.format(request.user.username))
+
+    context["form"] = EditPictureForm()
+    if errors:
+        context["errors"] = errors
+    return render(request, 'AgencyApp/account/picture.html', context)
+
 
 def selectProfessions(request, context):
     errors = []

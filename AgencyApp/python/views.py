@@ -1,8 +1,6 @@
 from django.shortcuts import render
 from django.contrib.auth.models import User
-from django.contrib import messages
 from models import UserAccount
-from helpers import getMessageFromKey
 
 import constants
 import helpers
@@ -10,58 +8,48 @@ import account
 import event
 import choose
 import home
+import profile
 
 getBaseContext = helpers.getBaseContext
 
 def displayHome(request):
-    return home.display(request, getBaseContext())
+    return home.display(request, getBaseContext(request))
 
 def login(request):
-    return account.loginUser(request, getBaseContext())
+    return account.loginUser(request, getBaseContext(request))
 
 def logout(request):
-    return account.logoutUser(request, getBaseContext())
+    return account.logoutUser(request, getBaseContext(request))
 
 def createAccount(request):
-    return account.createAccount(request, getBaseContext())
+    return account.createAccount(request, getBaseContext(request))
 
-def addPicture(request):
-    return account.addPicture(request, getBaseContext())
+def editInterests(request):
+    return account.editInterests(request, getBaseContext(request))
 
-def create_selectInterests(request):
-    return account.selectInterests(request, getBaseContext())
+def editPicture(request):
+    return account.editPicture(request, getBaseContext(request))
 
 def create_selectProfessions(request):
-    return account.selectProfessions(request, getBaseContext())
+    return account.selectProfessions(request, getBaseContext(request))
 
 def create_addBackground(request):
-    return account.addBackground(request, getBaseContext())
+    return account.addBackground(request, getBaseContext(request))
 
 def createAccountFinish(request):
-    return account.finish(request, getBaseContext())
+    return account.finish(request, getBaseContext(request))
 
 def createEvent(request):
-    return event.create(request, getBaseContext())
+    return event.create(request, getBaseContext(request))
 
 def choosePostType(request):
-    return choose.postType(request, getBaseContext())
+    return choose.postType(request, getBaseContext(request))
 
 def browse(request):
-    return render(request, "AgencyApp/browse.html", getBaseContext())
+    return render(request, "AgencyApp/browse.html", getBaseContext(request))
 
-def profile(request, username):
-    context = getBaseContext()
-    context["userAccount"] = None
-    context["accountFound"] =False
-    context["username"] = username
-    try:
-        user = User.objects.get(username=request.user.username)
-    except User.DoesNotExist:
-        pass
-    else:
-        context["userAccount"] = UserAccount.objects.get(username=username)
-        context["accountFound"] = True
-    return render(request, "AgencyApp/profile.html", context)
+def displayProfile(request, username):
+    return profile.display(request, username, getBaseContext(request))
 
 def jobs(request):
     return render(request, 'AgencyApp/jobs.html', {'jobList': ['job1', 'job2', 'job3']})

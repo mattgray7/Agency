@@ -6,12 +6,12 @@ urlpatterns = [
     url(r'^$', views.displayHome, name='displayHome'),
 
     # Create account
-    url(r'^account/create/basic/$', views.createAccount, name='create_account'),
-    #url(r'^create/account/add-picture/$', views.addPicture, name='add_picture'),
-    #url(r'^account/create/interests/$', views.create_selectInterests, name='create_selectInterests'),
+    url(r'^account/create/basic/$', views.createAccount, name='createAccount'),
+    url(r'^account/edit/picture/$', views.editPicture, name='editPicture'),
+    url(r'^account/edit/interests/$', views.editInterests, name='editInterests'),
     #url(r'^create/professions/$', views.create_selectProfessions, name='create_selectProfessions'),
     #url(r'^create/background/$', views.create_addBackground, name='create_addBackground'),
-    url(r'^account/create/finish/$', views.createAccountFinish, name='create_finish'),
+    url(r'^account/create/finish/$', views.createAccountFinish, name='createAccountFinish'),
     
     # Create posts
     url(r'^create/event/$', views.createEvent, name='create_event'),
@@ -24,6 +24,6 @@ urlpatterns = [
     url(r'^login/$', views.login, name='login'),
     url(r'^logout/$', views.logout, name='logout'),
     url(r'^ajax/$', ajax.call, name='ajax'),
-    url(r'^(?P<username>[A-Za-z0-9]+)/$', views.profile, name='profile'),
+    url(r'^(?P<username>[A-Za-z0-9]+)/$', views.displayProfile, name='displayProfile'),
     url(r'^jobs/$', views.jobs, name='jobs'),
 ]
