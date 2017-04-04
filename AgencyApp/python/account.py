@@ -13,6 +13,8 @@ from helpers import getMessageFromKey, capitalizeName
 import constants
 import helpers
 
+import os
+
 def loginUser(request, context):
     errors = []
     if request.method == 'POST':
@@ -169,7 +171,20 @@ def editPicture(request, context):
             if form.is_valid():
                 userAccount = UserAccount.objects.get(username=request.user.username)
                 userAccount.profilePicture = request.FILES['profilePicture']
-                
+
+                # Save the picture in its location
+                userAccount.save()
+
+                # TODO check for invalid image format
+                # TODO convert image to jpg or other common format
+                # Rename the file
+                initialPath = userAccount.profilePicture.path
+                newName = "profile{0}".format(os.path.splitext(initialPath)[-1])
+                newPath = os.path.join(os.path.dirname(initialPath), newName)
+                os.rename(initialPath, newPath)
+
+                # Save the new path in the db
+                userAccount.profilePicture.name = os.path.join(request.user.username, newName)
                 try:
                     userAccount.save()
                     pass

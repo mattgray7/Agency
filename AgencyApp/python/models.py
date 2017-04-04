@@ -4,17 +4,16 @@ from django.db import models
 from django.core.files.storage import FileSystemStorage
 
 from django.conf import settings
-image_storage = FileSystemStorage(
+imageStorage = FileSystemStorage(
     # Physical file location ROOT
-    location=u'{0}/profile/'.format(settings.MEDIA_ROOT),
+    location=u'{0}/'.format(settings.MEDIA_ROOT),
     # Url for file
-    base_url=u'{0}/profile/'.format(settings.MEDIA_URL),
+    base_url=u'{0}/'.format(settings.MEDIA_URL),
 )
 
 
 def image_directory_path(instance, filename):
-    # file will be uploaded to MEDIA_ROOT/my_sell/picture/<filename>
-    return u'picture/{0}'.format(filename)
+    return u'{0}/{1}'.format(instance.username, filename)
 
 
 # Create your models here.
@@ -25,7 +24,7 @@ class UserAccount(models.Model):
 	workInterest = models.BooleanField(default=False)
 	crewInterest = models.BooleanField(default=False)
 	collaborationInterest = models.BooleanField(default=False)
-	profilePicture = models.ImageField(default=None, upload_to=image_directory_path, storage=image_storage)
+	profilePicture = models.ImageField(default=None, upload_to=image_directory_path, storage=imageStorage)
 
 	#TODO use FileField
 	reelLink = models.CharField(max_length=500, default='')
