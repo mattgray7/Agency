@@ -149,7 +149,6 @@ def editInterests(request, context):
             source = request.POST.get("source")   
             if source == constants.CREATE_BASIC_ACCOUNT_FINISH:
                 editDestination = constants.EDIT_PROFILE_PICTURE
-                print "setting edit interest destination to edit profile picture"
 
     context["form"] = EditInterestsForm(initial={"work": userAccount.workInterest,
                                                  "crew": userAccount.crewInterest,
@@ -164,16 +163,16 @@ def editInterests(request, context):
 def editPicture(request, context):
     errors = []
     if request.method == "POST":
-        form = EditPictureForm(request.POST)
+        form = EditPictureForm(request.POST, request.FILES)
         formSubmitted = request.POST.get("source") not in [constants.PROFILE]
         if formSubmitted:
             if form.is_valid():
-                pic = form.cleaned_data.get('profilePicture')
                 userAccount = UserAccount.objects.get(username=request.user.username)
-                userAccount.profilePicture = pic
+                userAccount.profilePicture = request.FILES['profilePicture']
                 
                 try:
                     userAccount.save()
+                    pass
                 except:
                     errors.append("Could not connect to UserAccount db.")
                 else:

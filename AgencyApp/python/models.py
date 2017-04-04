@@ -1,6 +1,21 @@
 from __future__ import unicode_literals
 
 from django.db import models
+from django.core.files.storage import FileSystemStorage
+
+from django.conf import settings
+image_storage = FileSystemStorage(
+    # Physical file location ROOT
+    location=u'{0}/profile/'.format(settings.MEDIA_ROOT),
+    # Url for file
+    base_url=u'{0}/profile/'.format(settings.MEDIA_URL),
+)
+
+
+def image_directory_path(instance, filename):
+    # file will be uploaded to MEDIA_ROOT/my_sell/picture/<filename>
+    return u'picture/{0}'.format(filename)
+
 
 # Create your models here.
 class UserAccount(models.Model):
@@ -10,7 +25,7 @@ class UserAccount(models.Model):
 	workInterest = models.BooleanField(default=False)
 	crewInterest = models.BooleanField(default=False)
 	collaborationInterest = models.BooleanField(default=False)
-	profilePicture = models.FileField(default='')
+	profilePicture = models.ImageField(default=None, upload_to=image_directory_path, storage=image_storage)
 
 	#TODO use FileField
 	reelLink = models.CharField(max_length=500, default='')

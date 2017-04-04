@@ -8,7 +8,7 @@
 			{% endfor %}
 		</ul>
 	{% endif %}
-	<form method='post' action="/account/edit/picture/">
+	<form method='post' action="/account/edit/picture/" enctype="multipart/form-data">
 		{% csrf_token %}
 		{{ form.as_p }}
 		<input type="submit" value="Update picture" />

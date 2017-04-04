@@ -2,7 +2,25 @@
 
 {% block content %}
 	{% if accountFound %}
-		<p>Username is {{ userAccount.username }}</p>
+		{% if userAccount.profilePicture %}
+			<img src="{{ userAccount.profilePicture.url }}" height="200px" width="200px" />
+		{% else %}
+			<h5> No profile picture added</h5>
+		{% endif %}
+		<h1><u> {{ request.user.first_name }} {{ request.user.last_name }}</u></h1>
+		<br>
+		<h3> {{ request.user.first_name }} is looking for .. </h3>
+		<ul>
+			{% if userAccount.workInterest %}
+				<li>Work</li>
+			{% endif %}
+			{% if userAccount.crewInterest %}
+				<li>A crew</li>
+			{% endif %}
+			{% if userAccount.collaborationInterest %}
+				<li>Collaboration</li>
+			{% endif %}
+		</ul><br>
 	{% else %}
 		No user with name {{ username }} found.
 	{% endif %}

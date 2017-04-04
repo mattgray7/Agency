@@ -26,7 +26,7 @@ class SelectProfessionsForm(forms.Form):
 	other = forms.CharField(label="Other", required=False, max_length=200)
 
 class EditPictureForm(forms.Form):
-	profilePicture = forms.FileField(label="Profile Picture", required=False)
+	profilePicture = forms.FileField(label="Profile Picture")
 	editDestination = forms.CharField(widget=forms.HiddenInput, required=False)
 
 class EditBackgrounForm(forms.Form):
