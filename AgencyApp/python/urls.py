@@ -9,6 +9,7 @@ urlpatterns = [
     url(r'^account/create/basic/$', views.createAccount, name='createAccount'),
     url(r'^account/edit/picture/$', views.editPicture, name='editPicture'),
     url(r'^account/edit/interests/$', views.editInterests, name='editInterests'),
+    url(r'^account/edit/professions/$', views.editProfessions, name='editProfessions'),
     #url(r'^create/professions/$', views.create_selectProfessions, name='create_selectProfessions'),
     #url(r'^create/background/$', views.create_addBackground, name='create_addBackground'),
     url(r'^account/create/finish/$', views.createAccountFinish, name='createAccountFinish'),

@@ -38,5 +38,10 @@
 			<input type="hidden" name="source" value="{{ possibleSources.profile }}" />
 			<input type="submit" value="Edit profile picture" />
 		</form>
+		<form action="/account/edit/professions/" method="post">
+			{% csrf_token %}
+			<input type="hidden" name="source" value="{{ possibleSources.profile }}" />
+			<input type="submit" value="Edit professions" />
+		</form>
 	{% endif %}
 {% endblock %}

@@ -6,7 +6,7 @@ from django.db import IntegrityError
 
 # Create your views here.
 from django.http import HttpResponseRedirect
-from forms import LoginForm, CreateAccountForm, EditInterestsForm, EditPictureForm, SelectProfessionsForm
+from forms import LoginForm, CreateAccountForm, EditInterestsForm, EditPictureForm, EditProfessionsForm
 from models import UserAccount, Professions
 from helpers import getMessageFromKey, capitalizeName
 
@@ -119,18 +119,18 @@ def finish(request, context):
 
 
 def editInterests(request, context):
+    # Source is in request because account finish sends using post form
     errors = []
     userAccount = UserAccount.objects.get(username=request.user.username)
     editDestination = constants.PROFILE
 
     if request.method == "POST":
         form = EditInterestsForm(request.POST)
-        #fromProfile = request.POST.get("source") == constants.PROFILE
-        #fromCreateAccountFinish = request.POST.get("source") == constants.CREATE_BASIC_ACCOUNT_FINISH
-        formSubmitted = request.POST.get("source") not in [constants.CREATE_BASIC_ACCOUNT_FINISH,
-                                                           constants.PROFILE]
-        if formSubmitted:
+
+        print request.POST.get("source")
+        if request.POST.get("source") == constants.EDIT_INTERESTS:
             if form.is_valid():
+                print "form: {0}".format(form.cleaned_data)
                 workSelected = form.cleaned_data.get('work', False)
                 crewSelected = form.cleaned_data.get('crew', False)
                 collabSelected = form.cleaned_data.get('collaboration', False)
@@ -142,31 +142,93 @@ def editInterests(request, context):
                 except:
                     errors.append("Could not connect to UserAccount database")
 
-                # TODO redirect to profession page if looking for work selected
-                if form.cleaned_data.get('editDestination') == constants.EDIT_PROFILE_PICTURE:
-                    return HttpResponseRedirect('/account/edit/picture/')
+                messages.add_message(request, messages.INFO,
+                                     "source:{0}".format(constants.EDIT_INTERESTS))
+                print "setting message source to {0}".format(constants.EDIT_INTERESTS)
+                print "destinatino is {0}".format(form.cleaned_data.get('editDestination'))
+                if form.cleaned_data.get('editDestination') == constants.EDIT_PROFESSIONS:
+                    return HttpResponseRedirect('/account/edit/professions/')
                 else:
                     return HttpResponseRedirect('/{0}/'.format(request.user.username))
-        else:
-            source = request.POST.get("source")   
-            if source == constants.CREATE_BASIC_ACCOUNT_FINISH:
-                editDestination = constants.EDIT_PROFILE_PICTURE
+        elif request.POST.get("source") == constants.CREATE_BASIC_ACCOUNT_FINISH:
+            print "source is {0}, setting dest to {1}".format(constants.CREATE_BASIC_ACCOUNT_FINISH, constants.EDIT_PROFESSIONS)
+            editDestination = constants.EDIT_PROFESSIONS
 
     context["form"] = EditInterestsForm(initial={"work": userAccount.workInterest,
                                                  "crew": userAccount.crewInterest,
                                                  "collaboration": userAccount.collaborationInterest,
                                                  "editDestination": editDestination})
+    # TODO fix discrepancy between button forms and module forms
+    context["possibleSources"] = {"interests": constants.EDIT_INTERESTS}
+    print "possible source: interests:{0}".format(constants.EDIT_INTERESTS)
+
+
     if errors:
         context["errors"] = errors
     # fromProfile will go here
     return render(request, 'AgencyApp/account/interests.html', context)
 
 
+def editProfessions(request, context):
+    # source is in message because editInterests uses a redirect
+    errors = []
+    editDestination = constants.PROFILE
+    source = getMessageFromKey(request, "source")
+    if request.method == "POST":
+        form = EditProfessionsForm(request.POST)
+        if request.POST.get("source") == constants.EDIT_PROFESSIONS:
+        #if form.is_valid() and form.cleaned_data.get('source') == constants.EDIT_PROFESSIONS:
+            if form.is_valid():
+                actor = form.cleaned_data.get('actor', False)
+                director = form.cleaned_data.get('director', False)
+                writer = form.cleaned_data.get('writer', False)
+                cinematographer = form.cleaned_data.get('cinematographer', False)
+                other = form.cleaned_data.get('work', '')
+                print "finish editDest is {0}".format(form.cleaned_data.get('editDestination'))
+                print form.cleaned_data
+                if actor == director == writer == cinematographer == False and other == "":
+                    errors.append("You must select what line of work you are looking for.")
+                else:
+                    #username = getMessageFromKey(request, "username")
+                    username = request.user.username
+                    professions = Professions(username=username, actor=actor, director=director,
+                                              cinematographer=cinematographer, other=other)
+                    #TODO check if user profession already exists?
+                    try:
+                        professions.save()
+                    except:
+                        errors.append("Could not connect to Profession db.")
+
+                    messages.add_message(request, messages.INFO,
+                                         "source:{0}".format(constants.EDIT_PROFESSIONS))
+                    if form.cleaned_data.get('editDestination') == constants.EDIT_PROFILE_PICTURE:
+                        return HttpResponseRedirect('/account/edit/picture/')
+                    else:
+                        print "returning to profile, dest is {0}".format(form.cleaned_data.get('editDestination'))
+                        return HttpResponseRedirect('/{0}/'.format(request.user.username))
+
+        #elif constants.EDIT_INTERESTS in [request.POST.get("source"), form.is_valid() and form.cleaned_data.get("source")]:
+    elif source == constants.EDIT_INTERESTS:
+        print "source is {0}, setting dest to {1}".format(constants.EDIT_INTERESTS, constants.EDIT_PROFILE_PICTURE)
+        editDestination = constants.EDIT_PROFILE_PICTURE
+
+    context["form"] = EditProfessionsForm(initial={"editDestination": editDestination})
+    print "editDestination is {0}".format(editDestination)
+    context["possibleSources"] = {"professions": constants.EDIT_PROFESSIONS}
+    print "possible source: professions:{0}".format(constants.EDIT_PROFESSIONS)
+    if errors:
+        context["errors"] = errors
+    return render(request, 'AgencyApp/account/professions.html', context)
+
 def editPicture(request, context):
     errors = []
     if request.method == "POST":
         form = EditPictureForm(request.POST, request.FILES)
         formSubmitted = request.POST.get("source") not in [constants.PROFILE]
+
+        if request.POST.get("source") == constants.EDIT_PROFESSIONS:
+            editDestination = constants.EDIT_PROFILE_PICTURE
+        
         if formSubmitted:
             if form.is_valid():
                 userAccount = UserAccount.objects.get(username=request.user.username)
@@ -197,37 +259,6 @@ def editPicture(request, context):
     if errors:
         context["errors"] = errors
     return render(request, 'AgencyApp/account/picture.html', context)
-
-
-def selectProfessions(request, context):
-    errors = []
-    if request.method == "POST":
-        form = SelectProfessionsForm(request.POST)
-        if form.is_valid():
-            actor = form.cleaned_data.get('actor', False)
-            director = form.cleaned_data.get('director', False)
-            writer = form.cleaned_data.get('writer', False)
-            cinematographer = form.cleaned_data.get('cinematographer', False)
-            other = form.cleaned_data.get('work', '')
-
-            if actor == director == writer == cinematographer == False and other == "":
-                errors.append("You must select what line of work you are looking for.")
-            else:
-                #username = getMessageFromKey(request, "username")
-                username = request.user.username
-                professions = Professions(username=username, actor=actor, director=director,
-                                          cinematographer=cinematographer, other=other)
-                #TODO check if user profession already exists?
-                try:
-                    professions.save()
-                except:
-                    errors.append("Could not connect to Profession db.")
-                else:
-                    return HttpResponseRedirect('/create/background')
-    context["form"] = SelectProfessionsForm()
-    if errors:
-        context["errors"] = errors
-    return render(request, 'AgencyApp/account/professions.html', context)
 
 
 def addBackground(request, context):

@@ -30,6 +30,9 @@ def editInterests(request):
 def editPicture(request):
     return account.editPicture(request, getBaseContext(request))
 
+def editProfessions(request):
+    return account.editProfessions(request, getBaseContext(request))
+
 def create_selectProfessions(request):
     return account.selectProfessions(request, getBaseContext(request))
 
