@@ -124,9 +124,18 @@ def editInterests(request, context):
     userAccount = UserAccount.objects.get(username=request.user.username)
     editDestination = constants.PROFILE
 
+    # POST requests come from profile and account creation finish
+    incomingSource = request.method == "POST" and request.POST.get("source")
+    if incomingSource == constants.CREATE_BASIC_ACCOUNT_FINISH:
+        # TODO use a redirect table?
+        # Send to next page in account creation
+        editDestination = constants.EDIT_PROFESSIONS
+    else:
+        editDestination = constants.PROFILE
+
     if request.method == "POST":
         form = EditInterestsForm(request.POST)
-        if request.POST.get("source") == constants.EDIT_INTERESTS:
+        if incomingSource == constants.EDIT_INTERESTS:
             if form.is_valid():
                 workSelected = form.cleaned_data.get('work', False)
                 crewSelected = form.cleaned_data.get('crew', False)
@@ -145,15 +154,14 @@ def editInterests(request, context):
                     return HttpResponseRedirect('/account/edit/professions/')
                 else:
                     return HttpResponseRedirect('/{0}/'.format(request.user.username))
-        elif request.POST.get("source") == constants.CREATE_BASIC_ACCOUNT_FINISH:
-            editDestination = constants.EDIT_PROFESSIONS
+        #elif incomingSource == constants.CREATE_BASIC_ACCOUNT_FINISH:
+        #    editDestination = constants.EDIT_PROFESSIONS
 
     context["form"] = EditInterestsForm(initial={"work": userAccount.workInterest,
                                                  "crew": userAccount.crewInterest,
                                                  "collaboration": userAccount.collaborationInterest,
-                                                 "editDestination": editDestination})
-    # TODO fix discrepancy between button forms and module forms
-    context["possibleSources"] = {"interests": constants.EDIT_INTERESTS}
+                                                 "editDestination": editDestination,
+                                                 "source": constants.EDIT_INTERESTS})
 
     if errors:
         context["errors"] = errors
@@ -163,12 +171,27 @@ def editInterests(request, context):
 def editProfessions(request, context):
     # source is in message because editInterests uses a redirect
     errors = []
-    editDestination = constants.PROFILE
-    source = getMessageFromKey(request, "source")
+
+    # Get the incoming source and set the destination page
+    if request.POST.get("source"):
+        # Came from profile page edit
+        incomingSource = request.POST.get("source")
+        editDestination = constants.PROFILE
+    else:
+        # Came from editInterests redirect
+        incomingSource = getMessageFromKey(request, "source")
+        if incomingSource == constants.EDIT_INTERESTS:
+            editDestination = constants.EDIT_PROFILE_PICTURE
+        else:
+            # Shouldn't ever get here, but used as fallback
+            print "editProessions error: unknown source"
+            editDestination = constants.PROFILE
+
     if request.method == "POST":
         form = EditProfessionsForm(request.POST)
-        if request.POST.get("source") == constants.EDIT_PROFESSIONS:
+        if incomingSource == constants.EDIT_PROFESSIONS:
             if form.is_valid():
+                #TODO use a list in the model for all of the professions
                 actor = form.cleaned_data.get('actor', False)
                 director = form.cleaned_data.get('director', False)
                 writer = form.cleaned_data.get('writer', False)
@@ -193,11 +216,9 @@ def editProfessions(request, context):
                         return HttpResponseRedirect('/account/edit/picture/')
                     else:
                         return HttpResponseRedirect('/{0}/'.format(request.user.username))
-    elif source == constants.EDIT_INTERESTS:
-        editDestination = constants.EDIT_PROFILE_PICTURE
 
-    context["form"] = EditProfessionsForm(initial={"editDestination": editDestination})
-    context["possibleSources"] = {"professions": constants.EDIT_PROFESSIONS}
+    context["form"] = EditProfessionsForm(initial={"editDestination": editDestination,
+                                                   "source": constants.EDIT_PROFESSIONS})
     if errors:
         context["errors"] = errors
     return render(request, 'AgencyApp/account/professions.html', context)

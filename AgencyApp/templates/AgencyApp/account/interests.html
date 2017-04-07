@@ -12,10 +12,7 @@
 	<form method='post' action="/account/edit/interests/">
 		{% csrf_token %}
 		{{ form.as_p }}
-		<input type="hidden" name="source" value="{{ possibleSources.interests }}" />
-		{{ possibleSources.interests }}
 		<input type="submit" value="Update interests" />
-		Source: {{ possibleSources.interests }}
 	</form>
 
 {% endblock %}

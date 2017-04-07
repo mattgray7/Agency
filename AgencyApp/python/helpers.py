@@ -11,7 +11,6 @@ def getBaseContext(request):
         source = request.POST.get("source")
     else:
         source = getMessageFromKey(request, "source")
-    print "HELPER source is {0}".format(source)
     return {"toolbarSources": {"login": constants.TOOLBAR_LOGIN,
                                "home": constants.TOOLBAR_HOME,
                                "logout": constants.TOOLBAR_LOGOUT,
