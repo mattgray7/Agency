@@ -84,6 +84,8 @@ def createAccount(request, context):
                                                     last_name=lastName)
                     userAccount = UserAccount(email=form.cleaned_data.get('email'),
                                               username=username,
+                                              firstName=firstName,
+                                              lastName=lastName,
                                               setupComplete=False)
                     saveSuccess = True
                     try:
@@ -187,6 +189,21 @@ def editProfessions(request, context):
             print "editProessions error: unknown source"
             editDestination = constants.PROFILE
 
+    # Get any existing profession selections
+    try:
+        professions = Professions.objects.get(username=request.user.username)
+        context["form"] = EditProfessionsForm(initial={"editDestination": editDestination,
+                                                       "source": constants.EDIT_PROFESSIONS,
+                                                       "actor": professions.actor,
+                                                       "director": professions.director,
+                                                       "writer": professions.writer,
+                                                       "cinematographer": professions.cinematographer,
+                                                       "other": professions.other})
+    except Professions.DoesNotExist:
+        professions = None
+        context["form"] = EditProfessionsForm(initial={"editDestination": editDestination,
+                                                       "source": constants.EDIT_PROFESSIONS})
+
     if request.method == "POST":
         form = EditProfessionsForm(request.POST)
         if incomingSource == constants.EDIT_PROFESSIONS:
@@ -196,29 +213,33 @@ def editProfessions(request, context):
                 director = form.cleaned_data.get('director', False)
                 writer = form.cleaned_data.get('writer', False)
                 cinematographer = form.cleaned_data.get('cinematographer', False)
-                other = form.cleaned_data.get('work', '')
-                if actor == director == writer == cinematographer == False and other == "":
-                    errors.append("You must select what line of work you are looking for.")
-                else:
-                    #username = getMessageFromKey(request, "username")
-                    username = request.user.username
+                other = form.cleaned_data.get('other', '')
+
+                username = request.user.username
+                if professions is None:
                     professions = Professions(username=username, actor=actor, director=director,
-                                              cinematographer=cinematographer, other=other)
-                    #TODO check if user profession already exists?
-                    try:
-                        professions.save()
-                    except:
-                        errors.append("Could not connect to Profession db.")
+                                              writer=writer, cinematographer=cinematographer,
+                                              other=other)
+                else:
+                    professions.actor = actor
+                    professions.director = director
+                    professions.writer = writer
+                    professions.cinematographer = cinematographer
+                    professions.other = other
+                #TODO check if user profession already exists?
+                try:
+                    professions.save()
+                except:
+                    errors.append("Could not connect to Profession db.")
 
-                    messages.add_message(request, messages.INFO,
-                                         "source:{0}".format(constants.EDIT_PROFESSIONS))
-                    if form.cleaned_data.get('editDestination') == constants.EDIT_PROFILE_PICTURE:
-                        return HttpResponseRedirect('/account/edit/picture/')
-                    else:
-                        return HttpResponseRedirect('/{0}/'.format(request.user.username))
+                messages.add_message(request, messages.INFO,
+                                     "source:{0}".format(constants.EDIT_PROFESSIONS))
+                if form.cleaned_data.get('editDestination') == constants.EDIT_PROFILE_PICTURE:
+                    return HttpResponseRedirect('/account/edit/picture/')
+                else:
+                    return HttpResponseRedirect('/{0}/'.format(request.user.username))
 
-    context["form"] = EditProfessionsForm(initial={"editDestination": editDestination,
-                                                   "source": constants.EDIT_PROFESSIONS})
+
     if errors:
         context["errors"] = errors
     return render(request, 'AgencyApp/account/professions.html', context)

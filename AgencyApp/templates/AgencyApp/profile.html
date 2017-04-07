@@ -6,12 +6,20 @@
 			<div id="profilePic">
 				<img src="{{ userAccount.profilePicture.url }}" height="150px" width="175px"/>
 			</div>
+			{% if request.user.is_authenticated and request.user.username == username %}
+				<form action="/account/edit/picture/" method="post">
+					{% csrf_token %}
+					<input type="hidden" name="source" value="{{ possibleSources.profile }}" />
+					<input type="submit" value="Edit profile picture" />
+				</form>
+			{% endif %}
 		{% else %}
 			<h5> No profile picture added</h5>
 		{% endif %}
-		<h1><u> {{ request.user.first_name }} {{ request.user.last_name }}</u></h1>
-		<br>
-		<h3> {{ request.user.first_name }} is looking for .. </h3>
+		<h1><u> {{ userAccount.firstName }} {{ userAccount.lastName }}</u></h1>
+
+		<!-- Interests -->
+		<h3> {{ userAccount.firstName }} is looking for .. </h3>
 		<ul>
 			{% if userAccount.workInterest %}
 				<li>Work</li>
@@ -22,26 +30,65 @@
 			{% if userAccount.collaborationInterest %}
 				<li>Collaboration</li>
 			{% endif %}
-		</ul><br>
+		</ul>
+		{% if request.user.is_authenticated and request.user.username == username %}
+			<form action="/account/edit/interests/" method="post">
+				{% csrf_token %}
+				<input type="hidden" name="source" value="{{ possibleSources.profile }}" />
+				<input type="submit" value="Edit profile interests" />
+			</form>
+		{% endif %}
+		<br>
+		<!-- Professions -->
+		{% if not professionsFound %}
+			<h3> {{ userAccount.firstName }} has not specified his interested professions </h3>
+		{% elif userProfessions %}
+			<h3> {{ userAccount.firstName }}'s interested professions include ..</h3>
+			<ul>
+				<!-- TODO add for loop when list is done-->
+				{% if userProfessions.actor %}
+					<li>Acting</li>
+				{% endif %}
+				{% if userProfessions.director %}
+					<li>Directing</li>
+				{% endif %}
+				{% if userProfessions.writer %}
+					<li>Writing</li>
+				{% endif %}
+				{% if userProfessions.cinematographer %}
+					<li>Cinematography</li>
+				{% endif %}
+				{% if userProfessions.other %}
+					<li>{{ userProfessions.other }}</li>
+				{% endif %}
+			</ul>
+		{% endif %}
+		{% if request.user.is_authenticated and request.user.username == username %}
+			<form action="/account/edit/professions/" method="post">
+				{% csrf_token %}
+				<input type="hidden" name="source" value="{{ possibleSources.profile }}" />
+				<input type="submit" value="Edit professions" />
+			</form>
+		{% endif %}
 	{% else %}
 		No user with name {{ username }} found.
 	{% endif %}
 
-	{% if request.user.is_authenticated %}
+	<!--{% if request.user.is_authenticated %}
 		<form action="/account/edit/interests/" method="post">
 			{% csrf_token %}
 			<input type="hidden" name="source" value="{{ possibleSources.profile }}" />
 			<input type="submit" value="Edit profile interests" />
-		</form>
-		<form action="/account/edit/picture/" method="post">
-			{% csrf_token %}
-			<input type="hidden" name="source" value="{{ possibleSources.profile }}" />
-			<input type="submit" value="Edit profile picture" />
 		</form>
 		<form action="/account/edit/professions/" method="post">
 			{% csrf_token %}
 			<input type="hidden" name="source" value="{{ possibleSources.profile }}" />
 			<input type="submit" value="Edit professions" />
 		</form>
-	{% endif %}
+		<form action="/account/edit/picture/" method="post">
+			{% csrf_token %}
+			<input type="hidden" name="source" value="{{ possibleSources.profile }}" />
+			<input type="submit" value="Edit profile picture" />
+		</form>
+	{% endif %}-->
 {% endblock %}

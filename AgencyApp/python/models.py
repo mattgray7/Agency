@@ -19,7 +19,9 @@ def image_directory_path(instance, filename):
 # Create your models here.
 class UserAccount(models.Model):
 	email = models.EmailField(max_length=100)
-	username = models.CharField(max_length=10)
+	username = models.CharField(max_length=100)
+	firstName = models.CharField(max_length=100)
+	lastName = models.CharField(max_length=100)
 	setupComplete = models.BooleanField(default=False)
 	workInterest = models.BooleanField(default=False)
 	crewInterest = models.BooleanField(default=False)
