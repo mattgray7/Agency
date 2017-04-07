@@ -248,12 +248,10 @@ def editPicture(request, context):
     errors = []
     if request.method == "POST":
         form = EditPictureForm(request.POST, request.FILES)
-        formSubmitted = request.POST.get("source") not in [constants.PROFILE]
-
-        if request.POST.get("source") == constants.EDIT_PROFESSIONS:
-            editDestination = constants.EDIT_PROFILE_PICTURE
-        
-        if formSubmitted:
+        if request.POST.get("skip") == "True":
+            #TODO redirect to destination
+            return HttpResponseRedirect('/{0}/'.format(request.user.username))
+        elif request.POST.get("source") == constants.EDIT_PROFILE_PICTURE:
             if form.is_valid():
                 userAccount = UserAccount.objects.get(username=request.user.username)
                 userAccount.profilePicture = request.FILES['profilePicture']
@@ -279,7 +277,8 @@ def editPicture(request, context):
                 else:
                     return HttpResponseRedirect('/{0}/'.format(request.user.username))
 
-    context["form"] = EditPictureForm()
+    context["form"] = EditPictureForm(initial={"source": constants.EDIT_PROFILE_PICTURE})
+    context["possibleSources"] = {"picture": constants.EDIT_PROFILE_PICTURE}
     if errors:
         context["errors"] = errors
     return render(request, 'AgencyApp/account/picture.html', context)

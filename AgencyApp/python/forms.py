@@ -31,6 +31,7 @@ class EditProfessionsForm(forms.Form):
 class EditPictureForm(forms.Form):
 	profilePicture = forms.FileField(label="Profile Picture")
 	editDestination = forms.CharField(widget=forms.HiddenInput, required=False)
+	source = forms.CharField(widget=forms.HiddenInput, required=False)
 
 class EditBackgrounForm(forms.Form):
 	reel = forms.CharField(label="Reel Link", required=False, max_length=500)

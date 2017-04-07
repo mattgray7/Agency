@@ -23,8 +23,9 @@ def display(request, username, context):
         except User.DoesNotExist:
         	pass
         else:
+        	# TODO still set to True even if user removes all professions
         	context["professionsFound"] = True
         	context["userProfessions"] = professions
- 
+
     context["possibleSources"] = {"profile": constants.PROFILE}
     return render(request, "AgencyApp/profile.html", context)
