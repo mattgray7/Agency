@@ -31,23 +31,10 @@ def loginUser(request, context):
                     # Login was a success
                     login(request, user)
                     # TODO change the source page if from toolbar
-                    #loginDestination = form.cleaned_data.get('loginSuccessDestination')
-
                     messages.add_message(request, messages.INFO, "source:{0}".format(LOGIN))
-                    destinationURL = helpers.getDestinationURL(currentPage=LOGIN,
-                                                               sourcePage=HOME,
-                                                               pageKey=form.cleaned_data.get('loginSuccessDestination'))
-                    if not destinationURL:
-                        errors.append("Could not resolve URL.")
-                        raise
-                    else:
-                        return HttpResponseRedirect(destinationURL)
-                    """if loginDestination == constants.CREATE_POST:
-                        return HttpResponseRedirect(urls.CREATE_POST)
-                    elif loginDestination == constants.CREATE_EVENT:
-                        return HttpResponseRedirect(urls.CREATE_EVENT)
-                    else:
-                        return HttpResponseRedirect(urls.HOME)"""
+                    return helpers.redirect(currentPage=LOGIN,
+                                            sourcePage=HOME,
+                                            pageKey=form.cleaned_data.get('loginSuccessDestination'))
                 else:
                     errors.append("Email and password do not match.")
         else:
@@ -111,12 +98,17 @@ def createAccount(request, context):
                             errors.append("Unable to save in UserAccount db.")
                             #TODO delete account from User db
                     if saveSuccess:
-                        print "Successfully created account."
                         login(request, user)
 
                         messages.add_message(request, messages.INFO,
-                                             "source:{0}".format(constants.CREATE_BASIC_ACCOUNT_FINISH))
-                        return HttpResponseRedirect('/account/create/finish/')
+                                             "source:{0}".format(CREATE_BASIC_ACCOUNT_FINISH))
+
+                        # TODO change the source (home vs login?)
+                        destinationURL = helpers.getDestinationURL(currentPage=CREATE_BASIC_ACCOUNT,
+                                                                   sourcePage=LOGIN)
+                        if destinationURL:
+                            return HttpResponseRedirect(destinationURL)
+                        #return HttpResponseRedirect('/account/create/finish/')
 
     context["form"] = CreateAccountForm()
     if errors:

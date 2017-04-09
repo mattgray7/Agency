@@ -1,5 +1,29 @@
 from django.contrib import messages
+from django.http import HttpResponseRedirect
 import constants
+
+
+def redirect(currentPage, sourcePage, pageKey=None):
+    """Returns an HttpResonseRedirect of the desired URL can be resolved (see getDestinationURL for 
+    more info on how this is done). If no URL can be resolved, an error is raised
+
+    :param str currentPage: Current page name as defined in constants.py
+    :param str sourcePage: Name of page that led to the current page as defined in constants.py
+    :param str pageKey: Optional argument if multiple destinations exist from the same current/source
+                        page combintaion, defaults to DEFAULT
+    :return HttpResonseRedirect: Redirect to destination if found
+    """
+    if None in [currentPage, sourcePage]:
+        print "Current or source page not specified"
+        #TODO raise proper exception
+        raise
+
+    destinationURL = getDestinationURL(currentPage, sourcePage, pageKey)
+    if not destinationURL:
+        print "No url could be resolved"
+        raise
+    else:
+        return HttpResponseRedirect(destinationURL)
 
 
 def getDestinationURL(currentPage, sourcePage, pageKey=None):
