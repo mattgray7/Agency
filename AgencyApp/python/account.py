@@ -116,7 +116,20 @@ def createAccount(request, context):
 
 
 def finish(request, context):
+    # Get the incoming source and set the destination page
+    if request.POST.get("source"):
+        # Came from profile page edit
+        incomingSource = request.POST.get("source")
+    else:
+        # Came from editInterests redirect
+        incomingSource = getMessageFromKey(request, "source")
+
+    context["showSetupProfile"] = True
+    if incomingSource == constants.EDIT_BACKGROUND:
+        context["showSetupProfile"] = False
+    
     context["possibleSources"] = {"finish": constants.CREATE_BASIC_ACCOUNT_FINISH}
+
     return render(request, 'AgencyApp/account/finish.html', context)
 
 
@@ -344,6 +357,8 @@ def editBackground(request, context):
                 except:
                     errors.append("Could not connect to UserAccount db.")
                 else:
+                    messages.add_message(request, messages.INFO,
+                                         "source:{0}".format(constants.EDIT_BACKGROUND))
                     if form.cleaned_data.get("editDestination") == constants.SETUP_ACCOUNT_FINISH:
                         return HttpResponseRedirect('/account/create/finish/')
                     else:
