@@ -33,11 +33,8 @@ def editPicture(request):
 def editProfessions(request):
     return account.editProfessions(request, getBaseContext(request))
 
-def create_selectProfessions(request):
-    return account.selectProfessions(request, getBaseContext(request))
-
-def create_addBackground(request):
-    return account.addBackground(request, getBaseContext(request))
+def editBackground(request):
+    return account.editBackground(request, getBaseContext(request))
 
 def createAccountFinish(request):
     return account.finish(request, getBaseContext(request))

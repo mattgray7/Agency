@@ -15,6 +15,7 @@ CREATE_BASIC_ACCOUNT_FINISH = "createBasicAccountFinish"
 EDIT_INTERESTS = "editInterests"
 EDIT_PROFILE_PICTURE = "editProfilePicture"
 EDIT_PROFESSIONS = "editProfessions"
+EDIT_BACKGROUND = "editBackground"
 
 FIRST_CREATE_EVENT_VIEW = "firstCreateEventView"
 FIRST_CREATE_POST_VIEW = "firstCreatePostView"

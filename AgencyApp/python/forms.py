@@ -33,7 +33,7 @@ class EditPictureForm(forms.Form):
 	editDestination = forms.CharField(widget=forms.HiddenInput, required=False)
 	source = forms.CharField(widget=forms.HiddenInput, required=False)
 
-class EditBackgrounForm(forms.Form):
+class EditBackgroundForm(forms.Form):
 	reel = forms.CharField(label="Reel Link", required=False, max_length=500)
 	imdb = forms.CharField(label="IMDB Link", required=False, max_length=500)
 	bio = forms.CharField(label="Bio", required=False, max_length=1000)

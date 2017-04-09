@@ -6,7 +6,7 @@ from django.db import IntegrityError
 
 # Create your views here.
 from django.http import HttpResponseRedirect
-from forms import LoginForm, CreateAccountForm, EditInterestsForm, EditPictureForm, EditProfessionsForm
+from forms import LoginForm, CreateAccountForm, EditInterestsForm, EditPictureForm, EditProfessionsForm, EditBackgroundForm
 from models import UserAccount, Professions
 from helpers import getMessageFromKey, capitalizeName
 
@@ -239,19 +239,29 @@ def editProfessions(request, context):
                 else:
                     return HttpResponseRedirect('/{0}/'.format(request.user.username))
 
-
     if errors:
         context["errors"] = errors
     return render(request, 'AgencyApp/account/professions.html', context)
 
 def editPicture(request, context):
     errors = []
+
+    # Get the incoming source and set the destination page
+    if request.POST.get("source"):
+        # Came from profile page edit
+        incomingSource = request.POST.get("source")
+    else:
+        # Came from editInterests redirect
+        incomingSource = getMessageFromKey(request, "source")
+
+    if incomingSource == constants.EDIT_PROFESSIONS:
+        editDestination = constants.EDIT_BACKGROUND
+    else:
+        editDestination = constants.PROFILE 
+
     if request.method == "POST":
         form = EditPictureForm(request.POST, request.FILES)
-        if request.POST.get("skip") == "True":
-            #TODO redirect to destination
-            return HttpResponseRedirect('/{0}/'.format(request.user.username))
-        elif request.POST.get("source") == constants.EDIT_PROFILE_PICTURE:
+        if request.POST.get("source") == constants.EDIT_PROFILE_PICTURE:
             if form.is_valid():
                 userAccount = UserAccount.objects.get(username=request.user.username)
                 userAccount.profilePicture = request.FILES['profilePicture']
@@ -275,30 +285,39 @@ def editPicture(request, context):
                 except:
                     errors.append("Could not connect to UserAccount db.")
                 else:
+                    if form.cleaned_data.get('editDestination') == constants.EDIT_BACKGROUND:
+                        return HttpResponseRedirect('/account/edit/background')
+                    else:
+                        return HttpResponseRedirect('/{0}/'.format(request.user.username))
+            elif request.POST.get("skip") == "True":
+                # editDestination is stored in post data of skip form
+                if request.POST.get("editDestination") == constants.EDIT_BACKGROUND:
+                    return HttpResponseRedirect('/account/edit/background')
+                else:
                     return HttpResponseRedirect('/{0}/'.format(request.user.username))
 
-    context["form"] = EditPictureForm(initial={"source": constants.EDIT_PROFILE_PICTURE})
+
+    context["form"] = EditPictureForm(initial={"source": constants.EDIT_PROFILE_PICTURE,
+                                               "editDestination": editDestination})
+
+    # add edit destination to context so that skip button can redirect properly
+    context["editDestination"] = editDestination
     context["possibleSources"] = {"picture": constants.EDIT_PROFILE_PICTURE}
     if errors:
         context["errors"] = errors
     return render(request, 'AgencyApp/account/picture.html', context)
 
 
-def addBackground(request, context):
+def editBackground(request, context):
     errors = []
     if request.method == "POST":
         form = AddBackgroundForm(request.POST)
         if form.is_valid():
-            pic = form.cleaned_data.get('profilePicture')
             reel = form.cleaned_data.get('reel')
             imdb = form.cleaned_data.get('imdb')
             bio = form.cleaned_data.get('bio')
 
-            #username = getMessageFromKey(request, "username")
-            username = request.user.username
-
-            userAccount = UserAccount.objects.get(username=username)
-            userAccount.profilePicture = pic
+            userAccount = UserAccount.objects.get(username=request.user.username)
             userAccount.reelLink = reel
             userAccount.imdbLink = imdb
             userAccount.bio = bio
@@ -308,8 +327,8 @@ def addBackground(request, context):
             except:
                 errors.append("Could not connect to UserAccount db.")
             else:
-                return HttpResponseRedirect('/create/finish')
-    context["form"] = AddBackgroundForm()
+                return HttpResponseRedirect('/{0}/'.format(request.user.username))
+    context["form"] = EditBackgroundForm()
     if errors:
         context["errors"] = errors
     return render(request, 'AgencyApp/account/background.html', context)

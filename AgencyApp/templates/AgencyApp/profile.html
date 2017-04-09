@@ -6,15 +6,15 @@
 			<div id="profilePic">
 				<img src="{{ userAccount.profilePicture.url }}" height="150px" width="175px"/>
 			</div>
-			{% if request.user.is_authenticated and request.user.username == username %}
-				<form action="/account/edit/picture/" method="post">
-					{% csrf_token %}
-					<input type="hidden" name="source" value="{{ possibleSources.profile }}" />
-					<input type="submit" value="Edit profile picture" />
-				</form>
-			{% endif %}
 		{% else %}
 			<h5> No profile picture added</h5>
+		{% endif %}
+		{% if request.user.is_authenticated and request.user.username == username %}
+			<form action="/account/edit/picture/" method="post">
+				{% csrf_token %}
+				<input type="hidden" name="source" value="{{ possibleSources.profile }}" />
+				<input type="submit" value="Edit profile picture" />
+			</form>
 		{% endif %}
 		<h1><u> {{ userAccount.firstName }} {{ userAccount.lastName }}</u></h1>
 
