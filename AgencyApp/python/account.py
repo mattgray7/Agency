@@ -137,13 +137,9 @@ def editInterests(request, context):
     # Source is in request because account finish sends using post form
     errors = []
     userAccount = UserAccount.objects.get(username=request.user.username)
-    editDestination = constants.PROFILE
 
-    # POST requests come from profile and account creation finish
-    incomingSource = request.method == "POST" and request.POST.get("source")
+    incomingSource = _getIncomingSource(request)
     if incomingSource == constants.CREATE_BASIC_ACCOUNT_FINISH:
-        # TODO use a redirect table?
-        # Send to next page in account creation
         editDestination = constants.EDIT_PROFESSIONS
     else:
         editDestination = constants.PROFILE
@@ -169,8 +165,6 @@ def editInterests(request, context):
                     return HttpResponseRedirect('/account/edit/professions/')
                 else:
                     return HttpResponseRedirect('/{0}/'.format(request.user.username))
-        #elif incomingSource == constants.CREATE_BASIC_ACCOUNT_FINISH:
-        #    editDestination = constants.EDIT_PROFESSIONS
 
     context["form"] = EditInterestsForm(initial={"work": userAccount.workInterest,
                                                  "crew": userAccount.crewInterest,
@@ -187,20 +181,11 @@ def editProfessions(request, context):
     # source is in message because editInterests uses a redirect
     errors = []
 
-    # Get the incoming source and set the destination page
-    if request.POST.get("source"):
-        # Came from profile page edit
-        incomingSource = request.POST.get("source")
-        editDestination = constants.PROFILE
+    incomingSource = _getIncomingSource(request)
+    if incomingSource == constants.EDIT_INTERESTS:
+        editDestination = constants.EDIT_PROFILE_PICTURE
     else:
-        # Came from editInterests redirect
-        incomingSource = getMessageFromKey(request, "source")
-        if incomingSource == constants.EDIT_INTERESTS:
-            editDestination = constants.EDIT_PROFILE_PICTURE
-        else:
-            # Shouldn't ever get here, but used as fallback
-            print "editProessions error: unknown source"
-            editDestination = constants.PROFILE
+        editDestination = constants.PROFILE
 
     # Get any existing profession selections
     try:
@@ -258,14 +243,7 @@ def editProfessions(request, context):
 
 def editPicture(request, context):
     errors = []
-
-    # Get the incoming source and set the destination page
-    if request.POST.get("source"):
-        # Came from profile page edit
-        incomingSource = request.POST.get("source")
-    else:
-        # Came from editInterests redirect
-        incomingSource = getMessageFromKey(request, "source")
+    incomingSource = _getIncomingSource(request)
 
     if incomingSource == constants.EDIT_PROFESSIONS:
         editDestination = constants.EDIT_BACKGROUND
@@ -326,13 +304,7 @@ def editPicture(request, context):
 def editBackground(request, context):
     errors = []
     userAccount = UserAccount.objects.get(username=request.user.username)
-    # Get the incoming source and set the destination page
-    if request.POST.get("source"):
-        # Came from profile page edit
-        incomingSource = request.POST.get("source")
-    else:
-        # Came from editProfilePicture redirect
-        incomingSource = getMessageFromKey(request, "source")
+    incomingSource = _getIncomingSource(request)
 
     if incomingSource == constants.EDIT_PROFILE_PICTURE:
         editDestination = constants.SETUP_ACCOUNT_FINISH
@@ -372,6 +344,14 @@ def editBackground(request, context):
     if errors:
         context["errors"] = errors
     return render(request, 'AgencyApp/account/background.html', context)
+
+
+def _getIncomingSource(request):
+    if request.POST.get("source"):
+        incomingSource = request.POST.get("source")
+    else:
+        incomingSource = getMessageFromKey(request, "source")
+    return incomingSource
 
 
 def _emailIsRegistered(email):
