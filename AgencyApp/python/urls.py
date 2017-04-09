@@ -12,7 +12,7 @@ urlpatterns = [
     url(r'^account/edit/professions/$', views.editProfessions, name='editProfessions'),
     url(r'^account/edit/background/$', views.editBackground, name='editBackground'),
     url(r'^account/create/finish/$', views.createAccountFinish, name='createAccountFinish'),
-    
+
     # Create posts
     url(r'^create/event/$', views.createEvent, name='create_event'),
 

@@ -28,7 +28,6 @@ class UserAccount(models.Model):
 	collaborationInterest = models.BooleanField(default=False)
 	profilePicture = models.ImageField(default=None, upload_to=image_directory_path, storage=imageStorage)
 
-	#TODO use FileField
 	reelLink = models.CharField(max_length=500, default='')
 	imdbLink = models.CharField(max_length=500, default='')
 	bio = models.CharField(max_length=1000, default='')

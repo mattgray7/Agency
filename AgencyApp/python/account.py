@@ -262,6 +262,8 @@ def editPicture(request, context):
     if request.method == "POST":
         form = EditPictureForm(request.POST, request.FILES)
         if request.POST.get("source") == constants.EDIT_PROFILE_PICTURE:
+            messages.add_message(request, messages.INFO,
+                                 "source:{0}".format(constants.EDIT_PROFILE_PICTURE))
             if form.is_valid():
                 userAccount = UserAccount.objects.get(username=request.user.username)
                 userAccount.profilePicture = request.FILES['profilePicture']
@@ -310,28 +312,52 @@ def editPicture(request, context):
 
 def editBackground(request, context):
     errors = []
-    if request.method == "POST":
-        form = AddBackgroundForm(request.POST)
-        if form.is_valid():
-            reel = form.cleaned_data.get('reel')
-            imdb = form.cleaned_data.get('imdb')
-            bio = form.cleaned_data.get('bio')
+    userAccount = UserAccount.objects.get(username=request.user.username)
+    # Get the incoming source and set the destination page
+    if request.POST.get("source"):
+        # Came from profile page edit
+        incomingSource = request.POST.get("source")
+    else:
+        # Came from editProfilePicture redirect
+        incomingSource = getMessageFromKey(request, "source")
 
-            userAccount = UserAccount.objects.get(username=request.user.username)
-            userAccount.reelLink = reel
-            userAccount.imdbLink = imdb
-            userAccount.bio = bio
-            
-            try:
-                userAccount.save()
-            except:
-                errors.append("Could not connect to UserAccount db.")
-            else:
-                return HttpResponseRedirect('/{0}/'.format(request.user.username))
-    context["form"] = EditBackgroundForm()
+    if incomingSource == constants.EDIT_PROFILE_PICTURE:
+        editDestination = constants.SETUP_ACCOUNT_FINISH
+    else:
+        editDestination = constants.PROFILE 
+
+    if request.method == "POST":
+        form = EditBackgroundForm(request.POST)
+        if request.POST.get("source") == constants.EDIT_BACKGROUND:
+            if form.is_valid():
+                # TODO verify that reel and imdb are valid links
+                reel = form.cleaned_data.get('reel')
+                imdb = form.cleaned_data.get('imdb')
+                bio = form.cleaned_data.get('bio')
+
+                userAccount.reelLink = reel
+                userAccount.imdbLink = imdb
+                userAccount.bio = bio
+                
+                try:
+                    userAccount.save()
+                except:
+                    errors.append("Could not connect to UserAccount db.")
+                else:
+                    if form.cleaned_data.get("editDestination") == constants.SETUP_ACCOUNT_FINISH:
+                        return HttpResponseRedirect('/account/create/finish/')
+                    else:
+                        return HttpResponseRedirect('/{0}/'.format(request.user.username))
+    
+    context["form"] = EditBackgroundForm(initial={"source": constants.EDIT_BACKGROUND,
+                                                  "editDestination": editDestination,
+                                                  "reel": userAccount.reelLink,
+                                                  "imdb": userAccount.imdbLink,
+                                                  "bio": userAccount.bio})
     if errors:
         context["errors"] = errors
     return render(request, 'AgencyApp/account/background.html', context)
+
 
 def _emailIsRegistered(email):
     existingUsers = User.objects.filter(email=email)

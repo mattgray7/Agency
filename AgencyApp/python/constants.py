@@ -11,6 +11,7 @@ TOOLBAR_LOGOUT = "toolbarLogout"
 TOOLBAR_PROFILE = "toolbarProfile"
 
 CREATE_BASIC_ACCOUNT_FINISH = "createBasicAccountFinish"
+SETUP_ACCOUNT_FINISH = "setupAccountFinish"
 
 EDIT_INTERESTS = "editInterests"
 EDIT_PROFILE_PICTURE = "editProfilePicture"
