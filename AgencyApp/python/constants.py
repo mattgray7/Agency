@@ -1,29 +1,42 @@
 # Source page enums:
-HOME = "home"
-LOGIN = "login"
-PROFILE = "profile"
-CREATE_POST = "createPost"
-CREATE_EVENT = "createEvent"
+HOME = "HOME"
+LOGIN = "LOGIN"
+PROFILE = "PROFILE"
+CREATE_POST = "CREATE_POST"
+CREATE_EVENT = "CREATE_EVENT"
 
-TOOLBAR_LOGIN = "toolbarLogin"
-TOOLBAR_HOME = "toolbarHome"
-TOOLBAR_LOGOUT = "toolbarLogout"
-TOOLBAR_PROFILE = "toolbarProfile"
+DEFAULT = "DEFAULT"
 
-CREATE_BASIC_ACCOUNT_FINISH = "createBasicAccountFinish"
-SETUP_ACCOUNT_FINISH = "setupAccountFinish"
+TOOLBAR_LOGIN = "TOOLBAR_LOGIN"
+TOOLBAR_HOME = "TOOLBAR_HOME"
+TOOLBAR_LOGOUT = "TOOLBAR_LOGOUT"
+TOOLBAR_PROFILE = "TOOLBAR_PROFILE"
 
-EDIT_INTERESTS = "editInterests"
-EDIT_PROFILE_PICTURE = "editProfilePicture"
-EDIT_PROFESSIONS = "editProfessions"
-EDIT_BACKGROUND = "editBackground"
+CREATE_BASIC_ACCOUNT_FINISH = "CREATE_BASIC_ACCOUNT_FINISH"
+SETUP_ACCOUNT_FINISH = "SETUP_ACCOUNT_FINISH"
 
-FIRST_CREATE_EVENT_VIEW = "firstCreateEventView"
-FIRST_CREATE_POST_VIEW = "firstCreatePostView"
-FIRST_BROWSE_VIEW = "firstBrowse"
-FIRST_IMPROVE_PROFILE_VIEW = "firstImproveAccount"
+EDIT_INTERESTS = "EDIT_INTERESTS"
+EDIT_PROFILE_PICTURE = "EDIT_PROFILE_PICTURE"
+EDIT_PROFESSIONS = "EDIT_PROFESSIONS"
+EDIT_BACKGROUND = "EDIT_BACKGROUND"
 
+URL_MAP = {HOME: "/",
+		   LOGIN:"/login/",
+		   CREATE_POST: "/create/post/choose/",
+		   CREATE_EVENT: "/create/event/",
+		   CREATE_BASIC_ACCOUNT_FINISH: "/account/create/finish/",
+		   SETUP_ACCOUNT_FINISH: "/account/create/finish/",
+		   EDIT_INTERESTS: "/account/edit/interests/",
+		   EDIT_PROFESSIONS: "/account/edit/professions/",
+		   EDIT_PROFILE_PICTURE: "/account/edit/picture/",
+		   EDIT_BACKGROUND: "/account/edit/background/"
+		   }
 
-
-
-
+# format is {currentPage: {source1: dest1, source2:dest2, source3: {pagekey1: dest3-1, pagekey2: dest3-2}}}
+PAGE_MAP = {DEFAULT: HOME,
+			EDIT_INTERESTS: {PROFILE: {DEFAULT: PROFILE},
+							 CREATE_BASIC_ACCOUNT_FINISH: {DEFAULT: EDIT_PROFESSIONS}},
+			LOGIN: {HOME: {DEFAULT: HOME,
+						   HOME: HOME,
+						   CREATE_EVENT: CREATE_EVENT,
+						   CREATE_POST: CREATE_POST}}}

@@ -2,6 +2,41 @@ from django.contrib import messages
 import constants
 
 
+def getDestinationURL(currentPage, sourcePage, pageKey=None):
+    """Returns a destination URL taken from the PAGE_MAP dict declared in constants.py.
+    The URL is determined from the current page requesting the URL, and the source page
+    that led to the current page. If there could be multiple, different destinations from
+    the same currentPage and sourcePage, the pageKey is used to determine the correct one. 
+    Otherwise, the default page for the current/source combo is used
+
+    :param str currentPage: Current page name as defined in constants.py
+    :param str sourcePage: Name of page that led to the current page as defined in constants.py
+    :param str pageKey: Optional argument if multiple destinations exist from the same current/source
+                        page combintaion, defaults to DEFAULT
+    :return str: Relative URL defined in the URL_MAP in constants.py
+    """
+    if not pageKey:
+        pageKey = constants.DEFAULT
+
+    currentPageMap = constants.PAGE_MAP.get(currentPage)
+    if currentPageMap:
+        destPageMap = currentPageMap.get(sourcePage)
+        if destPageMap:
+            destPageName = destPageMap.get(pageKey)
+            if destPageName:
+                destURL = constants.URL_MAP.get(destPageName)
+                if destURL:
+                    return destURL
+                else:
+                    print "helpers.py: getDestinationURL: no destURL found"
+            else:
+                print "helpers.py: getDestinationURL: no destPageName found"
+        else:
+            print "helpers.py: getDestinationURL: no destPageMap found"
+    else:
+        print "helpers.py: getDestinationURL: no currentPageMap found"
+
+
 def getBaseContext(request):
     """Returns context required by the base template.
 

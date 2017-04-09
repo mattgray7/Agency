@@ -10,6 +10,7 @@ from forms import LoginForm, CreateAccountForm, EditInterestsForm, EditPictureFo
 from models import UserAccount, Professions
 from helpers import getMessageFromKey, capitalizeName
 
+from constants import *
 import constants
 import helpers
 
@@ -29,24 +30,33 @@ def loginUser(request, context):
                 if user is not None:
                     # Login was a success
                     login(request, user)
-                    loginDestination = form.cleaned_data.get('loginSuccessDestination')
+                    # TODO change the source page if from toolbar
+                    #loginDestination = form.cleaned_data.get('loginSuccessDestination')
 
-                    messages.add_message(request, messages.INFO, "source:{0}".format(constants.LOGIN))
-                    if loginDestination == constants.CREATE_POST:
-                        return HttpResponseRedirect('/create/post/choose')
-                    elif loginDestination == constants.CREATE_EVENT:
-                        return HttpResponseRedirect('/create/event/')
+                    messages.add_message(request, messages.INFO, "source:{0}".format(LOGIN))
+                    destinationURL = helpers.getDestinationURL(currentPage=LOGIN,
+                                                               sourcePage=HOME,
+                                                               pageKey=form.cleaned_data.get('loginSuccessDestination'))
+                    if not destinationURL:
+                        errors.append("Could not resolve URL.")
+                        raise
                     else:
-                        return HttpResponseRedirect('/')
+                        return HttpResponseRedirect(destinationURL)
+                    """if loginDestination == constants.CREATE_POST:
+                        return HttpResponseRedirect(urls.CREATE_POST)
+                    elif loginDestination == constants.CREATE_EVENT:
+                        return HttpResponseRedirect(urls.CREATE_EVENT)
+                    else:
+                        return HttpResponseRedirect(urls.HOME)"""
                 else:
                     errors.append("Email and password do not match.")
         else:
             if request.POST.get("loginSuccessDestination"):
                 loginSuccessDestination = request.POST.get("loginSuccessDestination")
                 context["form"] = LoginForm(initial={'loginSuccessDestination': loginSuccessDestination})
-                if loginSuccessDestination == constants.CREATE_POST:
+                if loginSuccessDestination == CREATE_POST:
                     errors.append("You must login to create a post.")
-                elif loginSuccessDestination == constants.CREATE_EVENT:
+                elif loginSuccessDestination == CREATE_EVENT:
                     errors.append("You must login to create an event.")
     
     if not context.get("form"):
