@@ -60,10 +60,13 @@ def logoutUser(request, context):
 
 def createAccount(request, context):
     errors = []
+    memory = {}
+    memorySource = {}
     if request.method == 'POST':
         # Form submitted
         form = CreateAccountForm(request.POST)
         if form.is_valid():
+            memorySource = form.cleaned_data
             if _emailIsRegistered(form.cleaned_data.get('email')):
                 errors.append("Email already in use.")
             else:
@@ -103,8 +106,13 @@ def createAccount(request, context):
                         return helpers.redirect(request=request,
                                                 currentPage=CREATE_BASIC_ACCOUNT,
                                                 sourcePage=LOGIN)
+        else:
+            errors.append("Invalid value entered.")
+            memorySource = request.POST
 
-    context["form"] = CreateAccountForm()
+    context["form"] = CreateAccountForm(initial={"email": memorySource.get("email"),
+                                                 "firstName": memorySource.get("firstName"),
+                                                 "lastName": memorySource.get("lastName")})
     if errors:
         context["errors"] = errors
     return render(request, 'AgencyApp/account/create.html', context)
