@@ -3,10 +3,11 @@ from django.http import HttpResponseRedirect
 import constants
 
 
-def redirect(currentPage, sourcePage, pageKey=None):
+def redirect(request, currentPage, sourcePage, pageKey=None):
     """Returns an HttpResonseRedirect of the desired URL can be resolved (see getDestinationURL for 
     more info on how this is done). If no URL can be resolved, an error is raised
 
+    :param request: The request object
     :param str currentPage: Current page name as defined in constants.py
     :param str sourcePage: Name of page that led to the current page as defined in constants.py
     :param str pageKey: Optional argument if multiple destinations exist from the same current/source
@@ -18,15 +19,17 @@ def redirect(currentPage, sourcePage, pageKey=None):
         #TODO raise proper exception
         raise
 
-    destinationURL = getDestinationURL(currentPage, sourcePage, pageKey)
+    destinationURL = getDestinationURL(currentPage, sourcePage, pageKey, request.user.username)
     if not destinationURL:
         print "No url could be resolved"
         raise
     else:
+        messages.add_message(request, messages.INFO,
+                             "source:{0}".format(currentPage))
         return HttpResponseRedirect(destinationURL)
 
 
-def getDestinationURL(currentPage, sourcePage, pageKey=None):
+def getDestinationURL(currentPage, sourcePage, pageKey=None, username=None):
     """Returns a destination URL taken from the PAGE_MAP dict declared in constants.py.
     The URL is determined from the current page requesting the URL, and the source page
     that led to the current page. If there could be multiple, different destinations from
@@ -37,6 +40,7 @@ def getDestinationURL(currentPage, sourcePage, pageKey=None):
     :param str sourcePage: Name of page that led to the current page as defined in constants.py
     :param str pageKey: Optional argument if multiple destinations exist from the same current/source
                         page combintaion, defaults to DEFAULT
+    :param str username: Optional argument if the destination could be profile requiring a username
     :return str: Relative URL defined in the URL_MAP in constants.py
     """
     if not pageKey:
@@ -49,6 +53,14 @@ def getDestinationURL(currentPage, sourcePage, pageKey=None):
             destPageName = destPageMap.get(pageKey)
             if destPageName:
                 destURL = constants.URL_MAP.get(destPageName)
+                # Special case for profile
+                #TODO get the username without haveing to pass the request
+                if destPageName == constants.PROFILE:
+                    if username:
+                        destURL = destURL.format(username)
+                    else:
+                        print "USERNAME SHOULD HAVE BEEN PASSED"
+                        destURL = "/"
                 if destURL:
                     return destURL
                 else:

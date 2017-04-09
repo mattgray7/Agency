@@ -30,9 +30,9 @@ def loginUser(request, context):
                 if user is not None:
                     # Login was a success
                     login(request, user)
-                    # TODO change the source page if from toolbar
-                    messages.add_message(request, messages.INFO, "source:{0}".format(LOGIN))
-                    return helpers.redirect(currentPage=LOGIN,
+                    # TODO change the source page if from toolbar                
+                    return helpers.redirect(request=request,
+                                            currentPage=LOGIN,
                                             sourcePage=HOME,
                                             pageKey=form.cleaned_data.get('loginSuccessDestination'))
                 else:
@@ -99,20 +99,13 @@ def createAccount(request, context):
                             #TODO delete account from User db
                     if saveSuccess:
                         login(request, user)
-
-                        messages.add_message(request, messages.INFO,
-                                             "source:{0}".format(CREATE_BASIC_ACCOUNT_FINISH))
-
                         # TODO change the source (home vs login?)
-                        destinationURL = helpers.getDestinationURL(currentPage=CREATE_BASIC_ACCOUNT,
-                                                                   sourcePage=LOGIN)
-                        if destinationURL:
-                            return HttpResponseRedirect(destinationURL)
-                        #return HttpResponseRedirect('/account/create/finish/')
+                        return helpers.redirect(request=request,
+                                                currentPage=CREATE_BASIC_ACCOUNT,
+                                                sourcePage=LOGIN)
 
     context["form"] = CreateAccountForm()
     if errors:
-        print "Create account errors: {0}".format(errors)
         context["errors"] = errors
     return render(request, 'AgencyApp/account/create.html', context)
 
@@ -127,10 +120,10 @@ def finish(request, context):
         incomingSource = getMessageFromKey(request, "source")
 
     context["showSetupProfile"] = True
-    if incomingSource == constants.EDIT_BACKGROUND:
+    if incomingSource == EDIT_BACKGROUND:
         context["showSetupProfile"] = False
     
-    context["possibleSources"] = {"finish": constants.CREATE_BASIC_ACCOUNT_FINISH}
+    context["possibleSources"] = {"finish": CREATE_BASIC_ACCOUNT_FINISH}
 
     return render(request, 'AgencyApp/account/finish.html', context)
 
@@ -141,14 +134,10 @@ def editInterests(request, context):
     userAccount = UserAccount.objects.get(username=request.user.username)
 
     incomingSource = _getIncomingSource(request)
-    if incomingSource == constants.CREATE_BASIC_ACCOUNT_FINISH:
-        editDestination = constants.EDIT_PROFESSIONS
-    else:
-        editDestination = constants.PROFILE
 
     if request.method == "POST":
         form = EditInterestsForm(request.POST)
-        if incomingSource == constants.EDIT_INTERESTS:
+        if incomingSource == EDIT_INTERESTS:
             if form.is_valid():
                 workSelected = form.cleaned_data.get('work', False)
                 crewSelected = form.cleaned_data.get('crew', False)
@@ -160,19 +149,16 @@ def editInterests(request, context):
                     userAccount.save()
                 except:
                     errors.append("Could not connect to UserAccount database")
-
-                messages.add_message(request, messages.INFO,
-                                     "source:{0}".format(constants.EDIT_INTERESTS))
-                if form.cleaned_data.get('editDestination') == constants.EDIT_PROFESSIONS:
-                    return HttpResponseRedirect('/account/edit/professions/')
                 else:
-                    return HttpResponseRedirect('/{0}/'.format(request.user.username))
+                    return helpers.redirect(request=request,
+                                            currentPage=EDIT_INTERESTS,
+                                            sourcePage=form.cleaned_data.get('editSource'))
 
     context["form"] = EditInterestsForm(initial={"work": userAccount.workInterest,
                                                  "crew": userAccount.crewInterest,
                                                  "collaboration": userAccount.collaborationInterest,
-                                                 "editDestination": editDestination,
-                                                 "source": constants.EDIT_INTERESTS})
+                                                 "source": EDIT_INTERESTS,
+                                                 "editSource": incomingSource})
 
     if errors:
         context["errors"] = errors
@@ -180,20 +166,14 @@ def editInterests(request, context):
 
 
 def editProfessions(request, context):
-    # source is in message because editInterests uses a redirect
     errors = []
-
     incomingSource = _getIncomingSource(request)
-    if incomingSource == constants.EDIT_INTERESTS:
-        editDestination = constants.EDIT_PROFILE_PICTURE
-    else:
-        editDestination = constants.PROFILE
 
     # Get any existing profession selections
     try:
         professions = Professions.objects.get(username=request.user.username)
-        context["form"] = EditProfessionsForm(initial={"editDestination": editDestination,
-                                                       "source": constants.EDIT_PROFESSIONS,
+        context["form"] = EditProfessionsForm(initial={"source": EDIT_PROFESSIONS,
+                                                       "editSource": incomingSource,
                                                        "actor": professions.actor,
                                                        "director": professions.director,
                                                        "writer": professions.writer,
@@ -201,12 +181,12 @@ def editProfessions(request, context):
                                                        "other": professions.other})
     except Professions.DoesNotExist:
         professions = None
-        context["form"] = EditProfessionsForm(initial={"editDestination": editDestination,
-                                                       "source": constants.EDIT_PROFESSIONS})
+        context["form"] = EditProfessionsForm(initial={"source": EDIT_PROFESSIONS,
+                                                       "editSource": incomingSource})
 
     if request.method == "POST":
         form = EditProfessionsForm(request.POST)
-        if incomingSource == constants.EDIT_PROFESSIONS:
+        if incomingSource == EDIT_PROFESSIONS:
             if form.is_valid():
                 #TODO use a list in the model for all of the professions
                 actor = form.cleaned_data.get('actor', False)
@@ -231,13 +211,10 @@ def editProfessions(request, context):
                     professions.save()
                 except:
                     errors.append("Could not connect to Profession db.")
-
-                messages.add_message(request, messages.INFO,
-                                     "source:{0}".format(constants.EDIT_PROFESSIONS))
-                if form.cleaned_data.get('editDestination') == constants.EDIT_PROFILE_PICTURE:
-                    return HttpResponseRedirect('/account/edit/picture/')
                 else:
-                    return HttpResponseRedirect('/{0}/'.format(request.user.username))
+                    return helpers.redirect(request=request,
+                                            currentPage=EDIT_PROFESSIONS,
+                                            sourcePage=form.cleaned_data.get('editSource'))
 
     if errors:
         context["errors"] = errors
@@ -247,16 +224,9 @@ def editPicture(request, context):
     errors = []
     incomingSource = _getIncomingSource(request)
 
-    if incomingSource == constants.EDIT_PROFESSIONS:
-        editDestination = constants.EDIT_BACKGROUND
-    else:
-        editDestination = constants.PROFILE 
-
     if request.method == "POST":
         form = EditPictureForm(request.POST, request.FILES)
-        if request.POST.get("source") == constants.EDIT_PROFILE_PICTURE:
-            messages.add_message(request, messages.INFO,
-                                 "source:{0}".format(constants.EDIT_PROFILE_PICTURE))
+        if request.POST.get("source") == EDIT_PROFILE_PICTURE:
             if form.is_valid():
                 userAccount = UserAccount.objects.get(username=request.user.username)
                 userAccount.profilePicture = request.FILES['profilePicture']
@@ -280,24 +250,21 @@ def editPicture(request, context):
                 except:
                     errors.append("Could not connect to UserAccount db.")
                 else:
-                    if form.cleaned_data.get('editDestination') == constants.EDIT_BACKGROUND:
-                        return HttpResponseRedirect('/account/edit/background')
-                    else:
-                        return HttpResponseRedirect('/{0}/'.format(request.user.username))
+                    return helpers.redirect(request=request,
+                                            currentPage=EDIT_PROFILE_PICTURE,
+                                            sourcePage=form.cleaned_data.get('editSource'))
             elif request.POST.get("skip") == "True":
                 # editDestination is stored in post data of skip form
-                if request.POST.get("editDestination") == constants.EDIT_BACKGROUND:
-                    return HttpResponseRedirect('/account/edit/background')
-                else:
-                    return HttpResponseRedirect('/{0}/'.format(request.user.username))
+                return helpers.redirect(request=request,
+                                        currentPage=EDIT_PROFILE_PICTURE,
+                                        sourcePage=request.POST.get("editSource"))
 
-
-    context["form"] = EditPictureForm(initial={"source": constants.EDIT_PROFILE_PICTURE,
-                                               "editDestination": editDestination})
+    context["form"] = EditPictureForm(initial={"source": EDIT_PROFILE_PICTURE,
+                                               "editSource": incomingSource})
 
     # add edit destination to context so that skip button can redirect properly
-    context["editDestination"] = editDestination
-    context["possibleSources"] = {"picture": constants.EDIT_PROFILE_PICTURE}
+    context["editSource"] = incomingSource
+    context["possibleSources"] = {"picture": EDIT_PROFILE_PICTURE}
     if errors:
         context["errors"] = errors
     return render(request, 'AgencyApp/account/picture.html', context)
@@ -308,14 +275,9 @@ def editBackground(request, context):
     userAccount = UserAccount.objects.get(username=request.user.username)
     incomingSource = _getIncomingSource(request)
 
-    if incomingSource == constants.EDIT_PROFILE_PICTURE:
-        editDestination = constants.SETUP_ACCOUNT_FINISH
-    else:
-        editDestination = constants.PROFILE 
-
     if request.method == "POST":
         form = EditBackgroundForm(request.POST)
-        if request.POST.get("source") == constants.EDIT_BACKGROUND:
+        if request.POST.get("source") == EDIT_BACKGROUND:
             if form.is_valid():
                 # TODO verify that reel and imdb are valid links
                 reel = form.cleaned_data.get('reel')
@@ -331,15 +293,12 @@ def editBackground(request, context):
                 except:
                     errors.append("Could not connect to UserAccount db.")
                 else:
-                    messages.add_message(request, messages.INFO,
-                                         "source:{0}".format(constants.EDIT_BACKGROUND))
-                    if form.cleaned_data.get("editDestination") == constants.SETUP_ACCOUNT_FINISH:
-                        return HttpResponseRedirect('/account/create/finish/')
-                    else:
-                        return HttpResponseRedirect('/{0}/'.format(request.user.username))
+                    return helpers.redirect(request=request,
+                                            currentPage=EDIT_BACKGROUND,
+                                            sourcePage=form.cleaned_data.get("editSource"))
     
-    context["form"] = EditBackgroundForm(initial={"source": constants.EDIT_BACKGROUND,
-                                                  "editDestination": editDestination,
+    context["form"] = EditBackgroundForm(initial={"source": EDIT_BACKGROUND,
+                                                  "editSource": incomingSource,
                                                   "reel": userAccount.reelLink,
                                                   "imdb": userAccount.imdbLink,
                                                   "bio": userAccount.bio})

@@ -16,8 +16,8 @@ class EditInterestsForm(forms.Form):
 	work = forms.BooleanField(label="Work", required=False)
 	crew = forms.BooleanField(label="Crew", required=False)
 	collaboration = forms.BooleanField(label="Collaboration", required=False)
-	editDestination = forms.CharField(widget=forms.HiddenInput, required=False)
 	source = forms.CharField(widget=forms.HiddenInput, required=False)
+	editSource = forms.CharField(widget=forms.HiddenInput, required=False)
 
 class EditProfessionsForm(forms.Form):
 	actor = forms.BooleanField(label="Actor", required=False)
@@ -27,11 +27,13 @@ class EditProfessionsForm(forms.Form):
 	other = forms.CharField(label="Other", required=False, max_length=200)
 	editDestination = forms.CharField(widget=forms.HiddenInput, required=False)
 	source = forms.CharField(widget=forms.HiddenInput, required=False)
+	editSource = forms.CharField(widget=forms.HiddenInput, required=False)
 
 class EditPictureForm(forms.Form):
 	profilePicture = forms.FileField(label="Profile Picture")
 	editDestination = forms.CharField(widget=forms.HiddenInput, required=False)
 	source = forms.CharField(widget=forms.HiddenInput, required=False)
+	editSource = forms.CharField(widget=forms.HiddenInput, required=False)
 
 class EditBackgroundForm(forms.Form):
 	reel = forms.CharField(label="Reel Link", required=False, max_length=500)
@@ -39,3 +41,4 @@ class EditBackgroundForm(forms.Form):
 	bio = forms.CharField(label="Bio", required=False, max_length=1000)
 	editDestination = forms.CharField(widget=forms.HiddenInput, required=False)
 	source = forms.CharField(widget=forms.HiddenInput, required=False)
+	editSource = forms.CharField(widget=forms.HiddenInput, required=False)
