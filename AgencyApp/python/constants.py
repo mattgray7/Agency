@@ -21,6 +21,19 @@ EDIT_PROFILE_PICTURE = "EDIT_PROFILE_PICTURE"
 EDIT_PROFESSIONS = "EDIT_PROFESSIONS"
 EDIT_BACKGROUND = "EDIT_BACKGROUND"
 
+PROFESSIONS = ["Actor", "Acting Coach", "Art Director", "Assistant Director", "Assistant Camera Operator",
+			   "Boom Operator", "Camera Operator", "Casting Director", "Choreographer", "Cinematographer",
+			   "CG Animator", "Compositor", "Costume Designer", "Concept Artist", "Dancer", "Director",
+			   "Editor", "Film Festival Director", "Film Festival Volunteer", "Graphic Designer", "Grip",
+			   "Hair Stylist", "Key Grip", "Lighting Technician", "Location Manager", "Makeup Artist",
+			   "Marketing", "Music Composer", "Music Supervisor", "Music Editor", "Musician", "Photographer",
+			   "Producer", "Production Assistant", "Production Caterer", "Production Coordinator",
+			   "Production Designer", "Production Manager", "Prop Master", "Screenwriter",
+			   "Script Coordinator/Supervisor", "Set Coordinator", "Set Decorator", "Set Design",
+			   "SFX Technician", "SFX Supervisor", "Songwriter", "Sound Editor", "Sound Engineer",
+			   "Storyboard Artist", "Stunt Coordinator", "Stunt Artist", "Talent Management", "VFX Arist",
+			   "VFX Supervisor", "Voice Artist", "Wardrobe Supervisor"]
+
 URL_MAP = {HOME: "/",
 		   LOGIN:"/login/",
 		   PROFILE:"/{0}/",
