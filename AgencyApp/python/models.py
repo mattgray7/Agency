@@ -1,5 +1,7 @@
 from __future__ import unicode_literals
 
+import json
+from constants import *
 from django.db import models
 from django.core.files.storage import FileSystemStorage
 
@@ -34,6 +36,18 @@ class UserAccount(models.Model):
 
 	def __str__(self):
 		return self.username
+
+class MasterProfession(models.Model):
+    professionName = models.CharField(max_length=100)
+    def __str__(self):
+        return self.professionName
+
+class Profession(models.Model):
+    username = models.CharField(max_length=100)
+    professionName = models.CharField(max_length=100)
+
+    def __str__(self):
+    	return self.professionName
 
 class Professions(models.Model):
 	#TODO Use lists?

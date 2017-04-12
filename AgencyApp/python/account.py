@@ -6,7 +6,8 @@ from django.db import IntegrityError
 
 # Create your views here.
 from django.http import HttpResponseRedirect
-from forms import LoginForm, CreateAccountForm, EditInterestsForm, EditPictureForm, EditProfessionsForm, EditBackgroundForm
+from forms import *
+
 from models import UserAccount, Professions
 from helpers import getMessageFromKey, capitalizeName
 
@@ -176,53 +177,50 @@ def editInterests(request, context):
 def editProfessions(request, context):
     errors = []
     incomingSource = _getIncomingSource(request)
+    print "incomingSource is {0}".format(incomingSource)
 
     # Get any existing profession selections
     try:
-        professions = Professions.objects.get(username=request.user.username)
-        context["form"] = EditProfessionsForm(initial={"source": EDIT_PROFESSIONS,
-                                                       "editSource": incomingSource,
-                                                       "actor": professions.actor,
-                                                       "director": professions.director,
-                                                       "writer": professions.writer,
-                                                       "cinematographer": professions.cinematographer,
-                                                       "other": professions.other})
+        professions = Profession.objects.filter(username=request.user.username)
+        print "professions: {0}".format(professions)
+
+        ##context["form"] = EditProfessionsForm(initial={"source": EDIT_PROFESSIONS,
+        #                                               "editSource": incomingSource,
+        #                                               "professions": [(x, x) for x in professions]})
+
+        from django.contrib.auth.models import Permission, User
+        print "username is {0}".format(User.objects.get()) #get_username())
+        print "filtered is {0}".format(Profession.objects.filter(username=User.objects.get()))
+        options = [(x,x) for x in Profession.objects.filter(username=User.objects.get())]
+        #context["form"] = ProForm2(queryset=Profession.objects.filter(username=User.objects.get()))
     except Professions.DoesNotExist:
         professions = None
-        context["form"] = EditProfessionsForm(initial={"source": EDIT_PROFESSIONS,
+        #context["form"] = ProForm2()
+    context['form'] = EditProfessionsForm(initial={"source": EDIT_PROFESSIONS,
                                                        "editSource": incomingSource})
+                                                   #"professions": [(x, x) for x in professions]})
 
     if request.method == "POST":
+        #form = EditProfessionsForm(request.POST)
         form = EditProfessionsForm(request.POST)
         if incomingSource == EDIT_PROFESSIONS:
             if form.is_valid():
-                #TODO use a list in the model for all of the professions
-                actor = form.cleaned_data.get('actor', False)
-                director = form.cleaned_data.get('director', False)
-                writer = form.cleaned_data.get('writer', False)
-                cinematographer = form.cleaned_data.get('cinematographer', False)
-                other = form.cleaned_data.get('other', '')
+                #for x in Profession.objects.filter(username=request.user.username):
+                #    x.delete()
 
-                username = request.user.username
-                if professions is None:
-                    professions = Professions(username=username, actor=actor, director=director,
-                                              writer=writer, cinematographer=cinematographer,
-                                              other=other)
-                else:
-                    professions.actor = actor
-                    professions.director = director
-                    professions.writer = writer
-                    professions.cinematographer = cinematographer
-                    professions.other = other
-                #TODO check if user profession already exists?
-                try:
-                    professions.save()
-                except:
-                    errors.append("Could not connect to Profession db.")
-                else:
-                    return helpers.redirect(request=request,
+                professionsSelected = list(request.POST.getlist("professions"))
+                for profession in professionsSelected:
+                    entry = Profession(username=request.user.username, professionName=profession)
+                    entry.save()
+                    print "saved entry {0}".format(entry)
+
+                print Profession.objects.filter(username=request.user.username)
+                return helpers.redirect(request=request,
                                             currentPage=EDIT_PROFESSIONS,
                                             sourcePage=form.cleaned_data.get('editSource'))
+            else:
+                print request.POST
+                print form.cleaned_data
 
     if errors:
         context["errors"] = errors
@@ -242,7 +240,10 @@ def editPicture(request, context):
                 # Save the picture in its location
                 userAccount.save()
 
-                # TODO check for invalid image format
+                # TODO 
+
+
+
                 # TODO convert image to jpg or other common format
                 # Rename the file
                 initialPath = userAccount.profilePicture.path
