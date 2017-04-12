@@ -63,57 +63,61 @@ def createAccount(request, context):
     errors = []
     memory = {}
     memorySource = {}
+    incomingSource = _getIncomingSource(request)
     if request.method == 'POST':
         # Form submitted
         form = CreateAccountForm(request.POST)
-        if form.is_valid():
-            memorySource = form.cleaned_data
-            if _emailIsRegistered(form.cleaned_data.get('email')):
-                errors.append("Email already in use.")
-            else:
-                if form.cleaned_data.get('password') != form.cleaned_data.get('passwordConfirm'):
-                    errors.append("Passwords don't match.")
+        if incomingSource == CREATE_BASIC_ACCOUNT:
+            if form.is_valid():
+                memorySource = form.cleaned_data
+                if _emailIsRegistered(form.cleaned_data.get('email')):
+                    errors.append("Email already in use.")
                 else:
-                    firstName = capitalizeName(form.cleaned_data.get('firstName'))
-                    lastName = capitalizeName(form.cleaned_data.get('lastName'))
-                    username = _getProfileNameFromName(firstName.lower(), lastName.lower())
-                    
-                    user = User.objects.create_user(username=username,
-                                                    email=form.cleaned_data.get('email'), 
-                                                    password=form.cleaned_data.get('password'),
-                                                    first_name=firstName,
-                                                    last_name=lastName)
-                    userAccount = UserAccount(email=form.cleaned_data.get('email'),
-                                              username=username,
-                                              firstName=firstName,
-                                              lastName=lastName,
-                                              setupComplete=False)
-                    saveSuccess = True
-                    try:
-                        user.save()
-                    except:
-                        saveSuccess = False
-                        errors.append("Unable to save in User db.")
+                    if form.cleaned_data.get('password') != form.cleaned_data.get('passwordConfirm'):
+                        errors.append("Passwords don't match.")
                     else:
+                        firstName = capitalizeName(form.cleaned_data.get('firstName'))
+                        lastName = capitalizeName(form.cleaned_data.get('lastName'))
+                        username = _getProfileNameFromName(firstName.lower(), lastName.lower())
+                        
+                        user = User.objects.create_user(username=username,
+                                                        email=form.cleaned_data.get('email'), 
+                                                        password=form.cleaned_data.get('password'),
+                                                        first_name=firstName,
+                                                        last_name=lastName)
+                        userAccount = UserAccount(email=form.cleaned_data.get('email'),
+                                                  username=username,
+                                                  firstName=firstName,
+                                                  lastName=lastName,
+                                                  setupComplete=False)
+                        saveSuccess = True
                         try:
-                            userAccount.save()
+                            user.save()
                         except:
                             saveSuccess = False
-                            errors.append("Unable to save in UserAccount db.")
-                            #TODO delete account from User db
-                    if saveSuccess:
-                        login(request, user)
-                        # TODO change the source (home vs login?)
-                        return helpers.redirect(request=request,
-                                                currentPage=CREATE_BASIC_ACCOUNT,
-                                                sourcePage=LOGIN)
-        else:
-            errors.append("Invalid value entered.")
-            memorySource = request.POST
+                            errors.append("Unable to save in User db.")
+                        else:
+                            try:
+                                userAccount.save()
+                            except:
+                                saveSuccess = False
+                                errors.append("Unable to save in UserAccount db.")
+                                #TODO delete account from User db
+                        if saveSuccess:
+                            login(request, user)
+                            # TODO change the source (home vs login?)
+                            return helpers.redirect(request=request,
+                                                    currentPage=CREATE_BASIC_ACCOUNT,
+                                                    sourcePage=LOGIN)
+            else:
+                errors.append("Invalid value entered.")
+                memorySource = request.POST
 
     context["form"] = CreateAccountForm(initial={"email": memorySource.get("email"),
                                                  "firstName": memorySource.get("firstName"),
-                                                 "lastName": memorySource.get("lastName")})
+                                                 "lastName": memorySource.get("lastName"),
+                                                 "source": CREATE_BASIC_ACCOUNT,
+                                                 "createSource": incomingSource})
     if errors:
         context["errors"] = errors
     return render(request, 'AgencyApp/account/create.html', context)
