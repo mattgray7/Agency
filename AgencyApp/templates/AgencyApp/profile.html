@@ -69,22 +69,9 @@
 		{% elif userProfessions %}
 			<h3> {{ userAccount.firstName }}'s interested professions include ..</h3>
 			<ul>
-				<!-- TODO add for loop when list is done-->
-				{% if userProfessions.actor %}
-					<li>Acting</li>
-				{% endif %}
-				{% if userProfessions.director %}
-					<li>Directing</li>
-				{% endif %}
-				{% if userProfessions.writer %}
-					<li>Writing</li>
-				{% endif %}
-				{% if userProfessions.cinematographer %}
-					<li>Cinematography</li>
-				{% endif %}
-				{% if userProfessions.other %}
-					<li>{{ userProfessions.other }}</li>
-				{% endif %}
+				{% for profession in userProfessions %}
+					<li>{{profession}}</li>
+				{% endfor %}
 			</ul>
 		{% endif %}
 		{% if request.user.is_authenticated and request.user.username == username %}

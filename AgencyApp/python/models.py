@@ -49,15 +49,6 @@ class Profession(models.Model):
     def __str__(self):
     	return self.professionName
 
-class Professions(models.Model):
-	#TODO Use lists?
-	username = models.CharField(max_length=100)
-	actor = models.BooleanField(default=False)
-	director = models.BooleanField(default=False)
-	writer = models.BooleanField(default=False)
-	cinematographer = models.BooleanField(default=False)
-	other = models.CharField(default='', max_length=200)
-
 class Posting(models.Model):
 	description = models.CharField(max_length=300)
 

@@ -9,10 +9,20 @@
 			{% endfor %}
 		</ul>
 	{% endif %}
-	<form method='post' action="/account/edit/professions/">
+	<form method='post' action='/account/edit/professions/'>
 		{% csrf_token %}
-		{{ form.as_p }}
-		<input type="submit" value="Update professions" />
+		<input type="hidden" name="source" value="{{source}}" />
+		<input type="hidden" name="editSource" value="{{editSource}}" />
+		{% for profession in professionList %}
+			<br>
+			{% if profession in selectedProfessions %}
+				<input type="checkbox" name="professions" value="{{profession}}" checked>
+			{% else %}
+				<input type="checkbox" name="professions" value="{{profession}}">
+			{% endif %}
+			{{ profession }}
+		{% endfor %}
+		<br><input type="submit" value="Update professions" />
 	</form>
 
 {% endblock %}

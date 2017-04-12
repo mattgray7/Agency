@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.contrib.auth.models import User
-from models import UserAccount, Professions
+from models import UserAccount, Profession
 
 import constants
 
@@ -18,15 +18,16 @@ def display(request, username, context):
         context["accountFound"] = True
 
         # get professions
-        """try:
-        	professions = Professions.objects.get(username=username)
-        except P.DoesNotExist:
+        try:
+        	professions = Profession.objects.filter(username=username)
+        except Profession.DoesNotExist:
         	pass
         else:
         	# TODO still set to True even if user removes all professions
         	context["professionsFound"] = True
-        	context["userProfessions"] = professions
-        	"""
+        	context["userProfessions"] = [x.professionName for x in professions]
+        	print "user professions: {0}".format(context.get("userProfessions"))
+        	
 
     context["possibleSources"] = {"profile": constants.PROFILE}
     return render(request, "AgencyApp/profile.html", context)

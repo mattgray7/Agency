@@ -8,7 +8,7 @@ from django.db import IntegrityError
 from django.http import HttpResponseRedirect
 from forms import *
 
-from models import UserAccount, Professions
+from models import UserAccount
 from helpers import getMessageFromKey, capitalizeName
 
 from constants import *
@@ -181,46 +181,26 @@ def editProfessions(request, context):
 
     # Get any existing profession selections
     try:
-        professions = Profession.objects.filter(username=request.user.username)
-        print "professions: {0}".format(professions)
-
-        ##context["form"] = EditProfessionsForm(initial={"source": EDIT_PROFESSIONS,
-        #                                               "editSource": incomingSource,
-        #                                               "professions": [(x, x) for x in professions]})
-
-        from django.contrib.auth.models import Permission, User
-        print "username is {0}".format(User.objects.get()) #get_username())
-        print "filtered is {0}".format(Profession.objects.filter(username=User.objects.get()))
-        options = [(x,x) for x in Profession.objects.filter(username=User.objects.get())]
-        #context["form"] = ProForm2(queryset=Profession.objects.filter(username=User.objects.get()))
+        context["selectedProfessions"] = [x.professionName for x in Profession.objects.filter(username=request.user.username)]
     except Professions.DoesNotExist:
-        professions = None
-        #context["form"] = ProForm2()
-    context['form'] = EditProfessionsForm(initial={"source": EDIT_PROFESSIONS,
-                                                       "editSource": incomingSource})
-                                                   #"professions": [(x, x) for x in professions]})
+        context["selectedProfessions"] = []
 
+    context["professionList"] = PROFESSIONS
+    context["source"] = EDIT_PROFESSIONS
+    context["editSource"] = incomingSource
     if request.method == "POST":
-        #form = EditProfessionsForm(request.POST)
-        form = EditProfessionsForm(request.POST)
         if incomingSource == EDIT_PROFESSIONS:
-            if form.is_valid():
-                #for x in Profession.objects.filter(username=request.user.username):
-                #    x.delete()
+            professionsSelected = request.POST.getlist("professions")
 
-                professionsSelected = list(request.POST.getlist("professions"))
-                for profession in professionsSelected:
-                    entry = Profession(username=request.user.username, professionName=profession)
-                    entry.save()
-                    print "saved entry {0}".format(entry)
+            Profession.objects.filter(username=request.user.username).delete()
 
-                print Profession.objects.filter(username=request.user.username)
-                return helpers.redirect(request=request,
+            for profession in professionsSelected:
+                entry = Profession(username=request.user.username, professionName=profession)
+                entry.save()
+
+            return helpers.redirect(request=request,
                                             currentPage=EDIT_PROFESSIONS,
-                                            sourcePage=form.cleaned_data.get('editSource'))
-            else:
-                print request.POST
-                print form.cleaned_data
+                                            sourcePage=request.POST.get('editSource'))
 
     if errors:
         context["errors"] = errors
