@@ -14,6 +14,7 @@ from helpers import getMessageFromKey, capitalizeName
 from constants import *
 import constants
 import helpers
+import views
 
 import os
 
@@ -141,41 +142,32 @@ def finish(request, context):
     return render(request, 'AgencyApp/account/finish.html', context)
 
 
-def editInterests(request, context):
-    # Source is in request because account finish sends using post form
-    errors = []
-    userAccount = UserAccount.objects.get(username=request.user.username)
+class EditInterestsView(views.GenericAccountView):
+    def __init__(self, *args, **kwargs):
+        super(EditInterestsView, self).__init__(*args, **kwargs)
 
-    incomingSource = _getIncomingSource(request)
+    @property
+    def formInitialValues(self):
+        self._formInitialValues["work"] = self.userAccount.workInterest
+        self._formInitialValues["crew"] = self.userAccount.crewInterest
+        self._formInitialValues["collaboration"] = self.userAccount.collaborationInterest
+        return self._formInitialValues
 
-    if request.method == "POST":
-        form = EditInterestsForm(request.POST)
-        if incomingSource == EDIT_INTERESTS:
-            if form.is_valid():
-                workSelected = form.cleaned_data.get('work', False)
-                crewSelected = form.cleaned_data.get('crew', False)
-                collabSelected = form.cleaned_data.get('collaboration', False)
-                userAccount.workInterest = workSelected
-                userAccount.crewInterest = crewSelected
-                userAccount.collaborationInterest = collabSelected
-                try:
-                    userAccount.save()
-                except:
-                    errors.append("Could not connect to UserAccount database")
-                else:
-                    return helpers.redirect(request=request,
-                                            currentPage=EDIT_INTERESTS,
-                                            sourcePage=form.cleaned_data.get('editSource'))
-
-    context["form"] = EditInterestsForm(initial={"work": userAccount.workInterest,
-                                                 "crew": userAccount.crewInterest,
-                                                 "collaboration": userAccount.collaborationInterest,
-                                                 "source": EDIT_INTERESTS,
-                                                 "editSource": incomingSource})
-
-    if errors:
-        context["errors"] = errors
-    return render(request, 'AgencyApp/account/interests.html', context)
+    def processForm(self):
+        """Overriding asbtract method"""
+        print "overridden method now"
+        workSelected = self.formData.get('work', False)
+        crewSelected = self.formData.get('crew', False)
+        collabSelected = self.formData.get('collaboration', False)
+        self.userAccount.workInterest = workSelected
+        self.userAccount.crewInterest = crewSelected
+        self.userAccount.collaborationInterest = collabSelected
+        try:
+            self.userAccount.save()
+            return True
+        except:
+            self.errors.append("Could not connect to UserAccount database")
+        return False
 
 
 def editProfessions(request, context):
