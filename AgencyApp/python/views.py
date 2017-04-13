@@ -25,7 +25,7 @@ class GenericAccountView(object):
         self._userAccount = None
         self._username = None
         self._pageErrors = []  #TODO
-        self.pageContext = helpers.getBaseContext(self.request)
+        self._pageContext = None
 
         self._form = None
         self._formClass = None
@@ -35,13 +35,20 @@ class GenericAccountView(object):
         self._formData = None
 
     @property
+    def pageContext(self):
+        """To be overridden in parent class"""
+        if self._pageContext is None:
+            self._pageContext = helpers.getBaseContext(self.request)
+        return self._pageContext
+
+    @property
     def formClass(self):
         if not self._formClass:
             self._formClass = constants.FORM_MAP.get(self.currentPage)
         return self._formClass
 
-    def setFormClass(self, formClass):
-        self._formClass = formClass
+    def setPageContextElement(self, key, value):
+        self.pageContext[key] = value
 
     @property
     def formSubmitted(self):
@@ -69,9 +76,8 @@ class GenericAccountView(object):
             if self.request.method == "POST":
                 if self.formSubmitted:
                     self._form = self.formClass(self.request.POST)
-                else:
+                elif self.formClass:
                     self._form = self.formClass(initial=self.formInitialValues)
-                    print "initial values are {0}".format(self.formInitialValues)
         return self._form
 
     @property
@@ -114,16 +120,26 @@ class GenericAccountView(object):
         if self.request.method == "POST":
             print "request is post"
             if self.formSubmitted:
+                formIsValid = False
                 print "form is submitted"
-                if self.form.is_valid():
-                    print "form is valid"
+                if self.formClass:
+                    if self.form.is_valid():
+                        if self.processForm():
+                            formIsValid = True
+                else:
                     if self.processForm():
-                        print "processSuccess, redirecting source {0} and current {1}".format(self.sourcePage, self.currentPage)
-                        return helpers.redirect(request=self.request,
-                                                currentPage=self.currentPage,
-                                                sourcePage=self.sourcePage)
-        self.pageContext["form"] = self.form
-        return render(self.request, 'AgencyApp/account/interests.html', self.pageContext)
+                        formIsValid = True
+                    
+                if formIsValid:
+                    print "processSuccess, redirecting source {0} and current {1}".format(self.sourcePage, self.currentPage)
+                    return helpers.redirect(request=self.request,
+                                            currentPage=self.currentPage,
+                                            sourcePage=self.sourcePage)
+
+        # Need to access before form is set
+        self.pageContext
+        self._pageContext["form"] = self.form
+        return render(self.request, constants.HTML_MAP.get(self.currentPage), self.pageContext)
 
     def processForm(self):
         """To bo overridden in child class"""
@@ -149,11 +165,13 @@ def editInterests(request):
     view = account.EditInterestsView(request=request, currentPage=constants.EDIT_INTERESTS)
     return view.process()
 
+def editProfessions(request):
+    view = account.EditProfessionsView(request=request, currentPage=constants.EDIT_PROFESSIONS)
+    return view.process()
+    #return account.editProfessions(request, getBaseContext(request))
+
 def editPicture(request):
     return account.editPicture(request, getBaseContext(request))
-
-def editProfessions(request):
-    return account.editProfessions(request, getBaseContext(request))
 
 def editBackground(request):
     return account.editBackground(request, getBaseContext(request))

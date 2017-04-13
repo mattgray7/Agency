@@ -8,7 +8,7 @@ from django.db import IntegrityError
 from django.http import HttpResponseRedirect
 from forms import *
 
-from models import UserAccount
+from models import UserAccount, Profession
 from helpers import getMessageFromKey, capitalizeName
 
 from constants import *
@@ -155,7 +155,6 @@ class EditInterestsView(views.GenericAccountView):
 
     def processForm(self):
         """Overriding asbtract method"""
-        print "overridden method now"
         workSelected = self.formData.get('work', False)
         crewSelected = self.formData.get('crew', False)
         collabSelected = self.formData.get('collaboration', False)
@@ -170,6 +169,33 @@ class EditInterestsView(views.GenericAccountView):
         return False
 
 
+class EditProfessionsView(views.GenericAccountView):
+    def __init__(self, *args, **kwargs):
+        super(EditProfessionsView, self).__init__(*args, **kwargs)
+
+    @property
+    def pageContext(self):
+        if self._pageContext is None:
+            self._pageContext = helpers.getBaseContext(self.request)
+            try:
+                self._pageContext["selectedProfessions"] = [x.professionName for x in Profession.objects.filter(username=self.username)]
+            except Profession.DoesNotExist:
+                self._pageContext["selectedProfessions"] = []
+
+            self._pageContext["professionList"] = PROFESSIONS
+            self._pageContext["source"] = EDIT_PROFESSIONS
+            self._pageContext["editSource"] = self.incomingSource
+        return self._pageContext
+
+    def processForm(self):
+        """Overriding asbtract method"""
+        professionsSelected = self.formData.getlist("professions")
+        Profession.objects.filter(username=self.username).delete()
+        for profession in professionsSelected:
+            entry = Profession(username=self.username, professionName=profession)
+            entry.save()
+        return True
+"""
 def editProfessions(request, context):
     errors = []
     incomingSource = _getIncomingSource(request)
@@ -200,7 +226,7 @@ def editProfessions(request, context):
 
     if errors:
         context["errors"] = errors
-    return render(request, 'AgencyApp/account/professions.html', context)
+    return render(request, 'AgencyApp/account/professions.html', context)"""
 
 def editPicture(request, context):
     errors = []
