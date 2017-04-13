@@ -15,7 +15,7 @@
 	</form>
 	<form method='post' action="/account/edit/picture/">
 		{% csrf_token %}
-		<input type="hidden" name="source" value="{{ possibleSources.picture }}">
+		<input type="hidden" name="source" value="{{ source }}">
 		<input type="hidden" name="editSource" value="{{ editSource }}">
 		<input type="hidden" name="skip" value="True">
 		<input type="submit" value="Skip">

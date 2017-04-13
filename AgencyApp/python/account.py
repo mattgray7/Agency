@@ -160,10 +160,10 @@ class EditInterestsView(views.GenericAccountView):
         self.userAccount.collaborationInterest = self.formData.get('collaboration', False)
         try:
             self.userAccount.save()
-            return True
         except:
             self.errors.append("Could not connect to UserAccount database")
-        return False
+            return False
+        return True
 
 
 class EditProfessionsView(views.GenericAccountView):
@@ -190,61 +190,57 @@ class EditProfessionsView(views.GenericAccountView):
         Profession.objects.filter(username=self.username).delete()
         for profession in professionsSelected:
             entry = Profession(username=self.username, professionName=profession)
-            entry.save()
+            try:
+                entry.save()
+            except:
+                print "PROCESS ERROR"
+                return False
         return True
 
 
-def editPicture(request, context):
-    errors = []
-    incomingSource = _getIncomingSource(request)
+class EditPictureView(views.GenericAccountView):
+    def __init__(self, *args, **kwargs):
+        super(EditPictureView, self).__init__(*args, **kwargs)
 
-    if request.method == "POST":
-        form = EditPictureForm(request.POST, request.FILES)
-        if request.POST.get("source") == EDIT_PROFILE_PICTURE:
-            if form.is_valid():
-                userAccount = UserAccount.objects.get(username=request.user.username)
-                userAccount.profilePicture = request.FILES['profilePicture']
+    @property
+    def pageContext(self):
+        if self._pageContext is None:
+            self._pageContext = helpers.getBaseContext(self.request)
+            self._pageContext["editSource"] = self.incomingSource
+            self._pageContext["source"] = EDIT_PROFILE_PICTURE
+        return self._pageContext
 
-                # Save the picture in its location
-                userAccount.save()
+    @property
+    def form(self):
+        """To be overridden in child class"""
+        if not self._form:
+            if self.formSubmitted:
+                # Override form to create form with request.FILES
+                self._form = self.formClass(self.request.POST, self.request.FILES)
+            elif self.formClass:
+                self._form = self.formClass(initial=self.formInitialValues)
+        return self._form
 
-                # TODO 
+    def processForm(self):
+        """Overriding asbtract method"""
+        self.userAccount.profilePicture = self.request.FILES['profilePicture']
+        self.userAccount.save()
 
+        # TODO convert image to jpg or other common format
+        # Rename the file
+        initialPath = self.userAccount.profilePicture.path
+        newName = "profile{0}".format(os.path.splitext(initialPath)[-1])
+        newPath = os.path.join(os.path.dirname(initialPath), newName)
+        os.rename(initialPath, newPath)
 
-
-                # TODO convert image to jpg or other common format
-                # Rename the file
-                initialPath = userAccount.profilePicture.path
-                newName = "profile{0}".format(os.path.splitext(initialPath)[-1])
-                newPath = os.path.join(os.path.dirname(initialPath), newName)
-                os.rename(initialPath, newPath)
-
-                # Save the new path in the db
-                userAccount.profilePicture.name = os.path.join(request.user.username, newName)
-                try:
-                    userAccount.save()
-                    pass
-                except:
-                    errors.append("Could not connect to UserAccount db.")
-                else:
-                    return helpers.redirect(request=request,
-                                            currentPage=EDIT_PROFILE_PICTURE,
-                                            sourcePage=form.cleaned_data.get('editSource'))
-            elif request.POST.get("skip") == "True":
-                # editDestination is stored in post data of skip form
-                return helpers.redirect(request=request,
-                                        currentPage=EDIT_PROFILE_PICTURE,
-                                        sourcePage=request.POST.get("editSource"))
-
-    context["form"] = EditPictureForm(initial={"source": EDIT_PROFILE_PICTURE,
-                                               "editSource": incomingSource})
-
-    # add edit destination to context so that skip button can redirect properly
-    context["editSource"] = incomingSource
-    context["possibleSources"] = {"picture": EDIT_PROFILE_PICTURE}
-    if errors:
-        context["errors"] = errors
-    return render(request, 'AgencyApp/account/picture.html', context)
+        # Save the new path in the db
+        self.userAccount.profilePicture.name = os.path.join(self.username, newName)
+        try:
+            self.userAccount.save()
+        except:
+            errors.append("Could not connect to UserAccount db.")
+            return False
+        return True
 
 
 class EditBackgroundView(views.GenericAccountView):

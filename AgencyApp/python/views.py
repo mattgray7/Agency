@@ -73,11 +73,10 @@ class GenericAccountView(object):
     def form(self):
         """To be overridden in child class"""
         if not self._form:
-            if self.request.method == "POST":
-                if self.formSubmitted:
-                    self._form = self.formClass(self.request.POST)
-                elif self.formClass:
-                    self._form = self.formClass(initial=self.formInitialValues)
+            if self.formSubmitted:
+                self._form = self.formClass(self.request.POST)
+            elif self.formClass:
+                self._form = self.formClass(initial=self.formInitialValues)
         return self._form
 
     @property
@@ -118,18 +117,18 @@ class GenericAccountView(object):
 
     def process(self):
         if self.request.method == "POST":
-            print "request is post"
             if self.formSubmitted:
                 formIsValid = False
-                print "form is submitted"
-                if self.formClass:
-                    if self.form.is_valid():
+                if self.request.POST.get("skip") != "True":
+                    if self.formClass:
+                        if self.form.is_valid():
+                            if self.processForm():
+                                formIsValid = True
+                    else:
                         if self.processForm():
                             formIsValid = True
                 else:
-                    if self.processForm():
-                        formIsValid = True
-                    
+                    formIsValid = True
                 if formIsValid:
                     print "processSuccess, redirecting source {0} and current {1}".format(self.sourcePage, self.currentPage)
                     return helpers.redirect(request=self.request,
@@ -170,7 +169,9 @@ def editProfessions(request):
     return view.process()
 
 def editPicture(request):
-    return account.editPicture(request, getBaseContext(request))
+    view = account.EditPictureView(request=request, currentPage=constants.EDIT_PROFILE_PICTURE)
+    return view.process()
+    #return account.editPicture(request, getBaseContext(request))
 
 def editBackground(request):
     view = account.EditBackgroundView(request=request, currentPage=constants.EDIT_BACKGROUND)

@@ -25,7 +25,7 @@ class EditInterestsForm(forms.Form):
     editSource = forms.CharField(widget=forms.HiddenInput, required=False)
 
 class EditPictureForm(forms.Form):
-	profilePicture = forms.FileField(label="Profile Picture")
+	profilePicture = forms.FileField(label="Profile Picture", required=False)
 	editDestination = forms.CharField(widget=forms.HiddenInput, required=False)
 	source = forms.CharField(widget=forms.HiddenInput, required=False)
 	editSource = forms.CharField(widget=forms.HiddenInput, required=False)
