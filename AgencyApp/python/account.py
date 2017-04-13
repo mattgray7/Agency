@@ -155,12 +155,9 @@ class EditInterestsView(views.GenericAccountView):
 
     def processForm(self):
         """Overriding asbtract method"""
-        workSelected = self.formData.get('work', False)
-        crewSelected = self.formData.get('crew', False)
-        collabSelected = self.formData.get('collaboration', False)
-        self.userAccount.workInterest = workSelected
-        self.userAccount.crewInterest = crewSelected
-        self.userAccount.collaborationInterest = collabSelected
+        self.userAccount.workInterest = self.formData.get('work', False)
+        self.userAccount.crewInterest = self.formData.get('crew', False)
+        self.userAccount.collaborationInterest = self.formData.get('collaboration', False)
         try:
             self.userAccount.save()
             return True
@@ -195,38 +192,7 @@ class EditProfessionsView(views.GenericAccountView):
             entry = Profession(username=self.username, professionName=profession)
             entry.save()
         return True
-"""
-def editProfessions(request, context):
-    errors = []
-    incomingSource = _getIncomingSource(request)
-    print "incomingSource is {0}".format(incomingSource)
 
-    # Get any existing profession selections
-    try:
-        context["selectedProfessions"] = [x.professionName for x in Profession.objects.filter(username=request.user.username)]
-    except Professions.DoesNotExist:
-        context["selectedProfessions"] = []
-
-    context["professionList"] = PROFESSIONS
-    context["source"] = EDIT_PROFESSIONS
-    context["editSource"] = incomingSource
-    if request.method == "POST":
-        if incomingSource == EDIT_PROFESSIONS:
-            professionsSelected = request.POST.getlist("professions")
-
-            Profession.objects.filter(username=request.user.username).delete()
-
-            for profession in professionsSelected:
-                entry = Profession(username=request.user.username, professionName=profession)
-                entry.save()
-
-            return helpers.redirect(request=request,
-                                            currentPage=EDIT_PROFESSIONS,
-                                            sourcePage=request.POST.get('editSource'))
-
-    if errors:
-        context["errors"] = errors
-    return render(request, 'AgencyApp/account/professions.html', context)"""
 
 def editPicture(request, context):
     errors = []
@@ -281,41 +247,28 @@ def editPicture(request, context):
     return render(request, 'AgencyApp/account/picture.html', context)
 
 
-def editBackground(request, context):
-    errors = []
-    userAccount = UserAccount.objects.get(username=request.user.username)
-    incomingSource = _getIncomingSource(request)
+class EditBackgroundView(views.GenericAccountView):
+    def __init__(self, *args, **kwargs):
+        super(EditBackgroundView, self).__init__(*args, **kwargs)
 
-    if request.method == "POST":
-        form = EditBackgroundForm(request.POST)
-        if request.POST.get("source") == EDIT_BACKGROUND:
-            if form.is_valid():
-                # TODO verify that reel and imdb are valid links
-                reel = form.cleaned_data.get('reel')
-                imdb = form.cleaned_data.get('imdb')
-                bio = form.cleaned_data.get('bio')
+    @property
+    def formInitialValues(self):
+        self._formInitialValues["reel"] = self.userAccount.reelLink
+        self._formInitialValues["imdb"] = self.userAccount.imdbLink
+        self._formInitialValues["bio"] = self.userAccount.bio
+        return self._formInitialValues
 
-                userAccount.reelLink = reel
-                userAccount.imdbLink = imdb
-                userAccount.bio = bio
-                
-                try:
-                    userAccount.save()
-                except:
-                    errors.append("Could not connect to UserAccount db.")
-                else:
-                    return helpers.redirect(request=request,
-                                            currentPage=EDIT_BACKGROUND,
-                                            sourcePage=form.cleaned_data.get("editSource"))
-    
-    context["form"] = EditBackgroundForm(initial={"source": EDIT_BACKGROUND,
-                                                  "editSource": incomingSource,
-                                                  "reel": userAccount.reelLink,
-                                                  "imdb": userAccount.imdbLink,
-                                                  "bio": userAccount.bio})
-    if errors:
-        context["errors"] = errors
-    return render(request, 'AgencyApp/account/background.html', context)
+    def processForm(self):
+        """Overriding asbtract method"""
+        self.userAccount.reelLink = self.formData.get('reel')
+        self.userAccount.imdbLink = self.formData.get('imdb')
+        self.userAccount.bio = self.formData.get('bio')
+        try:
+            self.userAccount.save()
+            return True
+        except:
+            self.errors.append("Could not connect to UserAccount database")
+        return False
 
 
 def _getIncomingSource(request):

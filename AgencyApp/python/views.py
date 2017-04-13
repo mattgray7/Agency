@@ -168,13 +168,13 @@ def editInterests(request):
 def editProfessions(request):
     view = account.EditProfessionsView(request=request, currentPage=constants.EDIT_PROFESSIONS)
     return view.process()
-    #return account.editProfessions(request, getBaseContext(request))
 
 def editPicture(request):
     return account.editPicture(request, getBaseContext(request))
 
 def editBackground(request):
-    return account.editBackground(request, getBaseContext(request))
+    view = account.EditBackgroundView(request=request, currentPage=constants.EDIT_BACKGROUND)
+    return view.process()
 
 def createAccountFinish(request):
     return account.finish(request, getBaseContext(request))

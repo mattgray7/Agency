@@ -77,7 +77,8 @@ FORM_MAP = {LOGIN: forms.LoginForm,
 			}
 
 HTML_MAP = {EDIT_INTERESTS: 'AgencyApp/account/interests.html',
-			EDIT_PROFESSIONS: 'AgencyApp/account/professions.html'}
+			EDIT_PROFESSIONS: 'AgencyApp/account/professions.html',
+			EDIT_BACKGROUND: 'AgencyApp/account/background.html'}
 
 
 
