@@ -25,9 +25,7 @@ def display(request, username, context):
         else:
         	# TODO still set to True even if user removes all professions
         	context["professionsFound"] = True
-        	context["userProfessions"] = [x.professionName for x in professions]
-        	print "user professions: {0}".format(context.get("userProfessions"))
-        	
+        	context["userProfessions"] = [x.professionName for x in professions]        	
 
     context["possibleSources"] = {"profile": constants.PROFILE}
     return render(request, "AgencyApp/profile.html", context)

@@ -22,3 +22,8 @@ print "Adding professions to db"
 for profession in constants.PROFESSIONS:
     p = models.MasterProfession(professionName=profession)
     p.save()"""
+
+class blaa(object):
+	def __init__(self, *args, **kwargs):
+		print kwargs
+		print kwargs.get("current")

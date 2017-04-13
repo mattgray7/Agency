@@ -1,3 +1,5 @@
+import forms
+
 # Source page enums:
 HOME = "HOME"
 LOGIN = "LOGIN"
@@ -6,6 +8,8 @@ CREATE_POST = "CREATE_POST"
 CREATE_EVENT = "CREATE_EVENT"
 
 DEFAULT = "DEFAULT"
+MANUAL_FORM_CLASS = "MANUAL_FORM_CLASS"
+DJANGO_FORM_CLASS = "DJANGO_FORM_CLASS"
 
 TOOLBAR_LOGIN = "TOOLBAR_LOGIN"
 TOOLBAR_HOME = "TOOLBAR_HOME"
@@ -64,6 +68,15 @@ PAGE_MAP = {DEFAULT: HOME,
 							  EDIT_PROFILE_PICTURE: {DEFAULT: SETUP_ACCOUNT_FINISH}}
 			}
 
+FORM_MAP = {LOGIN: forms.LoginForm,
+			CREATE_BASIC_ACCOUNT: forms.CreateAccountForm,
+			EDIT_INTERESTS: forms.EditInterestsForm,
+			EDIT_PROFESSIONS: None,	#manual
+			EDIT_PROFILE_PICTURE: forms.EditPictureForm,
+			EDIT_BACKGROUND: forms.EditBackgroundForm
+			}
+
+HTML_MAP = {EDIT_INTERESTS: 'AgencyApp/account/interests.html'}
 
 
 

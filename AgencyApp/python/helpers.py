@@ -1,6 +1,158 @@
 from django.contrib import messages
+from django.shortcuts import render
+
 from django.http import HttpResponseRedirect
 import constants
+from models import UserAccount
+
+
+class GenericAccountView(object):
+
+    def __init__(self, *args, **kwargs):
+        self.request = kwargs.get("request")
+        print "request is {0}".format(self.request)
+        if not self.request:
+            # TODO raise proper exception
+            raise("No request passed to view")
+
+        self._incomingSource = None
+        self._sourcePage = kwargs.get("sourcePage")
+        self._currentPage = kwargs.get("currentPage")
+
+        self._userAccount = None
+        self._username = None
+        self._pageErrors = []  #TODO
+        self.pageContext = getBaseContext(self.request)
+
+        self._form = None
+        self._formClass = None
+        self._formInitialValues = {"source": self.currentPage,
+                                   "editSource": self.incomingSource}
+        self._formSubmitted = False
+        self._formData = None
+
+    @property
+    def formClass(self):
+        if not self._formClass:
+            self._formClass = constants.FORM_MAP.get(self.currentPage)
+        return self._formClass
+
+    def setFormClass(self, formClass):
+        self._formClass = formClass
+
+    @property
+    def formSubmitted(self):
+        self._formSubmitted = self.currentPage == self.incomingSource
+        return self._formSubmitted
+
+    @property
+    def formInitialValues(self):
+        # To override in child class
+        return self._formInitialValues
+
+    @property
+    def formData(self):
+        if self._formData is None:
+            if self.formClass is None:
+                self._formData = self.request.POST
+            else:
+                self._formData = self.form.is_valid() and self.form.cleaned_data
+        return self._formData
+
+    @property
+    def form(self):
+        """To be overridden in child class"""
+        if not self._form:
+            if self.request.method == "POST":
+                if self.formSubmitted:
+                    self._form = self.formClass(self.request.POST)
+                else:
+                    self._form = self.formClass(initial=self.formInitialValues)
+                    print "initial values are {0}".format(self.formInitialValues)
+        return self._form
+
+    @property
+    def sourcePage(self):
+        if self._sourcePage is None:
+            if self.formSubmitted:
+                self._sourcePage = self.formData.get("editSource")
+            else:
+                self._sourcePage = self.incomingSource
+        return self._sourcePage
+
+    @property
+    def currentPage(self):
+        if self._currentPage is None:
+            self._currentPage = self.incomingSource
+        return self._currentPage
+
+    @property
+    def incomingSource(self):
+        if self._incomingSource is None:
+            if self.request.POST.get("source"):
+                self._incomingSource = self.request.POST.get("source")
+            else:
+                self._incomingSource = getMessageFromKey(self.request, "source")
+        return self._incomingSource
+
+    @property
+    def userAccount(self):
+        if self._userAccount is None:
+            self._userAccount = UserAccount.objects.get(username=self.username)
+        return self._userAccount
+
+
+    @property
+    def username(self):
+        if self._username is None:
+            self._username = self.request.user.username
+        return self._username
+
+    def process(self):
+        if self.request.method == "POST":
+            print "request is post"
+            if self.formSubmitted:
+                print "form is submitted"
+                if self.form.is_valid():
+                    print "form is valid"
+                    if self.processForm():
+                        print "processSuccess, redirecting source {0} and current {1}".format(self.sourcePage, self.currentPage)
+                        return redirect(request=self.request,
+                                        currentPage=self.currentPage,
+                                        sourcePage=self.sourcePage)
+        self.pageContext["form"] = self.form
+        return render(self.request, 'AgencyApp/account/interests.html', self.pageContext)
+
+    def processForm(self):
+        """To bo overridden in child class"""
+        pass
+
+class EditInterestsView(GenericAccountView):
+    def __init__(self, *args, **kwargs):
+        super(EditInterestsView, self).__init__(*args, **kwargs)
+
+    @property
+    def formInitialValues(self):
+        self._formInitialValues["work"] = self.userAccount.workInterest
+        self._formInitialValues["crew"] = self.userAccount.crewInterest
+        self._formInitialValues["collaboration"] = self.userAccount.collaborationInterest
+        return self._formInitialValues
+
+    def processForm(self):
+        """Overriding asbtract method"""
+        print "overridden method now"
+        workSelected = self.formData.get('work', False)
+        crewSelected = self.formData.get('crew', False)
+        collabSelected = self.formData.get('collaboration', False)
+        self.userAccount.workInterest = workSelected
+        self.userAccount.crewInterest = crewSelected
+        self.userAccount.collaborationInterest = collabSelected
+        try:
+            self.userAccount.save()
+            return True
+        except:
+            self.errors.append("Could not connect to UserAccount database")
+        return False
 
 
 def redirect(request, currentPage, sourcePage, pageKey=None):

@@ -25,7 +25,8 @@ def createAccount(request):
     return account.createAccount(request, getBaseContext(request))
 
 def editInterests(request):
-    return account.editInterests(request, getBaseContext(request))
+    e = helpers.EditInterestsView(request=request, currentPage=constants.EDIT_INTERESTS)
+    return e.process()
 
 def editPicture(request):
     return account.editPicture(request, getBaseContext(request))
