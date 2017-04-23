@@ -9,7 +9,7 @@ from django.http import HttpResponseRedirect
 from forms import *
 
 from models import UserAccount, Profession
-from helpers import getMessageFromKey, capitalizeName
+from helpers import getMessageFromKey
 
 from constants import *
 import constants
@@ -52,6 +52,7 @@ def loginUser(request, context):
         context["form"] = LoginForm()
     if errors:
         context["errors"] = errors
+    context["source"] = LOGIN
     return render(request, 'AgencyApp/account/login.html', context)
 
 
@@ -60,68 +61,64 @@ def logoutUser(request, context):
     return HttpResponseRedirect('/')
 
 
-def createAccount(request, context):
-    errors = []
-    memory = {}
-    memorySource = {}
-    incomingSource = _getIncomingSource(request)
-    if request.method == 'POST':
-        # Form submitted
-        form = CreateAccountForm(request.POST)
-        if incomingSource == CREATE_BASIC_ACCOUNT:
-            if form.is_valid():
-                memorySource = form.cleaned_data
-                if _emailIsRegistered(form.cleaned_data.get('email')):
-                    errors.append("Email already in use.")
-                else:
-                    if form.cleaned_data.get('password') != form.cleaned_data.get('passwordConfirm'):
-                        errors.append("Passwords don't match.")
-                    else:
-                        firstName = capitalizeName(form.cleaned_data.get('firstName'))
-                        lastName = capitalizeName(form.cleaned_data.get('lastName'))
-                        username = _getProfileNameFromName(firstName.lower(), lastName.lower())
-                        
-                        user = User.objects.create_user(username=username,
-                                                        email=form.cleaned_data.get('email'), 
-                                                        password=form.cleaned_data.get('password'),
-                                                        first_name=firstName,
-                                                        last_name=lastName)
-                        userAccount = UserAccount(email=form.cleaned_data.get('email'),
-                                                  username=username,
-                                                  firstName=firstName,
-                                                  lastName=lastName,
-                                                  setupComplete=False)
-                        saveSuccess = True
-                        try:
-                            user.save()
-                        except:
-                            saveSuccess = False
-                            errors.append("Unable to save in User db.")
-                        else:
-                            try:
-                                userAccount.save()
-                            except:
-                                saveSuccess = False
-                                errors.append("Unable to save in UserAccount db.")
-                                #TODO delete account from User db
-                        if saveSuccess:
-                            login(request, user)
-                            # TODO change the source (home vs login?)
-                            return helpers.redirect(request=request,
-                                                    currentPage=CREATE_BASIC_ACCOUNT,
-                                                    sourcePage=LOGIN)
-            else:
-                errors.append("Invalid value entered.")
-                memorySource = request.POST
+class CreateAccountView(views.GenericAccountView):
+    def __init__(self, *args, **kwargs):
+        super(CreateAccountView, self).__init__(*args, **kwargs)
 
-    context["form"] = CreateAccountForm(initial={"email": memorySource.get("email"),
-                                                 "firstName": memorySource.get("firstName"),
-                                                 "lastName": memorySource.get("lastName"),
-                                                 "source": CREATE_BASIC_ACCOUNT,
-                                                 "createSource": incomingSource})
-    if errors:
-        context["errors"] = errors
-    return render(request, 'AgencyApp/account/create.html', context)
+    @property
+    def userAccount(self):
+        return None
+
+    @property
+    def pageContext(self):
+        if self._pageContext is None:
+            self._pageContext = helpers.getBaseContext(self.request)
+            self._pageContext["email"] = self.errorMemory.get("email")
+            self._pageContext["firstName"] = self.errorMemory.get("firstName")
+            self._pageContext["lastName"] = self.errorMemory.get("lastName")
+            self._pageContext["createSource"] = self.incomingSource
+            self._pageContext["source"] = CREATE_BASIC_ACCOUNT
+        return self._pageContext
+
+    @property
+    def formInitialValues(self):
+        self._formInitialValues["email"] = self.errorMemory.get("email")
+        self._formInitialValues["firstName"] = self.errorMemory.get("firstName")
+        self._formInitialValues["lastName"] = self.errorMemory.get("lastName")
+        self._formInitialValues["createSource"] = self.incomingSource
+        return self._formInitialValues
+
+    def processForm(self):
+        """Overriding asbtract method"""
+        if _emailIsRegistered(self.formData.get('email')):
+            self._pageErrors.append("Email already in use.")
+        else:
+            if self.formData.get('password') != self.formData.get('passwordConfirm'):
+                self._pageErrors.append("Passwords don't match.")
+            else:
+                firstName = helpers.capitalizeName(self.formData.get('firstName'))
+                lastName = helpers.capitalizeName(self.formData.get('lastName'))
+                self._username = _getProfileNameFromName(firstName.lower(), lastName.lower())
+                user = User.objects.create_user(username=self.username,
+                                                email=self.formData.get('email'),
+                                                password=self.formData.get('password'),
+                                                first_name=firstName,
+                                                last_name=lastName)
+                userAccount = UserAccount(email=self.formData.get('email'),
+                                          username=self.username,
+                                          firstName=firstName,
+                                          lastName=lastName,
+                                          setupComplete=False)
+                try:
+                    user.save()
+                    userAccount.save()
+                except Exception as e:
+                    print e
+                    self._pageErrors.append("Unable to create User.")
+                else:
+                    login(self.request, user)
+                    return True
+        return False
 
 
 def finish(request, context):

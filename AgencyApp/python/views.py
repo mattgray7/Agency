@@ -25,6 +25,8 @@ class GenericAccountView(object):
         self._userAccount = None
         self._username = None
         self._pageErrors = []  #TODO
+
+        self.errorMemory = {}
         self._pageContext = None
 
         self._form = None
@@ -36,10 +38,15 @@ class GenericAccountView(object):
 
     @property
     def pageContext(self):
-        """To be overridden in parent class"""
+        """To be overridden in child class"""
         if self._pageContext is None:
             self._pageContext = helpers.getBaseContext(self.request)
         return self._pageContext
+
+    @property
+    def pageErrors(self):
+        "TODO"
+        return self._pageErrors
 
     @property
     def formClass(self):
@@ -71,7 +78,6 @@ class GenericAccountView(object):
 
     @property
     def form(self):
-        """To be overridden in child class"""
         if not self._form:
             if self.formSubmitted:
                 self._form = self.formClass(self.request.POST)
@@ -83,7 +89,7 @@ class GenericAccountView(object):
     def sourcePage(self):
         if self._sourcePage is None:
             if self.formSubmitted:
-                self._sourcePage = self.formData.get("editSource")
+                self._sourcePage = self.formData.get("editSource") or self.formData.get("createSource")
             else:
                 self._sourcePage = self.incomingSource
         return self._sourcePage
@@ -122,8 +128,11 @@ class GenericAccountView(object):
                 if self.request.POST.get("skip") != "True":
                     if self.formClass:
                         if self.form.is_valid():
+                            self.errorMemory = self.formData
                             if self.processForm():
                                 formIsValid = True
+                        else:
+                            self.errorMemory = self.request.POST
                     else:
                         if self.processForm():
                             formIsValid = True
@@ -138,6 +147,8 @@ class GenericAccountView(object):
         # Need to access before form is set
         self.pageContext
         self._pageContext["form"] = self.form
+        if self._pageErrors:
+            self._pageContext["errors"] = self.pageErrors
         return render(self.request, constants.HTML_MAP.get(self.currentPage), self.pageContext)
 
     def processForm(self):
@@ -158,7 +169,8 @@ def logout(request):
     return account.logoutUser(request, getBaseContext(request))
 
 def createAccount(request):
-    return account.createAccount(request, getBaseContext(request))
+    view = account.CreateAccountView(request=request, currentPage=constants.CREATE_BASIC_ACCOUNT)
+    return view.process()
 
 def editInterests(request):
     view = account.EditInterestsView(request=request, currentPage=constants.EDIT_INTERESTS)

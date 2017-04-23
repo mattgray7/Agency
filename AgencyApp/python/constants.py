@@ -57,7 +57,8 @@ PAGE_MAP = {DEFAULT: HOME,
 						   HOME: HOME,
 						   CREATE_EVENT: CREATE_EVENT,
 						   CREATE_POST: CREATE_POST}},
-			CREATE_BASIC_ACCOUNT: {LOGIN: {DEFAULT: CREATE_BASIC_ACCOUNT_FINISH}},
+			CREATE_BASIC_ACCOUNT: {LOGIN: {DEFAULT: CREATE_BASIC_ACCOUNT_FINISH},
+								   HOME: {DEFAULT: CREATE_BASIC_ACCOUNT_FINISH}},
 			EDIT_INTERESTS: {PROFILE: {DEFAULT: PROFILE},
 							 CREATE_BASIC_ACCOUNT_FINISH: {DEFAULT: EDIT_PROFESSIONS}},
 			EDIT_PROFESSIONS: {PROFILE: {DEFAULT: PROFILE},
@@ -76,7 +77,8 @@ FORM_MAP = {LOGIN: forms.LoginForm,
 			EDIT_BACKGROUND: forms.EditBackgroundForm
 			}
 
-HTML_MAP = {EDIT_INTERESTS: 'AgencyApp/account/interests.html',
+HTML_MAP = {CREATE_BASIC_ACCOUNT: 'AgencyApp/account/create.html',
+			EDIT_INTERESTS: 'AgencyApp/account/interests.html',
 			EDIT_PROFESSIONS: 'AgencyApp/account/professions.html',
 			EDIT_BACKGROUND: 'AgencyApp/account/background.html',
 			EDIT_PROFILE_PICTURE: 'AgencyApp/account/picture.html'}

@@ -40,12 +40,13 @@
 			{% endif %}
 		{% endif %}
 		{{ form.as_p }}
-		<!--<ul>
-			<li><input type="text" placeholder="Email" id="email" name="email" onkeyup="enableLogin();"required></li>
-			<li><input type="password" placeholder="Password" id="password" name="password" onkeyup="enableLogin();"required></li>
-			<li><button type="submit" id="loginButton" disabled="disabled">Login</button></li>
-		</ul>-->
 		<input type="submit" value="Login" />
 	</form>
-	<br><a href='/account/create/basic'>Create an account</a>
+
+	<br>
+	<form method='post' action='/account/create/basic/'>
+		{% csrf_token %}
+		<input type='hidden' name='source' value='{{ source }}' />
+		<input type='submit' value='Create Account' />
+	</form>
 {% endblock %}
