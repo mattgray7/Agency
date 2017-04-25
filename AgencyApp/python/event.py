@@ -122,6 +122,7 @@ class CreateEventView(views.GenericFormView):
         poster = self.formData.get("poster", "")
         location = self.formData.get("location", "")
         description = self.formData.get("description", "")
+        date = self.formData.get("date", "")
         if len(title) < 1:  #TODO switch min length
             self._pageErrors.append("Title must be at least 30 characters long.")
         else:
@@ -140,6 +141,7 @@ class CreateEventView(views.GenericFormView):
                             self._currentEvent.title = title
                             self._currentEvent.description = description
                             self._currentEvent.location = location
+                            self._currentEvent.date = date
                             eventToSave = self._currentEvent
                         else:
                             # Create new event
@@ -147,7 +149,8 @@ class CreateEventView(views.GenericFormView):
                                                        poster=poster,
                                                        title=title,
                                                        location=location,
-                                                       description=description
+                                                       description=description,
+                                                       date=date
                                                        )
                         try:
                             eventToSave.save()

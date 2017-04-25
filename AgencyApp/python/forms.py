@@ -44,6 +44,7 @@ class CreateEventForm(forms.Form):
     title = forms.CharField(label="Title", required=True, max_length=500)
     description = forms.CharField(label="Event Description", required=True, max_length=5000)
     location = forms.CharField(label="Location", required=True, max_length=1000)
+    date = forms.DateField(widget=forms.DateInput(attrs={'class':'datepicker'}))
     source = forms.CharField(widget=forms.HiddenInput, required=False)
     createSource = forms.CharField(widget=forms.HiddenInput, required=False)
 

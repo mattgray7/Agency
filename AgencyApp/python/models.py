@@ -41,6 +41,7 @@ class Event(models.Model):
     title = models.CharField(max_length=500)
     location = models.CharField(max_length=1000)
     description = models.CharField(max_length=5000)
+    date = models.DateTimeField(default=None)
 
 class Profession(models.Model):
     username = models.CharField(max_length=100)

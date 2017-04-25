@@ -19,6 +19,19 @@
 			{% endfor %}
 		</ul>
 	{% endif %}
+
+	 <script>
+	  $( document ).ready(function() {
+	  		console.log("doing datepicker");
+	      	$( ".datepicker" ).datepicker({
+	      changeMonth: true,
+	      changeYear: true,
+	      yearRange: "2017:2019",
+	      // You can put more options here.
+	    });
+	  });
+	  </script>
+
 	<form method='post' action="/create/event/">
 		{% csrf_token %}
 		{{ form.as_p }}
@@ -30,3 +43,4 @@
 {% endif %}
 
 {% endblock %}
+
