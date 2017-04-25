@@ -167,6 +167,7 @@ class GenericFormView(GenericView):
 # Must be done after GenericAccountView defined
 import account
 import event
+import browse
 
 
 def displayHome(request):
@@ -216,7 +217,12 @@ def viewEvent(request, eventID):
 def choosePostType(request):
     return choose.postType(request, getBaseContext(request))
 
-def browse(request):
+def browseEvents(request):
+    view = browse.BrowseEventsView(request=request, sourcePage=constants.HOME, currentPage=constants.BROWSE_EVENTS)
+    return view.process()
+    #return render(request, "AgencyApp/browse.html", getBaseContext(request))
+
+def browsePosts(request):
     return render(request, "AgencyApp/browse.html", getBaseContext(request))
 
 def displayProfile(request, username):

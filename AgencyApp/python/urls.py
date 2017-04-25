@@ -22,7 +22,8 @@ urlpatterns = [
     url(r'^create/post/choose/$', views.choosePostType, name='choose_postType'),
 
     # Other
-    url(r'^browse/$', views.browse, name='browse'),
+    url(r'^browse/events/$', views.browseEvents, name='browseEvents'),
+    url(r'^browse/posts/$', views.browsePosts, name='browsePosts'),
     url(r'^login/$', views.login, name='login'),
     url(r'^logout/$', views.logout, name='logout'),
     url(r'^ajax/$', ajax.call, name='ajax'),

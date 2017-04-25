@@ -8,6 +8,9 @@ CREATE_POST = "CREATE_POST"
 CREATE_EVENT = "CREATE_EVENT"
 VIEW_EVENT = "VIEW_EVENT"
 
+BROWSE_EVENTS = "BROWSE_EVENTS"
+BROWSE_POSTS = "BROWSE_POSTS"
+
 EVENT_ID_LENGTH = 8
 
 DEFAULT = "DEFAULT"
@@ -52,7 +55,9 @@ URL_MAP = {HOME: "/",
 		   EDIT_INTERESTS: "/account/edit/interests/",
 		   EDIT_PROFESSIONS: "/account/edit/professions/",
 		   EDIT_PROFILE_PICTURE: "/account/edit/picture/",
-		   EDIT_BACKGROUND: "/account/edit/background/"
+		   EDIT_BACKGROUND: "/account/edit/background/",
+		   BROWSE_EVENTS: "/browse/events/",
+		   BROWSE_POSTS: "/browse/posts/"
 		   }
 
 # format is {currentPage: {source1: dest1, source2:dest2, source3: {pagekey1: dest3-1, pagekey2: dest3-2}}}
@@ -95,7 +100,9 @@ HTML_MAP = {CREATE_BASIC_ACCOUNT: 'AgencyApp/account/create.html',
 			EDIT_BACKGROUND: 'AgencyApp/account/background.html',
 			EDIT_PROFILE_PICTURE: 'AgencyApp/account/picture.html',
 			CREATE_EVENT: 'AgencyApp/event/create.html',
-			VIEW_EVENT: 'AgencyApp/event/view.html'}
+			VIEW_EVENT: 'AgencyApp/event/view.html',
+			BROWSE_EVENTS: 'AgencyApp/browse.html',
+			BROWSE_POSTS: 'AgencyApp/browse.html'}
 
 
 

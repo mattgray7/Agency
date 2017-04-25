@@ -1,5 +1,28 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h3>You are browsing now.</h3>
+
+{% if browseView == "BROWSE_EVENTS" %}
+	<h4> Search upcoming events...</h4>
+	{% if events %}
+		<table>
+			<tr> 
+				<td> Title </td>
+				<td> Posted by </td>
+				<td> Description </td>
+			</tr>
+		{% for event in events %}
+			<tr>
+				<td> <a href="/view/event/{{ event.eventID }}/"> {{ event.title }}</a></td>
+				<td> <a href="/{{ event.poster }}/"> {{ event.poster }}</a></td>
+				<td> {{ event.description }} </td>
+			</tr>
+		{% endfor %}
+	</table>
+	{% else %}
+		<h4> No events are currently listed.</h4>
+	{% endif %}
+{% else %}
+	{{browseView }}
+{% endif %}
 {% endblock %}
