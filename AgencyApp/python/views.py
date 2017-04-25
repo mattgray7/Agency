@@ -4,19 +4,19 @@ from models import UserAccount
 
 import constants
 import helpers
-import event
 import choose
 import home
 import profile
 
 getBaseContext = helpers.getBaseContext
 
-class GenericAccountView(object):
+class GenericView(object):
     def __init__(self, *args, **kwargs):
         self.request = kwargs.get("request")
         if not self.request:
             # TODO raise proper exception
             raise("No request passed to view")
+        print "request is {0}".format(self.request)
 
         self._incomingSource = None
         self._sourcePage = kwargs.get("sourcePage")
@@ -27,21 +27,20 @@ class GenericAccountView(object):
         self._pageErrors = []  #TODO
 
         self.errorMemory = {}
-        self._pageContext = None
-
-        self._form = None
-        self._formClass = None
-        self._formInitialValues = {"source": self.currentPage,
-                                   "editSource": self.incomingSource}
-        self._formSubmitted = False
-        self._formData = None
+        self._pageContext = {}
+        self._pageKey = None
 
     @property
     def pageContext(self):
         """To be overridden in child class"""
-        if self._pageContext is None:
+        if not self._pageContext:
             self._pageContext = helpers.getBaseContext(self.request)
         return self._pageContext
+
+    @property
+    def pageKey(self):
+        """The page key for page destination"""
+        return self._pageKey
 
     @property
     def pageErrors(self):
@@ -49,47 +48,10 @@ class GenericAccountView(object):
         return self._pageErrors
 
     @property
-    def formClass(self):
-        if not self._formClass:
-            self._formClass = constants.FORM_MAP.get(self.currentPage)
-        return self._formClass
-
-    def setPageContextElement(self, key, value):
-        self.pageContext[key] = value
-
-    @property
-    def formSubmitted(self):
-        self._formSubmitted = self.currentPage == self.incomingSource
-        return self._formSubmitted
-
-    @property
-    def formInitialValues(self):
-        # To override in child class
-        return self._formInitialValues
-
-    @property
-    def formData(self):
-        if self._formData is None:
-            if self.formClass is None:
-                self._formData = self.request.POST
-            else:
-                self._formData = self.form.is_valid() and self.form.cleaned_data
-        return self._formData
-
-    @property
-    def form(self):
-        if not self._form:
-            if self.formSubmitted:
-                self._form = self.formClass(self.request.POST)
-            elif self.formClass:
-                self._form = self.formClass(initial=self.formInitialValues)
-        return self._form
-
-    @property
     def sourcePage(self):
         if self._sourcePage is None:
             if self.formSubmitted:
-                self._sourcePage = self.formData.get("editSource") or self.formData.get("createSource")
+                self._sourcePage = self.request.POST.get("editSource") or self.request.POST.get("createSource") or self.request.POST.get("loginSource")
             else:
                 self._sourcePage = self.incomingSource
         return self._sourcePage
@@ -121,15 +83,64 @@ class GenericAccountView(object):
             self._username = self.request.user.username
         return self._username
 
+
+class GenericFormView(GenericView):
+    def __init__(self, *args, **kwargs):
+        super(GenericFormView, self).__init__(*args, **kwargs)
+        self._form = None
+        self._formClass = None
+        self._formInitialValues = {"source": self.currentPage,
+                                   "editSource": self.incomingSource}
+        self._formSubmitted = False
+        self._formData = None
+
+    @property
+    def formClass(self):
+        if not self._formClass:
+            self._formClass = constants.FORM_MAP.get(self.currentPage)
+        return self._formClass
+
+    @property
+    def formSubmitted(self):
+        self._formSubmitted = self.currentPage == self.incomingSource
+        print "current, source: {0} {1}".format(self.currentPage, self.incomingSource)
+        return self._formSubmitted
+
+    @property
+    def formInitialValues(self):
+        # To override in child class
+        return self._formInitialValues
+
+    @property
+    def formData(self):
+        if self._formData is None:
+            if self.formClass is None:
+                self._formData = self.request.POST
+            else:
+                self._formData = self.form.is_valid() and self.form.cleaned_data
+        return self._formData
+
+    @property
+    def form(self):
+        if not self._form:
+            if self.formSubmitted:
+                self._form = self.formClass(self.request.POST)
+            elif self.formClass:
+                self._form = self.formClass(initial=self.formInitialValues)
+        return self._form
+
     def process(self):
         if self.request.method == "POST":
             if self.formSubmitted:
+                print "form submitted"
                 formIsValid = False
                 if self.request.POST.get("skip") != "True":
                     if self.formClass:
                         if self.form.is_valid():
+                            print "form is valid"
                             self.errorMemory = self.formData
                             if self.processForm():
+                                print "procexx form success"
                                 formIsValid = True
                         else:
                             self.errorMemory = self.request.POST
@@ -138,12 +149,13 @@ class GenericAccountView(object):
                             formIsValid = True
                 else:
                     formIsValid = True
+                    print "form is Valid"
                 if formIsValid:
                     print "processSuccess, redirecting source {0} and current {1}".format(self.sourcePage, self.currentPage)
                     return helpers.redirect(request=self.request,
                                             currentPage=self.currentPage,
-                                            sourcePage=self.sourcePage)
-
+                                            sourcePage=self.sourcePage,
+                                            pageKey=self._pageKey)
         # Need to access before form is set
         self.pageContext
         self._pageContext["form"] = self.form
@@ -157,6 +169,7 @@ class GenericAccountView(object):
 
 # Must be done after GenericAccountView defined
 import account
+import event
 
 
 def displayHome(request):
@@ -183,7 +196,6 @@ def editProfessions(request):
 def editPicture(request):
     view = account.EditPictureView(request=request, currentPage=constants.EDIT_PROFILE_PICTURE)
     return view.process()
-    #return account.editPicture(request, getBaseContext(request))
 
 def editBackground(request):
     view = account.EditBackgroundView(request=request, currentPage=constants.EDIT_BACKGROUND)
@@ -193,7 +205,13 @@ def createAccountFinish(request):
     return account.finish(request, getBaseContext(request))
 
 def createEvent(request):
-    return event.create(request, getBaseContext(request))
+    view = event.CreateEventView(request=request, sourcePage=constants.HOME, currentPage=constants.CREATE_EVENT)
+    return view.process()
+    #return event.create(request, getBaseContext(request))
+
+def viewEvent(request, eventID):
+    view = event.ViewEventView(request=request, currentPage=constants.VIEW_EVENT, eventID=eventID)
+    return view.process()
 
 def choosePostType(request):
     return choose.postType(request, getBaseContext(request))

@@ -6,6 +6,9 @@ LOGIN = "LOGIN"
 PROFILE = "PROFILE"
 CREATE_POST = "CREATE_POST"
 CREATE_EVENT = "CREATE_EVENT"
+VIEW_EVENT = "VIEW_EVENT"
+
+EVENT_ID_LENGTH = 8
 
 DEFAULT = "DEFAULT"
 MANUAL_FORM_CLASS = "MANUAL_FORM_CLASS"
@@ -43,6 +46,7 @@ URL_MAP = {HOME: "/",
 		   PROFILE:"/{0}/",
 		   CREATE_POST: "/create/post/choose/",
 		   CREATE_EVENT: "/create/event/",
+		   VIEW_EVENT: "/view/event/{0}/",
 		   CREATE_BASIC_ACCOUNT_FINISH: "/account/create/finish/",
 		   SETUP_ACCOUNT_FINISH: "/account/create/finish/",
 		   EDIT_INTERESTS: "/account/edit/interests/",
@@ -66,7 +70,11 @@ PAGE_MAP = {DEFAULT: HOME,
 			EDIT_PROFILE_PICTURE: {PROFILE: {DEFAULT: PROFILE},
 								   EDIT_PROFESSIONS: {DEFAULT: EDIT_BACKGROUND}},
 			EDIT_BACKGROUND: {PROFILE: {DEFAULT: PROFILE},
-							  EDIT_PROFILE_PICTURE: {DEFAULT: SETUP_ACCOUNT_FINISH}}
+							  EDIT_PROFILE_PICTURE: {DEFAULT: SETUP_ACCOUNT_FINISH}},
+			CREATE_EVENT: {HOME: {DEFAULT: VIEW_EVENT},
+						   CREATE_BASIC_ACCOUNT_FINISH: {DEFAULT: VIEW_EVENT},
+						   SETUP_ACCOUNT_FINISH: {DEFAULT: VIEW_EVENT},
+						   }
 			}
 
 FORM_MAP = {LOGIN: forms.LoginForm,
@@ -74,14 +82,17 @@ FORM_MAP = {LOGIN: forms.LoginForm,
 			EDIT_INTERESTS: forms.EditInterestsForm,
 			EDIT_PROFESSIONS: None,	#manual
 			EDIT_PROFILE_PICTURE: forms.EditPictureForm,
-			EDIT_BACKGROUND: forms.EditBackgroundForm
+			EDIT_BACKGROUND: forms.EditBackgroundForm,
+			CREATE_EVENT: forms.CreateEventForm
 			}
 
 HTML_MAP = {CREATE_BASIC_ACCOUNT: 'AgencyApp/account/create.html',
 			EDIT_INTERESTS: 'AgencyApp/account/interests.html',
 			EDIT_PROFESSIONS: 'AgencyApp/account/professions.html',
 			EDIT_BACKGROUND: 'AgencyApp/account/background.html',
-			EDIT_PROFILE_PICTURE: 'AgencyApp/account/picture.html'}
+			EDIT_PROFILE_PICTURE: 'AgencyApp/account/picture.html',
+			CREATE_EVENT: 'AgencyApp/event/create.html',
+			VIEW_EVENT: 'AgencyApp/event/view.html'}
 
 
 

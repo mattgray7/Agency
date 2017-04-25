@@ -61,7 +61,7 @@ def logoutUser(request, context):
     return HttpResponseRedirect('/')
 
 
-class CreateAccountView(views.GenericAccountView):
+class CreateAccountView(views.GenericFormView):
     def __init__(self, *args, **kwargs):
         super(CreateAccountView, self).__init__(*args, **kwargs)
 
@@ -71,7 +71,7 @@ class CreateAccountView(views.GenericAccountView):
 
     @property
     def pageContext(self):
-        if self._pageContext is None:
+        if not self._pageContext:
             self._pageContext = helpers.getBaseContext(self.request)
             self._pageContext["email"] = self.errorMemory.get("email")
             self._pageContext["firstName"] = self.errorMemory.get("firstName")
@@ -139,7 +139,7 @@ def finish(request, context):
     return render(request, 'AgencyApp/account/finish.html', context)
 
 
-class EditInterestsView(views.GenericAccountView):
+class EditInterestsView(views.GenericFormView):
     def __init__(self, *args, **kwargs):
         super(EditInterestsView, self).__init__(*args, **kwargs)
 
@@ -163,13 +163,13 @@ class EditInterestsView(views.GenericAccountView):
         return True
 
 
-class EditProfessionsView(views.GenericAccountView):
+class EditProfessionsView(views.GenericFormView):
     def __init__(self, *args, **kwargs):
         super(EditProfessionsView, self).__init__(*args, **kwargs)
 
     @property
     def pageContext(self):
-        if self._pageContext is None:
+        if not self._pageContext:
             self._pageContext = helpers.getBaseContext(self.request)
             try:
                 self._pageContext["selectedProfessions"] = [x.professionName for x in Profession.objects.filter(username=self.username)]
@@ -195,13 +195,13 @@ class EditProfessionsView(views.GenericAccountView):
         return True
 
 
-class EditPictureView(views.GenericAccountView):
+class EditPictureView(views.GenericFormView):
     def __init__(self, *args, **kwargs):
         super(EditPictureView, self).__init__(*args, **kwargs)
 
     @property
     def pageContext(self):
-        if self._pageContext is None:
+        if not self._pageContext:
             self._pageContext = helpers.getBaseContext(self.request)
             self._pageContext["editSource"] = self.incomingSource
             self._pageContext["source"] = EDIT_PROFILE_PICTURE
@@ -240,7 +240,7 @@ class EditPictureView(views.GenericAccountView):
         return True
 
 
-class EditBackgroundView(views.GenericAccountView):
+class EditBackgroundView(views.GenericFormView):
     def __init__(self, *args, **kwargs):
         super(EditBackgroundView, self).__init__(*args, **kwargs)
 

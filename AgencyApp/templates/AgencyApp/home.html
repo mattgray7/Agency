@@ -95,16 +95,24 @@ function createForm(formName, formValue, destination){
 	form.setAttribute('method', "post");
 	form.setAttribute('action', destination);
 
-	var sourceInput = document.createElement("input");
-	sourceInput.setAttribute("type", "hidden");
-	sourceInput.setAttribute("name", formName);
-	sourceInput.setAttribute("value", formValue)
-	form.appendChild(sourceInput)
+	if (formName != "source"){
+		var sourceInput = document.createElement("input");
+		sourceInput.setAttribute("type", "hidden");
+		sourceInput.setAttribute("name", "source");
+		sourceInput.setAttribute("value", "{{ possibleSource.home }}");
+		form.appendChild(sourceInput);
+	};
+
+	var formInput = document.createElement("input");
+	formInput.setAttribute("type", "hidden");
+	formInput.setAttribute("name", formName);
+	formInput.setAttribute("value", formValue);
+	form.appendChild(formInput)
 
 	var csrfInput = document.createElement("input");
 	csrfInput.setAttribute("type", "hidden");
 	csrfInput.setAttribute("name", "csrfmiddlewaretoken");
-	csrfInput.setAttribute("value", getCookie('csrftoken'))
+	csrfInput.setAttribute("value", getCookie('csrftoken'));
 	form.appendChild(csrfInput);
 	document.body.appendChild(form);
 	return form;

@@ -3,12 +3,29 @@
 {% block content %}
 
 {% if source == possibleSources.login %}
-	<h5>Welcome back {{ request.user.first_name }}!</h5>
-{% elif source == possibleSources.home %}
-	<h5> You got here from main menu </h5>
-{% elif source == possibleSources.createAccountFinish %}
-	<h5> You got here from finishing basic account creation</h5>
+	<h3>Welcome back {{ request.user.first_name }}!</h3>
+{% elif source == possibleSources.setupAccountFinish or source == possibleSources.createBasicAccountFinish%}
+	<h3> Create your first event </h3>
+{% else %}
+	<h2> Create an event</h2>
 {% endif %}
 
-<h1>You are creating an event!</h1>
+{% if request.user.is_authenticated %}
+	{% if errors %}
+		<ul>
+			{% for error in errors %}
+				<li>{{ error }}</li>
+			{% endfor %}
+		</ul>
+	{% endif %}
+	<form method='post' action="/create/event/">
+		{% csrf_token %}
+		{{ form.as_p }}
+		<!--<input type="hidden" name="eventID" value="{{eventID}}" />-->
+		<input type="submit" value="Create Event" />
+	</form>
+{% else %}
+	<h4>You must login to create an event.</h4>
+{% endif %}
+
 {% endblock %}

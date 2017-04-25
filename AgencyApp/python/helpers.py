@@ -19,7 +19,7 @@ def redirect(request, currentPage, sourcePage, pageKey=None):
         #TODO raise proper exception
         raise
 
-    destinationURL = getDestinationURL(currentPage, sourcePage, pageKey, request.user.username)
+    destinationURL = getDestinationURL(request, currentPage, sourcePage, pageKey)
     if not destinationURL:
         print "No url could be resolved"
         raise
@@ -29,7 +29,7 @@ def redirect(request, currentPage, sourcePage, pageKey=None):
         return HttpResponseRedirect(destinationURL)
 
 
-def getDestinationURL(currentPage, sourcePage, pageKey=None, username=None):
+def getDestinationURL(request, currentPage, sourcePage, pageKey=None):
     """Returns a destination URL taken from the PAGE_MAP dict declared in constants.py.
     The URL is determined from the current page requesting the URL, and the source page
     that led to the current page. If there could be multiple, different destinations from
@@ -54,10 +54,16 @@ def getDestinationURL(currentPage, sourcePage, pageKey=None, username=None):
             if destPageName:
                 destURL = constants.URL_MAP.get(destPageName)
                 # Special case for profile
-                #TODO get the username without haveing to pass the request
                 if destPageName == constants.PROFILE:
-                    if username:
-                        destURL = destURL.format(username)
+                    if request.user.username:
+                        destURL = destURL.format(request.user.username)
+                elif destPageName == constants.VIEW_EVENT:
+                    print request.POST
+                    if request.POST.get('eventID'):
+                        destURL = destURL.format(request.POST.get('eventID'))
+                        print "set destURL to {0}".format(destURL)
+                        messages.add_message(request, messages.INFO,
+                                             "eventID:{0}".format(request.POST.get('eventID')))
                     else:
                         print "USERNAME SHOULD HAVE BEEN PASSED"
                         destURL = "/"

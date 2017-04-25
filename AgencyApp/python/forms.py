@@ -37,3 +37,13 @@ class EditBackgroundForm(forms.Form):
 	editDestination = forms.CharField(widget=forms.HiddenInput, required=False)
 	source = forms.CharField(widget=forms.HiddenInput, required=False)
 	editSource = forms.CharField(widget=forms.HiddenInput, required=False)
+
+class CreateEventForm(forms.Form):
+    eventID = forms.CharField(widget=forms.HiddenInput, required=False, max_length=10)
+    poster = forms.CharField(widget=forms.HiddenInput, required=False, max_length=200)
+    title = forms.CharField(label="Title", required=True, max_length=500)
+    description = forms.CharField(label="Event Description", required=True, max_length=5000)
+    location = forms.CharField(label="Location", required=True, max_length=1000)
+    source = forms.CharField(widget=forms.HiddenInput, required=False)
+    createSource = forms.CharField(widget=forms.HiddenInput, required=False)
+

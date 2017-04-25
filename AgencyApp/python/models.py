@@ -13,10 +13,8 @@ imageStorage = FileSystemStorage(
     base_url=u'{0}/'.format(settings.MEDIA_URL),
 )
 
-
 def image_directory_path(instance, filename):
     return u'{0}/{1}'.format(instance.username, filename)
-
 
 # Create your models here.
 class UserAccount(models.Model):
@@ -37,10 +35,12 @@ class UserAccount(models.Model):
 	def __str__(self):
 		return self.username
 
-class MasterProfession(models.Model):
-    professionName = models.CharField(max_length=100)
-    def __str__(self):
-        return self.professionName
+class Event(models.Model):
+    eventID = models.CharField(max_length=10)
+    poster = models.CharField(max_length=200)
+    title = models.CharField(max_length=500)
+    location = models.CharField(max_length=1000)
+    description = models.CharField(max_length=5000)
 
 class Profession(models.Model):
     username = models.CharField(max_length=100)

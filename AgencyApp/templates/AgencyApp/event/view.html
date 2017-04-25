@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+{% if event %}
+	<h3> {{ event.title }}  </h3>
+	<h5> Posted by {{ event.poster }} </h5>
+	<h4> Located at {{ event.location }} </h4>
+	<p> {{ event.description }}
+{% else %}
+	<h4>No event found</h4>
+{% endif %}
+
+{% endblock %}

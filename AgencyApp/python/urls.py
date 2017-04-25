@@ -14,7 +14,8 @@ urlpatterns = [
     url(r'^account/create/finish/$', views.createAccountFinish, name='createAccountFinish'),
 
     # Create posts
-    url(r'^create/event/$', views.createEvent, name='create_event'),
+    url(r'^create/event/$', views.createEvent, name='createEvent'),
+    url(r'^view/event/(?P<eventID>[A-Za-z0-9]+)/$', views.viewEvent, name='viewEvent'),
 
     # Choose type
     url(r'^create/post/choose/$', views.choosePostType, name='choose_postType'),
