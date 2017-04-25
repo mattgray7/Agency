@@ -112,29 +112,26 @@ class CreateEventView(views.GenericFormView):
             if poster != self.username:
                 self._pageErrors.append("You must be logged in to create an event.")
             else:
-                if len(models.Event.objects.filter(title=title)) > 0:
-                    self._pageErrors.append("This title already exists.")
+                if len(description) < 1:  #TODO switch min length
+                    self._pageErrors.append("Event description must be at least 75 characters long.")
                 else:
-                    if len(description) < 1:  #TODO switch min length
-                        self._pageErrors.append("Event description must be at least 75 characters long.")
+                    if location < 1:  #TODO switch min length
+                        self._pageErrors.append("Location must be at least 20 characters long.")
                     else:
-                        if location < 1:  #TODO switch min length
-                            self._pageErrors.append("Location must be at least 20 characters long.")
+                        newEvent = models.Event(eventID = self.eventID,
+                                                poster=poster,
+                                                title=title,
+                                                location=location,
+                                                description=description
+                                                )
+                        try:
+                            newEvent.save()
+                            print "saved new event with eventID {0}".format(self.eventID)
+                        except Excetion as e:
+                            print e
+                            self._pageErrors.append("Could not connect to Event database.")
                         else:
-                            newEvent = models.Event(eventID = self.eventID,
-                                                    poster=poster,
-                                                    title=title,
-                                                    location=location,
-                                                    description=description
-                                                    )
-                            try:
-                                newEvent.save()
-                                print "saved new event with eventID {0}".format(self.eventID)
-                            except Excetion as e:
-                                print e
-                                self._pageErrors.append("Could not connect to Event database.")
-                            else:
-                                return True
+                            return True
         print "returning false"
         return False
 
