@@ -64,15 +64,15 @@
 		<br>
 
 		<!-- Professions -->
-		{% if not professionsFound %}
-			<h3> {{ userAccount.firstName }} has not specified his interested professions </h3>
-		{% elif userProfessions %}
+		{% if userProfessions %}
 			<h3> {{ userAccount.firstName }}'s interested professions include...</h3>
 			<ul>
 				{% for profession in userProfessions %}
 					<li>{{profession}}</li>
 				{% endfor %}
 			</ul>
+		{% else %}
+			<h3> {{ userAccount.firstName }} has not specified his interested professions </h3>
 		{% endif %}
 		{% if request.user.is_authenticated and request.user.username == username %}
 			<form action="/account/edit/professions/" method="post">
