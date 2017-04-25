@@ -47,4 +47,6 @@ class CreateEventForm(forms.Form):
     date = forms.DateField(widget=forms.DateInput(attrs={'class':'datepicker'}))
     source = forms.CharField(widget=forms.HiddenInput, required=False)
     createSource = forms.CharField(widget=forms.HiddenInput, required=False)
+    eventPicture = forms.FileField(label="Event Picture", required=False)
+
 

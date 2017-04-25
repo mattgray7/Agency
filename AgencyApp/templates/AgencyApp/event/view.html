@@ -3,6 +3,12 @@
 {% block content %}
 
 {% if event %}
+	{% if event.eventPicture %}
+		<div id="eventPicture">
+			<img src="{{ event.eventPicture.url }}" height="150px" width="175px"/>
+		</div>
+	{% endif %}
+
 	<h3> {{ event.title }}  </h3>
 	<h5> Posted by {{ event.poster }} </h5>
 	{% if event.poster == request.user.username %}

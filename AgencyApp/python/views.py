@@ -66,6 +66,8 @@ class GenericView(object):
         if self._incomingSource is None:
             if self.request.POST.get("source"):
                 self._incomingSource = self.request.POST.get("source")
+                print "incoming source is {0}".format(self._incomingSource)
+                print self.request.POST
             else:
                 self._incomingSource = helpers.getMessageFromKey(self.request, "source")
         return self._incomingSource
@@ -220,7 +222,6 @@ def choosePostType(request):
 def browseEvents(request):
     view = browse.BrowseEventsView(request=request, sourcePage=constants.HOME, currentPage=constants.BROWSE_EVENTS)
     return view.process()
-    #return render(request, "AgencyApp/browse.html", getBaseContext(request))
 
 def browsePosts(request):
     return render(request, "AgencyApp/browse.html", getBaseContext(request))
