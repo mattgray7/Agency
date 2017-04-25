@@ -37,7 +37,11 @@
 		{% csrf_token %}
 		{{ form.as_p }}
 		<!--<input type="hidden" name="eventID" value="{{eventID}}" />-->
-		<input type="submit" value="Create Event" />
+		{% if currentEvent.title %}
+			<input type="submit" value="Update event" />
+		{% else %}
+			<input type="submit" value="Create event" />
+		{% endif %}
 	</form>
 {% else %}
 	<h4>You must login to create an event.</h4>

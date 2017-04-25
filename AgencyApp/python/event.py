@@ -72,12 +72,12 @@ class CreateEventView(views.GenericFormView):
         self._formInitialValues["eventID"] = self.eventID
         self._formInitialValues["poster"] = self.username
         self._formInitialValues["source"] = CREATE_EVENT
+        self._formInitialValues["eventPicture"] = self.eventPicture # TODO add default image
         if self.currentEvent:
             self._formInitialValues["title"] = self.currentEvent.title
             self._formInitialValues["description"] = self.currentEvent.description
             self._formInitialValues["location"] = self.currentEvent.location
             self._formInitialValues["date"] = self.currentEvent.date
-            self._formInitialValues["eventPicture"] = self.currentEvent.eventPicture
         return self._formInitialValues
 
     @property
