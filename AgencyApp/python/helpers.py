@@ -48,6 +48,8 @@ def getDestinationURL(request, currentPage, sourcePage, pageKey=None):
 
     currentPageMap = constants.PAGE_MAP.get(currentPage)
     if currentPageMap:
+        if sourcePage == constants.VIEW_EVENT:
+            sourcePage = sourcePage.format(request.POST.get("eventID"))
         destPageMap = currentPageMap.get(sourcePage)
         if destPageMap:
             destPageName = destPageMap.get(pageKey)
@@ -58,14 +60,12 @@ def getDestinationURL(request, currentPage, sourcePage, pageKey=None):
                     if request.user.username:
                         destURL = destURL.format(request.user.username)
                 elif destPageName == constants.VIEW_EVENT:
-                    print request.POST
                     if request.POST.get('eventID'):
                         destURL = destURL.format(request.POST.get('eventID'))
-                        print "set destURL to {0}".format(destURL)
                         messages.add_message(request, messages.INFO,
                                              "eventID:{0}".format(request.POST.get('eventID')))
                     else:
-                        print "USERNAME SHOULD HAVE BEEN PASSED"
+                        print "USERNAME OR VIEW SHOULD HAVE BEEN PASSED"
                         destURL = "/"
                 if destURL:
                     return destURL

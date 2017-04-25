@@ -74,7 +74,9 @@ PAGE_MAP = {DEFAULT: HOME,
 			CREATE_EVENT: {HOME: {DEFAULT: VIEW_EVENT},
 						   CREATE_BASIC_ACCOUNT_FINISH: {DEFAULT: VIEW_EVENT},
 						   SETUP_ACCOUNT_FINISH: {DEFAULT: VIEW_EVENT},
-						   }
+						   VIEW_EVENT: {DEFAULT: CREATE_EVENT}
+						   },
+
 			}
 
 FORM_MAP = {LOGIN: forms.LoginForm,
@@ -83,7 +85,8 @@ FORM_MAP = {LOGIN: forms.LoginForm,
 			EDIT_PROFESSIONS: None,	#manual
 			EDIT_PROFILE_PICTURE: forms.EditPictureForm,
 			EDIT_BACKGROUND: forms.EditBackgroundForm,
-			CREATE_EVENT: forms.CreateEventForm
+			CREATE_EVENT: forms.CreateEventForm,
+			VIEW_EVENT: forms.CreateEventForm,
 			}
 
 HTML_MAP = {CREATE_BASIC_ACCOUNT: 'AgencyApp/account/create.html',

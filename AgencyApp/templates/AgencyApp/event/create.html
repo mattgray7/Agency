@@ -2,15 +2,16 @@
 
 {% block content %}
 
-{% if source == possibleSources.login %}
-	<h3>Welcome back {{ request.user.first_name }}!</h3>
-{% elif source == possibleSources.setupAccountFinish or source == possibleSources.createBasicAccountFinish%}
-	<h3> Create your first event </h3>
-{% else %}
-	<h2> Create an event</h2>
-{% endif %}
-
 {% if request.user.is_authenticated %}
+	{% if source == possibleSources.viewEvent %}
+		<h3> Edit event </h3>
+	{% elif source == possibleSources.login %}
+		<h3>Welcome back {{ request.user.first_name }}!</h3>
+	{% elif source == possibleSources.setupAccountFinish or source == possibleSources.createBasicAccountFinish%}
+		<h3> Create your first event </h3>
+	{% else %}
+		<h2> Create an event</h2>
+	{% endif %}
 	{% if errors %}
 		<ul>
 			{% for error in errors %}

@@ -16,7 +16,6 @@ class GenericView(object):
         if not self.request:
             # TODO raise proper exception
             raise("No request passed to view")
-        print "request is {0}".format(self.request)
 
         self._incomingSource = None
         self._sourcePage = kwargs.get("sourcePage")
@@ -90,7 +89,8 @@ class GenericFormView(GenericView):
         self._form = None
         self._formClass = None
         self._formInitialValues = {"source": self.currentPage,
-                                   "editSource": self.incomingSource}
+                                   "editSource": self.incomingSource,
+                                   "createSource": self.incomingSource}
         self._formSubmitted = False
         self._formData = None
 
@@ -132,15 +132,12 @@ class GenericFormView(GenericView):
     def process(self):
         if self.request.method == "POST":
             if self.formSubmitted:
-                print "form submitted"
                 formIsValid = False
                 if self.request.POST.get("skip") != "True":
                     if self.formClass:
                         if self.form.is_valid():
-                            print "form is valid"
                             self.errorMemory = self.formData
                             if self.processForm():
-                                print "procexx form success"
                                 formIsValid = True
                         else:
                             self.errorMemory = self.request.POST
@@ -207,7 +204,10 @@ def createAccountFinish(request):
 def createEvent(request):
     view = event.CreateEventView(request=request, sourcePage=constants.HOME, currentPage=constants.CREATE_EVENT)
     return view.process()
-    #return event.create(request, getBaseContext(request))
+
+def editEvent(request, eventID):
+    view = event.CreateEventView(request=request, sourcePage=constants.VIEW_EVENT, currentPage=constants.CREATE_EVENT, eventID=eventID)
+    return view.process()
 
 def viewEvent(request, eventID):
     view = event.ViewEventView(request=request, currentPage=constants.VIEW_EVENT, eventID=eventID)

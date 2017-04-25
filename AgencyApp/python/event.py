@@ -18,6 +18,8 @@ class CreateEventView(views.GenericFormView):
     def __init__(self, *args, **kwargs):
         super(CreateEventView, self).__init__(*args, **kwargs)
         self._eventID = kwargs.get('eventID') or self.request.POST.get("eventID")
+        self._formClass = constants.FORM_MAP.get(self.currentPage)
+        self._currentEvent = None
 
     @property
     def pageContext(self):
@@ -25,8 +27,10 @@ class CreateEventView(views.GenericFormView):
             self._pageContext = helpers.getBaseContext(self.request)
             self._pageContext["eventID"] = self.eventID
             self._pageContext["possibleSources"] = {"login": constants.LOGIN,
+                                                    "viewEvent": constants.VIEW_EVENT,
                                                     "setupAccountFinish": constants.SETUP_ACCOUNT_FINISH,
                                                     "createBasicAccountFinish": constants.CREATE_BASIC_ACCOUNT_FINISH}
+            self._pageContext["currentEvent"] = self.currentEvent
         return self._pageContext
 
     @property
@@ -42,9 +46,19 @@ class CreateEventView(views.GenericFormView):
         return self._eventID
 
     @property
+    def currentEvent(self):
+        if self._currentEvent is None:
+            try:
+                self._currentEvent = models.Event.objects.get(eventID=self.eventID)
+            except models.Event.DoesNotExist:
+                pass
+        return self._currentEvent
+
+    @property
     def formClass(self):
         if not self._formClass:
             self._formClass = constants.FORM_MAP.get(self.currentPage)
+        print "formClass is {0}, current page is {1}".format(self._formClass, self.currentPage)
         return self._formClass
 
     @property
@@ -56,6 +70,10 @@ class CreateEventView(views.GenericFormView):
         self._formInitialValues["eventID"] = self.eventID
         self._formInitialValues["poster"] = self.username
         self._formInitialValues["source"] = self.incomingSource
+        if self.currentEvent:
+            self._formInitialValues["title"] = self.currentEvent.title
+            self._formInitialValues["description"] = self.currentEvent.description
+            self._formInitialValues["location"] = self.currentEvent.location
         return self._formInitialValues
 
     @property
@@ -70,11 +88,9 @@ class CreateEventView(views.GenericFormView):
     def process(self):
         if self.request.method == "POST":
             if self.formSubmitted:
-                print "form submitted"
                 formIsValid = False
                 if self.request.POST.get("cancel") != "True":
                     if self.formClass:
-                        print "there is a form class, {0}".format(self.formClass)
                         if self.form.is_valid():
                             print "form is valid"
                         if self.processForm():
@@ -118,21 +134,29 @@ class CreateEventView(views.GenericFormView):
                     if location < 1:  #TODO switch min length
                         self._pageErrors.append("Location must be at least 20 characters long.")
                     else:
-                        newEvent = models.Event(eventID = self.eventID,
-                                                poster=poster,
-                                                title=title,
-                                                location=location,
-                                                description=description
-                                                )
+                        eventToSave = None
+                        if self.currentEvent:
+                            # Edit existing event
+                            self._currentEvent.title = title
+                            self._currentEvent.description = description
+                            self._currentEvent.location = location
+                            eventToSave = self._currentEvent
+                        else:
+                            # Create new event
+                            eventToSave = models.Event(eventID = self.eventID,
+                                                       poster=poster,
+                                                       title=title,
+                                                       location=location,
+                                                       description=description
+                                                       )
                         try:
-                            newEvent.save()
+                            eventToSave.save()
                             print "saved new event with eventID {0}".format(self.eventID)
-                        except Excetion as e:
+                        except Exception as e:
                             print e
                             self._pageErrors.append("Could not connect to Event database.")
                         else:
                             return True
-        print "returning false"
         return False
 
 
@@ -141,6 +165,7 @@ class ViewEventView(views.GenericFormView):
         super(ViewEventView, self).__init__(*args, **kwargs)
 
         self._eventID = kwargs.get("eventID")
+        self._formClass = constants.FORM_MAP.get(self.currentPage)
         self._currentEvent = None
 
     @property
@@ -159,6 +184,34 @@ class ViewEventView(views.GenericFormView):
         if self._currentEvent is None:
             self._currentEvent = models.Event.objects.get(eventID=self.eventID)
         return self._currentEvent
+
+
+    @property
+    def formClass(self):
+        if not self._formClass:
+            self._formClass = constants.FORM_MAP.get(self.currentPage)
+        return self._formClass
+
+    @property
+    def formSubmitted(self):
+        return self.request.POST.get("title") and self.request.POST.get("description") and self.request.POST.get("location")
+
+    @property
+    def formInitialValues(self):
+        self._formInitialValues["eventID"] = self.eventID
+        self._formInitialValues["poster"] = self.username
+        self._formInitialValues["source"] = constants.VIEW_EVENT
+        return self._formInitialValues
+
+    @property
+    def form(self):
+        if not self._form:
+            if self.formSubmitted:
+                self._form = self.formClass(self.request.POST)
+            else:
+                self._form = self.formClass(initial=self.formInitialValues)
+        return self._form
+
 
     def process(self):
         if self._pageErrors:

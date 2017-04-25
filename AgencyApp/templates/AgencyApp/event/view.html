@@ -5,6 +5,14 @@
 {% if event %}
 	<h3> {{ event.title }}  </h3>
 	<h5> Posted by {{ event.poster }} </h5>
+	{% if event.poster == request.user.username %}
+		<form method='post' action="/edit/event/{{ event.eventID }}/">
+			{% csrf_token %}
+			{{ form.as_p }}
+			<!--<input type="hidden" name="eventID" value="{{eventID}}" />-->
+			<input type="submit" value="Edit Event" />
+		</form>
+	{% endif %}
 	<h4> Located at {{ event.location }} </h4>
 	<p> {{ event.description }}
 {% else %}
