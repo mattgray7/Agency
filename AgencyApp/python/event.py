@@ -27,7 +27,6 @@ class CreateEventView(views.GenericFormView):
             self._pageContext["possibleSources"] = {"login": constants.LOGIN,
                                                     "setupAccountFinish": constants.SETUP_ACCOUNT_FINISH,
                                                     "createBasicAccountFinish": constants.CREATE_BASIC_ACCOUNT_FINISH}
-            print "setting page context to {0}".format(self._pageContext)
         return self._pageContext
 
     @property
@@ -37,9 +36,7 @@ class CreateEventView(views.GenericFormView):
             while not tempEventIDValid:
                 tempEventID = ''.join(random.SystemRandom().choice(string.ascii_lowercase) for _ in range(constants.EVENT_ID_LENGTH))
                 if len(models.Event.objects.filter(eventID = tempEventID)) == 0:
-                    print "found valid eventID"
                     self._eventID = tempEventID
-                    print "event id is {0}".format(self._eventID)
                     tempEventIDValid = True
                     break
         return self._eventID
@@ -96,6 +93,7 @@ class CreateEventView(views.GenericFormView):
                     return helpers.redirect(request=self.request,
                                             currentPage=self.currentPage,
                                             sourcePage=self.sourcePage)
+        # Need to access pageContext before setting variables
         print "page context is {0}".format(self.pageContext)
         self._pageContext["form"] = self.form
         if self._pageErrors:

@@ -42,7 +42,7 @@
 		<br>
 
 		<!-- Interests -->
-		<h3> {{ userAccount.firstName }} is looking for .. </h3>
+		<h3> {{ userAccount.firstName }} is looking for... </h3>
 		<ul>
 			{% if userAccount.workInterest %}
 				<li>Work</li>
@@ -67,7 +67,7 @@
 		{% if not professionsFound %}
 			<h3> {{ userAccount.firstName }} has not specified his interested professions </h3>
 		{% elif userProfessions %}
-			<h3> {{ userAccount.firstName }}'s interested professions include ..</h3>
+			<h3> {{ userAccount.firstName }}'s interested professions include...</h3>
 			<ul>
 				{% for profession in userProfessions %}
 					<li>{{profession}}</li>
@@ -80,6 +80,16 @@
 				<input type="hidden" name="source" value="{{ possibleSources.profile }}" />
 				<input type="submit" value="Edit professions" />
 			</form>
+		{% endif %}
+
+		<!-- Events -->
+		{% if eventsFound %}
+			<br><h3>Events {{ userAccount.firstName }} has posted...
+			<ul>
+				{% for event in events %}
+					<li><a href='/view/event/{{event.eventID}}/'>{{ event.title }}</a></li>
+				{% endfor %}
+			</ul>
 		{% endif %}
 	{% else %}
 		No user with name {{ username }} found.
