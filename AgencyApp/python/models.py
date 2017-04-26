@@ -48,6 +48,7 @@ class Event(models.Model):
     location = models.CharField(max_length=1000, default=None, blank=True, null=True)
     description = models.CharField(max_length=5000, default=None, blank=True, null=True)
     date = models.DateTimeField(default=None, blank=True, null=True)
+    eventPicturePath = models.CharField(max_length=5000, default=None, blank=True, null=True)
     eventPicture = models.ImageField(default=None, upload_to=image_directory_path, storage=imageStorage, blank=True, null=True)
 
 

@@ -32,6 +32,11 @@
 	    });
 	  });
 	  </script>
+	{% if currentEvent.eventPicture %}
+		<div id="eventPicture">
+			<img src="{{ currentEvent.eventPicture.url }}" height="150px" width="175px"/>
+		</div>
+	{% endif %}
 
 	<form method='post' action="/create/event/" enctype="multipart/form-data">
 		{% csrf_token %}
@@ -43,6 +48,7 @@
 			<input type="submit" value="Create event" />
 		{% endif %}
 	</form>
+	{{form.eventPicture.path}}
 {% else %}
 	<h4>You must login to create an event.</h4>
 {% endif %}

@@ -116,10 +116,6 @@ class PictureFormView(object):
         # like event.eventPicture
         #self._pictureModelPictureField = self.request.FILES.get(self.ModelFieldName)
         self._pictureModelPictureField = self.pictureModel.__dict__[self.pictureModelFieldName]
-        print "picfield is {0}, model is {1}, model dict is {2}, fieldName is {3}".format(self._pictureModelPictureField,
-                                                                                          self.pictureModel,
-                                                                                          self.pictureModel.__dict__,
-                                                                                          self.pictureModelFieldName)
         return self._pictureModelPictureField
 
     @property
@@ -127,79 +123,20 @@ class PictureFormView(object):
         # Like eventPicture
         return self._pictureModelFieldName
 
-    
-    """if self.formSubmitted:
-                print "post, {0}, files, {1}".format(self.request.POST, self.request.FILES)
-                # Save picture
-                #print "event picture is {0}".format(self._eventPicture)
-                if self.currentEvent and self._eventPicture:
-                    self.currentEvent.eventPicture = self._eventPicture
-                    self.currentEvent.save()
-                    print "currentEvent is {0}".format(self.currentEvent)
-
-                    # Rename event file
-                    print self._eventPicture
-                    initialPath = self.currentEvent.eventPicture.path
-                    newName = "event_{0}{1}".format(self.eventID, os.path.splitext(initialPath)[-1])
-                    newPath = os.path.join(os.path.dirname(initialPath), newName)
-                    os.rename(initialPath, newPath)
-                    print "initialPath {0}, newPath {1}".format(initialPath, newPath)
-
-                    self.currentEvent.eventPicture.name = os.path.join(self.username, newName)
-                    self.currentEvent.save()
-                    print "currentEvent is now {0}".format(self.currentEvent)
-                    self._eventPicture = self.currentEvent.eventPicture
-        return self._eventPicture"""
-
-
     def updatePicturePathAndModel(self):
         if self.pictureModel:
-            print "REQUEST IS {0}".format(self.request.FILES)
             self._pictureModelPictureField = self.request.FILES.get(self.pictureModelFieldName)
             self.pictureModel.save()
-            print "currentEvent is {0}".format(self.pictureModel)
 
             # Rename event file
-            print "field is {0}".format(self.pictureModelPictureField)
             if self.pictureModelPictureField:
                 newPath = os.path.join(os.path.dirname(self.pictureModelPictureField.path), self.filename)
                 os.rename(self.pictureModelPictureField.path, newPath)
-                print "initialPath {0}, newPath {1}".format(self.pictureModelPictureField.path, newPath)
 
                 self.pictureModelPictureField.name = os.path.join(self.request.user.username, self.filename)
                 self.pictureModel.save()
-                print "currentEvent is now {0}".format(self.pictureModel)
                 return True
-            """#pictureAttribute = self._pictureModel.__dict__[self.pictureModelName]
-            pictureAttribute = self.picture
-            self._pictureModel.__dict__[self.pictureModelName] = pictureAttribute
-            print pictureAttribute
-            #picturePath = models.imageStorage.save(os.path.join(os.path.dirname(initialPath), self.filename), ContentFile(self.picture.read()))
-            picturePath = models.imageStorage.save(self.picture)
-
-
-
-            self.pictureModel.save()
-            print "pictureModel is {0}".format(self.pictureModel)
-
-            # Rename event file
-            #dir (self.pictureModel)
-            
-            initialPath = self._pictureModel.__dict__[self.pictureModelName]
-            initialPath = self.picturePath
-            print initialPath
-            newPath = os.path.join(os.path.dirname(initialPath), self.filename)
-            os.rename(initialPath, newPath)
-            print "initialPath {0}, newPath {1}".format(initialPath, newPath)
-
-            #dir(self.pictureModel)
-            pictureAttribute.name = os.path.join(self.request.user.username, self.filename)
-            self.pictureModel.save()
-            self._picture = pictureAttribute
-            return True"""
         return False
-
-        
 
 
 class GenericFormView(GenericView):
