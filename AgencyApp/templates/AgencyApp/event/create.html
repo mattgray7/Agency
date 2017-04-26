@@ -38,7 +38,7 @@
 		</div>
 	{% endif %}
 
-	<form method='post' action="/create/event/" enctype="multipart/form-data">
+	<form method='post' action="/create/event/" name='createForm' enctype="multipart/form-data">
 		{% csrf_token %}
 		{{ form.as_p }}
 		<!--<input type="hidden" name="eventID" value="{{eventID}}" />-->
@@ -48,7 +48,13 @@
 			<input type="submit" value="Create event" />
 		{% endif %}
 	</form>
-	{{form.eventPicture.path}}
+	<form method='post' action="/create/event/" name='skip'>
+		{% csrf_token %}
+		<input type="hidden" name="source" value="{{ source }}">
+		<input type="hidden" name="eventID" value="{{ eventID }}">
+		<input type="hidden" name="skip" value="True">
+		<input type="submit" value="Return to event">
+	</form>
 {% else %}
 	<h4>You must login to create an event.</h4>
 {% endif %}

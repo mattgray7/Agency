@@ -41,6 +41,7 @@ class CreateEventView(views.GenericFormView, views.PictureFormView):
                                                     "setupAccountFinish": constants.SETUP_ACCOUNT_FINISH,
                                                     "createBasicAccountFinish": constants.CREATE_BASIC_ACCOUNT_FINISH}
             self._pageContext["currentEvent"] = self.currentEvent
+            self._pageContext["source"] = CREATE_EVENT
         return self._pageContext
 
     @property
@@ -119,7 +120,7 @@ class CreateEventView(views.GenericFormView, views.PictureFormView):
         if self.request.method == "POST":
             if self.formSubmitted:
                 formIsValid = False
-                if self.request.POST.get("cancel") != "True":
+                if self.request.POST.get("skip") != "True":
                     if self.formClass:
                         if self.form.is_valid():
                             print "form is valid"
@@ -131,7 +132,11 @@ class CreateEventView(views.GenericFormView, views.PictureFormView):
                         if self.processForm():
                             formIsValid = True
                 else:
-                    formIsValid = True
+                    return helpers.redirect(request=self.request,
+                                            currentPage=self.currentPage,
+                                            sourcePage=self.sourcePage,
+                                            pageKey=SKIP)
+
                     print "form is Valid because of cancel"
                 if formIsValid:
                     print "processSuccess, redirecting source {0} and current {1}, pagekey {2}".format(self.sourcePage,
