@@ -16,13 +16,20 @@ import random, string
 
 import os
 
-class CreateEventView(views.GenericFormView):
+class CreateEventView(views.GenericFormView, views.PictureFormView):
     def __init__(self, *args, **kwargs):
+        print "\n\nin create view, about to init"
         super(CreateEventView, self).__init__(*args, **kwargs)
+        print "finish init"
         self._eventID = kwargs.get('eventID') or self.request.POST.get("eventID")
         self._formClass = constants.FORM_MAP.get(self.currentPage)
         self._currentEvent = None
-        self._eventPicture = None
+
+        self._pictureModel = self.currentEvent
+        self._pictureModelPictureField = self.currentEvent.eventPicture
+        self._pictureModelFieldName = "eventPicture"
+        self._filename = None
+
 
     @property
     def pageContext(self):
@@ -72,12 +79,12 @@ class CreateEventView(views.GenericFormView):
         self._formInitialValues["eventID"] = self.eventID
         self._formInitialValues["poster"] = self.username
         self._formInitialValues["source"] = CREATE_EVENT
-        self._formInitialValues["eventPicture"] = self.eventPicture # TODO add default image
         if self.currentEvent:
             self._formInitialValues["title"] = self.currentEvent.title
             self._formInitialValues["description"] = self.currentEvent.description
             self._formInitialValues["location"] = self.currentEvent.location
             self._formInitialValues["date"] = self.currentEvent.date
+            self._formInitialValues["eventPicture"] = self.currentEvent.eventPicture # TODO add default image
         return self._formInitialValues
 
     @property
@@ -89,6 +96,7 @@ class CreateEventView(views.GenericFormView):
                 self._form = self.formClass(initial=self.formInitialValues)
         return self._form
 
+    """
     @property
     def eventPicture(self):
         if self._eventPicture is None:
@@ -117,6 +125,14 @@ class CreateEventView(views.GenericFormView):
                     print "currentEvent is now {0}".format(self.currentEvent)
                     self._eventPicture = self.currentEvent.eventPicture
         return self._eventPicture
+    """
+    @property
+    def filename(self):
+        if self._filename is None:
+            self._filename = MEDIA_FILE_NAME_MAP.get(self.request.POST.get("source"), "tempfile")
+            self._filename = self._filename.format(self.eventID, os.path.splitext(self.pictureModelPictureField.path)[-1])
+            print "setting filename to {0}".format(self._filename)
+        return self._filename
 
     @property
     def currentEvent(self):
@@ -158,7 +174,7 @@ class CreateEventView(views.GenericFormView):
                         if self.form.is_valid():
                             print "form is valid"
                             print self.form
-                        if self.processForm():
+                        if self.processForm() and self.updatePicturePathAndModel():
                             print "process form success"
                             formIsValid = True
                     else:
@@ -206,7 +222,8 @@ class CreateEventView(views.GenericFormView):
                             self._currentEvent.description = description
                             self._currentEvent.location = location
                             self._currentEvent.date = date
-                            self._currentEvent.eventPicture = self.eventPicture
+                            self._currentEvent.eventPicture = self.request.FILES.get("eventPicture")
+                            print "saving picture {0}".format(self.request.FILES.get)
                             """else:
                                 # Create new event
                                 eventToSave = models.Event(eventID = self.eventID,
