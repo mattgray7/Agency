@@ -114,7 +114,7 @@ class PictureFormView(object):
     @property
     def pictureModelPictureField(self):
         # like event.eventPicture
-        #self._pictureModelPictureField = self.request.FILES.get(self.ModelFieldName)
+        # Need to return updated field each time is accessed (since the field is set independently)
         self._pictureModelPictureField = self.pictureModel.__dict__[self.pictureModelFieldName]
         return self._pictureModelPictureField
 
@@ -125,15 +125,19 @@ class PictureFormView(object):
 
     def updatePicturePathAndModel(self):
         if self.pictureModel:
+            # Save the InMemoryUploadedFile instance in the file field of the model
             self._pictureModelPictureField = self.request.FILES.get(self.pictureModelFieldName)
             self.pictureModel.save()
 
             # Rename event file
             if self.pictureModelPictureField:
                 newPath = os.path.join(os.path.dirname(self.pictureModelPictureField.path), self.filename)
+                print "newPath is {0}".format(newPath)
                 os.rename(self.pictureModelPictureField.path, newPath)
+                print "renamed path {0} to newpath {1}".format(self.pictureModelPictureField.path, newPath)
 
-                self.pictureModelPictureField.name = os.path.join(self.request.user.username, self.filename)
+                self._pictureModelPictureField.name = os.path.join(self.request.user.username, self.filename)
+                print "Set picture model field.name to {0}".format(self._pictureModelPictureField.name)
                 self.pictureModel.save()
                 return True
         return False

@@ -25,7 +25,7 @@ class EditInterestsForm(forms.Form):
     editSource = forms.CharField(widget=forms.HiddenInput, required=False)
 
 class EditPictureForm(forms.Form):
-	profilePicture = forms.FileField(label="Profile Picture", required=False)
+	profilePicture = forms.FileField(label="New profile picture", required=False)
 	editDestination = forms.CharField(widget=forms.HiddenInput, required=False)
 	source = forms.CharField(widget=forms.HiddenInput, required=False)
 	editSource = forms.CharField(widget=forms.HiddenInput, required=False)
@@ -42,7 +42,7 @@ class CreateEventForm(forms.Form):
     eventID = forms.CharField(widget=forms.HiddenInput, required=False, max_length=10)
     poster = forms.CharField(widget=forms.HiddenInput, required=False, max_length=200)
     eventPicturePath = forms.CharField(widget=forms.HiddenInput, required=False)
-    eventPicture = forms.FileField(label="New photo", required=False)
+    eventPicture = forms.FileField(label="New event picture", required=False)
     title = forms.CharField(label="Title", required=True, max_length=500)
     description = forms.CharField(label="Event Description", required=True, max_length=5000)
     location = forms.CharField(label="Location", required=True, max_length=1000)

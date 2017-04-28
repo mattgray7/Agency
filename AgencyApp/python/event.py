@@ -83,9 +83,6 @@ class CreateEventView(views.GenericFormView, views.PictureFormView):
             self._formInitialValues["description"] = self.currentEvent.description
             self._formInitialValues["location"] = self.currentEvent.location
             self._formInitialValues["date"] = self.currentEvent.date
-            if self.currentEvent.eventPicture:
-                self._formInitialValues["eventPicture"] = self.currentEvent.eventPicture.path # TODO add default image
-                self._formInitialValues["eventPicturePath"] = self.currentEvent.eventPicture.path
         return self._formInitialValues
 
     @property
@@ -146,7 +143,9 @@ class CreateEventView(views.GenericFormView, views.PictureFormView):
                                             currentPage=self.currentPage,
                                             sourcePage=self.sourcePage)
         # Need to access pageContext before setting variables
-        print "page context is {0}".format(self.pageContext)
+        # !!!!!!!!!! Don't delete
+        self.pageContext
+        # !!!!!!!!!!
         self._pageContext["form"] = self.form
         if self._pageErrors:
             self._pageContext["errors"] = self.pageErrors
@@ -179,18 +178,6 @@ class CreateEventView(views.GenericFormView, views.PictureFormView):
                             self._currentEvent.date = date
                             if self.request.FILES.get("eventPicture"):
                                 self._currentEvent.eventPicture = self.request.FILES.get("eventPicture")
-                            print "saving picture {0}".format(self.request.FILES.get)
-                            """else:
-                                # Create new event
-                                eventToSave = models.Event(eventID = self.eventID,
-                                                           poster=poster,
-                                                           title=title,
-                                                           location=location,
-                                                           description=description,
-                                                           date=date,
-                                                           eventPicture=self.eventPicture
-                                                           )
-                                self._currentEvent = eventToSave"""
                             try:
                                 self.currentEvent.save()
                                 print "saved new event with eventID {0}".format(self.eventID)

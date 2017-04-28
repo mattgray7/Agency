@@ -195,17 +195,39 @@ class EditProfessionsView(views.GenericFormView):
         return True
 
 
-class EditPictureView(views.GenericFormView):
+class EditPictureView(views.GenericFormView, views.PictureFormView):
     def __init__(self, *args, **kwargs):
         super(EditPictureView, self).__init__(*args, **kwargs)
+
+        self._pictureModel = self.userAccount
+        #self._pictureModelPictureField = self.userAccount.profilePicture
+        self._pictureModelFieldName = "profilePicture"
+        self._filename = None
+        self._incomingSource = self.request.POST.get("source")
+        print self.request.POST
+
 
     @property
     def pageContext(self):
         if not self._pageContext:
             self._pageContext = helpers.getBaseContext(self.request)
+            self._pageContext["userAccount"] = self.userAccount
             self._pageContext["editSource"] = self.incomingSource
             self._pageContext["source"] = EDIT_PROFILE_PICTURE
         return self._pageContext
+
+    @property
+    def filename(self):
+        if self._filename is None:
+            self._filename = MEDIA_FILE_NAME_MAP.get(EDIT_PROFILE_PICTURE, "tempfile")
+            self._filename = self._filename.format(os.path.splitext(self.pictureModelPictureField.path)[-1])
+            print "FILENAME IS {0}".format(self._filename)
+        return self._filename
+
+    @property
+    def sourcePage(self):
+        self._sourcePage = self.incomingSource
+        return self._sourcePage
 
     @property
     def form(self):
@@ -217,6 +239,29 @@ class EditPictureView(views.GenericFormView):
             elif self.formClass:
                 self._form = self.formClass(initial=self.formInitialValues)
         return self._form
+
+    @property
+    def formSubmitted(self):
+        #return self.request.POST.get("title") and self.request.POST.get("description") and self.request.POST.get("location")
+        self._formSubmitted = self.sourcePage == self.currentPage
+        print "source :{0}, current {1}".format(self.sourcePage, self.currentPage)
+        return self._formSubmitted
+
+    @property
+    def formClass(self):
+        if not self._formClass:
+            self._formClass = constants.FORM_MAP.get(self.currentPage)
+        return self._formClass
+
+    @property
+    def formInitialValues(self):
+        self._formInitialValues["source"] = EDIT_PROFILE_PICTURE
+        self._formInitialValues["editSource"] = self.incomingSource
+        self._formInitialValues["editDestination"] = self.request.POST.get("editDestination")
+        #if self.userAccount.profilePicture:
+        #    self._formInitialValues["profilePicture"] = self.userAccount.profilePicture.path # TODO add default image
+                
+        return self._formInitialValues
 
     def processForm(self):
         """Overriding asbtract method"""
@@ -238,6 +283,38 @@ class EditPictureView(views.GenericFormView):
             errors.append("Could not connect to UserAccount db.")
             return False
         return True
+
+    def process(self):
+        if self.request.method == "POST":
+            if self.formSubmitted:
+                formIsValid = False
+                if self.request.POST.get("skip") != "True":
+                    if self.formClass:
+                        if self.form.is_valid():
+                            self.errorMemory = self.formData
+                            if self.processForm() and self.updatePicturePathAndModel():
+                                formIsValid = True
+                        else:
+                            self.errorMemory = self.request.POST
+                    else:
+                        if self.processForm():
+                            formIsValid = True
+                else:
+                    formIsValid = True
+                    print "form is Valid"
+                if formIsValid:
+                    print "processSuccess, redirecting source {0} and current {1}".format(self.sourcePage, self.currentPage)
+                    return helpers.redirect(request=self.request,
+                                            currentPage=self.currentPage,
+                                            sourcePage=self.sourcePage,
+                                            pageKey=self._pageKey)
+        # Need to access before form is set
+        self.pageContext
+        self._pageContext["form"] = self.form
+        if self._pageErrors:
+            self._pageContext["errors"] = self.pageErrors
+        return render(self.request, constants.HTML_MAP.get(self.currentPage), self.pageContext)
+
 
 
 class EditBackgroundView(views.GenericFormView):

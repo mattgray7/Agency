@@ -8,6 +8,13 @@
 			{% endfor %}
 		</ul>
 	{% endif %}
+
+	{% if userAccount.profilePicture %}
+		<div id="profilePicture">
+			<img src="{{ userAccount.profilePicture.url }}" height="150px" width="175px"/>
+		</div>
+	{% endif %}
+
 	<form method='post' action="/account/edit/picture/" enctype="multipart/form-data">
 		{% csrf_token %}
 		{{ form.as_p }}
