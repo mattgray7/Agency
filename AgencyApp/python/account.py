@@ -35,17 +35,16 @@ def loginUser(request, context):
                     # TODO change the source page if from toolbar                
                     return helpers.redirect(request=request,
                                             currentPage=LOGIN,
-                                            sourcePage=HOME,
-                                            pageKey=form.cleaned_data.get('loginSuccessDestination'))
+                                            destinationPage=form.cleaned_data.get('destination'))
                 else:
                     errors.append("Email and password do not match.")
         else:
-            if request.POST.get("loginSuccessDestination"):
-                loginSuccessDestination = request.POST.get("loginSuccessDestination")
-                context["form"] = LoginForm(initial={'loginSuccessDestination': loginSuccessDestination})
-                if loginSuccessDestination == CREATE_POST:
+            if request.POST.get("destination"):
+                destination = request.POST.get("destination")
+                context["form"] = LoginForm(initial={'destination': destination})
+                if destination == CREATE_POST:
                     errors.append("You must login to create a post.")
-                elif loginSuccessDestination == CREATE_EVENT:
+                elif destination == CREATE_EVENT:
                     errors.append("You must login to create an event.")
     
     if not context.get("form"):

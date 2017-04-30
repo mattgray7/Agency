@@ -52,7 +52,8 @@ class CreateEventForm(forms.Form):
     location = forms.CharField(label="Location", required=True, max_length=1000)
     date = forms.DateField(widget=forms.DateInput(attrs={'class':'datepicker'}))
     source = forms.CharField(widget=forms.HiddenInput, required=False)
-    createSource = forms.CharField(widget=forms.HiddenInput, required=False)
+    next = forms.CharField(widget=forms.HiddenInput, required=False)
+    destination = forms.CharField(widget=forms.HiddenInput, required=False)
 
 
 

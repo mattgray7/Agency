@@ -18,9 +18,7 @@ import os
 
 class CreateEventView(views.GenericFormView, views.PictureFormView):
     def __init__(self, *args, **kwargs):
-        print "\n\nin create view, about to init"
         super(CreateEventView, self).__init__(*args, **kwargs)
-        print "finish init"
         self._eventID = kwargs.get('eventID') or self.request.POST.get("eventID")
         self._formClass = constants.FORM_MAP.get(self.currentPage)
         self._currentEvent = None
@@ -29,6 +27,7 @@ class CreateEventView(views.GenericFormView, views.PictureFormView):
         self._pictureModelPictureField = self.currentEvent.eventPicture
         self._pictureModelFieldName = "eventPicture"
         self._filename = None
+        self._defaultDestination = VIEW_EVENT
 
 
     @property
@@ -41,13 +40,10 @@ class CreateEventView(views.GenericFormView, views.PictureFormView):
                                                     "setupAccountFinish": constants.SETUP_ACCOUNT_FINISH,
                                                     "createBasicAccountFinish": constants.CREATE_BASIC_ACCOUNT_FINISH}
             self._pageContext["currentEvent"] = self.currentEvent
-            self._pageContext["source"] = CREATE_EVENT
+            self._pageContext["source"] = self.currentPage
+            self._pageContext["next"] = self.currentPage
+            self._pageContext["destination"] = self.destinationPage
         return self._pageContext
-
-    @property
-    def sourcePage(self):
-        self._sourcePage = self.incomingSource
-        return self._sourcePage
 
     @property
     def eventID(self):
@@ -71,13 +67,17 @@ class CreateEventView(views.GenericFormView, views.PictureFormView):
     def formSubmitted(self):
         #return self.request.POST.get("title") and self.request.POST.get("description") and self.request.POST.get("location")
         self._formSubmitted = self.sourcePage == self.currentPage
+        print "form submitted: sourcePage {0}, currentPage {1}".format(self.sourcePage, self.currentPage)
         return self._formSubmitted
 
     @property
     def formInitialValues(self):
         self._formInitialValues["eventID"] = self.eventID
         self._formInitialValues["poster"] = self.username
-        self._formInitialValues["source"] = CREATE_EVENT
+        self._formInitialValues["source"] = self.currentPage
+        print "set form initial to {0}".format(self.currentPage)
+        self._formInitialValues["next"] = self.currentPage
+        self._formInitialValues["destination"] = self.destinationPage
         if self.currentEvent:
             self._formInitialValues["title"] = self.currentEvent.title
             self._formInitialValues["description"] = self.currentEvent.description
@@ -115,33 +115,36 @@ class CreateEventView(views.GenericFormView, views.PictureFormView):
 
     def process(self):
         if self.request.method == "POST":
+            print "processing, method is post"
             if self.formSubmitted:
+                print "form submitted"
                 formIsValid = False
                 if self.request.POST.get("skip") != "True":
+                    print "no skip pressed"
                     if self.formClass:
+                        print "form class found"
                         if self.form.is_valid():
                             print "form is valid"
                             print self.form
                         if self.processForm() and self.updatePicturePathAndModel():
                             print "process form success"
                             formIsValid = True
+                        else:
+                            print "PROCESS OR UPDATE FAILED"
                     else:
                         if self.processForm():
                             formIsValid = True
                 else:
+                    print "skip pressed"
                     return helpers.redirect(request=self.request,
                                             currentPage=self.currentPage,
-                                            sourcePage=self.sourcePage,
-                                            pageKey=SKIP)
+                                            destinationPage=self.destinationPage)
 
                     print "form is Valid because of cancel"
                 if formIsValid:
-                    print "processSuccess, redirecting source {0} and current {1}, pagekey {2}".format(self.sourcePage,
-                                                                                                       self.currentPage,
-                                                                                                       self.pageKey)
                     return helpers.redirect(request=self.request,
                                             currentPage=self.currentPage,
-                                            sourcePage=self.sourcePage)
+                                            destinationPage=self.destinationPage)
         # Need to access pageContext before setting variables
         # !!!!!!!!!! Don't delete
         self.pageContext
@@ -149,6 +152,7 @@ class CreateEventView(views.GenericFormView, views.PictureFormView):
         self._pageContext["form"] = self.form
         if self._pageErrors:
             self._pageContext["errors"] = self.pageErrors
+        print "source :{0}, current: {1}, dest: {2}".format(self.sourcePage, self.currentPage, self.destinationPage)
         return render(self.request, constants.HTML_MAP.get(self.currentPage), self.pageContext)
 
     def processForm(self):
@@ -214,7 +218,6 @@ class ViewEventView(views.GenericFormView):
             self._currentEvent = models.Event.objects.get(eventID=self.eventID)
         return self._currentEvent
 
-
     @property
     def formClass(self):
         if not self._formClass:
@@ -229,7 +232,7 @@ class ViewEventView(views.GenericFormView):
     def formInitialValues(self):
         self._formInitialValues["eventID"] = self.eventID
         self._formInitialValues["poster"] = self.username
-        self._formInitialValues["source"] = constants.VIEW_EVENT
+        self._formInitialValues["source"] = self.currentPage
         return self._formInitialValues
 
     @property
@@ -240,7 +243,6 @@ class ViewEventView(views.GenericFormView):
             else:
                 self._form = self.formClass(initial=self.formInitialValues)
         return self._form
-
 
     def process(self):
         if self._pageErrors:

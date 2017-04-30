@@ -50,7 +50,9 @@ class GenericView(object):
 
     @property
     def sourcePage(self):
+        print "accessing source page"
         if self._sourcePage is None:
+            print "source page is none"
             """if self.formSubmitted:
                 # Taken from form values (because source will == current page when form submitted)
                 self._sourcePage = self.request.POST.get("editSource") or self.request.POST.get("createSource") or self.request.POST.get("loginSource")
@@ -164,6 +166,7 @@ class PictureFormView(object):
                 print "Set picture model field.name to {0}".format(self._pictureModelPictureField.name)
                 self.pictureModel.save()
                 return True
+        print "pic update fail"
         return False
 
 
@@ -291,11 +294,11 @@ def createAccountFinish(request):
     return account.finish(request, getBaseContext(request))
 
 def createEvent(request):
-    view = event.CreateEventView(request=request, sourcePage=constants.HOME, currentPage=constants.CREATE_EVENT)
+    view = event.CreateEventView(request=request, currentPage=constants.CREATE_EVENT)
     return view.process()
 
 def editEvent(request, eventID):
-    view = event.CreateEventView(request=request, sourcePage=constants.VIEW_EVENT, currentPage=constants.CREATE_EVENT, eventID=eventID)
+    view = event.CreateEventView(request=request, currentPage=constants.CREATE_EVENT, eventID=eventID)
     return view.process()
 
 def viewEvent(request, eventID):
