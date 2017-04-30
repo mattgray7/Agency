@@ -52,7 +52,7 @@ class GenericView(object):
     def sourcePage(self):
         print "accessing source page"
         if self._sourcePage is None:
-            print "source page is none"
+            print "source page is None"
             """if self.formSubmitted:
                 # Taken from form values (because source will == current page when form submitted)
                 self._sourcePage = self.request.POST.get("editSource") or self.request.POST.get("createSource") or self.request.POST.get("loginSource")
@@ -168,7 +168,7 @@ class GenericFormView(GenericView):
         if self.request.method == "POST":
             if self.formSubmitted:
                 formIsValid = False
-                if self.request.POST.get("skip") != "True":
+                if self.request.POST.get(constants.CANCEL) != "True":
                     if self.formClass:
                         if self.form.is_valid():
                             self.errorMemory = self.formData
@@ -256,27 +256,26 @@ class PictureFormView(GenericFormView):
             # Rename event file
             if self.pictureModelPictureField:
                 newPath = os.path.join(os.path.dirname(self.pictureModelPictureField.path), self.filename)
-                print "newPath is {0}".format(newPath)
                 os.rename(self.pictureModelPictureField.path, newPath)
-                print "renamed path {0} to newpath {1}".format(self.pictureModelPictureField.path, newPath)
-
                 self._pictureModelPictureField.name = os.path.join(self.request.user.username, self.filename)
-                print "Set picture model field.name to {0}".format(self._pictureModelPictureField.name)
                 self.pictureModel.save()
                 return True
-        print "pic update fail"
         return False
 
     def process(self):
         if self.request.method == "POST":
             if self.formSubmitted:
                 formIsValid = False
-                if self.request.POST.get("skip") != "True":
+                if self.request.POST.get(constants.CANCEL) != "True":
                     if self.formClass:
                         if self.form.is_valid():
                             self.errorMemory = self.formData
-                            if self.processForm() and self.updatePicturePathAndModel():
-                                formIsValid = True
+                            if self.processForm():
+                                if self.request.FILES.get(self.pictureModelFieldName):
+                                    if self.updatePicturePathAndModel():
+                                        formIsValid = True
+                                else:
+                                    formIsValid = True
                         else:
                             self.errorMemory = self.request.POST
                     else:

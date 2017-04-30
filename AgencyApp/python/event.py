@@ -42,6 +42,7 @@ class CreateEventView(views.PictureFormView):
             self._pageContext["source"] = self.currentPage
             self._pageContext["next"] = self.currentPage
             self._pageContext["destination"] = self.destinationPage
+            self._pageContext["cancel"] = CANCEL
         return self._pageContext
 
     @property
@@ -61,8 +62,10 @@ class CreateEventView(views.PictureFormView):
         self._formInitialValues["eventID"] = self.eventID
         self._formInitialValues["poster"] = self.username
         self._formInitialValues["source"] = self.currentPage
+        print "set form source to {0}".format(self.currentPage)
         self._formInitialValues["next"] = self.currentPage
         self._formInitialValues["destination"] = self.destinationPage
+        print "set form destination to {0}".format(self.destinationPage)
         if self.currentEvent:
             self._formInitialValues["title"] = self.currentEvent.title
             self._formInitialValues["description"] = self.currentEvent.description

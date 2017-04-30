@@ -224,6 +224,7 @@ class EditPictureView(views.PictureFormView):
         if not self._pageContext:
             self._pageContext = helpers.getBaseContext(self.request)
             self._pageContext["userAccount"] = self.userAccount
+            self._pageContext["cancel"] = CANCEL
             self._pageContext["source"] = self.currentPage
             self._pageContext["next"] = self.currentPage
             self._pageContext["destination"] = self.destinationPage
@@ -245,24 +246,17 @@ class EditPictureView(views.PictureFormView):
 
     def processForm(self):
         """Overriding asbtract method"""
-        self.userAccount.profilePicture = self.request.FILES['profilePicture']
-        self.userAccount.save()
+        if self.request.FILES.get("profilePicture"):
+            self.userAccount.profilePicture = self.request.FILES.get("profilePicture")
 
-        # TODO convert image to jpg or other common format
-        # Rename the file
-        initialPath = self.userAccount.profilePicture.path
-        newName = "profile{0}".format(os.path.splitext(initialPath)[-1])
-        newPath = os.path.join(os.path.dirname(initialPath), newName)
-        os.rename(initialPath, newPath)
-
-        # Save the new path in the db
-        self.userAccount.profilePicture.name = os.path.join(self.username, newName)
         try:
             self.userAccount.save()
-        except:
-            errors.append("Could not connect to UserAccount db.")
-            return False
-        return True
+        except Exception as e:
+            print e
+            self._pageErrors.append("Could not connect to User database")
+        else:
+            return True
+        return False
 
 
 class EditBackgroundView(views.GenericFormView):
