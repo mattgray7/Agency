@@ -23,9 +23,11 @@ class GenericView(object):
             # TODO raise proper exception
             raise("No request passed to view")
 
-        self._incomingSource = None
         self._sourcePage = kwargs.get("sourcePage")
         self._currentPage = kwargs.get("currentPage")
+        self._destinationPage = None
+        self._defaultDestination = None
+        self._destPageKey = None
 
         self._userAccount = None
         self._username = None
@@ -33,7 +35,6 @@ class GenericView(object):
 
         self.errorMemory = {}
         self._pageContext = {}
-        self._pageKey = None
 
     @property
     def pageContext(self):
@@ -43,11 +44,6 @@ class GenericView(object):
         return self._pageContext
 
     @property
-    def pageKey(self):
-        """The page key for page destination"""
-        return self._pageKey
-
-    @property
     def pageErrors(self):
         "TODO"
         return self._pageErrors
@@ -55,28 +51,57 @@ class GenericView(object):
     @property
     def sourcePage(self):
         if self._sourcePage is None:
-            if self.formSubmitted:
+            """if self.formSubmitted:
+                # Taken from form values (because source will == current page when form submitted)
                 self._sourcePage = self.request.POST.get("editSource") or self.request.POST.get("createSource") or self.request.POST.get("loginSource")
+                print "form is submitted, and source page is {0}".format(self._sourcePage)
             else:
-                self._sourcePage = self.incomingSource
+                if self.request.POST.get("source"):
+                    self._sourcePage = self.request.POST.get("source")
+                    print "post request has source, and source page is {0}".format(self._sourcePage)
+                else:
+                    self._incomingSource = helpers.getMessageFromKey(self.request, "source")
+                    print "message has source, and source page is {0}".format(self._sourcePage)"""
+            if self.request.POST.get("source"):
+                self._sourcePage = self.request.POST.get("source")
+                print "post request has source, and source page is {0}".format(self._sourcePage)
+            else:
+                self._sourcePage = helpers.getMessageFromKey(self.request, "source")
+                print "message has source, and source page is {0}".format(self._sourcePage)
         return self._sourcePage
 
     @property
     def currentPage(self):
         if self._currentPage is None:
-            self._currentPage = self.incomingSource
+            if self.request.POST.get("next"):
+                self._currentPage = self.request.POST.get("next")
+                print "current page set to next: {0}".format(self._currentPage)
+            else:
+                self._currentPage = self.sourcePage
+                print "current page set to source: {0}".format(self._sourcePage)
         return self._currentPage
 
     @property
-    def incomingSource(self):
-        if self._incomingSource is None:
-            if self.request.POST.get("source"):
-                self._incomingSource = self.request.POST.get("source")
-                print "incoming source is {0}".format(self._incomingSource)
-                print self.request.POST
+    def destinationPage(self):
+        if self._destinationPage is None:
+            if self.request.POST.get("destination"):
+                self._destinationPage = self.request.POST.get("destination")
             else:
-                self._incomingSource = helpers.getMessageFromKey(self.request, "source")
-        return self._incomingSource
+                print "no destination in post request"
+            if not self._destinationPage or self._destinationPage == constants.DEFAULT:
+                print "setting to default dest {0}".format(self._defaultDestination)
+                self._destinationPage = self._defaultDestination
+            """self._destinationPage = helpers.getDestinationPage(self.request, self.currentPage,
+                                                               self.sourcePage, self.destPageKey)
+            if not self._destinationPage:
+                print "destination error occurred!"
+                self_destinationPage = HOME"""
+        return self._destinationPage
+
+    @property
+    def destPageKey(self):
+        """Used when multiple destination options for same source and current page combo"""
+        return self._destPageKey
 
     @property
     def userAccount(self):
@@ -93,7 +118,6 @@ class GenericView(object):
 
 class PictureFormView(object):
     def __init__(self, *args, **kwargs):
-        print "in picture form view init"
         self.request = kwargs.get("request")
         self._pictureModel = None
         self._pictureModelPictureField = None
@@ -148,9 +172,7 @@ class GenericFormView(GenericView):
         super(GenericFormView, self).__init__(*args, **kwargs)
         self._form = None
         self._formClass = None
-        self._formInitialValues = {"source": self.currentPage,
-                                   "editSource": self.incomingSource,
-                                   "createSource": self.incomingSource}
+        self._formInitialValues = {}
         self._formSubmitted = False
         self._formData = None
 
@@ -162,13 +184,15 @@ class GenericFormView(GenericView):
 
     @property
     def formSubmitted(self):
-        self._formSubmitted = self.currentPage == self.incomingSource
-        print "current, source: {0} {1}".format(self.currentPage, self.incomingSource)
+        self._formSubmitted = self.currentPage == self.sourcePage
         return self._formSubmitted
 
     @property
     def formInitialValues(self):
         # To override in child class
+        self._formInitialValues["source"] = self.sourcePage
+        self._formInitialValues["next"] = self.currentPage
+        self._formInitialValues["destination"] = self.destinationPage
         return self._formInitialValues
 
     @property
@@ -209,15 +233,19 @@ class GenericFormView(GenericView):
                     print "form is Valid"
                 if formIsValid:
                     print "processSuccess, redirecting source {0} and current {1}".format(self.sourcePage, self.currentPage)
-                    return helpers.redirect(request=self.request,
+                    """return helpers.redirect(request=self.request,
                                             currentPage=self.currentPage,
                                             sourcePage=self.sourcePage,
-                                            pageKey=self._pageKey)
+                                            pageKey=self._pageKey)"""
+                    return helpers.redirect(request=self.request,
+                                            currentPage = self.currentPage,
+                                            destinationPage=self.destinationPage)
         # Need to access before form is set
         self.pageContext
         self._pageContext["form"] = self.form
         if self._pageErrors:
             self._pageContext["errors"] = self.pageErrors
+        print "source :{0}, current: {1}, dest: {2}".format(self.sourcePage, self.currentPage, self.destinationPage)
         return render(self.request, constants.HTML_MAP.get(self.currentPage), self.pageContext)
 
     def processForm(self):

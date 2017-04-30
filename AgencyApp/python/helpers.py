@@ -3,7 +3,8 @@ from django.contrib import messages
 from django.http import HttpResponseRedirect
 import constants
 
-def redirect(request, currentPage, sourcePage, pageKey=None):
+
+def redirect(request, currentPage, destinationPage):
     """Returns an HttpResonseRedirect of the desired URL can be resolved (see getDestinationURL for 
     more info on how this is done). If no URL can be resolved, an error is raised
 
@@ -14,22 +15,37 @@ def redirect(request, currentPage, sourcePage, pageKey=None):
                         page combintaion, defaults to DEFAULT
     :return HttpResonseRedirect: Redirect to destination if found
     """
-    if None in [currentPage, sourcePage]:
-        print "Current or source page not specified"
-        #TODO raise proper exception
-        raise
-
-    destinationURL = getDestinationURL(request, currentPage, sourcePage, pageKey)
+    destinationURL = getDestinationURL(request, destinationPage)
     if not destinationURL:
         print "No url could be resolved"
         raise
     else:
+        print "ADDING MESSAGE AND REDIRECTING, source is {0}".format(currentPage)
         messages.add_message(request, messages.INFO,
                              "source:{0}".format(currentPage))
         return HttpResponseRedirect(destinationURL)
 
 
-def getDestinationURL(request, currentPage, sourcePage, pageKey=None):
+def getDestinationURL(request, destPageName):
+    destURL = constants.URL_MAP.get(destPageName)
+
+    # Add specific values for profile usernames and eventIDs in the url
+    if destPageName == constants.PROFILE:
+        if request.user.username:
+            destURL = destURL.format(request.user.username)
+        else:
+            print "NO USERNAME PASSED TO getDestinationURL"
+    elif destPageName == constants.VIEW_EVENT:
+        if request.POST.get('eventID'):
+            destURL = destURL.format(request.POST.get('eventID'))
+            messages.add_message(request, messages.INFO,
+                                 "eventID:{0}".format(request.POST.get('eventID')))
+        else:
+            print "NO EVENTID PASSED TO getDestinationURL"
+    return destURL
+
+
+def getDestinationPage(request, currentPage, sourcePage, destPageKey=None):
     """Returns a destination URL taken from the PAGE_MAP dict declared in constants.py.
     The URL is determined from the current page requesting the URL, and the source page
     that led to the current page. If there could be multiple, different destinations from
@@ -38,13 +54,18 @@ def getDestinationURL(request, currentPage, sourcePage, pageKey=None):
 
     :param str currentPage: Current page name as defined in constants.py
     :param str sourcePage: Name of page that led to the current page as defined in constants.py
-    :param str pageKey: Optional argument if multiple destinations exist from the same current/source
+    :param str destPageKey: Optional argument if multiple destinations exist from the same current/source
                         page combintaion, defaults to DEFAULT
     :param str username: Optional argument if the destination could be profile requiring a username
     :return str: Relative URL defined in the URL_MAP in constants.py
     """
-    if not pageKey:
-        pageKey = constants.DEFAULT
+    if None in [currentPage, sourcePage]:
+        print "Current or source page not specified"
+        #TODO raise proper exception
+        raise
+
+    if not destPageKey:
+        destPageKey = constants.DEFAULT
 
     currentPageMap = constants.PAGE_MAP.get(currentPage)
     if currentPageMap:
@@ -52,25 +73,11 @@ def getDestinationURL(request, currentPage, sourcePage, pageKey=None):
             sourcePage = sourcePage.format(request.POST.get("eventID"))
         destPageMap = currentPageMap.get(sourcePage)
         if destPageMap:
-            destPageName = destPageMap.get(pageKey)
+            destPageName = destPageMap.get(destPageKey)
             if destPageName:
+                return destPageName
                 destURL = constants.URL_MAP.get(destPageName)
                 # Special case for profile
-                if destPageName == constants.PROFILE:
-                    if request.user.username:
-                        destURL = destURL.format(request.user.username)
-                elif destPageName == constants.VIEW_EVENT:
-                    if request.POST.get('eventID'):
-                        destURL = destURL.format(request.POST.get('eventID'))
-                        messages.add_message(request, messages.INFO,
-                                             "eventID:{0}".format(request.POST.get('eventID')))
-                    else:
-                        print "USERNAME OR VIEW SHOULD HAVE BEEN PASSED"
-                        destURL = "/"
-                if destURL:
-                    return destURL
-                else:
-                    print "helpers.py: getDestinationURL: no destURL found"
             else:
                 print "helpers.py: getDestinationURL: no destPageName found"
         else:
@@ -92,7 +99,8 @@ def getBaseContext(request):
                                "home": constants.TOOLBAR_HOME,
                                "logout": constants.TOOLBAR_LOGOUT,
                                "profile": constants.TOOLBAR_PROFILE},
-            "source": source
+            "source": source,
+            "default": constants.DEFAULT
             }
 
 

@@ -68,46 +68,52 @@ function viewPosts(){
 }
 
 function createAccount(){
-	var form = createForm("source", "{{ possibleSources.home }}", "/account/create/basic/");
+	var form = createForm("{{ possibleDestinations.createAccount }}", "{{ default }}", "/account/create/basic/");
+	console.log(form);
 	form.submit();
 }
 
 function createEventPost(){
 	if(!userLoggedIn){
-		var form = createForm("loginSuccessDestination", "{{ possibleDestinations.event }}", "/login/");
+		var form = createForm("{{ possibleDestinations.login }}", "{{ possibleDestinations.event }}", "/login/");
 	}else{
-		var form = createForm("source", "{{ possibleSources.home }}", "/create/event/")
+		var form = createForm("{{ possibleDestinations.event }}", "{{ default }}", "/create/event/")
 	}
 	form.submit()
 }
 
 function createWorkPost(){
 	if(!userLoggedIn){
-		var form = createForm("loginSuccessDestination", "{{ possibleDestinations.post }}", "/login/");
+		var form = createForm("{{ possibleDestinations.login }}", "{{ possibleDestinations.post }}", "/login/");
 	}else{
-		var form = createForm("source", "{{ possibleSources.home }}", "/create/post/choose/")
+		var form = createForm("{{ possibleDestinations.post }}", "{{ default }}", "/create/post/choose/")
 	}
 	form.submit()
 }
 
-function createForm(formName, formValue, destination){
+function createForm(nextInputValue, destinationInputValue, destinationURL){
 	var form = document.createElement("form");
 	form.setAttribute('method', "post");
-	form.setAttribute('action', destination);
+	form.setAttribute('action', destinationURL);
 
-	if (formName != "source"){
-		var sourceInput = document.createElement("input");
-		sourceInput.setAttribute("type", "hidden");
-		sourceInput.setAttribute("name", "source");
-		sourceInput.setAttribute("value", "{{ possibleSource.home }}");
-		form.appendChild(sourceInput);
-	};
+	var sourceInput = document.createElement("input");
+	sourceInput.setAttribute("type", "hidden");
+	sourceInput.setAttribute("name", "source");
+	sourceInput.setAttribute("value", "{{ source }}");
+	form.appendChild(sourceInput);
 
-	var formInput = document.createElement("input");
-	formInput.setAttribute("type", "hidden");
-	formInput.setAttribute("name", formName);
-	formInput.setAttribute("value", formValue);
-	form.appendChild(formInput)
+	// called current, but is actually the next page to direct to 
+	var nextInput = document.createElement("input");
+	nextInput.setAttribute("type", "hidden");
+	nextInput.setAttribute("name", "next");
+	nextInput.setAttribute("value", nextInputValue)
+	form.appendChild(nextInput)
+
+	var destinationInput = document.createElement("input");
+	destinationInput.setAttribute("type", "hidden");
+	destinationInput.setAttribute("name", "destination");
+	destinationInput.setAttribute("value", destinationInputValue);
+	form.appendChild(destinationInput)
 
 	var csrfInput = document.createElement("input");
 	csrfInput.setAttribute("type", "hidden");

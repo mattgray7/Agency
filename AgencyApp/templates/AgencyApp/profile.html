@@ -12,7 +12,9 @@
 		{% if request.user.is_authenticated and request.user.username == username %}
 			<form action="/account/edit/picture/" method="post">
 				{% csrf_token %}
-				<input type="hidden" name="source" value="{{ possibleSources.profile }}" />
+				<input type="hidden" name="source" value="{{ source }}" />
+				<input type="hidden" name="current" value="{{ possibleDestinations.picture }}" />
+				<input type="hidden" name="destination" value="{{ source }}" /> <!-- return to profile when done -->
 				<input type="submit" value="Edit profile picture" />
 			</form>
 		{% endif %}
@@ -35,7 +37,9 @@
 		{% if request.user.is_authenticated and request.user.username == username %}
 			<form action="/account/edit/background/" method="post">
 				{% csrf_token %}
-				<input type="hidden" name="source" value="{{ possibleSources.profile }}" />
+				<input type="hidden" name="source" value="{{ source }}" />
+				<input type="hidden" name="current" value="{{ possibleDestinations.background }}" />
+				<input type="hidden" name="destination" value="{{ source }}" /> <!-- return to profile when done -->
 				<input type="submit" value="Edit background" />
 			</form>
 		{% endif %}
@@ -57,7 +61,9 @@
 		{% if request.user.is_authenticated and request.user.username == username %}
 			<form action="/account/edit/interests/" method="post">
 				{% csrf_token %}
-				<input type="hidden" name="source" value="{{ possibleSources.profile }}" />
+				<input type="hidden" name="source" value="{{ source }}" />
+				<input type="hidden" name="current" value="{{ possibleDestinations.interests }}" />
+				<input type="hidden" name="destination" value="{{ source }}" /> <!-- return to profile when done -->
 				<input type="submit" value="Edit profile interests" />
 			</form>
 		{% endif %}
@@ -77,14 +83,16 @@
 		{% if request.user.is_authenticated and request.user.username == username %}
 			<form action="/account/edit/professions/" method="post">
 				{% csrf_token %}
-				<input type="hidden" name="source" value="{{ possibleSources.profile }}" />
+				<input type="hidden" name="source" value="{{ source }}" />
+				<input type="hidden" name="current" value="{{ possibleDestinations.professions }}" />
+				<input type="hidden" name="destination" value="{{ source }}" /> <!-- return to profile when done -->
 				<input type="submit" value="Edit professions" />
 			</form>
 		{% endif %}
 
 		<!-- Events -->
 		{% if eventsFound %}
-			<br><h3>Events {{ userAccount.firstName }} has posted...
+			<br><h3>Events {{ userAccount.firstName }} has posted...</h3>
 			<ul>
 				{% for event in events %}
 					<li><a href='/view/event/{{event.eventID}}/'>{{ event.title }}</a></li>

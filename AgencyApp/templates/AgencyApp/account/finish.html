@@ -4,24 +4,32 @@
 	<h2>Your account setup is complete! What's next?</h2>
 	<form action="/create/event/" method="post">
 		{% csrf_token %}
-		<input type="hidden" name="source" value="{{ possibleSources.finish }}" />
+		<input type="hidden" name="source" value="{{ source }}" />
+		<input type="hidden" name="next" value="{{ possibleDestinations.event }}" />
+		<input type="hidden" name="destination" value="{{ default }}" />
 		<input type="submit" value="Create event" />
 	</form>
 	<form action="/create/post/choose/" method="post">
 		{% csrf_token %}
-		<input type="hidden" name="source" value="{{ possibleSources.finish }}" />
+		<input type="hidden" name="source" value="{{ source }}" />
+		<input type="hidden" name="next" value="{{ possibleDestinations.post }}" />
+		<input type="hidden" name="destination" value="{{ default }}" />
 		<input type="submit" value="Create job/collaboration post" />
 	</form>
 	{% if showSetupProfile %}
 		<form action="/account/edit/interests/" method="post">
 			{% csrf_token %}
-			<input type="hidden" name="source" value="{{ possibleSources.finish }}" />
+			<input type="hidden" name="source" value="{{ source }}" />
+			<input type="hidden" name="next" value="{{ possibleDestinations.setupProfile }}" />
+			<input type="hidden" name="destination" value="{{ default }}" />
 			<input type="submit" value="Setup profile" />
 		</form>
 	{% endif %}
 	<form action="/browse/" method="post">
 		{% csrf_token %}
-		<input type="hidden" name="source" value="{{ possibleSources.finish }}" />
+		<input type="hidden" name="source" value="{{ source }}" />
+		<input type="hidden" name="next" value=" {{ possibleDestinations.browse }}" />
+		<input type="hidden" name="destination" value="{{ default }}" />
 		<input type="submit" value="Browse event and job posts" />
 	</form>
 {% endblock %}

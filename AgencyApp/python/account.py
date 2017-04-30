@@ -64,6 +64,7 @@ def logoutUser(request, context):
 class CreateAccountView(views.GenericFormView):
     def __init__(self, *args, **kwargs):
         super(CreateAccountView, self).__init__(*args, **kwargs)
+        self._defaultDestination = CREATE_BASIC_ACCOUNT_FINISH
 
     @property
     def userAccount(self):
@@ -76,8 +77,9 @@ class CreateAccountView(views.GenericFormView):
             self._pageContext["email"] = self.errorMemory.get("email")
             self._pageContext["firstName"] = self.errorMemory.get("firstName")
             self._pageContext["lastName"] = self.errorMemory.get("lastName")
-            self._pageContext["createSource"] = self.incomingSource
-            self._pageContext["source"] = CREATE_BASIC_ACCOUNT
+            self._pageContext["destination"] = self.destinationPage
+            self._pageContext["next"] = self.currentPage
+            self._pageContext["source"] = self.currentPage
         return self._pageContext
 
     @property
@@ -85,7 +87,9 @@ class CreateAccountView(views.GenericFormView):
         self._formInitialValues["email"] = self.errorMemory.get("email")
         self._formInitialValues["firstName"] = self.errorMemory.get("firstName")
         self._formInitialValues["lastName"] = self.errorMemory.get("lastName")
-        self._formInitialValues["createSource"] = self.incomingSource
+        self._formInitialValues["destination"] = self.destinationPage
+        self._formInitialValues["next"] = self.currentPage
+        self._formInitialValues["source"] = self.currentPage
         return self._formInitialValues
 
     def processForm(self):
@@ -134,7 +138,13 @@ def finish(request, context):
     if incomingSource == EDIT_BACKGROUND:
         context["showSetupProfile"] = False
     
-    context["possibleSources"] = {"finish": CREATE_BASIC_ACCOUNT_FINISH}
+    #context["possibleSources"] = {"finish": CREATE_BASIC_ACCOUNT_FINISH}
+    context["source"] = CREATE_BASIC_ACCOUNT_FINISH
+    context["default"] = DEFAULT
+    context["possibleDestinations"] = {"event": CREATE_EVENT,
+                                       "post": CREATE_POST,
+                                       "setupProfile": EDIT_INTERESTS,
+                                       "browse": BROWSE_EVENTS}
 
     return render(request, 'AgencyApp/account/finish.html', context)
 
@@ -142,12 +152,17 @@ def finish(request, context):
 class EditInterestsView(views.GenericFormView):
     def __init__(self, *args, **kwargs):
         super(EditInterestsView, self).__init__(*args, **kwargs)
+        self._defaultDestination = EDIT_PROFESSIONS
 
     @property
     def formInitialValues(self):
         self._formInitialValues["work"] = self.userAccount.workInterest
         self._formInitialValues["crew"] = self.userAccount.crewInterest
         self._formInitialValues["collaboration"] = self.userAccount.collaborationInterest
+        self._formInitialValues["destination"] = self.destinationPage
+        self._formInitialValues["next"] = self.currentPage
+        self._formInitialValues["source"] = self.currentPage
+
         return self._formInitialValues
 
     def processForm(self):
@@ -166,6 +181,7 @@ class EditInterestsView(views.GenericFormView):
 class EditProfessionsView(views.GenericFormView):
     def __init__(self, *args, **kwargs):
         super(EditProfessionsView, self).__init__(*args, **kwargs)
+        self._defaultDestination = EDIT_PROFILE_PICTURE
 
     @property
     def pageContext(self):
@@ -177,8 +193,9 @@ class EditProfessionsView(views.GenericFormView):
                 self._pageContext["selectedProfessions"] = []
 
             self._pageContext["professionList"] = PROFESSIONS
-            self._pageContext["source"] = EDIT_PROFESSIONS
-            self._pageContext["editSource"] = self.incomingSource
+            self._pageContext["source"] = self.currentPage
+            self._pageContext["next"] = self.currentPage
+            self._pageContext["destination"] = self.destinationPage
         return self._pageContext
 
     def processForm(self):
@@ -203,31 +220,31 @@ class EditPictureView(views.GenericFormView, views.PictureFormView):
         #self._pictureModelPictureField = self.userAccount.profilePicture
         self._pictureModelFieldName = "profilePicture"
         self._filename = None
-        self._incomingSource = self.request.POST.get("source")
-        print self.request.POST
-
+        self._defaultDestination = EDIT_BACKGROUND
 
     @property
     def pageContext(self):
         if not self._pageContext:
             self._pageContext = helpers.getBaseContext(self.request)
             self._pageContext["userAccount"] = self.userAccount
-            self._pageContext["editSource"] = self.incomingSource
-            self._pageContext["source"] = EDIT_PROFILE_PICTURE
+            self._pageContext["source"] = self.currentPage
+            self._pageContext["next"] = self.currentPage
+            self._pageContext["destination"] = self.destinationPage
         return self._pageContext
+
+    @property
+    def formInitialValues(self):
+        self._formInitialValues["source"] = self.currentPage
+        self._formInitialValues["next"] = self.currentPage
+        self._formInitialValues["destination"] = self.destinationPage
+        return self._formInitialValues
 
     @property
     def filename(self):
         if self._filename is None:
             self._filename = MEDIA_FILE_NAME_MAP.get(EDIT_PROFILE_PICTURE, "tempfile")
             self._filename = self._filename.format(os.path.splitext(self.pictureModelPictureField.path)[-1])
-            print "FILENAME IS {0}".format(self._filename)
         return self._filename
-
-    @property
-    def sourcePage(self):
-        self._sourcePage = self.incomingSource
-        return self._sourcePage
 
     @property
     def form(self):
@@ -252,16 +269,6 @@ class EditPictureView(views.GenericFormView, views.PictureFormView):
         if not self._formClass:
             self._formClass = constants.FORM_MAP.get(self.currentPage)
         return self._formClass
-
-    @property
-    def formInitialValues(self):
-        self._formInitialValues["source"] = EDIT_PROFILE_PICTURE
-        self._formInitialValues["editSource"] = self.incomingSource
-        self._formInitialValues["editDestination"] = self.request.POST.get("editDestination")
-        #if self.userAccount.profilePicture:
-        #    self._formInitialValues["profilePicture"] = self.userAccount.profilePicture.path # TODO add default image
-                
-        return self._formInitialValues
 
     def processForm(self):
         """Overriding asbtract method"""
@@ -301,18 +308,18 @@ class EditPictureView(views.GenericFormView, views.PictureFormView):
                             formIsValid = True
                 else:
                     formIsValid = True
-                    print "form is Valid"
+                    print "SKIP PRESSED, destinatino is {0}".format(self.destinationPage)
                 if formIsValid:
-                    print "processSuccess, redirecting source {0} and current {1}".format(self.sourcePage, self.currentPage)
+                    
                     return helpers.redirect(request=self.request,
                                             currentPage=self.currentPage,
-                                            sourcePage=self.sourcePage,
-                                            pageKey=self._pageKey)
+                                            destinationPage=self.destinationPage)
         # Need to access before form is set
         self.pageContext
         self._pageContext["form"] = self.form
         if self._pageErrors:
             self._pageContext["errors"] = self.pageErrors
+        print "source :{0}, current: {1}, dest: {2}".format(self.sourcePage, self.currentPage, self.destinationPage)
         return render(self.request, constants.HTML_MAP.get(self.currentPage), self.pageContext)
 
 
@@ -320,12 +327,16 @@ class EditPictureView(views.GenericFormView, views.PictureFormView):
 class EditBackgroundView(views.GenericFormView):
     def __init__(self, *args, **kwargs):
         super(EditBackgroundView, self).__init__(*args, **kwargs)
+        self._defaultDestination = CREATE_BASIC_ACCOUNT_FINISH
 
     @property
     def formInitialValues(self):
         self._formInitialValues["reel"] = self.userAccount.reelLink
         self._formInitialValues["imdb"] = self.userAccount.imdbLink
         self._formInitialValues["bio"] = self.userAccount.bio
+        self._formInitialValues["source"] = self.currentPage
+        self._formInitialValues["next"] = self.currentPage
+        self._formInitialValues["destination"] = self.destinationPage
         return self._formInitialValues
 
     def processForm(self):
