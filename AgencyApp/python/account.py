@@ -213,11 +213,8 @@ class EditProfessionsView(views.GenericFormView):
 
 class EditPictureView(views.PictureFormView):
     def __init__(self, *args, **kwargs):
-        print "running edit picture view"
         super(EditPictureView, self).__init__(*args, **kwargs)
-
         self._pictureModel = self.userAccount
-        #self._pictureModelPictureField = self.userAccount.profilePicture
         self._pictureModelFieldName = "profilePicture"
         self._filename = None
         self._defaultDestination = EDIT_BACKGROUND
@@ -246,30 +243,6 @@ class EditPictureView(views.PictureFormView):
             self._filename = self._filename.format(os.path.splitext(self.pictureModelPictureField.path)[-1])
         return self._filename
 
-    @property
-    def form(self):
-        """To be overridden in child class"""
-        if not self._form:
-            if self.formSubmitted:
-                # Override form to create form with request.FILES
-                self._form = self.formClass(self.request.POST, self.request.FILES)
-            elif self.formClass:
-                self._form = self.formClass(initial=self.formInitialValues)
-        return self._form
-
-    @property
-    def formSubmitted(self):
-        #return self.request.POST.get("title") and self.request.POST.get("description") and self.request.POST.get("location")
-        self._formSubmitted = self.sourcePage == self.currentPage
-        print "source :{0}, current {1}".format(self.sourcePage, self.currentPage)
-        return self._formSubmitted
-
-    @property
-    def formClass(self):
-        if not self._formClass:
-            self._formClass = constants.FORM_MAP.get(self.currentPage)
-        return self._formClass
-
     def processForm(self):
         """Overriding asbtract method"""
         self.userAccount.profilePicture = self.request.FILES['profilePicture']
@@ -290,38 +263,6 @@ class EditPictureView(views.PictureFormView):
             errors.append("Could not connect to UserAccount db.")
             return False
         return True
-
-    def process(self):
-        if self.request.method == "POST":
-            if self.formSubmitted:
-                formIsValid = False
-                if self.request.POST.get("skip") != "True":
-                    if self.formClass:
-                        if self.form.is_valid():
-                            self.errorMemory = self.formData
-                            if self.processForm() and self.updatePicturePathAndModel():
-                                formIsValid = True
-                        else:
-                            self.errorMemory = self.request.POST
-                    else:
-                        if self.processForm():
-                            formIsValid = True
-                else:
-                    formIsValid = True
-                    print "SKIP PRESSED, destinatino is {0}".format(self.destinationPage)
-                if formIsValid:
-                    
-                    return helpers.redirect(request=self.request,
-                                            currentPage=self.currentPage,
-                                            destinationPage=self.destinationPage)
-        # Need to access before form is set
-        self.pageContext
-        self._pageContext["form"] = self.form
-        if self._pageErrors:
-            self._pageContext["errors"] = self.pageErrors
-        print "source :{0}, current: {1}, dest: {2}".format(self.sourcePage, self.currentPage, self.destinationPage)
-        return render(self.request, constants.HTML_MAP.get(self.currentPage), self.pageContext)
-
 
 
 class EditBackgroundView(views.GenericFormView):

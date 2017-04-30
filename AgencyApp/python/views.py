@@ -220,6 +220,17 @@ class PictureFormView(GenericFormView):
         return self._filename
 
     @property
+    def form(self):
+        """To be overridden in child class"""
+        if not self._form:
+            if self.formSubmitted:
+                # Override form to create form with request.FILES
+                self._form = self.formClass(self.request.POST, self.request.FILES)
+            elif self.formClass:
+                self._form = self.formClass(initial=self.formInitialValues)
+        return self._form
+
+    @property
     def pictureModel(self):
         # like event
         return self._pictureModel
@@ -255,6 +266,39 @@ class PictureFormView(GenericFormView):
                 return True
         print "pic update fail"
         return False
+
+    def process(self):
+        if self.request.method == "POST":
+            if self.formSubmitted:
+                formIsValid = False
+                if self.request.POST.get("skip") != "True":
+                    if self.formClass:
+                        if self.form.is_valid():
+                            self.errorMemory = self.formData
+                            if self.processForm() and self.updatePicturePathAndModel():
+                                formIsValid = True
+                        else:
+                            self.errorMemory = self.request.POST
+                    else:
+                        if self.processForm():
+                            formIsValid = True
+                else:
+                    formIsValid = True
+                    print "SKIP PRESSED, destinatino is {0}".format(self.destinationPage)
+                if formIsValid:
+                    
+                    return helpers.redirect(request=self.request,
+                                            currentPage=self.currentPage,
+                                            destinationPage=self.destinationPage)
+        # Need to access pageContext before setting variables
+        # !!!!!!!!!! Don't delete
+        self.pageContext
+        # !!!!!!!!!!
+        self._pageContext["form"] = self.form
+        if self._pageErrors:
+            self._pageContext["errors"] = self.pageErrors
+        print "source :{0}, current: {1}, dest: {2}".format(self.sourcePage, self.currentPage, self.destinationPage)
+        return render(self.request, constants.HTML_MAP.get(self.currentPage), self.pageContext)
 
 # Must be done after GenericAccountView defined
 import account
