@@ -211,8 +211,9 @@ class EditProfessionsView(views.GenericFormView):
         return True
 
 
-class EditPictureView(views.GenericFormView, views.PictureFormView):
+class EditPictureView(views.PictureFormView):
     def __init__(self, *args, **kwargs):
+        print "running edit picture view"
         super(EditPictureView, self).__init__(*args, **kwargs)
 
         self._pictureModel = self.userAccount

@@ -16,7 +16,7 @@ import random, string
 
 import os
 
-class CreateEventView(views.GenericFormView, views.PictureFormView):
+class CreateEventView(views.PictureFormView):
     def __init__(self, *args, **kwargs):
         super(CreateEventView, self).__init__(*args, **kwargs)
         self._eventID = kwargs.get('eventID') or self.request.POST.get("eventID")
@@ -156,7 +156,6 @@ class CreateEventView(views.GenericFormView, views.PictureFormView):
         return render(self.request, constants.HTML_MAP.get(self.currentPage), self.pageContext)
 
     def processForm(self):
-        print "processingform"
         title = self.formData.get("title", "")
         poster = self.formData.get("poster", "")
         location = self.formData.get("location", "")

@@ -118,58 +118,6 @@ class GenericView(object):
         return self._username
 
 
-class PictureFormView(object):
-    def __init__(self, *args, **kwargs):
-        self.request = kwargs.get("request")
-        self._pictureModel = None
-        self._pictureModelPictureField = None
-        self._pictureModelFieldName = None
-        self._filename = None
-
-    @property
-    def filename(self):
-        if self._filename is None:
-            self._filename = MEDIA_FILE_NAME_MAP.get(self.request.POST.get("source"), "tempfile")
-        return self._filename
-
-    @property
-    def pictureModel(self):
-        # like event
-        return self._pictureModel
-
-    @property
-    def pictureModelPictureField(self):
-        # like event.eventPicture
-        # Need to return updated field each time is accessed (since the field is set independently)
-        self._pictureModelPictureField = self.pictureModel.__dict__[self.pictureModelFieldName]
-        return self._pictureModelPictureField
-
-    @property
-    def pictureModelFieldName(self):
-        # Like eventPicture
-        return self._pictureModelFieldName
-
-    def updatePicturePathAndModel(self):
-        if self.pictureModel:
-            # Save the InMemoryUploadedFile instance in the file field of the model
-            self._pictureModelPictureField = self.request.FILES.get(self.pictureModelFieldName)
-            self.pictureModel.save()
-
-            # Rename event file
-            if self.pictureModelPictureField:
-                newPath = os.path.join(os.path.dirname(self.pictureModelPictureField.path), self.filename)
-                print "newPath is {0}".format(newPath)
-                os.rename(self.pictureModelPictureField.path, newPath)
-                print "renamed path {0} to newpath {1}".format(self.pictureModelPictureField.path, newPath)
-
-                self._pictureModelPictureField.name = os.path.join(self.request.user.username, self.filename)
-                print "Set picture model field.name to {0}".format(self._pictureModelPictureField.name)
-                self.pictureModel.save()
-                return True
-        print "pic update fail"
-        return False
-
-
 class GenericFormView(GenericView):
     def __init__(self, *args, **kwargs):
         super(GenericFormView, self).__init__(*args, **kwargs)
@@ -254,6 +202,59 @@ class GenericFormView(GenericView):
     def processForm(self):
         """To bo overridden in child class"""
         pass
+
+
+
+class PictureFormView(GenericFormView):
+    def __init__(self, *args, **kwargs):
+        super(PictureFormView, self).__init__(*args, **kwargs)
+        self._pictureModel = None
+        self._pictureModelPictureField = None
+        self._pictureModelFieldName = None
+        self._filename = None
+
+    @property
+    def filename(self):
+        if self._filename is None:
+            self._filename = MEDIA_FILE_NAME_MAP.get(self.request.POST.get("source"), "tempfile")
+        return self._filename
+
+    @property
+    def pictureModel(self):
+        # like event
+        return self._pictureModel
+
+    @property
+    def pictureModelPictureField(self):
+        # like event.eventPicture
+        # Need to return updated field each time is accessed (since the field is set independently)
+        self._pictureModelPictureField = self.pictureModel.__dict__[self.pictureModelFieldName]
+        return self._pictureModelPictureField
+
+    @property
+    def pictureModelFieldName(self):
+        # Like eventPicture
+        return self._pictureModelFieldName
+
+    def updatePicturePathAndModel(self):
+        if self.pictureModel:
+            # Save the InMemoryUploadedFile instance in the file field of the model
+            self._pictureModelPictureField = self.request.FILES.get(self.pictureModelFieldName)
+            self.pictureModel.save()
+
+            # Rename event file
+            if self.pictureModelPictureField:
+                newPath = os.path.join(os.path.dirname(self.pictureModelPictureField.path), self.filename)
+                print "newPath is {0}".format(newPath)
+                os.rename(self.pictureModelPictureField.path, newPath)
+                print "renamed path {0} to newpath {1}".format(self.pictureModelPictureField.path, newPath)
+
+                self._pictureModelPictureField.name = os.path.join(self.request.user.username, self.filename)
+                print "Set picture model field.name to {0}".format(self._pictureModelPictureField.name)
+                self.pictureModel.save()
+                return True
+        print "pic update fail"
+        return False
 
 # Must be done after GenericAccountView defined
 import account
