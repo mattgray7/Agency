@@ -93,8 +93,8 @@ HTML_MAP = {CREATE_BASIC_ACCOUNT: 'AgencyApp/account/create.html',
 			BROWSE_EVENTS: 'AgencyApp/browse.html',
 			BROWSE_POSTS: 'AgencyApp/browse.html'}
 
-MEDIA_FILE_NAME_MAP = {EDIT_PROFILE_PICTURE: "profile{0}",
-					   CREATE_EVENT: "event_{0}{1}"}
+MEDIA_FILE_NAME_MAP = {EDIT_PROFILE_PICTURE: "profile.jpg",
+					   CREATE_EVENT: "event_{0}.jpg"}
 
 
 

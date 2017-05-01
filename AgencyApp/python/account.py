@@ -239,7 +239,6 @@ class EditPictureView(views.PictureFormView):
     def filename(self):
         if self._filename is None:
             self._filename = MEDIA_FILE_NAME_MAP.get(EDIT_PROFILE_PICTURE, "tempfile")
-            self._filename = self._filename.format(os.path.splitext(self.pictureModelPictureField.path)[-1])
         return self._filename
 
     def processForm(self):

@@ -73,7 +73,7 @@ class CreateEventView(views.PictureFormView):
     def filename(self):
         if self._filename is None:
             self._filename = MEDIA_FILE_NAME_MAP.get(self.request.POST.get("source"), "tempfile")
-            self._filename = self._filename.format(self.eventID, os.path.splitext(self.pictureModelPictureField.path)[-1])
+            self._filename = self._filename.format(self.eventID)
         return self._filename
 
     @property
@@ -113,6 +113,7 @@ class CreateEventView(views.PictureFormView):
                             self._currentEvent.date = date
                             if self.request.FILES.get("eventPicture"):
                                 self._currentEvent.eventPicture = self.request.FILES.get("eventPicture")
+                                print "EVENT PICTURE: {0}".format(self.request.FILES.get("eventPicture"))
                             try:
                                 self.currentEvent.save()
                                 print "saved new event with eventID {0}".format(self.eventID)

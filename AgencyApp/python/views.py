@@ -51,7 +51,6 @@ class GenericView(object):
     @property
     def sourcePage(self):
         if self._sourcePage is None:
-            print "source is None"
             if self.request.POST.get("source"):
                 self._sourcePage = self.request.POST.get("source")
                 print "post request has source, and source page is {0}".format(self._sourcePage)
@@ -259,8 +258,10 @@ class PictureFormView(GenericFormView):
             # Rename event file
             if self.pictureModelPictureField:
                 newPath = os.path.join(os.path.dirname(self.pictureModelPictureField.path), self.filename)
+                print "new path is {0}, existing is {1}".format(newPath, self.pictureModelPictureField.path)
                 os.rename(self.pictureModelPictureField.path, newPath)
                 self._pictureModelPictureField.name = os.path.join(self.request.user.username, self.filename)
+                print "new name is {0}".format(self._pictureModelPictureField.name)
                 self.pictureModel.save()
                 return True
         return False
