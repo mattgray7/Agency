@@ -15,13 +15,11 @@ def redirect(request, currentPage, destinationPage):
                         page combintaion, defaults to DEFAULT
     :return HttpResonseRedirect: Redirect to destination if found
     """
-    print "CURRENT PAGE IS {0}".format(currentPage)
     destinationURL = getDestinationURL(request, destinationPage)
     if not destinationURL:
         print "No url could be resolved"
         raise
     else:
-        print "ADDING MESSAGE AND REDIRECTING, source is {0}".format(currentPage)
         messages.add_message(request, messages.INFO,
                              "source:{0}".format(currentPage))
         return HttpResponseRedirect(destinationURL)

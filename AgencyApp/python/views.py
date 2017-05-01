@@ -74,9 +74,7 @@ class GenericView(object):
         if self._destinationPage is None:
             if self.request.POST.get("destination"):
                 self._destinationPage = self.request.POST.get("destination")
-            else:
-                print "no destination in post request"
-            if not self._destinationPage or self._destinationPage == constants.DEFAULT:
+            if self._destinationPage in [None, constants.DEFAULT]:
                 self._destinationPage = constants.DEFAULT_PAGE_MAP.get(self.currentPage)
         return self._destinationPage
 
@@ -107,7 +105,6 @@ class GenericFormView(GenericView):
         self._formSubmitted = False
         self._formData = None
         self._cancelDestination = None
-
 
     @property
     def formClass(self):
@@ -284,7 +281,8 @@ def displayHome(request):
     return home.display(request, getBaseContext(request))
 
 def login(request):
-    return account.loginUser(request, getBaseContext(request))
+    view = account.LoginView(request=request, currentPage=constants.LOGIN)
+    return view.process()
 
 def logout(request):
     return account.logoutUser(request, getBaseContext(request))

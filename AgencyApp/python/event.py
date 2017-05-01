@@ -91,6 +91,8 @@ class CreateEventView(views.PictureFormView):
         if self._cancelDestination is None:
             if self.sourcePage == SETUP_ACCOUNT_FINISH:
                 self._cancelDestination = HOME
+            elif self.sourcePage == LOGIN:
+                self._cancelDestination = HOME
             else:
                 self._cancelDestination = self.sourcePage
         return self._cancelDestination

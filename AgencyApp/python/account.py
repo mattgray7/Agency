@@ -19,42 +19,58 @@ import views
 import os
 
 
-def loginUser(request, context):
-    errors = []
-    if request.method == 'POST':
-        # Form submitted
-        form = LoginForm(request.POST)
-        if form.is_valid():
-            username = _getProfileNameFromEmail(form.cleaned_data.get('email'))
-            if username is None:
-                errors.append("{0} is not a registered email.".format(form.cleaned_data.get('email')))
-            else:
-                user = authenticate(username=username, password=form.cleaned_data.get('password'))
-                if user is not None:
-                    # Login was a success
-                    login(request, user)
-                    # TODO change the source page if from toolbar                
-                    return helpers.redirect(request=request,
-                                            currentPage=LOGIN,
-                                            destinationPage=form.cleaned_data.get('destination'))
-                else:
-                    errors.append("Email and password do not match.")
-        else:
-            if request.POST.get("destination"):
-                destination = request.POST.get("destination")
-                context["form"] = LoginForm(initial={'destination': destination})
-                if destination == CREATE_POST:
-                    errors.append("You must login to create a post.")
-                elif destination == CREATE_EVENT:
-                    errors.append("You must login to create an event.")
-    
-    if not context.get("form"):
-        context["form"] = LoginForm()
-    if errors:
-        context["errors"] = errors
-    context["source"] = LOGIN
-    return render(request, 'AgencyApp/account/login.html', context)
+class LoginView(views.GenericFormView):
+    def __init__(self, *args, **kwargs):
+        super(LoginView, self).__init__(*args, **kwargs)
 
+    @property
+    def userAccount(self):
+        return None
+
+    @property
+    def pageErrors(self):
+        postMsg = "You must login to create a post."
+        eventMsg = "You must login to create an event."
+        if self.destinationPage == CREATE_POST and postMsg not in self._pageErrors:
+            self._pageErrors.append(postMsg)
+        elif self.destinationPage == CREATE_EVENT and eventMsg not in self._pageErrors:
+            self._pageErrors.append(eventMsg)
+        return self._pageErrors
+
+    @property
+    def pageContext(self):
+        if not self._pageContext:
+            self._pageContext = helpers.getBaseContext(self.request)
+            self._pageContext["destination"] = self.destinationPage
+            self._pageContext["next"] = self.currentPage
+            self._pageContext["source"] = self.currentPage
+
+        # Need to update everytime pageContext is accessed
+        self._pageContext["errors"] = self.pageErrors
+        return self._pageContext
+
+    @property
+    def formInitialValues(self):
+        self._formInitialValues["email"] = self.errorMemory.get("email")
+        self._formInitialValues["destination"] = self.destinationPage
+        self._formInitialValues["next"] = self.currentPage
+        self._formInitialValues["source"] = self.currentPage
+        return self._formInitialValues
+
+    def processForm(self):
+        """Overriding asbtract method"""
+        self._username = _getProfileNameFromEmail(self.formData.get('email'))
+        if self._username is None:
+            self._pageErrors.append("{0} is not a registered email.".format(self.formData.get('email')))
+        else:
+            user = authenticate(username=self.username, password=self.formData.get('password'))
+            if user is not None:
+                # Login was a success
+                login(self.request, user)
+                return True
+            else:
+                self._pageErrors.append("Email and password do not match.")
+ 
 
 def logoutUser(request, context):
     logout(request)

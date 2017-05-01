@@ -85,7 +85,8 @@ FORM_MAP = {LOGIN: forms.LoginForm,
 			VIEW_EVENT: forms.CreateEventForm,
 			}
 
-HTML_MAP = {CREATE_BASIC_ACCOUNT: 'AgencyApp/account/create.html',
+HTML_MAP = {LOGIN: 'AgencyApp/account/login.html',
+			CREATE_BASIC_ACCOUNT: 'AgencyApp/account/create.html',
 			EDIT_INTERESTS: 'AgencyApp/account/interests.html',
 			EDIT_PROFESSIONS: 'AgencyApp/account/professions.html',
 			EDIT_BACKGROUND: 'AgencyApp/account/background.html',
