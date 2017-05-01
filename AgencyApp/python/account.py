@@ -40,9 +40,9 @@ class LoginView(views.GenericFormView):
     @property
     def formInitialValues(self):
         self._formInitialValues["email"] = self.errorMemory.get("email")
-        self._formInitialValues["destination"] = self.destinationPage
+        """self._formInitialValues["destination"] = self.destinationPage
         self._formInitialValues["next"] = self.currentPage
-        self._formInitialValues["source"] = self.currentPage
+        self._formInitialValues["source"] = self.currentPage"""
         return self._formInitialValues
 
     def processForm(self):
@@ -85,7 +85,6 @@ class CreateAccountView(views.GenericFormView):
 
     @property
     def pageContext(self):
-        #if not self._pageContext:
         self._pageContext["email"] = self.errorMemory.get("email")
         self._pageContext["firstName"] = self.errorMemory.get("firstName")
         self._pageContext["lastName"] = self.errorMemory.get("lastName")
@@ -96,9 +95,6 @@ class CreateAccountView(views.GenericFormView):
         self._formInitialValues["email"] = self.errorMemory.get("email")
         self._formInitialValues["firstName"] = self.errorMemory.get("firstName")
         self._formInitialValues["lastName"] = self.errorMemory.get("lastName")
-        self._formInitialValues["destination"] = self.destinationPage
-        self._formInitialValues["next"] = self.currentPage
-        self._formInitialValues["source"] = self.currentPage
         return self._formInitialValues
 
     def processForm(self):
@@ -173,9 +169,6 @@ class EditInterestsView(views.GenericFormView):
         self._formInitialValues["work"] = self.userAccount.workInterest
         self._formInitialValues["crew"] = self.userAccount.crewInterest
         self._formInitialValues["collaboration"] = self.userAccount.collaborationInterest
-        self._formInitialValues["destination"] = self.destinationPage
-        self._formInitialValues["next"] = self.currentPage
-        self._formInitialValues["source"] = self.currentPage
         return self._formInitialValues
 
     def processForm(self):
@@ -228,7 +221,6 @@ class EditPictureView(views.PictureFormView):
     @property
     def pageContext(self):
         self._pageContext["userAccount"] = self.userAccount
-        print "pageContext is {0}"
         return self._pageContext
 
     @property
@@ -240,13 +232,6 @@ class EditPictureView(views.PictureFormView):
             else:
                 self._cancelDestination = PROFILE
         return self._cancelDestination
-
-    @property
-    def formInitialValues(self):
-        self._formInitialValues["source"] = self.currentPage
-        self._formInitialValues["next"] = self.currentPage
-        self._formInitialValues["destination"] = self.destinationPage
-        return self._formInitialValues
 
     @property
     def filename(self):
@@ -278,9 +263,6 @@ class EditBackgroundView(views.GenericFormView):
         self._formInitialValues["reel"] = self.userAccount.reelLink
         self._formInitialValues["imdb"] = self.userAccount.imdbLink
         self._formInitialValues["bio"] = self.userAccount.bio
-        self._formInitialValues["source"] = self.currentPage
-        self._formInitialValues["next"] = self.currentPage
-        self._formInitialValues["destination"] = self.destinationPage
         return self._formInitialValues
 
     def processForm(self):

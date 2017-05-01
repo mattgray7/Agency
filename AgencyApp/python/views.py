@@ -59,12 +59,15 @@ class GenericView(object):
     @property
     def sourcePage(self):
         if self._sourcePage is None:
+            print self.request.POST
             if self.request.POST.get("source"):
                 self._sourcePage = self.request.POST.get("source")
                 print "post request has source, and source page is {0}".format(self._sourcePage)
             else:
                 self._sourcePage = helpers.getMessageFromKey(self.request, "source")
-                print "message has source, and source page is {0}".format(self._sourcePage)
+                if not self._sourcePage:
+                    print "message has source, and source page is {0}".format(self._sourcePage)
+                    self._sourcePage = constants.HOME
         return self._sourcePage
 
     @property
@@ -112,6 +115,12 @@ class GenericFormView(GenericView):
         self._formSubmitted = False
         self._formData = None
         self._cancelDestination = None
+        self.setupFormInitialValues()
+
+    def setupFormInitialValues(self):
+        self._formInitialValues["source"] = self.currentPage
+        self._formInitialValues["next"] = self.currentPage
+        self._formInitialValues["destination"] = self.destinationPage
 
     @property
     def formClass(self):
@@ -127,9 +136,6 @@ class GenericFormView(GenericView):
     @property
     def formInitialValues(self):
         # To override in child class
-        self._formInitialValues["source"] = self.currentPage
-        self._formInitialValues["next"] = self.currentPage
-        self._formInitialValues["destination"] = self.destinationPage
         return self._formInitialValues
 
     @property
@@ -183,6 +189,7 @@ class GenericFormView(GenericView):
         # Need to access pageContext before setting variables
         # !!!!!!!!!! Don't delete
         self.pageContext
+        self.formInitialValues
         # !!!!!!!!!!
         self._pageContext["form"] = self.form
         if self._pageErrors:

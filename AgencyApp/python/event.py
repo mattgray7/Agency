@@ -54,9 +54,6 @@ class CreateEventView(views.PictureFormView):
     def formInitialValues(self):
         self._formInitialValues["eventID"] = self.eventID
         self._formInitialValues["poster"] = self.username
-        self._formInitialValues["source"] = self.currentPage # set the form source to current page, since it will be the source when the form is submitted and the next page loads
-        self._formInitialValues["next"] = self.currentPage
-        self._formInitialValues["destination"] = self.destinationPage
         if self.currentEvent:
             self._formInitialValues["title"] = self.currentEvent.title
             self._formInitialValues["description"] = self.currentEvent.description
@@ -170,7 +167,6 @@ class ViewEventView(views.GenericFormView):
     def formInitialValues(self):
         self._formInitialValues["eventID"] = self.eventID
         self._formInitialValues["poster"] = self.username
-        self._formInitialValues["source"] = self.currentPage
         return self._formInitialValues
 
     @property
