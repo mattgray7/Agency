@@ -223,7 +223,7 @@ class EditPictureView(views.PictureFormView):
         if not self._pageContext:
             self._pageContext = helpers.getBaseContext(self.request)
             self._pageContext["userAccount"] = self.userAccount
-            self._pageContext["source"] = self.currentPage
+            self._pageContext["source"] = self.sourcePage
             self._pageContext["next"] = self.currentPage
             self._pageContext["destination"] = self.destinationPage
         return self._pageContext

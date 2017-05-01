@@ -38,7 +38,7 @@ class CreateEventView(views.PictureFormView):
                                                         "setupAccountFinish": constants.SETUP_ACCOUNT_FINISH,
                                                         "createBasicAccountFinish": constants.CREATE_BASIC_ACCOUNT_FINISH}
             self._pageContext["currentEvent"] = self.currentEvent
-            self._pageContext["source"] = self.currentPage
+            self._pageContext["source"] = self.sourcePage  # keep as source in page context, so cancel has correct source
             self._pageContext["next"] = self.currentPage
             self._pageContext["destination"] = self.destinationPage
         return self._pageContext
@@ -59,7 +59,7 @@ class CreateEventView(views.PictureFormView):
     def formInitialValues(self):
         self._formInitialValues["eventID"] = self.eventID
         self._formInitialValues["poster"] = self.username
-        self._formInitialValues["source"] = self.currentPage
+        self._formInitialValues["source"] = self.currentPage # set the form source to current page, since it will be the source when the form is submitted and the next page loads
         self._formInitialValues["next"] = self.currentPage
         self._formInitialValues["destination"] = self.destinationPage
         if self.currentEvent:

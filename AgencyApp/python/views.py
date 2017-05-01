@@ -51,6 +51,7 @@ class GenericView(object):
     @property
     def sourcePage(self):
         if self._sourcePage is None:
+            print "source is None"
             if self.request.POST.get("source"):
                 self._sourcePage = self.request.POST.get("source")
                 print "post request has source, and source page is {0}".format(self._sourcePage)
@@ -232,8 +233,10 @@ class PictureFormView(GenericFormView):
         return self._pictureModelFieldName
 
     def checkFormValidity(self):
+        print 'checking picture valididty'
         formIsValid = False
         if self.request.POST.get(constants.CANCEL) != "True":
+
             if self.formSubmitted:
                 if self.formClass:
                     if self.form.is_valid():
@@ -250,6 +253,8 @@ class PictureFormView(GenericFormView):
                     if self.processForm():
                         formIsValid = True
         else:
+            print "CANCEL WAS PRESSED, SETTING DEST TO {0}".format(self.sourcePage)
+            self._destinationPage = self.sourcePage
             formIsValid = True
         return formIsValid
 

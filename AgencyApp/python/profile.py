@@ -40,5 +40,6 @@ def display(request, username, context):
     context["possibleDestinations"] = {"picture": constants.EDIT_PROFILE_PICTURE,
                                        "background": constants.EDIT_BACKGROUND,
                                        "professions": constants.EDIT_PROFESSIONS,
-                                       "interests": constants.EDIT_INTERESTS}
+                                       "interests": constants.EDIT_INTERESTS,
+                                       "viewEvent": constants.VIEW_EVENT}
     return render(request, "AgencyApp/profile.html", context)

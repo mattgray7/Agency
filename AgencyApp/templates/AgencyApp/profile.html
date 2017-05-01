@@ -95,7 +95,14 @@
 			<br><h3>Events {{ userAccount.firstName }} has posted...</h3>
 			<ul>
 				{% for event in events %}
-					<li><a href='/view/event/{{event.eventID}}/'>{{ event.title }}</a></li>
+					<form method="post" action="/view/event/{{event.eventID}}/"> 
+						{% csrf_token %}
+						<input type="hidden" name="source" value="{{ source }}" />
+						<input type="hidden" name="next" value="{{ possibleDestinations.viewEvent }}" />
+						<input type="hidden" name="destination" value="{{ possibleDestinations.viewEvent }}" />
+						<input type="submit" Value="{{ event.title }}" />
+					</form>
+					<!--<li><a href='/view/event/{{event.eventID}}/'>{{ event.title }}</a></li>-->
 				{% endfor %}
 			</ul>
 		{% endif %}
