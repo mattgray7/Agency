@@ -24,7 +24,6 @@ class CreateEventView(views.PictureFormView):
         self._currentEvent = None
 
         self._pictureModel = self.currentEvent
-        #self._pictureModelPictureField = self.currentEvent.eventPicture
         self._pictureModelFieldName = "eventPicture"
         self._filename = None
         self._defaultDestination = VIEW_EVENT
@@ -35,14 +34,13 @@ class CreateEventView(views.PictureFormView):
             self._pageContext = helpers.getBaseContext(self.request)
             self._pageContext["eventID"] = self.eventID
             self._pageContext["possibleSources"] = {"login": constants.LOGIN,
-                                                    "viewEvent": constants.VIEW_EVENT,
-                                                    "setupAccountFinish": constants.SETUP_ACCOUNT_FINISH,
-                                                    "createBasicAccountFinish": constants.CREATE_BASIC_ACCOUNT_FINISH}
+                                                        "viewEvent": constants.VIEW_EVENT,
+                                                        "setupAccountFinish": constants.SETUP_ACCOUNT_FINISH,
+                                                        "createBasicAccountFinish": constants.CREATE_BASIC_ACCOUNT_FINISH}
             self._pageContext["currentEvent"] = self.currentEvent
             self._pageContext["source"] = self.currentPage
             self._pageContext["next"] = self.currentPage
             self._pageContext["destination"] = self.destinationPage
-            self._pageContext["cancel"] = CANCEL
         return self._pageContext
 
     @property
@@ -62,10 +60,8 @@ class CreateEventView(views.PictureFormView):
         self._formInitialValues["eventID"] = self.eventID
         self._formInitialValues["poster"] = self.username
         self._formInitialValues["source"] = self.currentPage
-        print "set form source to {0}".format(self.currentPage)
         self._formInitialValues["next"] = self.currentPage
         self._formInitialValues["destination"] = self.destinationPage
-        print "set form destination to {0}".format(self.destinationPage)
         if self.currentEvent:
             self._formInitialValues["title"] = self.currentEvent.title
             self._formInitialValues["description"] = self.currentEvent.description

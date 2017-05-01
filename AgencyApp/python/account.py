@@ -161,7 +161,6 @@ class EditInterestsView(views.GenericFormView):
         self._formInitialValues["destination"] = self.destinationPage
         self._formInitialValues["next"] = self.currentPage
         self._formInitialValues["source"] = self.currentPage
-
         return self._formInitialValues
 
     def processForm(self):
@@ -224,7 +223,6 @@ class EditPictureView(views.PictureFormView):
         if not self._pageContext:
             self._pageContext = helpers.getBaseContext(self.request)
             self._pageContext["userAccount"] = self.userAccount
-            self._pageContext["cancel"] = CANCEL
             self._pageContext["source"] = self.currentPage
             self._pageContext["next"] = self.currentPage
             self._pageContext["destination"] = self.destinationPage

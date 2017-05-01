@@ -50,20 +50,7 @@ class GenericView(object):
 
     @property
     def sourcePage(self):
-        print "accessing source page"
         if self._sourcePage is None:
-            print "source page is None"
-            """if self.formSubmitted:
-                # Taken from form values (because source will == current page when form submitted)
-                self._sourcePage = self.request.POST.get("editSource") or self.request.POST.get("createSource") or self.request.POST.get("loginSource")
-                print "form is submitted, and source page is {0}".format(self._sourcePage)
-            else:
-                if self.request.POST.get("source"):
-                    self._sourcePage = self.request.POST.get("source")
-                    print "post request has source, and source page is {0}".format(self._sourcePage)
-                else:
-                    self._incomingSource = helpers.getMessageFromKey(self.request, "source")
-                    print "message has source, and source page is {0}".format(self._sourcePage)"""
             if self.request.POST.get("source"):
                 self._sourcePage = self.request.POST.get("source")
                 print "post request has source, and source page is {0}".format(self._sourcePage)
@@ -141,7 +128,7 @@ class GenericFormView(GenericView):
     @property
     def formInitialValues(self):
         # To override in child class
-        self._formInitialValues["source"] = self.sourcePage
+        self._formInitialValues["source"] = self.currentPage
         self._formInitialValues["next"] = self.currentPage
         self._formInitialValues["destination"] = self.destinationPage
         return self._formInitialValues
@@ -162,37 +149,35 @@ class GenericFormView(GenericView):
                 self._form = self.formClass(self.request.POST)
             elif self.formClass:
                 self._form = self.formClass(initial=self.formInitialValues)
+            print "\n\nform is {0}".format(self._form)
         return self._form
 
-    def process(self):
-        if self.request.method == "POST":
+    def checkFormValidity(self):
+        formIsValid = False
+        if self.request.POST.get(constants.CANCEL) != "True":
             if self.formSubmitted:
-                formIsValid = False
-                if self.request.POST.get(constants.CANCEL) != "True":
-                    if self.formClass:
-                        if self.form.is_valid():
-                            self.errorMemory = self.formData
-                            if self.processForm():
-                                formIsValid = True
-                        else:
-                            self.errorMemory = self.request.POST
+                if self.formClass:
+                    if self.form.is_valid():
+                        self.errorMemory = self.formData
+                        formIsValid = self.processForm()
                     else:
-                        if self.processForm():
-                            formIsValid = True
+                        self.errorMemory = self.request.POST
                 else:
-                    formIsValid = True
-                    print "form is Valid"
-                if formIsValid:
-                    print "processSuccess, redirecting source {0} and current {1}".format(self.sourcePage, self.currentPage)
-                    """return helpers.redirect(request=self.request,
-                                            currentPage=self.currentPage,
-                                            sourcePage=self.sourcePage,
-                                            pageKey=self._pageKey)"""
-                    return helpers.redirect(request=self.request,
-                                            currentPage = self.currentPage,
-                                            destinationPage=self.destinationPage)
-        # Need to access before form is set
+                    formIsValid = self.processForm()
+        else:
+            formIsValid = True
+        return formIsValid
+
+    def process(self):
+        if self.request.method == "POST" and self.checkFormValidity():
+            return helpers.redirect(request=self.request,
+                                    currentPage=self.currentPage,
+                                    destinationPage=self.destinationPage)
+
+        # Need to access pageContext before setting variables
+        # !!!!!!!!!! Don't delete
         self.pageContext
+        # !!!!!!!!!!
         self._pageContext["form"] = self.form
         if self._pageErrors:
             self._pageContext["errors"] = self.pageErrors
@@ -202,7 +187,6 @@ class GenericFormView(GenericView):
     def processForm(self):
         """To bo overridden in child class"""
         pass
-
 
 
 class PictureFormView(GenericFormView):
@@ -247,6 +231,28 @@ class PictureFormView(GenericFormView):
         # Like eventPicture
         return self._pictureModelFieldName
 
+    def checkFormValidity(self):
+        formIsValid = False
+        if self.request.POST.get(constants.CANCEL) != "True":
+            if self.formSubmitted:
+                if self.formClass:
+                    if self.form.is_valid():
+                        self.errorMemory = self.formData
+                        if self.processForm():
+                            if self.request.FILES.get(self.pictureModelFieldName):
+                                if self.updatePicturePathAndModel():
+                                    formIsValid = True
+                            else:
+                                formIsValid = True
+                    else:
+                        self.errorMemory = self.request.POST
+                else:
+                    if self.processForm():
+                        formIsValid = True
+        else:
+            formIsValid = True
+        return formIsValid
+
     def updatePicturePathAndModel(self):
         if self.pictureModel:
             # Save the InMemoryUploadedFile instance in the file field of the model
@@ -261,43 +267,6 @@ class PictureFormView(GenericFormView):
                 self.pictureModel.save()
                 return True
         return False
-
-    def process(self):
-        if self.request.method == "POST":
-            if self.formSubmitted:
-                formIsValid = False
-                if self.request.POST.get(constants.CANCEL) != "True":
-                    if self.formClass:
-                        if self.form.is_valid():
-                            self.errorMemory = self.formData
-                            if self.processForm():
-                                if self.request.FILES.get(self.pictureModelFieldName):
-                                    if self.updatePicturePathAndModel():
-                                        formIsValid = True
-                                else:
-                                    formIsValid = True
-                        else:
-                            self.errorMemory = self.request.POST
-                    else:
-                        if self.processForm():
-                            formIsValid = True
-                else:
-                    formIsValid = True
-                    print "SKIP PRESSED, destinatino is {0}".format(self.destinationPage)
-                if formIsValid:
-                    
-                    return helpers.redirect(request=self.request,
-                                            currentPage=self.currentPage,
-                                            destinationPage=self.destinationPage)
-        # Need to access pageContext before setting variables
-        # !!!!!!!!!! Don't delete
-        self.pageContext
-        # !!!!!!!!!!
-        self._pageContext["form"] = self.form
-        if self._pageErrors:
-            self._pageContext["errors"] = self.pageErrors
-        print "source :{0}, current: {1}, dest: {2}".format(self.sourcePage, self.currentPage, self.destinationPage)
-        return render(self.request, constants.HTML_MAP.get(self.currentPage), self.pageContext)
 
 # Must be done after GenericAccountView defined
 import account

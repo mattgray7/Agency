@@ -100,7 +100,8 @@ def getBaseContext(request):
                                "logout": constants.TOOLBAR_LOGOUT,
                                "profile": constants.TOOLBAR_PROFILE},
             "source": source,
-            "default": constants.DEFAULT
+            "default": constants.DEFAULT,
+            "cancel": constants.CANCEL
             }
 
 
