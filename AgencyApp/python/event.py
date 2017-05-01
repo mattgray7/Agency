@@ -131,6 +131,7 @@ class ViewEventView(views.GenericFormView):
         self._eventID = kwargs.get("eventID")
         self._formClass = constants.FORM_MAP.get(self.currentPage)
         self._currentEvent = None
+        self._defaultDestination = VIEW_EVENT
 
     @property
     def eventID(self):
@@ -141,6 +142,10 @@ class ViewEventView(views.GenericFormView):
         if not self._pageContext:
             self._pageContext = helpers.getBaseContext(self.request)
             self._pageContext["event"] = self.currentEvent
+            self._pageContext["source"] = self.currentPage  #used for manual form, so form source should be current
+            self._pageContext["possibleDestinations"] = {"edit": CREATE_EVENT,
+                                                         "browse": BROWSE_EVENTS}
+            self._pageContext["destination"] = self.destinationPage
         return self._pageContext
 
     @property

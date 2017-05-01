@@ -233,7 +233,6 @@ class PictureFormView(GenericFormView):
         return self._pictureModelFieldName
 
     def checkFormValidity(self):
-        print 'checking picture valididty'
         formIsValid = False
         if self.request.POST.get(constants.CANCEL) != "True":
 
@@ -253,7 +252,6 @@ class PictureFormView(GenericFormView):
                     if self.processForm():
                         formIsValid = True
         else:
-            print "CANCEL WAS PRESSED, SETTING DEST TO {0}".format(self.sourcePage)
             self._destinationPage = self.sourcePage
             formIsValid = True
         return formIsValid

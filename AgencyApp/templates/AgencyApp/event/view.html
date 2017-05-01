@@ -14,8 +14,10 @@
 	{% if event.poster == request.user.username %}
 		<form method='post' action="/edit/event/{{ event.eventID }}/">
 			{% csrf_token %}
-			{{ form.as_p }}
-			<!--<input type="hidden" name="eventID" value="{{eventID}}" />-->
+			<input type="hidden" name="source" value="{{ source }}" />
+			<input type="hidden" name="next" value="{{ possibleDestinations.edit }}" />
+			<input type="hidden" name="destination" value="{{ destination }}" />
+			<input type="hidden" name="eventID" value="{{ event.eventID }}" />
 			<input type="submit" value="Edit Event" />
 		</form>
 	{% endif %}

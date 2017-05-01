@@ -49,7 +49,7 @@
 			<input type="submit" value="Create event" />
 		{% endif %}
 	</form>
-	<form method='post' action="/create/event/" name='skip'>
+	<form method='post' action="/create/event/" name="{{ cancel }}">
 		{% csrf_token %}
 		<input type="hidden" name="source" value="{{ source }}">
 		<input type="hidden" name="next" value="{{ next }}">
