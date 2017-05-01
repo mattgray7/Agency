@@ -141,7 +141,6 @@ class GenericFormView(GenericView):
                 self._form = self.formClass(self.request.POST)
             elif self.formClass:
                 self._form = self.formClass(initial=self.formInitialValues)
-            print "\n\nform is {0}".format(self._form)
         return self._form
 
     @property
@@ -308,7 +307,8 @@ def editBackground(request):
     return view.process()
 
 def createAccountFinish(request):
-    return account.finish(request, getBaseContext(request))
+    view = account.CreateAccountFinishView(request=request, currentPage=constants.CREATE_BASIC_ACCOUNT_FINISH)
+    return view.process()
 
 def createEvent(request):
     view = event.CreateEventView(request=request, currentPage=constants.CREATE_EVENT)

@@ -26,7 +26,6 @@ def redirect(request, currentPage, destinationPage):
 
 
 def getDestinationURL(request, destPageName):
-    print "destpage name is {0}".format(destPageName)
     destURL = constants.URL_MAP.get(destPageName)
 
     # Add specific values for profile usernames and eventIDs in the url

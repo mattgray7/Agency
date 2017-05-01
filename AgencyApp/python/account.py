@@ -140,6 +140,29 @@ class CreateAccountView(views.GenericFormView):
         return False
 
 
+class CreateAccountFinishView(views.GenericFormView):
+    def __init__(self, *args, **kwargs):
+        super(CreateAccountFinishView, self).__init__(*args, **kwargs)
+
+    @property
+    def pageContext(self):
+        if not self._pageContext:
+            self._pageContext = helpers.getBaseContext(self.request)
+            self._pageContext["destination"] = self.destinationPage
+            self._pageContext["next"] = self.currentPage
+            self._pageContext["source"] = self.currentPage
+
+            self._pageContext["showSetupProfile"] = True
+            if self.sourcePage == EDIT_BACKGROUND:
+                self._pageContext["showSetupProfile"] = False
+
+            self._pageContext["possibleDestinations"] = {"event": CREATE_EVENT,
+                                                         "post": CREATE_POST,
+                                                         "setupProfile": EDIT_INTERESTS,
+                                                         "browse": BROWSE_EVENTS}
+        return self._pageContext
+
+
 def finish(request, context):
     # Get the incoming source and set the destination page
     if request.POST.get("source"):
