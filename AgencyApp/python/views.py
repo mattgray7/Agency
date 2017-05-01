@@ -79,13 +79,8 @@ class GenericView(object):
             else:
                 print "no destination in post request"
             if not self._destinationPage or self._destinationPage == constants.DEFAULT:
+                self._destinationPage = constants.DEFAULT_PAGE_MAP.get(self.currentPage)
                 print "setting to default dest {0}".format(self._defaultDestination)
-                self._destinationPage = self._defaultDestination
-            """self._destinationPage = helpers.getDestinationPage(self.request, self.currentPage,
-                                                               self.sourcePage, self.destPageKey)
-            if not self._destinationPage:
-                print "destination error occurred!"
-                self_destinationPage = HOME"""
         return self._destinationPage
 
     @property
@@ -235,7 +230,6 @@ class PictureFormView(GenericFormView):
     def checkFormValidity(self):
         formIsValid = False
         if self.request.POST.get(constants.CANCEL) != "True":
-
             if self.formSubmitted:
                 if self.formClass:
                     if self.form.is_valid():
@@ -252,7 +246,7 @@ class PictureFormView(GenericFormView):
                     if self.processForm():
                         formIsValid = True
         else:
-            self._destinationPage = self.sourcePage
+            self._destinationPage = self.sourcePage == constants.LOGIN and constants.HOME or self.sourcePage
             formIsValid = True
         return formIsValid
 
