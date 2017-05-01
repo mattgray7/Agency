@@ -18,6 +18,7 @@ import views
 
 import os
 
+
 def loginUser(request, context):
     errors = []
     if request.method == 'POST':
@@ -63,7 +64,6 @@ def logoutUser(request, context):
 class CreateAccountView(views.GenericFormView):
     def __init__(self, *args, **kwargs):
         super(CreateAccountView, self).__init__(*args, **kwargs)
-        self._defaultDestination = CREATE_BASIC_ACCOUNT_FINISH
 
     @property
     def userAccount(self):
@@ -151,7 +151,6 @@ def finish(request, context):
 class EditInterestsView(views.GenericFormView):
     def __init__(self, *args, **kwargs):
         super(EditInterestsView, self).__init__(*args, **kwargs)
-        self._defaultDestination = EDIT_PROFESSIONS
 
     @property
     def formInitialValues(self):
@@ -179,7 +178,6 @@ class EditInterestsView(views.GenericFormView):
 class EditProfessionsView(views.GenericFormView):
     def __init__(self, *args, **kwargs):
         super(EditProfessionsView, self).__init__(*args, **kwargs)
-        self._defaultDestination = EDIT_PROFILE_PICTURE
 
     @property
     def pageContext(self):
@@ -216,7 +214,6 @@ class EditPictureView(views.PictureFormView):
         self._pictureModel = self.userAccount
         self._pictureModelFieldName = "profilePicture"
         self._filename = None
-        self._defaultDestination = EDIT_BACKGROUND
 
     @property
     def pageContext(self):
@@ -227,6 +224,16 @@ class EditPictureView(views.PictureFormView):
             self._pageContext["next"] = self.currentPage
             self._pageContext["destination"] = self.destinationPage
         return self._pageContext
+
+    @property
+    def cancelDestination(self):
+        """Override to continue the profile setup process"""
+        if self._cancelDestination is None:
+            if self.destinationPage == EDIT_BACKGROUND:
+                self._cancelDestination = EDIT_BACKGROUND
+            else:
+                self._cancelDestination = PROFILE
+        return self._cancelDestination
 
     @property
     def formInitialValues(self):
@@ -259,7 +266,6 @@ class EditPictureView(views.PictureFormView):
 class EditBackgroundView(views.GenericFormView):
     def __init__(self, *args, **kwargs):
         super(EditBackgroundView, self).__init__(*args, **kwargs)
-        self._defaultDestination = CREATE_BASIC_ACCOUNT_FINISH
 
     @property
     def formInitialValues(self):

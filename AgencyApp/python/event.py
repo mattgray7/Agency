@@ -26,7 +26,6 @@ class CreateEventView(views.PictureFormView):
         self._pictureModel = self.currentEvent
         self._pictureModelFieldName = "eventPicture"
         self._filename = None
-        self._defaultDestination = VIEW_EVENT
 
     @property
     def pageContext(self):
@@ -87,6 +86,15 @@ class CreateEventView(views.PictureFormView):
                 self._currentEvent.save()
         return self._currentEvent
 
+    @property
+    def cancelDestination(self):
+        if self._cancelDestination is None:
+            if self.sourcePage == SETUP_ACCOUNT_FINISH:
+                self._cancelDestination = HOME
+            else:
+                self._cancelDestination = self.sourcePage
+        return self._cancelDestination
+
     def processForm(self):
         title = self.formData.get("title", "")
         poster = self.formData.get("poster", "")
@@ -132,7 +140,6 @@ class ViewEventView(views.GenericFormView):
         self._eventID = kwargs.get("eventID")
         self._formClass = constants.FORM_MAP.get(self.currentPage)
         self._currentEvent = None
-        self._defaultDestination = VIEW_EVENT
 
     @property
     def eventID(self):

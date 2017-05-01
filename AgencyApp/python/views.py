@@ -26,7 +26,6 @@ class GenericView(object):
         self._sourcePage = kwargs.get("sourcePage")
         self._currentPage = kwargs.get("currentPage")
         self._destinationPage = None
-        self._defaultDestination = None
         self._destPageKey = None
 
         self._userAccount = None
@@ -79,7 +78,6 @@ class GenericView(object):
                 print "no destination in post request"
             if not self._destinationPage or self._destinationPage == constants.DEFAULT:
                 self._destinationPage = constants.DEFAULT_PAGE_MAP.get(self.currentPage)
-                print "setting to default dest {0}".format(self._defaultDestination)
         return self._destinationPage
 
     @property
@@ -108,6 +106,8 @@ class GenericFormView(GenericView):
         self._formInitialValues = {}
         self._formSubmitted = False
         self._formData = None
+        self._cancelDestination = None
+
 
     @property
     def formClass(self):
@@ -147,6 +147,12 @@ class GenericFormView(GenericView):
             print "\n\nform is {0}".format(self._form)
         return self._form
 
+    @property
+    def cancelDestination(self):
+        if self._cancelDestination is None:
+            self._cancelDestination = self.sourcePage
+        return self._cancelDestination
+
     def checkFormValidity(self):
         formIsValid = False
         if self.request.POST.get(constants.CANCEL) != "True":
@@ -160,6 +166,7 @@ class GenericFormView(GenericView):
                 else:
                     formIsValid = self.processForm()
         else:
+            self._destinationPage = self.cancelDestination
             formIsValid = True
         return formIsValid
 
@@ -245,7 +252,8 @@ class PictureFormView(GenericFormView):
                     if self.processForm():
                         formIsValid = True
         else:
-            self._destinationPage = self.sourcePage == constants.LOGIN and constants.HOME or self.sourcePage
+            #self._destinationPage = self.sourcePage == constants.LOGIN and constants.HOME or self.sourcePage
+            self._destinationPage = self.cancelDestination
             formIsValid = True
         return formIsValid
 
