@@ -284,7 +284,8 @@ def login(request):
     return view.process()
 
 def logout(request):
-    return account.logoutUser(request, getBaseContext(request))
+    view = account.LogoutView(request=request, currentPage=constants.LOGOUT)
+    return view.process()
 
 def createAccount(request):
     view = account.CreateAccountView(request=request, currentPage=constants.CREATE_BASIC_ACCOUNT)

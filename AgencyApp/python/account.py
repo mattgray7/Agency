@@ -72,9 +72,19 @@ class LoginView(views.GenericFormView):
                 self._pageErrors.append("Email and password do not match.")
  
 
-def logoutUser(request, context):
-    logout(request)
-    return HttpResponseRedirect('/')
+class LogoutView(views.GenericFormView):
+    def __init__(self, *args, **kwargs):
+        super(LogoutView, self).__init__(*args, **kwargs)
+
+    @property
+    def userAccount(self):
+        return None
+
+    def process(self):
+        logout(self.request)
+        return helpers.redirect(request=self.request,
+                                currentPage=self.currentPage,
+                                destinationPage=self.destinationPage)
 
 
 class CreateAccountView(views.GenericFormView):
@@ -161,30 +171,6 @@ class CreateAccountFinishView(views.GenericFormView):
                                                          "setupProfile": EDIT_INTERESTS,
                                                          "browse": BROWSE_EVENTS}
         return self._pageContext
-
-
-def finish(request, context):
-    # Get the incoming source and set the destination page
-    if request.POST.get("source"):
-        # Came from profile page edit
-        incomingSource = request.POST.get("source")
-    else:
-        # Came from editInterests redirect
-        incomingSource = getMessageFromKey(request, "source")
-
-    context["showSetupProfile"] = True
-    if incomingSource == EDIT_BACKGROUND:
-        context["showSetupProfile"] = False
-    
-    #context["possibleSources"] = {"finish": CREATE_BASIC_ACCOUNT_FINISH}
-    context["source"] = CREATE_BASIC_ACCOUNT_FINISH
-    context["default"] = DEFAULT
-    context["possibleDestinations"] = {"event": CREATE_EVENT,
-                                       "post": CREATE_POST,
-                                       "setupProfile": EDIT_INTERESTS,
-                                       "browse": BROWSE_EVENTS}
-
-    return render(request, 'AgencyApp/account/finish.html', context)
 
 
 class EditInterestsView(views.GenericFormView):
