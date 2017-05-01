@@ -33,13 +33,22 @@ class GenericView(object):
         self._pageErrors = []  #TODO
 
         self.errorMemory = {}
+
+        # Need to setup the base context first so child classes can add to it
         self._pageContext = {}
+        self.setupBaseContext()
+
+    def setupBaseContext(self):
+        if not self._pageContext:
+            self._pageContext = helpers.getBaseContext(self.request)
+        self._pageContext["source"] = self.currentPage
+        self._pageContext["next"] = self.currentPage
+        self._pageContext["destination"] = self.destinationPage
 
     @property
     def pageContext(self):
         """To be overridden in child class"""
-        if not self._pageContext:
-            self._pageContext = helpers.getBaseContext(self.request)
+        self._pageContext["errors"] = self.pageErrors
         return self._pageContext
 
     @property
@@ -63,10 +72,8 @@ class GenericView(object):
         if self._currentPage is None:
             if self.request.POST.get("next"):
                 self._currentPage = self.request.POST.get("next")
-                print "current page set to next: {0}".format(self._currentPage)
             else:
                 self._currentPage = self.sourcePage
-                print "current page set to source: {0}".format(self._sourcePage)
         return self._currentPage
 
     @property
@@ -163,6 +170,7 @@ class GenericFormView(GenericView):
                     formIsValid = self.processForm()
         else:
             self._destinationPage = self.cancelDestination
+            self._pageContext["destination"] = self.cancelDestination
             formIsValid = True
         return formIsValid
 
@@ -262,10 +270,8 @@ class PictureFormView(GenericFormView):
             # Rename event file
             if self.pictureModelPictureField:
                 newPath = os.path.join(os.path.dirname(self.pictureModelPictureField.path), self.filename)
-                print "new path is {0}, existing is {1}".format(newPath, self.pictureModelPictureField.path)
                 os.rename(self.pictureModelPictureField.path, newPath)
                 self._pictureModelPictureField.name = os.path.join(self.request.user.username, self.filename)
-                print "new name is {0}".format(self._pictureModelPictureField.name)
                 self.pictureModel.save()
                 return True
         return False

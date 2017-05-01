@@ -38,18 +38,6 @@ class LoginView(views.GenericFormView):
         return self._pageErrors
 
     @property
-    def pageContext(self):
-        if not self._pageContext:
-            self._pageContext = helpers.getBaseContext(self.request)
-            self._pageContext["destination"] = self.destinationPage
-            self._pageContext["next"] = self.currentPage
-            self._pageContext["source"] = self.currentPage
-
-        # Need to update everytime pageContext is accessed
-        self._pageContext["errors"] = self.pageErrors
-        return self._pageContext
-
-    @property
     def formInitialValues(self):
         self._formInitialValues["email"] = self.errorMemory.get("email")
         self._formInitialValues["destination"] = self.destinationPage
@@ -97,14 +85,10 @@ class CreateAccountView(views.GenericFormView):
 
     @property
     def pageContext(self):
-        if not self._pageContext:
-            self._pageContext = helpers.getBaseContext(self.request)
-            self._pageContext["email"] = self.errorMemory.get("email")
-            self._pageContext["firstName"] = self.errorMemory.get("firstName")
-            self._pageContext["lastName"] = self.errorMemory.get("lastName")
-            self._pageContext["destination"] = self.destinationPage
-            self._pageContext["next"] = self.currentPage
-            self._pageContext["source"] = self.currentPage
+        #if not self._pageContext:
+        self._pageContext["email"] = self.errorMemory.get("email")
+        self._pageContext["firstName"] = self.errorMemory.get("firstName")
+        self._pageContext["lastName"] = self.errorMemory.get("lastName")
         return self._pageContext
 
     @property
@@ -156,21 +140,28 @@ class CreateAccountFinishView(views.GenericFormView):
 
     @property
     def pageContext(self):
-        if not self._pageContext:
-            self._pageContext = helpers.getBaseContext(self.request)
-            self._pageContext["destination"] = self.destinationPage
-            self._pageContext["next"] = self.currentPage
-            self._pageContext["source"] = self.currentPage
+        self._pageContext = helpers.getBaseContext(self.request)
+        self._pageContext["showSetupProfile"] = True
+        if self.sourcePage == EDIT_BACKGROUND:
+            self._pageContext["showSetupProfile"] = False
 
-            self._pageContext["showSetupProfile"] = True
-            if self.sourcePage == EDIT_BACKGROUND:
-                self._pageContext["showSetupProfile"] = False
-
-            self._pageContext["possibleDestinations"] = {"event": CREATE_EVENT,
-                                                         "post": CREATE_POST,
-                                                         "setupProfile": EDIT_INTERESTS,
-                                                         "browse": BROWSE_EVENTS}
+        self._pageContext["possibleDestinations"] = {"event": CREATE_EVENT,
+                                                     "post": CREATE_POST,
+                                                     "interests": EDIT_INTERESTS,
+                                                     "browse": BROWSE_EVENTS}
+        self._pageContext["next"] = CREATE_BASIC_ACCOUNT_FINISH
         return self._pageContext
+
+    def checkFormValidity(self):
+        formIsValid = False
+        if self.formSubmitted:
+            if self.form.is_valid():
+                self.errorMemory = self.formData
+                formIsValid = True
+            else:
+                self.errorMemory = self.request.POST
+            formIsValid = True
+        return formIsValid
 
 
 class EditInterestsView(views.GenericFormView):
@@ -206,17 +197,11 @@ class EditProfessionsView(views.GenericFormView):
 
     @property
     def pageContext(self):
-        if not self._pageContext:
-            self._pageContext = helpers.getBaseContext(self.request)
-            try:
-                self._pageContext["selectedProfessions"] = [x.professionName for x in Profession.objects.filter(username=self.username)]
-            except Profession.DoesNotExist:
-                self._pageContext["selectedProfessions"] = []
-
-            self._pageContext["professionList"] = PROFESSIONS
-            self._pageContext["source"] = self.currentPage
-            self._pageContext["next"] = self.currentPage
-            self._pageContext["destination"] = self.destinationPage
+        try:
+            self._pageContext["selectedProfessions"] = [x.professionName for x in Profession.objects.filter(username=self.username)]
+        except Profession.DoesNotExist:
+            self._pageContext["selectedProfessions"] = []
+        self._pageContext["professionList"] = PROFESSIONS
         return self._pageContext
 
     def processForm(self):
@@ -242,12 +227,8 @@ class EditPictureView(views.PictureFormView):
 
     @property
     def pageContext(self):
-        if not self._pageContext:
-            self._pageContext = helpers.getBaseContext(self.request)
-            self._pageContext["userAccount"] = self.userAccount
-            self._pageContext["source"] = self.sourcePage
-            self._pageContext["next"] = self.currentPage
-            self._pageContext["destination"] = self.destinationPage
+        self._pageContext["userAccount"] = self.userAccount
+        print "pageContext is {0}"
         return self._pageContext
 
     @property
