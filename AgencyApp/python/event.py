@@ -61,7 +61,7 @@ class CreateEventView(views.PictureFormView):
     @property
     def cancelDestinationURL(self):
         if self._cancelDestinationURL is None:
-            self._cancelDestinationURL = constants.DEFAULT_CANCEL_URL_MAP.get(self.currentPage)
+            self._cancelDestinationURL = constants.URL_MAP.get(self.currentPage)
             if self._cancelDestinationURL:
                 self._cancelDestinationURL = self._cancelDestinationURL.format(self.eventID)
         return self._cancelDestinationURL

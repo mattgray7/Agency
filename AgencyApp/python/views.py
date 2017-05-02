@@ -63,7 +63,7 @@ class GenericView(object):
     @property
     def cancelDestinationURL(self):
         if self._cancelDestinationURL is None:
-            self._cancelDestinationURL = constants.DEFAULT_CANCEL_URL_MAP.get(self.currentPage)
+            self._cancelDestinationURL = constants.URL_MAP.get(self.currentPage)
         return self._cancelDestinationURL
 
     @property
@@ -141,7 +141,6 @@ class GenericFormView(GenericView):
         self._formInitialValues = {}
         self._formSubmitted = False
         self._formData = None
-        #self._cancelDestinationURL = None
         self.setupFormInitialValues()
 
     def setupFormInitialValues(self):

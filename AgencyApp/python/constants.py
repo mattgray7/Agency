@@ -50,6 +50,7 @@ PROFESSIONS = ["Actor", "Acting Coach", "Art Director", "Assistant Director", "A
 URL_MAP = {HOME: "/",
 		   LOGIN:"/login/",
 		   PROFILE:"/{0}/",
+		   CREATE_BASIC_ACCOUNT: "/account/create/basic/",
 		   CREATE_POST: "/create/post/choose/",
 		   CREATE_EVENT: "/create/event/",
 		   EDIT_EVENT: "/edit/event/{0}/",
@@ -63,16 +64,6 @@ URL_MAP = {HOME: "/",
 		   BROWSE_EVENTS: "/browse/events/",
 		   BROWSE_POSTS: "/browse/posts/"
 		   }
-
-
-DEFAULT_CANCEL_URL_MAP = {CREATE_EVENT: "/create/event/",
-						  EDIT_EVENT: "/edit/event/{0}/",
-						  EDIT_INTERESTS: "/account/edit/interests/",
-						  EDIT_PROFESSIONS: "/account/edit/professions/",
-						  EDIT_PROFILE_PICTURE: "/account/edit/picture/",
-						  EDIT_BACKGROUND: "/account/edit/background/",
-						  PROFILE: "/{0}/"
-						  }
 
 DEFAULT_PAGE_MAP = {HOME: HOME,
 					LOGIN: HOME,

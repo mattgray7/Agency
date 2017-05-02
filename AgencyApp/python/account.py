@@ -40,9 +40,6 @@ class LoginView(views.GenericFormView):
     @property
     def formInitialValues(self):
         self._formInitialValues["email"] = self.errorMemory.get("email")
-        """self._formInitialValues["destination"] = self.destinationPage
-        self._formInitialValues["next"] = self.currentPage
-        self._formInitialValues["source"] = self.currentPage"""
         return self._formInitialValues
 
     def processForm(self):
@@ -82,6 +79,13 @@ class CreateAccountView(views.GenericFormView):
     @property
     def userAccount(self):
         return None
+
+    @property
+    def cancelDestination(self):
+        """Override to continue the profile setup process"""
+        if self._cancelDestination is None:
+            self._cancelDestination = HOME
+        return self._cancelDestination
 
     @property
     def pageContext(self):
@@ -165,10 +169,8 @@ class EditInterestsView(views.GenericFormView):
     @property
     def cancelDestination(self):
         """Override to continue the profile setup process"""
-        print "self._cancelDestination is {0}".format(self._cancelDestination)
         if self._cancelDestination is None:
             if self.destinationPage == EDIT_PROFESSIONS:
-                print "setting cancel destination to edit professions"
                 self._cancelDestination = EDIT_PROFESSIONS
             else:
                 self._cancelDestination = PROFILE
@@ -246,7 +248,7 @@ class EditPictureView(views.PictureFormView):
     @property
     def cancelDestinationURL(self):
         if self._cancelDestinationURL is None:
-            self._cancelDestinationURL = constants.DEFAULT_CANCEL_URL_MAP.get(self.currentPage)
+            self._cancelDestinationURL = constants.URL_MAP.get(self.currentPage)
             if self._cancelDestinationURL:
                 self._cancelDestinationURL = self._cancelDestinationURL.format(self.request.user.username)
         return self._cancelDestinationURL
