@@ -21,10 +21,8 @@ class BrowseEventsView(views.GenericView):
 
     @property
     def pageContext(self):
-        if not self._pageContext:
-            self._pageContext = helpers.getBaseContext(self.request)
-            self._pageContext["events"] = self.eventList
-            self._pageContext["browseView"] = BROWSE_EVENTS
+        self._pageContext["events"] = self.eventList
+        self._pageContext["browseView"] = BROWSE_EVENTS
         return self._pageContext
 
     @property
