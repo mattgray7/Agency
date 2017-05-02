@@ -219,6 +219,14 @@ class EditPictureView(views.PictureFormView):
         self._filename = None
 
     @property
+    def cancelDestinationURL(self):
+        if self._cancelDestinationURL is None:
+            self._cancelDestinationURL = constants.DEFAULT_CANCEL_URL_MAP.get(self.currentPage)
+            if self._cancelDestinationURL:
+                self._cancelDestinationURL = self._cancelDestinationURL.format(self.request.user.username)
+        return self._cancelDestinationURL
+
+    @property
     def pageContext(self):
         self._pageContext["userAccount"] = self.userAccount
         return self._pageContext

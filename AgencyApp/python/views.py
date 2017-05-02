@@ -59,12 +59,13 @@ class GenericView(object):
 
     @property
     def cancelButtonExtraInputs(self):
-        return json.dumps(self._cancelButtonExtraInputs or "BLAH")
+        return json.dumps(self._cancelButtonExtraInputs) or None
 
     @property
     def pageContext(self):
         """To be overridden in child class"""
         self._pageContext["errors"] = self.pageErrors
+        self._pageContext["cancelButtonExtraInputs"] = self.cancelButtonExtraInputs
         return self._pageContext
 
     @property

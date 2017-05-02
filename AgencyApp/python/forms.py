@@ -29,7 +29,6 @@ class EditInterestsForm(forms.Form):
 
 class EditPictureForm(forms.Form):
     profilePicture = forms.FileField(label="New profile picture", required=False)
-    editDestination = forms.CharField(widget=forms.HiddenInput, required=False)
     source = forms.CharField(widget=forms.HiddenInput, required=False)
     next = forms.CharField(widget=forms.HiddenInput, required=False)
     destination = forms.CharField(widget=forms.HiddenInput, required=False)

@@ -63,7 +63,9 @@ URL_MAP = {HOME: "/",
 		   }
 
 
-DEFAULT_CANCEL_URL_MAP = {CREATE_EVENT: "/edit/event/{0}/"}
+DEFAULT_CANCEL_URL_MAP = {CREATE_EVENT: "/edit/event/{0}/",
+						  EDIT_PROFILE_PICTURE: "/account/edit/picture/",
+						  PROFILE: "/{0}/"}
 
 DEFAULT_PAGE_MAP = {HOME: HOME,
 					LOGIN: HOME,
