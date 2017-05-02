@@ -11,7 +11,7 @@
 	{% endif %}
 	<form method='post' action='/account/edit/professions/'>
 		{% csrf_token %}
-		<input type="hidden" name="source" value="{{ source }}" />
+		<input type="hidden" name="source" value="{{ next }}" />
 		<input type="hidden" name="next" value="{{ next }}" />
 		<input type="hidden" name="destination" value="{{ destination }}">
 		{% for profession in professionList %}
@@ -25,5 +25,7 @@
 		{% endfor %}
 		<br><input type="submit" value="Update professions" />
 	</form>
+	<div id="cancelButton"></div>
+
 
 {% endblock %}

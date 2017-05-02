@@ -68,20 +68,8 @@
 
         {% block content %}{% endblock %}
 
-        <!-- Cancel button -->
-        <script>
-            /*var cancelButtonForm = ("<form method='post' action='/create/event/' name='{{ cancel }}'> \
-                                    {% csrf_token %} \
-                                    <input type='hidden' name='source' value='{{ source }}'> \
-                                    <input type='hidden' name='next' value='{{ next }}'> \
-                                    <input type='hidden' name='destination' value='{{ destination }}'> \
-                                    <input type='hidden' name='{{ cancel }}' value='True'> \
-                                    {% if currentEvent.title %} \
-                                        <input type='submit' value='Return to event'> \
-                                    {% else %} \
-                                        <input type='submit' value='Cancel'> \
-                                    {% endif %} \
-                                    </form>");*/
+            <!-- Cancel button -->
+            <script>
             window.onload = function(){
                 console.log("in document onload, cancel div is " + document.getElementById('cancelButton'));
                 var cancelButtonDiv = document.getElementById('cancelButton');
@@ -95,7 +83,7 @@
                     var sourceInput = document.createElement("input");
                     sourceInput.setAttribute("type", "hidden");
                     sourceInput.setAttribute("name", "source");
-                    sourceInput.setAttribute("value", "{{ source }}");
+                    sourceInput.setAttribute("value", "{{ next }}");
                     cancelButtonForm.appendChild(sourceInput);
 
                     var nextInput = document.createElement("input");

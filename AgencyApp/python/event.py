@@ -38,13 +38,24 @@ class CreateEventView(views.PictureFormView):
                                                 "setupAccountFinish": constants.SETUP_ACCOUNT_FINISH,
                                                 "createBasicAccountFinish": constants.CREATE_BASIC_ACCOUNT_FINISH}
         self._pageContext["currentEvent"] = self.currentEvent
-        self._pageContext["source"] = self.sourcePage  # keep as source in page context, so cancel has correct source
+        self._pageContext["source"] =  self.sourcePage
         return self._pageContext
+
+    @property
+    def cancelDestination(self):
+        if self._cancelDestination is None:
+            if self.sourcePage in [HOME, LOGIN, SETUP_ACCOUNT_FINISH, CREATE_BASIC_ACCOUNT_FINISH]:
+                self._cancelDestination = HOME
+            else:
+                self._cancelDestination = self.request.POST.get("cancelDestination") or self.sourcePage
+                print self.request.POST
+        return self._cancelDestination
 
     @property
     def cancelButtonExtraInputs(self):
         if not self._cancelButtonExtraInputs:
-            self._cancelButtonExtraInputs = {"eventID": self.eventID}
+            self._cancelButtonExtraInputs = {"eventID": self.eventID,
+                                             "cancelDestination": self.cancelDestination}
         return json.dumps(self._cancelButtonExtraInputs)
 
     @property
@@ -98,17 +109,6 @@ class CreateEventView(views.PictureFormView):
                 self._currentEvent.save()
         return self._currentEvent
 
-    @property
-    def cancelDestination(self):
-        if self._cancelDestination is None:
-            if self.sourcePage == SETUP_ACCOUNT_FINISH:
-                self._cancelDestination = HOME
-            elif self.sourcePage in [LOGIN, CREATE_BASIC_ACCOUNT_FINISH]:
-                self._cancelDestination = HOME
-            else:
-                self._cancelDestination = self.sourcePage
-        return self._cancelDestination
-
     def processForm(self):
         title = self.formData.get("title", "")
         poster = self.formData.get("poster", "")
@@ -153,6 +153,7 @@ class ViewEventView(views.GenericFormView):
         self._eventID = kwargs.get("eventID")
         self._formClass = constants.FORM_MAP.get(self.currentPage)
         self._currentEvent = None
+        print "in view event, sourcepage {0}, current {1}".format(self.sourcePage, self.currentPage)
 
     @property
     def eventID(self):

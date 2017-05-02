@@ -34,6 +34,7 @@ class GenericView(object):
         self._username = None
         self._pageErrors = []  #TODO
         self._cancelButtonExtraInputs = {}
+        self._cancelDestination = None
         self._cancelDestinationURL = None
         self._cancelButtonName = "Cancel"
 
@@ -46,7 +47,7 @@ class GenericView(object):
     def setupBaseContext(self):
         if not self._pageContext:
             self._pageContext = helpers.getBaseContext(self.request)
-        self._pageContext["source"] = self.currentPage
+        self._pageContext["source"] = self.sourcePage
         self._pageContext["next"] = self.currentPage
         self._pageContext["destination"] = self.destinationPage
         self._pageContext["cancelButtonExtraInputs"] = self.cancelButtonExtraInputs
@@ -54,9 +55,15 @@ class GenericView(object):
         self._pageContext["cancelButtonName"] = self.cancelButtonName
 
     @property
+    def cancelDestination(self):
+        if self._cancelDestination is None:
+            self._cancelDestination = self.request.POST.get("cancelDestination") or self.sourcePage
+        return self._cancelDestination
+
+    @property
     def cancelDestinationURL(self):
         if self._cancelDestinationURL is None:
-            self._cancelDestinationURL = constants.DEFAULT_CANCEL_URL_MAP.get(self.sourcePage)
+            self._cancelDestinationURL = constants.DEFAULT_CANCEL_URL_MAP.get(self.currentPage)
         return self._cancelDestinationURL
 
     @property
@@ -82,14 +89,11 @@ class GenericView(object):
     @property
     def sourcePage(self):
         if self._sourcePage is None:
-            print self.request.POST
             if self.request.POST.get("source"):
                 self._sourcePage = self.request.POST.get("source")
-                print "post request has source, and source page is {0}".format(self._sourcePage)
             else:
                 self._sourcePage = helpers.getMessageFromKey(self.request, "source")
                 if not self._sourcePage:
-                    print "message has source, and source page is {0}".format(self._sourcePage)
                     self._sourcePage = constants.HOME
         return self._sourcePage
 
@@ -137,14 +141,14 @@ class GenericFormView(GenericView):
         self._formInitialValues = {}
         self._formSubmitted = False
         self._formData = None
-        self._cancelDestination = None
-        self._cancelDestinationURL = None
+        #self._cancelDestinationURL = None
         self.setupFormInitialValues()
 
     def setupFormInitialValues(self):
         self._formInitialValues["source"] = self.currentPage
         self._formInitialValues["next"] = self.currentPage
         self._formInitialValues["destination"] = self.destinationPage
+        self._formInitialValues["cancelDestination"] = self.cancelDestination
 
     @property
     def formClass(self):
@@ -179,12 +183,6 @@ class GenericFormView(GenericView):
             elif self.formClass:
                 self._form = self.formClass(initial=self.formInitialValues)
         return self._form
-
-    @property
-    def cancelDestination(self):
-        if self._cancelDestination is None:
-            self._cancelDestination = self.sourcePage
-        return self._cancelDestination
 
     def checkFormValidity(self):
         formIsValid = False
