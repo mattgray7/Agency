@@ -35,6 +35,7 @@ class GenericView(object):
         self._pageErrors = []  #TODO
         self._cancelButtonExtraInputs = {}
         self._cancelDestinationURL = None
+        self._cancelButtonName = "Cancel"
 
         self.errorMemory = {}
 
@@ -50,6 +51,7 @@ class GenericView(object):
         self._pageContext["destination"] = self.destinationPage
         self._pageContext["cancelButtonExtraInputs"] = self.cancelButtonExtraInputs
         self._pageContext["cancelDestinationURL"] = self.cancelDestinationURL
+        self._pageContext["cancelButtonName"] = self.cancelButtonName
 
     @property
     def cancelDestinationURL(self):
@@ -60,6 +62,10 @@ class GenericView(object):
     @property
     def cancelButtonExtraInputs(self):
         return json.dumps(self._cancelButtonExtraInputs) or None
+
+    @property
+    def cancelButtonName(self):
+        return self._cancelButtonName
 
     @property
     def pageContext(self):

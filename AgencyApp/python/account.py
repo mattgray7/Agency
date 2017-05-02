@@ -226,6 +226,12 @@ class EditPictureView(views.PictureFormView):
         return self._cancelDestinationURL
 
     @property
+    def cancelButtonName(self):
+        if self.sourcePage != PROFILE:
+            self._cancelButtonName = "Skip"
+        return self._cancelButtonName
+
+    @property
     def pageContext(self):
         self._pageContext["userAccount"] = self.userAccount
         return self._pageContext
