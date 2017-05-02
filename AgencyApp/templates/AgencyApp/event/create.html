@@ -39,7 +39,11 @@
 		</div>
 	{% endif %}
 
-	<form method='post' action="/edit/event/{{eventID}}/" name='createForm' enctype="multipart/form-data">
+	{% if currentEvent.title %}
+		<form method='post' action="/edit/event/{{eventID}}/" name='createForm' enctype="multipart/form-data">
+	{% else %}
+		<form method='post' action="/create/event/" name='createForm' enctype="multipart/form-data">
+	{% endif %}
 		{% csrf_token %}
 		{{ form.as_p }}
 		<!--<input type="hidden" name="eventID" value="{{eventID}}" />-->

@@ -58,13 +58,15 @@ class CreateEventView(views.PictureFormView):
     @property
     def eventID(self):
         if self._eventID is None:
-            tempEventIDValid = False
-            while not tempEventIDValid:
-                tempEventID = ''.join(random.SystemRandom().choice(string.ascii_lowercase) for _ in range(constants.EVENT_ID_LENGTH))
-                if len(models.Event.objects.filter(eventID = tempEventID)) == 0:
-                    self._eventID = tempEventID
-                    tempEventIDValid = True
-                    break
+            self._eventID = self.request.POST.get("eventID")
+            if not self._eventID:
+                tempEventIDValid = False
+                while not tempEventIDValid:
+                    tempEventID = ''.join(random.SystemRandom().choice(string.ascii_lowercase) for _ in range(constants.EVENT_ID_LENGTH))
+                    if len(models.Event.objects.filter(eventID = tempEventID)) == 0:
+                        self._eventID = tempEventID
+                        tempEventIDValid = True
+                        break
         return self._eventID
 
     @property
