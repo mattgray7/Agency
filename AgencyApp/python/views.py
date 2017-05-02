@@ -346,7 +346,7 @@ def createEvent(request):
     return view.process()
 
 def editEvent(request, eventID):
-    view = event.CreateEventView(request=request, currentPage=constants.CREATE_EVENT, eventID=eventID)
+    view = event.CreateEventView(request=request, currentPage=constants.EDIT_EVENT, eventID=eventID)
     return view.process()
 
 def viewEvent(request, eventID):

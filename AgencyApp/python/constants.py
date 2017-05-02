@@ -8,6 +8,7 @@ CANCEL = "CANCEL"
 PROFILE = "PROFILE"
 CREATE_POST = "CREATE_POST"
 CREATE_EVENT = "CREATE_EVENT"
+EDIT_EVENT = "EDIT_EVENT"
 VIEW_EVENT = "VIEW_EVENT"
 
 BROWSE_EVENTS = "BROWSE_EVENTS"
@@ -50,7 +51,8 @@ URL_MAP = {HOME: "/",
 		   LOGIN:"/login/",
 		   PROFILE:"/{0}/",
 		   CREATE_POST: "/create/post/choose/",
-		   CREATE_EVENT: "/edit/event/{0}/",
+		   CREATE_EVENT: "/create/event/",
+		   EDIT_EVENT: "/edit/event/{0}/",
 		   VIEW_EVENT: "/view/event/{0}/",
 		   CREATE_BASIC_ACCOUNT_FINISH: "/account/create/finish/",
 		   SETUP_ACCOUNT_FINISH: "/account/create/finish/",
@@ -63,7 +65,8 @@ URL_MAP = {HOME: "/",
 		   }
 
 
-DEFAULT_CANCEL_URL_MAP = {CREATE_EVENT: "/edit/event/{0}/",
+DEFAULT_CANCEL_URL_MAP = {CREATE_EVENT: "/create/event/",
+						  EDIT_EVENT: "/edit/event/{0}/",
 						  EDIT_PROFILE_PICTURE: "/account/edit/picture/",
 						  PROFILE: "/{0}/"}
 
@@ -80,6 +83,7 @@ DEFAULT_PAGE_MAP = {HOME: HOME,
 					PROFILE: PROFILE,
 					VIEW_EVENT: VIEW_EVENT,
 					CREATE_EVENT: VIEW_EVENT,
+					EDIT_EVENT: VIEW_EVENT,
 					BROWSE_EVENTS: VIEW_EVENT}
 
 FORM_MAP = {LOGIN: forms.LoginForm,
@@ -89,6 +93,7 @@ FORM_MAP = {LOGIN: forms.LoginForm,
 			EDIT_PROFILE_PICTURE: forms.EditPictureForm,
 			EDIT_BACKGROUND: forms.EditBackgroundForm,
 			CREATE_EVENT: forms.CreateEventForm,
+			EDIT_EVENT: forms.CreateEventForm,
 			VIEW_EVENT: forms.CreateEventForm,
 			}
 
@@ -101,6 +106,7 @@ HTML_MAP = {LOGIN: 'AgencyApp/account/login.html',
 			EDIT_BACKGROUND: 'AgencyApp/account/background.html',
 			EDIT_PROFILE_PICTURE: 'AgencyApp/account/picture.html',
 			CREATE_EVENT: 'AgencyApp/event/create.html',
+			EDIT_EVENT: 'AgencyApp/event/create.html',
 			VIEW_EVENT: 'AgencyApp/event/view.html',
 			BROWSE_EVENTS: 'AgencyApp/browse.html',
 			BROWSE_POSTS: 'AgencyApp/browse.html'}

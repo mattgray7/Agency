@@ -206,7 +206,6 @@ class EditProfessionsView(views.GenericFormView):
             try:
                 entry.save()
             except:
-                print "PROCESS ERROR"
                 return False
         return True
 
