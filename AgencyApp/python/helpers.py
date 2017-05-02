@@ -34,7 +34,7 @@ def getDestinationURL(request, destPageName):
             destURL = destURL.format(request.user.username)
         else:
             print "NO USERNAME PASSED TO getDestinationURL"
-    elif destPageName == constants.VIEW_EVENT:
+    elif destPageName in [constants.VIEW_EVENT, constants.CREATE_EVENT]:
         if request.POST.get('eventID'):
             destURL = destURL.format(request.POST.get('eventID'))
             messages.add_message(request, messages.INFO,

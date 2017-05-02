@@ -13,6 +13,8 @@ import profile
 import models
 
 import os
+import simplejson as json
+
 
 getBaseContext = helpers.getBaseContext
 
@@ -31,6 +33,8 @@ class GenericView(object):
         self._userAccount = None
         self._username = None
         self._pageErrors = []  #TODO
+        self._cancelButtonExtraInputs = {}
+        self._cancelDestinationURL = None
 
         self.errorMemory = {}
 
@@ -44,6 +48,18 @@ class GenericView(object):
         self._pageContext["source"] = self.currentPage
         self._pageContext["next"] = self.currentPage
         self._pageContext["destination"] = self.destinationPage
+        self._pageContext["cancelButtonExtraInputs"] = self.cancelButtonExtraInputs
+        self._pageContext["cancelDestinationURL"] = self.cancelDestinationURL
+
+    @property
+    def cancelDestinationURL(self):
+        if self._cancelDestinationURL is None:
+            self._cancelDestinationURL = constants.DEFAULT_CANCEL_URL_MAP.get(self.sourcePage)
+        return self._cancelDestinationURL
+
+    @property
+    def cancelButtonExtraInputs(self):
+        return json.dumps(self._cancelButtonExtraInputs or "BLAH")
 
     @property
     def pageContext(self):
@@ -115,6 +131,7 @@ class GenericFormView(GenericView):
         self._formSubmitted = False
         self._formData = None
         self._cancelDestination = None
+        self._cancelDestinationURL = None
         self.setupFormInitialValues()
 
     def setupFormInitialValues(self):
@@ -263,7 +280,6 @@ class PictureFormView(GenericFormView):
                     if self.processForm():
                         formIsValid = True
         else:
-            #self._destinationPage = self.sourcePage == constants.LOGIN and constants.HOME or self.sourcePage
             self._destinationPage = self.cancelDestination
             formIsValid = True
         return formIsValid

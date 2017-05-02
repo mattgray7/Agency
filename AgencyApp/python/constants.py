@@ -50,7 +50,7 @@ URL_MAP = {HOME: "/",
 		   LOGIN:"/login/",
 		   PROFILE:"/{0}/",
 		   CREATE_POST: "/create/post/choose/",
-		   CREATE_EVENT: "/create/event/",
+		   CREATE_EVENT: "/edit/event/{0}/",
 		   VIEW_EVENT: "/view/event/{0}/",
 		   CREATE_BASIC_ACCOUNT_FINISH: "/account/create/finish/",
 		   SETUP_ACCOUNT_FINISH: "/account/create/finish/",
@@ -61,6 +61,9 @@ URL_MAP = {HOME: "/",
 		   BROWSE_EVENTS: "/browse/events/",
 		   BROWSE_POSTS: "/browse/posts/"
 		   }
+
+
+DEFAULT_CANCEL_URL_MAP = {CREATE_EVENT: "/edit/event/{0}/"}
 
 DEFAULT_PAGE_MAP = {HOME: HOME,
 					LOGIN: HOME,

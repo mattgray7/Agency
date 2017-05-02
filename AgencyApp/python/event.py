@@ -15,11 +15,14 @@ import models
 import random, string
 
 import os
+import simplejson as json
 
 class CreateEventView(views.PictureFormView):
     def __init__(self, *args, **kwargs):
+        self._eventID = kwargs.get('eventID')
         super(CreateEventView, self).__init__(*args, **kwargs)
-        self._eventID = kwargs.get('eventID') or self.request.POST.get("eventID")
+        if not self._eventID:
+            self._eventID = self.request.POST.get("eventID")
         self._formClass = constants.FORM_MAP.get(self.currentPage)
         self._currentEvent = None
 
@@ -37,6 +40,18 @@ class CreateEventView(views.PictureFormView):
         self._pageContext["currentEvent"] = self.currentEvent
         self._pageContext["source"] = self.sourcePage  # keep as source in page context, so cancel has correct source
         return self._pageContext
+
+    @property
+    def cancelButtonExtraInputs(self):
+        if not self._cancelButtonExtraInputs:
+            self._cancelButtonExtraInputs = {"eventID": self.eventID}
+        return json.dumps(self._cancelButtonExtraInputs)
+
+    @property
+    def cancelDestinationURL(self):
+        if self._cancelDestinationURL is None:
+            self._cancelDestinationURL = constants.DEFAULT_CANCEL_URL_MAP.get(self.currentPage).format(self.eventID)
+        return self._cancelDestinationURL
 
     @property
     def eventID(self):
@@ -116,7 +131,6 @@ class CreateEventView(views.PictureFormView):
                             self._currentEvent.date = date
                             if self.request.FILES.get("eventPicture"):
                                 self._currentEvent.eventPicture = self.request.FILES.get("eventPicture")
-                                print "EVENT PICTURE: {0}".format(self.request.FILES.get("eventPicture"))
                             try:
                                 self.currentEvent.save()
                                 print "saved new event with eventID {0}".format(self.eventID)

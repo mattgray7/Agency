@@ -67,6 +67,86 @@
         {% endblock %}
 
         {% block content %}{% endblock %}
+
+        <!-- Cancel button -->
+        <script>
+            /*var cancelButtonForm = ("<form method='post' action='/create/event/' name='{{ cancel }}'> \
+                                    {% csrf_token %} \
+                                    <input type='hidden' name='source' value='{{ source }}'> \
+                                    <input type='hidden' name='next' value='{{ next }}'> \
+                                    <input type='hidden' name='destination' value='{{ destination }}'> \
+                                    <input type='hidden' name='{{ cancel }}' value='True'> \
+                                    {% if currentEvent.title %} \
+                                        <input type='submit' value='Return to event'> \
+                                    {% else %} \
+                                        <input type='submit' value='Cancel'> \
+                                    {% endif %} \
+                                    </form>");*/
+            window.onload = function(){
+                console.log("in document onload, cancel div is " + document.getElementById('cancelButton'));
+                var cancelButtonDiv = document.getElementById('cancelButton');
+                if (cancelButtonDiv != null){
+                    var cancelButtonForm = document.createElement("form");
+                    cancelButtonForm.setAttribute('method', "post");
+                    cancelButtonForm.setAttribute('action', "{{ cancelDestinationURL }}");
+                    console.log("form is ");
+                    console.log(cancelButtonForm);
+
+                    var sourceInput = document.createElement("input");
+                    sourceInput.setAttribute("type", "hidden");
+                    sourceInput.setAttribute("name", "source");
+                    sourceInput.setAttribute("value", "{{ source }}");
+                    cancelButtonForm.appendChild(sourceInput);
+
+                    var nextInput = document.createElement("input");
+                    nextInput.setAttribute("type", "hidden");
+                    nextInput.setAttribute("name", "next");
+                    nextInput.setAttribute("value", "{{ next }}")
+                    cancelButtonForm.appendChild(nextInput)
+
+                    var destinationInput = document.createElement("input");
+                    destinationInput.setAttribute("type", "hidden");
+                    destinationInput.setAttribute("name", "destination");
+                    destinationInput.setAttribute("value", "{{ destination }}");
+                    cancelButtonForm.appendChild(destinationInput)
+
+                    var cancelInput = document.createElement("input");
+                    cancelInput.setAttribute("type", "hidden");
+                    cancelInput.setAttribute("name", "{{ cancel }}");
+                    cancelInput.setAttribute("value", "True");
+                    cancelButtonForm.appendChild(cancelInput)
+
+                    if("{{cancelButtonExtraInputs}}" != ""){
+                        var cancelButtonExtraInputs = {{ cancelButtonExtraInputs|safe }};
+                        for(var inputName in cancelButtonExtraInputs){
+                            var newInput = document.createElement("input");
+                            newInput.setAttribute("type", "hidden");
+                            newInput.setAttribute("name", inputName);
+                            newInput.setAttribute("value", cancelButtonExtraInputs[inputName]);
+                            cancelButtonForm.appendChild(newInput);
+                        };
+                    };
+
+                    var csrfInput = document.createElement("input");
+                    csrfInput.setAttribute("type", "hidden");
+                    csrfInput.setAttribute("name", "csrfmiddlewaretoken");
+                    csrfInput.setAttribute("value", getCookie('csrftoken'));
+                    cancelButtonForm.appendChild(csrfInput);
+
+                    var cancelSubmit = document.createElement("input");
+                    cancelSubmit.setAttribute("type", "submit");
+                    cancelSubmit.setAttribute("value", "Cancel");
+                    cancelButtonForm.appendChild(cancelSubmit);
+                    cancelButtonDiv.appendChild(cancelButtonForm);
+                    //document.getElementById('cancelButton').innerHTML = cancelButtonForm;
+
+                    $('#cancelButton').click(function(){
+                       cancelButtonForm.submit();
+                    });
+                    //$("#cancelButton").html(cancelButtonForm);
+                };
+            };
+        </script>
         
         {% block footer %}
             <br><br><br>
