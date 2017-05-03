@@ -39,6 +39,8 @@ class CreateEventView(views.PictureFormView):
                                                 "createBasicAccountFinish": constants.CREATE_BASIC_ACCOUNT_FINISH}
         self._pageContext["currentEvent"] = self.currentEvent
         self._pageContext["source"] =  self.sourcePage
+        self._pageContext["cancelSource"] = self.sourcePage
+        self._pageContext["cancelDestination"] = self.sourcePage
         return self._pageContext
 
     @property
@@ -109,6 +111,11 @@ class CreateEventView(views.PictureFormView):
                 self._currentEvent.save()
         return self._currentEvent
 
+    def cancelPage(self):
+        super(CreateEventView, self).cancelPage()
+        if self.sourcePage != constants.VIEW_EVENT:
+            models.Event.objects.filter(eventID=self.eventID).delete()
+
     def processForm(self):
         title = self.formData.get("title", "")
         poster = self.formData.get("poster", "")
@@ -153,7 +160,6 @@ class ViewEventView(views.GenericFormView):
         self._eventID = kwargs.get("eventID")
         self._formClass = constants.FORM_MAP.get(self.currentPage)
         self._currentEvent = None
-        print "in view event, sourcepage {0}, current {1}".format(self.sourcePage, self.currentPage)
 
     @property
     def eventID(self):

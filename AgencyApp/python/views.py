@@ -52,7 +52,9 @@ class GenericView(object):
         self._pageContext["destination"] = self.destinationPage
         self._pageContext["cancelButtonExtraInputs"] = self.cancelButtonExtraInputs
         self._pageContext["cancelDestinationURL"] = self.cancelDestinationURL
+        self._pageContext["cancelDestination"] = self.destinationPage
         self._pageContext["cancelButtonName"] = self.cancelButtonName
+        self._pageContext["cancelSource"] = self.currentPage
 
     @property
     def cancelDestination(self):
@@ -196,10 +198,14 @@ class GenericFormView(GenericView):
                 else:
                     formIsValid = self.processForm()
         else:
-            self._destinationPage = self.cancelDestination
-            self._pageContext["destination"] = self.cancelDestination
+            self.cancelPage()
             formIsValid = True
         return formIsValid
+
+    def cancelPage(self):
+        print "CANCELIING PAGE"
+        self._destinationPage = self.cancelDestination
+        self._pageContext["destination"] = self.cancelDestination
 
     def process(self):
         if self.request.method == "POST" and self.checkFormValidity():
@@ -284,7 +290,7 @@ class PictureFormView(GenericFormView):
                     if self.processForm():
                         formIsValid = True
         else:
-            self._destinationPage = self.cancelDestination
+            self.cancelPage()
             formIsValid = True
         return formIsValid
 

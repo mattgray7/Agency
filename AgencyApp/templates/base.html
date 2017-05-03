@@ -83,7 +83,7 @@
                     var sourceInput = document.createElement("input");
                     sourceInput.setAttribute("type", "hidden");
                     sourceInput.setAttribute("name", "source");
-                    sourceInput.setAttribute("value", "{{ next }}");
+                    sourceInput.setAttribute("value", "{{ cancelSource }}");
                     cancelButtonForm.appendChild(sourceInput);
 
                     var nextInput = document.createElement("input");
@@ -95,7 +95,7 @@
                     var destinationInput = document.createElement("input");
                     destinationInput.setAttribute("type", "hidden");
                     destinationInput.setAttribute("name", "destination");
-                    destinationInput.setAttribute("value", "{{ destination }}");
+                    destinationInput.setAttribute("value", "{{ cancelDestination }}");
                     cancelButtonForm.appendChild(destinationInput)
 
                     var cancelInput = document.createElement("input");
