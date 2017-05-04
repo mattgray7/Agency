@@ -8,7 +8,6 @@ from django.core.files.base import ContentFile
 import constants
 import helpers
 import choose
-import home
 import profile
 import models
 
@@ -113,6 +112,8 @@ class GenericView(object):
         if self._destinationPage is None:
             if self.request.POST.get("destination"):
                 self._destinationPage = self.request.POST.get("destination")
+            elif helpers.getMessageFromKey(self.request, "destination"):
+                self._destinationPage = helpers.getMessageFromKey(self.request, "destination")
             if self._destinationPage in [None, constants.DEFAULT]:
                 self._destinationPage = constants.DEFAULT_PAGE_MAP.get(self.currentPage)
         return self._destinationPage
@@ -133,6 +134,22 @@ class GenericView(object):
         if self._username is None:
             self._username = self.request.user.username
         return self._username
+
+    def process(self):
+        if self.request.method == "POST" and self.checkFormValidity():
+            return helpers.redirect(request=self.request,
+                                    currentPage=self.currentPage,
+                                    destinationPage=self.destinationPage)
+
+        # Need to access pageContext before setting variables
+        # !!!!!!!!!! Don't delete
+        self.pageContext
+        # !!!!!!!!!!
+        if self._pageErrors:
+            self._pageContext["errors"] = self.pageErrors
+        print "source :{0}, current: {1}, dest: {2}".format(self.sourcePage, self.currentPage, self.destinationPage)
+        return render(self.request, constants.HTML_MAP.get(self.currentPage), self.pageContext)
+
 
 
 class GenericFormView(GenericView):
@@ -203,7 +220,6 @@ class GenericFormView(GenericView):
         return formIsValid
 
     def cancelPage(self):
-        print "CANCELIING PAGE"
         self._destinationPage = self.cancelDestination
         self._pageContext["destination"] = self.cancelDestination
 
@@ -309,14 +325,17 @@ class PictureFormView(GenericFormView):
                 return True
         return False
 
-# Must be done after GenericAccountView defined
+# Must be done after GenericView defined
+import home
 import account
 import event
 import browse
 
 
 def displayHome(request):
-    return home.display(request, getBaseContext(request))
+    #return home.display(request, getBaseContext(request))
+    view = home.HomeView(request=request, currentPage=constants.HOME)
+    return view.process()
 
 def login(request):
     view = account.LoginView(request=request, currentPage=constants.LOGIN)

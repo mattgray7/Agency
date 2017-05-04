@@ -20,11 +20,6 @@ DEFAULT = "DEFAULT"
 MANUAL_FORM_CLASS = "MANUAL_FORM_CLASS"
 DJANGO_FORM_CLASS = "DJANGO_FORM_CLASS"
 
-TOOLBAR_LOGIN = "TOOLBAR_LOGIN"
-TOOLBAR_HOME = "TOOLBAR_HOME"
-TOOLBAR_LOGOUT = "TOOLBAR_LOGOUT"
-TOOLBAR_PROFILE = "TOOLBAR_PROFILE"
-
 CREATE_BASIC_ACCOUNT = "CREATE_BASIC_ACCOUNT"
 CREATE_BASIC_ACCOUNT_FINISH = "CREATE_BASIC_ACCOUNT_FINISH"
 SETUP_ACCOUNT_FINISH = "SETUP_ACCOUNT_FINISH"
@@ -81,7 +76,8 @@ DEFAULT_PAGE_MAP = {HOME: HOME,
 					EDIT_EVENT: VIEW_EVENT,
 					BROWSE_EVENTS: VIEW_EVENT}
 
-FORM_MAP = {LOGIN: forms.LoginForm,
+FORM_MAP = {HOME: forms.BaseForm,
+			LOGIN: forms.LoginForm,
 			CREATE_BASIC_ACCOUNT: forms.CreateAccountForm,
 			EDIT_INTERESTS: forms.EditInterestsForm,
 			EDIT_PROFESSIONS: None,	#manual
@@ -92,7 +88,8 @@ FORM_MAP = {LOGIN: forms.LoginForm,
 			VIEW_EVENT: forms.CreateEventForm,
 			}
 
-HTML_MAP = {LOGIN: 'AgencyApp/account/login.html',
+HTML_MAP = {HOME: 'AgencyApp/home.html',
+			LOGIN: 'AgencyApp/account/login.html',
 			CREATE_BASIC_ACCOUNT: 'AgencyApp/account/create.html',
 			CREATE_BASIC_ACCOUNT_FINISH: 'AgencyApp/account/finish.html',
 			SETUP_ACCOUNT_FINISH: 'AgencyApp/account/finish.html',

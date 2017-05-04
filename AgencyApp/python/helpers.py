@@ -94,10 +94,10 @@ def getBaseContext(request):
         source = request.POST.get("source")
     else:
         source = getMessageFromKey(request, "source")
-    return {"toolbarSources": {"login": constants.TOOLBAR_LOGIN,
-                               "home": constants.TOOLBAR_HOME,
-                               "logout": constants.TOOLBAR_LOGOUT,
-                               "profile": constants.TOOLBAR_PROFILE},
+    return {"possibleDestinations": {"login": constants.LOGIN,
+                                     "home": constants.HOME,
+                                     "logout": constants.LOGOUT,
+                                     "profile": constants.PROFILE},
             "source": source,
             "default": constants.DEFAULT,
             "cancel": constants.CANCEL

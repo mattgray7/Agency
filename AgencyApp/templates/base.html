@@ -42,24 +42,24 @@
         {% block header %}
             <form action="/" method="post">
                 {% csrf_token %}
-                <input type="hidden" name="source" value="{{ toolbarSources.home }}">
+                <input type="hidden" name="source" value="{{ possibleDestinations..home }}">
                 <input type="submit" value="Van Film Collective">
             </form>
             {% if request.user.is_authenticated %}
                 <form action="/{{ request.user.username }}/" method="post">
                     {% csrf_token %}
-                    <input type="hidden" name="source" value="{{ toolbarSources.profile }}">
+                    <input type="hidden" name="source" value="{{ possibleDestinations.profile }}">
                     <input type="submit" value="{{ request.user.first_name }} {{ request.user.last_name }}">
                 </form>
                 <form action="/logout/" method="post">
                     {% csrf_token %}
-                    <input type="hidden" name="source" value="{{ toolbarSources.logout }}">
+                    <input type="hidden" name="source" value="{{ possibleDestinations.logout }}">
                     <input type="submit" value="Logout">
                 </form>
             {% else %}
                 <form action="/login/" method="post">
                     {% csrf_token %}
-                    <input type="hidden" name="source" value="{{ toolbarSources.login }}">
+                    <input type="hidden" name="source" value="{{ possibleDestinations.login }}">
                     <input type="submit" value="Login">
                 </form>
             {% endif %}

@@ -68,45 +68,36 @@ function viewPosts(){
 }
 
 function createAccount(){
-	var form = createForm("{{ possibleDestinations.createAccount }}", "{{ default }}", "/account/create/basic/");
-	console.log(form);
+	var form = createForm("{{ possibleSources.createAccount }}", "Create Account");
 	form.submit();
 }
 
 function createEventPost(){
-	if(!userLoggedIn){
-		var form = createForm("{{ possibleDestinations.login }}", "{{ possibleDestinations.event }}", "/login/");
-	}else{
-		var form = createForm("{{ possibleDestinations.event }}", "{{ default }}", "/create/event/")
-	}
+	var form = createForm("{{ possibleSources.event }}", "Create Event");
 	form.submit()
 }
 
 function createWorkPost(){
-	if(!userLoggedIn){
-		var form = createForm("{{ possibleDestinations.login }}", "{{ possibleDestinations.post }}", "/login/");
-	}else{
-		var form = createForm("{{ possibleDestinations.post }}", "{{ default }}", "/create/post/choose/")
-	}
-	form.submit()
+	var form = createForm("{{ possibleSources.post }}", "Create Post");
+	form.submit();
 }
 
-function createForm(nextInputValue, destinationInputValue, destinationURL){
+function createForm(destinationInputValue, submitValueButton){
 	var form = document.createElement("form");
 	form.setAttribute('method', "post");
-	form.setAttribute('action', destinationURL);
+	form.setAttribute('action', "/");
 
 	var sourceInput = document.createElement("input");
 	sourceInput.setAttribute("type", "hidden");
 	sourceInput.setAttribute("name", "source");
-	sourceInput.setAttribute("value", "{{ source }}");
+	sourceInput.setAttribute("value", "{{ possibleSources.home }}");
 	form.appendChild(sourceInput);
 
 	// called current, but is actually the next page to direct to 
 	var nextInput = document.createElement("input");
 	nextInput.setAttribute("type", "hidden");
 	nextInput.setAttribute("name", "next");
-	nextInput.setAttribute("value", nextInputValue)
+	nextInput.setAttribute("value", "{{ possibleSources.home")
 	form.appendChild(nextInput)
 
 	var destinationInput = document.createElement("input");
@@ -120,6 +111,11 @@ function createForm(nextInputValue, destinationInputValue, destinationURL){
 	csrfInput.setAttribute("name", "csrfmiddlewaretoken");
 	csrfInput.setAttribute("value", getCookie('csrftoken'));
 	form.appendChild(csrfInput);
+
+	var submit = document.createElement("input");
+	submit.setAttribute("type", "submit");
+	submit.setAttribute("value", submitValueButton);
+	form.appendChild(submit);
 	document.body.appendChild(form);
 	return form;
 }
