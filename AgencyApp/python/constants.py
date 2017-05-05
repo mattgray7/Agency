@@ -61,6 +61,7 @@ URL_MAP = {HOME: "/",
 		   }
 
 DEFAULT_PAGE_MAP = {HOME: HOME,
+					PROFILE: PROFILE,
 					LOGIN: HOME,
 					LOGOUT: HOME,
 					CREATE_BASIC_ACCOUNT: CREATE_BASIC_ACCOUNT_FINISH,
@@ -77,6 +78,7 @@ DEFAULT_PAGE_MAP = {HOME: HOME,
 					BROWSE_EVENTS: VIEW_EVENT}
 
 FORM_MAP = {HOME: forms.BaseForm,
+			PROFILE: forms.BaseForm,
 			LOGIN: forms.LoginForm,
 			CREATE_BASIC_ACCOUNT: forms.CreateAccountForm,
 			EDIT_INTERESTS: forms.EditInterestsForm,
@@ -90,6 +92,7 @@ FORM_MAP = {HOME: forms.BaseForm,
 
 HTML_MAP = {HOME: 'AgencyApp/home.html',
 			LOGIN: 'AgencyApp/account/login.html',
+			PROFILE: 'AgencyApp/profile.html',
 			CREATE_BASIC_ACCOUNT: 'AgencyApp/account/create.html',
 			CREATE_BASIC_ACCOUNT_FINISH: 'AgencyApp/account/finish.html',
 			SETUP_ACCOUNT_FINISH: 'AgencyApp/account/finish.html',

@@ -1,100 +1,100 @@
 {% extends "base.html" %}
 
 {% block content %}
-	{% if accountFound %}
-		{% if userAccount.profilePicture %}
+	{% if profileUserAccount %}
+		{% if profileUserAccount.profilePicture %}
 			<div id="profilePic">
-				<img src="{{ userAccount.profilePicture.url }}" height="150px" width="175px"/>
+				<img src="{{ profileUserAccount.profilePicture.url }}" height="150px" width="175px"/>
 			</div>
 		{% else %}
 			<h5> No profile picture added</h5>
 		{% endif %}
-		{% if request.user.is_authenticated and request.user.username == username %}
-			<form action="/account/edit/picture/" method="post">
+		{% if viewingOwnProfile %}
+			<form action="/{{ profileUsername }}/" method="post">
 				{% csrf_token %}
-				<input type="hidden" name="source" value="{{ source }}" />
-				<input type="hidden" name="current" value="{{ possibleDestinations.picture }}" />
-				<input type="hidden" name="destination" value="{{ source }}" /> <!-- return to profile when done -->
+				<input type="hidden" name="source" value="{{ next }}" />
+				<input type="hidden" name="current" value="{{ next }}" />
+				<input type="hidden" name="destination" value="{{ possibleDestinations.picture }}" /> <!-- return to profile when done -->
 				<input type="submit" value="Edit profile picture" />
 			</form>
 		{% endif %}
-		<h1><u> {{ userAccount.firstName }} {{ userAccount.lastName }}</u></h1>
+		<h1><u> {{ profileUserAccount.firstName }} {{ profileUserAccount.lastName }}</u></h1>
 
 		<!-- Bio -->
-		{% if userAccount.bio %}
+		{% if profileUserAccount.bio %}
 			<!-- TODO make bio editable on the page with js -->
-			{{userAccount.bio}}<br>
+			{{profileUserAccount.bio}}<br>
 		{% endif %}
 
 		<!-- Background -->
-		{% if userAccount.reelLink %}
-			<a href="{{userAccount.reelLink}}">Reel</a>
+		{% if profileUserAccount.reelLink %}
+			<a href="{{profileUserAccount.reelLink}}">Reel</a>
 		{% endif %}
-		{% if userAccount.imdbLink %}
-			<a href="{{userAccount.imdbLink}}">IMDB</a>
+		{% if profileUserAccount.imdbLink %}
+			<a href="{{profileUserAccount.imdbLink}}">IMDB</a>
 		{% endif %}
 
-		{% if request.user.is_authenticated and request.user.username == username %}
-			<form action="/account/edit/background/" method="post">
+		{% if viewingOwnProfile %}
+			<form action="/{{ profileUsername }}/" method="post">
 				{% csrf_token %}
-				<input type="hidden" name="source" value="{{ source }}" />
-				<input type="hidden" name="current" value="{{ possibleDestinations.background }}" />
-				<input type="hidden" name="destination" value="{{ source }}" /> <!-- return to profile when done -->
+				<input type="hidden" name="source" value="{{ next }}" />
+				<input type="hidden" name="current" value="{{ next }}" />
+				<input type="hidden" name="destination" value="{{ possibleDestinations.background }}" /> <!-- return to profile when done -->
 				<input type="submit" value="Edit background" />
 			</form>
 		{% endif %}
 		<br>
 
 		<!-- Interests -->
-		<h3> {{ userAccount.firstName }} is looking for... </h3>
+		<h3> {{ profileUserAccount.firstName }} is looking for... </h3>
 		<ul>
-			{% if userAccount.workInterest %}
+			{% if profileUserAccount.workInterest %}
 				<li>Work</li>
 			{% endif %}
-			{% if userAccount.crewInterest %}
+			{% if profileUserAccount.crewInterest %}
 				<li>A crew</li>
 			{% endif %}
-			{% if userAccount.collaborationInterest %}
+			{% if profileUserAccount.collaborationInterest %}
 				<li>Collaboration</li>
 			{% endif %}
 		</ul>
-		{% if request.user.is_authenticated and request.user.username == username %}
-			<form action="/account/edit/interests/" method="post">
+		{% if viewingOwnProfile %}
+			<form action="/{{ profileUsername }}/" method="post">
 				{% csrf_token %}
-				<input type="hidden" name="source" value="{{ source }}" />
-				<input type="hidden" name="current" value="{{ possibleDestinations.interests }}" />
-				<input type="hidden" name="destination" value="{{ source }}" /> <!-- return to profile when done -->
+				<input type="hidden" name="source" value="{{ next }}" />
+				<input type="hidden" name="current" value="{{ next }}" />
+				<input type="hidden" name="destination" value="{{ possibleDestinations.interests }}" /> <!-- return to profile when done -->
 				<input type="submit" value="Edit profile interests" />
 			</form>
 		{% endif %}
 		<br>
 
 		<!-- Professions -->
-		{% if userProfessions %}
-			<h3> {{ userAccount.firstName }}'s interested professions include...</h3>
+		{% if profileProfessions %}
+			<h3> {{ profileUserAccount.firstName }}'s interested professions include...</h3>
 			<ul>
-				{% for profession in userProfessions %}
-					<li>{{profession}}</li>
+				{% for profession in profileProfessions %}
+					<li>{{ profession }}</li>
 				{% endfor %}
 			</ul>
 		{% else %}
-			<h3> {{ userAccount.firstName }} has not specified his interested professions </h3>
+			<h3> {{ profileUserAccount.firstName }} has not specified his interested professions </h3>
 		{% endif %}
-		{% if request.user.is_authenticated and request.user.username == username %}
-			<form action="/account/edit/professions/" method="post">
+		{% if viewingOwnProfile %}
+			<form action="/{{ profileUsername }}/" method="post">
 				{% csrf_token %}
-				<input type="hidden" name="source" value="{{ source }}" />
-				<input type="hidden" name="current" value="{{ possibleDestinations.professions }}" />
-				<input type="hidden" name="destination" value="{{ source }}" /> <!-- return to profile when done -->
+				<input type="hidden" name="source" value="{{ next }}" />
+				<input type="hidden" name="current" value="{{ next }}" />
+				<input type="hidden" name="destination" value="{{ possibleDestinations.professions }}" /> <!-- return to profile when done -->
 				<input type="submit" value="Edit professions" />
 			</form>
 		{% endif %}
 
-		<!-- Events -->
-		{% if eventsFound %}
-			<br><h3>Events {{ userAccount.firstName }} has posted...</h3>
+		<!-- Events --><!--
+		{% if profileEvents %}
+			<br><h3>Events {{ profileUserAccount.firstName }} has posted...</h3>
 			<ul>
-				{% for event in events %}
+				{% for event in profileEvents %}
 					<form method="post" action="/view/event/{{event.eventID}}/"> 
 						{% csrf_token %}
 						<input type="hidden" name="source" value="{{ source }}" />
@@ -102,12 +102,11 @@
 						<input type="hidden" name="destination" value="{{ possibleDestinations.viewEvent }}" />
 						<input type="submit" Value="{{ event.title }}" />
 					</form>
-					<!--<li><a href='/view/event/{{event.eventID}}/'>{{ event.title }}</a></li>-->
 				{% endfor %}
 			</ul>
-		{% endif %}
+		{% endif %}-->
 	{% else %}
-		No user with name {{ username }} found.
+		No user with name {{ profileUsername }} found.
 	{% endif %}
 
 {% endblock %}

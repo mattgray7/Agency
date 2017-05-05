@@ -94,7 +94,7 @@ def getBaseContext(request):
         source = request.POST.get("source")
     else:
         source = getMessageFromKey(request, "source")
-    return {"possibleDestinations": {"login": constants.LOGIN,
+    return {"toolbarDestinations": {"login": constants.LOGIN,
                                      "home": constants.HOME,
                                      "logout": constants.LOGOUT,
                                      "profile": constants.PROFILE},

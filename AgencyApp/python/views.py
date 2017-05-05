@@ -8,7 +8,6 @@ from django.core.files.base import ContentFile
 import constants
 import helpers
 import choose
-import profile
 import models
 
 import os
@@ -327,13 +326,13 @@ class PictureFormView(GenericFormView):
 
 # Must be done after GenericView defined
 import home
+import profile
 import account
 import event
 import browse
 
 
 def displayHome(request):
-    #return home.display(request, getBaseContext(request))
     view = home.HomeView(request=request, currentPage=constants.HOME)
     return view.process()
 
@@ -392,7 +391,8 @@ def browsePosts(request):
     return render(request, "AgencyApp/browse.html", getBaseContext(request))
 
 def displayProfile(request, username):
-    return profile.display(request, username, getBaseContext(request))
+    view = profile.ProfileView(request=request, username=username, currentPage=constants.PROFILE)
+    return view.process()
 
 def jobs(request):
     return render(request, 'AgencyApp/jobs.html', {'jobList': ['job1', 'job2', 'job3']})
