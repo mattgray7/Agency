@@ -3,22 +3,34 @@
 {% block content %}
 	<h1>Do you want to create a Project for your post?</h1>
 
-	<div id="newProjectDiv" hidden='true'>
+	<div id="newProjectButtonDiv" style="visibility:visible">
 		<button onclick='newProjectChosen();'>Create new project</button>
 	</div>
 
-	<div id="newProjectFormDiv">
+	<div id="newProjectFormDiv" style="visibility:hidden">
 		<form method="post" id="newProjectForm" action="/create/project/">
 			{% csrf_token %}
 			{{ form.as_p }}
 			<input type="submit" value="Create project"/ >
 		</form>
+		<button onclick="displayMain();">Back</button>
 	</div>
 
 	<script>
 		function newProjectChosen(){
 			var newProjectFormDiv = document.getElementById("newProjectFormDiv");
-			//newProjectFormDiv.innerHTML = newProjectFormDiv.
+			newProjectFormDiv.style.visibility= "visible";
+
+			var newProjectButtonDiv = document.getElementById("newProjectButtonDiv");
+			newProjectButtonDiv.style.visibility = "hidden";
+		}
+
+		function displayMain(){
+			var newProjectFormDiv = document.getElementById("newProjectFormDiv");
+			newProjectFormDiv.style.visibility= "hidden";
+
+			var newProjectButtonDiv = document.getElementById("newProjectButtonDiv");
+			newProjectButtonDiv.style.visibility = "visible";
 		}
 	</script>
 
