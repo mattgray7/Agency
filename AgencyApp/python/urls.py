@@ -18,8 +18,10 @@ urlpatterns = [
     url(r'^view/event/(?P<eventID>[A-Za-z0-9]+)/$', views.viewEvent, name='viewEvent'),
     url(r'^edit/event/(?P<eventID>[A-Za-z0-9]+)/$', views.editEvent, name='editEvent'),
 
-    # Choose type
-    url(r'^create/post/choose/$', views.choosePostType, name='choose_postType'),
+    # Create post
+    url(r'^create/post/$', views.createPost, name='createPost'),
+    url(r'^create/post/collaboration/$', views.createCollaborationPost, name='createCollaborationPost'),
+    url(r'^create/project/$', views.createProject, name='createProject'),
 
     # Other
     url(r'^browse/events/$', views.browseEvents, name='browseEvents'),

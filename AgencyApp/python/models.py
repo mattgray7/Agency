@@ -16,7 +16,11 @@ imageStorage = FileSystemStorage(
 def image_directory_path(instance, filename):
     if hasattr(instance, "username"):
         inputString = instance.username
-    elif isinstance(instance, Event) and hasattr(instance, "poster"):
+    elif (isinstance(instance, Event) or 
+          isinstance(instance, Post) or
+          isinstance(instance, Project) or
+          isinstance(instance, JobPost) and
+          hasattr(instance, "poster")):
         inputString = instance.poster
     else:
         print isinstance(instance, Event)
@@ -24,22 +28,22 @@ def image_directory_path(instance, filename):
 
 # Create your models here.
 class UserAccount(models.Model):
-	email = models.EmailField(max_length=100)
-	username = models.CharField(max_length=100)
-	firstName = models.CharField(max_length=100)
-	lastName = models.CharField(max_length=100)
-	setupComplete = models.BooleanField(default=False)
-	workInterest = models.BooleanField(default=False)
-	crewInterest = models.BooleanField(default=False)
-	collaborationInterest = models.BooleanField(default=False)
-	profilePicture = models.ImageField(default=None, upload_to=image_directory_path, storage=imageStorage)
+    email = models.EmailField(max_length=100)
+    username = models.CharField(max_length=100)
+    firstName = models.CharField(max_length=100)
+    lastName = models.CharField(max_length=100)
+    setupComplete = models.BooleanField(default=False)
+    workInterest = models.BooleanField(default=False)
+    crewInterest = models.BooleanField(default=False)
+    collaborationInterest = models.BooleanField(default=False)
+    profilePicture = models.ImageField(default=None, upload_to=image_directory_path, storage=imageStorage)
 
-	reelLink = models.CharField(max_length=500, default='')
-	imdbLink = models.CharField(max_length=500, default='')
-	bio = models.CharField(max_length=1000, default='')
+    reelLink = models.CharField(max_length=500, default='')
+    imdbLink = models.CharField(max_length=500, default='')
+    bio = models.CharField(max_length=1000, default='')
 
-	def __str__(self):
-		return self.username
+    def __str__(self):
+        return self.username
 
 class Event(models.Model):
     eventID = models.CharField(max_length=10)
@@ -51,16 +55,41 @@ class Event(models.Model):
     eventPicturePath = models.CharField(max_length=5000, default=None, blank=True, null=True)
     eventPicture = models.ImageField(default=None, upload_to=image_directory_path, storage=imageStorage, blank=True, null=True)
 
-
 class Profession(models.Model):
     username = models.CharField(max_length=100)
     professionName = models.CharField(max_length=100)
 
     def __str__(self):
-    	return self.professionName
+        return self.professionName
 
-class Posting(models.Model):
-	description = models.CharField(max_length=300)
+class Project(models.Model):
+    projectID = models.CharField(max_length=10)
+    poster = models.CharField(max_length=200)
+    title = models.CharField(max_length=500, default=None, blank=True, null=True)
+    description = models.CharField(max_length=5000, default=None, blank=True, null=True)
+    projectPicturePath = models.CharField(max_length=5000, default=None, blank=True, null=True)
+    projectPicture = models.ImageField(default=None, upload_to=image_directory_path, storage=imageStorage, blank=True, null=True)
 
-	def __str__(self):
-		return self.description
+class Post(models.Model):
+    postID = models.CharField(max_length=10)
+    poster = models.CharField(max_length=200)
+    title = models.CharField(max_length=500, default=None, blank=True, null=True)
+    description = models.CharField(max_length=5000, default=None, blank=True, null=True)
+    postPicturePath = models.CharField(max_length=5000, default=None, blank=True, null=True)
+    postPicture = models.ImageField(default=None, upload_to=image_directory_path, storage=imageStorage, blank=True, null=True)
+
+    def __str__(self):
+        return self.title
+
+class WorkPost(models.Model):
+    postID = models.CharField(max_length=10)
+    projectID = models.CharField(max_length=10)
+    profession = models.CharField(max_length=200)
+    paid = models.BooleanField(default=False)
+
+class CollaborationPost(models.Model):
+    #TODO
+    postID = models.CharField(max_length=10)
+    profession = models.CharField(max_length=200)
+
+

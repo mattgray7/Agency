@@ -39,19 +39,7 @@ class CreateEventView(views.PictureFormView):
                                                 "createBasicAccountFinish": constants.CREATE_BASIC_ACCOUNT_FINISH}
         self._pageContext["currentEvent"] = self.currentEvent
         self._pageContext["source"] =  self.sourcePage
-        self._pageContext["cancelSource"] = self.sourcePage
-        self._pageContext["cancelDestination"] = self.sourcePage
         return self._pageContext
-
-    @property
-    def cancelDestination(self):
-        if self._cancelDestination is None:
-            if self.sourcePage in [HOME, LOGIN, SETUP_ACCOUNT_FINISH, CREATE_BASIC_ACCOUNT_FINISH]:
-                self._cancelDestination = HOME
-            else:
-                self._cancelDestination = self.request.POST.get("cancelDestination") or self.sourcePage
-                print self.request.POST
-        return self._cancelDestination
 
     @property
     def cancelButtonExtraInputs(self):
@@ -73,13 +61,7 @@ class CreateEventView(views.PictureFormView):
         if self._eventID is None:
             self._eventID = self.request.POST.get("eventID")
             if not self._eventID:
-                tempEventIDValid = False
-                while not tempEventIDValid:
-                    tempEventID = ''.join(random.SystemRandom().choice(string.ascii_lowercase) for _ in range(constants.EVENT_ID_LENGTH))
-                    if len(models.Event.objects.filter(eventID = tempEventID)) == 0:
-                        self._eventID = tempEventID
-                        tempEventIDValid = True
-                        break
+                self._eventID = helpers.createUniqueID(models.Event, "eventID")
         return self._eventID
 
     @property

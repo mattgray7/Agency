@@ -7,7 +7,6 @@ from django.core.files.base import ContentFile
 
 import constants
 import helpers
-import choose
 import models
 
 import os
@@ -52,12 +51,17 @@ class GenericView(object):
         self._pageContext["cancelDestinationURL"] = self.cancelDestinationURL
         self._pageContext["cancelDestination"] = self.destinationPage
         self._pageContext["cancelButtonName"] = self.cancelButtonName
-        self._pageContext["cancelSource"] = self.currentPage
+        self._pageContext["cancelSource"] = self.sourcePage
+        self._pageContext["cancelDestination"] = self.cancelDestination
 
     @property
     def cancelDestination(self):
         if self._cancelDestination is None:
-            self._cancelDestination = self.request.POST.get("cancelDestination") or self.sourcePage
+            if self.sourcePage in [constants.HOME, constants.LOGIN, constants.SETUP_ACCOUNT_FINISH,
+                                   constants.CREATE_BASIC_ACCOUNT_FINISH]:
+                self._cancelDestination = constants.HOME
+            else:
+                self._cancelDestination = self.request.POST.get("cancelDestination") or self.sourcePage
         return self._cancelDestination
 
     @property
@@ -195,7 +199,7 @@ class GenericFormView(GenericView):
     @property
     def form(self):
         if not self._form:
-            if self.formSubmitted:
+            if self.formSubmitted and self.formClass:
                 self._form = self.formClass(self.request.POST)
             elif self.formClass:
                 self._form = self.formClass(initial=self.formInitialValues)
@@ -241,7 +245,7 @@ class GenericFormView(GenericView):
 
     def processForm(self):
         """To bo overridden in child class"""
-        pass
+        return True
 
 
 class PictureFormView(GenericFormView):
@@ -330,6 +334,7 @@ import profile
 import account
 import event
 import browse
+import post
 
 
 def displayHome(request):
@@ -380,8 +385,21 @@ def viewEvent(request, eventID):
     view = event.ViewEventView(request=request, currentPage=constants.VIEW_EVENT, eventID=eventID)
     return view.process()
 
-def choosePostType(request):
-    return choose.postType(request, getBaseContext(request))
+def createPost(request):
+    view = post.CreatePostMainView(request=request, currentPage=constants.CREATE_POST)
+    return view.process()
+
+def createCollaborationPost(request):
+    view = post.CreateCollaborationPostView(request=request, currentPage=constants.CREATE_COLLABORATION_POST)
+    return view.process()
+
+def createWorkPost(request):
+    view = post.CreateWorkPostView(request=request, currentPage=constants.CREATE_WORK_POST)
+    return view.process()
+
+def createProject(request):
+    view = post.CreateProjectView(request=request, currentPage=constants.CREATE_PROJECT)
+    return view.process()
 
 def browseEvents(request):
     view = browse.BrowseEventsView(request=request, sourcePage=constants.HOME, currentPage=constants.BROWSE_EVENTS)

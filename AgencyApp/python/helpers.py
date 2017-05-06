@@ -2,6 +2,8 @@ from django.contrib import messages
 
 from django.http import HttpResponseRedirect
 import constants
+import random, string
+
 
 
 def redirect(request, currentPage, destinationPage):
@@ -102,6 +104,22 @@ def getBaseContext(request):
             "default": constants.DEFAULT,
             "cancel": constants.CANCEL
             }
+
+
+def createUniqueID(destDatabase, idKey):
+    """Creates a random alphanumeric id the length of constants.RANDOM_ID_LENGTH. It is
+    then checked against the destDatabase to see if it is takesn. If so, a new random id
+    is generated and checked until a unique id is found and returned.
+
+    :param models.Model destDatabase: The database to check the uniqueness of generated ID against
+    :param str idKey: The name of the id field in the dest database
+    """
+    tempIDValid = False
+    while not tempIDValid:
+        tempID = ''.join(random.SystemRandom().choice(string.ascii_lowercase + string.digits) for _ in range(constants.RANDOM_ID_LENGTH))
+        if len(destDatabase.objects.filter(**{'{0}__contains'.format(idKey): tempID})) == 0:
+            tempIDValid = True
+            return tempID
 
 
 def getMessageFromKey(request, key):

@@ -1,4 +1,5 @@
 import forms
+import models
 
 # Source page enums:
 HOME = "HOME"
@@ -6,15 +7,19 @@ LOGIN = "LOGIN"
 LOGOUT = "LOGOUT"
 CANCEL = "CANCEL"
 PROFILE = "PROFILE"
-CREATE_POST = "CREATE_POST"
 CREATE_EVENT = "CREATE_EVENT"
 EDIT_EVENT = "EDIT_EVENT"
 VIEW_EVENT = "VIEW_EVENT"
-
+CREATE_POST = "CREATE_POST"
+VIEW_POST = "VIEW_POST"
+CREATE_COLLABORATION_POST = "CREATE_COLLABORATION_POST"
+VIEW_COLLABORATION_POST = "VIEW_COLLABOARTION_POST"
+CREATE_PROJECT = "CREATE_PROJECT"
+VIEW_PROJECT = "VIEW_PROJECT"
 BROWSE_EVENTS = "BROWSE_EVENTS"
 BROWSE_POSTS = "BROWSE_POSTS"
 
-EVENT_ID_LENGTH = 8
+RANDOM_ID_LENGTH = 6
 
 DEFAULT = "DEFAULT"
 MANUAL_FORM_CLASS = "MANUAL_FORM_CLASS"
@@ -46,10 +51,13 @@ URL_MAP = {HOME: "/",
 		   LOGIN:"/login/",
 		   PROFILE:"/{0}/",
 		   CREATE_BASIC_ACCOUNT: "/account/create/basic/",
-		   CREATE_POST: "/create/post/choose/",
+		   CREATE_POST: "/create/post/",
 		   CREATE_EVENT: "/create/event/",
 		   EDIT_EVENT: "/edit/event/{0}/",
 		   VIEW_EVENT: "/view/event/{0}/",
+		   CREATE_POST: "/create/post/",
+		   CREATE_PROJECT: "/create/project/",
+		   CREATE_COLLABORATION_POST: "/create/post/collaboration",
 		   CREATE_BASIC_ACCOUNT_FINISH: "/account/create/finish/",
 		   SETUP_ACCOUNT_FINISH: "/account/create/finish/",
 		   EDIT_INTERESTS: "/account/edit/interests/",
@@ -72,10 +80,14 @@ DEFAULT_PAGE_MAP = {HOME: HOME,
 					EDIT_BACKGROUND: SETUP_ACCOUNT_FINISH,
 					SETUP_ACCOUNT_FINISH: HOME,
 					PROFILE: PROFILE,
-					VIEW_EVENT: VIEW_EVENT,
 					CREATE_EVENT: VIEW_EVENT,
+					VIEW_EVENT: VIEW_EVENT,
 					EDIT_EVENT: VIEW_EVENT,
-					BROWSE_EVENTS: VIEW_EVENT}
+					BROWSE_EVENTS: VIEW_EVENT,
+					CREATE_POST: CREATE_PROJECT,
+					CREATE_PROJECT: VIEW_PROJECT,
+					CREATE_COLLABORATION_POST: VIEW_COLLABORATION_POST
+					}
 
 FORM_MAP = {HOME: forms.BaseForm,
 			PROFILE: forms.BaseForm,
@@ -88,6 +100,9 @@ FORM_MAP = {HOME: forms.BaseForm,
 			CREATE_EVENT: forms.CreateEventForm,
 			EDIT_EVENT: forms.CreateEventForm,
 			VIEW_EVENT: forms.CreateEventForm,
+			CREATE_POST: None,
+			CREATE_PROJECT: forms.CreateProjectForm,
+			CREATE_COLLABORATION_POST: None
 			}
 
 HTML_MAP = {HOME: 'AgencyApp/home.html',
@@ -103,11 +118,17 @@ HTML_MAP = {HOME: 'AgencyApp/home.html',
 			CREATE_EVENT: 'AgencyApp/event/create.html',
 			EDIT_EVENT: 'AgencyApp/event/create.html',
 			VIEW_EVENT: 'AgencyApp/event/view.html',
+			CREATE_POST: 'AgencyApp/post/createPost.html',
+			CREATE_PROJECT: 'AgencyApp/post/project.html',
+			CREATE_COLLABORATION_POST: 'AgencyApp/post/createCollaborationPost.html',
 			BROWSE_EVENTS: 'AgencyApp/browse.html',
-			BROWSE_POSTS: 'AgencyApp/browse.html'}
+			BROWSE_POSTS: 'AgencyApp/browse.html'
+			}
+
 
 MEDIA_FILE_NAME_MAP = {EDIT_PROFILE_PICTURE: "profile.jpg",
-					   CREATE_EVENT: "event_{0}.jpg"}
+					   CREATE_EVENT: "event_{0}.jpg"
+					   }
 
 
 
