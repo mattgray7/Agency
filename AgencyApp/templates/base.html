@@ -71,11 +71,32 @@
         {% endblock %}
 
         {% block content %}{% endblock %}
+        <script>
+            function createFormInput(type, name, value){
+                var input = document.createElement("input");
+                input.setAttribute("type", type);
+                input.setAttribute("name", name);
+                input.setAttribute("value", value);
+                return input;
+            };
 
-            <!-- Cancel button -->
-            <script>
+            function createPageRedirectForm(source, next, destination, submitButtonLabel){
+                var form = document.createElement("form");
+                form.setAttribute('method', "post");
+                form.setAttribute('action', "/");
+
+                form.appendChild(createFormInput("hidden", "source", source));
+                form.appendChild(createFormInput("hidden", "next", next));
+                form.appendChild(createFormInput("hidden", "destination", destination));
+                form.appendChild(createFormInput("hidden", "csrfmiddlewaretoken", getCookie("csrftoken")));
+                form.appendChild(createFormInput("submit", null, submitButtonLabel));
+                document.body.appendChild(form);
+                return form;
+            }
+
+
+            //Cancel button
             window.onload = function(){
-                console.log("in document onload, cancel div is " + document.getElementById('cancelButton'));
                 var cancelButtonDiv = document.getElementById('cancelButton');
                 if (cancelButtonDiv != null){
                     var cancelButtonForm = document.createElement("form");
@@ -130,12 +151,10 @@
                     cancelSubmit.setAttribute("value", "{{ cancelButtonName }}");
                     cancelButtonForm.appendChild(cancelSubmit);
                     cancelButtonDiv.appendChild(cancelButtonForm);
-                    //document.getElementById('cancelButton').innerHTML = cancelButtonForm;
 
                     $('#cancelButton').click(function(){
                        cancelButtonForm.submit();
                     });
-                    //$("#cancelButton").html(cancelButtonForm);
                 };
             };
         </script>
