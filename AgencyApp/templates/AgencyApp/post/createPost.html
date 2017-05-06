@@ -15,15 +15,17 @@
 		{% csrf_token %}
 		<input type="hidden" name="source" value="{{ next }}"/ >
 		<input type="hidden" name="next" value="{{ next }}"/ >
-		<input type="hidden" name="destination" value="{{ possibleDestinations.collaboration }}"/ >
-		<input type="submit" value="Looking for collaborators"/ >
+		<input type="hidden" name="destination" value="{{ possibleDestinations.project }}"/ >
+		<input type="submit" value="Looking for actors/crew members"/ >
 	</form>
 	<br>
 	<form method="post" action="/create/post/">
 		{% csrf_token %}
 		<input type="hidden" name="source" value="{{ next }}"/ >
 		<input type="hidden" name="next" value="{{ next }}"/ >
-		<input type="hidden" name="destination" value="{{ possibleDestinations.project }}"/ >
-		<input type="submit" value="Looking for actors/crew members"/ >
+		<input type="hidden" name="destination" value="{{ possibleDestinations.collaboration }}"/ >
+		<input type="submit" value="Looking for collaborators"/ >
 	</form>
+
+
 {% endblock %}
