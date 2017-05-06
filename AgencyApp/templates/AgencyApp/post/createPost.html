@@ -18,7 +18,6 @@
 		<input type="hidden" name="destination" value="{{ possibleDestinations.project }}"/ >
 		<input type="submit" value="Looking for actors/crew members"/ >
 	</form>
-	<br>
 	<form method="post" action="/create/post/">
 		{% csrf_token %}
 		<input type="hidden" name="source" value="{{ next }}"/ >

@@ -18,6 +18,10 @@ class CreatePostMainView(views.GenericFormView):
         super(CreatePostMainView, self).__init__(*args, **kwargs)
 
     @property
+    def cancelDestination(self):
+        return constants.HOME
+
+    @property
     def pageContext(self):
         self._pageContext["possibleSources"] = {"login": constants.LOGIN,
                                                 "home": constants.HOME,
@@ -36,9 +40,16 @@ class CreateProjectView(views.PictureFormView):
         self._formClass = constants.FORM_MAP.get(self.currentPage)
         self._projectID = None
         self._currentProject = None
-
         self._pictureModel = self.currentProject
         self._pictureModelFieldName = "projectPicture"
+
+    @property
+    def cancelButtonName(self):
+        return "Back"
+
+    @property
+    def cancelDestination(self):
+        return constants.CREATE_POST
 
     @property
     def projectID(self):
@@ -76,6 +87,10 @@ class GenericCreatePostView(views.PictureFormView):
         self._pictureModelFieldName = "postPicture"
 
     @property
+    def cancelButtonName(self):
+        return "Back"
+
+    @property
     def postID(self):
         if self._postID is None:
             self_postID = helpers.createUniqueID(destDatabase=models.Post, idKey="postID")
@@ -105,11 +120,15 @@ class CreateCollaborationPostView(GenericCreatePostView):
                 pass
         return self._currentPost
 
-    """@property
+    @property
+    def cancelDestination(self):
+        return constants.CREATE_POST
+
+    @property
     def pageContext(self):
         self._pageContext["possibleSources"] = {"createPost": constants.CREATE_POST}
         self._pageContext["possibleDestinations"] = {"collaboration": constants.CREATE_COLLABORATION_POST}
-        return self._pageContext"""
+        return self._pageContext
 
 class CreateWorkPostView(GenericCreatePostView):
     def __init__(self, *args, **kwargs):

@@ -19,7 +19,8 @@ def image_directory_path(instance, filename):
     elif (isinstance(instance, Event) or 
           isinstance(instance, Post) or
           isinstance(instance, Project) or
-          isinstance(instance, JobPost) and
+          isinstance(instance, WorkPost) or
+          isinstance(instance, CollaborationPost) and
           hasattr(instance, "poster")):
         inputString = instance.poster
     else:
