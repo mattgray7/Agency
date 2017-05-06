@@ -96,7 +96,7 @@
 
 
             //Cancel button
-            window.onload = function(){
+            $(document).ready(function(){
                 var cancelButtonDiv = document.getElementById('cancelButton');
                 if (cancelButtonDiv != null){
                     var cancelButtonForm = document.createElement("form");
@@ -154,7 +154,7 @@
                        cancelButtonForm.submit();
                     });
                 };
-            };
+            });
         </script>
         
         {% block footer %}

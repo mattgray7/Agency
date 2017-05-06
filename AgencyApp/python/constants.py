@@ -16,6 +16,8 @@ CREATE_COLLABORATION_POST = "CREATE_COLLABORATION_POST"
 VIEW_COLLABORATION_POST = "VIEW_COLLABORTION_POST"
 CREATE_PROJECT = "CREATE_PROJECT"
 VIEW_PROJECT = "VIEW_PROJECT"
+CREATE_WORK_POST = "CREATE_WORK_POST"
+VIEW_WORK_POST = "VIEW_WORK_POST"
 BROWSE_EVENTS = "BROWSE_EVENTS"
 BROWSE_POSTS = "BROWSE_POSTS"
 
@@ -58,6 +60,7 @@ URL_MAP = {HOME: "/",
 		   CREATE_POST: "/create/post/",
 		   CREATE_PROJECT: "/create/project/",
 		   CREATE_COLLABORATION_POST: "/create/post/collaboration/",
+		   CREATE_WORK_POST: "/create/post/work/",
 		   CREATE_BASIC_ACCOUNT_FINISH: "/account/create/finish/",
 		   SETUP_ACCOUNT_FINISH: "/account/create/finish/",
 		   EDIT_INTERESTS: "/account/edit/interests/",
@@ -85,7 +88,8 @@ DEFAULT_PAGE_MAP = {HOME: HOME,
 					EDIT_EVENT: VIEW_EVENT,
 					BROWSE_EVENTS: VIEW_EVENT,
 					CREATE_POST: CREATE_PROJECT,
-					CREATE_PROJECT: VIEW_PROJECT,
+					CREATE_PROJECT: CREATE_WORK_POST,
+					CREATE_WORK_POST: VIEW_WORK_POST,
 					CREATE_COLLABORATION_POST: VIEW_COLLABORATION_POST
 					}
 
@@ -102,7 +106,8 @@ FORM_MAP = {HOME: forms.BaseForm,
 			VIEW_EVENT: forms.CreateEventForm,
 			CREATE_POST: None,
 			CREATE_PROJECT: forms.CreateProjectForm,
-			CREATE_COLLABORATION_POST: None
+			CREATE_COLLABORATION_POST: forms.CreateCollaborationPostForm,
+			CREATE_WORK_POST: forms.CreateWorkPostForm
 			}
 
 HTML_MAP = {HOME: 'AgencyApp/home.html',
@@ -121,6 +126,7 @@ HTML_MAP = {HOME: 'AgencyApp/home.html',
 			CREATE_POST: 'AgencyApp/post/createPost.html',
 			CREATE_PROJECT: 'AgencyApp/post/project.html',
 			CREATE_COLLABORATION_POST: 'AgencyApp/post/createCollaborationPost.html',
+			CREATE_WORK_POST: 'AgencyApp/post/createWorkPost.html',
 			BROWSE_EVENTS: 'AgencyApp/browse.html',
 			BROWSE_POSTS: 'AgencyApp/browse.html'
 			}

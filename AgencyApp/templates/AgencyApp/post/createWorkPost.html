@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+	<h3>Create a new work post</h3>
+	<form method="post" action="/create/post/work/">
+		{{ form.as_p }}
+		<input type="submit" value="Create post" />
+	</form>
+	<div id="cancelButton"></div>
+{% endblock %}

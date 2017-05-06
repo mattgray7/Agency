@@ -82,6 +82,7 @@ class GenericCreatePostView(views.PictureFormView):
         super(GenericCreatePostView, self).__init__(*args, **kwargs)
         self._formClass = constants.FORM_MAP.get(self.currentPage)
         self._postID = None
+        self._basePost = None
         self._currentPost = None
         self._pictureModel = None
         self._pictureModelFieldName = "postPicture"
@@ -100,6 +101,12 @@ class GenericCreatePostView(views.PictureFormView):
     def currentPost(self):
         """To be overridden in child class"""
         return None
+
+    @property
+    def basePost(self):
+        if self._basePost is None:
+            self._basePost = models.Post.objects.get(postID = self.postID)
+        return self.basePost
 
     @property
     def pictureModel(self):

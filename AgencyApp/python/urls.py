@@ -21,6 +21,7 @@ urlpatterns = [
     # Create post
     url(r'^create/post/$', views.createPost, name='createPost'),
     url(r'^create/post/collaboration/$', views.createCollaborationPost, name='createCollaborationPost'),
+    url(r'^create/post/work/$', views.createWorkPost, name='createWorkPost'),
     url(r'^create/project/$', views.createProject, name='createProject'),
 
     # Other
