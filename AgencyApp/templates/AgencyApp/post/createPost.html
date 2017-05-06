@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block content %}
+	{% if source == possibleSources.login %}
+		<h5> Welcome back {{ request.user.first_name }}!</h5>
+	{% elif source == possibleSources.home %}
+		<h5> You got here from main menu </h5>
+	{% elif source == possibleSources.createAccountFinish %}
+		<h5> You got here from finishing basic account creation</h5>
+	{% endif %}
+
+	<h1>What are you looking for?</h1>
+
+	<form method="post" action="/create/post/">
+		{% csrf_token %}
+		<input type="hidden" name="source" value="{{ next }}"/ >
+		<input type="hidden" name="next" value="{{ next }}"/ >
+		<input type="hidden" name="destination" value="{{ possibleDestinations.collaboration }}"/ >
+		<input type="submit" value="Looking for collaborators"/ >
+	</form>
+	<br>
+	<form method="post" action="/create/post/">
+		{% csrf_token %}
+		<input type="hidden" name="source" value="{{ next }}"/ >
+		<input type="hidden" name="next" value="{{ next }}"/ >
+		<input type="hidden" name="destination" value="{{ possibleDestinations.project }}"/ >
+		<input type="submit" value="Looking for actors/crew members"/ >
+	</form>
+{% endblock %}

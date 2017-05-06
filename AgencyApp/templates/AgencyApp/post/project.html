@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block content %}
+	<h1>Do you want to create a Project for your post?</h1>
+
+	<div id="newProjectDiv" hidden='true'>
+		<button onclick='newProjectChosen();'>Create new project</button>
+	</div>
+
+	<div id="newProjectFormDiv">
+		<form method="post" id="newProjectForm" action="/create/project/">
+			{% csrf_token %}
+			{{ form.as_p }}
+			<input type="submit" value="Create project"/ >
+		</form>
+	</div>
+
+	<script>
+		function newProjectChosen(){
+			var newProjectFormDiv = document.getElementById("newProjectFormDiv");
+			//newProjectFormDiv.innerHTML = newProjectFormDiv.
+		}
+	</script>
+
+{% endblock %}
