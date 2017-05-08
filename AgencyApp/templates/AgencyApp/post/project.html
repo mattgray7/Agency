@@ -2,12 +2,23 @@
 
 {% block content %}
 	<h1>Do you want to create a Project for your post?</h1>
+	{% if errors %}
+		<ul>
+			{% for error in errors %}
+				<li>{{ error }}</li>
+			{% endfor %}
+		</ul>
+	{% endif %}
 
 	<!-- Hidden, will copy code into main div when necessary -->
 	<div id="mainChoicesMenuDiv" style="display:none">
 		<button onclick="newProjectChosen();">Create new project</button><br>
 		<button onclick="addToProjectChosen();">Add post to existing project</button><br>
-		<button onclick="skipChosen();">Skip</button>
+		<script>
+			// make source = current and next = destination for skip (and give skip dest url as the form action)
+			var skipForm = createPageRedirectForm("{{ next }}", "{{ destination }}", "{{ default }}", "/create/post/work/", "Skip project creation", document.getElementById("mainChoicesMenuDiv"));
+		</script>
+		{{skipForm}}
 	</div>
 
 	<div id="newProjectFormDiv" style="display:none">
@@ -50,10 +61,6 @@
 		function addToProjectChosen(){
 			mainChoiceDiv.innerHTML = document.getElementById("addToProjectFormDiv").innerHTML;
 			document.getElementById("cancelButton").style.display = "none";
-		}
-
-		function skipChosen(){
-
 		}
 	</script>
 

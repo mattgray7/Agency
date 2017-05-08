@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+{% if post %}
+	{% if post.postPicture %}
+		<div id="postPicture">
+			<img src="{{ post.postPicture.url }}" height="150px" width="175px"/>
+		</div>
+	{% endif %}
+
+	<h3> {{ post.title }}  </h3>
+	<h5> Posted by {{ event.poster }} </h5>
+	{% if post.poster == request.user.username %}
+		<form method='post' action="/edit/post/{{ post.postID }}/">
+			{% csrf_token %}
+			<input type="hidden" name="source" value="{{ next }}" />
+			<input type="hidden" name="next" value="{{ next }}" />
+			<input type="hidden" name="destination" value="{{ possibleDestinations.edit }}" />
+			<input type="hidden" name="postID" value="{{ post.postID }}" />
+			<input type="submit" value="Edit Post" />
+		</form>
+	{% endif %}
+	<p> {{ post.description }}
+{% else %}
+	<h4>No post found</h4>
+{% endif %}
+
+<form method="post" action="/view/posts/">
+	{% csrf_token %}
+	<input type="hidden" name="source" value="{{ source }}" />
+	<input type="submit" value="View more posts" />
+</form>
+
+<form method="post" action="/browse/posts/">
+	{% csrf_token %}
+	<input type="hidden" name="source" value="{{ source }}" />
+	<input type="submit" value="View more posts" />
+</form>
+
+{% endblock %}
