@@ -4,6 +4,7 @@
 
 	<h3>Create a new collaboration post</h3>
 	<form method="post" action="/create/post/collaboration/">
+		{% csrf_token %}
 		{{ form.as_p }}
 		<input type="submit" value="Create post" />
 	</form>

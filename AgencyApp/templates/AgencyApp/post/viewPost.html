@@ -10,9 +10,9 @@
 	{% endif %}
 
 	<h3> {{ post.title }}  </h3>
-	<h5> Posted by {{ event.poster }} </h5>
+	<h5> Posted by {{ post.poster }} </h5>
 	{% if post.poster == request.user.username %}
-		<form method='post' action="/edit/post/{{ post.postID }}/">
+		<form method='post' action="/view/post/{{ post.postID }}/">
 			{% csrf_token %}
 			<input type="hidden" name="source" value="{{ next }}" />
 			<input type="hidden" name="next" value="{{ next }}" />
@@ -26,11 +26,6 @@
 	<h4>No post found</h4>
 {% endif %}
 
-<form method="post" action="/view/posts/">
-	{% csrf_token %}
-	<input type="hidden" name="source" value="{{ source }}" />
-	<input type="submit" value="View more posts" />
-</form>
 
 <form method="post" action="/browse/posts/">
 	{% csrf_token %}
