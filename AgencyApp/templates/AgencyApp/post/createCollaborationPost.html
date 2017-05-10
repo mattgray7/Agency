@@ -1,9 +1,27 @@
 {% extends "base.html" %}
 
 {% block content %}
+	{% if errors %}
+		<ul>
+			{% for error in errors %}
+				<li>{{ error }}</li>
+			{% endfor %}
+		</ul>
+	{% endif %}
 
 	<h3>Create a new collaboration post</h3>
-	<form method="post" action="/create/post/collaboration/">
+
+	{% if post.postPicture %}
+		<div id="postPicture">
+			<img src="{{ post.postPicture.url }}" height="150px" width="175px"/>
+		</div>
+	{% endif %}
+
+	{% if pvent.title %}
+		<form method='post' action="/edit/post/{{post.postID}}/" name='createForm' enctype="multipart/form-data">
+	{% else %}
+		<form method='post' action="/create/post/collaboration/" name='createForm' enctype="multipart/form-data">
+	{% endif %}
 		{% csrf_token %}
 		{{ form.as_p }}
 		<input type="submit" value="Create post" />

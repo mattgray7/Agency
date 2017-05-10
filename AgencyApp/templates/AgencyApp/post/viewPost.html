@@ -26,7 +26,6 @@
 	<h4>No post found</h4>
 {% endif %}
 
-
 <form method="post" action="/browse/posts/">
 	{% csrf_token %}
 	<input type="hidden" name="source" value="{{ source }}" />
