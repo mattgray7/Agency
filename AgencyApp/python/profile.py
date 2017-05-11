@@ -1,12 +1,12 @@
 from django.shortcuts import render
 from forms import *
 
-from models import UserAccount, Profession, Event
 from helpers import getMessageFromKey
 from django.contrib import messages
 
 
 import constants
+import models
 import helpers
 import views
 
@@ -19,6 +19,7 @@ class ProfileView(views.GenericFormView):
         self._profileUserAccount = None
         self._profileProfessions = None
         self._profileEvents = None
+        self._profilePosts = None
 
     @property
     def userViewingOwnProfile(self):
@@ -33,7 +34,7 @@ class ProfileView(views.GenericFormView):
                 pass
             else:
                 # get the rest of the profile attributes
-                self._profileUserAccount = UserAccount.objects.get(username=self._desiredProfileUsername)
+                self._profileUserAccount = models.UserAccount.objects.get(username=self._desiredProfileUsername)
         return self._profileUserAccount
 
     @property
@@ -41,7 +42,7 @@ class ProfileView(views.GenericFormView):
         if self._profileProfessions is None:
             if self.profileUserAccount:
                 try:
-                    professions = Profession.objects.filter(username=self.profileUserAccount.username)
+                    professions = models.Profession.objects.filter(username=self.profileUserAccount.username)
                 except Profession.DoesNotExist:
                     pass
                 else:
@@ -51,12 +52,18 @@ class ProfileView(views.GenericFormView):
     @property
     def profileEvents(self):
         if self._profileEvents is None:
-            if self.profileUserAccount:
-                try:
-                    self._profileEvents = Event.objects.filter(poster=self.profileUserAccount.username)
-                except Event.DoesNotExist:
-                    pass
+            if self.profileUserAccount and self.profileUserAccount.username:
+                self._profileEvents = models.Event.objects.filter(poster=self.profileUserAccount.username)
         return self._profileEvents
+
+    @property
+    def profilePosts(self):
+        if self._profilePosts is None:
+            if self.profileUserAccount:
+                self._profilePosts = {}
+                self._profilePosts["collaboration"] = models.CollaborationPost.objects.filter(poster=self.profileUserAccount.username)
+                self._profilePosts["work"] = models.WorkPost.objects.filter(poster=self.profileUserAccount.username)
+        return self._profilePosts
 
     @property
     def pageContext(self):
@@ -65,11 +72,13 @@ class ProfileView(views.GenericFormView):
         self._pageContext["profileUsername"] = self._desiredProfileUsername
         self._pageContext["profileProfessions"] = self.profileProfessions
         self._pageContext["profileEvents"] = self.profileEvents
+        self._pageContext["profilePosts"] = self.profilePosts
         self._pageContext["possibleDestinations"] = {"picture": constants.EDIT_PROFILE_PICTURE,
                                                      "background": constants.EDIT_BACKGROUND,
                                                      "professions": constants.EDIT_PROFESSIONS,
                                                      "interests": constants.EDIT_INTERESTS,
-                                                     "viewEvent": constants.VIEW_EVENT
+                                                     "viewEvent": constants.VIEW_EVENT,
+                                                     "viewPost": constants.VIEW_POST
                                                      }
         return self._pageContext
 

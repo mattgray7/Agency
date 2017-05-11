@@ -39,7 +39,6 @@ class PostInstance(object):
                 self._record = self.database(postID=self.postID,
                                              poster=self.request.user.username)
                 self._record.save()
-            print self._record
         return self._record
 
     @property

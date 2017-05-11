@@ -93,19 +93,47 @@
 		<!-- Events -->
 		{% if profileEvents %}
 			<br><h3>Events {{ profileUserAccount.firstName }} has posted...</h3>
-			<ul>
 				{% for event in profileEvents %}
 					<form method="post" action="/{{ profileUsername }}/"> 
 						{% csrf_token %}
 						<input type="hidden" name="eventID" value="{{event.eventID}}" />
 						<input type="hidden" name="source" value="{{ next }}" />
-						<input type="hidden" name="next" value="{{ possibleDestinations.viewEvent }}" />
+						<input type="hidden" name="next" value="{{ next }}" />
 						<input type="hidden" name="destination" value="{{ possibleDestinations.viewEvent }}" />
 						<input type="submit" Value="{{ event.title }}" />
 					</form>
 				{% endfor %}
-			</ul>
 		{% endif %}
+
+
+		<!-- Posts -->
+		{% if profilePosts %}
+			{% if profilePosts.collaboration %}
+				<br>
+				<h3>Seeking collaborators posts...</h3>
+				{% for collabPost in profilePosts.collaboration %}
+					<form method="post" action="/{{ profileUsername }}/"> 
+						{% csrf_token %}
+						<input type="hidden" name="postID" value="{{collabPost.postID}}" />
+						<input type="hidden" name="source" value="{{ next }}" />
+						<input type="hidden" name="next" value="{{ next }}" />
+						<input type="hidden" name="destination" value="{{ possibleDestinations.viewPost }}" />
+						<input type="submit" Value="{{ collabPost.title }}" />
+					</form>
+				{% endfor %}
+			{% elif profilePosts.work %}
+				{% for workPost in profilePosts.work %}
+					<form method="post" action="/{{ profileUsername }}/"> 
+						{% csrf_token %}
+						<input type="hidden" name="postID" value="{{workPost.postID}}" />
+						<input type="hidden" name="source" value="{{ next }}" />
+						<input type="hidden" name="next" value="{{ next }}" />
+						<input type="hidden" name="destination" value="{{ possibleDestinations.viewPost }}" />
+						<input type="submit" Value="{{ workPost.title }}" />
+					</form>
+				{% endfor %}	
+			{% endif %}
+		{% endif %}	
 	{% else %}
 		No user with name {{ profileUsername }} found.
 	{% endif %}
