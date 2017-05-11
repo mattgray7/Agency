@@ -59,7 +59,7 @@ class GenericView(object):
     def cancelDestination(self):
         if self._cancelDestination is None:
             if self.sourcePage in [constants.HOME, constants.LOGIN, constants.SETUP_ACCOUNT_FINISH,
-                                   constants.CREATE_BASIC_ACCOUNT_FINISH, constants.CREATE_POST]:
+                                   constants.CREATE_BASIC_ACCOUNT_FINISH]:
                 self._cancelDestination = constants.HOME
             else:
                 self._cancelDestination = self.request.POST.get("cancelDestination") or self.sourcePage
