@@ -24,7 +24,7 @@ urlpatterns = [
     url(r'^view/post/(?P<postID>[A-Za-z0-9]+)/$', views.viewPost, name='viewPost'),
     url(r'^create/post/collaboration/$', views.createCollaborationPost, name='createCollaborationPost'),
     url(r'^create/post/work/$', views.createWorkPost, name='createWorkPost'),
-    url(r'^create/project/$', views.createProject, name='createProject'),
+    url(r'^create/project/$', views.createProjectPost, name='createProjectPost'),
 
     # Other
     url(r'^browse/events/$', views.browseEvents, name='browseEvents'),

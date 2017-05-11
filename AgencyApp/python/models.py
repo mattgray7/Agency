@@ -72,7 +72,7 @@ class AbstractPost(models.Model):
 
 class ProjectPost(AbstractPost):
     #TODO add something
-    status = models.CharField(max_length=50)
+    status = models.CharField(max_length=50, default=None, blank=True, null=True)
 
 class WorkPost(AbstractPost):
     projectPostID = models.CharField(max_length=10)

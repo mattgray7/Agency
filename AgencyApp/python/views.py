@@ -420,8 +420,8 @@ def viewPost(request, postID):
     view = post.ViewPostView(request=request, currentPage=constants.VIEW_POST, postID=postID)
     return view.process()
 
-def createProject(request):
-    view = post.CreateProjectView(request=request, currentPage=constants.CREATE_PROJECT)
+def createProjectPost(request):
+    view = post.CreateProjectPostView(request=request, currentPage=constants.CREATE_PROJECT_POST)
     return view.process()
 
 def browseEvents(request):

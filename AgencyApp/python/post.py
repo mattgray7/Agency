@@ -20,6 +20,7 @@ class PostInstance(object):
         self._record = None
         self._database = None
         self._postTypePageName = None
+        self.errors = []
 
     @property
     def postID(self):
@@ -51,26 +52,95 @@ class PostInstance(object):
         """To be overridden in child class"""
         return self._postTypePageName
 
+    def checkBasicFormValues(self):
+        return (self._checkTitle(title=self.request.POST.get("title", "")) and
+                self._checkPoster(poster=self.request.POST.get("poster", "")) and
+                self._checkDescription(description=self.request.POST.get("description", "")))
+
+    def checkModelFormValues(self):
+        """To be overridden in child class"""
+        return True
+
+    def saveBasicFormValues(self):
+        """To be overridden in child class"""
+        if self.record:
+            self.record.title = self.request.POST.get("title", "")
+            self.record.poster = self.request.POST.get("poster", "")
+            self.record.description = self.request.POST.get("description", "")
+            if self.request.FILES.get("postPicture"):
+                self.record.postPicture = self.request.FILES.get("postPicture")
+            self.record.save()
+            return True
+        return False
+
+    def saveModelFormValues(self):
+        """To be overridden in child class"""
+        return True
+
+    def formIsValid(self):
+        if self.request.POST:
+            if self.checkBasicFormValues() and self.checkModelFormValues():
+                return self.saveBasicFormValues() and self.saveModelFormValues()
+        return False
+
+    def _checkTitle(self, title):
+        if len(title) < 1:
+            self.errors.append("Title must be at least 30 characters long.")
+            return False
+        return True
+
+    def _checkPoster(self, poster):
+        if poster != self.request.user.username:
+            self.errors.append("You must be logged in to create an post.")
+            return False
+        return True
+
+    def _checkDescription(self, description):
+        if len(description) < 1:  #TODO switch min length
+            self.errors.append("Post description must be at least 75 characters long.")
+            return False
+        return True
+               
+
+class ProjectPostInstance(PostInstance):
+    def __init__(self, *args, **kwargs):
+        super(ProjectPostInstance, self).__init__(*args, **kwargs)
+        self._postTypePageName = constants.CREATE_PROJECT_POST
+        self._database = models.ProjectPost
+
+    def checkModelFormValues(self):
+        """TODO, only thing so far is status, which is optional, so return True"""
+        return True
+
+    def saveModelFormValues(self):
+        if self.record:
+            self.record.status = self.request.POST.get("status", "")
+            self.record.save()
+            return True
+        return False
+
 
 class CollaborationPostInstance(PostInstance):
     def __init__(self, *args, **kwargs):
         super(CollaborationPostInstance, self).__init__(*args, **kwargs)
         self._postTypePageName = constants.CREATE_COLLABORATION_POST
         self._database = models.CollaborationPost
-    """def __init__(self, *args, **kwargs):
-        super(CollaborationPostInstance, self).__init__(*args, **kwargs)
 
-    @property
-    def database(self):
-        if self._database is None:
-            self._database = models.CollaborationPost
-        return self._database
+    def checkModelFormValues(self):
+        valid = False
+        if self.request.method == "POST":
+            if len(self.request.POST.get("profession", "")) < 1:
+                self.errors.append("Missing profession")
+            else:
+                valid = True
+        return valid
 
-    @property
-    def postTypePageName(self):
-        if self._postTypePageName is None:
-            self._postTypePageName = constants.CREATE_COLLABORATION_POST
-        return self._postTypePageName"""
+    def saveModelFormValues(self):
+        if self.record:
+            self.record.profession = self.request.POST.get("profession", "")
+            self.record.save()
+            return True
+        return False
 
 
 class WorkPostInstance(PostInstance):
@@ -79,17 +149,28 @@ class WorkPostInstance(PostInstance):
         self._postTypePageName = constants.CREATE_WORK_POST
         self._database = models.WorkPost
 
-class ProjectPostInstance(PostInstance):
-    def __init__(self, *args, **kwargs):
-        super(ProjectPostInstance, self).__init__(*args, **kwargs)
-        self._postTypePageName = constants.CREATE_PROJECT_POST
-        self._database = models.ProjectPost
+    def checkModelFormValues(self):
+        valid = False
+        if self.request.method == "POST":
+            if len(self.request.POST.get("profession", "")) < 1:
+                self.errors.append("Missing profession")
+            else:
+                valid = True
+        return valid
 
+    def saveModelFormValues(self):
+        if self.record:
+            self.record.profession = self.request.POST.get("profession")
+            self.record.paid = self.request.POST.get("paid", False)
+            self.record.save()
+            return True
+        return False
 
 # =================== END OF INSTANCES ====================== #
 
-# ======================= VIEWS ======================== #
 
+
+# ======================= VIEWS ======================== #
 
 class CreatePostChoiceView(views.GenericFormView):
     def __init__(self, *args, **kwargs):
@@ -109,49 +190,6 @@ class CreatePostChoiceView(views.GenericFormView):
         self._pageContext["possibleDestinations"] = {"collaboration": constants.CREATE_COLLABORATION_POST,
                                                      "project": constants.CREATE_PROJECT_POST
                                                      }
-        return self._pageContext
-
-
-class CreateProjectView(views.PictureFormView):
-    def __init__(self, *args, **kwargs):
-        super(CreateProjectView, self).__init__(*args, **kwargs)
-        self._formClass = constants.FORM_MAP.get(self.currentPage)
-        self._projectID = None
-        self._currentProject = None
-        self._pictureModel = self.currentProject
-        self._pictureModelFieldName = "projectPicture"
-
-    @property
-    def cancelButtonName(self):
-        return "Back"
-
-    @property
-    def cancelDestination(self):
-        return constants.CREATE_POST
-
-    @property
-    def projectID(self):
-        if self._projectID is None:
-            self_projectID = helpers.createUniqueID(destDatabase=models.Project, idKey="projectID")
-        return self._projectID
-
-    @property
-    def currentProject(self):
-        if self._currentProject is None:
-            try:
-                self._currentProject = models.Project.objects.get(projectID=self.projectID)
-            except models.Project.DoesNotExist:
-                pass
-        return self._currentProject
-
-    @property
-    def pageContext(self):
-        self._pageContext["possibleSources"] = {"login": constants.LOGIN,
-                                                "home": constants.HOME,
-                                                "createAccountFinish": constants.CREATE_BASIC_ACCOUNT_FINISH,
-                                                "setupProfileFinish": constants.SETUP_ACCOUNT_FINISH
-                                                }
-        self._pageContext["possibleDestinations"] = {"collaboration": constants.CREATE_COLLABORATION_POST}
         return self._pageContext
 
 
@@ -238,39 +276,30 @@ class GenericCreatePostView(views.PictureFormView):
         if self.post.record:
             self._formInitialValues["title"] = self.post.record.title
             self._formInitialValues["description"] = self.post.record.description
-            self._formInitialValues["profession"] = self.post.record.profession
         return self._formInitialValues
 
     def processForm(self):
-        title = self.formData.get("title", "")
-        poster = self.formData.get("poster", "")
-        description = self.formData.get("description", "")
-        profession = self.formData.get("profession", "")
-        if len(title) < 1:  #TODO switch min length
-            self._pageErrors.append("Title must be at least 30 characters long.")
-        else:
-            if poster != self.username:
-                self._pageErrors.append("You must be logged in to create an post.")
-            else:
-                if len(description) < 1:  #TODO switch min length
-                    self._pageErrors.append("Post description must be at least 75 characters long.")
-                else:
-                    if self.post and self.post.record:
-                        self._post.record.title = title
-                        self._post.record.description = description
-                        self._post.record.profession = profession
-                        if self.request.FILES.get("postPicture"):
-                            self._post.record.postPicture = self.request.FILES.get("postPicture")
-                        try:
-                            self.post.record.save()
-                            print "saved new post with postID {0}".format(self.postID)
-                        except Exception as e:
-                            print e
-                            self._pageErrors.append("Could not connect to Post database.")
-                        else:
-                            return True
-        return False
+        return self.post.formIsValid()
 
+
+class CreateProjectPostView(GenericCreatePostView):
+    def __init__(self, *args, **kwargs):
+        super(CreateProjectPostView, self).__init__(*args, **kwargs)
+
+    @property
+    def post(self):
+        if self._post is None:
+            if not self.postID:
+                self._postID = helpers.createUniqueID(destDatabase=models.ProjectPost, idKey="postID")
+            self._post = ProjectPostInstance(request=self.request, postID=self.postID)
+        return self._post
+
+    @property
+    def formInitialValues(self):
+        self._formInitialValues = super(CreateProjectPostView, self).formInitialValues
+        if self.post.record:
+            self._formInitialValues["status"] = self.post.record.status
+        return self._formInitialValues
 
 
 class CreateCollaborationPostView(GenericCreatePostView):
@@ -285,6 +314,14 @@ class CreateCollaborationPostView(GenericCreatePostView):
             self._post = CollaborationPostInstance(request=self.request, postID=self.postID)
         return self._post
 
+    @property
+    def formInitialValues(self):
+        self._formInitialValues = super(CreateCollaborationPostView, self).formInitialValues
+        self._formInitialValues["postID"] = self.postID
+        if self.post.record:
+            self._formInitialValues["profession"] = self.post.record.profession
+        return self._formInitialValues
+
 
 class CreateWorkPostView(GenericCreatePostView):
     def __init__(self, *args, **kwargs):
@@ -297,6 +334,14 @@ class CreateWorkPostView(GenericCreatePostView):
                 self._postID = helpers.createUniqueID(destDatabase=models.WorkPost, idKey="postID")
             self._post = WorkPostInstance(request=self.request, postID=self.postID)
         return self._post
+
+    @property
+    def formInitialValues(self):
+        self._formInitialValues = super(CreateWorkPostView, self).formInitialValues
+        if self.post.record:
+            self._formInitialValues["profession"] = self.post.record.profession
+            self._formInitialValues["paid"] = self.post.record.paid
+        return self._formInitialValues
 
 
 class ViewPostView(views.GenericFormView):
