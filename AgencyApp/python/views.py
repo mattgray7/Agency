@@ -394,8 +394,8 @@ def viewEvent(request, eventID):
     view = event.ViewEventView(request=request, currentPage=constants.VIEW_EVENT, eventID=eventID)
     return view.process()
 
-def createPost(request):
-    view = post.CreatePostMainView(request=request, currentPage=constants.CREATE_POST)
+def createPostChoice(request):
+    view = post.CreatePostChoiceView(request=request, currentPage=constants.CREATE_POST_CHOICE)
     return view.process()
 
 def createCollaborationPost(request):

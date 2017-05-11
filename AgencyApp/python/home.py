@@ -20,7 +20,7 @@ class HomeView(views.GenericFormView):
 
     @property
     def pageContext(self):
-        self._pageContext["possibleSources"] = {"post": constants.CREATE_POST,
+        self._pageContext["possibleSources"] = {"post": constants.CREATE_POST_CHOICE,
                                                 "event": constants.CREATE_EVENT,
                                                 "home": constants.HOME,
                                                 "createAccount": constants.CREATE_BASIC_ACCOUNT

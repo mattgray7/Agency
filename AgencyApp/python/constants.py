@@ -12,7 +12,7 @@ CREATE_EVENT = "CREATE_EVENT"
 EDIT_EVENT = "EDIT_EVENT"
 VIEW_EVENT = "VIEW_EVENT"
 
-CREATE_POST = "CREATE_POST"
+CREATE_POST_CHOICE = "CREATE_POST_CHOICE"
 VIEW_POST = "VIEW_POST"
 EDIT_POST = "EDIT_POST"
 
@@ -57,11 +57,10 @@ URL_MAP = {HOME: "/",
 		   LOGIN:"/login/",
 		   PROFILE:"/{0}/",
 		   CREATE_BASIC_ACCOUNT: "/account/create/basic/",
-		   CREATE_POST: "/create/post/",
 		   CREATE_EVENT: "/create/event/",
 		   EDIT_EVENT: "/edit/event/{0}/",
 		   VIEW_EVENT: "/view/event/{0}/",
-		   CREATE_POST: "/create/post/",
+		   CREATE_POST_CHOICE: "/create/post/",
 		   EDIT_POST: "/edit/post/{0}/",
 		   VIEW_POST: "/view/post/{0}/",
 		   CREATE_PROJECT: "/create/project/",
@@ -93,7 +92,7 @@ DEFAULT_PAGE_MAP = {HOME: HOME,
 					VIEW_EVENT: VIEW_EVENT,
 					EDIT_EVENT: VIEW_EVENT,
 					BROWSE_EVENTS: VIEW_EVENT,
-					CREATE_POST: CREATE_PROJECT,
+					CREATE_POST_CHOICE: CREATE_PROJECT,
 					EDIT_POST: VIEW_POST,
 					CREATE_PROJECT: CREATE_WORK_POST,
 					CREATE_WORK_POST: VIEW_POST,
@@ -112,7 +111,7 @@ FORM_MAP = {HOME: forms.BaseForm,
 			CREATE_EVENT: forms.CreateEventForm,
 			EDIT_EVENT: forms.CreateEventForm,
 			VIEW_EVENT: forms.CreateEventForm,
-			CREATE_POST: None,
+			CREATE_POST_CHOICE: None,
 			CREATE_PROJECT: forms.CreateProjectForm,
 			CREATE_COLLABORATION_POST: forms.CreateCollaborationPostForm,
 			CREATE_WORK_POST: forms.CreateWorkPostForm,
@@ -133,7 +132,7 @@ HTML_MAP = {HOME: 'AgencyApp/home.html',
 			CREATE_EVENT: 'AgencyApp/event/create.html',
 			EDIT_EVENT: 'AgencyApp/event/create.html',
 			VIEW_EVENT: 'AgencyApp/event/view.html',
-			CREATE_POST: 'AgencyApp/post/createPost.html',
+			CREATE_POST_CHOICE: 'AgencyApp/post/createPostChoice.html',
 			VIEW_POST: 'AgencyApp/post/viewPost.html',
 			EDIT_POST: None,
 			CREATE_PROJECT: 'AgencyApp/post/project.html',

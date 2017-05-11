@@ -19,7 +19,7 @@ urlpatterns = [
     url(r'^edit/event/(?P<eventID>[A-Za-z0-9]+)/$', views.editEvent, name='editEvent'),
 
     # Create post
-    url(r'^create/post/$', views.createPost, name='createPost'),
+    url(r'^create/post/$', views.createPostChoice, name='createPostChoice'),
     url(r'^edit/post/(?P<postID>[A-Za-z0-9]+)/$', views.editPost, name='editPost'),
     url(r'^view/post/(?P<postID>[A-Za-z0-9]+)/$', views.viewPost, name='viewPost'),
     url(r'^create/post/collaboration/$', views.createCollaborationPost, name='createCollaborationPost'),

@@ -90,9 +90,9 @@ class WorkPostInstance(PostInstance):
 # ======================= VIEWS ======================== #
 
 
-class CreatePostMainView(views.GenericFormView):
+class CreatePostChoiceView(views.GenericFormView):
     def __init__(self, *args, **kwargs):
-        super(CreatePostMainView, self).__init__(*args, **kwargs)
+        super(CreatePostChoiceView, self).__init__(*args, **kwargs)
 
     @property
     def cancelDestination(self):
