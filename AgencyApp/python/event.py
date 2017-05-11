@@ -159,6 +159,7 @@ class ViewEventView(views.GenericFormView):
     def currentEvent(self):
         if self._currentEvent is None:
             self._currentEvent = models.Event.objects.get(eventID=self.eventID)
+            print type(self._currentEvent)
         return self._currentEvent
 
     @property

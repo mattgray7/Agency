@@ -78,9 +78,6 @@ class AbstractPost(models.Model):
     postPicturePath = models.CharField(max_length=5000, default=None, blank=True, null=True)
     postPicture = models.ImageField(default=None, upload_to=image_directory_path, storage=imageStorage, blank=True, null=True)
 
-    def __str__(self):
-        return self.title
-
 class WorkPost(AbstractPost):
     projectID = models.CharField(max_length=10)
     profession = models.CharField(max_length=200)

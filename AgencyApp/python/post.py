@@ -38,6 +38,7 @@ class PostInstance(object):
                 self._record = self.database(postID=self.postID,
                                              poster=self.request.user.username)
                 self._record.save()
+            print self._record
         return self._record
 
     @property
@@ -221,6 +222,37 @@ class GenericCreatePostView(views.PictureFormView):
             self._formInitialValues["profession"] = self.post.record.profession
         return self._formInitialValues
 
+    def processForm(self):
+        title = self.formData.get("title", "")
+        poster = self.formData.get("poster", "")
+        description = self.formData.get("description", "")
+        profession = self.formData.get("profession", "")
+        if len(title) < 1:  #TODO switch min length
+            self._pageErrors.append("Title must be at least 30 characters long.")
+        else:
+            if poster != self.username:
+                self._pageErrors.append("You must be logged in to create an event.")
+            else:
+                if len(description) < 1:  #TODO switch min length
+                    self._pageErrors.append("Event description must be at least 75 characters long.")
+                else:
+                    if self.post and self.post.record:
+                        self._post.record.title = title
+                        self._post.record.description = description
+                        self._post.record.profession = profession
+                        if self.request.FILES.get("postPicture"):
+                            self._post.record.postPicture = self.request.FILES.get("postPicture")
+                        try:
+                            self.post.record.save()
+                            print "saved new event with postID {0}".format(self.postID)
+                        except Exception as e:
+                            print e
+                            self._pageErrors.append("Could not connect to Post database.")
+                        else:
+                            return True
+        return False
+
+
 
 class CreateCollaborationPostView(GenericCreatePostView):
     def __init__(self, *args, **kwargs):
@@ -254,9 +286,32 @@ class CreateWorkPostView(GenericCreatePostView):
 
 class ViewPostView(views.GenericFormView):
     def __init__(self, *args, **kwargs):
+        self._postID = kwargs.get("postID")
         super(ViewPostView, self).__init__(*args, **kwargs)
-        raise
+        self._post = None
 
+    @property
+    def postID(self):
+        if self._postID is None:
+            self._postID = self.request.get("postID")
+        return self._postID
+
+    @property
+    def post(self):
+        if self._post is None:
+            if self.postID:
+                if isCollaborationPost(self.postID):
+                    self._post = CollaborationPostInstance(request=self.request, postID=self.postID)
+                elif isWorkPost(self.postID):
+                    self._post = WorkPostInstance(request=self.request, postID=self.postID)
+        return self._post
+
+    @property
+    def pageContext(self):
+        self._pageContext["post"] = self.postID and self.post.record or None
+        self._pageContext["possibleDestinations"] = {"edit": constants.EDIT_POST}
+        print "\n\npageContext is {0}".format(self._pageContext)
+        return self._pageContext
 
 
 def isCollaborationPost(postID):
