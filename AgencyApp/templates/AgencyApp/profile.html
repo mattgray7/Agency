@@ -108,6 +108,20 @@
 
 		<!-- Posts -->
 		{% if profilePosts %}
+			{% if profilePosts.projects %}
+				<br>
+				<h3>Projects {{ userAccount.firstName }} is involved in...</h3>
+				{% for projectPost in profilePosts.projects %}
+					<form method="post" action="/{{ profileUsername }}/"> 
+						{% csrf_token %}
+						<input type="hidden" name="postID" value="{{projectPost.postID}}" />
+						<input type="hidden" name="source" value="{{ next }}" />
+						<input type="hidden" name="next" value="{{ next }}" />
+						<input type="hidden" name="destination" value="{{ possibleDestinations.viewPost }}" />
+						<input type="submit" Value="{{ projectPost.title }}" />
+					</form>
+				{% endfor %}
+			{% endif %}
 			{% if profilePosts.collaboration %}
 				<br>
 				<h3>Seeking collaborators posts...</h3>
@@ -121,7 +135,8 @@
 						<input type="submit" Value="{{ collabPost.title }}" />
 					</form>
 				{% endfor %}
-			{% elif profilePosts.work %}
+			{% endif %}
+			{% if profilePosts.work %}
 				{% for workPost in profilePosts.work %}
 					<form method="post" action="/{{ profileUsername }}/"> 
 						{% csrf_token %}

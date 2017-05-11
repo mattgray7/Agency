@@ -411,6 +411,8 @@ def editPost(request, postID):
         view = post.CreateCollaborationPostView(request=request, currentPage=constants.EDIT_POST, postID=postID)
     elif post.isWorkPost(postID):
         view = post.CreateWorkPostView(request=request, currentPage=constants.EDIT_POST, postID=postID)
+    elif post.isProjectPost(postID):
+        view = post.CreateProjectPostView(request=request, currentPage=constants.EDIT_POST, postID=postID)
     else:
         print "ERROR SELECTING EDIT POST VIEW"
         raise

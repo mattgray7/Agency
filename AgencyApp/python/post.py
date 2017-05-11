@@ -370,8 +370,13 @@ class ViewPostView(views.GenericFormView):
     def pageContext(self):
         self._pageContext["post"] = self.postID and self.post.record or None
         self._pageContext["possibleDestinations"] = {"edit": constants.EDIT_POST}
+        self._pageContext["isProject"] = isProjectPost(self.postID)
+        self._pageContext["isCollaboration"] = isCollaborationPost(self.postID)
+        self._pageContext["isWork"] = isWorkPost(self.postID)
         return self._pageContext
 
+def isProjectPost(postID):
+    return len(models.ProjectPost.objects.filter(postID=postID)) > 0
 
 def isCollaborationPost(postID):
     return len(models.CollaborationPost.objects.filter(postID=postID)) > 0
