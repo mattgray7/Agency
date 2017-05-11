@@ -22,7 +22,6 @@ def redirect(request, currentPage, destinationPage):
         print "No url could be resolved"
         raise
     else:
-        print "SETTING SOURCE TO CURRENT PAGE: {0}".format(currentPage)
         messages.add_message(request, messages.INFO,
                              "source:{0}".format(currentPage))
         return HttpResponseRedirect(destinationURL)
@@ -44,9 +43,8 @@ def getDestinationURL(request, destPageName):
                                  "eventID:{0}".format(request.POST.get('eventID')))
         else:
             print "NO EVENTID PASSED TO getDestinationURL"
-    elif destPageName in [constants.VIEW_POST, constants.CREATE_COLLABORATION_POST, constants.CREATE_WORK_POST]:
-        print "POST URL ATTEMPTING TO BE SET"
-        print request.GET
+    elif destPageName in [constants.VIEW_POST, constants.CREATE_COLLABORATION_POST,
+                          constants.CREATE_WORK_POST, constants.EDIT_POST]:
         if request.POST.get('postID'):
             destURL = destURL.format(request.POST.get('postID'))
             messages.add_message(request, messages.INFO,

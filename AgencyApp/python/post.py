@@ -24,7 +24,8 @@ class PostInstance(object):
     @property
     def postID(self):
         if self._postID is None:
-            self._postID = self.request.POST.get("postID")
+            self._postID = self.request.POST.get("postID") or helpers.getMessageFromKey(self.request,
+                                                                                        "postID")
             if self._postID is None:
                 self._postID = helpers.createUniqueID(destDatabase=self.database, idKey="postID")
         return self._postID
@@ -165,7 +166,8 @@ class GenericCreatePostView(views.PictureFormView):
     @property
     def postID(self):
         if self._postID is None:
-            self._postID = self.request.POST.get("postID")
+            self._postID = self.request.POST.get("postID") or helpers.getMessageFromKey(self.request,
+                                                                                        "postID")
         return self._postID
 
     @property
@@ -192,7 +194,7 @@ class GenericCreatePostView(views.PictureFormView):
     @property
     def currentPageHtml(self):
         if self._currentPageHtml is None:
-            if self.currentPage == constants.EDIT_EVENT:
+            if self.currentPage == constants.EDIT_POST:
                 self._currentPageHtml = constants.HTML_MAP.get(self.post.postTypePageName)
             else:
                 self._currentPageHtml = constants.HTML_MAP.get(self.currentPage)
@@ -201,7 +203,7 @@ class GenericCreatePostView(views.PictureFormView):
     @property
     def formClass(self):
         if self._formClass is None:
-            if self.currentPage == constants.EDIT_EVENT:
+            if self.currentPage == constants.EDIT_POST:
                 self._formClass = constants.FORM_MAP.get(self.post.postTypePageName)
             else:
                 self._formClass = constants.FORM_MAP.get(self.currentPage)
@@ -210,7 +212,7 @@ class GenericCreatePostView(views.PictureFormView):
     @property
     def pictureModel(self):
         """To be overridden in child class"""
-        return self.post.postRecord
+        return self.post.record
 
     @property
     def formInitialValues(self):
@@ -231,10 +233,10 @@ class GenericCreatePostView(views.PictureFormView):
             self._pageErrors.append("Title must be at least 30 characters long.")
         else:
             if poster != self.username:
-                self._pageErrors.append("You must be logged in to create an event.")
+                self._pageErrors.append("You must be logged in to create an post.")
             else:
                 if len(description) < 1:  #TODO switch min length
-                    self._pageErrors.append("Event description must be at least 75 characters long.")
+                    self._pageErrors.append("Post description must be at least 75 characters long.")
                 else:
                     if self.post and self.post.record:
                         self._post.record.title = title
@@ -244,7 +246,7 @@ class GenericCreatePostView(views.PictureFormView):
                             self._post.record.postPicture = self.request.FILES.get("postPicture")
                         try:
                             self.post.record.save()
-                            print "saved new event with postID {0}".format(self.postID)
+                            print "saved new post with postID {0}".format(self.postID)
                         except Exception as e:
                             print e
                             self._pageErrors.append("Could not connect to Post database.")
@@ -310,7 +312,6 @@ class ViewPostView(views.GenericFormView):
     def pageContext(self):
         self._pageContext["post"] = self.postID and self.post.record or None
         self._pageContext["possibleDestinations"] = {"edit": constants.EDIT_POST}
-        print "\n\npageContext is {0}".format(self._pageContext)
         return self._pageContext
 
 
