@@ -28,7 +28,7 @@ class HomeView(views.GenericFormView):
         return self._pageContext
 
     def loginRequired(self):
-        return not self.request.user.is_authenticated() and self.destinationPage in [constants.CREATE_EVENT, constants.CREATE_POST]
+        return not self.request.user.is_authenticated() and self.destinationPage in [constants.CREATE_EVENT, constants.CREATE_POST_CHOICE]
 
     def process(self):
         if self.request.method == "POST":

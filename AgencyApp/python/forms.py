@@ -42,13 +42,13 @@ class CreateEventForm(BaseForm):
     location = forms.CharField(label="Location", required=True, max_length=1000)
     date = forms.DateField(widget=forms.DateInput(attrs={'class':'datepicker'}))
 
-class CreateProjectForm(BaseForm):
+"""class CreateProjectForm(BaseForm):
     projectID = forms.CharField(widget=forms.HiddenInput, required=False, max_length=10)
     poster = forms.CharField(widget=forms.HiddenInput, required=False, max_length=200)
     title = forms.CharField(max_length=500, required=True)
     description = forms.CharField(label="Project Description:", required=True, max_length=5000)
     projectPicturePath = forms.CharField(widget=forms.HiddenInput, required=False)
-    projectPicture = forms.ImageField(label="Project picture", required=False)
+    projectPicture = forms.ImageField(label="Project picture", required=False)"""
 
 class GenericCreatePostForm(BaseForm):
     postID = forms.CharField(widget=forms.HiddenInput, required=False, max_length=10)
@@ -58,8 +58,11 @@ class GenericCreatePostForm(BaseForm):
     title = forms.CharField(label="Post title", max_length=500, required=True)
     description = forms.CharField(label="Project Description", required=True, max_length=5000)
 
+class CreateProjectPostForm(GenericCreatePostForm):
+    status = forms.CharField(label="Production status", required=False, max_length=50)
+
 class CreateWorkPostForm(GenericCreatePostForm):
-    projectID = forms.CharField(widget=forms.HiddenInput, required=False, max_length=10)
+    projectPostID = forms.CharField(widget=forms.HiddenInput, required=False, max_length=10)
     profession = forms.CharField(label="Profession", max_length=200, required=True)
     paid = forms.BooleanField(label="Paid", required=False)
 

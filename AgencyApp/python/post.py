@@ -44,7 +44,7 @@ class PostInstance(object):
     @property
     def database(self):
         """To be overridden in child class"""
-        return self.database
+        return self._database
 
     @property
     def postTypePageName(self):
@@ -54,6 +54,10 @@ class PostInstance(object):
 
 class CollaborationPostInstance(PostInstance):
     def __init__(self, *args, **kwargs):
+        super(CollaborationPostInstance, self).__init__(*args, **kwargs)
+        self._postTypePageName = constants.CREATE_COLLABORATION_POST
+        self._database = models.CollaborationPost
+    """def __init__(self, *args, **kwargs):
         super(CollaborationPostInstance, self).__init__(*args, **kwargs)
 
     @property
@@ -66,24 +70,21 @@ class CollaborationPostInstance(PostInstance):
     def postTypePageName(self):
         if self._postTypePageName is None:
             self._postTypePageName = constants.CREATE_COLLABORATION_POST
-        return self._postTypePageName
+        return self._postTypePageName"""
 
 
 class WorkPostInstance(PostInstance):
     def __init__(self, *args, **kwargs):
         super(WorkPostInstance, self).__init__(*args, **kwargs)
+        self._postTypePageName = constants.CREATE_WORK_POST
+        self._database = models.WorkPost
 
-    @property
-    def database(self):
-        if self._database is None:
-            self._database = models.WorkPost
-        return self._database
+class ProjectPostInstance(PostInstance):
+    def __init__(self, *args, **kwargs):
+        super(ProjectPostInstance, self).__init__(*args, **kwargs)
+        self._postTypePageName = constants.CREATE_PROJECT_POST
+        self._database = models.ProjectPost
 
-    @property
-    def postTypePageName(self):
-        if self._postTypePageName is None:
-            self._postTypePageName = constants.CREATE_WORK_POST
-        return self._postTypePageName
 
 # =================== END OF INSTANCES ====================== #
 
@@ -106,7 +107,7 @@ class CreatePostChoiceView(views.GenericFormView):
                                                 "setupProfileFinish": constants.SETUP_ACCOUNT_FINISH
                                                 }
         self._pageContext["possibleDestinations"] = {"collaboration": constants.CREATE_COLLABORATION_POST,
-                                                     "project": constants.CREATE_PROJECT
+                                                     "project": constants.CREATE_PROJECT_POST
                                                      }
         return self._pageContext
 

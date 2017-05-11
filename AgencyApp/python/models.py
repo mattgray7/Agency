@@ -17,7 +17,7 @@ def image_directory_path(instance, filename):
     if hasattr(instance, "username"):
         inputString = instance.username
     elif (isinstance(instance, Event) or 
-          isinstance(instance, Project) or
+          isinstance(instance, ProjectPost) or
           isinstance(instance, WorkPost) or
           isinstance(instance, CollaborationPost) and
           hasattr(instance, "poster")):
@@ -62,14 +62,6 @@ class Profession(models.Model):
     def __str__(self):
         return self.professionName
 
-class Project(models.Model):
-    projectID = models.CharField(max_length=10)
-    poster = models.CharField(max_length=200)
-    title = models.CharField(max_length=500, default=None, blank=True, null=True)
-    description = models.CharField(max_length=5000, default=None, blank=True, null=True)
-    projectPicturePath = models.CharField(max_length=5000, default=None, blank=True, null=True)
-    projectPicture = models.ImageField(default=None, upload_to=image_directory_path, storage=imageStorage, blank=True, null=True)
-
 class AbstractPost(models.Model):
     postID = models.CharField(max_length=10)
     poster = models.CharField(max_length=200)
@@ -78,8 +70,12 @@ class AbstractPost(models.Model):
     postPicturePath = models.CharField(max_length=5000, default=None, blank=True, null=True)
     postPicture = models.ImageField(default=None, upload_to=image_directory_path, storage=imageStorage, blank=True, null=True)
 
+class ProjectPost(AbstractPost):
+    #TODO add something
+    status = models.CharField(max_length=50)
+
 class WorkPost(AbstractPost):
-    projectID = models.CharField(max_length=10)
+    projectPostID = models.CharField(max_length=10)
     profession = models.CharField(max_length=200)
     paid = models.BooleanField(default=False)
 
