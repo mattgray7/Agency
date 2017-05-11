@@ -90,21 +90,22 @@
 			</form>
 		{% endif %}
 
-		<!-- Events --><!--
+		<!-- Events -->
 		{% if profileEvents %}
 			<br><h3>Events {{ profileUserAccount.firstName }} has posted...</h3>
 			<ul>
 				{% for event in profileEvents %}
-					<form method="post" action="/view/event/{{event.eventID}}/"> 
+					<form method="post" action="/{{ profileUsername }}/"> 
 						{% csrf_token %}
-						<input type="hidden" name="source" value="{{ source }}" />
+						<input type="hidden" name="eventID" value="{{event.eventID}}" />
+						<input type="hidden" name="source" value="{{ next }}" />
 						<input type="hidden" name="next" value="{{ possibleDestinations.viewEvent }}" />
 						<input type="hidden" name="destination" value="{{ possibleDestinations.viewEvent }}" />
 						<input type="submit" Value="{{ event.title }}" />
 					</form>
 				{% endfor %}
 			</ul>
-		{% endif %}-->
+		{% endif %}
 	{% else %}
 		No user with name {{ profileUsername }} found.
 	{% endif %}
