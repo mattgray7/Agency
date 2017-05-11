@@ -156,9 +156,9 @@ class CreateProjectView(views.PictureFormView):
 
 class GenericCreatePostView(views.PictureFormView):
     def __init__(self, *args, **kwargs):
+        self._postID = kwargs.get("postID")
         super(GenericCreatePostView, self).__init__(*args, **kwargs)
         self._post = None
-        self._postID = None
         self._pictureModel = None
         self._pictureModelFieldName = "postPicture"
 
@@ -188,7 +188,24 @@ class GenericCreatePostView(views.PictureFormView):
 
     @property
     def cancelButtonName(self):
-        return "Back"
+        if self.sourcePage == constants.VIEW_POST:
+            return "Cancel"
+        else:
+            return "Back"
+
+    @property
+    def cancelDestinationURL(self):
+        if self._cancelDestinationURL is None:
+            self._cancelDestinationURL = constants.URL_MAP.get(self.currentPage)
+            if self._cancelDestinationURL:
+                self._cancelDestinationURL = self._cancelDestinationURL.format(self.postID)
+        return self._cancelDestinationURL
+
+    @property
+    def cancelButtonExtraInputs(self):
+        if not self._cancelButtonExtraInputs:
+            self._cancelButtonExtraInputs = {"postID": self.postID}
+        return json.dumps(self._cancelButtonExtraInputs)
 
     @property
     def currentPageHtml(self):
@@ -266,10 +283,6 @@ class CreateCollaborationPostView(GenericCreatePostView):
                 self._postID = helpers.createUniqueID(destDatabase=models.CollaborationPost, idKey="postID")
             self._post = CollaborationPostInstance(request=self.request, postID=self.postID)
         return self._post
-
-    @property
-    def cancelDestination(self):
-        return constants.CREATE_POST
 
 
 class CreateWorkPostView(GenericCreatePostView):

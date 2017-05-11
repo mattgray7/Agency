@@ -24,7 +24,11 @@
 	{% endif %}
 		{% csrf_token %}
 		{{ form.as_p }}
-		<input type="submit" value="Create post" />
+		{% if post.title %}
+			<input type="submit" value="Update post" />
+		{% else %}
+			<input type="submit" value="Create post" />
+		{% endif %}
 	</form>
 	<div id="cancelButton"></div>
 {% endblock %}

@@ -10,7 +10,16 @@
 	{% endif %}
 
 	<h3> {{ post.title }}  </h3>
-	<h5> Posted by {{ post.poster }} </h5>
+	<h5> Posted by {{ post.poster }} <br>
+		 Looking for a {{ post.profession }}
+	</h5>
+	<h5> Description:<br>
+		{% if post.description %}
+			{{ post.description }}
+		{% else %}
+			No description provided.
+		{% endif %}
+	</h5>
 	{% if post.poster == request.user.username %}
 		<form method='post' action="/view/post/{{ post.postID }}/">
 			{% csrf_token %}
