@@ -24,6 +24,7 @@ class GenericView(object):
 
         self._sourcePage = kwargs.get("sourcePage")
         self._currentPage = kwargs.get("currentPage")
+        self._currentPageHtml = None
         self._destinationPage = None
         self._destPageKey = None
 
@@ -111,6 +112,12 @@ class GenericView(object):
         return self._currentPage
 
     @property
+    def currentPageHtml(self):
+        if self._currentPageHtml is None:
+            self._currentPageHtml = constants.HTML_MAP.get(self.currentPage)
+        return self._currentPageHtml
+
+    @property
     def destinationPage(self):
         if self._destinationPage is None:
             if self.request.POST.get("destination"):
@@ -151,7 +158,7 @@ class GenericView(object):
         if self._pageErrors:
             self._pageContext["errors"] = self.pageErrors
         print "source :{0}, current: {1}, dest: {2}".format(self.sourcePage, self.currentPage, self.destinationPage)
-        return render(self.request, constants.HTML_MAP.get(self.currentPage), self.pageContext)
+        return render(self.request, self.currentPageHtml, self.pageContext)
 
 
 
@@ -241,7 +248,7 @@ class GenericFormView(GenericView):
         if self._pageErrors:
             self._pageContext["errors"] = self.pageErrors
         print "source :{0}, current: {1}, dest: {2}".format(self.sourcePage, self.currentPage, self.destinationPage)
-        return render(self.request, constants.HTML_MAP.get(self.currentPage), self.pageContext)
+        return render(self.request, self.currentPageHtml, self.pageContext)
 
     def processForm(self):
         """To bo overridden in child class"""
@@ -268,8 +275,10 @@ class PictureFormView(GenericFormView):
         if not self._form:
             if self.formSubmitted:
                 # Override form to create form with request.FILES
+                print "Form submitted"
                 self._form = self.formClass(self.request.POST, self.request.FILES)
             elif self.formClass:
+                print "setting form initial values to {0}".format(self.formInitialValues)
                 self._form = self.formClass(initial=self.formInitialValues)
         return self._form
 
@@ -395,6 +404,20 @@ def createCollaborationPost(request):
 
 def createWorkPost(request):
     view = post.CreateWorkPostView(request=request, currentPage=constants.CREATE_WORK_POST)
+    return view.process()
+
+def editPost(request, postID):
+    if post.isCollaborationPost(postID):
+        view = post.CreateCollaborationPostView(request=request, currentPage=constants.EDIT_POST, postID=postID)
+    elif post.isWorkPost(postID):
+        view = post.CreateWorkPostView(request=request, currentPage=constants.EDIT_POST, postID=postID)
+    else:
+        print "ERROR SELECTING EDIT POST VIEW"
+        raise
+    return view.process()
+
+def viewPost(request, postID):
+    view = post.ViewPostView(request=request, currentPage=constants.VIEW_POST, postID=postID)
     return view.process()
 
 def createProject(request):

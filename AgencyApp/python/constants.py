@@ -7,17 +7,21 @@ LOGIN = "LOGIN"
 LOGOUT = "LOGOUT"
 CANCEL = "CANCEL"
 PROFILE = "PROFILE"
+
 CREATE_EVENT = "CREATE_EVENT"
 EDIT_EVENT = "EDIT_EVENT"
 VIEW_EVENT = "VIEW_EVENT"
+
 CREATE_POST = "CREATE_POST"
 VIEW_POST = "VIEW_POST"
-CREATE_COLLABORATION_POST = "CREATE_COLLABORATION_POST"
-VIEW_COLLABORATION_POST = "VIEW_COLLABORTION_POST"
+EDIT_POST = "EDIT_POST"
+
 CREATE_PROJECT = "CREATE_PROJECT"
 VIEW_PROJECT = "VIEW_PROJECT"
+
+CREATE_COLLABORATION_POST = "CREATE_COLLABORATION_POST"
 CREATE_WORK_POST = "CREATE_WORK_POST"
-VIEW_WORK_POST = "VIEW_WORK_POST"
+
 BROWSE_EVENTS = "BROWSE_EVENTS"
 BROWSE_POSTS = "BROWSE_POSTS"
 
@@ -58,6 +62,8 @@ URL_MAP = {HOME: "/",
 		   EDIT_EVENT: "/edit/event/{0}/",
 		   VIEW_EVENT: "/view/event/{0}/",
 		   CREATE_POST: "/create/post/",
+		   EDIT_POST: "/edit/post/{0}/",
+		   VIEW_POST: "/view/post/{0}/",
 		   CREATE_PROJECT: "/create/project/",
 		   CREATE_COLLABORATION_POST: "/create/post/collaboration/",
 		   CREATE_WORK_POST: "/create/post/work/",
@@ -88,9 +94,11 @@ DEFAULT_PAGE_MAP = {HOME: HOME,
 					EDIT_EVENT: VIEW_EVENT,
 					BROWSE_EVENTS: VIEW_EVENT,
 					CREATE_POST: CREATE_PROJECT,
+					EDIT_POST: VIEW_POST,
 					CREATE_PROJECT: CREATE_WORK_POST,
-					CREATE_WORK_POST: VIEW_WORK_POST,
-					CREATE_COLLABORATION_POST: VIEW_COLLABORATION_POST
+					CREATE_WORK_POST: VIEW_POST,
+					CREATE_COLLABORATION_POST: VIEW_POST,
+					VIEW_POST: VIEW_POST
 					}
 
 FORM_MAP = {HOME: forms.BaseForm,
@@ -107,7 +115,9 @@ FORM_MAP = {HOME: forms.BaseForm,
 			CREATE_POST: None,
 			CREATE_PROJECT: forms.CreateProjectForm,
 			CREATE_COLLABORATION_POST: forms.CreateCollaborationPostForm,
-			CREATE_WORK_POST: forms.CreateWorkPostForm
+			CREATE_WORK_POST: forms.CreateWorkPostForm,
+			EDIT_POST: None,
+			VIEW_POST: None
 			}
 
 HTML_MAP = {HOME: 'AgencyApp/home.html',
@@ -124,6 +134,8 @@ HTML_MAP = {HOME: 'AgencyApp/home.html',
 			EDIT_EVENT: 'AgencyApp/event/create.html',
 			VIEW_EVENT: 'AgencyApp/event/view.html',
 			CREATE_POST: 'AgencyApp/post/createPost.html',
+			VIEW_POST: 'AgencyApp/post/viewPost.html',
+			EDIT_POST: None,
 			CREATE_PROJECT: 'AgencyApp/post/project.html',
 			CREATE_COLLABORATION_POST: 'AgencyApp/post/createCollaborationPost.html',
 			CREATE_WORK_POST: 'AgencyApp/post/createWorkPost.html',
@@ -133,7 +145,9 @@ HTML_MAP = {HOME: 'AgencyApp/home.html',
 
 
 MEDIA_FILE_NAME_MAP = {EDIT_PROFILE_PICTURE: "profile.jpg",
-					   CREATE_EVENT: "event_{0}.jpg"
+					   CREATE_EVENT: "event_{0}.jpg",
+					   CREATE_COLLABORATION_POST: "post_{0}.jpg",
+					   CREATE_WORK_POST: "post_{0}.jpg"
 					   }
 
 

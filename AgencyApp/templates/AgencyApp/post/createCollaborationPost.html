@@ -17,7 +17,7 @@
 		</div>
 	{% endif %}
 
-	{% if pvent.title %}
+	{% if post.title %}
 		<form method='post' action="/edit/post/{{post.postID}}/" name='createForm' enctype="multipart/form-data">
 	{% else %}
 		<form method='post' action="/create/post/collaboration/" name='createForm' enctype="multipart/form-data">

@@ -12,6 +12,82 @@ import views
 import string, random
 import json
 
+# =================== INSTANCES ====================== #
+class PostInstance(object):
+    def __init__(self, *args, **kwargs):
+        self.request = kwargs.get("request")
+        self._postID = kwargs.get('postID')
+        self._record = None
+        self._database = None
+        self._postTypePageName = None
+
+    @property
+    def postID(self):
+        if self._postID is None:
+            self._postID = self.request.POST.get("postID")
+            if self._postID is None:
+                self._postID = helpers.createUniqueID(destDatabase=self.database, idKey="postID")
+        return self._postID
+
+    @property
+    def record(self):
+        if self._record is None:
+            try:
+                self._record = self.database.objects.get(postID=self.postID)
+            except self.database.DoesNotExist:
+                self._record = self.database(postID=self.postID,
+                                             poster=self.request.user.username)
+                self._record.save()
+        return self._record
+
+    @property
+    def database(self):
+        """To be overridden in child class"""
+        return self.database
+
+    @property
+    def postTypePageName(self):
+        """To be overridden in child class"""
+        return self._postTypePageName
+
+
+class CollaborationPostInstance(PostInstance):
+    def __init__(self, *args, **kwargs):
+        super(CollaborationPostInstance, self).__init__(*args, **kwargs)
+
+    @property
+    def database(self):
+        if self._database is None:
+            self._database = models.CollaborationPost
+        return self._database
+
+    @property
+    def postTypePageName(self):
+        if self._postTypePageName is None:
+            self._postTypePageName = constants.CREATE_COLLABORATION_POST
+        return self._postTypePageName
+
+
+class WorkPostInstance(PostInstance):
+    def __init__(self, *args, **kwargs):
+        super(WorkPostInstance, self).__init__(*args, **kwargs)
+
+    @property
+    def database(self):
+        if self._database is None:
+            self._database = models.WorkPost
+        return self._database
+
+    @property
+    def postTypePageName(self):
+        if self._postTypePageName is None:
+            self._postTypePageName = constants.CREATE_WORK_POST
+        return self._postTypePageName
+
+# =================== END OF INSTANCES ====================== #
+
+# ======================= VIEWS ======================== #
+
 
 class CreatePostMainView(views.GenericFormView):
     def __init__(self, *args, **kwargs):
@@ -80,38 +156,70 @@ class CreateProjectView(views.PictureFormView):
 class GenericCreatePostView(views.PictureFormView):
     def __init__(self, *args, **kwargs):
         super(GenericCreatePostView, self).__init__(*args, **kwargs)
-        self._formClass = constants.FORM_MAP.get(self.currentPage)
+        self._post = None
         self._postID = None
-        self._basePost = None
-        self._currentPost = None
         self._pictureModel = None
         self._pictureModelFieldName = "postPicture"
+
+    @property
+    def postID(self):
+        if self._postID is None:
+            self._postID = self.request.POST.get("postID")
+        return self._postID
+
+    @property
+    def post(self):
+        """To be overridden in child class"""
+        return self._post
+
+    @property
+    def pageContext(self):
+        self._pageContext["post"] = self.post.record
+        return self._pageContext
+
+    @property
+    def filename(self):
+        if self._filename is None:
+            self._filename = constants.MEDIA_FILE_NAME_MAP.get(self.post.postTypePageName, "tempfile")
+            self._filename = self._filename.format(self.postID)
+        return self._filename
 
     @property
     def cancelButtonName(self):
         return "Back"
 
     @property
-    def postID(self):
-        if self._postID is None:
-            self_postID = helpers.createUniqueID(destDatabase=models.Post, idKey="postID")
-        return self._postID
+    def currentPageHtml(self):
+        if self._currentPageHtml is None:
+            if self.currentPage == constants.EDIT_EVENT:
+                self._currentPageHtml = constants.HTML_MAP.get(self.post.postTypePageName)
+            else:
+                self._currentPageHtml = constants.HTML_MAP.get(self.currentPage)
+        return self._currentPageHtml
 
     @property
-    def currentPost(self):
-        """To be overridden in child class"""
-        return None
-
-    @property
-    def basePost(self):
-        if self._basePost is None:
-            self._basePost = models.Post.objects.get(postID = self.postID)
-        return self.basePost
+    def formClass(self):
+        if self._formClass is None:
+            if self.currentPage == constants.EDIT_EVENT:
+                self._formClass = constants.FORM_MAP.get(self.post.postTypePageName)
+            else:
+                self._formClass = constants.FORM_MAP.get(self.currentPage)
+        return self._formClass
 
     @property
     def pictureModel(self):
         """To be overridden in child class"""
-        return self.currentPost
+        return self.post.postRecord
+
+    @property
+    def formInitialValues(self):
+        self._formInitialValues["postID"] = self.postID
+        self._formInitialValues["poster"] = self.username
+        if self.post.record:
+            self._formInitialValues["title"] = self.post.record.title
+            self._formInitialValues["description"] = self.post.record.description
+            self._formInitialValues["profession"] = self.post.record.profession
+        return self._formInitialValues
 
 
 class CreateCollaborationPostView(GenericCreatePostView):
@@ -119,34 +227,41 @@ class CreateCollaborationPostView(GenericCreatePostView):
         super(CreateCollaborationPostView, self).__init__(*args, **kwargs)
 
     @property
-    def currentPost(self):
-        if self._currentPost is None:
-            try:
-                self._currentPost = models.CollaborationPost.objects.get(postID=self.postID)
-            except models.CollaborationPost.DoesNotExist:
-                pass
-        return self._currentPost
+    def post(self):
+        if self._post is None:
+            if not self.postID:
+                self._postID = helpers.createUniqueID(destDatabase=models.CollaborationPost, idKey="postID")
+            self._post = CollaborationPostInstance(request=self.request, postID=self.postID)
+        return self._post
 
     @property
     def cancelDestination(self):
         return constants.CREATE_POST
 
-    @property
-    def pageContext(self):
-        self._pageContext["possibleSources"] = {"createPost": constants.CREATE_POST}
-        self._pageContext["possibleDestinations"] = {"collaboration": constants.CREATE_COLLABORATION_POST}
-        return self._pageContext
 
 class CreateWorkPostView(GenericCreatePostView):
     def __init__(self, *args, **kwargs):
         super(CreateWorkPostView, self).__init__(*args, **kwargs)
 
     @property
-    def currentPost(self):
-        if self._currentPost is None:
-            try:
-                self._currentPost = models.WorkPost.objects.get(postID=self.postID)
-            except models.WorkPost.DoesNotExist:
-                pass
-        return self._currentPost
+    def post(self):
+        if self._post is None:
+            if not self.postID:
+                self._postID = helpers.createUniqueID(destDatabase=models.WorkPost, idKey="postID")
+            self._post = WorkPostInstance(request=self.request, postID=self.postID)
+        return self._post
+
+
+class ViewPostView(views.GenericFormView):
+    def __init__(self, *args, **kwargs):
+        super(ViewPostView, self).__init__(*args, **kwargs)
+        raise
+
+
+
+def isCollaborationPost(postID):
+    return len(models.CollaborationPost.objects.filter(postID=postID)) > 0
+
+def isWorkPost(postID):
+    return len(models.WorkPost.objects.filter(postID=postID)) > 0
 

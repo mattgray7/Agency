@@ -17,7 +17,6 @@ def image_directory_path(instance, filename):
     if hasattr(instance, "username"):
         inputString = instance.username
     elif (isinstance(instance, Event) or 
-          isinstance(instance, Post) or
           isinstance(instance, Project) or
           isinstance(instance, WorkPost) or
           isinstance(instance, CollaborationPost) and
@@ -71,7 +70,7 @@ class Project(models.Model):
     projectPicturePath = models.CharField(max_length=5000, default=None, blank=True, null=True)
     projectPicture = models.ImageField(default=None, upload_to=image_directory_path, storage=imageStorage, blank=True, null=True)
 
-class Post(models.Model):
+class AbstractPost(models.Model):
     postID = models.CharField(max_length=10)
     poster = models.CharField(max_length=200)
     title = models.CharField(max_length=500, default=None, blank=True, null=True)
@@ -82,15 +81,12 @@ class Post(models.Model):
     def __str__(self):
         return self.title
 
-class WorkPost(models.Model):
-    postID = models.CharField(max_length=10)
+class WorkPost(AbstractPost):
     projectID = models.CharField(max_length=10)
     profession = models.CharField(max_length=200)
     paid = models.BooleanField(default=False)
 
-class CollaborationPost(models.Model):
-    #TODO
-    postID = models.CharField(max_length=10)
+class CollaborationPost(AbstractPost):
     profession = models.CharField(max_length=200)
 
 

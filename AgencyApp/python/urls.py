@@ -20,6 +20,8 @@ urlpatterns = [
 
     # Create post
     url(r'^create/post/$', views.createPost, name='createPost'),
+    url(r'^edit/post/(?P<postID>[A-Za-z0-9]+)/$', views.editPost, name='editPost'),
+    url(r'^view/post/(?P<postID>[A-Za-z0-9]+)/$', views.viewPost, name='viewPost'),
     url(r'^create/post/collaboration/$', views.createCollaborationPost, name='createCollaborationPost'),
     url(r'^create/post/work/$', views.createWorkPost, name='createWorkPost'),
     url(r'^create/project/$', views.createProject, name='createProject'),

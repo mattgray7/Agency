@@ -142,6 +142,7 @@ class ViewEventView(views.GenericFormView):
         self._eventID = kwargs.get("eventID")
         self._formClass = constants.FORM_MAP.get(self.currentPage)
         self._currentEvent = None
+        print "source :{0}, current {1}".format(self.sourcePage, self.currentPage)
 
     @property
     def eventID(self):
