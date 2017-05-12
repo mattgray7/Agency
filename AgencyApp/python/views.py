@@ -275,10 +275,8 @@ class PictureFormView(GenericFormView):
         if not self._form:
             if self.formSubmitted:
                 # Override form to create form with request.FILES
-                print "Form submitted"
                 self._form = self.formClass(self.request.POST, self.request.FILES)
             elif self.formClass:
-                print "setting form initial values to {0}".format(self.formInitialValues)
                 self._form = self.formClass(initial=self.formInitialValues)
         return self._form
 
@@ -429,6 +427,9 @@ def createProjectPost(request):
 def browseEvents(request):
     view = browse.BrowseEventsView(request=request, sourcePage=constants.HOME, currentPage=constants.BROWSE_EVENTS)
     return view.process()
+
+def browseProjects(request):
+    return render(request, "AgencyApp/browse.html", getBaseContext(request))
 
 def browsePosts(request):
     return render(request, "AgencyApp/browse.html", getBaseContext(request))

@@ -44,7 +44,8 @@ def getDestinationURL(request, destPageName):
         else:
             print "NO EVENTID PASSED TO getDestinationURL"
     elif destPageName in [constants.VIEW_POST, constants.CREATE_COLLABORATION_POST,
-                          constants.CREATE_WORK_POST, constants.EDIT_POST]:
+                          constants.CREATE_WORK_POST, constants.CREATE_PROJECT_POST,
+                          constants.EDIT_POST]:
         if request.POST.get('postID'):
             destURL = destURL.format(request.POST.get('postID'))
             messages.add_message(request, messages.INFO,

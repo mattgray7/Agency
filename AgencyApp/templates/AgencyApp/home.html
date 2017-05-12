@@ -31,13 +31,15 @@ function getWelcomeMsg(){
 
 <script>
 
-var mainChoice = "<button onclick='eventsChosen();' value='Events'>Events (View and create events in your community)</button><br><button onclick='jobsChosen();' value='Jobs'>Jobs (Find a job, crew members, or others looking to collaborate)</button><br>";
+var mainChoice = "<button onclick='eventsChosen();' value='Events'>Events (View and create events in your community)</button><br><button onclick='jobsChosen();' value='Jobs'>Jobs (Find a job, crew members, or others looking to collaborate)</button><br><button onclick='projectsChosen();' value='Projects'>Projects (View current projects and create your own)</button><br>"
 
 var createAccountButton = "<button onclick='createAccount()'; value='Create account'>Create account</button>";
 
 var eventChoice = "<button onclick='viewEvents();'> View events in your community</button><br><button onclick='createEventPost();'>Create event</button><br><button onclick='displayMainChoice();'>Back</button>";
 
-var jobChoice = "<button onclick='viewPosts();'> View job postings and creative profiles</button><br><button onclick='createWorkPost();'>Create job post</button><br><button onclick='displayMainChoice();'>Back</button>";
+var postChoice = "<button onclick='viewPosts();'> View job postings and creative profiles</button><br><button onclick='createWorkPost();'>Create job post</button><br><button onclick='displayMainChoice();'>Back</button>";
+
+var projectChoice = "<button onclick='viewProjects();'> View projects </button><br><button onclick='createProject();'>Create project</button><br><button onclick='displayMainChoice();'>Back</button>";
 
 window.onload = displayMainChoice();
 
@@ -54,8 +56,12 @@ function eventsChosen(){
 	document.getElementById('mainChoice').innerHTML = eventChoice;
 }
 
-function jobsChosen(){
-	document.getElementById('mainChoice').innerHTML = jobChoice;
+function postsChosen(){
+	document.getElementById('mainChoice').innerHTML = postChoice;
+}
+
+function projectsChosen(){
+	document.getElementById('mainChoice').innerHTML = projectChoice;
 }
 
 function viewEvents(){
@@ -66,18 +72,27 @@ function viewPosts(){
 	window.location = '/browse/posts/';
 }
 
+function viewProjects(){
+	window.location = '/browse/projects/';
+}
+
 function createAccount(){
 	var form = createPageRedirectForm("{{ possibleSources.home }}", "{{ possibleSources.home }}", "{{ possibleSources.createAccount }}", "Create Account");
 	form.submit();
 }
 
-function createEventPost(){
+function createEvent(){
 	var form = createPageRedirectForm("{{ possibleSources.home }}", "{{ possibleSources.home }}", "{{ possibleSources.event }}", "Create Event");
 	form.submit()
 }
 
-function createWorkPost(){
+function createPost(){
 	var form = createPageRedirectForm("{{ possibleSources.home }}", "{{ possibleSources.home }}", "{{ possibleSources.post }}", "Create Post");
+	form.submit();
+}
+
+function createProject(){
+	var form = createPageRedirectForm("{{ possibleSources.home }}", "{{ possibleSources.home }}", "{{ possibleSources.project }}", "Create Project");
 	form.submit();
 }
 

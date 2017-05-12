@@ -18,6 +18,7 @@ class PostInstance(object):
         self.request = kwargs.get("request")
         self._postID = kwargs.get("postID")
         self._postType = kwargs.get("postType")
+        self._postTypePageName = None
         self._record = None
         self._database = None
         self.errors = []
@@ -269,7 +270,7 @@ class GenericCreatePostView(views.PictureFormView):
     def currentPageHtml(self):
         if self._currentPageHtml is None:
             if self.currentPage == constants.EDIT_POST:
-                self._currentPageHtml = constants.HTML_MAP.get(self.post.postTypePageName)
+                self._currentPageHtml = constants.HTML_MAP.get(constants.CREATE_POST_PAGE_MAP.get(self.post.postType))
             else:
                 self._currentPageHtml = constants.HTML_MAP.get(self.currentPage)
         return self._currentPageHtml
@@ -278,7 +279,7 @@ class GenericCreatePostView(views.PictureFormView):
     def formClass(self):
         if self._formClass is None:
             if self.currentPage == constants.EDIT_POST:
-                self._formClass = constants.FORM_MAP.get(self.post.postTypePageName)
+                self._formClass = constants.FORM_MAP.get(constants.CREATE_POST_PAGE_MAP.get(self.post.postType))
             else:
                 self._formClass = constants.FORM_MAP.get(self.currentPage)
         return self._formClass
