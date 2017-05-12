@@ -22,7 +22,7 @@
 	</div>
 
 	<div id="newProjectFormDiv" style="display:none">
-		<form method="post" id="newProjectForm" action="/create/project/">
+		<form method="post" id="newProjectForm" action="/create/post/project/">
 			{% csrf_token %}
 			{{ form.as_p }}
 			<input type="submit" value="Create project"/>
@@ -31,7 +31,7 @@
 	</div>
 
 	<div id="addToProjectFormDiv" style="display:none">
-		<form method="post" id="addToProjectForm" action="/create/project/">
+		<form method="post" id="addToProjectForm" action="/create/post/project/">
 		{% csrf_token %}
 			<input type="submit" value="ADD TO EXISTING FORM" />
 		</form>

@@ -9,17 +9,18 @@
 		</div>
 	{% endif %}
 
-	<h3> {{ post.title }}  </h3>
-	<h4> {% if isProject %}
-			Project
+	<h3> {% if isProject %}
+			Project {{ post.title }}
+			<h5>Status: {{ post.status }}</h5>
 		{% elif isCollaboration %}
-			Looking for collaboration
+			(Looking for collaboration) {{ post.title }} <br>
+			Looking for a {{ post.profession }}
 		{% elif isWork %}
-			Looking for crew members
+			(Looking for crew) {{ post.title }} <br>
+			Looking for a {{ post.profession }}
 		{% endif %}
-	<h5> Posted by {{ post.poster }} <br>
-		 Looking for a {{ post.profession }}
-	</h5>
+	</h3>
+	<h5> Posted by {{ post.poster }} </h5>
 	<h5> Description:<br>
 		{% if post.description %}
 			{{ post.description }}
@@ -37,7 +38,7 @@
 			<input type="submit" value="Edit Post" />
 		</form>
 	{% endif %}
-	<p> {{ post.description }}
+	<p>
 {% else %}
 	<h4>No post found</h4>
 {% endif %}

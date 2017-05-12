@@ -68,7 +68,7 @@ class PostInstance(object):
             self.record.poster = self.request.POST.get("poster", "")
             self.record.description = self.request.POST.get("description", "")
             if self.request.FILES.get("postPicture"):
-                self.record.postPicture = self.request.FILES.get("postPicture")
+                self._record.postPicture = self.request.FILES.get("postPicture")
             self.record.save()
             return True
         return False
@@ -353,14 +353,16 @@ class ViewPostView(views.GenericFormView):
     @property
     def postID(self):
         if self._postID is None:
-            self._postID = self.request.get("postID")
+            self._postID = self.request.get("postID") or helpers.getMessageFromKey(self.request, "postID")
         return self._postID
 
     @property
     def post(self):
         if self._post is None:
             if self.postID:
-                if isCollaborationPost(self.postID):
+                if isProjectPost(self.postID):
+                    self._post = ProjectPostInstance(request=self.request, postID=self.postID)
+                elif isCollaborationPost(self.postID):
                     self._post = CollaborationPostInstance(request=self.request, postID=self.postID)
                 elif isWorkPost(self.postID):
                     self._post = WorkPostInstance(request=self.request, postID=self.postID)
