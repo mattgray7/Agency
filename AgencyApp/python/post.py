@@ -16,10 +16,10 @@ import json
 class PostInstance(object):
     def __init__(self, *args, **kwargs):
         self.request = kwargs.get("request")
-        self._postID = kwargs.get('postID')
+        self._postID = kwargs.get("postID")
+        self._postType = kwargs.get("postType")
         self._record = None
         self._database = None
-        self._postTypePageName = None
         self.errors = []
 
     @property
@@ -27,8 +27,6 @@ class PostInstance(object):
         if self._postID is None:
             self._postID = self.request.POST.get("postID") or helpers.getMessageFromKey(self.request,
                                                                                         "postID")
-            if self._postID is None:
-                self._postID = helpers.createUniqueID(destDatabase=self.database, idKey="postID")
         return self._postID
 
     @property
@@ -36,15 +34,23 @@ class PostInstance(object):
         if self._record is None:
             try:
                 self._record = self.database.objects.get(postID=self.postID)
+                print "Found existing event with id {0}".format(self.postID)
             except self.database.DoesNotExist:
                 self._record = self.database(postID=self.postID,
                                              poster=self.request.user.username)
+                print "Created new event with id {0}".format(self.postID)
                 self._record.save()
         return self._record
 
     @property
+    def postType(self):
+        """To be overridden in child classs"""
+        return self._postType
+
+    @property
     def database(self):
-        """To be overridden in child class"""
+        if self._database is None:
+            self._database = constants.POST_DATABASE_MAP.get(self.postType)
         return self._database
 
     @property
@@ -104,8 +110,8 @@ class PostInstance(object):
 
 class ProjectPostInstance(PostInstance):
     def __init__(self, *args, **kwargs):
+        kwargs["postType"] = constants.PROJECT_POST
         super(ProjectPostInstance, self).__init__(*args, **kwargs)
-        self._postTypePageName = constants.CREATE_PROJECT_POST
         self._database = models.ProjectPost
 
     def checkModelFormValues(self):
@@ -122,8 +128,8 @@ class ProjectPostInstance(PostInstance):
 
 class CollaborationPostInstance(PostInstance):
     def __init__(self, *args, **kwargs):
+        kwargs["postType"] = constants.COLLABORATION_POST
         super(CollaborationPostInstance, self).__init__(*args, **kwargs)
-        self._postTypePageName = constants.CREATE_COLLABORATION_POST
         self._database = models.CollaborationPost
 
     def checkModelFormValues(self):
@@ -145,8 +151,8 @@ class CollaborationPostInstance(PostInstance):
 
 class WorkPostInstance(PostInstance):
     def __init__(self, *args, **kwargs):
+        kwargs["postType"] = constants.WORK_POST
         super(WorkPostInstance, self).__init__(*args, **kwargs)
-        self._postTypePageName = constants.CREATE_WORK_POST
         self._database = models.WorkPost
 
     def checkModelFormValues(self):
@@ -196,8 +202,9 @@ class CreatePostChoiceView(views.GenericFormView):
 class GenericCreatePostView(views.PictureFormView):
     def __init__(self, *args, **kwargs):
         self._postID = kwargs.get("postID")
-        super(GenericCreatePostView, self).__init__(*args, **kwargs)
+        self._postType = kwargs.get("postType")
         self._post = None
+        super(GenericCreatePostView, self).__init__(*args, **kwargs)
         self._pictureModel = None
         self._pictureModelFieldName = "postPicture"
 
@@ -206,12 +213,24 @@ class GenericCreatePostView(views.PictureFormView):
         if self._postID is None:
             self._postID = self.request.POST.get("postID") or helpers.getMessageFromKey(self.request,
                                                                                         "postID")
+            if not self._postID:
+                self._postID = helpers.createUniqueID(destDatabase=constants.POST_DATABASE_MAP.get(self.postType),
+                                                      idKey="postID")
         return self._postID
 
     @property
     def post(self):
         """To be overridden in child class"""
         return self._post
+
+    @property
+    def postType(self):
+        return self._postType
+
+    def cancelPage(self):
+        super(GenericCreatePostView, self).cancelPage()
+        if self.sourcePage != constants.VIEW_POST:
+            self.post.database.objects.filter(postID=self.postID).delete()
 
     @property
     def pageContext(self):
@@ -284,13 +303,12 @@ class GenericCreatePostView(views.PictureFormView):
 
 class CreateProjectPostView(GenericCreatePostView):
     def __init__(self, *args, **kwargs):
+        kwargs["postType"] = constants.PROJECT_POST
         super(CreateProjectPostView, self).__init__(*args, **kwargs)
 
     @property
     def post(self):
         if self._post is None:
-            if not self.postID:
-                self._postID = helpers.createUniqueID(destDatabase=models.ProjectPost, idKey="postID")
             self._post = ProjectPostInstance(request=self.request, postID=self.postID)
         return self._post
 
@@ -304,13 +322,12 @@ class CreateProjectPostView(GenericCreatePostView):
 
 class CreateCollaborationPostView(GenericCreatePostView):
     def __init__(self, *args, **kwargs):
+        kwargs["postType"] = constants.COLLABORATION_POST
         super(CreateCollaborationPostView, self).__init__(*args, **kwargs)
 
     @property
     def post(self):
         if self._post is None:
-            if not self.postID:
-                self._postID = helpers.createUniqueID(destDatabase=models.CollaborationPost, idKey="postID")
             self._post = CollaborationPostInstance(request=self.request, postID=self.postID)
         return self._post
 
@@ -325,13 +342,12 @@ class CreateCollaborationPostView(GenericCreatePostView):
 
 class CreateWorkPostView(GenericCreatePostView):
     def __init__(self, *args, **kwargs):
+        kwargs["postType"] = constants.WORK_POST
         super(CreateWorkPostView, self).__init__(*args, **kwargs)
 
     @property
     def post(self):
         if self._post is None:
-            if not self.postID:
-                self._postID = helpers.createUniqueID(destDatabase=models.WorkPost, idKey="postID")
             self._post = WorkPostInstance(request=self.request, postID=self.postID)
         return self._post
 

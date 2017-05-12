@@ -1,7 +1,6 @@
 from __future__ import unicode_literals
 
 import json
-from constants import *
 from django.db import models
 from django.core.files.storage import FileSystemStorage
 
