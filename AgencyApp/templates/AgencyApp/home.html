@@ -31,7 +31,7 @@ function getWelcomeMsg(){
 
 <script>
 
-var mainChoice = "<button onclick='eventsChosen();' value='Events'>Events (View and create events in your community)</button><br><button onclick='postsChosen();' value='Jobs'>Jobs (Find a job, crew members, or others looking to collaborate)</button><br><button onclick='projectsChosen();'> Projects (View current project and create your own)</button><br>";
+var mainChoice = "<button onclick='eventsChosen();' value='Events'>Events</button><br><button onclick='postsChosen();' value='Posts'>Posts</button><br><button onclick='projectsChosen();'> Projects</button><br>";
 
 var createAccountButton = "<button onclick='createAccount()'; value='Create account'>Create account</button>";
 
@@ -39,7 +39,7 @@ var eventChoice = "<button onclick='viewEvents();'> View events in your communit
 
 var postChoice = "<button onclick='viewPosts();'> View job postings and creative profiles</button><br><button onclick='createPost();'>Create job post</button><br><button onclick='displayMainChoice();'>Back</button>";
 
-var projectChoice = "<button onclick='viewProjects();'> View current proj</button><br><button onclick='createProject();'>Create project</button><br><button onclick='displayMainChoice();'>Back</button>";
+var projectChoice = "<button onclick='viewProjects();'> View current projects</button><br><button onclick='createProject();'>Create project</button><br><button onclick='displayMainChoice();'>Back</button>";
 
 window.onload = displayMainChoice();
 

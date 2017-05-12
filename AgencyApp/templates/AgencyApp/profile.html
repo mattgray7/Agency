@@ -137,6 +137,8 @@
 				{% endfor %}
 			{% endif %}
 			{% if profilePosts.work %}
+				<br>
+				<h3>Seeking crew posts...</h3>
 				{% for workPost in profilePosts.work %}
 					<form method="post" action="/{{ profileUsername }}/"> 
 						{% csrf_token %}

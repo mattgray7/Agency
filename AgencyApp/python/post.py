@@ -195,7 +195,7 @@ class CreatePostChoiceView(views.GenericFormView):
                                                 "setupProfileFinish": constants.SETUP_ACCOUNT_FINISH
                                                 }
         self._pageContext["possibleDestinations"] = {"collaboration": constants.CREATE_COLLABORATION_POST,
-                                                     "project": constants.CREATE_PROJECT_POST
+                                                     "work": constants.CREATE_WORK_POST
                                                      }
         return self._pageContext
 
