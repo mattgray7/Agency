@@ -139,9 +139,9 @@ HTML_MAP = {HOME: 'AgencyApp/home.html',
 			CREATE_POST_CHOICE: 'AgencyApp/post/createPostChoice.html',
 			VIEW_POST: 'AgencyApp/post/viewPost.html',
 			EDIT_POST: None,
-			CREATE_PROJECT_POST: 'AgencyApp/post/project.html',
-			CREATE_COLLABORATION_POST: 'AgencyApp/post/createCollaborationPost.html',
-			CREATE_WORK_POST: 'AgencyApp/post/createWorkPost.html',
+			CREATE_PROJECT_POST: 'AgencyApp/post/createPost.html',
+			CREATE_COLLABORATION_POST: 'AgencyApp/post/createPost.html',
+			CREATE_WORK_POST: 'AgencyApp/post/createPost.html',
 			BROWSE_EVENTS: 'AgencyApp/browse.html',
 			BROWSE_POSTS: 'AgencyApp/browse.html'
 			}

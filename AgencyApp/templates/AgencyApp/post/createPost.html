@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block content %}
+	{% if errors %}
+		<ul>
+			{% for error in errors %}
+				<li>{{ error }}</li>
+			{% endfor %}
+		</ul>
+	{% endif %}
+
+	<h3>
+		{% if isProject %}
+			{% if post.title %}
+				Update project
+			{% else %}
+				Create project
+			{% endif %}
+		{% elif isCollaboration %}
+			{% if post.title %}
+				Update collaboration post
+			{% else %}
+				Create collaboration post
+			{% endif %}
+		{% elif isWork %}
+			{% if post.title %}
+				Update work post
+			{% else %}
+				Create work post
+			{% endif %}
+		{% endif %}
+	</h3>
+
+	{% if post.postPicture %}
+		<div id="postPicture">
+			<img src="{{ post.postPicture.url }}" height="150px" width="175px"/>
+		</div>
+	{% endif %}
+
+	{% if post.title %}
+		<form method='post' action="/edit/post/{{post.postID}}/" name='createForm' enctype="multipart/form-data">
+	{% else %}
+		{% if isProject %}
+			<form method='post' action="/create/post/project/" name='createForm' enctype="multipart/form-data">
+		{% elif isCollaboration %}
+			<form method='post' action="/create/post/collaboration/" name='createForm' enctype="multipart/form-data">
+		{% elif isWork %}
+			<form method='post' action="/create/post/work/" name='createForm' enctype="multipart/form-data">
+		{% endif %}
+	{% endif %}
+		{% csrf_token %}
+		{{ form.as_p }}
+		{% if post.title %}
+			<input type="submit" value="Update" />
+		{% else %}
+			<input type="submit" value="Create" />
+		{% endif %}
+	</form>
+	<div id="cancelButton"></div>
+{% endblock %}

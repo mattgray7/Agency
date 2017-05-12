@@ -236,6 +236,9 @@ class GenericCreatePostView(views.PictureFormView):
     @property
     def pageContext(self):
         self._pageContext["post"] = self.post.record
+        self._pageContext["isProject"] = isProjectPost(self.postID)
+        self._pageContext["isCollaboration"] = isCollaborationPost(self.postID)
+        self._pageContext["isWork"] = isWorkPost(self.postID)
         return self._pageContext
 
     @property

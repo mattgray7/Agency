@@ -11,7 +11,7 @@
 	{% endif %}
 
 	<!-- Hidden, will copy code into main div when necessary -->
-	<div id="mainChoicesMenuDiv" style="display:none">
+	<!--<div id="mainChoicesMenuDiv" style="display:none">
 		<button onclick="newProjectChosen();">Create new project</button><br>
 		<button onclick="addToProjectChosen();">Add post to existing project</button><br>
 		<script>
@@ -38,7 +38,7 @@
 		<button onclick="displayMain();">Back</button>
 	</div>
 
-	<!-- Visible divs -->
+	<! Visible divs --><!--
 	<div id="mainChoice"></div>
 	<div id="cancelButton"></div>
 
@@ -62,6 +62,47 @@
 			mainChoiceDiv.innerHTML = document.getElementById("addToProjectFormDiv").innerHTML;
 			document.getElementById("cancelButton").style.display = "none";
 		}
-	</script>
+	</script>-->
+
+{% extends "base.html" %}
+
+{% block content %}
+	{% if errors %}
+		<ul>
+			{% for error in errors %}
+				<li>{{ error }}</li>
+			{% endfor %}
+		</ul>
+	{% endif %}
+
+	<h3>
+		{% if post.title %}
+			Edit project
+		{% else %}
+			Create a new project
+		{% endif %}
+	</h3>
+
+	{% if post.postPicture %}
+		<div id="postPicture">
+			<img src="{{ post.postPicture.url }}" height="150px" width="175px"/>
+		</div>
+	{% endif %}
+
+	{% if post.title %}
+		<form method='post' action="/edit/post/{{post.postID}}/" name='createForm' enctype="multipart/form-data">
+	{% else %}
+		<form method='post' action="/create/post/collaboration/" name='createForm' enctype="multipart/form-data">
+	{% endif %}
+		{% csrf_token %}
+		{{ form.as_p }}
+		{% if post.title %}
+			<input type="submit" value="Update post" />
+		{% else %}
+			<input type="submit" value="Create post" />
+		{% endif %}
+	</form>
+	<div id="cancelButton"></div>
+{% endblock %}
 
 {% endblock %}
