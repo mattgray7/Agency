@@ -18,7 +18,6 @@ class ProfileView(views.GenericFormView):
         self._userViewingOwnProfile = False
         self._profileUserAccount = None
         self._profileProfessions = None
-        self._profileEvents = None
         self._profilePosts = None
 
     @property
@@ -50,17 +49,11 @@ class ProfileView(views.GenericFormView):
         return self._profileProfessions
 
     @property
-    def profileEvents(self):
-        if self._profileEvents is None:
-            if self.profileUserAccount and self.profileUserAccount.username:
-                self._profileEvents = models.Event.objects.filter(poster=self.profileUserAccount.username)
-        return self._profileEvents
-
-    @property
     def profilePosts(self):
         if self._profilePosts is None:
             if self.profileUserAccount:
                 self._profilePosts = {}
+                self._profilePosts["events"] = models.EventPost.objects.filter(poster=self.profileUserAccount.username)
                 self._profilePosts["collaboration"] = models.CollaborationPost.objects.filter(poster=self.profileUserAccount.username)
                 self._profilePosts["work"] = models.WorkPost.objects.filter(poster=self.profileUserAccount.username)
                 self._profilePosts["projects"] = models.ProjectPost.objects.filter(poster=self.profileUserAccount.username)
@@ -72,13 +65,11 @@ class ProfileView(views.GenericFormView):
         self._pageContext["profileUserAccount"] = self.profileUserAccount
         self._pageContext["profileUsername"] = self._desiredProfileUsername
         self._pageContext["profileProfessions"] = self.profileProfessions
-        self._pageContext["profileEvents"] = self.profileEvents
         self._pageContext["profilePosts"] = self.profilePosts
         self._pageContext["possibleDestinations"] = {"picture": constants.EDIT_PROFILE_PICTURE,
                                                      "background": constants.EDIT_BACKGROUND,
                                                      "professions": constants.EDIT_PROFESSIONS,
                                                      "interests": constants.EDIT_INTERESTS,
-                                                     "viewEvent": constants.VIEW_EVENT,
                                                      "viewPost": constants.VIEW_POST
                                                      }
         return self._pageContext

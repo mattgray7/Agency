@@ -31,10 +31,13 @@ class LoginView(views.GenericFormView):
     def pageErrors(self):
         postMsg = "You must login to create a post."
         eventMsg = "You must login to create an event."
+        projectMsg = "You must login to create a project."
         if self.destinationPage == CREATE_POST_CHOICE and postMsg not in self._pageErrors:
             self._pageErrors.append(postMsg)
-        elif self.destinationPage == CREATE_EVENT and eventMsg not in self._pageErrors:
+        elif self.destinationPage == CREATE_EVENT_POST and eventMsg not in self._pageErrors:
             self._pageErrors.append(eventMsg)
+        elif self.destinationPage == CREATE_PROJECT_POST and projectMsg not in self._pageErrors:
+            self._pageErrors.append(projectMsg)
         return self._pageErrors
 
     @property
@@ -145,7 +148,7 @@ class CreateAccountFinishView(views.GenericFormView):
         if self.sourcePage == EDIT_BACKGROUND:
             self._pageContext["showSetupProfile"] = False
 
-        self._pageContext["possibleDestinations"] = {"event": CREATE_EVENT,
+        self._pageContext["possibleDestinations"] = {"event": CREATE_EVENT_POST,
                                                      "post": CREATE_POST_CHOICE,
                                                      "interests": EDIT_INTERESTS,
                                                      "browse": BROWSE_EVENTS}

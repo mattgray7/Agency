@@ -28,6 +28,7 @@ class PostInstance(object):
         if self._postID is None:
             self._postID = self.request.POST.get("postID") or helpers.getMessageFromKey(self.request,
                                                                                         "postID")
+            print "instance post id is {0}".fofrmat(self._postID)
         return self._postID
 
     @property
@@ -36,10 +37,12 @@ class PostInstance(object):
             try:
                 self._record = self.database.objects.get(postID=self.postID)
                 print "Found existing event with id {0}".format(self.postID)
+                print "database is {0}".format(self.database)
+                print self._record.title
             except self.database.DoesNotExist:
                 self._record = self.database(postID=self.postID,
                                              poster=self.request.user.username)
-                print "Created new event with id {0}".format(self.postID)
+                print "Created new post with id {0}".format(self.postID)
                 self._record.save()
         return self._record
 
@@ -107,7 +110,31 @@ class PostInstance(object):
             self.errors.append("Post description must be at least 75 characters long.")
             return False
         return True
-               
+
+
+class EventPostInstance(PostInstance):
+    def __init__(self, *args, **kwargs):
+        kwargs["postType"] = constants.EVENT_POST
+        super(EventPostInstance, self).__init__(*args, **kwargs)
+        self._database = models.EventPost
+
+    def checkModelFormValues(self):
+        valid = False
+        if self.request.method == "POST":
+            if len(self.request.POST.get("location")) < 1:
+                self.errors.append("Missing location")
+            else:
+                valid = True
+        return valid
+
+    def saveModelFormValues(self):
+        if self.record:
+            self.record.location = self.request.POST.get("location", "")
+            self.record.date = self.request.POST.get("date", "")
+            self.record.save()
+            return True
+        return False
+ 
 
 class ProjectPostInstance(PostInstance):
     def __init__(self, *args, **kwargs):
@@ -236,6 +263,7 @@ class GenericCreatePostView(views.PictureFormView):
     @property
     def pageContext(self):
         self._pageContext["post"] = self.post.record
+        self._pageContext["isEvent"] = isEventPost(self.postID)
         self._pageContext["isProject"] = isProjectPost(self.postID)
         self._pageContext["isCollaboration"] = isCollaborationPost(self.postID)
         self._pageContext["isWork"] = isWorkPost(self.postID)
@@ -303,6 +331,26 @@ class GenericCreatePostView(views.PictureFormView):
 
     def processForm(self):
         return self.post.formIsValid()
+
+
+class CreateEventPostView(GenericCreatePostView):
+    def __init__(self, *args, **kwargs):
+        kwargs["postType"] = constants.EVENT_POST
+        super(CreateEventPostView, self).__init__(*args, **kwargs)
+
+    @property
+    def post(self):
+        if self._post is None:
+            self._post = EventPostInstance(request=self.request, postID=self.postID)
+        return self._post
+
+    @property
+    def formInitialValues(self):
+        self._formInitialValues = super(CreateEventPostView, self).formInitialValues
+        if self.post.record:
+            self._formInitialValues["location"] = self.post.record.location
+            self._formInitialValues["date"] = self.post.record.date
+        return self._formInitialValues
 
 
 class CreateProjectPostView(GenericCreatePostView):
@@ -380,6 +428,8 @@ class ViewPostView(views.GenericFormView):
     def post(self):
         if self._post is None:
             if self.postID:
+                if isEventPost(self.postID):
+                    self._post = EventPostInstance(request=self.request, postID=self.postID)
                 if isProjectPost(self.postID):
                     self._post = ProjectPostInstance(request=self.request, postID=self.postID)
                 elif isCollaborationPost(self.postID):
@@ -392,17 +442,24 @@ class ViewPostView(views.GenericFormView):
     def pageContext(self):
         self._pageContext["post"] = self.postID and self.post.record or None
         self._pageContext["possibleDestinations"] = {"edit": constants.EDIT_POST}
+        self._pageContext["isEvent"] = isEventPost(self.postID)
         self._pageContext["isProject"] = isProjectPost(self.postID)
         self._pageContext["isCollaboration"] = isCollaborationPost(self.postID)
         self._pageContext["isWork"] = isWorkPost(self.postID)
         return self._pageContext
 
+def _postIDExistsInDb(postID, database):
+    return len(database.objects.filter(postID=postID)) > 0
+
+def isEventPost(postID):
+    return _postIDExistsInDb(postID, models.EventPost)
+
 def isProjectPost(postID):
-    return len(models.ProjectPost.objects.filter(postID=postID)) > 0
+    return _postIDExistsInDb(postID, models.ProjectPost)
 
 def isCollaborationPost(postID):
-    return len(models.CollaborationPost.objects.filter(postID=postID)) > 0
+    return _postIDExistsInDb(postID, models.CollaborationPost)
 
 def isWorkPost(postID):
-    return len(models.WorkPost.objects.filter(postID=postID)) > 0
+    return _postIDExistsInDb(postID, models.WorkPost)
 

@@ -380,10 +380,6 @@ def createAccountFinish(request):
     view = account.CreateAccountFinishView(request=request, currentPage=constants.CREATE_BASIC_ACCOUNT_FINISH)
     return view.process()
 
-def createEvent(request):
-    view = event.CreateEventView(request=request, currentPage=constants.CREATE_EVENT)
-    return view.process()
-
 def editEvent(request, eventID):
     view = event.CreateEventView(request=request, currentPage=constants.EDIT_EVENT, eventID=eventID)
     return view.process()
@@ -396,6 +392,14 @@ def createPostChoice(request):
     view = post.CreatePostChoiceView(request=request, currentPage=constants.CREATE_POST_CHOICE)
     return view.process()
 
+def createEventPost(request):
+    view = post.CreateEventPostView(request=request, currentPage=constants.CREATE_EVENT_POST)
+    return view.process()
+
+def createProjectPost(request):
+    view = post.CreateProjectPostView(request=request, currentPage=constants.CREATE_PROJECT_POST)
+    return view.process()
+
 def createCollaborationPost(request):
     view = post.CreateCollaborationPostView(request=request, currentPage=constants.CREATE_COLLABORATION_POST)
     return view.process()
@@ -405,7 +409,9 @@ def createWorkPost(request):
     return view.process()
 
 def editPost(request, postID):
-    if post.isCollaborationPost(postID):
+    if post.isEventPost(postID):
+        view = post.CreateEventPostView(request=request, currentPage=constants.EDIT_POST, postID=postID)
+    elif post.isCollaborationPost(postID):
         view = post.CreateCollaborationPostView(request=request, currentPage=constants.EDIT_POST, postID=postID)
     elif post.isWorkPost(postID):
         view = post.CreateWorkPostView(request=request, currentPage=constants.EDIT_POST, postID=postID)
@@ -418,10 +424,6 @@ def editPost(request, postID):
 
 def viewPost(request, postID):
     view = post.ViewPostView(request=request, currentPage=constants.VIEW_POST, postID=postID)
-    return view.process()
-
-def createProjectPost(request):
-    view = post.CreateProjectPostView(request=request, currentPage=constants.CREATE_PROJECT_POST)
     return view.process()
 
 def browse(request, browseType=constants.BROWSE):

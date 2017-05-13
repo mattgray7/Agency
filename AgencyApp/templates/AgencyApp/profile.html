@@ -108,6 +108,20 @@
 
 		<!-- Posts -->
 		{% if profilePosts %}
+			{% if profilePosts.events %}
+		    	<br>
+		    	<h3>Events {{ profileUserAccount.firstName }} has posted...</h3>
+				{% for event in profilePosts.events %}
+					<form method="post" action="/{{ profileUsername }}/"> 
+						{% csrf_token %}
+						<input type="hidden" name="postID" value="{{event.postID}}" />
+						<input type="hidden" name="source" value="{{ next }}" />
+						<input type="hidden" name="next" value="{{ next }}" />
+						<input type="hidden" name="destination" value="{{ possibleDestinations.viewPost }}" />
+						<input type="submit" Value="{{ event.title }}" />
+					</form>
+				{% endfor %}
+			{% endif %}
 			{% if profilePosts.projects %}
 				<br>
 				<h3>Projects {{ userAccount.firstName }} is involved in...</h3>

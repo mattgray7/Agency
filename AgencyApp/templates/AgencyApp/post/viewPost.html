@@ -9,7 +9,10 @@
 		</div>
 	{% endif %}
 
-	<h3> {% if isProject %}
+	<h3>{% if isEvent %}
+			Event {{ post.title }} 
+			<h5>Located at {{post.location}} on {{post.date}}</h5>
+		{% elif isProject %}
 			Project {{ post.title }}
 			<h5>Status: {{ post.status }}</h5>
 		{% elif isCollaboration %}

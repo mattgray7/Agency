@@ -14,15 +14,16 @@ PROJECT_POST = "PROJECT_POST"
 COLLABORATION_POST = "COLLABORATION_POST"
 WORK_POST = "WORK_POST"
 
-CREATE_EVENT = "CREATE_EVENT"
-EDIT_EVENT = "EDIT_EVENT"
-VIEW_EVENT = "VIEW_EVENT"
+#CREATE_EVENT = "CREATE_EVENT"
+#EDIT_EVENT = "EDIT_EVENT"
+#VIEW_EVENT = "VIEW_EVENT"
 
 CREATE_POST_CHOICE = "CREATE_POST_CHOICE"
 VIEW_POST = "VIEW_POST"
 EDIT_POST = "EDIT_POST"
 
-CREATE_PROJECT_POST = "CREATE_PROJECT"
+CREATE_EVENT_POST = "CREATE_EVENT_POST"
+CREATE_PROJECT_POST = "CREATE_PROJECT_POST"
 CREATE_COLLABORATION_POST = "CREATE_COLLABORATION_POST"
 CREATE_WORK_POST = "CREATE_WORK_POST"
 
@@ -64,9 +65,10 @@ URL_MAP = {HOME: "/",
 		   LOGIN:"/login/",
 		   PROFILE:"/{0}/",
 		   CREATE_BASIC_ACCOUNT: "/account/create/basic/",
-		   CREATE_EVENT: "/create/event/",
-		   EDIT_EVENT: "/edit/event/{0}/",
-		   VIEW_EVENT: "/view/event/{0}/",
+		   #CREATE_EVENT: "/create/event/",
+		   CREATE_EVENT_POST: "/create/event/",
+		   #EDIT_EVENT: "/edit/event/{0}/",
+		   #VIEW_EVENT: "/view/event/{0}/",
 		   CREATE_POST_CHOICE: "/create/post/",
 		   EDIT_POST: "/edit/post/{0}/",
 		   VIEW_POST: "/view/post/{0}/",
@@ -98,17 +100,19 @@ DEFAULT_PAGE_MAP = {HOME: HOME,
 					EDIT_BACKGROUND: SETUP_ACCOUNT_FINISH,
 					SETUP_ACCOUNT_FINISH: HOME,
 					PROFILE: PROFILE,
-					CREATE_EVENT: VIEW_EVENT,
-					VIEW_EVENT: VIEW_EVENT,
-					EDIT_EVENT: VIEW_EVENT,
+					#CREATE_EVENT: VIEW_EVENT,
+					CREATE_EVENT_POST: VIEW_POST,
+					#VIEW_EVENT: VIEW_EVENT,
+					#EDIT_EVENT: VIEW_EVENT,
 					CREATE_POST_CHOICE: CREATE_PROJECT_POST,
 					EDIT_POST: VIEW_POST,
+					CREATE_EVENT_POST: VIEW_POST,
 					CREATE_PROJECT_POST: VIEW_POST,
 					CREATE_WORK_POST: VIEW_POST,
 					CREATE_COLLABORATION_POST: VIEW_POST,
 					VIEW_POST: VIEW_POST,
 					BROWSE: BROWSE,
-					BROWSE_EVENTS: VIEW_EVENT,
+					BROWSE_EVENTS: VIEW_POST,
 					BROWSE_PROJECTS: VIEW_POST,
 					BROWSE_COLLABORATION_POSTS: VIEW_POST,
 					BROWSE_WORK_POSTS: VIEW_POST
@@ -122,9 +126,10 @@ FORM_MAP = {HOME: forms.BaseForm,
 			EDIT_PROFESSIONS: None,	#manual
 			EDIT_PROFILE_PICTURE: forms.EditPictureForm,
 			EDIT_BACKGROUND: forms.EditBackgroundForm,
-			CREATE_EVENT: forms.CreateEventForm,
-			EDIT_EVENT: forms.CreateEventForm,
-			VIEW_EVENT: forms.CreateEventForm,
+			#CREATE_EVENT: forms.CreateEventForm,
+			CREATE_EVENT_POST: forms.CreateEventPostForm,
+			#EDIT_EVENT: forms.CreateEventForm,
+			#VIEW_EVENT: forms.CreateEventForm,
 			CREATE_POST_CHOICE: None,
 			CREATE_PROJECT_POST: forms.CreateProjectPostForm,
 			CREATE_COLLABORATION_POST: forms.CreateCollaborationPostForm,
@@ -143,12 +148,13 @@ HTML_MAP = {HOME: 'AgencyApp/home.html',
 			EDIT_PROFESSIONS: 'AgencyApp/account/professions.html',
 			EDIT_BACKGROUND: 'AgencyApp/account/background.html',
 			EDIT_PROFILE_PICTURE: 'AgencyApp/account/picture.html',
-			CREATE_EVENT: 'AgencyApp/event/create.html',
-			EDIT_EVENT: 'AgencyApp/event/create.html',
-			VIEW_EVENT: 'AgencyApp/event/view.html',
+			#CREATE_EVENT: 'AgencyApp/event/create.html',
+			#EDIT_EVENT: 'AgencyApp/event/create.html',
+			#VIEW_EVENT: 'AgencyApp/event/view.html',
 			CREATE_POST_CHOICE: 'AgencyApp/post/createPostChoice.html',
 			VIEW_POST: 'AgencyApp/post/viewPost.html',
 			EDIT_POST: None,
+			CREATE_EVENT_POST: 'AgencyApp/post/createPost.html',
 			CREATE_PROJECT_POST: 'AgencyApp/post/createPost.html',
 			CREATE_COLLABORATION_POST: 'AgencyApp/post/createPost.html',
 			CREATE_WORK_POST: 'AgencyApp/post/createPost.html',
@@ -161,18 +167,18 @@ HTML_MAP = {HOME: 'AgencyApp/home.html',
 
 
 MEDIA_FILE_NAME_MAP = {EDIT_PROFILE_PICTURE: "profile.jpg",
-					   CREATE_EVENT: "event_{0}.jpg",
+					   CREATE_EVENT_POST: "event_{0}.jpg",
 					   CREATE_COLLABORATION_POST: "post_{0}.jpg",
 					   CREATE_WORK_POST: "post_{0}.jpg",
 					   CREATE_PROJECT_POST: "post_{0}.jpg"
 					   }
 
-POST_DATABASE_MAP = {EVENT_POST: models.Event,
+POST_DATABASE_MAP = {EVENT_POST: models.EventPost,
 					 PROJECT_POST: models.ProjectPost,
 					 COLLABORATION_POST: models.CollaborationPost,
 					 WORK_POST: models.WorkPost}
 
-CREATE_POST_PAGE_MAP = {EVENT_POST: CREATE_EVENT,
+CREATE_POST_PAGE_MAP = {EVENT_POST: CREATE_EVENT_POST,
 						PROJECT_POST: CREATE_PROJECT_POST,
 						COLLABORATION_POST: CREATE_COLLABORATION_POST,
 						WORK_POST: CREATE_WORK_POST}

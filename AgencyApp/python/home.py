@@ -22,14 +22,16 @@ class HomeView(views.GenericFormView):
     def pageContext(self):
         self._pageContext["possibleSources"] = {"post": constants.CREATE_POST_CHOICE,
                                                 "project": constants.CREATE_PROJECT_POST,
-                                                "event": constants.CREATE_EVENT,
+                                                "event": constants.CREATE_EVENT_POST,
                                                 "home": constants.HOME,
                                                 "createAccount": constants.CREATE_BASIC_ACCOUNT
                                                 }
         return self._pageContext
 
     def loginRequired(self):
-        return not self.request.user.is_authenticated() and self.destinationPage in [constants.CREATE_EVENT, constants.CREATE_POST_CHOICE]
+        return not self.request.user.is_authenticated() and self.destinationPage in [constants.CREATE_EVENT_POST,
+                                                                                     constants.CREATE_PROJECT_POST,
+                                                                                     constants.CREATE_POST_CHOICE]
 
     def process(self):
         if self.request.method == "POST":

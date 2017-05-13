@@ -14,9 +14,7 @@ urlpatterns = [
     url(r'^account/edit/background/$', views.editBackground, name='editBackground'),
 
     # Create posts
-    url(r'^create/event/$', views.createEvent, name='createEvent'),
-    url(r'^view/event/(?P<eventID>[A-Za-z0-9]+)/$', views.viewEvent, name='viewEvent'),
-    url(r'^edit/event/(?P<eventID>[A-Za-z0-9]+)/$', views.editEvent, name='editEvent'),
+    url(r'^create/event/$', views.createEventPost, name='createEvent'),
 
     # Create post
     url(r'^create/post/$', views.createPostChoice, name='createPostChoice'),

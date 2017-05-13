@@ -15,14 +15,12 @@ imageStorage = FileSystemStorage(
 def image_directory_path(instance, filename):
     if hasattr(instance, "username"):
         inputString = instance.username
-    elif (isinstance(instance, Event) or 
+    elif (isinstance(instance, EventPost) or 
           isinstance(instance, ProjectPost) or
           isinstance(instance, WorkPost) or
           isinstance(instance, CollaborationPost) and
           hasattr(instance, "poster")):
         inputString = instance.poster
-    else:
-        print isinstance(instance, Event)
     return u'{0}/{1}'.format(inputString, filename)
 
 # Create your models here.
@@ -44,16 +42,6 @@ class UserAccount(models.Model):
     def __str__(self):
         return self.username
 
-class Event(models.Model):
-    eventID = models.CharField(max_length=10)
-    poster = models.CharField(max_length=200)
-    title = models.CharField(max_length=500, default=None, blank=True, null=True)
-    location = models.CharField(max_length=1000, default=None, blank=True, null=True)
-    description = models.CharField(max_length=5000, default=None, blank=True, null=True)
-    date = models.DateTimeField(default=None, blank=True, null=True)
-    eventPicturePath = models.CharField(max_length=5000, default=None, blank=True, null=True)
-    eventPicture = models.ImageField(default=None, upload_to=image_directory_path, storage=imageStorage, blank=True, null=True)
-
 class Profession(models.Model):
     username = models.CharField(max_length=100)
     professionName = models.CharField(max_length=100)
@@ -69,8 +57,11 @@ class AbstractPost(models.Model):
     postPicturePath = models.CharField(max_length=5000, default=None, blank=True, null=True)
     postPicture = models.ImageField(default=None, upload_to=image_directory_path, storage=imageStorage, blank=True, null=True)
 
+class EventPost(AbstractPost):
+    location = models.CharField(max_length=1000, default=None, blank=True, null=True)
+    date = models.DateField(default=None, blank=True, null=True)
+
 class ProjectPost(AbstractPost):
-    #TODO add something
     status = models.CharField(max_length=50, default=None, blank=True, null=True)
 
 class WorkPost(AbstractPost):
