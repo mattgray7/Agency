@@ -2,8 +2,47 @@
 
 {% block content %}
 
-{% if browseView == "BROWSE_EVENTS" %}
-	<h4> Search upcoming events...</h4>
+<h4>
+{% if browseView == possibleViews.event %}
+	Browse upcoming events...
+{% elif browseView == possibleViews.project %}
+	Browse projects...
+{% elif browseView == possibleViews.collabPost %}
+	Browse posts seeking collaborators...
+{% elif browseView == possibleViews.workPost %}
+	Browse posts seeking crews
+{% else %}
+	Browse
+{% endif %}
+</h4>
+
+<div id="eventViewDiv"></div>
+<div id="projectViewDiv"></div>
+<div id="collabPostViewDiv"></div>
+<div id="workPostViewDiv"></div>
+
+<script>
+	function createBrowseTable(postList, colHeaders){
+		if(postList != null){
+			var tableHTML = "<table>";
+
+			//create the row for headers
+			tableHTML += "<tr>";
+			for(var i=0; i < colHeaders.length; i++){
+				tableHTML += "<td>" + colHeader[i] + "</td>";
+			}
+			tableHTML += "</tr>";
+
+			//create all rowse for postList
+			for(var i=0; i < postList.length; i++){
+				tableHTML += "<tr>";
+				//need to iterate over tables, but in the order of colHeaders
+
+			}
+		}
+	}
+</script>
+
 	{% if events %}
 		<table>
 			<tr> 
@@ -22,7 +61,5 @@
 	{% else %}
 		<h4> No events are currently listed.</h4>
 	{% endif %}
-{% else %}
-	{{browseView }}
-{% endif %}
+
 {% endblock %}

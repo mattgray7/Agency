@@ -340,7 +340,7 @@ import home
 import profile
 import account
 import event
-import browse
+import browse as browseModule   # to avoid conflict with browse method
 import post
 
 
@@ -424,15 +424,21 @@ def createProjectPost(request):
     view = post.CreateProjectPostView(request=request, currentPage=constants.CREATE_PROJECT_POST)
     return view.process()
 
-def browseEvents(request):
-    view = browse.BrowseEventsView(request=request, sourcePage=constants.HOME, currentPage=constants.BROWSE_EVENTS)
+def browse(request, browseType=constants.BROWSE):
+    view = browseModule.BrowseView(request=request, currentPage=browseType)
     return view.process()
 
-def browseProjects(request):
-    return render(request, "AgencyApp/browse.html", getBaseContext(request))
+def browseEvents(request):
+    return browse(request, browseType=constants.BROWSE_EVENTS)
 
-def browsePosts(request):
-    return render(request, "AgencyApp/browse.html", getBaseContext(request))
+def browseProjects(request):
+    return browse(request, browseType=constants.BROWSE_PROJECTS)
+
+def browseCollaborationPosts(request):
+    return browse(request, browseType=constants.BROWSE_COLLABORATION_POSTS)
+
+def browseWorkPosts(request):
+    return browse(request, browseType=constants.BROWSE_WORK_POSTS)
 
 def displayProfile(request, username):
     view = profile.ProfileView(request=request, username=username, currentPage=constants.PROFILE)

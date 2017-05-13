@@ -30,7 +30,9 @@ urlpatterns = [
     # Other
     url(r'^browse/events/$', views.browseEvents, name='browseEvents'),
     url(r'^browse/projects/$', views.browseProjects, name='browseProjects'),
-    url(r'^browse/posts/$', views.browsePosts, name='browsePosts'),
+    url(r'^browse/posts/collaboration/$', views.browseCollaborationPosts, name='browseCollaborationPosts'),
+    url(r'^browse/posts/work/$', views.browseWorkPosts, name='browseWorkPosts'),
+    url(r'^browse/$', views.browse, name='browse'),
     url(r'^login/$', views.login, name='login'),
     url(r'^logout/$', views.logout, name='logout'),
     url(r'^ajax/$', ajax.call, name='ajax'),

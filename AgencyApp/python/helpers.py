@@ -108,7 +108,8 @@ def getBaseContext(request):
     return {"toolbarDestinations": {"login": constants.LOGIN,
                                      "home": constants.HOME,
                                      "logout": constants.LOGOUT,
-                                     "profile": constants.PROFILE},
+                                     "profile": constants.PROFILE,
+                                     "browse": constants.BROWSE},
             "source": source,
             "default": constants.DEFAULT,
             "cancel": constants.CANCEL

@@ -46,6 +46,12 @@
                 <input type="hidden" name="next" value="{{ toolbarDestinations.home }}">
                 <input type="submit" value="Van Film Collective">
             </form>
+            <form action="/browse/" method="post">
+                {% csrf_token %}
+                <input type="hidden" name="source" value="{{ source }}">
+                <input type="hidden" name="next" value="{{ toolbarDestinations.browse }}">
+                <input type="submit" value="Browse">
+            </form>
             {% if request.user.is_authenticated %}
                 <form action="/{{ request.user.username }}/" method="post">
                     {% csrf_token %}
