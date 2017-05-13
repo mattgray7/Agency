@@ -339,7 +339,6 @@ class PictureFormView(GenericFormView):
 import home
 import profile
 import account
-import event
 import browse as browseModule   # to avoid conflict with browse method
 import post
 
@@ -378,10 +377,6 @@ def editBackground(request):
 
 def createAccountFinish(request):
     view = account.CreateAccountFinishView(request=request, currentPage=constants.CREATE_BASIC_ACCOUNT_FINISH)
-    return view.process()
-
-def editEvent(request, eventID):
-    view = event.CreateEventView(request=request, currentPage=constants.EDIT_EVENT, eventID=eventID)
     return view.process()
 
 def viewEvent(request, eventID):
