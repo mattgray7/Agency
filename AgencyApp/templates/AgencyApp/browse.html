@@ -173,7 +173,7 @@
 		};
 
 		var collabViewDiv = document.getElementById("collabViewDiv");
-		if(((collabViewDiv != null) && ("{{browseView}}" == "{{possibleViews.collabPost}}")) || ("{{browseView}}" == "{{possibleViews.browse}}")){
+		if(((collabViewDiv != null) && ("{{browseView}}" == "{{possibleViews.collabPost}}")) || ("{{browseView}}" == "{{possibleViews.browse}}") || ("{{browseView}}" == "{{possibleViews.post}}")){
 			{% if projects %}
 				collabViewDiv.innerHTML = createViewCollabPostTable();
 			{% else %}
@@ -182,7 +182,7 @@
 		};
 
 		var workViewDiv = document.getElementById("workViewDiv");
-		if(((workViewDiv != null) && ("{{browseView}}" == "{{possibleViews.workPost}}")) || ("{{browseView}}" == "{{possibleViews.browse}}")){
+		if(((workViewDiv != null) && ("{{browseView}}" == "{{possibleViews.workPost}}")) || ("{{browseView}}" == "{{possibleViews.browse}}") || ("{{browseView}}" == "{{possibleViews.post}}")){
 			{% if projects %}
 				workViewDiv.innerHTML = createViewWorkPostTable();
 			{% else %}

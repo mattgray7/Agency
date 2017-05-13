@@ -437,6 +437,9 @@ def browseCollaborationPosts(request):
 def browseWorkPosts(request):
     return browse(request, browseType=constants.BROWSE_WORK_POSTS)
 
+def browsePosts(request):
+    return browse(request, browseType=constants.BROWSE_POSTS)
+
 def displayProfile(request, username):
     view = profile.ProfileView(request=request, username=username, currentPage=constants.PROFILE)
     return view.process()

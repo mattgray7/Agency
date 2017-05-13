@@ -31,6 +31,7 @@ class BrowseView(views.GenericFormView):
                                               "project": constants.BROWSE_PROJECTS,
                                               "collabPost": constants.BROWSE_COLLABORATION_POSTS,
                                               "workPost": constants.BROWSE_WORK_POSTS,
+                                              "post": constants.BROWSE_POSTS,
                                               "browse": constants.BROWSE}
         self._pageContext["possibleDestinations"] = {"viewPost": constants.VIEW_POST}
         self._pageContext["events"] = self.eventList

@@ -28,6 +28,7 @@ CREATE_COLLABORATION_POST = "CREATE_COLLABORATION_POST"
 CREATE_WORK_POST = "CREATE_WORK_POST"
 
 BROWSE = "BROWSE"
+BROWSE_POSTS = "BROWSE_POSTS"
 BROWSE_EVENTS = "BROWSE_EVENTS"
 BROWSE_PROJECTS = "BROWSE_PROJECTS"
 BROWSE_COLLABORATION_POSTS = "BROWSE_COLLABORATION_POSTS"
@@ -85,6 +86,7 @@ URL_MAP = {HOME: "/",
 		   BROWSE_PROJECTS: "/browse/projects/",
 		   BROWSE_COLLABORATION_POSTS: "/browse/posts/collaboration/",
 		   BROWSE_WORK_POSTS: "/browse/posts/work/",
+		   BROWSE_POSTS: "/browse/posts/",
 		   BROWSE: "/browse/"
 		   }
 
@@ -115,7 +117,8 @@ DEFAULT_PAGE_MAP = {HOME: HOME,
 					BROWSE_EVENTS: VIEW_POST,
 					BROWSE_PROJECTS: VIEW_POST,
 					BROWSE_COLLABORATION_POSTS: VIEW_POST,
-					BROWSE_WORK_POSTS: VIEW_POST
+					BROWSE_WORK_POSTS: VIEW_POST,
+					BROWSE_POSTS: VIEW_POST
 					}
 
 FORM_MAP = {HOME: forms.BaseForm,
@@ -162,6 +165,7 @@ HTML_MAP = {HOME: 'AgencyApp/home.html',
 			BROWSE_PROJECTS: 'AgencyApp/browse.html',
 			BROWSE_COLLABORATION_POSTS: 'AgencyApp/browse.html',
 			BROWSE_WORK_POSTS: 'AgencyApp/browse.html',
+			BROWSE_POSTS: 'AgencyApp/browse.html',
 			BROWSE: 'AgencyApp/browse.html'
 			}
 
