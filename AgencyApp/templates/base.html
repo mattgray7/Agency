@@ -69,7 +69,8 @@
                 <form action="/login/" method="post">
                     {% csrf_token %}
                     <input type="hidden" name="source" value="{{ source }}">
-                    <input type="hidden" name="source" value="{{ toolbarDestinations.login }}">
+                    <input type="hidden" name="next" value="{{ toolbarDestinations.login }}">
+                    <input type="hidden" name="destination" value="{{ default }}">
                     <input type="submit" value="Login">
                 </form>
             {% endif %}

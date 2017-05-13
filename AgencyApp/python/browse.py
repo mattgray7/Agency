@@ -39,7 +39,7 @@ class BrowseView(views.GenericFormView):
     def eventList(self):
         if self._eventList is None:
             #TODO get 50 or so at a time
-            self._eventList = models.Event.objects.all()
+            self._eventList = models.EventPost.objects.all()
         return self._eventList
 
     @property

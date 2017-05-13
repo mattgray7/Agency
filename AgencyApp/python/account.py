@@ -151,8 +151,7 @@ class CreateAccountFinishView(views.GenericFormView):
         self._pageContext["possibleDestinations"] = {"event": CREATE_EVENT_POST,
                                                      "post": CREATE_POST_CHOICE,
                                                      "interests": EDIT_INTERESTS,
-                                                     "browse": BROWSE_EVENTS}
-        self._pageContext["next"] = CREATE_BASIC_ACCOUNT_FINISH
+                                                     "browse": BROWSE}
         return self._pageContext
 
     def checkFormValidity(self):
