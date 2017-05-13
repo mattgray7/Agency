@@ -95,6 +95,9 @@
                 if (formProcessURL == null){
                     formProcessURL = "/";
                 }
+                if (extraHiddenInputs == null){
+                    extraHiddenInputs = [];
+                }
                 var form = document.createElement("form");
                 form.setAttribute('method', "post");
                 form.setAttribute('action', formProcessURL);

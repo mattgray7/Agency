@@ -2,24 +2,10 @@
 
 {% block content %}
 
-<h4>
-{% if browseView == possibleViews.event %}
-	Browse upcoming events...
-{% elif browseView == possibleViews.project %}
-	Browse projects...
-{% elif browseView == possibleViews.collabPost %}
-	Browse posts seeking collaborators...
-{% elif browseView == possibleViews.workPost %}
-	Browse posts seeking crews
-{% else %}
-	Browse
-{% endif %}
-</h4>
-
 <div id="eventViewDiv"></div>
 <div id="projectViewDiv"></div>
-<div id="collabPostViewDiv"></div>
-<div id="workPostViewDiv"></div>
+<div id="collabViewDiv"></div>
+<div id="workViewDiv"></div>
 
 <script>
 	/*function createBrowseTable(postList, colHeaders){
@@ -44,9 +30,9 @@
 
 
 	function createViewEventTable(){
-		var tableString = '';
+		var tableString = '<h3>Browse events</h3>';
 		{% if events %}
-			tableString = '<table>';
+			tableString += '<table>';
 			tableString += ("<tr> " +
 								"<td> Title </td>" +
 								"<td> Posted by </td>" +
@@ -71,6 +57,91 @@
 		return tableString;
 	};
 
+	function createViewProjectTable(){
+		var tableString = '<h3>Browse projects</h3>';
+		{% if projects %}
+			tableString += '<table>';
+			tableString += ("<tr> " +
+								"<td> Title </td>" +
+								"<td> Posted by </td>" +
+								"<td> Status </td>" +
+								"<td> Description </td>" +
+							"</tr>");
+
+			//Add each event
+			{% for projectObj in projects %}
+				tableString += ("<tr>" +
+									"<td><button onclick='createPostRedirectForm(" + '"{{projectObj.postID}}","{{possibleDestinations.viewPost}}"' + ");'>{{projectObj.title}}</button></td>" +
+									"<td>{{projectObj.poster}}</td>" +
+									"<td>{{projectObj.status}}</td>" +
+									"<td>{{projectObj.description}}</td>" +
+								"</tr>");
+
+			{% endfor %}
+			tableString += "</table>";
+		{% endif %}
+		return tableString;
+	};
+
+	function createViewCollabPostTable(){
+		var tableString = '<h3>Browse posts seeking collaborators</h3>';
+		{% if projects %}
+			tableString += '<table>';
+			tableString += ("<tr> " +
+								"<td> Title </td>" +
+								"<td> Posted by </td>" +
+								"<td> Seeking </td>" +
+								"<td> Description </td>" +
+							"</tr>");
+
+			//Add each event
+			{% for collabObj in collabPosts %}
+				tableString += ("<tr>" +
+									"<td><button onclick='createPostRedirectForm(" + '"{{collabObj.postID}}","{{possibleDestinations.viewPost}}"' + ");'>{{collabObj.title}}</button></td>" +
+									"<td>{{collabObj.poster}}</td>" +
+									"<td>{{collabObj.profession}}</td>" +
+									"<td>{{collabObj.description}}</td>" +
+								"</tr>");
+
+			{% endfor %}
+			tableString += "</table>";
+		{% endif %}
+		return tableString;
+	};
+
+
+	function createViewWorkPostTable(){
+		var tableString = '<h3>Browse posts seeking crew members</h3>';
+		{% if projects %}
+			tableString += '<table>';
+			tableString += ("<tr> " +
+								"<td> Title </td>" +
+								"<td> Posted by </td>" +
+								"<td> Seeking </td>" +
+								"<td> Description </td>" +
+								"<td> Paid </td>" +
+							"</tr>");
+
+			//Add each event
+			{% for workObj in workPosts %}
+				tableString += ("<tr>" +
+									"<td><button onclick='createPostRedirectForm(" + '"{{workObj.postID}}","{{possibleDestinations.viewPost}}"' + ");'>{{workObj.title}}</button></td>" +
+									"<td>{{workObj.poster}}</td>" +
+									"<td>{{workObj.profession}}</td>" +
+									"<td>{{workObj.description}}</td>")
+				
+				// Add tick or x for paid
+				{% if workObj.paid %}
+					tableString += "<td>&#10004;</td></tr>";
+				{% else %}
+					tableString += "<td></td></tr>";
+				{% endif %}
+			{% endfor %}
+			tableString += "</table>";
+		{% endif %}
+		return tableString;
+	};
+
 
 	function createPostRedirectForm(postID, destinationPageName){
 		var extraInputs = []
@@ -80,11 +151,44 @@
 		form.submit();
 	}
 
+
+
 	$(document).ready(function(){
 		var eventViewDiv = document.getElementById("eventViewDiv");
-		if(eventViewDiv != null){
-			eventViewDiv.innerHTML = createViewEventTable();
-		}
+		if(((eventViewDiv != null) && ("{{browseView}}" == "{{possibleViews.event}}")) || ("{{browseView}}" == "{{possibleViews.browse}}")){
+			{% if events %}
+				eventViewDiv.innerHTML = createViewEventTable();
+			{% else %}
+				eventViewDiv.innerHTML = "<h3> No events posted </h3>";
+			{% endif %}
+		};
+
+		var projectViewDiv = document.getElementById("projectViewDiv");
+		if(((projectViewDiv != null) && ("{{browseView}}" == "{{possibleViews.project}}")) || ("{{browseView}}" == "{{possibleViews.browse}}")){
+			{% if projects %}
+				projectViewDiv.innerHTML = createViewProjectTable();
+			{% else %}
+				projectViewDiv.innerHTML = "<h3> No projects posted </h3>";
+			{% endif %}
+		};
+
+		var collabViewDiv = document.getElementById("collabViewDiv");
+		if(((collabViewDiv != null) && ("{{browseView}}" == "{{possibleViews.collabPost}}")) || ("{{browseView}}" == "{{possibleViews.browse}}")){
+			{% if projects %}
+				collabViewDiv.innerHTML = createViewCollabPostTable();
+			{% else %}
+				collabViewDiv.innerHTML = "<h3> No posts available</h3>";
+			{% endif %}
+		};
+
+		var workViewDiv = document.getElementById("workViewDiv");
+		if(((workViewDiv != null) && ("{{browseView}}" == "{{possibleViews.workPost}}")) || ("{{browseView}}" == "{{possibleViews.browse}}")){
+			{% if projects %}
+				workViewDiv.innerHTML = createViewWorkPostTable();
+			{% else %}
+				workViewDiv.innerHTML = "<h3> No posts available</h3>";
+			{% endif %}
+		};
 	});
 </script>
 

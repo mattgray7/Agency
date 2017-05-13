@@ -35,7 +35,6 @@ class PostInstance(object):
         if self._record is None:
             try:
                 self._record = self.database.objects.get(postID=self.postID)
-                print self._record.title
             except self.database.DoesNotExist:
                 self._record = self.database(postID=self.postID,
                                              poster=self.request.user.username)
@@ -191,7 +190,7 @@ class WorkPostInstance(PostInstance):
     def saveModelFormValues(self):
         if self.record:
             self.record.profession = self.request.POST.get("profession")
-            self.record.paid = self.request.POST.get("paid", False)
+            self.record.paid = self.request.POST.get("paid", False) and True
             self.record.save()
             return True
         return False
