@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.contrib.auth.models import User
 from django.contrib import messages
+from django.forms.models import model_to_dict
 
 # Create your views here.
 from django.http import HttpResponseRedirect
@@ -12,6 +13,8 @@ import constants
 import helpers
 import views
 import models
+
+import json
 
 
 class BrowseView(views.GenericFormView):
@@ -28,6 +31,7 @@ class BrowseView(views.GenericFormView):
                                               "project": constants.BROWSE_PROJECTS,
                                               "collabPost": constants.BROWSE_COLLABORATION_POSTS,
                                               "workPost": constants.BROWSE_WORK_POSTS}
+        self._pageContext["possibleDestinations"] = {"viewPost": constants.VIEW_POST}
         self._pageContext["events"] = self.eventList
         self._pageContext["projects"] = self.projectList
         self._pageContext["collabPosts"] = self.collabPostList
@@ -60,6 +64,4 @@ class BrowseView(views.GenericFormView):
             self._workPostList = models.WorkPost.objects.all()
         return self._workPostList
 
-    def process(self):
-        return render(self.request, constants.HTML_MAP.get(self.currentPage), self.pageContext)
 

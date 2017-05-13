@@ -22,7 +22,7 @@
 <div id="workPostViewDiv"></div>
 
 <script>
-	function createBrowseTable(postList, colHeaders){
+	/*function createBrowseTable(postList, colHeaders){
 		if(postList != null){
 			var tableHTML = "<table>";
 
@@ -40,10 +40,55 @@
 
 			}
 		}
+	}*/
+
+
+	function createViewEventTable(){
+		var tableString = '';
+		{% if events %}
+			tableString = '<table>';
+			tableString += ("<tr> " +
+								"<td> Title </td>" +
+								"<td> Posted by </td>" +
+								"<td> Date </td>" +
+								"<td> Location </td>" +
+								"<td> Description </td>" +
+							"</tr>");
+
+			//Add each event
+			{% for eventObj in events %}
+				tableString += ("<tr>" +
+									"<td><button onclick='createPostRedirectForm(" + '"{{eventObj.postID}}","{{possibleDestinations.viewPost}}"' + ");'>{{eventObj.title}}</button></td>" +
+									"<td>{{eventObj.poster}}</td>" +
+									"<td>{{eventObj.date}}</td>" +
+									"<td>{{eventObj.location}}</td>" +
+									"<td>{{eventObj.description}}</td>" +
+								"</tr>");
+
+			{% endfor %}
+			tableString += "</table>";
+		{% endif %}
+		return tableString;
+	};
+
+
+	function createPostRedirectForm(postID, destinationPageName){
+		var extraInputs = []
+		extraInputs.push({key: "postID", value: postID});
+
+		var form = createPageRedirectForm("{{ next }}", "{{ next }}", destinationPageName, "/browse/", extraInputs);
+		form.submit();
 	}
+
+	$(document).ready(function(){
+		var eventViewDiv = document.getElementById("eventViewDiv");
+		if(eventViewDiv != null){
+			eventViewDiv.innerHTML = createViewEventTable();
+		}
+	});
 </script>
 
-	{% if events %}
+<!--	{% if events %}
 		<table>
 			<tr> 
 				<td> Title </td>
@@ -60,6 +105,6 @@
 	</table>
 	{% else %}
 		<h4> No events are currently listed.</h4>
-	{% endif %}
+	{% endif %}-->
 
 {% endblock %}

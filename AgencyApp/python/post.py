@@ -28,7 +28,6 @@ class PostInstance(object):
         if self._postID is None:
             self._postID = self.request.POST.get("postID") or helpers.getMessageFromKey(self.request,
                                                                                         "postID")
-            print "instance post id is {0}".fofrmat(self._postID)
         return self._postID
 
     @property
@@ -36,13 +35,10 @@ class PostInstance(object):
         if self._record is None:
             try:
                 self._record = self.database.objects.get(postID=self.postID)
-                print "Found existing event with id {0}".format(self.postID)
-                print "database is {0}".format(self.database)
                 print self._record.title
             except self.database.DoesNotExist:
                 self._record = self.database(postID=self.postID,
                                              poster=self.request.user.username)
-                print "Created new post with id {0}".format(self.postID)
                 self._record.save()
         return self._record
 

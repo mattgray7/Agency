@@ -87,16 +87,30 @@
                 return input;
             };
 
-            function createPageRedirectForm(source, next, destination, submitButtonLabel){
+            function createPageRedirectForm(source, next, destination, formProcessURL, extraHiddenInputs){
+                console.log(source);
+                console.log(next);
+                console.log(destination);
+                console.log(formProcessURL);
+                if (formProcessURL == null){
+                    formProcessURL = "/";
+                }
                 var form = document.createElement("form");
                 form.setAttribute('method', "post");
-                form.setAttribute('action', "/");
+                form.setAttribute('action', formProcessURL);
 
                 form.appendChild(createFormInput("hidden", "source", source));
                 form.appendChild(createFormInput("hidden", "next", next));
                 form.appendChild(createFormInput("hidden", "destination", destination));
                 form.appendChild(createFormInput("hidden", "csrfmiddlewaretoken", getCookie("csrftoken")));
-                form.appendChild(createFormInput("submit", null, submitButtonLabel));
+                form.appendChild(createFormInput("submit", null, null));
+
+                // add extra hidden inputs
+                if(extraHiddenInputs.length > 0){
+                    for(i=0; i < extraHiddenInputs.length; i++){
+                        form.appendChild(createFormInput("hidden", extraHiddenInputs[i].key, extraHiddenInputs[i].value));
+                    }
+                };
                 document.body.appendChild(form);
                 return form;
             }

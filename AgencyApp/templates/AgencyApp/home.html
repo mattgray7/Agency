@@ -77,23 +77,23 @@ function viewProjects(){
 }
 
 function createAccount(){
-	var form = createPageRedirectForm("{{ possibleSources.home }}", "{{ possibleSources.home }}", "{{ possibleSources.createAccount }}", "Create Account");
+	var form = createPageRedirectForm("{{ possibleSources.home }}", "{{ possibleSources.home }}", "{{ possibleSources.createAccount }}", "/");
 	form.submit();
 }
 
 function createEventPost(){
 	//cannot call function createEvent, it is builtin
-	var form = createPageRedirectForm("{{ possibleSources.home }}", "{{ possibleSources.home }}", "{{ possibleSources.event }}", "Create Event");
+	var form = createPageRedirectForm("{{ possibleSources.home }}", "{{ possibleSources.home }}", "{{ possibleSources.event }}", "/");
 	form.submit();
 }
 
 function createPost(){
-	var form = createPageRedirectForm("{{ possibleSources.home }}", "{{ possibleSources.home }}", "{{ possibleSources.post }}", "Create Post");
+	var form = createPageRedirectForm("{{ possibleSources.home }}", "{{ possibleSources.home }}", "{{ possibleSources.post }}", "/");
 	form.submit();
 }
 
 function createProject(){
-	var form = createPageRedirectForm("{{ possibleSources.home }}", "{{ possibleSources.home }}", "{{ possibleSources.project }}", "Create Project");
+	var form = createPageRedirectForm("{{ possibleSources.home }}", "{{ possibleSources.home }}", "{{ possibleSources.project }}", "/");
 	form.submit();
 }
 
