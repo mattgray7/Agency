@@ -21,6 +21,12 @@ class ProfileView(views.GenericFormView):
         self._profilePosts = None
 
     @property
+    def currentPageURL(self):
+        if self._currentPageURL is None:
+            self._currentPageURL = constants.URL_MAP.get(self.currentPage).format(self._desiredProfileUsername)
+        return self._currentPageURL
+
+    @property
     def userViewingOwnProfile(self):
         return self._desiredProfileUsername == self.username and self.request.user.is_authenticated()
 
@@ -63,7 +69,6 @@ class ProfileView(views.GenericFormView):
     def pageContext(self):
         self._pageContext["viewingOwnProfile"] = self.userViewingOwnProfile
         self._pageContext["profileUserAccount"] = self.profileUserAccount
-        self._pageContext["profileUsername"] = self._desiredProfileUsername
         self._pageContext["profileProfessions"] = self.profileProfessions
         self._pageContext["profilePosts"] = self.profilePosts
         self._pageContext["possibleDestinations"] = {"picture": constants.EDIT_PROFILE_PICTURE,

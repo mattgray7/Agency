@@ -10,7 +10,7 @@
 			<h5> No profile picture added</h5>
 		{% endif %}
 		{% if viewingOwnProfile %}
-			<form action="/{{ profileUsername }}/" method="post">
+			<form action="{{ currentPageURL }}" method="post">
 				{% csrf_token %}
 				<input type="hidden" name="source" value="{{ next }}" />
 				<input type="hidden" name="current" value="{{ next }}" />
@@ -35,7 +35,7 @@
 		{% endif %}
 
 		{% if viewingOwnProfile %}
-			<form action="/{{ profileUsername }}/" method="post">
+			<form action="{{ currentPageURL }}" method="post">
 				{% csrf_token %}
 				<input type="hidden" name="source" value="{{ next }}" />
 				<input type="hidden" name="current" value="{{ next }}" />
@@ -59,7 +59,7 @@
 			{% endif %}
 		</ul>
 		{% if viewingOwnProfile %}
-			<form action="/{{ profileUsername }}/" method="post">
+			<form action="{{ currentPageURL }}" method="post">
 				{% csrf_token %}
 				<input type="hidden" name="source" value="{{ next }}" />
 				<input type="hidden" name="current" value="{{ next }}" />
@@ -81,7 +81,7 @@
 			<h3> {{ profileUserAccount.firstName }} has not specified his interested professions </h3>
 		{% endif %}
 		{% if viewingOwnProfile %}
-			<form action="/{{ profileUsername }}/" method="post">
+			<form action="{{ currentPageURL }}" method="post">
 				{% csrf_token %}
 				<input type="hidden" name="source" value="{{ next }}" />
 				<input type="hidden" name="current" value="{{ next }}" />
@@ -94,7 +94,7 @@
 		{% if profileEvents %}
 			<br><h3>Events {{ profileUserAccount.firstName }} has posted...</h3>
 				{% for event in profileEvents %}
-					<form method="post" action="/{{ profileUsername }}/"> 
+					<form method="post" action="{{ currentPageURL }}"> 
 						{% csrf_token %}
 						<input type="hidden" name="eventID" value="{{event.eventID}}" />
 						<input type="hidden" name="source" value="{{ next }}" />
@@ -112,7 +112,7 @@
 		    	<br>
 		    	<h3>Events {{ profileUserAccount.firstName }} has posted...</h3>
 				{% for event in profilePosts.events %}
-					<form method="post" action="/{{ profileUsername }}/"> 
+					<form method="post" action="{{ currentPageURL }}"> 
 						{% csrf_token %}
 						<input type="hidden" name="postID" value="{{event.postID}}" />
 						<input type="hidden" name="source" value="{{ next }}" />
@@ -126,7 +126,7 @@
 				<br>
 				<h3>Projects {{ userAccount.firstName }} is involved in...</h3>
 				{% for projectPost in profilePosts.projects %}
-					<form method="post" action="/{{ profileUsername }}/"> 
+					<form method="post" action="{{ currentPageURL }}"> 
 						{% csrf_token %}
 						<input type="hidden" name="postID" value="{{projectPost.postID}}" />
 						<input type="hidden" name="source" value="{{ next }}" />
@@ -140,7 +140,7 @@
 				<br>
 				<h3>Seeking collaborators posts...</h3>
 				{% for collabPost in profilePosts.collaboration %}
-					<form method="post" action="/{{ profileUsername }}/"> 
+					<form method="post" action="{{ currentPageURL }}"> 
 						{% csrf_token %}
 						<input type="hidden" name="postID" value="{{collabPost.postID}}" />
 						<input type="hidden" name="source" value="{{ next }}" />
@@ -154,7 +154,7 @@
 				<br>
 				<h3>Seeking crew posts...</h3>
 				{% for workPost in profilePosts.work %}
-					<form method="post" action="/{{ profileUsername }}/"> 
+					<form method="post" action="{{ currentPageURL }}"> 
 						{% csrf_token %}
 						<input type="hidden" name="postID" value="{{workPost.postID}}" />
 						<input type="hidden" name="source" value="{{ next }}" />
