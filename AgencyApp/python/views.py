@@ -25,6 +25,7 @@ class GenericView(object):
         self._sourcePage = kwargs.get("sourcePage")
         self._currentPage = kwargs.get("currentPage")
         self._currentPageHtml = None
+        self._currentPageURL = None
         self._destinationPage = None
         self._destPageKey = None
 
@@ -48,6 +49,7 @@ class GenericView(object):
         self._pageContext["source"] = self.sourcePage
         self._pageContext["next"] = self.currentPage
         self._pageContext["destination"] = self.destinationPage
+        self._pageContext["currentPageURL"] = self.currentPageURL
         self._pageContext["cancelButtonExtraInputs"] = self.cancelButtonExtraInputs
         self._pageContext["cancelDestinationURL"] = self.cancelDestinationURL
         self._pageContext["cancelDestination"] = self.destinationPage
@@ -116,6 +118,12 @@ class GenericView(object):
         if self._currentPageHtml is None:
             self._currentPageHtml = constants.HTML_MAP.get(self.currentPage)
         return self._currentPageHtml
+
+    @property
+    def currentPageURL(self):
+        if self._currentPageURL is None:
+            self._currentPageURL = constants.URL_MAP.get(self.currentPage)
+        return self._currentPageURL
 
     @property
     def destinationPage(self):
@@ -231,7 +239,6 @@ class GenericFormView(GenericView):
         return formIsValid
 
     def cancelPage(self):
-        print "setting dest page to {0}".format(self.cancelDestination)
         self._destinationPage = self.cancelDestination
         self._pageContext["destination"] = self.cancelDestination
 

@@ -147,7 +147,8 @@
 		var extraInputs = []
 		extraInputs.push({key: "postID", value: postID});
 
-		var form = createPageRedirectForm("{{ next }}", "{{ next }}", destinationPageName, "/browse/", extraInputs);
+		console.log("source {{next}}, current: {{next}}, dest" + destinationPageName)
+		var form = createPageRedirectForm("{{ next }}", "{{ next }}", destinationPageName, "{{ currentPageURL }}", extraInputs);
 		form.submit();
 	}
 
