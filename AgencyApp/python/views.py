@@ -225,11 +225,13 @@ class GenericFormView(GenericView):
                 else:
                     formIsValid = self.processForm()
         else:
+            print "page is cancelling"
             self.cancelPage()
             formIsValid = True
         return formIsValid
 
     def cancelPage(self):
+        print "setting dest page to {0}".format(self.cancelDestination)
         self._destinationPage = self.cancelDestination
         self._pageContext["destination"] = self.cancelDestination
 

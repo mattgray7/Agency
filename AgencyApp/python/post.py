@@ -9,8 +9,10 @@ import models
 import helpers
 import constants
 import views
+import browse
 import string, random
 import json
+
 
 # =================== INSTANCES ====================== #
 class PostInstance(object):
@@ -432,6 +434,36 @@ class ViewPostView(views.GenericFormView):
                 elif isWorkPost(self.postID):
                     self._post = WorkPostInstance(request=self.request, postID=self.postID)
         return self._post
+
+    @property
+    def cancelButtonName(self):
+        if browse.isBrowsePage(self.sourcePage):
+            self._cancelButtonName = "Back to browse"
+        else:
+            self._cancelButtonName = "View more posts"
+        return self._cancelButtonName
+
+    @property
+    def cancelDestinationURL(self):
+        if self._cancelDestinationURL is None:
+            self._cancelDestinationURL = constants.URL_MAP.get(self.currentPage)
+            if self._cancelDestinationURL:
+                self._cancelDestinationURL = self._cancelDestinationURL.format(self.postID)
+        return self._cancelDestinationURL
+
+    @property
+    def cancelButtonExtraInputs(self):
+        if not self._cancelButtonExtraInputs:
+            self._cancelButtonExtraInputs = {"postID": self.postID}
+        return json.dumps(self._cancelButtonExtraInputs)
+
+    @property
+    def cancelDestination(self):
+        if browse.isBrowsePage(self.sourcePage):
+            self._cancelDestination = self.sourcePage
+        else:
+            self._cancelDestination = constants.BROWSE
+        return self._cancelDestination
 
     @property
     def pageContext(self):

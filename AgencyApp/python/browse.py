@@ -67,3 +67,7 @@ class BrowseView(views.GenericFormView):
         return self._workPostList
 
 
+def isBrowsePage(pageName):
+    return pageName in [constants.BROWSE, constants.BROWSE_EVENTS, constants.BROWSE_PROJECTS,
+                        constants.BROWSE_POSTS, constants.BROWSE_COLLABORATION_POSTS,
+                        constants.BROWSE_WORK_POSTS]

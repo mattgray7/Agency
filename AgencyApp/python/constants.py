@@ -14,10 +14,6 @@ PROJECT_POST = "PROJECT_POST"
 COLLABORATION_POST = "COLLABORATION_POST"
 WORK_POST = "WORK_POST"
 
-#CREATE_EVENT = "CREATE_EVENT"
-#EDIT_EVENT = "EDIT_EVENT"
-#VIEW_EVENT = "VIEW_EVENT"
-
 CREATE_POST_CHOICE = "CREATE_POST_CHOICE"
 VIEW_POST = "VIEW_POST"
 EDIT_POST = "EDIT_POST"
@@ -102,10 +98,7 @@ DEFAULT_PAGE_MAP = {HOME: HOME,
 					EDIT_BACKGROUND: SETUP_ACCOUNT_FINISH,
 					SETUP_ACCOUNT_FINISH: HOME,
 					PROFILE: PROFILE,
-					#CREATE_EVENT: VIEW_EVENT,
 					CREATE_EVENT_POST: VIEW_POST,
-					#VIEW_EVENT: VIEW_EVENT,
-					#EDIT_EVENT: VIEW_EVENT,
 					CREATE_POST_CHOICE: CREATE_PROJECT_POST,
 					EDIT_POST: VIEW_POST,
 					CREATE_EVENT_POST: VIEW_POST,
@@ -129,10 +122,7 @@ FORM_MAP = {HOME: forms.BaseForm,
 			EDIT_PROFESSIONS: None,	#manual
 			EDIT_PROFILE_PICTURE: forms.EditPictureForm,
 			EDIT_BACKGROUND: forms.EditBackgroundForm,
-			#CREATE_EVENT: forms.CreateEventForm,
 			CREATE_EVENT_POST: forms.CreateEventPostForm,
-			#EDIT_EVENT: forms.CreateEventForm,
-			#VIEW_EVENT: forms.CreateEventForm,
 			CREATE_POST_CHOICE: None,
 			CREATE_PROJECT_POST: forms.CreateProjectPostForm,
 			CREATE_COLLABORATION_POST: forms.CreateCollaborationPostForm,
@@ -151,9 +141,6 @@ HTML_MAP = {HOME: 'AgencyApp/home.html',
 			EDIT_PROFESSIONS: 'AgencyApp/account/professions.html',
 			EDIT_BACKGROUND: 'AgencyApp/account/background.html',
 			EDIT_PROFILE_PICTURE: 'AgencyApp/account/picture.html',
-			#CREATE_EVENT: 'AgencyApp/event/create.html',
-			#EDIT_EVENT: 'AgencyApp/event/create.html',
-			#VIEW_EVENT: 'AgencyApp/event/view.html',
 			CREATE_POST_CHOICE: 'AgencyApp/post/createPostChoice.html',
 			VIEW_POST: 'AgencyApp/post/viewPost.html',
 			EDIT_POST: None,
