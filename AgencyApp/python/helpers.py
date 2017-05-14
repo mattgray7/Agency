@@ -5,7 +5,6 @@ import constants
 import random, string
 
 
-
 def redirect(request, currentPage, destinationPage):
     """Returns an HttpResonseRedirect of the desired URL can be resolved (see getDestinationURL for 
     more info on how this is done). If no URL can be resolved, an error is raised
@@ -36,9 +35,7 @@ def getDestinationURL(request, destPageName):
             destURL = destURL.format(request.user.username)
         else:
             print "NO USERNAME PASSED TO getDestinationURL"
-    elif destPageName in [constants.VIEW_POST, constants.CREATE_EVENT_POST, constants.CREATE_COLLABORATION_POST,
-                          constants.CREATE_WORK_POST, constants.CREATE_PROJECT_POST,
-                          constants.EDIT_POST]:
+    elif isPostPage(destPageName):
         if request.POST.get('postID'):
             destURL = destURL.format(request.POST.get('postID'))
             messages.add_message(request, messages.INFO,
@@ -107,6 +104,18 @@ def getBaseContext(request):
             "default": constants.DEFAULT,
             "cancel": constants.CANCEL
             }
+
+
+def isPostPage(pageName):
+    """Returns True if the pageName is a page dealing with posts
+
+    :param str pageName: The page enum to check
+    :return bool: True if the page name is a post page
+    """
+    return pageName in [constants.VIEW_POST, constants.CREATE_EVENT_POST,
+                        constants.CREATE_COLLABORATION_POST, constants.CREATE_WORK_POST,
+                        constants.CREATE_PROJECT_POST, constants.EDIT_POST,
+                        constants.CREATE_CASTING_POST]
 
 
 def createUniqueID(destDatabase, idKey):

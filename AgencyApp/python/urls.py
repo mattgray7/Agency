@@ -23,6 +23,7 @@ urlpatterns = [
     url(r'^create/post/collaboration/$', views.createCollaborationPost, name='createCollaborationPost'),
     url(r'^create/post/work/$', views.createWorkPost, name='createWorkPost'),
     url(r'^create/post/project/$', views.createProjectPost, name='createProjectPost'),
+    url(r'^create/post/casting/$', views.createCastingPost, name='createCastingPost'),
 
 
     # Other

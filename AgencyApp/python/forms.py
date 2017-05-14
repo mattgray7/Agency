@@ -36,9 +36,9 @@ class GenericCreatePostForm(BaseForm):
     postID = forms.CharField(widget=forms.HiddenInput, required=False, max_length=10)
     poster = forms.CharField(widget=forms.HiddenInput, required=False, max_length=200)
     postPicturePath = forms.CharField(widget=forms.HiddenInput, required=False)
-    postPicture = forms.ImageField(label="New post picture", required=False)
-    title = forms.CharField(label="Post title", max_length=500, required=True)
-    description = forms.CharField(label="Project Description", required=True, max_length=5000)
+    postPicture = forms.ImageField(label="Picture", required=False)
+    title = forms.CharField(label="Title", max_length=500, required=True)
+    description = forms.CharField(label="Description", required=True, max_length=5000)
 
 class CreateEventPostForm(GenericCreatePostForm):
     location = forms.CharField(label="Location", required=True, max_length=1000)
@@ -54,6 +54,9 @@ class CreateWorkPostForm(GenericCreatePostForm):
 
 class CreateCollaborationPostForm(GenericCreatePostForm):
     profession = forms.CharField(label="Profession", max_length=200, required=True)
+
+class CreateCastingPostForm(GenericCreatePostForm):
+    paid = forms.BooleanField(label="Paid", required=False)
 
 
 

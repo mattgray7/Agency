@@ -6,29 +6,9 @@
 <div id="projectViewDiv"></div>
 <div id="collabViewDiv"></div>
 <div id="workViewDiv"></div>
+<div id="castingViewDiv"></div>
 
 <script>
-	/*function createBrowseTable(postList, colHeaders){
-		if(postList != null){
-			var tableHTML = "<table>";
-
-			//create the row for headers
-			tableHTML += "<tr>";
-			for(var i=0; i < colHeaders.length; i++){
-				tableHTML += "<td>" + colHeader[i] + "</td>";
-			}
-			tableHTML += "</tr>";
-
-			//create all rowse for postList
-			for(var i=0; i < postList.length; i++){
-				tableHTML += "<tr>";
-				//need to iterate over tables, but in the order of colHeaders
-
-			}
-		}
-	}*/
-
-
 	function createViewEventTable(){
 		var tableString = '<h3>Browse events</h3>';
 		{% if events %}
@@ -85,7 +65,7 @@
 
 	function createViewCollabPostTable(){
 		var tableString = '<h3>Browse posts seeking collaborators</h3>';
-		{% if projects %}
+		{% if collabPosts %}
 			tableString += '<table>';
 			tableString += ("<tr> " +
 								"<td> Title </td>" +
@@ -112,7 +92,7 @@
 
 	function createViewWorkPostTable(){
 		var tableString = '<h3>Browse posts seeking crew members</h3>';
-		{% if projects %}
+		{% if workPosts %}
 			tableString += '<table>';
 			tableString += ("<tr> " +
 								"<td> Title </td>" +
@@ -132,6 +112,36 @@
 				
 				// Add tick or x for paid
 				{% if workObj.paid %}
+					tableString += "<td>&#10004;</td></tr>";
+				{% else %}
+					tableString += "<td></td></tr>";
+				{% endif %}
+			{% endfor %}
+			tableString += "</table>";
+		{% endif %}
+		return tableString;
+	};
+
+	function createViewCastingPostTable(){
+		var tableString = '<h3>Browse casting posts</h3>';
+		{% if castingPosts %}
+			tableString += '<table>';
+			tableString += ("<tr> " +
+								"<td> Title </td>" +
+								"<td> Posted by </td>" +
+								"<td> Description </td>" +
+								"<td> Paid </td>" +
+							"</tr>");
+
+			//Add each event
+			{% for castingObj in castingPosts %}
+				tableString += ("<tr>" +
+									"<td><button onclick='createPostRedirectForm(" + '"{{castingObj.postID}}","{{possibleDestinations.viewPost}}"' + ");'>{{castingObj.title}}</button></td>" +
+									"<td>{{castingObj.poster}}</td>" +
+									"<td>{{castingObj.description}}</td>")
+				
+				// Add tick or x for paid
+				{% if castingObj.paid %}
 					tableString += "<td>&#10004;</td></tr>";
 				{% else %}
 					tableString += "<td></td></tr>";
@@ -175,7 +185,7 @@
 
 		var collabViewDiv = document.getElementById("collabViewDiv");
 		if(((collabViewDiv != null) && ("{{browseView}}" == "{{possibleViews.collabPost}}")) || ("{{browseView}}" == "{{possibleViews.browse}}") || ("{{browseView}}" == "{{possibleViews.post}}")){
-			{% if projects %}
+			{% if collabPosts %}
 				collabViewDiv.innerHTML = createViewCollabPostTable();
 			{% else %}
 				collabViewDiv.innerHTML = "<h3> No posts available</h3>";
@@ -184,32 +194,22 @@
 
 		var workViewDiv = document.getElementById("workViewDiv");
 		if(((workViewDiv != null) && ("{{browseView}}" == "{{possibleViews.workPost}}")) || ("{{browseView}}" == "{{possibleViews.browse}}") || ("{{browseView}}" == "{{possibleViews.post}}")){
-			{% if projects %}
+			{% if workPosts %}
 				workViewDiv.innerHTML = createViewWorkPostTable();
 			{% else %}
 				workViewDiv.innerHTML = "<h3> No posts available</h3>";
 			{% endif %}
 		};
+
+		var castingViewDiv = document.getElementById("castingViewDiv");
+		if(((castingViewDiv != null) && ("{{browseView}}" == "{{possibleViews.castingPost}}")) || ("{{browseView}}" == "{{possibleViews.browse}}") || ("{{browseView}}" == "{{possibleViews.post}}")){
+			{% if castingPosts %}
+				castingViewDiv.innerHTML = createViewCastingPostTable();
+			{% else %}
+				castingViewDiv.innerHTML = "<h3> No posts available</h3>";
+			{% endif %}
+		};
 	});
 </script>
-
-<!--	{% if events %}
-		<table>
-			<tr> 
-				<td> Title </td>
-				<td> Posted by </td>
-				<td> Description </td>
-			</tr>
-		{% for event in events %}
-			<tr>
-				<td> <a href="/view/event/{{ event.eventID }}/"> {{ event.title }}</a></td>
-				<td> <a href="/{{ event.poster }}/"> {{ event.poster }}</a></td>
-				<td> {{ event.description }} </td>
-			</tr>
-		{% endfor %}
-	</table>
-	{% else %}
-		<h4> No events are currently listed.</h4>
-	{% endif %}-->
 
 {% endblock %}

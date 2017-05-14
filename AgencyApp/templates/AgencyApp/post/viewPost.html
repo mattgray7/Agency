@@ -18,9 +18,15 @@
 		{% elif isCollaboration %}
 			(Looking for collaboration) {{ post.title }} <br>
 			Looking for a {{ post.profession }}
-		{% elif isWork %}
-			(Looking for crew) {{ post.title }} <br>
-			Looking for a {{ post.profession }}
+		{% else %}
+
+			{% if isWork %}
+				(Looking for crew) {{ post.title }} <br>
+				Looking for a {{ post.profession }}
+			{% elif isCasting %}
+				Casting a tole: {{ post.title }}
+			{% endif %}
+			
 			{% if post.paid %}
 				 - Paid&#10004;<br>
 			{% else %}

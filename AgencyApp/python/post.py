@@ -197,6 +197,24 @@ class WorkPostInstance(PostInstance):
             return True
         return False
 
+
+class CastingPostInstance(PostInstance):
+    def __init__(self, *args, **kwargs):
+        kwargs["postType"] = constants.CASTING_POST
+        super(CastingPostInstance, self).__init__(*args, **kwargs)
+        self._database = models.CastingPost
+
+    def checkModelFormValues(self):
+        """TODO only thing current is paid (will add more), so dont need to check"""
+        return True
+
+    def saveModelFormValues(self):
+        if self.record:
+            self.record.paid = self.request.POST.get("paid", False) and True  #get value will be 'true' instead of True
+            self.record.save()
+            return True
+        return False
+
 # =================== END OF INSTANCES ====================== #
 
 
@@ -219,7 +237,8 @@ class CreatePostChoiceView(views.GenericFormView):
                                                 "setupProfileFinish": constants.SETUP_ACCOUNT_FINISH
                                                 }
         self._pageContext["possibleDestinations"] = {"collaboration": constants.CREATE_COLLABORATION_POST,
-                                                     "work": constants.CREATE_WORK_POST
+                                                     "work": constants.CREATE_WORK_POST,
+                                                     "casting": constants.CREATE_CASTING_POST
                                                      }
         return self._pageContext
 
@@ -264,6 +283,7 @@ class GenericCreatePostView(views.PictureFormView):
         self._pageContext["isProject"] = isProjectPost(self.postID)
         self._pageContext["isCollaboration"] = isCollaborationPost(self.postID)
         self._pageContext["isWork"] = isWorkPost(self.postID)
+        self._pageContext["isCasting"] = isCastingPost(self.postID)
         return self._pageContext
 
     @property
@@ -409,6 +429,25 @@ class CreateWorkPostView(GenericCreatePostView):
         return self._formInitialValues
 
 
+class CreateCastingPostView(GenericCreatePostView):
+    def __init__(self, *args, **kwargs):
+        kwargs["postType"] = constants.CASTING_POST
+        super(CreateCastingPostView, self).__init__(*args, **kwargs)
+
+    @property
+    def post(self):
+        if self._post is None:
+            self._post = CastingPostInstance(request=self.request, postID=self.postID)
+        return self._post
+
+    @property
+    def formInitialValues(self):
+        self._formInitialValues = super(CreateCastingPostView, self).formInitialValues
+        if self.post.record:
+            self._formInitialValues["paid"] = self.post.record.paid
+        return self._formInitialValues
+
+
 class ViewPostView(views.GenericFormView):
     def __init__(self, *args, **kwargs):
         self._postID = kwargs.get("postID")
@@ -433,6 +472,8 @@ class ViewPostView(views.GenericFormView):
                     self._post = CollaborationPostInstance(request=self.request, postID=self.postID)
                 elif isWorkPost(self.postID):
                     self._post = WorkPostInstance(request=self.request, postID=self.postID)
+                elif isCastingPost(self.postID):
+                    self._post = CastingPostInstance(request=self.request, postID=self.postID)
         return self._post
 
     @property
@@ -473,6 +514,7 @@ class ViewPostView(views.GenericFormView):
         self._pageContext["isProject"] = isProjectPost(self.postID)
         self._pageContext["isCollaboration"] = isCollaborationPost(self.postID)
         self._pageContext["isWork"] = isWorkPost(self.postID)
+        self._pageContext["isCasting"] = isCastingPost(self.postID)
         return self._pageContext
 
 def _postIDExistsInDb(postID, database):
@@ -489,4 +531,13 @@ def isCollaborationPost(postID):
 
 def isWorkPost(postID):
     return _postIDExistsInDb(postID, models.WorkPost)
+
+def isCastingPost(postID):
+    return _postIDExistsInDb(postID, models.CastingPost)
+
+def isPostPage(pageName):
+    return pageName in [constants.VIEW_POST, constants.CREATE_EVENT_POST,
+                        constants.CREATE_COLLABORATION_POST, constants.CREATE_WORK_POST,
+                        constants.CREATE_PROJECT_POST, constants.EDIT_POST,
+                        constants.CREATE_CASTING_POST]
 

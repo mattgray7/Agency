@@ -47,6 +47,12 @@
 			{% else %}
 				Create work post
 			{% endif %}
+		{% elif isCasting %}
+			{% if post.title %}
+				Update casting post
+			{% else %}
+				Create casting post
+			{% endif %}
 		{% endif %}
 	</h3>
 
@@ -67,6 +73,8 @@
 			<form method='post' action="/create/post/collaboration/" name='createForm' enctype="multipart/form-data">
 		{% elif isWork %}
 			<form method='post' action="/create/post/work/" name='createForm' enctype="multipart/form-data">
+		{% elif isCasting %}
+			<form method='post' action="/create/post/casting/" name='createForm' enctype="multipart/form-data">
 		{% endif %}
 	{% endif %}
 		{% csrf_token %}

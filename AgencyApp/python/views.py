@@ -412,6 +412,10 @@ def createWorkPost(request):
     view = post.CreateWorkPostView(request=request, currentPage=constants.CREATE_WORK_POST)
     return view.process()
 
+def createCastingPost(request):
+    view = post.CreateCastingPostView(request=request, currentPage=constants.CREATE_CASTING_POST)
+    return view.process()
+
 def editPost(request, postID):
     if post.isEventPost(postID):
         view = post.CreateEventPostView(request=request, currentPage=constants.EDIT_POST, postID=postID)
@@ -421,6 +425,8 @@ def editPost(request, postID):
         view = post.CreateWorkPostView(request=request, currentPage=constants.EDIT_POST, postID=postID)
     elif post.isProjectPost(postID):
         view = post.CreateProjectPostView(request=request, currentPage=constants.EDIT_POST, postID=postID)
+    elif post.isCastingPost(postID):
+        view = post.CreateCastingPostView(request=request, currentPage=constants.EDIT_POST, postID=postID)
     else:
         print "ERROR SELECTING EDIT POST VIEW"
         raise

@@ -63,6 +63,7 @@ class ProfileView(views.GenericFormView):
                 self._profilePosts["collaboration"] = models.CollaborationPost.objects.filter(poster=self.profileUserAccount.username)
                 self._profilePosts["work"] = models.WorkPost.objects.filter(poster=self.profileUserAccount.username)
                 self._profilePosts["projects"] = models.ProjectPost.objects.filter(poster=self.profileUserAccount.username)
+                self._profilePosts["casting"] = models.CastingPost.objects.filter(poster=self.profileUserAccount.username)
         return self._profilePosts
 
     @property

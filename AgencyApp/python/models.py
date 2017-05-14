@@ -18,7 +18,8 @@ def image_directory_path(instance, filename):
     elif (isinstance(instance, EventPost) or 
           isinstance(instance, ProjectPost) or
           isinstance(instance, WorkPost) or
-          isinstance(instance, CollaborationPost) and
+          isinstance(instance, CollaborationPost) or
+          isinstance(instance, CastingPost) and
           hasattr(instance, "poster")):
         inputString = instance.poster
     return u'{0}/{1}'.format(inputString, filename)
@@ -71,5 +72,9 @@ class WorkPost(AbstractPost):
 
 class CollaborationPost(AbstractPost):
     profession = models.CharField(max_length=200)
+
+class CastingPost(AbstractPost):
+    # TODO have a separate table for a single casting choice (gender, hair, age, etc)
+    paid = models.BooleanField(default=False)
 
 
