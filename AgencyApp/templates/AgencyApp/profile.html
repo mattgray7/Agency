@@ -164,6 +164,20 @@
 					</form>
 				{% endfor %}	
 			{% endif %}
+			{% if profilePosts.casting %}
+				<br>
+				<h3>Seeking actor posts...</h3>
+				{% for castingPost in profilePosts.casting %}
+					<form method="post" action="{{ currentPageURL }}">
+						{% csrf_token %}
+						<input type="hidden" name="postID" value="{{castingPost.postID}}" />
+						<input type="hidden" name="source" value="{{ next }}" />
+						<input type="hidden" name="next" value="{{ next }}" />
+						<input type="hidden" name="destination" value="{{ possibleDestinations.viewPost }}" />
+						<input type="submit" Value="{{ castingPost.title }}" />
+					</form>
+				{% endfor %}
+			{% endif %}
 		{% endif %}	
 	{% else %}
 		No user with name {{ profileUsername }} found.
