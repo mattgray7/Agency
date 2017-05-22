@@ -14,16 +14,15 @@ urlpatterns = [
     url(r'^account/edit/background/$', views.editBackground, name='editBackground'),
 
     # Create posts
-    url(r'^create/event/$', views.createEventPost, name='createEvent'),
-
-    # Create post
-    url(r'^create/post/$', views.createPostChoice, name='createPostChoice'),
-    url(r'^edit/post/(?P<postID>[A-Za-z0-9]+)/$', views.editPost, name='editPost'),
-    url(r'^view/post/(?P<postID>[A-Za-z0-9]+)/$', views.viewPost, name='viewPost'),
-    url(r'^create/post/collaboration/$', views.createCollaborationPost, name='createCollaborationPost'),
-    url(r'^create/post/work/$', views.createWorkPost, name='createWorkPost'),
-    url(r'^create/post/project/$', views.createProjectPost, name='createProjectPost'),
-    url(r'^create/post/casting/$', views.createCastingPost, name='createCastingPost'),
+    #url(r'^post/$', views.createPost, name='createPost'),
+    url(r'^post/create/$', views.createPostChoice, name='createPostChoice'),
+    url(r'^post/edit/(?P<postID>[A-Za-z0-9]+)/$', views.editPost, name='editPost'),
+    url(r'^post/view/(?P<postID>[A-Za-z0-9]+)/$', views.viewPost, name='viewPost'),
+    url(r'^post/create/event/$', views.createEventPost, name='createEvent'),
+    url(r'^post/create/collaboration/$', views.createCollaborationPost, name='createCollaborationPost'),
+    url(r'^post/create/work/$', views.createWorkPost, name='createWorkPost'),
+    url(r'^post/create/project/$', views.createProjectPost, name='createProjectPost'),
+    url(r'^post/create/casting/$', views.createCastingPost, name='createCastingPost'),
 
     # Ajax calls
     url(r'^view/post/(?P<postID>[A-Za-z0-9]+)/follow/$', ajax.followPost, name='followPost'),

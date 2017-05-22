@@ -11,21 +11,21 @@
 
 	<h1>What are you looking for?</h1>
 
-	<form method="post" action="/create/post/">
+	<form method="post" action="/post/create/">
 		{% csrf_token %}
 		<input type="hidden" name="source" value="{{ next }}"/ >
 		<input type="hidden" name="next" value="{{ next }}"/ >
 		<input type="hidden" name="destination" value="{{ possibleDestinations.work }}"/ >
 		<input type="submit" value="Looking for actors/crew members"/ >
 	</form>
-	<form method="post" action="/create/post/">
+	<form method="post" action="/post/create/">
 		{% csrf_token %}
 		<input type="hidden" name="source" value="{{ next }}"/ >
 		<input type="hidden" name="next" value="{{ next }}"/ >
 		<input type="hidden" name="destination" value="{{ possibleDestinations.collaboration }}"/ >
 		<input type="submit" value="Looking for collaborators"/ >
 	</form>
-	<form method="post" action="/create/post/">
+	<form method="post" action="/post/create/">
 		{% csrf_token %}
 		<input type="hidden" name="source" value="{{ next }}"/ >
 		<input type="hidden" name="next" value="{{ next }}"/ >

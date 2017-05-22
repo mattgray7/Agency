@@ -63,18 +63,18 @@
 	{% endif %}
 
 	{% if post.title %}
-		<form method='post' action="/edit/post/{{post.postID}}/" name='createForm' enctype="multipart/form-data">
+		<form method='post' action="/post/edit/{{post.postID}}/" name='createForm' enctype="multipart/form-data">
 	{% else %}
 		{% if isEvent %}
-			<form method='post' action="/create/event/" name='createForm' enctype="multipart/form-data">
+			<form method='post' action="/post/create/event/" name='createForm' enctype="multipart/form-data">
 		{% elif isProject %}
-			<form method='post' action="/create/post/project/" name='createForm' enctype="multipart/form-data">
+			<form method='post' action="/post/create/project/" name='createForm' enctype="multipart/form-data">
 		{% elif isCollaboration %}
-			<form method='post' action="/create/post/collaboration/" name='createForm' enctype="multipart/form-data">
+			<form method='post' action="/post/create/collaboration/" name='createForm' enctype="multipart/form-data">
 		{% elif isWork %}
-			<form method='post' action="/create/post/work/" name='createForm' enctype="multipart/form-data">
+			<form method='post' action="/post/create/work/" name='createForm' enctype="multipart/form-data">
 		{% elif isCasting %}
-			<form method='post' action="/create/post/casting/" name='createForm' enctype="multipart/form-data">
+			<form method='post' action="/post/create/casting/" name='createForm' enctype="multipart/form-data">
 		{% endif %}
 	{% endif %}
 		{% csrf_token %}

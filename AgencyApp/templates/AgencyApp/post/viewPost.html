@@ -6,7 +6,7 @@
 var currentlyFollowing = ("{{ following }}" == "True");
 function updatePostFollow(){ 
 	$.ajax({
-		url : "/view/post/{{ post.postID }}/follow/",
+		url : "/post/view/{{ post.postID }}/follow/",
 		data : {},
 		type : 'POST',
 		dataType: "json",
@@ -81,7 +81,7 @@ function updatePostFollow(){
 		{% endif %}
 	</h5>
 	{% if post.poster == request.user.username %}
-		<form method='post' action="/view/post/{{ post.postID }}/">
+		<form method='post' action="/post/view/{{ post.postID }}/">
 			{% csrf_token %}
 			<input type="hidden" name="source" value="{{ next }}" />
 			<input type="hidden" name="next" value="{{ next }}" />

@@ -69,6 +69,7 @@ URL_MAP = {HOME: "/",
 
 		   # Account creation
 		   CREATE_BASIC_ACCOUNT: "/account/create/basic/",
+		   CREATE_BASIC_ACCOUNT_FINISH: "/account/create/finish/",
 		   SETUP_ACCOUNT_FINISH: "/account/create/finish/",
 		   EDIT_INTERESTS: "/account/edit/interests/",
 		   EDIT_PROFESSIONS: "/account/edit/professions/",
@@ -79,15 +80,14 @@ URL_MAP = {HOME: "/",
 		   #VIEW_EVENT: "/view/event/{0}/",
 
 		   # Post creation
-		   CREATE_EVENT_POST: "/create/event/",
-		   CREATE_POST_CHOICE: "/create/post/",
-		   EDIT_POST: "/edit/post/{0}/",
-		   VIEW_POST: "/view/post/{0}/",
-		   CREATE_PROJECT_POST: "/create/post/project/",
-		   CREATE_COLLABORATION_POST: "/create/post/collaboration/",
-		   CREATE_WORK_POST: "/create/post/work/",
-		   CREATE_CASTING_POST: "/create/post/casting/",
-		   CREATE_BASIC_ACCOUNT_FINISH: "/account/create/finish/",
+		   CREATE_POST_CHOICE: "/post/create/",
+		   EDIT_POST: "/post/edit/{0}/",
+		   VIEW_POST: "/post/view/{0}/",
+		   CREATE_EVENT_POST: "/post/create/event/",
+		   CREATE_PROJECT_POST: "/post/create/project/",
+		   CREATE_COLLABORATION_POST: "/post/create/collaboration/",
+		   CREATE_WORK_POST: "/post/create/work/",
+		   CREATE_CASTING_POST: "/post/create/casting/",
 		   
 		   # Browse
 		   BROWSE_EVENTS: "/browse/events/",
