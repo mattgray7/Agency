@@ -23,6 +23,39 @@
 		return colString
 	}*/
 
+	/* TODO figure out how to make ajax call blocking when I get internet
+	function getFollowingCol(postID){
+		var followingCol = null;
+		$.ajax({
+			url : "/ajax/getPostFollowingBool/",
+			data : {"postID": postID},
+			type : 'POST',
+			dataType: "json",
+			success : function(data) {
+				followingCol += "<td>"
+				console.log("1. followingCol is " + followingCol);
+
+				if(data["following"]){
+					followingCol += "&#10004";
+				}
+				followingCol += "</td>";
+			}
+		});
+		return followingCol
+	}*/
+
+	function getFollowingCol(postID){
+		var colString = "<td>";
+		{% for followingPostID in followingPostIDs %}
+			if(postID == "{{followingPostID}}"){
+				colString += "&#10004";
+				//TODO add django for loop break
+			}
+		{% endfor %}
+		colString += "</td>";
+		return colString
+	}
+
 	function createViewEventTable(){
 		var tableString = '<h3>Browse events</h3>';
 		{% if events %}
@@ -34,6 +67,7 @@
 								"<td> Date </td>" +
 								"<td> Location </td>" +
 								"<td> Description </td>" +
+								"<td> Following </td>" +	// TODO don't add following column if user is not logged in
 							"</tr>");
 
 			//Add each event
@@ -50,9 +84,8 @@
 									"<td>{{eventObj.poster}}</td>" +
 									"<td>{{eventObj.date}}</td>" +
 									"<td>{{eventObj.location}}</td>" +
-									"<td>{{eventObj.description}}</td>" +
+									"<td>{{eventObj.description}}</td>" + getFollowingCol("{{eventObj.postID}}") + 
 								"</tr>");
-
 			{% endfor %}
 			tableString += "</table>";
 		{% endif %}
@@ -68,6 +101,7 @@
 								"<td> Posted by </td>" +
 								"<td> Status </td>" +
 								"<td> Description </td>" +
+								"<td> Following </td>" +
 							"</tr>");
 
 			//Add each event
@@ -83,7 +117,7 @@
 									"<td><button onclick='createPostRedirectForm(" + '"{{projectObj.postID}}","{{possibleDestinations.viewPost}}"' + ");'>{{projectObj.title}}</button></td>" +
 									"<td>{{projectObj.poster}}</td>" +
 									"<td>{{projectObj.status}}</td>" +
-									"<td>{{projectObj.description}}</td>" +
+									"<td>{{projectObj.description}}</td>" + getFollowingCol("{{projectObj.postID}}") +
 								"</tr>");
 
 			{% endfor %}
@@ -101,6 +135,7 @@
 								"<td> Posted by </td>" +
 								"<td> Seeking </td>" +
 								"<td> Description </td>" +
+								"<td> Following </td>" +
 							"</tr>");
 
 			//Add each event
@@ -116,7 +151,7 @@
 									"<td><button onclick='createPostRedirectForm(" + '"{{collabObj.postID}}","{{possibleDestinations.viewPost}}"' + ");'>{{collabObj.title}}</button></td>" +
 									"<td>{{collabObj.poster}}</td>" +
 									"<td>{{collabObj.profession}}</td>" +
-									"<td>{{collabObj.description}}</td>" +
+									"<td>{{collabObj.description}}</td>" + getFollowingCol("{{collabObj.postID}}") +
 								"</tr>");
 
 			{% endfor %}
@@ -136,6 +171,7 @@
 								"<td> Seeking </td>" +
 								"<td> Description </td>" +
 								"<td> Paid </td>" +
+								"<td> Following </td>" +
 							"</tr>");
 
 			//Add each event
@@ -155,10 +191,12 @@
 				
 				// Add tick or x for paid
 				{% if workObj.paid %}
-					tableString += "<td>&#10004;</td></tr>";
+					tableString += "<td>&#10004;</td>";
 				{% else %}
-					tableString += "<td></td></tr>";
+					tableString += "<td></td>";
 				{% endif %}
+				tableString += getFollowingCol("{{workObj.postID}}");
+				tableString += "</tr>";
 			{% endfor %}
 			tableString += "</table>";
 		{% endif %}
@@ -174,6 +212,7 @@
 								"<td> Posted by </td>" +
 								"<td> Description </td>" +
 								"<td> Paid </td>" +
+								"<td> Following </td>" +
 							"</tr>");
 
 			//Add each event
@@ -192,10 +231,12 @@
 				
 				// Add tick or x for paid
 				{% if castingObj.paid %}
-					tableString += "<td>&#10004;</td></tr>";
+					tableString += "<td>&#10004;</td>";
 				{% else %}
-					tableString += "<td></td></tr>";
+					tableString += "<td></td>";
 				{% endif %}
+				tableString += getFollowingCol("{{castingObj.postID}}");
+				tableString += "</tr>";
 			{% endfor %}
 			tableString += "</table>";
 		{% endif %}

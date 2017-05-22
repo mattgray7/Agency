@@ -509,7 +509,30 @@ class ViewPostView(views.GenericFormView):
         self._pageContext["isCollaboration"] = isCollaborationPost(self.postID)
         self._pageContext["isWork"] = isWorkPost(self.postID)
         self._pageContext["isCasting"] = isCastingPost(self.postID)
+        self._pageContext["following"] = isFollowingPost(self.postID, self.request.user.username)
         return self._pageContext
+
+def followPost(postID, username):
+    try:
+        follow = models.PostFollow(postID=postID, username=username)
+        follow.save()
+    except Exception as e:
+        print "Could not follow post: {0}".format(e)
+        return False
+    else:
+        return True
+
+def unfollowPost(postID, username):
+    try:
+        models.PostFollow.objects.filter(postID=postID, username=username).delete()
+    except Exception as e:
+        print "Could not unfollow post: {0}".format(e)
+        return False
+    else:
+        return True
+
+def isFollowingPost(postID, username):
+    return len(models.PostFollow.objects.filter(postID=postID, username=username)) > 0
 
 def _postIDExistsInDb(postID, database):
     return len(database.objects.filter(postID=postID)) > 0

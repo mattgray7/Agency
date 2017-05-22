@@ -2,6 +2,32 @@
 
 {% block content %}
 
+<script>
+var currentlyFollowing = ("{{ following }}" == "True");
+function updatePostFollow(){ 
+	$.ajax({
+		url : "/view/post/{{ post.postID }}/follow/",
+		data : {},
+		type : 'POST',
+		dataType: "json",
+		success : function(data) {
+			if(data["success"]){
+				if(currentlyFollowing){
+					document.getElementById("followButtonText").innerHTML = "Follow";
+				}else{
+					document.getElementById("followButtonText").innerHTML = "Unfollow";
+				}
+				currentlyFollowing = !currentlyFollowing;
+			}else{
+				console.log("Error following post:" + data)
+			}
+		}
+	});
+}
+</script>
+
+
+
 {% if post %}
 	{% if post.postPicture %}
 		<div id="postPicture">
@@ -24,9 +50,9 @@
 				(Looking for crew) {{ post.title }} <br>
 				Looking for a {{ post.profession }}
 			{% elif isCasting %}
-				Casting a tole: {{ post.title }}
+				Casting a role: {{ post.title }}
 			{% endif %}
-			
+
 			{% if post.paid %}
 				 - Paid&#10004;<br>
 			{% else %}
@@ -34,6 +60,18 @@
 			{% endif %}
 		{% endif %}
 	</h3>
+	{% if post.poster != request.user.username %}
+		<button onclick="updatePostFollow();">
+			<div id="followButtonText">
+				{% if following %}
+					Unfollow
+				{% else %}
+					Follow
+				{% endif %}
+			</div>
+		</button>
+	{% endif %}
+
 	<h5> Posted by {{ post.poster }} </h5>
 	<h5> Description:<br>
 		{% if post.description %}

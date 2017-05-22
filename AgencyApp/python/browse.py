@@ -23,6 +23,7 @@ class BrowseView(views.GenericFormView):
         self._collabPostList = None
         self._workPostList = None
         self._castingPostList = None
+        self._followingPostIDs = None
 
     @property
     def pageContext(self):
@@ -42,7 +43,16 @@ class BrowseView(views.GenericFormView):
         self._pageContext["workPosts"] = self.workPostList
         self._pageContext["castingPosts"] = self.castingPostList
         self._pageContext["browseView"] = self.currentPage
+        self._pageContext["followingPostIDs"] = self.followingPostIDs
         return self._pageContext
+
+    @property
+    def followingPostIDs(self):
+        """ List of IDs that the logged in user is following """
+        if self._followingPostIDs is None:
+            if self.request.user.username:
+                self._followingPostIDs = [post.postID for post in models.PostFollow.objects.filter(username=self.request.user.username)]
+        return self._followingPostIDs
 
     @property
     def eventList(self):

@@ -77,4 +77,8 @@ class CastingPost(AbstractPost):
     # TODO have a separate table for a single casting choice (gender, hair, age, etc)
     paid = models.BooleanField(default=False)
 
+class PostFollow(models.Model):
+    postID = models.CharField(max_length=10)
+    username = models.CharField(max_length=200)
+
 
