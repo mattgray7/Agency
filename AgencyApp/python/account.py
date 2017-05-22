@@ -143,14 +143,8 @@ class CreateAccountFinishView(views.GenericFormView):
 
     @property
     def pageContext(self):
-        self._pageContext = helpers.getBaseContext(self.request)
-        self._pageContext["showSetupProfile"] = True
-        if self.sourcePage == EDIT_BACKGROUND:
-            self._pageContext["showSetupProfile"] = False
-
         self._pageContext["possibleDestinations"] = {"event": CREATE_EVENT_POST,
-                                                     "post": CREATE_POST_CHOICE,
-                                                     "interests": EDIT_INTERESTS,
+                                                     "post": CREATE_POST,
                                                      "browse": BROWSE}
         return self._pageContext
 
@@ -311,8 +305,8 @@ class EditBackgroundView(views.GenericFormView):
     def cancelDestination(self):
         """Override to continue the profile setup process"""
         if self._cancelDestination is None:
-            if self.destinationPage == SETUP_ACCOUNT_FINISH:
-                self._cancelDestination = SETUP_ACCOUNT_FINISH
+            if self.destinationPage == HOME:
+                self._cancelDestination = HOME
             else:
                 self._cancelDestination = PROFILE
         return self._cancelDestination
