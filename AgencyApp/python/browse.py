@@ -35,7 +35,7 @@ class BrowseView(views.GenericFormView):
                                               "browse": constants.BROWSE}
         self._pageContext["possibleDestinations"] = {"viewPost": constants.VIEW_POST}
 
-        # TODO don't load everything if for /browse/events/ for example (can load the others through ajax)
+        # TODO don't load everything if for /browse/events/ for example (can load the others through)
         self._pageContext["events"] = self.eventList
         self._pageContext["projects"] = self.projectList
         self._pageContext["collabPosts"] = self.collabPostList

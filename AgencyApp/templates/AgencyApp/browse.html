@@ -8,12 +8,27 @@
 <div id="workViewDiv"></div>
 <div id="castingViewDiv"></div>
 
-<script>
+<script>/* TODO use this function when I have internet to fio how to pass django objects to a functino
+	function addPostPictureColumn(post){
+		// Add empty column even if a pic exists
+		var colString = '<td>';
+		{% if post.postPicture %}
+			colString += '<img src="' + post.postPicture.url + '" height="50px" width="70px"/>'
+		{% else %}
+			//TODO add a default pic
+			console.log(picURL)
+			colString += '<img height="50px" width="70px"/>'
+		{% endif %}
+		colString += '</td>';
+		return colString
+	}*/
+
 	function createViewEventTable(){
 		var tableString = '<h3>Browse events</h3>';
 		{% if events %}
 			tableString += '<table>';
 			tableString += ("<tr> " +
+								"<td></td>"	+  //post picture
 								"<td> Title </td>" +
 								"<td> Posted by </td>" +
 								"<td> Date </td>" +
@@ -23,7 +38,14 @@
 
 			//Add each event
 			{% for eventObj in events %}
-				tableString += ("<tr>" +
+				var pictureCol = '<td>';
+				{% if eventObj.postPicture %}
+					pictureCol += '<img src="{{ eventObj.postPicture.url }}" height="50px" width="70px"/>'
+				{% else %}
+					pictureCol += '<img height="50px" width="70px"/>'
+				{% endif %}
+				pictureCol += '</td>';
+				tableString += ("<tr>" + pictureCol +
 									"<td><button onclick='createPostRedirectForm(" + '"{{eventObj.postID}}","{{possibleDestinations.viewPost}}"' + ");'>{{eventObj.title}}</button></td>" +
 									"<td>{{eventObj.poster}}</td>" +
 									"<td>{{eventObj.date}}</td>" +
@@ -41,7 +63,7 @@
 		var tableString = '<h3>Browse projects</h3>';
 		{% if projects %}
 			tableString += '<table>';
-			tableString += ("<tr> " +
+			tableString += ("<tr><td></td>" +
 								"<td> Title </td>" +
 								"<td> Posted by </td>" +
 								"<td> Status </td>" +
@@ -50,7 +72,14 @@
 
 			//Add each event
 			{% for projectObj in projects %}
-				tableString += ("<tr>" +
+				var pictureCol = '<td>';
+				{% if projectObj.postPicture %}
+					pictureCol += '<img src="{{ projectObj.postPicture.url }}" height="50px" width="70px"/>'
+				{% else %}
+					pictureCol += '<img height="50px" width="70px"/>'
+				{% endif %}
+				pictureCol += '</td>';
+				tableString += ("<tr>" + pictureCol +
 									"<td><button onclick='createPostRedirectForm(" + '"{{projectObj.postID}}","{{possibleDestinations.viewPost}}"' + ");'>{{projectObj.title}}</button></td>" +
 									"<td>{{projectObj.poster}}</td>" +
 									"<td>{{projectObj.status}}</td>" +
@@ -76,7 +105,14 @@
 
 			//Add each event
 			{% for collabObj in collabPosts %}
-				tableString += ("<tr>" +
+				var pictureCol = '<td>';
+				{% if collabObj.postPicture %}
+					pictureCol += '<img src="{{ collabObj.postPicture.url }}" height="50px" width="70px"/>'
+				{% else %}
+					pictureCol += '<img height="50px" width="70px"/>'
+				{% endif %}
+				pictureCol += '</td>';
+				tableString += ("<tr>" + pictureCol +
 									"<td><button onclick='createPostRedirectForm(" + '"{{collabObj.postID}}","{{possibleDestinations.viewPost}}"' + ");'>{{collabObj.title}}</button></td>" +
 									"<td>{{collabObj.poster}}</td>" +
 									"<td>{{collabObj.profession}}</td>" +
@@ -104,7 +140,14 @@
 
 			//Add each event
 			{% for workObj in workPosts %}
-				tableString += ("<tr>" +
+				var pictureCol = '<td>';
+				{% if workObj.postPicture %}
+					pictureCol += '<img src="{{ workObj.postPicture.url }}" height="50px" width="70px"/>'
+				{% else %}
+					pictureCol += '<img height="50px" width="70px"/>'
+				{% endif %}
+				pictureCol += '</td>';
+				tableString += ("<tr>" + pictureCol +
 									"<td><button onclick='createPostRedirectForm(" + '"{{workObj.postID}}","{{possibleDestinations.viewPost}}"' + ");'>{{workObj.title}}</button></td>" +
 									"<td>{{workObj.poster}}</td>" +
 									"<td>{{workObj.profession}}</td>" +
@@ -135,7 +178,14 @@
 
 			//Add each event
 			{% for castingObj in castingPosts %}
-				tableString += ("<tr>" +
+				var pictureCol = '<td>';
+				{% if castingObj.postPicture %}
+					pictureCol += '<img src="{{ castingObj.postPicture.url }}" height="50px" width="70px"/>'
+				{% else %}
+					pictureCol += '<img height="50px" width="70px"/>'
+				{% endif %}
+				pictureCol += '</td>';
+				tableString += ("<tr>" + pictureCol +
 									"<td><button onclick='createPostRedirectForm(" + '"{{castingObj.postID}}","{{possibleDestinations.viewPost}}"' + ");'>{{castingObj.title}}</button></td>" +
 									"<td>{{castingObj.poster}}</td>" +
 									"<td>{{castingObj.description}}</td>")
