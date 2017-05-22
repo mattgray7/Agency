@@ -6,10 +6,9 @@ from django.forms.models import model_to_dict
 # Create your views here.
 from django.http import HttpResponseRedirect
 
-from constants import *
 import constants
 import helpers
-import views
+import genericViews as views
 import models
 
 import json

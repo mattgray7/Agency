@@ -8,14 +8,66 @@ from django.http import HttpResponseRedirect
 import models
 import helpers
 import constants
-import views
+import genericViews as views
 import browse
 import string, random
 import json
 
+# =================== Simple post views ===================== #
 
-# =================== INSTANCES ====================== #
-class PostInstance(object):
+class CreatePostTypesView(views.GenericFormView):
+    """Can create all post types"""
+    def __init__(self, *args, **kwargs):
+        super(CreatePostTypesView, self).__init__(*args, **kwargs)
+
+    @property
+    def cancelDestination(self):
+        return constants.HOME
+
+    @property
+    def pageContext(self):
+        self._pageContext["possibleSources"] = {"post": constants.CREATE_POST,
+                                                "createAccountFinish": constants.CREATE_BASIC_ACCOUNT_FINISH,
+                                                "setupProfileFinish": constants.SETUP_ACCOUNT_FINISH
+                                                }
+        self._pageContext["possibleDestinations"] = {"event": constants.CREATE_EVENT_POST,
+                                                     "project": constants.CREATE_PROJECT_POST,
+                                                     "collaboration": constants.CREATE_COLLABORATION_POST,
+                                                     "work": constants.CREATE_WORK_POST,
+                                                     "casting": constants.CREATE_CASTING_POST
+                                                     }
+        return self._pageContext
+
+
+class CreatePostChoiceView(views.GenericFormView):
+    """Can create work, collab, or casting posts"""
+    def __init__(self, *args, **kwargs):
+        super(CreatePostChoiceView, self).__init__(*args, **kwargs)
+
+    @property
+    def cancelDestination(self):
+        return constants.HOME
+
+    @property
+    def pageContext(self):
+        self._pageContext["possibleSources"] = {"login": constants.LOGIN,
+                                                "home": constants.HOME,
+                                                "createAccountFinish": constants.CREATE_BASIC_ACCOUNT_FINISH,
+                                                "setupProfileFinish": constants.SETUP_ACCOUNT_FINISH
+                                                }
+        self._pageContext["possibleDestinations"] = {"collaboration": constants.CREATE_COLLABORATION_POST,
+                                                     "work": constants.CREATE_WORK_POST,
+                                                     "casting": constants.CREATE_CASTING_POST
+                                                     }
+        return self._pageContext
+
+# ============================================================================================ #
+
+
+
+# ==================================== Generic post views ==================================== #
+
+class GenericPostInstance(object):
     def __init__(self, *args, **kwargs):
         self.request = kwargs.get("request")
         self._postID = kwargs.get("postID")
@@ -101,165 +153,6 @@ class PostInstance(object):
             self.errors.append("Post description must be at least 75 characters long.")
             return False
         return True
-
-
-class EventPostInstance(PostInstance):
-    def __init__(self, *args, **kwargs):
-        kwargs["postType"] = constants.EVENT_POST
-        super(EventPostInstance, self).__init__(*args, **kwargs)
-        self._database = models.EventPost
-
-    def checkModelFormValues(self):
-        valid = False
-        if self.request.method == "POST":
-            if len(self.request.POST.get("location")) < 1:
-                self.errors.append("Missing location")
-            else:
-                valid = True
-        return valid
-
-    def saveModelFormValues(self):
-        if self.record:
-            self.record.location = self.request.POST.get("location", "")
-            self.record.date = self.request.POST.get("date", "")
-            self.record.save()
-            return True
-        return False
- 
-
-class ProjectPostInstance(PostInstance):
-    def __init__(self, *args, **kwargs):
-        kwargs["postType"] = constants.PROJECT_POST
-        super(ProjectPostInstance, self).__init__(*args, **kwargs)
-        self._database = models.ProjectPost
-
-    def checkModelFormValues(self):
-        """TODO, only thing so far is status, which is optional, so return True"""
-        return True
-
-    def saveModelFormValues(self):
-        if self.record:
-            self.record.status = self.request.POST.get("status", "")
-            self.record.save()
-            return True
-        return False
-
-
-class CollaborationPostInstance(PostInstance):
-    def __init__(self, *args, **kwargs):
-        kwargs["postType"] = constants.COLLABORATION_POST
-        super(CollaborationPostInstance, self).__init__(*args, **kwargs)
-        self._database = models.CollaborationPost
-
-    def checkModelFormValues(self):
-        valid = False
-        if self.request.method == "POST":
-            if len(self.request.POST.get("profession", "")) < 1:
-                self.errors.append("Missing profession")
-            else:
-                valid = True
-        return valid
-
-    def saveModelFormValues(self):
-        if self.record:
-            self.record.profession = self.request.POST.get("profession", "")
-            self.record.save()
-            return True
-        return False
-
-
-class WorkPostInstance(PostInstance):
-    def __init__(self, *args, **kwargs):
-        kwargs["postType"] = constants.WORK_POST
-        super(WorkPostInstance, self).__init__(*args, **kwargs)
-        self._database = models.WorkPost
-
-    def checkModelFormValues(self):
-        valid = False
-        if self.request.method == "POST":
-            if len(self.request.POST.get("profession", "")) < 1:
-                self.errors.append("Missing profession")
-            else:
-                valid = True
-        return valid
-
-    def saveModelFormValues(self):
-        if self.record:
-            self.record.profession = self.request.POST.get("profession")
-            self.record.paid = self.request.POST.get("paid", False) and True
-            self.record.save()
-            return True
-        return False
-
-
-class CastingPostInstance(PostInstance):
-    def __init__(self, *args, **kwargs):
-        kwargs["postType"] = constants.CASTING_POST
-        super(CastingPostInstance, self).__init__(*args, **kwargs)
-        self._database = models.CastingPost
-
-    def checkModelFormValues(self):
-        """TODO only thing current is paid (will add more), so dont need to check"""
-        return True
-
-    def saveModelFormValues(self):
-        if self.record:
-            self.record.paid = self.request.POST.get("paid", False) and True  #get value will be 'true' instead of True
-            self.record.save()
-            return True
-        return False
-
-# =================== END OF INSTANCES ====================== #
-
-
-
-# ======================= VIEWS ======================== #
-
-class CreatePostTypesView(views.GenericFormView):
-    """Can create all post types"""
-    def __init__(self, *args, **kwargs):
-        super(CreatePostTypesView, self).__init__(*args, **kwargs)
-
-    @property
-    def cancelDestination(self):
-        return constants.HOME
-
-    @property
-    def pageContext(self):
-        self._pageContext["possibleSources"] = {"post": constants.CREATE_POST,
-                                                "createAccountFinish": constants.CREATE_BASIC_ACCOUNT_FINISH,
-                                                "setupProfileFinish": constants.SETUP_ACCOUNT_FINISH
-                                                }
-        self._pageContext["possibleDestinations"] = {"event": constants.CREATE_EVENT_POST,
-                                                     "project": constants.CREATE_PROJECT_POST,
-                                                     "collaboration": constants.CREATE_COLLABORATION_POST,
-                                                     "work": constants.CREATE_WORK_POST,
-                                                     "casting": constants.CREATE_CASTING_POST
-                                                     }
-        return self._pageContext
-
-
-class CreatePostChoiceView(views.GenericFormView):
-    """Can create work, collab, or casting posts"""
-    def __init__(self, *args, **kwargs):
-        super(CreatePostChoiceView, self).__init__(*args, **kwargs)
-
-    @property
-    def cancelDestination(self):
-        return constants.HOME
-
-    @property
-    def pageContext(self):
-        self._pageContext["possibleSources"] = {"login": constants.LOGIN,
-                                                "home": constants.HOME,
-                                                "createAccountFinish": constants.CREATE_BASIC_ACCOUNT_FINISH,
-                                                "setupProfileFinish": constants.SETUP_ACCOUNT_FINISH
-                                                }
-        self._pageContext["possibleDestinations"] = {"collaboration": constants.CREATE_COLLABORATION_POST,
-                                                     "work": constants.CREATE_WORK_POST,
-                                                     "casting": constants.CREATE_CASTING_POST
-                                                     }
-        return self._pageContext
 
 
 class GenericCreatePostView(views.PictureFormView):
@@ -369,108 +262,10 @@ class GenericCreatePostView(views.PictureFormView):
         return self.post.formIsValid()
 
 
-class CreateEventPostView(GenericCreatePostView):
-    def __init__(self, *args, **kwargs):
-        kwargs["postType"] = constants.EVENT_POST
-        super(CreateEventPostView, self).__init__(*args, **kwargs)
-
-    @property
-    def post(self):
-        if self._post is None:
-            self._post = EventPostInstance(request=self.request, postID=self.postID)
-        return self._post
-
-    @property
-    def formInitialValues(self):
-        self._formInitialValues = super(CreateEventPostView, self).formInitialValues
-        if self.post.record:
-            self._formInitialValues["location"] = self.post.record.location
-            self._formInitialValues["date"] = self.post.record.date
-        return self._formInitialValues
-
-
-class CreateProjectPostView(GenericCreatePostView):
-    def __init__(self, *args, **kwargs):
-        kwargs["postType"] = constants.PROJECT_POST
-        super(CreateProjectPostView, self).__init__(*args, **kwargs)
-
-    @property
-    def post(self):
-        if self._post is None:
-            self._post = ProjectPostInstance(request=self.request, postID=self.postID)
-        return self._post
-
-    @property
-    def formInitialValues(self):
-        self._formInitialValues = super(CreateProjectPostView, self).formInitialValues
-        if self.post.record:
-            self._formInitialValues["status"] = self.post.record.status
-        return self._formInitialValues
-
-
-class CreateCollaborationPostView(GenericCreatePostView):
-    def __init__(self, *args, **kwargs):
-        kwargs["postType"] = constants.COLLABORATION_POST
-        super(CreateCollaborationPostView, self).__init__(*args, **kwargs)
-
-    @property
-    def post(self):
-        if self._post is None:
-            self._post = CollaborationPostInstance(request=self.request, postID=self.postID)
-        return self._post
-
-    @property
-    def formInitialValues(self):
-        self._formInitialValues = super(CreateCollaborationPostView, self).formInitialValues
-        self._formInitialValues["postID"] = self.postID
-        if self.post.record:
-            self._formInitialValues["profession"] = self.post.record.profession
-        return self._formInitialValues
-
-
-class CreateWorkPostView(GenericCreatePostView):
-    def __init__(self, *args, **kwargs):
-        kwargs["postType"] = constants.WORK_POST
-        super(CreateWorkPostView, self).__init__(*args, **kwargs)
-
-    @property
-    def post(self):
-        if self._post is None:
-            self._post = WorkPostInstance(request=self.request, postID=self.postID)
-        return self._post
-
-    @property
-    def formInitialValues(self):
-        self._formInitialValues = super(CreateWorkPostView, self).formInitialValues
-        if self.post.record:
-            self._formInitialValues["profession"] = self.post.record.profession
-            self._formInitialValues["paid"] = self.post.record.paid
-        return self._formInitialValues
-
-
-class CreateCastingPostView(GenericCreatePostView):
-    def __init__(self, *args, **kwargs):
-        kwargs["postType"] = constants.CASTING_POST
-        super(CreateCastingPostView, self).__init__(*args, **kwargs)
-
-    @property
-    def post(self):
-        if self._post is None:
-            self._post = CastingPostInstance(request=self.request, postID=self.postID)
-        return self._post
-
-    @property
-    def formInitialValues(self):
-        self._formInitialValues = super(CreateCastingPostView, self).formInitialValues
-        if self.post.record:
-            self._formInitialValues["paid"] = self.post.record.paid
-        return self._formInitialValues
-
-
-class ViewPostView(views.GenericFormView):
+class GenericViewPostView(views.GenericFormView):
     def __init__(self, *args, **kwargs):
         self._postID = kwargs.get("postID")
-        super(ViewPostView, self).__init__(*args, **kwargs)
+        super(GenericViewPostView, self).__init__(*args, **kwargs)
         self._post = None
 
     @property
@@ -481,18 +276,7 @@ class ViewPostView(views.GenericFormView):
 
     @property
     def post(self):
-        if self._post is None:
-            if self.postID:
-                if isEventPost(self.postID):
-                    self._post = EventPostInstance(request=self.request, postID=self.postID)
-                if isProjectPost(self.postID):
-                    self._post = ProjectPostInstance(request=self.request, postID=self.postID)
-                elif isCollaborationPost(self.postID):
-                    self._post = CollaborationPostInstance(request=self.request, postID=self.postID)
-                elif isWorkPost(self.postID):
-                    self._post = WorkPostInstance(request=self.request, postID=self.postID)
-                elif isCastingPost(self.postID):
-                    self._post = CastingPostInstance(request=self.request, postID=self.postID)
+        """ To be overridden in child class """
         return self._post
 
     @property
@@ -536,6 +320,12 @@ class ViewPostView(views.GenericFormView):
         self._pageContext["isCasting"] = isCastingPost(self.postID)
         self._pageContext["following"] = isFollowingPost(self.postID, self.request.user.username)
         return self._pageContext
+
+# ================================================================================================== #
+
+
+
+# ========================================= Post functions =========================================  #
 
 def followPost(postID, username):
     try:

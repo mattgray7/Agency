@@ -8,7 +8,7 @@ from django.contrib import messages
 import constants
 import models
 import helpers
-import views
+import genericViews as views
 
 
 class ProfileView(views.GenericFormView):

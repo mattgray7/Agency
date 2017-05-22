@@ -8,10 +8,9 @@ from forms import *
 from models import UserAccount, Profession
 from helpers import getMessageFromKey
 
-from constants import *
 import constants
 import helpers
-import views
+import genericViews as views
 
 
 class HomeView(views.GenericFormView):

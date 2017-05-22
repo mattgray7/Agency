@@ -1,5 +1,6 @@
-import ajax
 import views
+import ajax
+
 from django.conf.urls import url
 
 urlpatterns = [

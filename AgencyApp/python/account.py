@@ -14,7 +14,7 @@ from helpers import getMessageFromKey
 from constants import *
 import constants
 import helpers
-import views
+import genericViews as views
 
 import os
 
