@@ -25,7 +25,7 @@ urlpatterns = [
     url(r'^post/create/casting/$', views.createCastingPost, name='createCastingPost'),
 
     # Ajax calls
-    url(r'^view/post/(?P<postID>[A-Za-z0-9]+)/follow/$', ajax.followPost, name='followPost'),
+    url(r'^post/view/(?P<postID>[A-Za-z0-9]+)/follow/$', ajax.followPost, name='followPost'),
     url(r'^ajax/getPostFollowingBool/$', ajax.getPostFollowingBool, name='getPostFollowingBool'),
 
     # Other
@@ -38,6 +38,6 @@ urlpatterns = [
     url(r'^login/$', views.login, name='login'),
     url(r'^logout/$', views.logout, name='logout'),
     #url(r'^ajax/$', ajax.call, name='ajax'),
-    url(r'^(?P<username>[A-Za-z0-9]+)/$', views.displayProfile, name='displayProfile'),
+    url(r'^user/(?P<username>[A-Za-z0-9]+)/$', views.displayProfile, name='displayProfile'),
     url(r'^jobs/$', views.jobs, name='jobs'),
 ]

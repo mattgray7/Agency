@@ -65,7 +65,7 @@ PROFESSIONS = ["Actor", "Acting Coach", "Art Director", "Assistant Director", "A
 
 URL_MAP = {HOME: "/",
 		   LOGIN:"/login/",
-		   PROFILE:"/{0}/",
+		   PROFILE:"/user/{0}/",
 
 		   # Account creation
 		   CREATE_BASIC_ACCOUNT: "/account/create/basic/",
