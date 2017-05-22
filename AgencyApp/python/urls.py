@@ -14,7 +14,7 @@ urlpatterns = [
     url(r'^account/edit/background/$', views.editBackground, name='editBackground'),
 
     # Create posts
-    #url(r'^post/$', views.createPost, name='createPost'),
+    url(r'^post/$', views.createPost, name='createPost'),
     url(r'^post/create/$', views.createPostChoice, name='createPostChoice'),
     url(r'^post/edit/(?P<postID>[A-Za-z0-9]+)/$', views.editPost, name='editPost'),
     url(r'^post/view/(?P<postID>[A-Za-z0-9]+)/$', views.viewPost, name='viewPost'),

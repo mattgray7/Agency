@@ -40,40 +40,63 @@
 
     <body>
         {% block header %}
-            <form action="/" method="post">
-                {% csrf_token %}
-                <input type="hidden" name="source" value="{{ next }}">
-                <input type="hidden" name="next" value="{{ toolbarDestinations.home }}">
-                <input type="submit" value="Van Film Collective">
-            </form>
-            <form action="/browse/" method="post">
-                {% csrf_token %}
-                <input type="hidden" name="source" value="{{ source }}">
-                <input type="hidden" name="next" value="{{ toolbarDestinations.browse }}">
-                <input type="submit" value="Browse">
-            </form>
-            {% if request.user.is_authenticated %}
-                <form action="/{{ request.user.username }}/" method="post">
-                    {% csrf_token %}
-                    <input type="hidden" name="source" value="{{ source }}">
-                    <input type="hidden" name="next" value="{{ toolbarDestinations.profile }}">
-                    <input type="submit" value="{{ request.user.first_name }} {{ request.user.last_name }}">
-                </form>
-                <form action="/logout/" method="post">
-                    {% csrf_token %}
-                    <input type="hidden" name="source" value="{{ source }}">
-                    <input type="hidden" name="next" value="{{ toolbarDestinations.logout }}">
-                    <input type="submit" value="Logout">
-                </form>
-            {% else %}
-                <form action="/login/" method="post">
-                    {% csrf_token %}
-                    <input type="hidden" name="source" value="{{ source }}">
-                    <input type="hidden" name="next" value="{{ toolbarDestinations.login }}">
-                    <input type="hidden" name="destination" value="{{ default }}">
-                    <input type="submit" value="Login">
-                </form>
-            {% endif %}
+            <table width="100%;">
+                <tr>
+                    <td width="80%">
+                        <form action="/" method="post">
+                            {% csrf_token %}
+                            <input type="hidden" name="source" value="{{ next }}">
+                            <input type="hidden" name="next" value="{{ toolbarDestinations.home }}">
+                            <input type="submit" value="Van Film Collective">
+                        </form>
+                    </td>
+                    <td>
+                        <form action="/browse/" method="post">
+                            {% csrf_token %}
+                            <input type="hidden" name="source" value="{{ source }}">
+                            <input type="hidden" name="next" value="{{ toolbarDestinations.browse }}">
+                            <input type="submit" value="Browse">
+                        </form>
+                    </td>
+                    {% if request.user.is_authenticated %}
+                        <td>
+                            <form action="/post/" method="post">
+                                {% csrf_token %}
+                                <input type="hidden" name="source" value="{{ source }}">
+                                <input type="hidden" name="next" value="{{ toolbarDestinations.post }}">
+                                <input type="submit" value="Post">
+                            </form>
+                        </td>
+
+                        <td>
+                            <form action="/user/{{ request.user.username }}/" method="post">
+                                {% csrf_token %}
+                                <input type="hidden" name="source" value="{{ source }}">
+                                <input type="hidden" name="next" value="{{ toolbarDestinations.profile }}">
+                                <input type="submit" value="{{ request.user.first_name }} {{ request.user.last_name }}">
+                            </form>
+                        </td>
+                        <td>
+                            <form action="/logout/" method="post">
+                                {% csrf_token %}
+                                <input type="hidden" name="source" value="{{ source }}">
+                                <input type="hidden" name="next" value="{{ toolbarDestinations.logout }}">
+                                <input type="submit" value="Logout">
+                            </form>
+                        </td>
+                    {% else %}
+                        <td>
+                            <form action="/login/" method="post">
+                                {% csrf_token %}
+                                <input type="hidden" name="source" value="{{ source }}">
+                                <input type="hidden" name="next" value="{{ toolbarDestinations.login }}">
+                                <input type="hidden" name="destination" value="{{ default }}">
+                                <input type="submit" value="Login">
+                            </form>
+                        </td>
+                    {% endif %}
+                </tr>
+            </table>
             <br><br>
         {% endblock %}
 
@@ -87,12 +110,15 @@
                 return input;
             };
 
-            function createPageRedirectForm(source, next, destination, formProcessURL, extraHiddenInputs){
+            function createPageRedirectForm(source, next, destination, formProcessURL, extraHiddenInputs, formParent, submitButtonValue){
                 if (formProcessURL == null){
                     formProcessURL = "/";
                 }
                 if (extraHiddenInputs == null){
                     extraHiddenInputs = [];
+                }
+                if (formParent == null){
+                    formParent = document.body;
                 }
                 var form = document.createElement("form");
                 form.setAttribute('method', "post");
@@ -102,7 +128,7 @@
                 form.appendChild(createFormInput("hidden", "next", next));
                 form.appendChild(createFormInput("hidden", "destination", destination));
                 form.appendChild(createFormInput("hidden", "csrfmiddlewaretoken", getCookie("csrftoken")));
-                form.appendChild(createFormInput("submit", null, null));
+                form.appendChild(createFormInput("submit", null, submitButtonValue));
 
                 // add extra hidden inputs
                 if(extraHiddenInputs.length > 0){
@@ -110,7 +136,7 @@
                         form.appendChild(createFormInput("hidden", extraHiddenInputs[i].key, extraHiddenInputs[i].value));
                     }
                 };
-                document.body.appendChild(form);
+                formParent.appendChild(form);
                 return form;
             }
 

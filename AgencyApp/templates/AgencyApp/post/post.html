@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2> Create a post </h2>
+<div id="eventDiv"></div>
+<div id="projectDiv"></div>
+<div id="collabDiv"></div>
+<div id="workDiv"></div>
+<div id="castingDiv"></div>
+
+<script>
+
+window.onload = function(){
+	var eventForm = createPageRedirectForm("{{ possibleSources.post }}", "{{ possibleSources.post }}", "{{ possibleDestinations.event }}", "/post/", null, document.getElementById("eventDiv"), "Create event");
+	var projectForm = createPageRedirectForm("{{ possibleSources.post }}", "{{ possibleSources.post }}", "{{ possibleDestinations.project }}", "/post/", null, document.getElementById("projectDiv"), "Create project");
+	var collabForm = createPageRedirectForm("{{ possibleSources.post }}", "{{ possibleSources.post }}", "{{ possibleDestinations.collaboration }}", "/post/", null, document.getElementById("collabDiv"), "Create collaboration post");
+	var workForm = createPageRedirectForm("{{ possibleSources.post }}", "{{ possibleSources.post }}", "{{ possibleDestinations.work }}", "/post/", null, document.getElementById("workDiv"), "Create work post");
+	var castingForm = createPageRedirectForm("{{ possibleSources.post }}", "{{ possibleSources.post }}", "{{ possibleDestinations.casting }}", "/post/", null, document.getElementById("castingDiv"), "Create casting post");
+}
+</script>
+
+
+{% endblock %}

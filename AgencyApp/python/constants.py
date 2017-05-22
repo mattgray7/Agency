@@ -15,6 +15,7 @@ COLLABORATION_POST = "COLLABORATION_POST"
 WORK_POST = "WORK_POST"
 CASTING_POST = "CASTING_POST"
 
+CREATE_POST = "CREATE_POST"
 CREATE_POST_CHOICE = "CREATE_POST_CHOICE"
 VIEW_POST = "VIEW_POST"
 EDIT_POST = "EDIT_POST"
@@ -80,6 +81,7 @@ URL_MAP = {HOME: "/",
 		   #VIEW_EVENT: "/view/event/{0}/",
 
 		   # Post creation
+		   CREATE_POST: "/post/",
 		   CREATE_POST_CHOICE: "/post/create/",
 		   EDIT_POST: "/post/edit/{0}/",
 		   VIEW_POST: "/post/view/{0}/",
@@ -116,6 +118,7 @@ DEFAULT_PAGE_MAP = {HOME: HOME,
 					SETUP_ACCOUNT_FINISH: HOME,
 
 					# Post creation
+					CREATE_POST: CREATE_POST,
 					CREATE_EVENT_POST: VIEW_POST,
 					CREATE_POST_CHOICE: CREATE_PROJECT_POST,
 					EDIT_POST: VIEW_POST,
@@ -174,6 +177,7 @@ HTML_MAP = {HOME: 'AgencyApp/home.html',
 			EDIT_PROFILE_PICTURE: 'AgencyApp/account/picture.html',
 
 			# Post creation
+			CREATE_POST: 'AgencyApp/post/post.html',
 			CREATE_POST_CHOICE: 'AgencyApp/post/postChoice.html',
 			VIEW_POST: 'AgencyApp/post/viewPost.html',
 			EDIT_POST: None,
@@ -195,10 +199,10 @@ HTML_MAP = {HOME: 'AgencyApp/home.html',
 
 MEDIA_FILE_NAME_MAP = {EDIT_PROFILE_PICTURE: "profile.jpg",
 					   EVENT_POST: "event_{0}.jpg",
-					   COLLABORATION_POST: "post_{0}.jpg",
-					   WORK_POST: "post_{0}.jpg",
-					   PROJECT_POST: "post_{0}.jpg",
-					   CASTING_POST: "post_{0}.jpg"
+					   COLLABORATION_POST: "collaboration_{0}.jpg",
+					   WORK_POST: "work_{0}.jpg",
+					   PROJECT_POST: "project_{0}.jpg",
+					   CASTING_POST: "casting_{0}.jpg"
 					   }
 
 POST_DATABASE_MAP = {EVENT_POST: models.EventPost,

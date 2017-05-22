@@ -215,7 +215,32 @@ class CastingPostInstance(PostInstance):
 
 # ======================= VIEWS ======================== #
 
+class CreatePostTypesView(views.GenericFormView):
+    """Can create all post types"""
+    def __init__(self, *args, **kwargs):
+        super(CreatePostTypesView, self).__init__(*args, **kwargs)
+
+    @property
+    def cancelDestination(self):
+        return constants.HOME
+
+    @property
+    def pageContext(self):
+        self._pageContext["possibleSources"] = {"post": constants.CREATE_POST,
+                                                "createAccountFinish": constants.CREATE_BASIC_ACCOUNT_FINISH,
+                                                "setupProfileFinish": constants.SETUP_ACCOUNT_FINISH
+                                                }
+        self._pageContext["possibleDestinations"] = {"event": constants.CREATE_EVENT_POST,
+                                                     "project": constants.CREATE_PROJECT_POST,
+                                                     "collaboration": constants.CREATE_COLLABORATION_POST,
+                                                     "work": constants.CREATE_WORK_POST,
+                                                     "casting": constants.CREATE_CASTING_POST
+                                                     }
+        return self._pageContext
+
+
 class CreatePostChoiceView(views.GenericFormView):
+    """Can create work, collab, or casting posts"""
     def __init__(self, *args, **kwargs):
         super(CreatePostChoiceView, self).__init__(*args, **kwargs)
 

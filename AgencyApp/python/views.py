@@ -416,6 +416,10 @@ def createCastingPost(request):
     view = post.CreateCastingPostView(request=request, currentPage=constants.CREATE_CASTING_POST)
     return view.process()
 
+def createPost(request):
+    view = post.CreatePostTypesView(request=request, currentPage=constants.CREATE_POST)
+    return view.process()
+
 def editPost(request, postID):
     if post.isEventPost(postID):
         view = post.CreateEventPostView(request=request, currentPage=constants.EDIT_POST, postID=postID)
