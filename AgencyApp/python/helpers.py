@@ -31,10 +31,7 @@ def getDestinationURL(request, destPageName):
 
     # Add specific values for profile usernames and eventIDs in the url
     if destPageName == constants.PROFILE:
-        if request.user.username:
-            destURL = destURL.format(request.user.username)
-        else:
-            print "NO USERNAME PASSED TO getDestinationURL"
+        destURL = destURL.format(request.POST.get('profileName', request.user.username))
     elif isPostPage(destPageName):
         if request.POST.get('postID'):
             destURL = destURL.format(request.POST.get('postID'))
@@ -99,7 +96,7 @@ def getBaseContext(request):
                                      "home": constants.HOME,
                                      "logout": constants.LOGOUT,
                                      "profile": constants.PROFILE,
-                                     "browse": constants.BROWSE,
+                                     "browse": constants.BROWSE_CHOICE,
                                      "post": constants.CREATE_POST},
             "source": source,
             "default": constants.DEFAULT,

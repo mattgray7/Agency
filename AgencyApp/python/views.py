@@ -17,7 +17,7 @@ import genericViews as views
 import home
 import profile
 import account
-import browse as browseModule   # to avoid conflict with browse method
+import browse
 import post
 
 import post_event as eventPost
@@ -26,6 +26,8 @@ import post_collaboration as collaborationPost
 import post_work as workPost
 import post_casting as castingPost
 
+
+# ============================== Basic pages ================================== #
 
 def displayHome(request):
     view = home.HomeView(request=request, currentPage=constants.HOME)
@@ -38,6 +40,16 @@ def login(request):
 def logout(request):
     view = account.LogoutView(request=request, currentPage=constants.LOGOUT)
     return view.process()
+
+def displayProfile(request, username):
+    view = profile.ProfileView(request=request, username=username, currentPage=constants.PROFILE)
+    return view.process()
+
+# ============================================================================= #
+
+
+
+# ========================= Create/edit account pages ========================= #
 
 def createAccount(request):
     view = account.CreateAccountView(request=request, currentPage=constants.CREATE_BASIC_ACCOUNT)
@@ -63,32 +75,18 @@ def createAccountFinish(request):
     view = account.CreateAccountFinishView(request=request, currentPage=constants.CREATE_BASIC_ACCOUNT_FINISH)
     return view.process()
 
-def createPostChoice(request):
-    view = post.CreatePostChoiceView(request=request, currentPage=constants.CREATE_POST_CHOICE)
-    return view.process()
+# ============================================================================= #
 
-def createEventPost(request):
-    view = eventPost.CreateEventPostView(request=request, currentPage=constants.CREATE_EVENT_POST)
-    return view.process()
 
-def createProjectPost(request):
-    view = projectPost.CreateProjectPostView(request=request, currentPage=constants.CREATE_PROJECT_POST)
-    return view.process()
 
-def createCollaborationPost(request):
-    view = collaborationPost.CreateCollaborationPostView(request=request, currentPage=constants.CREATE_COLLABORATION_POST)
-    return view.process()
-
-def createWorkPost(request):
-    view = workPost.CreateWorkPostView(request=request, currentPage=constants.CREATE_WORK_POST)
-    return view.process()
-
-def createCastingPost(request):
-    view = castingPost.CreateCastingPostView(request=request, currentPage=constants.CREATE_CASTING_POST)
-    return view.process()
+# ============================== Create post pages ============================== #
 
 def createPost(request):
     view = post.CreatePostTypesView(request=request, currentPage=constants.CREATE_POST)
+    return view.process()
+
+def createPostChoice(request):
+    view = post.CreatePostChoiceView(request=request, currentPage=constants.CREATE_POST_CHOICE)
     return view.process()
 
 def editPost(request, postID):
@@ -123,28 +121,48 @@ def viewPost(request, postID):
         raise
     return view.process()
 
-def browse(request, browseType=constants.BROWSE):
-    view = browseModule.BrowseView(request=request, currentPage=browseType)
+def createEventPost(request):
+    view = eventPost.CreateEventPostView(request=request, currentPage=constants.CREATE_EVENT_POST)
+    return view.process()
+
+def createProjectPost(request):
+    view = projectPost.CreateProjectPostView(request=request, currentPage=constants.CREATE_PROJECT_POST)
+    return view.process()
+
+def createCollaborationPost(request):
+    view = collaborationPost.CreateCollaborationPostView(request=request, currentPage=constants.CREATE_COLLABORATION_POST)
+    return view.process()
+
+def createWorkPost(request):
+    view = workPost.CreateWorkPostView(request=request, currentPage=constants.CREATE_WORK_POST)
+    return view.process()
+
+def createCastingPost(request):
+    view = castingPost.CreateCastingPostView(request=request, currentPage=constants.CREATE_CASTING_POST)
+    return view.process()
+
+# ====================================================================================== #
+
+
+
+# ===================================== Browse pages ==================================== #
+
+def browseChoice(request):
+    view = browse.BrowseChoiceView(request=request, currentPage=constants.BROWSE_CHOICE)
     return view.process()
 
 def browseEvents(request):
-    return browse(request, browseType=constants.BROWSE_EVENTS)
+    view = browse.BrowseEventsView(request=request, currentPage=constants.BROWSE_EVENTS)
+    return view.process()
 
 def browseProjects(request):
-    return browse(request, browseType=constants.BROWSE_PROJECTS)
+    view = browse.BrowseProjectsView(request=request, currentPage=constants.BROWSE_PROJECTS)
+    return view.process()
 
-def browseCollaborationPosts(request):
-    return browse(request, browseType=constants.BROWSE_COLLABORATION_POSTS)
-
-def browseWorkPosts(request):
-    return browse(request, browseType=constants.BROWSE_WORK_POSTS)
+def browseUsers(request):
+    view = browse.BrowseUsersView(request=request, currentPage=constants.BROWSE_USERS)
+    return view.process()
 
 def browsePosts(request):
     return browse(request, browseType=constants.BROWSE_POSTS)
 
-def displayProfile(request, username):
-    view = profile.ProfileView(request=request, username=username, currentPage=constants.PROFILE)
-    return view.process()
-
-def jobs(request):
-    return render(request, 'AgencyApp/jobs.html', {'jobList': ['job1', 'job2', 'job3']})

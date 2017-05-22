@@ -29,16 +29,21 @@ urlpatterns = [
     url(r'^post/view/(?P<postID>[A-Za-z0-9]+)/follow/$', ajax.followPost, name='followPost'),
     url(r'^ajax/getPostFollowingBool/$', ajax.getPostFollowingBool, name='getPostFollowingBool'),
 
-    # Other
+    # Browse
+    url(r'^browse/$', views.browseChoice, name='browseChoice'),
     url(r'^browse/events/$', views.browseEvents, name='browseEvents'),
     url(r'^browse/projects/$', views.browseProjects, name='browseProjects'),
-    url(r'^browse/posts/collaboration/$', views.browseCollaborationPosts, name='browseCollaborationPosts'),
-    url(r'^browse/posts/work/$', views.browseWorkPosts, name='browseWorkPosts'),
+    url(r'^browse/users/$', views.browseUsers, name='browseUsers'),
     url(r'^browse/posts/$', views.browsePosts, name='browsePosts'),
-    url(r'^browse/$', views.browse, name='browse'),
+
+    # Other
+    #url(r'^browse/events/$', views.browseEvents, name='browseEvents'),
+    #url(r'^browse/projects/$', views.browseProjects, name='browseProjects'),
+    #url(r'^browse/posts/collaboration/$', views.browseCollaborationPosts, name='browseCollaborationPosts'),
+    #url(r'^browse/posts/work/$', views.browseWorkPosts, name='browseWorkPosts'),
+    #url(r'^browse/posts/$', views.browsePosts, name='browsePosts'),
     url(r'^login/$', views.login, name='login'),
     url(r'^logout/$', views.logout, name='logout'),
     #url(r'^ajax/$', ajax.call, name='ajax'),
     url(r'^user/(?P<username>[A-Za-z0-9]+)/$', views.displayProfile, name='displayProfile'),
-    url(r'^jobs/$', views.jobs, name='jobs'),
 ]

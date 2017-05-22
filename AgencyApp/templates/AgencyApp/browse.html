@@ -2,11 +2,13 @@
 
 {% block content %}
 
-<div id="eventViewDiv"></div>
-<div id="projectViewDiv"></div>
-<div id="collabViewDiv"></div>
+<div id="eventsViewDiv"></div>
+<div id="projectsViewDiv"></div>
+<div id="postsViewDiv"></div>
+<div id="usersViewDiv"></div>
+<!--<div id="collabViewDiv"></div>
 <div id="workViewDiv"></div>
-<div id="castingViewDiv"></div>
+<div id="castingViewDiv"></div>-->
 
 <script>/* TODO use this function when I have internet to fio how to pass django objects to a functino
 	function addPostPictureColumn(post){
@@ -56,7 +58,7 @@
 		return colString
 	}
 
-	function createViewEventTable(){
+	function createViewEventsTable(){
 		var tableString = '<h3>Browse events</h3>';
 		{% if events %}
 			tableString += '<table>';
@@ -92,7 +94,7 @@
 		return tableString;
 	};
 
-	function createViewProjectTable(){
+	function createViewProjectsTable(){
 		var tableString = '<h3>Browse projects</h3>';
 		{% if projects %}
 			tableString += '<table>';
@@ -118,6 +120,34 @@
 									"<td>{{projectObj.poster}}</td>" +
 									"<td>{{projectObj.status}}</td>" +
 									"<td>{{projectObj.description}}</td>" + getFollowingCol("{{projectObj.postID}}") +
+								"</tr>");
+
+			{% endfor %}
+			tableString += "</table>";
+		{% endif %}
+		return tableString;
+	};
+
+	function createViewUsersTable(){
+		var tableString = '<h3>Browse users</h3>';
+		{% if users %}
+			tableString += '<table>';
+			tableString += ("<tr><td></td>" +
+								"<td> Name </td>" +
+								"<td> Seeking </td>" +
+							"</tr>");
+
+			//Add each event
+			{% for userObj in users %}
+				var pictureCol = '<td>';
+				{% if userObj.profilePicture %}
+					pictureCol += '<img src="{{ userObj.profilePicture.url }}" height="50px" width="70px"/>'
+				{% else %}
+					pictureCol += '<img height="50px" width="70px"/>'
+				{% endif %}
+				pictureCol += '</td>';
+				tableString += ("<tr>" + pictureCol +
+									"<td><button onclick='createProfileRedirectForm(" + '"{{userObj.username}}"' + ");'>{{userObj.firstName}} {{userObj.lastName}}</button></td>" +
 								"</tr>");
 
 			{% endfor %}
@@ -245,61 +275,59 @@
 
 
 	function createPostRedirectForm(postID, destinationPageName){
+		//Create a dict with the postID
 		var extraInputs = []
 		extraInputs.push({key: "postID", value: postID});
-
-		console.log("source {{next}}, current: {{next}}, dest" + destinationPageName)
 		var form = createPageRedirectForm("{{ next }}", "{{ next }}", destinationPageName, "{{ currentPageURL }}", extraInputs);
 		form.submit();
 	}
 
-
+	function createProfileRedirectForm(username){
+		var extraInputs = []
+		extraInputs.push({key: "profileName", value: username});
+		var form = createPageRedirectForm("{{ next }}", "{{ next }}", "{{ possibleDestinations.profile }}", "{{ currentPageURL }}", extraInputs);
+		form.submit();
+	}
 
 	$(document).ready(function(){
-		var eventViewDiv = document.getElementById("eventViewDiv");
-		if(((eventViewDiv != null) && ("{{browseView}}" == "{{possibleViews.event}}")) || ("{{browseView}}" == "{{possibleViews.browse}}")){
+		if("{{browseType}}" == "{{possibleViews.events}}"){
 			{% if events %}
-				eventViewDiv.innerHTML = createViewEventTable();
+				document.getElementById("eventsViewDiv").innerHTML = createViewEventsTable();
 			{% else %}
-				eventViewDiv.innerHTML = "<h3> No events posted </h3>";
+				document.getElementById("eventsViewDiv").innerHTML = "<h3> No events posted </h3>";
 			{% endif %}
-		};
-
-		var projectViewDiv = document.getElementById("projectViewDiv");
-		if(((projectViewDiv != null) && ("{{browseView}}" == "{{possibleViews.project}}")) || ("{{browseView}}" == "{{possibleViews.browse}}")){
+		}else if("{{browseType}}" == "{{possibleViews.projects}}"){
 			{% if projects %}
-				projectViewDiv.innerHTML = createViewProjectTable();
+				document.getElementById("projectsViewDiv").innerHTML = createViewProjectsTable();
 			{% else %}
-				projectViewDiv.innerHTML = "<h3> No projects posted </h3>";
+				document.getElementById("projectsViewDiv").innerHTML = "<h3> No projects posted </h3>";
 			{% endif %}
-		};
-
-		var collabViewDiv = document.getElementById("collabViewDiv");
-		if(((collabViewDiv != null) && ("{{browseView}}" == "{{possibleViews.collabPost}}")) || ("{{browseView}}" == "{{possibleViews.browse}}") || ("{{browseView}}" == "{{possibleViews.post}}")){
+		}else if("{{browseType}}" == "{{possibleViews.users}}"){
+			{% if users %}
+				document.getElementById("usersViewDiv").innerHTML = createViewUsersTable();
+			{% else %}
+				document.getElementById("usersViewDiv").innerHTML = "<h3> No users registered</h3>";
+			{% endif %}
+		}else if("{{browseType}}" == "{{possibleViews.posts}}"){
+			var postDivHTML = "";
 			{% if collabPosts %}
-				collabViewDiv.innerHTML = createViewCollabPostTable();
+				postDivHTML += createViewCollabPostTable();
 			{% else %}
-				collabViewDiv.innerHTML = "<h3> No collaboration ads posted</h3>";
+				postDivHTML +="<h3> No collaboration ads posted</h3>";
 			{% endif %}
-		};
 
-		var workViewDiv = document.getElementById("workViewDiv");
-		if(((workViewDiv != null) && ("{{browseView}}" == "{{possibleViews.workPost}}")) || ("{{browseView}}" == "{{possibleViews.browse}}") || ("{{browseView}}" == "{{possibleViews.post}}")){
 			{% if workPosts %}
-				workViewDiv.innerHTML = createViewWorkPostTable();
+				postDivHTML += createViewWorkPostTable();
 			{% else %}
-				workViewDiv.innerHTML = "<h3> No work ads posted</h3>";
+				postDivHTML +="<h3> No work ads posted</h3>";
 			{% endif %}
-		};
 
-		var castingViewDiv = document.getElementById("castingViewDiv");
-		if(((castingViewDiv != null) && ("{{browseView}}" == "{{possibleViews.castingPost}}")) || ("{{browseView}}" == "{{possibleViews.browse}}") || ("{{browseView}}" == "{{possibleViews.post}}")){
 			{% if castingPosts %}
-				castingViewDiv.innerHTML = createViewCastingPostTable();
+				postDivHTML += createViewCastingPostTable();
 			{% else %}
-				castingViewDiv.innerHTML = "<h3> No casting ads posted</h3>";
+				postDivHTML +="<h3> No casting ads posted</h3>";
 			{% endif %}
-		};
+		}
 	});
 </script>
 

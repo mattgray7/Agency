@@ -26,13 +26,11 @@ CREATE_COLLABORATION_POST = "CREATE_COLLABORATION_POST"
 CREATE_WORK_POST = "CREATE_WORK_POST"
 CREATE_CASTING_POST = "CREATE_CASTING_POST"
 
-BROWSE = "BROWSE"
+BROWSE_CHOICE = "BROWSE_CHOICE"
 BROWSE_POSTS = "BROWSE_POSTS"
 BROWSE_EVENTS = "BROWSE_EVENTS"
 BROWSE_PROJECTS = "BROWSE_PROJECTS"
-BROWSE_COLLABORATION_POSTS = "BROWSE_COLLABORATION_POSTS"
-BROWSE_WORK_POSTS = "BROWSE_WORK_POSTS"
-BROWSE_CASTING_POSTS = "BROWSE_CASTING_POSTS"
+BROWSE_USERS = "BROWSE_USERS"
 
 RANDOM_ID_LENGTH = 6
 
@@ -92,13 +90,11 @@ URL_MAP = {HOME: "/",
 		   CREATE_CASTING_POST: "/post/create/casting/",
 		   
 		   # Browse
+		   BROWSE_CHOICE: "/browse/",
+		   BROWSE_POSTS: "/browse/posts/",
 		   BROWSE_EVENTS: "/browse/events/",
 		   BROWSE_PROJECTS: "/browse/projects/",
-		   BROWSE_COLLABORATION_POSTS: "/browse/posts/collaboration/",
-		   BROWSE_WORK_POSTS: "/browse/posts/work/",
-		   BROWSE_CASTING_POSTS: "/browse/posts/casting/",
-		   BROWSE_POSTS: "/browse/posts/",
-		   BROWSE: "/browse/"
+		   BROWSE_USERS: "/browse/users/"
 		   }
 
 
@@ -130,13 +126,11 @@ DEFAULT_PAGE_MAP = {HOME: HOME,
 					CREATE_CASTING_POST: VIEW_POST,
 
 					# Browse
-					BROWSE: BROWSE,
+					BROWSE_CHOICE: BROWSE_CHOICE,
 					BROWSE_EVENTS: VIEW_POST,
 					BROWSE_PROJECTS: VIEW_POST,
-					BROWSE_COLLABORATION_POSTS: VIEW_POST,
-					BROWSE_WORK_POSTS: VIEW_POST,
-					BROWSE_CASTING_POSTS: VIEW_POST,
-					BROWSE_POSTS: VIEW_POST
+					BROWSE_POSTS: VIEW_POST,
+					BROWSE_USERS: PROFILE
 					}
 
 
@@ -188,12 +182,11 @@ HTML_MAP = {HOME: 'AgencyApp/home.html',
 			CREATE_CASTING_POST: 'AgencyApp/post/createPost.html',
 
 			# Browse
+			BROWSE_CHOICE: 'AgencyApp/browseChoice.html',
 			BROWSE_EVENTS: 'AgencyApp/browse.html',
 			BROWSE_PROJECTS: 'AgencyApp/browse.html',
-			BROWSE_COLLABORATION_POSTS: 'AgencyApp/browse.html',
-			BROWSE_WORK_POSTS: 'AgencyApp/browse.html',
 			BROWSE_POSTS: 'AgencyApp/browse.html',
-			BROWSE: 'AgencyApp/browse.html'
+			BROWSE_USERS: 'AgencyApp/browse.html'
 			}
 
 

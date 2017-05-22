@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2> What are you looking for? </h2>
+
+<div id="eventsDiv"></div>
+<div id="usersDiv"></div>
+<div id="postsDiv"></div>
+<div id="projectsDiv"></div>
+
+<script>
+window.onload = function(){
+	var eventsForm = createPageRedirectForm("{{ possibleSources.choice }}", "{{ possibleSources.choice }}", "{{ possibleDestinations.events }}", "/browse/", null, document.getElementById("eventsDiv"), "Events");
+	var usersForm = createPageRedirectForm("{{ possibleSources.choice }}", "{{ possibleSources.choice }}", "{{ possibleDestinations.users }}", "/browse/", null, document.getElementById("usersDiv"), "Users");
+	var postsForm = createPageRedirectForm("{{ possibleSources.choice }}", "{{ possibleSources.choice }}", "{{ possibleDestinations.posts }}", "/browse/", null, document.getElementById("postsDiv"), "Posts");
+	var projectsForm = createPageRedirectForm("{{ possibleSources.choice }}", "{{ possibleSources.choice }}", "{{ possibleDestinations.projects }}", "/browse/", null, document.getElementById("projectsDiv"), "Projects");
+};
+</script>
+
+{% endblock %}
