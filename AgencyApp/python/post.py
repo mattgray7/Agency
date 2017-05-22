@@ -20,7 +20,6 @@ class PostInstance(object):
         self.request = kwargs.get("request")
         self._postID = kwargs.get("postID")
         self._postType = kwargs.get("postType")
-        self._postTypePageName = None
         self._record = None
         self._database = None
         self.errors = []
@@ -53,11 +52,6 @@ class PostInstance(object):
         if self._database is None:
             self._database = constants.POST_DATABASE_MAP.get(self.postType)
         return self._database
-
-    @property
-    def postTypePageName(self):
-        """To be overridden in child class"""
-        return self._postTypePageName
 
     def checkBasicFormValues(self):
         return (self._checkTitle(title=self.request.POST.get("title", "")) and
@@ -289,7 +283,7 @@ class GenericCreatePostView(views.PictureFormView):
     @property
     def filename(self):
         if self._filename is None:
-            self._filename = constants.MEDIA_FILE_NAME_MAP.get(self.post.postTypePageName, "tempfile")
+            self._filename = constants.MEDIA_FILE_NAME_MAP.get(self.post.postType, "tempfile")
             self._filename = self._filename.format(self.postID)
         return self._filename
 

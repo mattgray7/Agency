@@ -96,7 +96,7 @@
 		var tableString = '<h3>Browse posts seeking collaborators</h3>';
 		{% if collabPosts %}
 			tableString += '<table>';
-			tableString += ("<tr> " +
+			tableString += ("<tr><td></td>" +
 								"<td> Title </td>" +
 								"<td> Posted by </td>" +
 								"<td> Seeking </td>" +
@@ -130,7 +130,7 @@
 		var tableString = '<h3>Browse posts seeking crew members</h3>';
 		{% if workPosts %}
 			tableString += '<table>';
-			tableString += ("<tr> " +
+			tableString += ("<tr><td></td>" +
 								"<td> Title </td>" +
 								"<td> Posted by </td>" +
 								"<td> Seeking </td>" +
@@ -169,7 +169,7 @@
 		var tableString = '<h3>Browse casting posts</h3>';
 		{% if castingPosts %}
 			tableString += '<table>';
-			tableString += ("<tr> " +
+			tableString += ("<tr><td></td>" +
 								"<td> Title </td>" +
 								"<td> Posted by </td>" +
 								"<td> Description </td>" +
@@ -238,7 +238,7 @@
 			{% if collabPosts %}
 				collabViewDiv.innerHTML = createViewCollabPostTable();
 			{% else %}
-				collabViewDiv.innerHTML = "<h3> No posts available</h3>";
+				collabViewDiv.innerHTML = "<h3> No collaboration ads posted</h3>";
 			{% endif %}
 		};
 
@@ -247,7 +247,7 @@
 			{% if workPosts %}
 				workViewDiv.innerHTML = createViewWorkPostTable();
 			{% else %}
-				workViewDiv.innerHTML = "<h3> No posts available</h3>";
+				workViewDiv.innerHTML = "<h3> No work ads posted</h3>";
 			{% endif %}
 		};
 
@@ -256,7 +256,7 @@
 			{% if castingPosts %}
 				castingViewDiv.innerHTML = createViewCastingPostTable();
 			{% else %}
-				castingViewDiv.innerHTML = "<h3> No posts available</h3>";
+				castingViewDiv.innerHTML = "<h3> No casting ads posted</h3>";
 			{% endif %}
 		};
 	});

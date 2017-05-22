@@ -194,11 +194,11 @@ HTML_MAP = {HOME: 'AgencyApp/home.html',
 
 
 MEDIA_FILE_NAME_MAP = {EDIT_PROFILE_PICTURE: "profile.jpg",
-					   CREATE_EVENT_POST: "event_{0}.jpg",
-					   CREATE_COLLABORATION_POST: "post_{0}.jpg",
-					   CREATE_WORK_POST: "post_{0}.jpg",
-					   CREATE_PROJECT_POST: "post_{0}.jpg",
-					   CREATE_CASTING_POST: "post_{0}.jpg"
+					   EVENT_POST: "event_{0}.jpg",
+					   COLLABORATION_POST: "post_{0}.jpg",
+					   WORK_POST: "post_{0}.jpg",
+					   PROJECT_POST: "post_{0}.jpg",
+					   CASTING_POST: "post_{0}.jpg"
 					   }
 
 POST_DATABASE_MAP = {EVENT_POST: models.EventPost,
