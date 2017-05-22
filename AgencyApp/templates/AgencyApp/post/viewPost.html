@@ -60,17 +60,16 @@ function updatePostFollow(){
 			{% endif %}
 		{% endif %}
 	</h3>
-	{% if post.poster != request.user.username %}
-		<button onclick="updatePostFollow();">
-			<div id="followButtonText">
-				{% if following %}
-					Unfollow
-				{% else %}
-					Follow
-				{% endif %}
-			</div>
-		</button>
-	{% endif %}
+	<button onclick="updatePostFollow();">
+		<div id="followButtonText">
+			{% if following %}
+				Unfollow
+			{% else %}
+				Follow
+			{% endif %}
+		</div>
+	</button>
+
 
 	<h5> Posted by {{ post.poster }} </h5>
 	<h5> Description:<br>
