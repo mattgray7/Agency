@@ -248,7 +248,6 @@
 
 			//Add each event
 			{% for castingObj in posts.casting %}
-			console.log(castingObj);
 				var pictureCol = '<td>';
 				{% if castingObj.postPicture %}
 					pictureCol += '<img src="{{ castingObj.postPicture.url }}" height="50px" width="70px"/>'

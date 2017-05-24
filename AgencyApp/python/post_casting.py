@@ -40,15 +40,15 @@ class CreateCastingPostView(post.GenericCreatePostView):
 
 
 
-class ViewWorkPostView(post.GenericViewPostView):
+class ViewCastingPostView(post.GenericViewPostView):
     def __init__(self, *args, **kwargs):
-        super(ViewWorkPostView, self).__init__(*args, **kwargs)
+        super(ViewCastingPostView, self).__init__(*args, **kwargs)
 
     @property
     def post(self):
         if self._post is None:
             if self.postID:
-                self._post = WorkPostInstance(request=self.request, postID=self.postID)
+                self._post = CastingPostInstance(request=self.request, postID=self.postID)
         return self._post
 
 
