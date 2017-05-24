@@ -30,8 +30,15 @@ class BrowseChoiceView(views.GenericFormView):
 
 class GenericBrowseView(views.GenericFormView):
     def __init__(self, *args, **kwargs):
+        self._nextPostID = None
         super(GenericBrowseView, self).__init__(*args, **kwargs)
         self._followingPostIDs = None
+ 
+    @property
+    def nextPostID(self):
+        if self._nextPostID is None:
+            self._nextPostID = self.request.POST.get("postID")
+        return self._nextPostID
 
     @property
     def followingPostIDs(self):
@@ -43,8 +50,31 @@ class GenericBrowseView(views.GenericFormView):
 
     @property
     def cancelButtonName(self):
-        self._cancelButtonName = "Back to browse"
+        if self.sourcePage == constants.BROWSE_CHOICE:
+            self._cancelButtonName = "Back to browse"
+        else:
+            self._cancelButtonName = "Back"
         return self._cancelButtonName
+
+    @property
+    def cancelDestinationURL(self):
+        if self._cancelDestinationURL is None:
+            self._cancelDestinationURL = constants.URL_MAP.get(self.currentPage)
+            if self._cancelDestinationURL:
+                self._cancelDestinationURL = self._cancelDestinationURL.format(self.nextPostID)
+        return self._cancelDestinationURL
+
+    @property
+    def cancelButtonExtraInputs(self):
+        if not self._cancelButtonExtraInputs:
+            self._cancelButtonExtraInputs = {"postID": self.nextPostID}
+        return json.dumps(self._cancelButtonExtraInputs)
+
+    @property
+    def cancelDestination(self):
+        self._cancelDestination = constants.BROWSE_CHOICE
+        return self._cancelDestination
+
 
     @property
     def pageContext(self):
