@@ -113,6 +113,42 @@ class BrowseUsersView(GenericBrowseView):
         return self._pageContext
 
 
+class BrowsePostsView(GenericBrowseView):
+    def __init__(self, *args, **kwargs):
+        super(BrowsePostsView, self).__init__(*args, **kwargs)
+        self._collabPostList = None
+        self._workPostList = None
+        self._castingPostList = None
+
+    @property
+    def collabPostList(self):
+        if self._collabPostList is None:
+            self._collabPostList = models.CollaborationPost.objects.all();
+        return self._collabPostList
+
+    @property
+    def workPostList(self):
+        if self._workPostList is None:
+            self._workPostList = models.WorkPost.objects.all();
+        return self._workPostList
+
+    @property
+    def castingPostList(self):
+        if self._castingPostList is None:
+            self._castingPostList = models.CastingPost.objects.all();
+        return self._castingPostList
+
+    @property
+    def pageContext(self):
+        self._pageContext = super(BrowsePostsView, self).pageContext
+        self._pageContext["possibleDestinations"] = {"viewPost": constants.VIEW_POST}
+        self._pageContext["posts"] = {}
+        self._pageContext["posts"]["collaboration"] = self.collabPostList
+        self._pageContext["posts"]["work"] = self.workPostList
+        self._pageContext["posts"]["casting"] = self.castingPostList
+        return self._pageContext
+
+
 def isBrowsePage(pageName):
     return pageName in [constants.BROWSE_EVENTS, constants.BROWSE_PROJECTS, constants.BROWSE_PROJECTS,
                         constants.BROWSE_POSTS]

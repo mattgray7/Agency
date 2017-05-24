@@ -306,7 +306,7 @@ class GenericViewPostView(views.GenericFormView):
         if browse.isBrowsePage(self.sourcePage):
             self._cancelDestination = self.sourcePage
         else:
-            self._cancelDestination = constants.BROWSE
+            self._cancelDestination = constants.BROWSE_POSTS
         return self._cancelDestination
 
     @property

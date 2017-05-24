@@ -158,7 +158,7 @@
 
 	function createViewCollabPostTable(){
 		var tableString = '<h3>Browse posts seeking collaborators</h3>';
-		{% if collabPosts %}
+		{% if posts.collaboration %}
 			tableString += '<table>';
 			tableString += ("<tr><td></td>" +
 								"<td> Title </td>" +
@@ -169,7 +169,7 @@
 							"</tr>");
 
 			//Add each event
-			{% for collabObj in collabPosts %}
+			{% for collabObj in posts.collaboration %}
 				var pictureCol = '<td>';
 				{% if collabObj.postPicture %}
 					pictureCol += '<img src="{{ collabObj.postPicture.url }}" height="50px" width="70px"/>'
@@ -186,6 +186,7 @@
 
 			{% endfor %}
 			tableString += "</table>";
+			console.log(tableString)
 		{% endif %}
 		return tableString;
 	};
@@ -193,7 +194,7 @@
 
 	function createViewWorkPostTable(){
 		var tableString = '<h3>Browse posts seeking crew members</h3>';
-		{% if workPosts %}
+		{% if posts.work %}
 			tableString += '<table>';
 			tableString += ("<tr><td></td>" +
 								"<td> Title </td>" +
@@ -205,7 +206,7 @@
 							"</tr>");
 
 			//Add each event
-			{% for workObj in workPosts %}
+			{% for workObj in posts.work %}
 				var pictureCol = '<td>';
 				{% if workObj.postPicture %}
 					pictureCol += '<img src="{{ workObj.postPicture.url }}" height="50px" width="70px"/>'
@@ -235,7 +236,7 @@
 
 	function createViewCastingPostTable(){
 		var tableString = '<h3>Browse casting posts</h3>';
-		{% if castingPosts %}
+		{% if posts.casting %}
 			tableString += '<table>';
 			tableString += ("<tr><td></td>" +
 								"<td> Title </td>" +
@@ -246,7 +247,8 @@
 							"</tr>");
 
 			//Add each event
-			{% for castingObj in castingPosts %}
+			{% for castingObj in posts.casting %}
+			console.log(castingObj);
 				var pictureCol = '<td>';
 				{% if castingObj.postPicture %}
 					pictureCol += '<img src="{{ castingObj.postPicture.url }}" height="50px" width="70px"/>'
@@ -310,23 +312,24 @@
 			{% endif %}
 		}else if("{{browseType}}" == "{{possibleViews.posts}}"){
 			var postDivHTML = "";
-			{% if collabPosts %}
+			{% if posts.collaboration %}
 				postDivHTML += createViewCollabPostTable();
 			{% else %}
 				postDivHTML +="<h3> No collaboration ads posted</h3>";
 			{% endif %}
 
-			{% if workPosts %}
+			{% if posts.work %}
 				postDivHTML += createViewWorkPostTable();
 			{% else %}
 				postDivHTML +="<h3> No work ads posted</h3>";
 			{% endif %}
 
-			{% if castingPosts %}
+			{% if posts.casting %}
 				postDivHTML += createViewCastingPostTable();
 			{% else %}
 				postDivHTML +="<h3> No casting ads posted</h3>";
 			{% endif %}
+			document.getElementById("postsViewDiv").innerHTML = postDivHTML;
 		}
 	});
 </script>

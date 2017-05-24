@@ -164,5 +164,6 @@ def browseUsers(request):
     return view.process()
 
 def browsePosts(request):
-    return browse(request, browseType=constants.BROWSE_POSTS)
+    view = browse.BrowsePostsView(request=request, currentPage=constants.BROWSE_POSTS)
+    return view.process()
 
