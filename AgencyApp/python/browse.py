@@ -42,6 +42,11 @@ class GenericBrowseView(views.GenericFormView):
         return self._followingPostIDs
 
     @property
+    def cancelButtonName(self):
+        self._cancelButtonName = "Back to browse"
+        return self._cancelButtonName
+
+    @property
     def pageContext(self):
         self._pageContext["possibleViews"] = {"events": constants.BROWSE_EVENTS,
                                               "projects": constants.BROWSE_PROJECTS,
