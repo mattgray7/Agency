@@ -142,8 +142,7 @@
             }
 
             //Cancel button
-            $(document).ready(function(){
-                var cancelButtonDiv = document.getElementById('cancelButton');
+            function createCancelButton(cancelButtonDiv, destination, destinationURL, buttonName){
                 if (cancelButtonDiv != null){
                     var extraInputs = []
                     extraInputs.push({key: "cancel", value: "True"});
@@ -154,12 +153,17 @@
                         }
                     {% endif %}
         
-                    var cancelButtonForm = createPageRedirectForm("{{ cancelSource }}", "{{ next }}", "{{ cancelDestination }}", "{{ cancelDestinationURL }}", extraInputs, cancelButtonDiv, "{{ cancelButtonName }}")
-                    $('#cancelButton').click(function(){
-                       cancelButtonForm.submit();
-                    });
+                    var cancelButtonForm = createPageRedirectForm("{{ cancelSource }}", "{{ next }}", destination, destinationURL, extraInputs, cancelButtonDiv, buttonName)
+                    cancelButtonDiv.appendChild(cancelButtonForm);
+                }
+            }
+            $(document).ready(function(){
+                var cancelButtonDiv = document.getElementById('cancelButton');
+                if (cancelButtonDiv != null){
+                    createCancelButton(cancelButtonDiv, "{{ cancelDestination }}", "{{ cancelDestinationURL }}", "{{ cancelButtonName }}");
                 };
             });
+
         </script>
         
         {% block footer %}

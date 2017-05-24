@@ -312,6 +312,7 @@ class GenericViewPostView(views.GenericFormView):
     @property
     def pageContext(self):
         self._pageContext["post"] = self.postID and self.post.record or None
+        self._pageContext["possibleSources"] = {"profile": constants.PROFILE}
         self._pageContext["possibleDestinations"] = {"edit": constants.EDIT_POST}
         self._pageContext["isEvent"] = isEventPost(self.postID)
         self._pageContext["isProject"] = isProjectPost(self.postID)
