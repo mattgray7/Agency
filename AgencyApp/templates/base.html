@@ -123,8 +123,7 @@
                 var form = document.createElement("form");
                 form.setAttribute('method', "post");
                 form.setAttribute('action', formProcessURL);
-                console.log(source + next + destination + formProcessURL + extraHiddenInputs)
-                console.log(formParent + submitButtonValue)
+
                 form.appendChild(createFormInput("hidden", "source", source));
                 form.appendChild(createFormInput("hidden", "next", next));
                 form.appendChild(createFormInput("hidden", "destination", destination));
@@ -160,6 +159,7 @@
             $(document).ready(function(){
                 var cancelButtonDiv = document.getElementById('cancelButton');
                 if (cancelButtonDiv != null){
+                    console.log("Cancelling to {{cancelDestinationURL}}")
                     createCancelButton(cancelButtonDiv, "{{ cancelDestination }}", "{{ cancelDestinationURL }}", "{{ cancelButtonName }}");
                 };
             });

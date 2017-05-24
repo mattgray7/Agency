@@ -95,5 +95,14 @@ function updatePostFollow(){
 {% endif %}
 
 <div id="cancelButton"></div>
+<div id="profileCancelButton"></div>
+{% if source == possibleSources.profile %}
+	<script>
+	$(document).ready(function(){
+		var profileCancelButtonDiv = document.getElementById("profileCancelButton");
+		var profileCancelButton = createCancelButton(profileCancelButtonDiv, "{{ possibleDestinations.profile }}", "/user/{{ post.poster }}/", "Back to profile")
+	});
+	</script>
+{% endif %}
 
 {% endblock %}

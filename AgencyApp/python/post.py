@@ -265,8 +265,9 @@ class GenericCreatePostView(views.PictureFormView):
 class GenericViewPostView(views.GenericFormView):
     def __init__(self, *args, **kwargs):
         self._postID = kwargs.get("postID")
-        super(GenericViewPostView, self).__init__(*args, **kwargs)
         self._post = None
+        super(GenericViewPostView, self).__init__(*args, **kwargs)
+        self._postType = None
 
     @property
     def postID(self):
@@ -280,6 +281,13 @@ class GenericViewPostView(views.GenericFormView):
         return self._post
 
     @property
+    def postType(self):
+        """To be overridden in child class"""
+        if self._postType is None:
+            self._postType = self.post and self.post.postType
+        return self._postType
+
+    @property
     def cancelButtonName(self):
         if browse.isBrowsePage(self.sourcePage):
             self._cancelButtonName = "Back to browse"
@@ -290,9 +298,11 @@ class GenericViewPostView(views.GenericFormView):
     @property
     def cancelDestinationURL(self):
         if self._cancelDestinationURL is None:
-            self._cancelDestinationURL = constants.URL_MAP.get(self.sourcePage)
-            if self._cancelDestinationURL:
-                self._cancelDestinationURL = self._cancelDestinationURL.format(self.postID)
+            self._cancelDestinationURL = constants.URL_MAP.get(self.cancelDestination)
+            if self.sourcePage == constants.PROFILE:
+                # format with username in url
+                if self._cancelDestinationURL:
+                    self._cancelDestinationURL = self._cancelDestinationURL.format(self.postID)
         return self._cancelDestinationURL
 
     @property
@@ -303,17 +313,20 @@ class GenericViewPostView(views.GenericFormView):
 
     @property
     def cancelDestination(self):
-        if browse.isBrowsePage(self.sourcePage):
-            self._cancelDestination = self.sourcePage
-        else:
-            self._cancelDestination = constants.BROWSE_POSTS
+        if self._cancelDestination is None:
+            self._cancelDestination = constants.BROWSE_POST_PAGE_MAP.get(self.post.postType or constants.PROFILE)
         return self._cancelDestination
 
     @property
     def pageContext(self):
         self._pageContext["post"] = self.postID and self.post.record or None
         self._pageContext["possibleSources"] = {"profile": constants.PROFILE}
-        self._pageContext["possibleDestinations"] = {"edit": constants.EDIT_POST}
+        self._pageContext["possibleDestinations"] = {"edit": constants.EDIT_POST,
+                                                     "profile": constants.PROFILE,
+                                                     "browse": {"events": constants.BROWSE_EVENTS,
+                                                                "projects": constants.BROWSE_PROJECTS,
+                                                                "users": constants.BROWSE_USERS,
+                                                                "posts": constants.BROWSE_POSTS}}
         self._pageContext["isEvent"] = isEventPost(self.postID)
         self._pageContext["isProject"] = isProjectPost(self.postID)
         self._pageContext["isCollaboration"] = isCollaborationPost(self.postID)
