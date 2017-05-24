@@ -123,7 +123,8 @@
                 var form = document.createElement("form");
                 form.setAttribute('method', "post");
                 form.setAttribute('action', formProcessURL);
-
+                console.log(source + next + destination + formProcessURL + extraHiddenInputs)
+                console.log(formParent + submitButtonValue)
                 form.appendChild(createFormInput("hidden", "source", source));
                 form.appendChild(createFormInput("hidden", "next", next));
                 form.appendChild(createFormInput("hidden", "destination", destination));
@@ -140,62 +141,20 @@
                 return form;
             }
 
-
             //Cancel button
             $(document).ready(function(){
                 var cancelButtonDiv = document.getElementById('cancelButton');
                 if (cancelButtonDiv != null){
-                    var cancelButtonForm = document.createElement("form");
-                    cancelButtonForm.setAttribute('method', "post");
-                    cancelButtonForm.setAttribute('action', "{{ cancelDestinationURL }}");
-
-                    var sourceInput = document.createElement("input");
-                    sourceInput.setAttribute("type", "hidden");
-                    sourceInput.setAttribute("name", "source");
-                    sourceInput.setAttribute("value", "{{ cancelSource }}");
-                    cancelButtonForm.appendChild(sourceInput);
-
-                    var nextInput = document.createElement("input");
-                    nextInput.setAttribute("type", "hidden");
-                    nextInput.setAttribute("name", "next");
-                    nextInput.setAttribute("value", "{{ next }}")
-                    cancelButtonForm.appendChild(nextInput)
-
-                    var destinationInput = document.createElement("input");
-                    destinationInput.setAttribute("type", "hidden");
-                    destinationInput.setAttribute("name", "destination");
-                    destinationInput.setAttribute("value", "{{ cancelDestination }}");
-                    cancelButtonForm.appendChild(destinationInput)
-
-                    var cancelInput = document.createElement("input");
-                    cancelInput.setAttribute("type", "hidden");
-                    cancelInput.setAttribute("name", "{{ cancel }}");
-                    cancelInput.setAttribute("value", "True");
-                    cancelButtonForm.appendChild(cancelInput)
-
-                    if("{{cancelButtonExtraInputs}}" != ""){
+                    var extraInputs = []
+                    extraInputs.push({key: "cancel", value: "True"});
+                    {% if cancelButtonExtraInputs %}
                         var cancelButtonExtraInputs = {{ cancelButtonExtraInputs|safe }};
-                        for(var inputName in cancelButtonExtraInputs){
-                            var newInput = document.createElement("input");
-                            newInput.setAttribute("type", "hidden");
-                            newInput.setAttribute("name", inputName);
-                            newInput.setAttribute("value", cancelButtonExtraInputs[inputName]);
-                            cancelButtonForm.appendChild(newInput);
-                        };
-                    };
-
-                    var csrfInput = document.createElement("input");
-                    csrfInput.setAttribute("type", "hidden");
-                    csrfInput.setAttribute("name", "csrfmiddlewaretoken");
-                    csrfInput.setAttribute("value", getCookie('csrftoken'));
-                    cancelButtonForm.appendChild(csrfInput);
-
-                    var cancelSubmit = document.createElement("input");
-                    cancelSubmit.setAttribute("type", "submit");
-                    cancelSubmit.setAttribute("value", "{{ cancelButtonName }}");
-                    cancelButtonForm.appendChild(cancelSubmit);
-                    cancelButtonDiv.appendChild(cancelButtonForm);
-
+                        for(var key in cancelButtonExtraInputs){
+                            extraInputs.push({key: key, value: cancelButtonExtraInputs[key]});
+                        }
+                    {% endif %}
+        
+                    var cancelButtonForm = createPageRedirectForm("{{ cancelSource }}", "{{ next }}", "{{ cancelDestination }}", "{{ cancelDestinationURL }}", extraInputs, cancelButtonDiv, "{{ cancelButtonName }}")
                     $('#cancelButton').click(function(){
                        cancelButtonForm.submit();
                     });

@@ -173,6 +173,14 @@ class EditInterestsView(views.GenericFormView):
         return self._cancelDestination
 
     @property
+    def cancelDestinationURL(self):
+        if self._cancelDestinationURL is None:
+            self._cancelDestinationURL = constants.URL_MAP.get(self.sourcePage)
+            if self._cancelDestinationURL:
+                self._cancelDestinationURL = self._cancelDestinationURL.format(self.request.user.username)
+        return self._cancelDestinationURL
+
+    @property
     def formInitialValues(self):
         self._formInitialValues["work"] = self.userAccount.workInterest
         self._formInitialValues["crew"] = self.userAccount.crewInterest
@@ -213,6 +221,14 @@ class EditProfessionsView(views.GenericFormView):
         return self._cancelDestination
 
     @property
+    def cancelDestinationURL(self):
+        if self._cancelDestinationURL is None:
+            self._cancelDestinationURL = constants.URL_MAP.get(self.sourcePage)
+            if self._cancelDestinationURL:
+                self._cancelDestinationURL = self._cancelDestinationURL.format(self.request.user.username)
+        return self._cancelDestinationURL
+
+    @property
     def pageContext(self):
         try:
             self._pageContext["selectedProfessions"] = [x.professionName for x in Profession.objects.filter(username=self.username)]
@@ -244,7 +260,7 @@ class EditPictureView(views.PictureFormView):
     @property
     def cancelDestinationURL(self):
         if self._cancelDestinationURL is None:
-            self._cancelDestinationURL = constants.URL_MAP.get(self.currentPage)
+            self._cancelDestinationURL = constants.URL_MAP.get(self.sourcePage)
             if self._cancelDestinationURL:
                 self._cancelDestinationURL = self._cancelDestinationURL.format(self.request.user.username)
         return self._cancelDestinationURL
@@ -310,6 +326,14 @@ class EditBackgroundView(views.GenericFormView):
             else:
                 self._cancelDestination = PROFILE
         return self._cancelDestination
+
+    @property
+    def cancelDestinationURL(self):
+        if self._cancelDestinationURL is None:
+            self._cancelDestinationURL = constants.URL_MAP.get(self.sourcePage)
+            if self._cancelDestinationURL:
+                self._cancelDestinationURL = self._cancelDestinationURL.format(self.request.user.username)
+        return self._cancelDestinationURL
 
     @property
     def formInitialValues(self):
