@@ -402,6 +402,12 @@ class EditActorDescriptionView(GenericEditAccountView):
         super(EditActorDescriptionView, self).__init__(*args, **kwargs)
 
     @property
+    def destinationPage(self):
+        if self._destinationPage is None:
+            self._destinationPage = PROFILE
+        return self._destinationPage
+
+    @property
     def nextButtonString(self):
         if self._nextButtonString is None:
             if self.sourcePage == PROFILE:
