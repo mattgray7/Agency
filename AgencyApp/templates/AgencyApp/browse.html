@@ -8,6 +8,18 @@
 <div id="usersViewDiv"></div>
 <br>
 <div id="cancelButton"></div>
+<div id="cancelButton2"></div>
+
+{% if source == possibleDestinations.viewPost %}
+
+	<script>
+	console.log("here")
+	$(document).ready(function(){
+		var cancelButtonDiv2 = document.getElementById("cancelButton2");
+		var cancelButton2 = createCancelButton(cancelButtonDiv2, "{{ possibleDestinations.browse }}", "{{ currentPageURL }}", "Back to browse")
+	});
+	</script>
+{% endif %}
 
 <!--<div id="collabViewDiv"></div>
 <div id="workViewDiv"></div>

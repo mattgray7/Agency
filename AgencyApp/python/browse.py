@@ -62,6 +62,8 @@ class GenericBrowseView(views.GenericFormView):
     def cancelButtonName(self):
         if self.sourcePage == constants.BROWSE_CHOICE:
             self._cancelButtonName = "Back to browse"
+        elif self.sourcePage == constants.VIEW_POST:
+            self._cancelButtonName = "Back to post"
         else:
             self._cancelButtonName = "Back"
         return self._cancelButtonName
@@ -105,7 +107,8 @@ class GenericBrowseView(views.GenericFormView):
                                               "posts": constants.BROWSE_POSTS,
                                               "users": constants.BROWSE_USERS}
         self._pageContext["possibleDestinations"] = {"profile": constants.PROFILE,
-                                                     "viewPost": constants.VIEW_POST}
+                                                     "viewPost": constants.VIEW_POST,
+                                                     "browse": constants.BROWSE_CHOICE}
         self._pageContext["followingPostIDs"] = self.followingPostIDs
         self._pageContext["posterNameMap"] = json.dumps(self.posterNameMap)
         self._pageContext["browseType"] = self.currentPage
