@@ -81,6 +81,7 @@ class GenericPostInstance(object):
         if self._postID is None:
             self._postID = self.request.POST.get("postID") or helpers.getMessageFromKey(self.request,
                                                                                         "postID")
+            print "self.post id is {0}".format(self._postID)
         return self._postID
 
     @property
@@ -131,6 +132,7 @@ class GenericPostInstance(object):
         return True
 
     def formIsValid(self):
+        print "processing isvalid"
         if self.request.POST:
             if self.checkBasicFormValues() and self.checkModelFormValues():
                 return self.saveBasicFormValues() and self.saveModelFormValues()
@@ -206,6 +208,10 @@ class GenericCreatePostView(views.PictureFormView):
         return self._filename
 
     @property
+    def cancelDestination(self):
+        return self.sourcePage
+
+    @property
     def cancelButtonName(self):
         if self.sourcePage == constants.VIEW_POST:
             return "Cancel"
@@ -215,7 +221,7 @@ class GenericCreatePostView(views.PictureFormView):
     @property
     def cancelDestinationURL(self):
         if self._cancelDestinationURL is None:
-            self._cancelDestinationURL = constants.URL_MAP.get(self.sourcePage)
+            self._cancelDestinationURL = constants.URL_MAP.get(self.currentPage)
             if self._cancelDestinationURL:
                 self._cancelDestinationURL = self._cancelDestinationURL.format(self.postID)
         return self._cancelDestinationURL

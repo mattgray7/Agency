@@ -35,6 +35,7 @@ class GenericView(object):
         self._cancelButtonExtraInputs = {}
         self._cancelDestination = None
         self._cancelDestinationURL = None
+        self._cancelSource = None
         self._cancelButtonName = "Cancel"
 
         self.errorMemory = {}
@@ -54,8 +55,14 @@ class GenericView(object):
         self._pageContext["cancelDestinationURL"] = self.cancelDestinationURL
         self._pageContext["cancelDestination"] = self.destinationPage
         self._pageContext["cancelButtonName"] = self.cancelButtonName
-        self._pageContext["cancelSource"] = self.sourcePage
+        self._pageContext["cancelSource"] = self.cancelSource
         self._pageContext["cancelDestination"] = self.cancelDestination
+
+    @property
+    def cancelSource(self):
+        if self._cancelSource is None:
+            self._cancelSource = self.sourcePage
+        return self._cancelSource
 
     @property
     def cancelDestination(self):

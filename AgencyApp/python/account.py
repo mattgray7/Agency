@@ -260,9 +260,9 @@ class EditPictureView(views.PictureFormView):
     @property
     def cancelDestinationURL(self):
         if self._cancelDestinationURL is None:
-            self._cancelDestinationURL = constants.URL_MAP.get(self.sourcePage)
-            if self._cancelDestinationURL:
-                self._cancelDestinationURL = self._cancelDestinationURL.format(self.request.user.username)
+            self._cancelDestinationURL = constants.URL_MAP.get(self.currentPage)
+            #if self._cancelDestinationURL:
+            #    self._cancelDestinationURL = self._cancelDestinationURL.format(self.request.user.username)
         return self._cancelDestinationURL
 
     @property
@@ -316,16 +316,6 @@ class EditBackgroundView(views.GenericFormView):
         if self.sourcePage != PROFILE:
             self._cancelButtonName = "Skip"
         return self._cancelButtonName
-
-    @property
-    def cancelDestination(self):
-        """Override to continue the profile setup process"""
-        if self._cancelDestination is None:
-            if self.destinationPage == HOME:
-                self._cancelDestination = HOME
-            else:
-                self._cancelDestination = PROFILE
-        return self._cancelDestination
 
     @property
     def cancelDestinationURL(self):

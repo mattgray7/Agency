@@ -144,7 +144,7 @@
             function createCancelButton(cancelButtonDiv, destination, destinationURL, buttonName){
                 if (cancelButtonDiv != null){
                     var extraInputs = []
-                    extraInputs.push({key: "cancel", value: "True"});
+                    extraInputs.push({key: "{{ cancel }}", value: "True"});
                     {% if cancelButtonExtraInputs %}
                         var cancelButtonExtraInputs = {{ cancelButtonExtraInputs|safe }};
                         for(var key in cancelButtonExtraInputs){
