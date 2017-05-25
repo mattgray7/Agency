@@ -200,7 +200,8 @@ class EditInterestsView(GenericEditAccountView):
     def nextButtonString(self):
         if self._nextButtonString is None:
             if self.sourcePage == PROFILE:
-                self_nextButtonString = "Update interests"
+                self._nextButtonString = "Update interests"
+
             else:
                 self._nextButtonString = "Add interests"
         return self._nextButtonString
@@ -243,7 +244,7 @@ class EditProfessionsView(GenericEditAccountView):
     def nextButtonString(self):
         if self._nextButtonString is None:
             if self.sourcePage == PROFILE:
-                self_nextButtonString = "Update professions"
+                self._nextButtonString = "Update professions"
             else:
                 self._nextButtonString = "Add interested professions"
         return self._nextButtonString
@@ -300,7 +301,7 @@ class EditPictureView(GenericEditAccountView):
     def nextButtonString(self):
         if self._nextButtonString is None:
             if self.sourcePage == PROFILE:
-                self_nextButtonString = "Update profile picture"
+                self._nextButtonString = "Update profile picture"
             else:
                 self._nextButtonString = "Add profile picture"
         return self._nextButtonString
@@ -350,16 +351,25 @@ class EditBackgroundView(GenericEditAccountView):
     def nextButtonString(self):
         if self._nextButtonString is None:
             if self.sourcePage == PROFILE:
-                self_nextButtonString = "Update background"
+                self._nextButtonString = "Update background"
             else:
                 self._nextButtonString = "Add background information"
         return self._nextButtonString
 
     @property
+    def cancelSource(self):
+        if self._cancelSource is None:
+            self._cancelSource = self.sourcePage
+        return self._cancelSource
+
+    @property
     def destinationPage(self):
         if self._destinationPage is None:
-            if self.actorProfessionSelected():
-                self._destinationPage = EDIT_ACTOR_DESCRIPTION
+            if self.actorProfessionSelected() :
+                if PROFILE in [self.sourcePage, self.request.POST.get("destination")]:
+                    self._destinationPage = PROFILE
+                else:
+                    self._destinationPage = EDIT_ACTOR_DESCRIPTION
             else:
                 self._destinationPage = PROFILE
         return self._destinationPage
@@ -375,7 +385,8 @@ class EditBackgroundView(GenericEditAccountView):
     @property
     def cancelDestination(self):
         """Override to continue the profile setup process"""
-        return self._destinationPage
+        print self.destinationPage
+        return self.destinationPage
 
     @property
     def formInitialValues(self):
@@ -411,7 +422,7 @@ class EditActorDescriptionView(GenericEditAccountView):
     def nextButtonString(self):
         if self._nextButtonString is None:
             if self.sourcePage == PROFILE:
-                self_nextButtonString = "Update physical description"
+                self._nextButtonString = "Update physical description"
             else:
                 self._nextButtonString = "Add physical description"
         return self._nextButtonString
