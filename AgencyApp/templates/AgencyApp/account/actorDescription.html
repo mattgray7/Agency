@@ -18,17 +18,36 @@
 		{% for attribute in masterAttributes %}
 			<br>
 				{{ attribute.name }}
-				{% if attribute.value == True %}
-					<input type="checkbox" name="attribute.{{attribute.name}}" value="{{attribute.value}}" checked>
-				{% elif attribute.attributeValue == False	 %}
-					<input type="checkbox" name="attribute.{{attribute.name}}" value="{{attribute.value}}">
+				{% if attribute.value == True or attribute.value == False %}
+					<script>
+					function updateBoolCheckboxValue(newValue){
+						var checkboxValueDiv = document.getElementById("{{attribute.name}}.value")
+						if(checkboxValueDiv != null){
+							checkboxValueDiv.innerHTML = "<input type='hidden' name='attribute.{{attribute.name}}' value='" + newValue +"'>";
+						}
+					}
+					</script>
+
+					{% if attribute.value == True %}
+						<input type="checkbox" name="checkbox" checked onclick="updateBoolCheckboxValue('False');">
+						<div id="{{attribute.name}}.value"></div>
+					{% elif attribute.value == False %}
+						<input type="checkbox" name="checkbox" onclick="updateBoolCheckboxValue('True');">
+						<div id="{{attribute.name}}.value"></div>
+					{% else %}
+						<input type="input" name="attribute.{{attribute.name}}" value="{{attribute.value}}">
+					{% endif %}
 				{% else %}
-					<input type="input" name="attribute.{{attribute.name}}" value="{{attribute.value}}">
+					here3
+				<input type="input" name="attribute.{{attribute.name}}" value="{{attribute.value}}">
+					
 				{% endif %}
 		{% endfor %}
 		<br><br><input type="submit" value="Update attributes" />
 	</form>
 	<div id="cancelButton"></div>
+
+
 
 
 {% endblock %}

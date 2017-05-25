@@ -190,7 +190,6 @@ class GenericEditAccountView(views.GenericFormView):
     @property
     def pageContext(self):
         self._pageContext["nextButtonString"] = self.nextButtonString
-        print "set next string to {0}".format(self.nextButtonString)
         return self._pageContext
 
 class EditInterestsView(GenericEditAccountView):
@@ -280,11 +279,9 @@ class EditProfessionsView(GenericEditAccountView):
                 print "Could not create profession entry: {0}".format(e)
                 return False
 
-
             if profession == 'Actor':
                 actorEntry = Actor(username=self.username)
                 try:
-                    print "saving actor entry"
                     actorEntry.save()
                 except Exception as e:
                     print "Could not create actor entry: {0}".format(e)
@@ -420,40 +417,40 @@ class EditActorDescriptionView(GenericEditAccountView):
 
     @property
     def pageContext(self):
-        selectedAttributes = {}
+        selectedAttributes = []
         for attribute in sorted(chain(ActorDescriptionStringAttribute.objects.filter(username=self.username),
                                       ActorDescriptionBooleanAttribute.objects.filter(username=self.username))):
-
-            selectedAttributes[attribute.attributeName] = attribute.attributeValue
+            selectedAttributes.append({"name": attribute.attributeName, "value": attribute.attributeValue})
         
         if not self._pageContext.get("masterAttributes"):
             self._pageContext["masterAttributes"] = ACTOR_ATTRIBUTE_DICT
             for selectedAttribute in selectedAttributes:
                 for masterAttribute in self._pageContext["masterAttributes"]:
-                    if masterAttribute.name == selectedAttribute.name and masterAttribute.value != selectedAttribute.value:
-                        masterAttribute.value = selectedAttribute.value
-            print "master attributes are {0}".format(self._pageContext["masterAttributes"])
+                    if masterAttribute.get("name") == selectedAttribute.get("name") and masterAttribute.get("value") != selectedAttribute.get("value"):
+                        masterAttribute["value"] = selectedAttribute.get("value")
         return self._pageContext
 
     def processForm(self):
         """Overriding asbtract method"""
-        attributesSelected = self.request.POST.lists()
+        newAttributes = []
+        for formInput in self.formData:
+            splittedFormInput = formInput.split('.')
+            if splittedFormInput[0] == "attribute":
+                newAttributes.append({"name": splittedFormInput[-1], "value": self.request.POST.get(formInput)})
 
-        print "selected attr are {0}".format(attributesSelected)
         ActorDescriptionStringAttribute.objects.filter(username=self.username).delete()
         ActorDescriptionBooleanAttribute.objects.filter(username=self.username).delete()
 
-        for attribute in attributesSelected:
-            if attributesSelected.get(attribute) in [True, False, "True", "False", "true", "false"]:
+        for attribute in newAttributes:
+            if attribute["value"] in [True, False, "True", "False", "true", "false"]:
                 entry = ActorDescriptionBooleanAttribute(username=self.username,
-                                                         attributeName=attribute,
-                                                         attributeValue = attributesSelected[attribute])
+                                                         attributeName=attribute["name"],
+                                                         attributeValue = attribute["value"])
             else:
                 entry = ActorDescriptionStringAttribute(username=self.username,
-                                                         attributeName=attribute,
-                                                         attributeValue = attributesSelected[attribute])
+                                                         attributeName=attribute["name"],
+                                                         attributeValue = attribute["value"])
             try:
-                print "saved entry for attribute {0}".format(attribute)
                 entry.save()
             except:
                 return False
