@@ -5,7 +5,6 @@ import constants
 import random, string
 import models
 
-
 def redirect(request, currentPage, destinationPage):
     """Returns an HttpResonseRedirect of the desired URL can be resolved (see getDestinationURL for 
     more info on how this is done). If no URL can be resolved, an error is raised
@@ -42,6 +41,10 @@ def getDestinationURL(request, destPageName, currentPageName=None):
             destURL = destURL.format(request.POST.get('postID'))
             messages.add_message(request, messages.INFO,
                                  "postID:{0}".format(request.POST.get('postID')))
+            import post
+            if post.isProjectPost(request.POST.get('postID')):
+                messages.add_message(request, messages.INFO,
+                                     "projectID:{0}".format(request.POST.get('postID')))
         else:
             print "NO POSTID PASSED TO getDestinationURL"
     return destURL

@@ -43,6 +43,13 @@ class CreateProjectPostView(post.GenericCreatePostView):
 class ViewProjectPostView(post.GenericViewPostView):
     def __init__(self, *args, **kwargs):
         super(ViewProjectPostView, self).__init__(*args, **kwargs)
+        self._castingPosts = None
+
+    @property
+    def castingPosts(self):
+        if self._castingPosts is None:
+            self._castingPosts = models.CastingPost.objects.filter(projectID=self.postID)
+        return self._castingPosts
 
     @property
     def post(self):
@@ -50,4 +57,12 @@ class ViewProjectPostView(post.GenericViewPostView):
             if self.postID:
                 self._post = ProjectPostInstance(request=self.request, postID=self.postID)
         return self._post
+
+    @property
+    def pageContext(self):
+        self._pageContext = super(ViewProjectPostView, self).pageContext
+        self._pageContext["possibleDestinations"] = {"createCasting": constants.CREATE_CASTING_POST,
+                                                     "viewCasting": constants.VIEW_POST}
+        self._pageContext["castingPosts"] = self.castingPosts
+        return self._pageContext
 

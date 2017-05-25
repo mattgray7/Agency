@@ -74,7 +74,7 @@ class CollaborationPost(AbstractPost):
     profession = models.CharField(max_length=200)
 
 class CastingPost(AbstractPost):
-    # TODO have a separate table for a single casting choice (gender, hair, age, etc)
+    projectID = models.CharField(max_length=10)
     paid = models.BooleanField(default=False)
 
 class Actor(models.Model):

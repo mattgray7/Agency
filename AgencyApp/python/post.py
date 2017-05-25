@@ -316,7 +316,7 @@ class GenericViewPostView(views.GenericFormView):
     @property
     def cancelDestination(self):
         if self._cancelDestination is None:
-            self._cancelDestination = constants.BROWSE_POST_PAGE_MAP.get(self.post.postType or constants.PROFILE)
+            self._cancelDestination = constants.BROWSE_POST_PAGE_MAP.get(self.post and self.post.postType or constants.PROFILE)
         return self._cancelDestination
 
     @property

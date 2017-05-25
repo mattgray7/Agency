@@ -89,6 +89,56 @@ function updatePostFollow(){
 			<input type="submit" value="Edit Post" />
 		</form>
 	{% endif %}
+	{% if isProject %}
+		<br>
+			{% if castingPosts %}
+			<h5> Acting roles posted </h5>
+				<table>
+					<tr><td></td><td> Role</td><td> Description </td><td> Paid</td></tr>
+					{% for castingPost in castingPosts %}
+						<tr><td>
+								{% if castingPost.postPicture %}
+									<img src="{{ castingPost.postPicture.url }}" height="50px" width="70px"/>
+								{% else %}
+									<img height="50px" width="70px"/>
+								{% endif %}
+						</td>
+						<td>
+							<form method='post' action="/post/view/{{ castingPost.postID }}/">
+								{% csrf_token %}
+								<input type="hidden" name="source" value="{{ next }}" />
+								<input type="hidden" name="next" value="{{ next }}" />
+								<input type="hidden" name="destination" value="{{ possibleDestinations.viewCasting }}" />
+								<input type="hidden" name="postID" value="{{ castingPost.postID }}" />
+								<input type="submit" value="{{ castingPost.title }}" />
+							</form>
+						</td>
+						<td>
+							{{castingPost.description}}
+						</td>
+						<td>
+							{% if castingPost.paid %}
+								&#10004;
+							{% endif %}
+						</td>
+					</tr>
+					{% endfor %}
+				</table>
+			{% else %}
+				<h5> No roles registered </h5>
+			{% endif %}
+		{% if post.poster == request.user.username %}
+			<form method='post' action="/post/view/{{ post.postID }}/">
+				{% csrf_token %}
+				<input type="hidden" name="source" value="{{ next }}" />
+				<input type="hidden" name="next" value="{{ next }}" />
+				<input type="hidden" name="destination" value="{{ possibleDestinations.createCasting }}" />
+				<input type="hidden" name="postID" value="{{ post.postID }}" />
+				<input type="hidden" name="projectID" value="{{ post.postID }}" />
+				<input type="submit" value="Add a new role to cast" />
+			</form>
+		{% endif %}
+	{% endif %}
 	<p>
 {% else %}
 	<h4>No post found</h4>
