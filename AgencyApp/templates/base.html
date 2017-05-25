@@ -36,6 +36,21 @@
             }
         }
     });
+
+
+    //Indexed div names for multiple profile names being displayed ona  page
+    var profileIndex = 0;
+    var profileName = "profileRedirectButton"
+    var profileIndexedName = profileName + profileIndex.toString()
+    function getNextProfileName(){
+        // remove numbers and return current name
+        var cleanedName = profileIndexedName.replace(/[0-9]/g, '');
+        var newName = profileName + profileIndex.toString();
+        var oldName = profileIndexedName;
+        profileIndexedName = newName;
+        profileIndex = profileIndex + 1;
+        return newName
+    }
     </script>
 
     <body>
@@ -176,15 +191,15 @@
             }
 
             $(document).ready(function(){
-                var cancelButtonDiv = document.getElementById('cancelButton');
-                if (cancelButtonDiv != null){
-                    createCancelButton(cancelButtonDiv, "{{ cancelDestination }}", "{{ cancelDestinationURL }}", "{{ cancelButtonName }}");
-                };
-
-                var profileRedirectButtonDiv = document.getElementById('profileRedirectButton');
-                if (profileRedirectButtonDiv != null){
-                    createProfileRedirectButton(profileRedirectButtonDiv, profileRedirectButtonDiv.innerHTML, "{{ currentPageURL }}");
-                };
+                $(document).find('div').each(function(){
+                    var divID = $(this).attr('id');
+                    var cleanedName = divID.replace(/[0-9]/g, '');
+                    if(cleanedName == "cancelButton"){
+                        createCancelButton(document.getElementById('cancelButton'), "{{ cancelDestination }}", "{{ cancelDestinationURL }}", "{{ cancelButtonName }}");
+                    }else if(cleanedName == "profileRedirectButton"){
+                        createProfileRedirectButton(document.getElementById(divID), $(this).attr("innerHTML"), "{{ currentPageURL }}");
+                    }
+                });
             });
 
         </script>
