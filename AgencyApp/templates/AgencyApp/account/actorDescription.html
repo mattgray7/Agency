@@ -2,7 +2,7 @@
 
 {% block content %}
 	<h2>Specify physical attributes</h2>
-	<h6> If you've selected acting as an interested profession, you can specify your <br>physical characteristics so that casting agents can search for exactly who <br>they're looking for. It's completey optional and will increase your networking exposure.
+	<h6> If you've selected acting as an interested profession, you can specify your <br>physical characteristics so that casting agents can search for exactly who <br>they're looking for. It's completey optional and will increase your networking exposure.</h6>
 	{% if errors %}
 		<ul>
 			{% for error in errors %}
@@ -17,16 +17,16 @@
 		<input type="hidden" name="destination" value="{{ destination }}">
 		{% for attribute in masterAttributes %}
 			<br>
-				{{ attributeName }}
-				{% if attribute.attributeValue == True %}
-					<input type="checkbox" name="attributes" value="{{attributeName}}:{{attributeValue}}" checked>
+				{{ attribute.name }}
+				{% if attribute.value == True %}
+					<input type="checkbox" name="attribute.{{attribute.name}}" value="{{attribute.value}}" checked>
 				{% elif attribute.attributeValue == False	 %}
-					<input type="checkbox" name="attributes" value="{{attributeName}}:{{attributeValue}}">
+					<input type="checkbox" name="attribute.{{attribute.name}}" value="{{attribute.value}}">
 				{% else %}
-					<input type="input" name="attributes" value="{{attributeName}}:{{attributeValue}}">
+					<input type="input" name="attribute.{{attribute.name}}" value="{{attribute.value}}">
 				{% endif %}
 		{% endfor %}
-		<br><input type="submit" value="Update attributes" />
+		<br><br><input type="submit" value="Update attributes" />
 	</form>
 	<div id="cancelButton"></div>
 

@@ -61,11 +61,22 @@ PROFESSIONS = ["Actor", "Acting Coach", "Art Director", "Assistant Director", "A
 			   "Storyboard Artist", "Stunt Coordinator", "Stunt Artist", "Talent Management", "VFX Arist",
 			   "VFX Supervisor", "Voice Artist", "Wardrobe Supervisor"]
 
-ACTOR_ATTRIBUTE_DICT = {"Hair color": None,
-						"Age range": None,
-						"Identified gender": None,
-						"Available now": True,
-						"Ethnicity": "Caucasian"}
+ACTOR_ATTRIBUTE_DICT = [{"name": "Hair color",
+						 "value": None},
+						{"name": "Eye color",
+						 "value": None},
+						{"name": "Age range",
+						 "value": None},
+						{"name": "Ethnicity",
+						 "value": "Caucasian"},
+						 {"name": "Identified gender",
+						 "value": None},
+						{"name": "Height",
+						 "value": None},
+						{"name": "Weight",
+						 "value": None},
+						{"name": "Available now",
+						 "value": True}]
 
 URL_MAP = {HOME: "/",
 		   LOGIN:"/login/",

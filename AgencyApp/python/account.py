@@ -427,16 +427,18 @@ class EditActorDescriptionView(GenericEditAccountView):
             selectedAttributes[attribute.attributeName] = attribute.attributeValue
         
         if not self._pageContext.get("masterAttributes"):
-            self._pageContext["masterAttributes"] = {}
-            for masterAttribute in ACTOR_ATTRIBUTE_DICT:
-                self._pageContext["masterAttributes"][masterAttribute] = selectedAttributes.get(masterAttribute, ACTOR_ATTRIBUTE_DICT.get(masterAttribute))
+            self._pageContext["masterAttributes"] = ACTOR_ATTRIBUTE_DICT
+            for selectedAttribute in selectedAttributes:
+                for masterAttribute in self._pageContext["masterAttributes"]:
+                    if masterAttribute.name == selectedAttribute.name and masterAttribute.value != selectedAttribute.value:
+                        masterAttribute.value = selectedAttribute.value
             print "master attributes are {0}".format(self._pageContext["masterAttributes"])
         return self._pageContext
 
     def processForm(self):
         """Overriding asbtract method"""
         attributesSelected = self.request.POST.lists()
-        
+
         print "selected attr are {0}".format(attributesSelected)
         ActorDescriptionStringAttribute.objects.filter(username=self.username).delete()
         ActorDescriptionBooleanAttribute.objects.filter(username=self.username).delete()
