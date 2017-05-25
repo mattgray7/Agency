@@ -152,9 +152,9 @@ class CreateAccountFinishView(views.GenericFormView):
         return True
 
 
-class EditInterestsView(views.GenericFormView):
+class GenericEditAccountView(views.GenericFormView):
     def __init__(self, *args, **kwargs):
-        super(EditInterestsView, self).__init__(*args, **kwargs)
+        super(GenericEditAccountView, self).__init__(*args, **kwargs)
 
     @property
     def cancelSource(self):
@@ -172,6 +172,18 @@ class EditInterestsView(views.GenericFormView):
         return self._cancelButtonName
 
     @property
+    def cancelDestinationURL(self):
+        if self._cancelDestinationURL is None:
+            self._cancelDestinationURL = constants.URL_MAP.get(self.currentPage)
+            if self._cancelDestinationURL and self.cancelDestination == constants.PROFILE:
+                self._cancelDestinationURL = self._cancelDestinationURL.format(self.request.user.username)
+        return self._cancelDestinationURL
+
+class EditInterestsView(GenericEditAccountView):
+    def __init__(self, *args, **kwargs):
+        super(EditInterestsView, self).__init__(*args, **kwargs)
+
+    @property
     def cancelDestination(self):
         """Override to continue the profile setup process"""
         if self._cancelDestination is None:
@@ -180,14 +192,6 @@ class EditInterestsView(views.GenericFormView):
             else:
                 self._cancelDestination = PROFILE
         return self._cancelDestination
-
-    @property
-    def cancelDestinationURL(self):
-        if self._cancelDestinationURL is None:
-            self._cancelDestinationURL = constants.URL_MAP.get(self.currentPage)
-            if self._cancelDestinationURL and self.cancelDestination == constants.PROFILE:
-                self._cancelDestinationURL = self._cancelDestinationURL.format(self.request.user.username)
-        return self._cancelDestinationURL
 
     @property
     def formInitialValues(self):
@@ -209,21 +213,9 @@ class EditInterestsView(views.GenericFormView):
         return True
 
 
-class EditProfessionsView(views.GenericFormView):
+class EditProfessionsView(GenericEditAccountView):
     def __init__(self, *args, **kwargs):
         super(EditProfessionsView, self).__init__(*args, **kwargs)
-
-    @property
-    def cancelSource(self):
-        if self._cancelSource is None:
-            self._cancelSource = self.currentPage
-        return self._cancelSource
-
-    @property
-    def cancelButtonName(self):
-        if self.sourcePage != PROFILE:
-            self._cancelButtonName = "Skip"
-        return self._cancelButtonName
 
     @property
     def cancelDestination(self):
@@ -234,14 +226,6 @@ class EditProfessionsView(views.GenericFormView):
             else:
                 self._cancelDestination = PROFILE
         return self._cancelDestination
-
-    @property
-    def cancelDestinationURL(self):
-        if self._cancelDestinationURL is None:
-            self._cancelDestinationURL = constants.URL_MAP.get(self.currentPage)
-            if self._cancelDestinationURL:
-                self._cancelDestinationURL = self._cancelDestinationURL.format(self.request.user.username)
-        return self._cancelDestinationURL
 
     @property
     def pageContext(self):
@@ -265,32 +249,12 @@ class EditProfessionsView(views.GenericFormView):
         return True
 
 
-class EditPictureView(views.PictureFormView):
+class EditPictureView(GenericEditAccountView):
     def __init__(self, *args, **kwargs):
         super(EditPictureView, self).__init__(*args, **kwargs)
         self._pictureModel = self.userAccount
         self._pictureModelFieldName = "profilePicture"
         self._filename = None
-
-    @property
-    def cancelSource(self):
-        if self._cancelSource is None:
-            self._cancelSource = self.currentPage
-        return self._cancelSource
-
-    @property
-    def cancelDestinationURL(self):
-        if self._cancelDestinationURL is None:
-            self._cancelDestinationURL = constants.URL_MAP.get(self.currentPage)
-            if self._cancelDestinationURL:
-                self._cancelDestinationURL = self._cancelDestinationURL.format(self.request.user.username)
-        return self._cancelDestinationURL
-
-    @property
-    def cancelButtonName(self):
-        if self.sourcePage != PROFILE:
-            self._cancelButtonName = "Skip"
-        return self._cancelButtonName
 
     @property
     def cancelDestination(self):
@@ -328,34 +292,14 @@ class EditPictureView(views.PictureFormView):
         return False
 
 
-class EditBackgroundView(views.GenericFormView):
+class EditBackgroundView(GenericEditAccountView):
     def __init__(self, *args, **kwargs):
         super(EditBackgroundView, self).__init__(*args, **kwargs)
-
-    @property
-    def cancelSource(self):
-        if self._cancelSource is None:
-            self._cancelSource = self.currentPage
-        return self._cancelSource
 
     @property
     def cancelDestination(self):
         """Override to continue the profile setup process"""
         return constants.PROFILE
-
-    @property
-    def cancelButtonName(self):
-        if self.sourcePage != PROFILE:
-            self._cancelButtonName = "Skip"
-        return self._cancelButtonName
-
-    @property
-    def cancelDestinationURL(self):
-        if self._cancelDestinationURL is None:
-            self._cancelDestinationURL = constants.URL_MAP.get(self.currentPage)
-            if self._cancelDestinationURL:
-                self._cancelDestinationURL = self._cancelDestinationURL.format(self.request.user.username)
-        return self._cancelDestinationURL
 
     @property
     def formInitialValues(self):
