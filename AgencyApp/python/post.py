@@ -302,11 +302,9 @@ class GenericViewPostView(views.GenericFormView):
     @property
     def cancelDestinationURL(self):
         if self._cancelDestinationURL is None:
-            self._cancelDestinationURL = constants.URL_MAP.get(self.cancelDestination)
-            if self.sourcePage == constants.PROFILE:
-                # format with username in url
-                if self._cancelDestinationURL:
-                    self._cancelDestinationURL = self._cancelDestinationURL.format(self.postID)
+            self._cancelDestinationURL = constants.URL_MAP.get(self.currentPage)
+            if self.postID and self._cancelDestinationURL:
+                self._cancelDestinationURL = self._cancelDestinationURL.format(self.postID)
         return self._cancelDestinationURL
 
     @property

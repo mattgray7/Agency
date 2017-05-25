@@ -16,7 +16,7 @@ def redirect(request, currentPage, destinationPage):
                         page combintaion, defaults to DEFAULT
     :return HttpResonseRedirect: Redirect to destination if found
     """
-    destinationURL = getDestinationURL(request, destinationPage)
+    destinationURL = getDestinationURL(request, destinationPage, currentPage)
     if not destinationURL:
         print "No url could be resolved"
         raise
@@ -26,16 +26,17 @@ def redirect(request, currentPage, destinationPage):
         return HttpResponseRedirect(destinationURL)
 
 
-def getDestinationURL(request, destPageName):
+def getDestinationURL(request, destPageName, currentPageName=None):
     destURL = constants.URL_MAP.get(destPageName)
 
     # Add specific values for profile usernames and eventIDs in the url
     if destPageName == constants.PROFILE:
-        if request.POST.get('profileName'):
-            destURL = destURL.format(request.POST.get('profileName', request.user.username))
+        username = request.POST.get('profileName', request.user.username)
+        if username:
+            destURL = destURL.format(username)
             messages.add_message(request, messages.INFO,
-                                 "profileName:{0}".format(request.POST.get('profileName')))
-    elif isPostPage(destPageName):
+                                 "profileName:{0}".format(username))
+    elif isPostPage(destPageName) or isPostPage(currentPageName):
         if request.POST.get('postID'):
             destURL = destURL.format(request.POST.get('postID'))
             messages.add_message(request, messages.INFO,

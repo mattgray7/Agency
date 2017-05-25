@@ -38,7 +38,7 @@ class GenericBrowseView(views.GenericFormView):
     @property
     def nextPostID(self):
         if self._nextPostID is None:
-            self._nextPostID = self.request.POST.get("postID")
+            self._nextPostID = self.request.POST.get("postID") or helpers.getMessageFromKey(self.request, "postID")
         return self._nextPostID
 
     @property
@@ -48,6 +48,15 @@ class GenericBrowseView(views.GenericFormView):
             if self.request.user.username:
                 self._followingPostIDs = [post.postID for post in models.PostFollow.objects.filter(username=self.request.user.username)]
         return self._followingPostIDs
+
+    @property
+    def cancelSource(self):
+        if self._cancelSource is None:
+            if self.sourcePage in [constants.PROFILE, constants.VIEW_POST]:
+                self._cancelSource = self.currentPage
+            else:
+                self._cancelSource = self.sourcePage
+        return self._cancelSource
 
     @property
     def cancelButtonName(self):
@@ -60,9 +69,7 @@ class GenericBrowseView(views.GenericFormView):
     @property
     def cancelDestinationURL(self):
         if self._cancelDestinationURL is None:
-            self._cancelDestinationURL = constants.URL_MAP.get(self.sourcePage)
-            if self._cancelDestinationURL:
-                self._cancelDestinationURL = self._cancelDestinationURL.format(self.nextPostID)
+            self._cancelDestinationURL = constants.URL_MAP.get(self.currentPage)
         return self._cancelDestinationURL
 
     @property
@@ -73,8 +80,15 @@ class GenericBrowseView(views.GenericFormView):
 
     @property
     def cancelDestination(self):
-        self._cancelDestination = constants.BROWSE_CHOICE
+        if self._cancelDestination is None:
+            if self.sourcePage == constants.VIEW_POST:
+                self._cancelDestination = self.sourcePage
+            else:
+                self._cancelDestination = constants.BROWSE_CHOICE
         return self._cancelDestination
+
+    def cancelPage(self):
+        pass
 
     @property
     def posterNameMap(self):
