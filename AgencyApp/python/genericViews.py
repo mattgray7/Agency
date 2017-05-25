@@ -245,11 +245,15 @@ class GenericFormView(GenericView):
         return formIsValid
 
     def cancelPage(self):
+        print "CANCELLING"
+        print self.destinationPage
         self._destinationPage = self.cancelDestination
+        print self.cancelDestination
         self._pageContext["destination"] = self.cancelDestination
 
     def process(self):
         if self.request.method == "POST" and self.checkFormValidity():
+            print "current {0}, dest {1}".format(self.currentPage, self.destinationPage)
             return helpers.redirect(request=self.request,
                                     currentPage=self.currentPage,
                                     destinationPage=self.destinationPage)
