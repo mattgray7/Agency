@@ -81,7 +81,6 @@ class GenericPostInstance(object):
         if self._postID is None:
             self._postID = self.request.POST.get("postID") or helpers.getMessageFromKey(self.request,
                                                                                         "postID")
-            print "self.post id is {0}".format(self._postID)
         return self._postID
 
     @property
@@ -132,7 +131,6 @@ class GenericPostInstance(object):
         return True
 
     def formIsValid(self):
-        print "processing isvalid"
         if self.request.POST:
             if self.checkBasicFormValues() and self.checkModelFormValues():
                 return self.saveBasicFormValues() and self.saveModelFormValues()

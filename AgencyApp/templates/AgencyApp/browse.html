@@ -48,6 +48,8 @@
 		});
 		return followingCol
 	}*/
+	var posterNameMap = {{ posterNameMap|safe }};
+
 
 	function getFollowingCol(postID){
 		var colString = "<td>";
@@ -76,6 +78,7 @@
 							"</tr>");
 
 			//Add each event
+
 			{% for eventObj in events %}
 				var pictureCol = '<td>';
 				{% if eventObj.postPicture %}
@@ -84,9 +87,10 @@
 					pictureCol += '<img height="50px" width="70px"/>'
 				{% endif %}
 				pictureCol += '</td>';
+
 				tableString += ("<tr>" + pictureCol +
 									"<td><button onclick='createPostRedirectForm(" + '"{{eventObj.postID}}","{{possibleDestinations.viewPost}}"' + ");'>{{eventObj.title}}</button></td>" +
-									"<td>{{eventObj.poster}}</td>" +
+									"<td><button onclick='createProfileRedirectForm(" + '"{{eventObj.poster}}"' + ");'>" + posterNameMap["{{eventObj.poster}}"] + "</button></td>" +
 									"<td>{{eventObj.date}}</td>" +
 									"<td>{{eventObj.location}}</td>" +
 									"<td>{{eventObj.description}}</td>" + getFollowingCol("{{eventObj.postID}}") + 
@@ -120,7 +124,7 @@
 				pictureCol += '</td>';
 				tableString += ("<tr>" + pictureCol +
 									"<td><button onclick='createPostRedirectForm(" + '"{{projectObj.postID}}","{{possibleDestinations.viewPost}}"' + ");'>{{projectObj.title}}</button></td>" +
-									"<td>{{projectObj.poster}}</td>" +
+										"<td><button onclick='createProfileRedirectForm(" + '"{{projectObj.poster}}"' + ");'>" + posterNameMap["{{projectObj.poster}}"] + "</button></td>" +
 									"<td>{{projectObj.status}}</td>" +
 									"<td>{{projectObj.description}}</td>" + getFollowingCol("{{projectObj.postID}}") +
 								"</tr>");
@@ -141,6 +145,7 @@
 							"</tr>");
 
 			//Add each event
+			var posterNameMap = {{ posterNameMap|safe }};
 			{% for userObj in users %}
 				var pictureCol = '<td>';
 				{% if userObj.profilePicture %}
@@ -150,7 +155,7 @@
 				{% endif %}
 				pictureCol += '</td>';
 				tableString += ("<tr>" + pictureCol +
-									"<td><button onclick='createProfileRedirectForm(" + '"{{userObj.username}}"' + ");'>{{userObj.firstName}} {{userObj.lastName}}</button></td>" +
+									"<td><button onclick='createProfileRedirectForm(" + '"{{userObj.username}}"' + ");'>" + posterNameMap["{{userObj.username}}"] + "</button></td>" +
 								"</tr>");
 
 			{% endfor %}
@@ -182,7 +187,7 @@
 				pictureCol += '</td>';
 				tableString += ("<tr>" + pictureCol +
 									"<td><button onclick='createPostRedirectForm(" + '"{{collabObj.postID}}","{{possibleDestinations.viewPost}}"' + ");'>{{collabObj.title}}</button></td>" +
-									"<td>{{collabObj.poster}}</td>" +
+									"<td><button onclick='createProfileRedirectForm(" + '"{{collabObj.poster}}"' + ");'>" + posterNameMap["{{collabObj.poster}}"] + "</button></td>" +
 									"<td>{{collabObj.profession}}</td>" +
 									"<td>{{collabObj.description}}</td>" + getFollowingCol("{{collabObj.postID}}") +
 								"</tr>");
@@ -219,7 +224,7 @@
 				pictureCol += '</td>';
 				tableString += ("<tr>" + pictureCol +
 									"<td><button onclick='createPostRedirectForm(" + '"{{workObj.postID}}","{{possibleDestinations.viewPost}}"' + ");'>{{workObj.title}}</button></td>" +
-									"<td>{{workObj.poster}}</td>" +
+									"<td><button onclick='createProfileRedirectForm(" + '"{{workObj.poster}}"' + ");'>" + posterNameMap["{{workObj.poster}}"] + "</button></td>" +
 									"<td>{{workObj.profession}}</td>" +
 									"<td>{{workObj.description}}</td>")
 				
@@ -260,7 +265,7 @@
 				pictureCol += '</td>';
 				tableString += ("<tr>" + pictureCol +
 									"<td><button onclick='createPostRedirectForm(" + '"{{castingObj.postID}}","{{possibleDestinations.viewPost}}"' + ");'>{{castingObj.title}}</button></td>" +
-									"<td>{{castingObj.poster}}</td>" +
+										"<td><button onclick='createProfileRedirectForm(" + '"{{castingObj.poster}}"' + ");'>" + posterNameMap["{{castingObj.poster}}"] + "</button></td>" +
 									"<td>{{castingObj.description}}</td>")
 				
 				// Add tick or x for paid
@@ -289,7 +294,9 @@
 	function createProfileRedirectForm(username){
 		var extraInputs = []
 		extraInputs.push({key: "profileName", value: username});
+		console.log("next: {{next}}, profile: {{possibleDestinations.profile}}")
 		var form = createPageRedirectForm("{{ next }}", "{{ next }}", "{{ possibleDestinations.profile }}", "{{ currentPageURL }}", extraInputs);
+		console.log("{{currentPageURL}}")
 		form.submit();
 	}
 
@@ -307,7 +314,7 @@
 				document.getElementById("projectsViewDiv").innerHTML = "<h3> No projects posted </h3>";
 			{% endif %}
 		}else if("{{browseType}}" == "{{possibleViews.users}}"){
-			{% if users %}
+			{% if posterNameMap %}
 				document.getElementById("usersViewDiv").innerHTML = createViewUsersTable();
 			{% else %}
 				document.getElementById("usersViewDiv").innerHTML = "<h3> No users registered</h3>";

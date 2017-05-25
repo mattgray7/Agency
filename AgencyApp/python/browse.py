@@ -33,6 +33,7 @@ class GenericBrowseView(views.GenericFormView):
         self._nextPostID = None
         super(GenericBrowseView, self).__init__(*args, **kwargs)
         self._followingPostIDs = None
+        self._posterNameMap = None
  
     @property
     def nextPostID(self):
@@ -75,6 +76,13 @@ class GenericBrowseView(views.GenericFormView):
         self._cancelDestination = constants.BROWSE_CHOICE
         return self._cancelDestination
 
+    @property
+    def posterNameMap(self):
+        if self._posterNameMap is None:
+            self._posterNameMap = {}
+            for account in models.UserAccount.objects.all():
+                self._posterNameMap[account.username] = "{0} {1}".format(account.firstName, account.lastName)
+        return self._posterNameMap
 
     @property
     def pageContext(self):
@@ -82,7 +90,10 @@ class GenericBrowseView(views.GenericFormView):
                                               "projects": constants.BROWSE_PROJECTS,
                                               "posts": constants.BROWSE_POSTS,
                                               "users": constants.BROWSE_USERS}
+        self._pageContext["possibleDestinations"] = {"profile": constants.PROFILE,
+                                                     "viewPost": constants.VIEW_POST}
         self._pageContext["followingPostIDs"] = self.followingPostIDs
+        self._pageContext["posterNameMap"] = json.dumps(self.posterNameMap)
         self._pageContext["browseType"] = self.currentPage
         return self._pageContext
 
@@ -102,7 +113,6 @@ class BrowseEventsView(GenericBrowseView):
     @property
     def pageContext(self):
         self._pageContext = super(BrowseEventsView, self).pageContext
-        self._pageContext["possibleDestinations"] = {"viewPost": constants.VIEW_POST}
         self._pageContext["events"] = self.eventList
         return self._pageContext
 
@@ -122,7 +132,6 @@ class BrowseProjectsView(GenericBrowseView):
     @property
     def pageContext(self):
         self._pageContext = super(BrowseProjectsView, self).pageContext
-        self._pageContext["possibleDestinations"] = {"viewPost": constants.VIEW_POST}
         self._pageContext["projects"] = self.projectList
         return self._pageContext
 
@@ -135,15 +144,13 @@ class BrowseUsersView(GenericBrowseView):
     @property
     def userList(self):
         if self._userList is None:
-            #TODO filter out logged in username
-            #self._userList = [user for user in models.UserAccount.objects.all() if user.username != self.request.user.username ]
-            self._userList = models.UserAccount.objects.all();
+            self._userList =  models.UserAccount.objects.all()
         return self._userList
+
 
     @property
     def pageContext(self):
         self._pageContext = super(BrowseUsersView, self).pageContext
-        self._pageContext["possibleDestinations"] = {"profile": constants.PROFILE}
         self._pageContext["users"] = self.userList
         return self._pageContext
 
@@ -176,7 +183,6 @@ class BrowsePostsView(GenericBrowseView):
     @property
     def pageContext(self):
         self._pageContext = super(BrowsePostsView, self).pageContext
-        self._pageContext["possibleDestinations"] = {"viewPost": constants.VIEW_POST}
         self._pageContext["posts"] = {}
         self._pageContext["posts"]["collaboration"] = self.collabPostList
         self._pageContext["posts"]["work"] = self.workPostList

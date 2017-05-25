@@ -31,7 +31,10 @@ def getDestinationURL(request, destPageName):
 
     # Add specific values for profile usernames and eventIDs in the url
     if destPageName == constants.PROFILE:
-        destURL = destURL.format(request.POST.get('profileName', request.user.username))
+        if request.POST.get('profileName'):
+            destURL = destURL.format(request.POST.get('profileName', request.user.username))
+            messages.add_message(request, messages.INFO,
+                                 "profileName:{0}".format(request.POST.get('profileName')))
     elif isPostPage(destPageName):
         if request.POST.get('postID'):
             destURL = destURL.format(request.POST.get('postID'))
