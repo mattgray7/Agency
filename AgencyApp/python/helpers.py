@@ -3,6 +3,7 @@ from django.contrib import messages
 from django.http import HttpResponseRedirect
 import constants
 import random, string
+import models
 
 
 def redirect(request, currentPage, destinationPage):
@@ -96,16 +97,20 @@ def getBaseContext(request):
         source = request.POST.get("source")
     else:
         source = getMessageFromKey(request, "source")
-    return {"toolbarDestinations": {"login": constants.LOGIN,
-                                     "home": constants.HOME,
-                                     "logout": constants.LOGOUT,
-                                     "profile": constants.PROFILE,
-                                     "browse": constants.BROWSE_CHOICE,
-                                     "post": constants.CREATE_POST},
-            "source": source,
-            "default": constants.DEFAULT,
-            "cancel": constants.CANCEL
-            }
+    returnDict = {"toolbarDestinations": {"login": constants.LOGIN,
+                                         "home": constants.HOME,
+                                         "logout": constants.LOGOUT,
+                                         "profile": constants.PROFILE,
+                                         "browse": constants.BROWSE_CHOICE,
+                                         "post": constants.CREATE_POST},
+                "source": source,
+                "default": constants.DEFAULT,
+                "cancel": constants.CANCEL
+                }
+    returnDict["posterNameMap"] = {}
+    for account in models.UserAccount.objects.all():
+        returnDict["posterNameMap"]["account.username"] = "{0} {1}".format(account.firstName, account.lastName)
+    return returnDict
 
 
 def isPostPage(pageName):

@@ -71,7 +71,7 @@ function updatePostFollow(){
 	</button>
 
 
-	<h5> Posted by {{ post.poster }} </h5>
+	<h5> Posted by <div id="profileRedirectButton">{{post.poster}}</div> </h5>
 	<h5> Description:<br>
 		{% if post.description %}
 			{{ post.description }}
@@ -95,14 +95,5 @@ function updatePostFollow(){
 {% endif %}
 
 <div id="cancelButton"></div>
-<div id="profileCancelButton"></div>
-{% if source == possibleSources.profile %}
-	<script>
-	$(document).ready(function(){
-		var profileCancelButtonDiv = document.getElementById("profileCancelButton");
-		var profileCancelButton = createCancelButton(profileCancelButtonDiv, "{{ possibleDestinations.profile }}", "/user/{{ post.poster }}/", "Back to profile")
-	});
-	</script>
-{% endif %}
 
 {% endblock %}

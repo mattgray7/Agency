@@ -153,14 +153,37 @@
                     {% endif %}
         
                     var cancelButtonForm = createPageRedirectForm("{{ cancelSource }}", "{{ next }}", destination, destinationURL, extraInputs, cancelButtonDiv, buttonName)
-                    cancelButtonDiv.appendChild(cancelButtonForm);
                 }
             }
+
+            function createProfileRedirectButton(redirectButtonDiv, profileName, destinationURL){
+                if (redirectButtonDiv != null){
+                    if(profileName == null){
+                        profileName = redirectButtonDiv.innerHTML;
+                    }
+                    redirectButtonDiv.innerHTML = "";
+
+                    var buttonName = profileName
+                    var profileNameMap = {{ posterNameMap|safe }};
+                    if((profileNameMap != "") && (profileNameMap[profileName] != undefined)){
+                        buttonName = posterNameMap[profileName]
+                    }
+
+                    var extraInputs = []
+                    extraInputs.push({key: "profileName", value: profileName});
+                    var redirectButtonForm = createPageRedirectForm("{{ next }}", "{{ next }}", "{{toolbarDestinations.profile}}", "/user/" + profileName + "/", extraInputs, redirectButtonDiv, buttonName)
+                }
+            }
+
             $(document).ready(function(){
                 var cancelButtonDiv = document.getElementById('cancelButton');
                 if (cancelButtonDiv != null){
-                    console.log("Cancelling to {{cancelDestinationURL}}")
                     createCancelButton(cancelButtonDiv, "{{ cancelDestination }}", "{{ cancelDestinationURL }}", "{{ cancelButtonName }}");
+                };
+
+                var profileRedirectButtonDiv = document.getElementById('profileRedirectButton');
+                if (profileRedirectButtonDiv != null){
+                    createProfileRedirectButton(profileRedirectButtonDiv, profileRedirectButtonDiv.innerHTML, "{{ currentPageURL }}");
                 };
             });
 
