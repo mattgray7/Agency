@@ -46,6 +46,7 @@ EDIT_INTERESTS = "EDIT_INTERESTS"
 EDIT_PROFILE_PICTURE = "EDIT_PROFILE_PICTURE"
 EDIT_PROFESSIONS = "EDIT_PROFESSIONS"
 EDIT_BACKGROUND = "EDIT_BACKGROUND"
+EDIT_ACTOR_DESCRIPTION = "EDIT_ACTOR_DESCRIPTION"
 
 PROFESSIONS = ["Actor", "Acting Coach", "Art Director", "Assistant Director", "Assistant Camera Operator",
 			   "Boom Operator", "Camera Operator", "Casting Director", "Choreographer", "Cinematographer",
@@ -60,7 +61,11 @@ PROFESSIONS = ["Actor", "Acting Coach", "Art Director", "Assistant Director", "A
 			   "Storyboard Artist", "Stunt Coordinator", "Stunt Artist", "Talent Management", "VFX Arist",
 			   "VFX Supervisor", "Voice Artist", "Wardrobe Supervisor"]
 
-
+ACTOR_ATTRIBUTE_DICT = {"Hair color": None,
+						"Age range": None,
+						"Identified gender": None,
+						"Available now": True,
+						"Ethnicity": "Caucasian"}
 
 URL_MAP = {HOME: "/",
 		   LOGIN:"/login/",
@@ -74,6 +79,7 @@ URL_MAP = {HOME: "/",
 		   EDIT_PROFESSIONS: "/account/edit/professions/",
 		   EDIT_PROFILE_PICTURE: "/account/edit/picture/",
 		   EDIT_BACKGROUND: "/account/edit/background/",
+		   EDIT_ACTOR_DESCRIPTION: "/account/edit/description/",
 		   #CREATE_EVENT: "/create/event/",
 		   #EDIT_EVENT: "/edit/event/{0}/",
 		   #VIEW_EVENT: "/view/event/{0}/",
@@ -111,6 +117,7 @@ DEFAULT_PAGE_MAP = {HOME: HOME,
 					EDIT_PROFESSIONS: EDIT_PROFILE_PICTURE,
 					EDIT_PROFILE_PICTURE: EDIT_BACKGROUND,
 					EDIT_BACKGROUND: HOME,
+					EDIT_ACTOR_DESCRIPTION: HOME,
 					SETUP_ACCOUNT_FINISH: HOME,
 
 					# Post creation
@@ -145,6 +152,7 @@ FORM_MAP = {HOME: forms.BaseForm,
 			EDIT_PROFESSIONS: None,	#manual
 			EDIT_PROFILE_PICTURE: forms.EditPictureForm,
 			EDIT_BACKGROUND: forms.EditBackgroundForm,
+			EDIT_ACTOR_DESCRIPTION: None, #manual
 
 			# Post creation
 			CREATE_EVENT_POST: forms.CreateEventPostForm,
@@ -165,10 +173,15 @@ HTML_MAP = {HOME: 'AgencyApp/home.html',
 			CREATE_BASIC_ACCOUNT: 'AgencyApp/account/create.html',
 			CREATE_BASIC_ACCOUNT_FINISH: 'AgencyApp/account/finish.html',
 			SETUP_ACCOUNT_FINISH: 'AgencyApp/account/finish.html',
-			EDIT_INTERESTS: 'AgencyApp/account/interests.html',
+			#EDIT_INTERESTS: 'AgencyApp/account/interests.html',
 			EDIT_PROFESSIONS: 'AgencyApp/account/professions.html',
-			EDIT_BACKGROUND: 'AgencyApp/account/background.html',
-			EDIT_PROFILE_PICTURE: 'AgencyApp/account/picture.html',
+			#EDIT_BACKGROUND: 'AgencyApp/account/background.html',
+			#EDIT_PROFILE_PICTURE: 'AgencyApp/account/picture.html',
+			EDIT_INTERESTS: 'AgencyApp/account/edit.html',
+			#EDIT_PROFESSIONS: 'AgencyApp/account/edit.html',
+			EDIT_PROFILE_PICTURE: 'AgencyApp/account/edit.html',
+			EDIT_BACKGROUND: 'AgencyApp/account/edit.html',
+			EDIT_ACTOR_DESCRIPTION: 'AgencyApp/account/actorDescription.html',
 
 			# Post creation
 			CREATE_POST: 'AgencyApp/post/post.html',

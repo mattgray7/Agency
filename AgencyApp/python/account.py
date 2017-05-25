@@ -17,6 +17,7 @@ import helpers
 import genericViews as views
 
 import os
+from itertools import chain
 
 
 class LoginView(views.GenericFormView):
@@ -155,6 +156,11 @@ class CreateAccountFinishView(views.GenericFormView):
 class GenericEditAccountView(views.GenericFormView):
     def __init__(self, *args, **kwargs):
         super(GenericEditAccountView, self).__init__(*args, **kwargs)
+        self._nextButtonString = None
+
+    @property
+    def nextButtonString(self):
+        return self._nextButtonString
 
     @property
     def cancelSource(self):
@@ -169,6 +175,8 @@ class GenericEditAccountView(views.GenericFormView):
     def cancelButtonName(self):
         if self.sourcePage != PROFILE:
             self._cancelButtonName = "Skip"
+        else:
+            self._cancelButtonName = "Back"
         return self._cancelButtonName
 
     @property
@@ -179,9 +187,24 @@ class GenericEditAccountView(views.GenericFormView):
                 self._cancelDestinationURL = self._cancelDestinationURL.format(self.request.user.username)
         return self._cancelDestinationURL
 
+    @property
+    def pageContext(self):
+        self._pageContext["nextButtonString"] = self.nextButtonString
+        print "set next string to {0}".format(self.nextButtonString)
+        return self._pageContext
+
 class EditInterestsView(GenericEditAccountView):
     def __init__(self, *args, **kwargs):
         super(EditInterestsView, self).__init__(*args, **kwargs)
+
+    @property
+    def nextButtonString(self):
+        if self._nextButtonString is None:
+            if self.sourcePage == PROFILE:
+                self_nextButtonString = "Update interests"
+            else:
+                self._nextButtonString = "Add interests"
+        return self._nextButtonString
 
     @property
     def cancelDestination(self):
@@ -218,6 +241,15 @@ class EditProfessionsView(GenericEditAccountView):
         super(EditProfessionsView, self).__init__(*args, **kwargs)
 
     @property
+    def nextButtonString(self):
+        if self._nextButtonString is None:
+            if self.sourcePage == PROFILE:
+                self_nextButtonString = "Update professions"
+            else:
+                self._nextButtonString = "Add interested professions"
+        return self._nextButtonString
+
+    @property
     def cancelDestination(self):
         """Override to continue the profile setup process"""
         if self._cancelDestination is None:
@@ -244,8 +276,19 @@ class EditProfessionsView(GenericEditAccountView):
             entry = Profession(username=self.username, professionName=profession)
             try:
                 entry.save()
-            except:
+            except Exception as e:
+                print "Could not create profession entry: {0}".format(e)
                 return False
+
+
+            if profession == 'Actor':
+                actorEntry = Actor(username=self.username)
+                try:
+                    print "saving actor entry"
+                    actorEntry.save()
+                except Exception as e:
+                    print "Could not create actor entry: {0}".format(e)
+                    pass
         return True
 
 
@@ -255,6 +298,15 @@ class EditPictureView(GenericEditAccountView):
         self._pictureModel = self.userAccount
         self._pictureModelFieldName = "profilePicture"
         self._filename = None
+
+    @property
+    def nextButtonString(self):
+        if self._nextButtonString is None:
+            if self.sourcePage == PROFILE:
+                self_nextButtonString = "Update profile picture"
+            else:
+                self._nextButtonString = "Add profile picture"
+        return self._nextButtonString
 
     @property
     def cancelDestination(self):
@@ -268,6 +320,7 @@ class EditPictureView(GenericEditAccountView):
 
     @property
     def pageContext(self):
+        self._pageContext = super(EditPictureView, self).pageContext
         self._pageContext["userAccount"] = self.userAccount
         return self._pageContext
 
@@ -297,9 +350,35 @@ class EditBackgroundView(GenericEditAccountView):
         super(EditBackgroundView, self).__init__(*args, **kwargs)
 
     @property
+    def nextButtonString(self):
+        if self._nextButtonString is None:
+            if self.sourcePage == PROFILE:
+                self_nextButtonString = "Update background"
+            else:
+                self._nextButtonString = "Add background information"
+        return self._nextButtonString
+
+    @property
+    def destinationPage(self):
+        if self._destinationPage is None:
+            if self.actorProfessionSelected():
+                self._destinationPage = EDIT_ACTOR_DESCRIPTION
+            else:
+                self._destinationPage = PROFILE
+        return self._destinationPage
+
+    def actorProfessionSelected(self):
+        isActor = None
+        try:
+            isActor = Actor.objects.get(username=self.username)
+        except Actor.DoesNotExist:
+            print "not an actor"
+        return isActor
+
+    @property
     def cancelDestination(self):
         """Override to continue the profile setup process"""
-        return constants.PROFILE
+        return self._destinationPage
 
     @property
     def formInitialValues(self):
@@ -319,6 +398,65 @@ class EditBackgroundView(GenericEditAccountView):
         except:
             self.errors.append("Could not connect to UserAccount database")
         return False
+
+
+class EditActorDescriptionView(GenericEditAccountView):
+    def __init__(self, *args, **kwargs):
+        super(EditActorDescriptionView, self).__init__(*args, **kwargs)
+
+    @property
+    def nextButtonString(self):
+        if self._nextButtonString is None:
+            if self.sourcePage == PROFILE:
+                self_nextButtonString = "Update physical description"
+            else:
+                self._nextButtonString = "Add physical description"
+        return self._nextButtonString
+
+    @property
+    def cancelDestination(self):
+        """Override to continue the profile setup process"""
+        return constants.PROFILE
+
+    @property
+    def pageContext(self):
+        selectedAttributes = {}
+        for attribute in sorted(chain(ActorDescriptionStringAttribute.objects.filter(username=self.username),
+                                      ActorDescriptionBooleanAttribute.objects.filter(username=self.username))):
+
+            selectedAttributes[attribute.attributeName] = attribute.attributeValue
+        
+        if not self._pageContext.get("masterAttributes"):
+            self._pageContext["masterAttributes"] = {}
+            for masterAttribute in ACTOR_ATTRIBUTE_DICT:
+                self._pageContext["masterAttributes"][masterAttribute] = selectedAttributes.get(masterAttribute, ACTOR_ATTRIBUTE_DICT.get(masterAttribute))
+            print "master attributes are {0}".format(self._pageContext["masterAttributes"])
+        return self._pageContext
+
+    def processForm(self):
+        """Overriding asbtract method"""
+        attributesSelected = self.request.POST.lists()
+        
+        print "selected attr are {0}".format(attributesSelected)
+        ActorDescriptionStringAttribute.objects.filter(username=self.username).delete()
+        ActorDescriptionBooleanAttribute.objects.filter(username=self.username).delete()
+
+        for attribute in attributesSelected:
+            if attributesSelected.get(attribute) in [True, False, "True", "False", "true", "false"]:
+                entry = ActorDescriptionBooleanAttribute(username=self.username,
+                                                         attributeName=attribute,
+                                                         attributeValue = attributesSelected[attribute])
+            else:
+                entry = ActorDescriptionStringAttribute(username=self.username,
+                                                         attributeName=attribute,
+                                                         attributeValue = attributesSelected[attribute])
+            try:
+                print "saved entry for attribute {0}".format(attribute)
+                entry.save()
+            except:
+                return False
+        return True
+
 
 
 def _getIncomingSource(request):

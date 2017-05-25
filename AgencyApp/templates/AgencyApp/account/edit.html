@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block content %}
+	<h2>Looking for...</h2>
+	{% if errors %}
+		<ul>
+			{% for error in errors %}
+				<li>{{ error }}</li>
+			{% endfor %}
+		</ul>
+	{% endif %}
+
+	<h2>{{ formTitle }}</h2>
+	{% if userAccount %}
+		{% if userAccount.profilePicture %}
+			<div id="profilePicture">
+				<img src="{{ userAccount.profilePicture.url }}" height="150px" width="175px"/>
+			</div>
+		{% endif %}
+	{% endif %}
+
+	{% if currentPageURL == "/account/edit/picture/" %}
+		<form method='post' action="{{ currentPageURL }}" enctype="multipart/form-data">
+	{% else %}
+		<form method='post' action="{{ currentPageURL }}">
+	{% endif %}
+		{% csrf_token %}
+		{{ form.as_p }}
+		<input type="submit" value="{{ nextButtonString }}" />
+	</form>
+	<div id="cancelButton"></div>
+
+{% endblock %}

@@ -71,6 +71,10 @@ def editBackground(request):
     view = account.EditBackgroundView(request=request, currentPage=constants.EDIT_BACKGROUND)
     return view.process()
 
+def editActorDescription(request):
+    view = account.EditActorDescriptionView(request=request, currentPage=constants.EDIT_ACTOR_DESCRIPTION)
+    return view.process()
+
 def createAccountFinish(request):
     view = account.CreateAccountFinishView(request=request, currentPage=constants.CREATE_BASIC_ACCOUNT_FINISH)
     return view.process()

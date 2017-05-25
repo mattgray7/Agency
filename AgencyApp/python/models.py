@@ -77,15 +77,18 @@ class CastingPost(AbstractPost):
     # TODO have a separate table for a single casting choice (gender, hair, age, etc)
     paid = models.BooleanField(default=False)
 
-class ActorDescriptionStringElement(models.Model):
+class Actor(models.Model):
     username = models.CharField(max_length=200)
-    descriptionName = models.CharField(max_length=200)
-    descriptionValue = models.CharField(max_length=200)
 
-class ActorDescriptionBooleanElement(models.Model):
+class ActorDescriptionStringAttribute(models.Model):
     username = models.CharField(max_length=200)
-    descriptionName = models.CharField(max_length=200)
-    descriptionValue = models.BooleanField(default=False)
+    attributeName = models.CharField(max_length=200)
+    attributeValue = models.CharField(max_length=200)
+
+class ActorDescriptionBooleanAttribute(models.Model):
+    username = models.CharField(max_length=200)
+    attributeName = models.CharField(max_length=200)
+    attributeValue = models.BooleanField(default=False)
 
 class PostFollow(models.Model):
     postID = models.CharField(max_length=10)

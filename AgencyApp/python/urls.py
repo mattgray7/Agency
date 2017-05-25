@@ -13,6 +13,7 @@ urlpatterns = [
     url(r'^account/edit/interests/$', views.editInterests, name='editInterests'),
     url(r'^account/edit/professions/$', views.editProfessions, name='editProfessions'),
     url(r'^account/edit/background/$', views.editBackground, name='editBackground'),
+    url(r'^account/edit/description/$', views.editActorDescription, name='editActorDescription'),
 
     # Create posts
     url(r'^post/$', views.createPost, name='createPost'),

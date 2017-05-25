@@ -9,7 +9,7 @@
 			{% endfor %}
 		</ul>
 	{% endif %}
-	<form method='post' action='/account/edit/professions/'>
+	<form method='post' action='{{currentPageURL}}'>
 		{% csrf_token %}
 		<input type="hidden" name="source" value="{{ next }}" />
 		<input type="hidden" name="next" value="{{ next }}" />
