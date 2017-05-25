@@ -75,6 +75,15 @@
 			<ul>
 				{% for profession in profileProfessions %}
 					<li>{{ profession }}</li>
+					{% if profession == "Actor" and viewingOwnProfile %}
+						<form action="{{ currentPageURL }}" method="post">
+							{% csrf_token %}
+							<input type="hidden" name="source" value="{{ next }}" />
+							<input type="hidden" name="current" value="{{ next }}" />
+							<input type="hidden" name="destination" value="{{ possibleDestinations.actorDescription }}" /> 
+							<input type="submit" value="Edit description" />
+						</form>
+					{% endif %}
 				{% endfor %}
 			</ul>
 		{% else %}

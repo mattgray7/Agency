@@ -76,7 +76,8 @@ class ProfileView(views.GenericFormView):
                                                      "background": constants.EDIT_BACKGROUND,
                                                      "professions": constants.EDIT_PROFESSIONS,
                                                      "interests": constants.EDIT_INTERESTS,
-                                                     "viewPost": constants.VIEW_POST
+                                                     "viewPost": constants.VIEW_POST,
+                                                     "actorDescription": constants.EDIT_ACTOR_DESCRIPTION
                                                      }
         return self._pageContext
 
