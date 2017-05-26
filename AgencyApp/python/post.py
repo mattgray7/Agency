@@ -183,10 +183,29 @@ class GenericCreatePostView(views.PictureFormView):
     def postType(self):
         return self._postType
 
+    @property
+    def cancelSource(self):
+        if self._cancelSource is None:
+            self._cancelSource = self.sourcePage
+        return self._cancelSource
+
     def cancelPage(self):
         super(GenericCreatePostView, self).cancelPage()
-        if self.sourcePage != constants.VIEW_POST:
+        print self.request.POST.get(constants.CANCEL)
+        if self.sourcePage != constants.VIEW_POST and self.request.POST.get(constants.CANCEL) == "True":
             self.post.database.objects.filter(postID=self.postID).delete()
+
+    @property
+    def formSubmitted(self):
+        if self.currentPage == constants.EDIT_POST or (isPostPage(self.currentPage) and self.currentPage != constants.VIEW_POST):
+            if self.sourcePage == constants.EDIT_POST or (isPostPage(self.sourcePage) and self.sourcePage != constants.VIEW_POST):
+                self._formSubmitted = True
+                print "setting to True"
+            else:
+                self._formSubmitted = self.sourcePage == self.currentPage
+        else:
+            self._formSubmitted = self.sourcePage == self.currentPage
+        return self._formSubmitted
 
     @property
     def pageContext(self):
@@ -207,6 +226,7 @@ class GenericCreatePostView(views.PictureFormView):
 
     @property
     def cancelDestination(self):
+        print "cancel dest is {0}".format(self.sourcePage)
         return self.sourcePage
 
     @property
@@ -331,11 +351,9 @@ class GenericViewPostView(views.GenericFormView):
                                                                 "posts": constants.BROWSE_POSTS}}
         self._pageContext["isEvent"] = isEventPost(self.postID)
         self._pageContext["isProject"] = isProjectPost(self.postID)
-        print "isProject w id {0}, {1}".format(self.postID, isProjectPost(self.postID))
         self._pageContext["isCollaboration"] = isCollaborationPost(self.postID)
         self._pageContext["isWork"] = isWorkPost(self.postID)
         self._pageContext["isCasting"] = isCastingPost(self.postID)
-        print "isCasting w id {0}, {1}".format(self.postID, isCastingPost(self.postID))
         self._pageContext["following"] = isFollowingPost(self.postID, self.request.user.username)
         return self._pageContext
 

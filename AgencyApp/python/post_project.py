@@ -27,9 +27,19 @@ class CreateProjectPostView(post.GenericCreatePostView):
         super(CreateProjectPostView, self).__init__(*args, **kwargs)
 
     @property
+    def cancelSource(self):
+        if self._cancelSource is None:
+            self._cancelSource = self.currentPage
+        return self._cancelSource 
+
+    def cancelPage(self):
+        pass
+
+    @property
     def post(self):
         if self._post is None:
             self._post = ProjectPostInstance(request=self.request, postID=self.postID, postType=constants.PROJECT_POST)
+            print self._post
         return self._post
 
     @property

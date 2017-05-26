@@ -37,12 +37,22 @@ def getDestinationURL(request, destPageName, currentPageName=None):
             messages.add_message(request, messages.INFO,
                                  "profileName:{0}".format(username))
     if request.POST.get('postID'):
-        destURL = destURL.format(request.POST.get('postID'))
+        postID = request.POST.get("postID")
+        if destPageName == constants.VIEW_POST and request.POST.get(constants.CANCEL) == "True":
+            if request.POST.get("skipToProject", False):
+                if request.POST.get("projectID"):
+                    postID = request.POST.get("projectID")
+                else:
+                    destPageName = constants.HOME
+        destURL = destURL.format(postID)
         messages.add_message(request, messages.INFO,
-                             "postID:{0}".format(request.POST.get('postID')))
+                             "postID:{0}".format(postID))
     if request.POST.get('projectID'):
         messages.add_message(request, messages.INFO,
                              "projectID:{0}".format(request.POST.get('projectID')))
+        if not request.POST.get('postID'):
+            messages.add_message(request, messages.INFO,
+                                 "postID:{0}".format(request.POST.get('projectID')))
     return destURL
 
 

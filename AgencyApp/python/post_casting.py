@@ -4,6 +4,7 @@ import models
 import helpers
 
 import post_project as projectPost
+import json
 
 class CastingPostInstance(post.GenericPostInstance):
     def __init__(self, *args, **kwargs):
@@ -52,6 +53,33 @@ class CreateCastingPostView(post.GenericCreatePostView):
             else:
                 self._postID = self.request.POST.get("postID") or helpers.getMessageFromKey(self.request, "postID")
         return self._postID
+
+    def cancelPage(self):
+        print self.cancelDestination
+        super(CreateCastingPostView, self).cancelPage()
+        if self.request.POST.get(constants.CANCEL) == "True":
+            if self.post.record.title:
+                # Existing post, dont want to delete
+                pass
+            else:
+                self.post.database.objects.filter(postID=self.postID).delete()
+
+    @property
+    def cancelButtonExtraInputs(self):
+        if not self._cancelButtonExtraInputs:
+            self._cancelButtonExtraInputs = {}
+        if self.post.record.title:
+            #Existing, don't cancel to project when cancelled
+            self._cancelButtonExtraInputs["skipToProject"] = False
+        elif self.projectID:
+            self._cancelButtonExtraInputs["skipToProject"] = True
+
+        if not self._cancelButtonExtraInputs.get("projectID"):
+            self._cancelButtonExtraInputs["projectID"] = self.projectID
+        if not self._cancelButtonExtraInputs.get("postID"):
+            self._cancelButtonExtraInputs["postID"] = self.postID
+        return json.dumps(self._cancelButtonExtraInputs)
+
 
     @property
     def project(self):
@@ -129,7 +157,7 @@ class ViewCastingPostView(post.GenericViewPostView):
     @property
     def post(self):
         if self._post is None:
-            self._post = CastingPostInstance(request=self.request, postID=self.postID)
+            self._post = CastingPostInstance(request=self.request, postID=self.postID, postType=constants.CASTING_POST)
         return self._post
 
 

@@ -183,7 +183,7 @@ class GenericFormView(GenericView):
         self._form = None
         self._formClass = None
         self._formInitialValues = {}
-        self._formSubmitted = False
+        self._formSubmitted = None
         self._formData = None
         self.setupFormInitialValues()
 
@@ -229,9 +229,13 @@ class GenericFormView(GenericView):
 
     def checkFormValidity(self):
         formIsValid = False
+        print "checking form validigy"
         if self.request.POST.get(constants.CANCEL) != "True":
+            print "\n\nno cancel"
             if self.formSubmitted:
+                print "form submitted"
                 if self.formClass:
+                    print "form class"
                     if self.form.is_valid():
                         self.errorMemory = self.formData
                         formIsValid = self.processForm()
@@ -239,21 +243,28 @@ class GenericFormView(GenericView):
                         self.errorMemory = self.request.POST
                 else:
                     formIsValid = self.processForm()
+            else:
+                print "form not submitted"
         else:
+            print "\n\nCANCELLING NOW"
             self.cancelPage()
             formIsValid = True
         return formIsValid
 
     def cancelPage(self):
+        print "setting des"
         self._destinationPage = self.cancelDestination
         self._pageContext["destination"] = self.cancelDestination
 
     def process(self):
+        print "processing"
         if self.request.method == "POST" and self.checkFormValidity():
-            print "current {0}, dest {1}".format(self.currentPage, self.destinationPage)
+            print "form is valid, redirecting to {0}".format(self.destinationPage)
             return helpers.redirect(request=self.request,
                                     currentPage=self.currentPage,
                                     destinationPage=self.destinationPage)
+        else:
+            print "forminvalid"
 
         # Need to access pageContext before setting variables
         # !!!!!!!!!! Don't delete
@@ -317,7 +328,9 @@ class PictureFormView(GenericFormView):
         formIsValid = False
         if self.request.POST.get(constants.CANCEL) != "True":
             if self.formSubmitted:
+                print "form submitted"
                 if self.formClass:
+                    print "form class"
                     if self.form.is_valid():
                         self.errorMemory = self.formData
                         if self.processForm():
@@ -329,9 +342,13 @@ class PictureFormView(GenericFormView):
                     else:
                         self.errorMemory = self.request.POST
                 else:
+                    print "no form class"
                     if self.processForm():
                         formIsValid = True
+            else:
+                print "form not submitted"
         else:
+            print "CANCELLING NOW"
             self.cancelPage()
             formIsValid = True
         return formIsValid
