@@ -26,8 +26,6 @@ function updatePostFollow(){
 }
 </script>
 
-here
-
 {% if post %}
 	{% if post.postPicture %}
 		<div id="postPicture">
@@ -90,7 +88,7 @@ here
 		</form>
 	{% endif %}
 	{% if isCasting %}
-		<form method='post' action="/post/view/{{ project.postID }}/">
+		<form method='post' action="/post/view/{{ projectID }}/">
 			{% csrf_token %}
 			<input type="hidden" name="source" value="{{ next }}" />
 			<input type="hidden" name="next" value="{{ next }}" />
@@ -102,6 +100,7 @@ here
 	{% endif %}
 
 	{% if isProject %}
+		isProject
 		<br>
 			{% if castingPosts %}
 			<h5> Acting roles posted </h5>
@@ -116,7 +115,6 @@ here
 								{% endif %}
 						</td>
 						<td>
-							{{postID}}
 							<form method='post' action="/post/view/{{ castingPost.postID }}/">
 								{% csrf_token %}
 								<input type="hidden" name="source" value="{{ next }}" />

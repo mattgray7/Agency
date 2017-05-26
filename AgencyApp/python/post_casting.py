@@ -113,8 +113,11 @@ class ViewCastingPostView(post.GenericViewPostView):
     def projectID(self):
         if self._projectID is None:
             projectID = self.request.POST.get("projectID", helpers.getMessageFromKey(self.request, "projectID"))
+            if not projectID:
+                projectID = self.post.record.projectID
             if post.isProjectPost(projectID):
                 self._projectID = projectID
+            #self._projectID = self.post.projectID
         return self._projectID
 
     @property

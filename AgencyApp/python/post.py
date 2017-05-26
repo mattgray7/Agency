@@ -331,9 +331,11 @@ class GenericViewPostView(views.GenericFormView):
                                                                 "posts": constants.BROWSE_POSTS}}
         self._pageContext["isEvent"] = isEventPost(self.postID)
         self._pageContext["isProject"] = isProjectPost(self.postID)
+        print "isProject w id {0}, {1}".format(self.postID, isProjectPost(self.postID))
         self._pageContext["isCollaboration"] = isCollaborationPost(self.postID)
         self._pageContext["isWork"] = isWorkPost(self.postID)
         self._pageContext["isCasting"] = isCastingPost(self.postID)
+        print "isCasting w id {0}, {1}".format(self.postID, isCastingPost(self.postID))
         self._pageContext["following"] = isFollowingPost(self.postID, self.request.user.username)
         return self._pageContext
 

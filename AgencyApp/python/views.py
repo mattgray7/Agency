@@ -116,10 +116,12 @@ def viewPost(request, postID):
         view = collaborationPost.ViewCollaborationPostView(request=request, currentPage=constants.VIEW_POST, postID=postID)
     elif post.isWorkPost(postID):
         view = workPost.ViewWorkPostView(request=request, currentPage=constants.VIEW_POST, postID=postID)
-    elif post.isProjectPost(postID):
-        view = projectPost.ViewProjectPostView(request=request, currentPage=constants.VIEW_POST, postID=postID)
     elif post.isCastingPost(postID):
+        print "is casting post, postId: {0}".format(postID)
         view = castingPost.ViewCastingPostView(request=request, currentPage=constants.VIEW_POST, postID=postID)
+    elif post.isProjectPost(postID):
+        print "is project post, postId: {0}".format(postID)
+        view = projectPost.ViewProjectPostView(request=request, currentPage=constants.VIEW_POST, postID=postID)
     else:
         print "ERROR SELECTING EDIT VIEW POST VIEW, postID is {0}".format(postID)
         raise

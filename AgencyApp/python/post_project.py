@@ -29,7 +29,7 @@ class CreateProjectPostView(post.GenericCreatePostView):
     @property
     def post(self):
         if self._post is None:
-            self._post = ProjectPostInstance(request=self.request, postID=self.postID)
+            self._post = ProjectPostInstance(request=self.request, postID=self.postID, postType=constants.PROJECT_POST)
         return self._post
 
     @property
@@ -55,14 +55,17 @@ class ViewProjectPostView(post.GenericViewPostView):
     def post(self):
         if self._post is None:
             if self.postID:
-                self._post = ProjectPostInstance(request=self.request, postID=self.postID)
+                self._post = ProjectPostInstance(request=self.request, postID=self.postID, postType=constants.PROJECT_POST)
         return self._post
 
     @property
     def pageContext(self):
         self._pageContext = super(ViewProjectPostView, self).pageContext
-        self._pageContext["possibleDestinations"] = {"createCasting": constants.CREATE_CASTING_POST,
+        self._pageContext["possibleDestinations"] = {"edit": constants.CREATE_PROJECT_POST,
+                                                     "createCasting": constants.CREATE_CASTING_POST,
                                                      "viewCasting": constants.VIEW_POST}
         self._pageContext["castingPosts"] = self.castingPosts
+        self._pageContext["project"] = self.post
+        self._pageContext["projectID"] = self.post.record.postID
         return self._pageContext
 
