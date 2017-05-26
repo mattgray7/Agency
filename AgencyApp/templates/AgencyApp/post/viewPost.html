@@ -26,7 +26,7 @@ function updatePostFollow(){
 }
 </script>
 
-
+here
 
 {% if post %}
 	{% if post.postPicture %}
@@ -89,6 +89,18 @@ function updatePostFollow(){
 			<input type="submit" value="Edit Post" />
 		</form>
 	{% endif %}
+	{% if isCasting %}
+		<form method='post' action="/post/view/{{ project.postID }}/">
+			{% csrf_token %}
+			<input type="hidden" name="source" value="{{ next }}" />
+			<input type="hidden" name="next" value="{{ next }}" />
+			<input type="hidden" name="destination" value="{{ possibleDestinations.viewProject }}" />
+			<input type="hidden" name="postID" value="{{ projectID }}" />
+			<input type="hidden" name="projectID" value="{{ projectID }}" />
+			<input type="submit" value="Back to {{ project.record.title }}" />
+		</form>
+	{% endif %}
+
 	{% if isProject %}
 		<br>
 			{% if castingPosts %}
@@ -104,12 +116,14 @@ function updatePostFollow(){
 								{% endif %}
 						</td>
 						<td>
+							{{postID}}
 							<form method='post' action="/post/view/{{ castingPost.postID }}/">
 								{% csrf_token %}
 								<input type="hidden" name="source" value="{{ next }}" />
 								<input type="hidden" name="next" value="{{ next }}" />
 								<input type="hidden" name="destination" value="{{ possibleDestinations.viewCasting }}" />
 								<input type="hidden" name="postID" value="{{ castingPost.postID }}" />
+								<input type="hidden" name="projectID" value="{{ post.postID }}" />
 								<input type="submit" value="{{ castingPost.title }}" />
 							</form>
 						</td>
@@ -141,6 +155,7 @@ function updatePostFollow(){
 	{% endif %}
 	<p>
 {% else %}
+not in post
 	<h4>No post found</h4>
 {% endif %}
 

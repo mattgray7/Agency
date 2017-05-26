@@ -3,6 +3,7 @@ import constants
 import models
 import helpers
 
+import post_project as projectPost
 
 class CastingPostInstance(post.GenericPostInstance):
     def __init__(self, *args, **kwargs):
@@ -39,6 +40,7 @@ class CreateCastingPostView(post.GenericCreatePostView):
     def __init__(self, *args, **kwargs):
         kwargs["postType"] = constants.CASTING_POST
         self._projectID = kwargs.get("postID")
+        self._project = None
         super(CreateCastingPostView, self).__init__(*args, **kwargs)
 
     @property
@@ -50,6 +52,12 @@ class CreateCastingPostView(post.GenericCreatePostView):
             else:
                 self._postID = self.request.POST.get("postID") or helpers.getMessageFromKey(self.request, "postID")
         return self._postID
+
+    @property
+    def project(self):
+        if self._project is None:
+            self._project = projectPost.ProjectPostInstance(request=self.request, postID=self.projectID, postType=constants.PROJECT_POST)
+        return self._project
 
     @property
     def projectID(self):
@@ -68,6 +76,8 @@ class CreateCastingPostView(post.GenericCreatePostView):
         self._pageContext = super(CreateCastingPostView, self).pageContext
         self._pageContext["isProject"] = False
         self._pageContext.get("possibleDestinations", {})["casting"] = constants.VIEW_POST
+        self._pageContext["viewProject"] = constants.VIEW_POST
+        self._pageContext["project"] = self.project
         return self._pageContext
 
     @property
@@ -86,16 +96,37 @@ class CreateCastingPostView(post.GenericCreatePostView):
         return self._formInitialValues
 
 
-
 class ViewCastingPostView(post.GenericViewPostView):
     def __init__(self, *args, **kwargs):
         super(ViewCastingPostView, self).__init__(*args, **kwargs)
+        self._project = None
+        self._projectID = None
+
+    @property
+    def pageContext(self):
+        self._pageContext = super(ViewCastingPostView, self).pageContext
+        self._pageContext["project"] = self.project
+        self._pageContext["projectID"] = self.projectID
+        return self._pageContext
+
+    @property
+    def projectID(self):
+        if self._projectID is None:
+            projectID = self.request.POST.get("projectID", helpers.getMessageFromKey(self.request, "projectID"))
+            if post.isProjectPost(projectID):
+                self._projectID = projectID
+        return self._projectID
+
+    @property
+    def project(self):
+        if self._project is None:
+            self._project = projectPost.ProjectPostInstance(request=self.request, postID=self.projectID, postType=constants.PROJECT_POST)
+        return self._project
 
     @property
     def post(self):
         if self._post is None:
-            if self.postID:
-                self._post = CastingPostInstance(request=self.request, postID=self.postID)
+            self._post = CastingPostInstance(request=self.request, postID=self.postID)
         return self._post
 
 

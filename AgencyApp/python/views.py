@@ -121,7 +121,7 @@ def viewPost(request, postID):
     elif post.isCastingPost(postID):
         view = castingPost.ViewCastingPostView(request=request, currentPage=constants.VIEW_POST, postID=postID)
     else:
-        print "ERROR SELECTING EDIT VIEW POST VIEW"
+        print "ERROR SELECTING EDIT VIEW POST VIEW, postID is {0}".format(postID)
         raise
     return view.process()
 

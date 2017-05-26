@@ -36,17 +36,13 @@ def getDestinationURL(request, destPageName, currentPageName=None):
             destURL = destURL.format(username)
             messages.add_message(request, messages.INFO,
                                  "profileName:{0}".format(username))
-    elif isPostPage(destPageName) or isPostPage(currentPageName):
-        if request.POST.get('postID'):
-            destURL = destURL.format(request.POST.get('postID'))
-            messages.add_message(request, messages.INFO,
-                                 "postID:{0}".format(request.POST.get('postID')))
-            import post
-            if post.isProjectPost(request.POST.get('postID')):
-                messages.add_message(request, messages.INFO,
-                                     "projectID:{0}".format(request.POST.get('postID')))
-        else:
-            print "NO POSTID PASSED TO getDestinationURL"
+    if request.POST.get('postID'):
+        destURL = destURL.format(request.POST.get('postID'))
+        messages.add_message(request, messages.INFO,
+                             "postID:{0}".format(request.POST.get('postID')))
+    if request.POST.get('projectID'):
+        messages.add_message(request, messages.INFO,
+                             "projectID:{0}".format(request.POST.get('projectID')))
     return destURL
 
 
