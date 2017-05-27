@@ -86,8 +86,8 @@ function updatePostFollow(){
 			<input type="hidden" name="postID" value="{{ post.postID }}" />
 			{% if isCasting and post.projectID %}
 				<input type="hidden" name="projectID" value="{{ post.projectID }}" />
-			<input type="submit" value="Edit Post" />
 			{% endif %}
+			<input type="submit" value="Edit Post" />
 		</form>
 	{% endif %}
 	{% if isCasting %}
@@ -98,7 +98,7 @@ function updatePostFollow(){
 			<input type="hidden" name="destination" value="{{ possibleDestinations.viewProject }}" />
 			<input type="hidden" name="postID" value="{{ projectID }}" />
 			<input type="hidden" name="projectID" value="{{ projectID }}" />
-			<input type="submit" value="Back to {{ project.record.title }}" />
+			Project: <input type="submit" value="{{ project.record.title }}" />
 		</form>
 	{% endif %}
 
@@ -155,7 +155,6 @@ function updatePostFollow(){
 	{% endif %}
 	<p>
 {% else %}
-not in post
 	<h4>No post found</h4>
 {% endif %}
 
