@@ -122,7 +122,7 @@ class CreateCastingPostView(post.GenericCreatePostView):
         self._pageContext["viewProject"] = constants.VIEW_POST
         self._pageContext["project"] = self.project
         self._pageContext["projectID"] = self.projectID
-        self._pageContext["attributes"] = getSelectedActorAttributeValues(self.username)
+        self._pageContext["attributes"] = getSelectedCastingAttributeValues(self.username)
         return self._pageContext
 
     @property
@@ -170,7 +170,7 @@ class ViewCastingPostView(post.GenericViewPostView):
     @property
     def attributes(self):
         if self._attributes is None:
-            self._attributes = getSelectedActorAttributeValues(self.username, self.postID)
+            self._attributes = getSelectedCastingAttributeValues(self.postID)
         return self._attributes
 
     @property
@@ -203,12 +203,21 @@ def getSelectedActorAttributeValues(username=None, postID=None):
     """ Returns the default values of constants.ACTOR_ATTRIBUTE_DICT with any selected values changed"""
     selectedAttributes = []
     for attribute in sorted(chain(models.ActorDescriptionStringAttribute.objects.filter(username=username),
-                                  models.ActorDescriptionStringAttribute.objects.filter(postID=postID),
-                                  models.ActorDescriptionBooleanAttribute.objects.filter(username=username),
-                                  models.ActorDescriptionBooleanAttribute.objects.filter(postID=postID)
-                                  )):
+                                  models.ActorDescriptionBooleanAttribute.objects.filter(username=username))):
         selectedAttributes.append({"name": attribute.attributeName, "value": attribute.attributeValue})
 
+    return _getAttributeDict(selectedAttributes)
+
+
+def getSelectedCastingAttributeValues(postID):
+    selectedAttributes = []
+    for attribute in sorted(chain(models.ActorDescriptionStringAttribute.objects.filter(postID=postID),
+                                  models.ActorDescriptionBooleanAttribute.objects.filter(postID=postID))):
+        selectedAttributes.append({"name": attribute.attributeName, "value": attribute.attributeValue})
+
+    return _getAttributeDict(selectedAttributes)
+
+def _getAttributeDict(selectedAttributes):
     attributeDict = constants.ACTOR_ATTRIBUTE_DICT
     for attribute in attributeDict:
         for selectedAttribute in selectedAttributes:
