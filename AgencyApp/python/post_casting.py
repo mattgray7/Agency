@@ -86,8 +86,8 @@ class CreateCastingPostView(post.GenericCreatePostView):
         """The project associated with the role being cast"""
         if self._projectID is None:
             projectID = self.request.POST.get("projectID") or helpers.getMessageFromKey(self.request, "projectID")
-            if not projectID and self._project:
-                projectID = self.project.record.postID
+            if not projectID:
+                projectID = models.CastingPost.objects.get(postID=self.postID).projectID
             if post.isProjectPost(projectID):
                 self._projectID = projectID
         return self._projectID
@@ -121,8 +121,8 @@ class CreateCastingPostView(post.GenericCreatePostView):
 class ViewCastingPostView(post.GenericViewPostView):
     def __init__(self, *args, **kwargs):
         super(ViewCastingPostView, self).__init__(*args, **kwargs)
-        self._project = None
         self._projectID = None
+        self._project = None
 
     @property
     def pageContext(self):
@@ -136,8 +136,7 @@ class ViewCastingPostView(post.GenericViewPostView):
         if self._projectID is None:
             projectID = self.request.POST.get("projectID", helpers.getMessageFromKey(self.request, "projectID"))
             if not projectID or projectID in ["null", "none"]:
-                if self._project:
-                    projectID = self.project.record.projectID
+                projectID = models.CastingPost.objects.get(postID=self.postID).projectID
             if post.isProjectPost(projectID):
                 self._projectID = projectID
         return self._projectID
