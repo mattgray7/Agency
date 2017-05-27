@@ -49,9 +49,6 @@ class CastingPostInstance(post.GenericPostInstance):
             if formInput.startswith("attribute"):
                 splitted = formInput.split(".")
                 attribute = {splitted[1]: self.request.POST.get(formInput)}
-                print "saving attribute {0}".format(attribute)
-                print self.postID
-
                 try:
                     attributeObj = models.ActorDescriptionStringAttribute(postID=self.postID,
                                                                           attributeName = splitted[1],
@@ -122,7 +119,7 @@ class CreateCastingPostView(post.GenericCreatePostView):
         self._pageContext["viewProject"] = constants.VIEW_POST
         self._pageContext["project"] = self.project
         self._pageContext["projectID"] = self.projectID
-        self._pageContext["attributes"] = getSelectedCastingAttributeValues(self.username)
+        self._pageContext["attributes"] = getSelectedCastingAttributeValues(self.postID)
         return self._pageContext
 
     @property
