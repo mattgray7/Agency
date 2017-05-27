@@ -49,12 +49,23 @@ function updatePostFollow(){
 				Looking for a {{ post.profession }}
 			{% elif isCasting %}
 				Casting a role: {{ post.title }}
-			{% endif %}
+				{% if post.paid %}
+					 - Paid&#10004;
+				{% else %}
+					 - Unpaid
+				{% endif %}
 
-			{% if post.paid %}
-				 - Paid&#10004;<br>
-			{% else %}
-				 - Unpaid<br>
+				{% if isCasting and project and post.poster == request.user.username %}
+					<form method='post' action="/post/view/{{ projectID }}/">
+						{% csrf_token %}
+						<input type="hidden" name="source" value="{{ next }}" />
+						<input type="hidden" name="next" value="{{ next }}" />
+						<input type="hidden" name="destination" value="{{ possibleDestinations.viewProject }}" />
+						<input type="hidden" name="postID" value="{{ projectID }}" />
+						<input type="hidden" name="projectID" value="{{ projectID }}" />
+						Project: <input type="submit" value="{{ project.record.title }}" />
+					</form>
+				{% endif %}
 			{% endif %}
 		{% endif %}
 	</h3>
@@ -88,17 +99,6 @@ function updatePostFollow(){
 				<input type="hidden" name="projectID" value="{{ post.projectID }}" />
 			{% endif %}
 			<input type="submit" value="Edit Post" />
-		</form>
-	{% endif %}
-	{% if isCasting and project %}
-		<form method='post' action="/post/view/{{ projectID }}/">
-			{% csrf_token %}
-			<input type="hidden" name="source" value="{{ next }}" />
-			<input type="hidden" name="next" value="{{ next }}" />
-			<input type="hidden" name="destination" value="{{ possibleDestinations.viewProject }}" />
-			<input type="hidden" name="postID" value="{{ projectID }}" />
-			<input type="hidden" name="projectID" value="{{ projectID }}" />
-			Project: <input type="submit" value="{{ project.record.title }}" />
 		</form>
 	{% endif %}
 

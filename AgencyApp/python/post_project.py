@@ -8,7 +8,6 @@ class ProjectPostInstance(post.GenericPostInstance):
         kwargs["postType"] = constants.PROJECT_POST
         super(ProjectPostInstance, self).__init__(*args, **kwargs)
         self._database = models.ProjectPost
-        print "projectid postis is {0}".format(self.postID)
 
     def checkModelFormValues(self):
         """TODO, only thing so far is status, which is optional, so return True"""
@@ -40,7 +39,6 @@ class CreateProjectPostView(post.GenericCreatePostView):
     def post(self):
         if self._post is None:
             self._post = ProjectPostInstance(request=self.request, postID=self.postID, postType=constants.PROJECT_POST)
-            print self._post
         return self._post
 
     @property
