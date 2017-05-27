@@ -49,6 +49,9 @@ class CastingPostInstance(post.GenericPostInstance):
             if formInput.startswith("attribute"):
                 splitted = formInput.split(".")
                 attribute = {splitted[1]: self.request.POST.get(formInput)}
+                print "saving attribute {0}".format(attribute)
+                print self.postID
+
                 try:
                     attributeObj = models.ActorDescriptionStringAttribute(postID=self.postID,
                                                                           attributeName = splitted[1],
@@ -151,6 +154,7 @@ class ViewCastingPostView(post.GenericViewPostView):
     def __init__(self, *args, **kwargs):
         self._projectID = None
         self._project = None
+        self._attributes = None
         super(ViewCastingPostView, self).__init__(*args, **kwargs)
 
     @property
@@ -159,7 +163,15 @@ class ViewCastingPostView(post.GenericViewPostView):
         self._pageContext["project"] = self.project
         self._pageContext["projectID"] = self.projectID
         self._pageContext.get("possibleDestinations", {})["createCasting"] = constants.CREATE_CASTING_POST
+        if self.attributes:
+            self._pageContext["attributes"] = self.attributes
         return self._pageContext
+
+    @property
+    def attributes(self):
+        if self._attributes is None:
+            self._attributes = getSelectedActorAttributeValues(self.username, self.postID)
+        return self._attributes
 
     @property
     def projectID(self):
@@ -187,13 +199,16 @@ class ViewCastingPostView(post.GenericViewPostView):
         return self._post
 
 
-def getSelectedActorAttributeValues(username):
+def getSelectedActorAttributeValues(username=None, postID=None):
     """ Returns the default values of constants.ACTOR_ATTRIBUTE_DICT with any selected values changed"""
     selectedAttributes = []
     for attribute in sorted(chain(models.ActorDescriptionStringAttribute.objects.filter(username=username),
-                                  models.ActorDescriptionBooleanAttribute.objects.filter(username=username))):
+                                  models.ActorDescriptionStringAttribute.objects.filter(postID=postID),
+                                  models.ActorDescriptionBooleanAttribute.objects.filter(username=username),
+                                  models.ActorDescriptionBooleanAttribute.objects.filter(postID=postID)
+                                  )):
         selectedAttributes.append({"name": attribute.attributeName, "value": attribute.attributeValue})
-        
+
     attributeDict = constants.ACTOR_ATTRIBUTE_DICT
     for attribute in attributeDict:
         for selectedAttribute in selectedAttributes:

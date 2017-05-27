@@ -102,6 +102,15 @@ function updatePostFollow(){
 		</form>
 	{% endif %}
 
+	{% if isCasting and attributes %}
+		<h4> Desired physical attributes </h4>
+		{% for attribute in attributes %}
+			<ul>
+				<li> {{attribute.name}}: {{attribute.value}}</li>
+			</ul>
+		{% endfor %}
+	{% endif %}
+
 	{% if isProject %}
 		<br>
 			{% if castingPosts %}

@@ -73,8 +73,6 @@ ACTOR_ATTRIBUTE_DICT = [{"name": "Hair color",
 						 "value": None},
 						{"name": "Height",
 						 "value": None},
-						{"name": "Weight",
-						 "value": None},
 						{"name": "Available now",
 						 "value": True}]
 
