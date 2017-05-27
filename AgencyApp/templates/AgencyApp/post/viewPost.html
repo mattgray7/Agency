@@ -90,7 +90,7 @@ function updatePostFollow(){
 			<input type="submit" value="Edit Post" />
 		</form>
 	{% endif %}
-	{% if isCasting %}
+	{% if isCasting and project %}
 		<form method='post' action="/post/view/{{ projectID }}/">
 			{% csrf_token %}
 			<input type="hidden" name="source" value="{{ next }}" />
@@ -147,7 +147,6 @@ function updatePostFollow(){
 				<input type="hidden" name="source" value="{{ next }}" />
 				<input type="hidden" name="next" value="{{ next }}" />
 				<input type="hidden" name="destination" value="{{ possibleDestinations.createCasting }}" />
-				<input type="hidden" name="postID" value="{{ post.postID }}" />
 				<input type="hidden" name="projectID" value="{{ post.postID }}" />
 				<input type="submit" value="Add a new role to cast" />
 			</form>
