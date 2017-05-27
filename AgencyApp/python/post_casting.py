@@ -20,7 +20,7 @@ class CastingPostInstance(post.GenericPostInstance):
             if post.isProjectPost(self.postID):
                 self._projectID = self.postID
             else:
-                self._projectID = self.request.POST.get("postID") or helpers.getMessageFromKey(self.request, "postID")
+                self._projectID = self.request.POST.get("projectID") or helpers.getMessageFromKey(self.request, "projectID")
                 if not post.isProjectPost(self._projectID):
                     self._projectID = None
         return self._projectID
@@ -31,7 +31,7 @@ class CastingPostInstance(post.GenericPostInstance):
     def saveModelFormValues(self):
         if self.record:
             self.record.paid = self.request.POST.get("paid", False) and True  #get value will be 'true' instead of True
-            self.record.projectID = self.request.POST.get("projectID")
+            self.record.projectID = self.projectID
             self.record.save()
             return True
         return False
@@ -40,7 +40,7 @@ class CastingPostInstance(post.GenericPostInstance):
 class CreateCastingPostView(post.GenericCreatePostView):
     def __init__(self, *args, **kwargs):
         kwargs["postType"] = constants.CASTING_POST
-        self._projectID = kwargs.get("postID")
+        self._projectID = None
         self._project = None
         super(CreateCastingPostView, self).__init__(*args, **kwargs)
 
@@ -55,23 +55,18 @@ class CreateCastingPostView(post.GenericCreatePostView):
         return self._postID
 
     def cancelPage(self):
-        print self.cancelDestination
         super(CreateCastingPostView, self).cancelPage()
         if self.request.POST.get(constants.CANCEL) == "True":
-            if self.post.record.title:
-                # Existing post, dont want to delete
-                pass
-            else:
+            # Delete post that was just created
+            if not self.post.record.title:
                 self.post.database.objects.filter(postID=self.postID).delete()
 
     @property
     def cancelButtonExtraInputs(self):
         if not self._cancelButtonExtraInputs:
             self._cancelButtonExtraInputs = {}
-        if self.post.record.title:
-            #Existing, don't cancel to project when cancelled
-            self._cancelButtonExtraInputs["skipToProject"] = False
-        elif self.projectID:
+        if not self.post.record.title:
+            # Skip to project should be done since this cancels the casting post
             self._cancelButtonExtraInputs["skipToProject"] = True
 
         if not self._cancelButtonExtraInputs.get("projectID"):
@@ -79,7 +74,6 @@ class CreateCastingPostView(post.GenericCreatePostView):
         if not self._cancelButtonExtraInputs.get("postID"):
             self._cancelButtonExtraInputs["postID"] = self.postID
         return json.dumps(self._cancelButtonExtraInputs)
-
 
     @property
     def project(self):
@@ -91,12 +85,11 @@ class CreateCastingPostView(post.GenericCreatePostView):
     def projectID(self):
         """The project associated with the role being cast"""
         if self._projectID is None:
-            if post.isProjectPost(self.postID):
-                self._projectID = self.postID
-            else:
-                self._projectID = self.request.POST.get("projectID") or helpers.getMessageFromKey(self.request, "projectID")
-                if not post.isProjectPost(self._projectID):
-                    self._projectID = None
+            projectID = self.request.POST.get("projectID") or helpers.getMessageFromKey(self.request, "projectID")
+            if not projectID and self._project:
+                projectID = self.project.record.postID
+            if post.isProjectPost(projectID):
+                self._projectID = projectID
         return self._projectID
 
     @property
@@ -106,6 +99,7 @@ class CreateCastingPostView(post.GenericCreatePostView):
         self._pageContext.get("possibleDestinations", {})["casting"] = constants.VIEW_POST
         self._pageContext["viewProject"] = constants.VIEW_POST
         self._pageContext["project"] = self.project
+        self._pageContext["projectID"] = self.projectID
         return self._pageContext
 
     @property
@@ -141,11 +135,11 @@ class ViewCastingPostView(post.GenericViewPostView):
     def projectID(self):
         if self._projectID is None:
             projectID = self.request.POST.get("projectID", helpers.getMessageFromKey(self.request, "projectID"))
-            if not projectID:
-                projectID = self.post.record.projectID
+            if not projectID or projectID in ["null", "none"]:
+                if self._project:
+                    projectID = self.project.record.projectID
             if post.isProjectPost(projectID):
                 self._projectID = projectID
-            #self._projectID = self.post.projectID
         return self._projectID
 
     @property

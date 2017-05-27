@@ -191,7 +191,6 @@ class GenericCreatePostView(views.PictureFormView):
 
     def cancelPage(self):
         super(GenericCreatePostView, self).cancelPage()
-        print self.request.POST.get(constants.CANCEL)
         if self.sourcePage != constants.VIEW_POST and self.request.POST.get(constants.CANCEL) == "True":
             self.post.database.objects.filter(postID=self.postID).delete()
 
@@ -200,7 +199,6 @@ class GenericCreatePostView(views.PictureFormView):
         if self.currentPage == constants.EDIT_POST or (isPostPage(self.currentPage) and self.currentPage != constants.VIEW_POST):
             if self.sourcePage == constants.EDIT_POST or (isPostPage(self.sourcePage) and self.sourcePage != constants.VIEW_POST):
                 self._formSubmitted = True
-                print "setting to True"
             else:
                 self._formSubmitted = self.sourcePage == self.currentPage
         else:
@@ -226,7 +224,6 @@ class GenericCreatePostView(views.PictureFormView):
 
     @property
     def cancelDestination(self):
-        print "cancel dest is {0}".format(self.sourcePage)
         return self.sourcePage
 
     @property
