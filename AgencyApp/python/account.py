@@ -16,6 +16,7 @@ import constants
 import helpers
 import genericViews as views
 
+import post_casting as castingPost
 import os
 from itertools import chain
 
@@ -433,17 +434,7 @@ class EditActorDescriptionView(GenericEditAccountView):
 
     @property
     def pageContext(self):
-        selectedAttributes = []
-        for attribute in sorted(chain(ActorDescriptionStringAttribute.objects.filter(username=self.username),
-                                      ActorDescriptionBooleanAttribute.objects.filter(username=self.username))):
-            selectedAttributes.append({"name": attribute.attributeName, "value": attribute.attributeValue})
-        
-        if not self._pageContext.get("masterAttributes"):
-            self._pageContext["masterAttributes"] = ACTOR_ATTRIBUTE_DICT
-            for selectedAttribute in selectedAttributes:
-                for masterAttribute in self._pageContext["masterAttributes"]:
-                    if masterAttribute.get("name") == selectedAttribute.get("name") and masterAttribute.get("value") != selectedAttribute.get("value"):
-                        masterAttribute["value"] = selectedAttribute.get("value")
+        self._pageContext["masterAttributes"] = castingPost.getSelectedActorAttributeValues(self.username)
         return self._pageContext
 
     def processForm(self):

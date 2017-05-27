@@ -199,13 +199,12 @@ class ViewCastingPostView(post.GenericViewPostView):
         return self._post
 
 
-def getSelectedActorAttributeValues(username=None, postID=None):
+def getSelectedActorAttributeValues(username=None):
     """ Returns the default values of constants.ACTOR_ATTRIBUTE_DICT with any selected values changed"""
     selectedAttributes = []
     for attribute in sorted(chain(models.ActorDescriptionStringAttribute.objects.filter(username=username),
                                   models.ActorDescriptionBooleanAttribute.objects.filter(username=username))):
         selectedAttributes.append({"name": attribute.attributeName, "value": attribute.attributeValue})
-
     return _getAttributeDict(selectedAttributes)
 
 
