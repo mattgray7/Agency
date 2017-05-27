@@ -79,6 +79,44 @@
 	{% endif %}
 		{% csrf_token %}
 		{{ form.as_p }}
+
+		{% if isCasting %}
+			<script>
+			function enableActorDescriptions(){
+				var inputs = document.getElementsByTagName("input");
+				for(var i=0; i < inputs.length; i++){
+					var currentInput = inputs[i]
+					if(currentInput.id.substring(0, 10) == "attributes"){
+						if(currentInput.disabled){
+							currentInput.disabled = false;
+							document.getElementById("physicalAttributesDivLabel").innerHTML = '<font color="black">Physical attributes</font>';
+						}else{
+							currentInput.disabled = true;
+							document.getElementById("physicalAttributesDivLabel").innerHTML = '<font color="gray">Physical attributes</font>';
+						}
+					}
+				}
+			}
+			</script>
+			<br><br>
+			<h5 style="display:inline;"> You can specify the physical characteristics of the role, which we can use to notify actors with matching traits of your casting post. Your post will still be visible without physical criteria enabled.</h5>
+			Enable physical criteria
+			<input type="checkbox" onclick="enableActorDescriptions();" value="Enable physical criteria" />
+			<br><br>
+
+			<div id="physicalAttributesDiv">
+				<h4 style="display:inline;">
+					<div id="physicalAttributesDivLabel"><font color="gray">Physical attributes</font></div>
+				</h4>
+				<table>
+					{% for attribute in attributes %}
+						<tr><td>{{attribute.name}}: <input type='text' value='{{attribute.value}}' id="attributes.{{attribute.name}}" name='attributes.{{attribute.name}}' disabled='disabled'></td></tr>
+					{% endfor %}
+				</table>
+			</div>
+			
+
+		{% endif %}
 		{% if post.title %}
 			<input type="submit" value="Update" />
 		{% else %}

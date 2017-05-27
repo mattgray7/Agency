@@ -5,6 +5,7 @@ import helpers
 
 import post_project as projectPost
 import json
+from itertools import chain
 
 class CastingPostInstance(post.GenericPostInstance):
     def __init__(self, *args, **kwargs):
@@ -32,9 +33,32 @@ class CastingPostInstance(post.GenericPostInstance):
         if self.record:
             self.record.paid = self.request.POST.get("paid", False) and True  #get value will be 'true' instead of True
             self.record.projectID = self.projectID
+
+            for formInput in self.request.POST:
+                if formInput.startswith("attribute"):
+                    splitted = formInput.split(".")
+
             self.record.save()
-            return True
+            return self.saveActorAttributes()
         return False
+
+    def saveActorAttributes(self):
+        attributes = {}
+        error = False
+        for formInput in self.request.POST:
+            if formInput.startswith("attribute"):
+                splitted = formInput.split(".")
+                attribute = {splitted[1]: self.request.POST.get(formInput)}
+                try:
+                    attributeObj = models.ActorDescriptionStringAttribute(postID=self.postID,
+                                                                          attributeName = splitted[1],
+                                                                          attributeValue = self.request.POST.get(formInput))
+                    attributeObj.save()
+                except Exception as e:
+                    error = True
+                    print "Error saving attribute: {0}".format(e)
+        return not error
+
 
 
 class CreateCastingPostView(post.GenericCreatePostView):
@@ -95,6 +119,7 @@ class CreateCastingPostView(post.GenericCreatePostView):
         self._pageContext["viewProject"] = constants.VIEW_POST
         self._pageContext["project"] = self.project
         self._pageContext["projectID"] = self.projectID
+        self._pageContext["attributes"] = getSelectedActorAttributeValues(self.username)
         return self._pageContext
 
     @property
@@ -160,5 +185,20 @@ class ViewCastingPostView(post.GenericViewPostView):
         if self._post is None:
             self._post = CastingPostInstance(request=self.request, postID=self.postID, projectID=self.projectID, postType=constants.CASTING_POST)
         return self._post
+
+
+def getSelectedActorAttributeValues(username):
+    """ Returns the default values of constants.ACTOR_ATTRIBUTE_DICT with any selected values changed"""
+    selectedAttributes = []
+    for attribute in sorted(chain(models.ActorDescriptionStringAttribute.objects.filter(username=username),
+                                  models.ActorDescriptionBooleanAttribute.objects.filter(username=username))):
+        selectedAttributes.append({"name": attribute.attributeName, "value": attribute.attributeValue})
+        
+    attributeDict = constants.ACTOR_ATTRIBUTE_DICT
+    for attribute in attributeDict:
+        for selectedAttribute in selectedAttributes:
+            if attribute.get("name") == selectedAttribute.get("name") and attribute.get("value") != selectedAttribute.get("value"):
+                attribute["value"] = selectedAttribute.get("value")
+    return attributeDict
 
 

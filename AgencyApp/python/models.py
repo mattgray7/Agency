@@ -81,7 +81,8 @@ class Actor(models.Model):
     username = models.CharField(max_length=200)
 
 class ActorDescriptionStringAttribute(models.Model):
-    username = models.CharField(max_length=200)
+    username = models.CharField(max_length=200, blank=True, null=True)
+    postID = models.CharField(max_length=200, blank=True, null=True)
     attributeName = models.CharField(max_length=200)
     attributeValue = models.CharField(max_length=200)
 
