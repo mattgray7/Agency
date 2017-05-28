@@ -55,16 +55,49 @@ function updatePostFollow(){
 					 - Unpaid
 				{% endif %}
 
-				{% if isCasting and project and post.poster == request.user.username %}
-					<form method='post' action="/post/view/{{ projectID }}/">
-						{% csrf_token %}
-						<input type="hidden" name="source" value="{{ next }}" />
-						<input type="hidden" name="next" value="{{ next }}" />
-						<input type="hidden" name="destination" value="{{ possibleDestinations.viewProject }}" />
-						<input type="hidden" name="postID" value="{{ projectID }}" />
-						<input type="hidden" name="projectID" value="{{ projectID }}" />
-						Project: <input type="submit" value="{{ project.record.title }}" />
-					</form>
+				{% if post.poster == request.user.username %}
+					{% if isCasting %}
+						{% if project and projectID %}
+							<form method='post' action="/post/view/{{ projectID }}/">
+								{% csrf_token %}
+								<input type="hidden" name="source" value="{{ next }}" />
+								<input type="hidden" name="next" value="{{ next }}" />
+								<input type="hidden" name="destination" value="{{ possibleDestinations.viewProject }}" />
+								<input type="hidden" name="postID" value="{{ projectID }}" />
+								<input type="hidden" name="projectID" value="{{ projectID }}" />
+								Project: <input type="submit" value="{{ project.record.title }}" />
+							</form>
+						{% else %}
+							<div id="possibleProjects"></div>
+							<script>
+							function showPossibleProjects(){
+								$.ajax({
+									url : "/ajax/getUserProjects/",
+									data : {},
+									type : 'POST',
+									dataType: "json",
+									success : function(data) {
+										if(data["projects"] != null){
+											document.getElementById("possibleProjects").innerHTML = "<br><h5 style='display:inline'> Existing projects: </h5>";
+											for(var i=0; i < data["projects"].length; i++){
+												var project = data["projects"][i];
+												var extraInputs = []
+                    							extraInputs.push({key: "projectID", value: project["projectID"]});
+                    							extraInputs.push({key: "postID", value: "{{ post.postID }}"});
+                    							extraInputs.push({key: "setProject", value: "True"});
+
+												var projectForm = createPageRedirectForm("{{ next }}", "{{ next }}", "{{ possibleDestinations.viewPost }}", "{{ currentPageURL }}", extraInputs, document.getElementById("possibleProjects"), project["projectName"])
+												document.getElementById("possibleProjects").innerHTML += "<br><br>";
+											}
+										}
+									}
+								});
+							}
+							</script>
+							<button onclick="showPossibleProjects();"> Add casting post to project </button>
+
+						{% endif %}
+					{% endif %}
 				{% endif %}
 			{% endif %}
 		{% endif %}

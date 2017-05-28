@@ -309,6 +309,12 @@ class GenericViewPostView(views.GenericFormView):
         return self._postType
 
     @property
+    def currentPageURL(self):
+        if self._currentPageURL is None:
+            self._currentPageURL = constants.URL_MAP.get(self.currentPage).format(self.postID)
+        return self._currentPageURL
+
+    @property
     def cancelButtonName(self):
         if browse.isBrowsePage(self.sourcePage):
             self._cancelButtonName = "Back to browse"
@@ -353,6 +359,21 @@ class GenericViewPostView(views.GenericFormView):
         self._pageContext["isCasting"] = isCastingPost(self.postID)
         self._pageContext["following"] = isFollowingPost(self.postID, self.request.user.username)
         return self._pageContext
+
+    def processForm(self):
+        success = False
+        if self.request.POST.get("setProject") == "True":
+            if self.request.POST.get("projectID"):
+                try:
+                    self.post.record.projectID = self.request.POST.get("projectID")
+                    self.post.record.save()
+                except Exception as e:
+                    print "Error adding casting post to project: {0}".format(e)
+                else:
+                    success = True
+        else:
+            success = True
+        return success
 
 # ================================================================================================== #
 

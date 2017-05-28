@@ -29,6 +29,8 @@ urlpatterns = [
     # Ajax calls
     url(r'^post/view/(?P<postID>[A-Za-z0-9]+)/follow/$', ajax.followPost, name='followPost'),
     url(r'^ajax/getPostFollowingBool/$', ajax.getPostFollowingBool, name='getPostFollowingBool'),
+    url(r'^ajax/getUserProjects/$', ajax.getUserProjects, name='getUserProjects'),
+
 
     # Browse
     url(r'^browse/$', views.browseChoice, name='browseChoice'),

@@ -17,3 +17,10 @@ def getPostFollowingBool(request):
 													  username=request.user.username)})
 
 
+def getUserProjects(request):
+	if request.user.username:
+		projects = []
+		for project in models.ProjectPost.objects.filter(poster=request.user.username):
+			projects.append({"projectID": project.postID, "projectName": project.title})
+		return JsonResponse({"projects": projects})
+
