@@ -43,17 +43,14 @@ class CastingPostInstance(post.GenericPostInstance):
         if self.request.POST.get("descriptionEnabled", "False") == "False":
             self.record.descriptionEnabled = False
             self.record.save()
-            print "enabled is false"
         else:
             self.record.descriptionEnabled = True
             self.record.save()
-            print "enabled is true"
             for formInput in self.request.POST:
                 if formInput.startswith("attribute"):
                     self.record.save()
                     splitted = formInput.split(".")
                     attribute = {splitted[1]: self.request.POST.get(formInput)}
-                    print "looking at attribute {0}".format(attribute)
                     try:
                         if self.request.POST.get(formInput) in [True, False, "True", "False"]:
                             attributeObj = models.ActorDescriptionBooleanAttribute(postID=self.postID,
@@ -177,7 +174,8 @@ class ViewCastingPostView(post.GenericViewPostView):
     @property
     def attributes(self):
         if self._attributes is None:
-            self._attributes = getSelectedCastingAttributeValues(self.postID)
+            if models.CastingPost.objects.get(postID=self.postID).descriptionEnabled:
+                self._attributes = getSelectedCastingAttributeValues(self.postID)
         return self._attributes
 
     @property
@@ -216,11 +214,15 @@ def getSelectedActorAttributeValues(username=None):
 
 
 def getSelectedCastingAttributeValues(postID):
-    selectedAttributes = []
-    for attribute in sorted(chain(models.ActorDescriptionStringAttribute.objects.filter(postID=postID),
-                                  models.ActorDescriptionBooleanAttribute.objects.filter(postID=postID))):
-        selectedAttributes.append({"name": attribute.attributeName, "value": attribute.attributeValue})
-    return _getAttributeDict(selectedAttributes)
+    if models.CastingPost.objects.get(postID=postID).descriptionEnabled:
+        selectedAttributes = []
+        for attribute in sorted(chain(models.ActorDescriptionStringAttribute.objects.filter(postID=postID),
+                                      models.ActorDescriptionBooleanAttribute.objects.filter(postID=postID))):
+            selectedAttributes.append({"name": attribute.attributeName, "value": attribute.attributeValue})
+        return _getAttributeDict(selectedAttributes)
+    else:
+        return constants.ACTOR_ATTRIBUTE_DICT
+
 
 def _getAttributeDict(selectedAttributes):
     attributeDict = constants.ACTOR_ATTRIBUTE_DICT
