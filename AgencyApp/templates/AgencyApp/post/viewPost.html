@@ -127,8 +127,8 @@ function updatePostFollow(){
 			<input type="hidden" name="next" value="{{ next }}" />
 			<input type="hidden" name="destination" value="{{ possibleDestinations.edit }}" />
 			<input type="hidden" name="postID" value="{{ post.postID }}" />
-			{% if isCasting and post.projectID %}
-				<input type="hidden" name="projectID" value="{{ post.projectID }}" />
+			{% if projectID %}
+				<input type="hidden" name="projectID" value="{{ projectID }}" />
 			{% endif %}
 			<input type="submit" value="Edit Post" />
 		</form>

@@ -48,7 +48,7 @@ class CreateWorkPostView(post.GenericCreatePostView):
         if not self.post.record.title:
             # Skip to project should be done since this cancels the casting post
             self._cancelButtonExtraInputs["skipToProject"] = True
-        return json.dumps(self._cancelButtonExtraInputs)
+        return self._cancelButtonExtraInputs
 
     @property
     def formInitialValues(self):

@@ -180,6 +180,7 @@ class GenericCreatePostView(views.PictureFormView):
                 else:
                     projectID = projectPost.postID
             self._projectID = projectID
+            print "projectID is {0}".format(self._projectID)
         return self._projectID
 
     @property
@@ -212,20 +213,6 @@ class GenericCreatePostView(views.PictureFormView):
         if self._cancelSource is None:
             self._cancelSource = self.sourcePage
         return self._cancelSource
-
-    @property
-    def cancelButtonExtraInputs(self):
-        if not self._cancelButtonExtraInputs:
-            self._cancelButtonExtraInputs = {}
-        #if not self.post.record.title:
-        #    # Skip to project should be done since this cancels the casting post
-        #    self._cancelButtonExtraInputs["skipToProject"] = True
-
-        if not self._cancelButtonExtraInputs.get("projectID"):
-            self._cancelButtonExtraInputs["projectID"] = self.projectID
-        if not self._cancelButtonExtraInputs.get("postID"):
-            self._cancelButtonExtraInputs["postID"] = self.postID
-        return json.dumps(self._cancelButtonExtraInputs)
 
     def cancelPage(self):
         super(GenericCreatePostView, self).cancelPage()
@@ -284,8 +271,10 @@ class GenericCreatePostView(views.PictureFormView):
     @property
     def cancelButtonExtraInputs(self):
         if not self._cancelButtonExtraInputs:
-            self._cancelButtonExtraInputs = {"postID": self.postID}
-        return json.dumps(self._cancelButtonExtraInputs)
+            self._cancelButtonExtraInputs = super(GenericCreatePostView, self).cancelButtonExtraInputs or {}
+        self._cancelButtonExtraInputs["postID"] = self.postID
+        self._cancelButtonExtraInputs["projectID"] = self.projectID
+        return self._cancelButtonExtraInputs
 
     @property
     def currentPageHtml(self):
@@ -313,10 +302,12 @@ class GenericCreatePostView(views.PictureFormView):
     @property
     def formInitialValues(self):
         self._formInitialValues["postID"] = self.postID
+        self._formInitialValues["projectID"] = self.projectID
         self._formInitialValues["poster"] = self.username
         if self.post.record:
             self._formInitialValues["title"] = self.post.record.title
             self._formInitialValues["description"] = self.post.record.description
+        print self._formInitialValues
         return self._formInitialValues
 
     def processForm(self):
@@ -329,8 +320,8 @@ class GenericViewPostView(views.GenericFormView):
         self._projectID = None
         self._project = None
         self._post = None
-        super(GenericViewPostView, self).__init__(*args, **kwargs)
         self._postType = None
+        super(GenericViewPostView, self).__init__(*args, **kwargs)
 
     @property
     def postID(self):
@@ -350,6 +341,7 @@ class GenericViewPostView(views.GenericFormView):
                 else:
                     projectID = projectPost.postID
             self._projectID = projectID
+            print "self.Porject id is {0}".format(self._projectID)
         return self._projectID
 
     @property
@@ -395,9 +387,10 @@ class GenericViewPostView(views.GenericFormView):
 
     @property
     def cancelButtonExtraInputs(self):
-        if not self._cancelButtonExtraInputs:
-            self._cancelButtonExtraInputs = {"postID": self.postID}
-        return json.dumps(self._cancelButtonExtraInputs)
+        self._cancelButtonExtraInputs = super(GenericViewPostView, self).cancelButtonExtraInputs
+        self._cancelButtonExtraInputs["postID"] = self.postID
+        self._cancelButtonExtraInputs["projectID"] = self.projectID
+        return self._cancelButtonExtraInputs
 
     @property
     def cancelDestination(self):

@@ -51,7 +51,7 @@ class GenericView(object):
         self._pageContext["next"] = self.currentPage
         self._pageContext["destination"] = self.destinationPage
         self._pageContext["currentPageURL"] = self.currentPageURL
-        self._pageContext["cancelButtonExtraInputs"] = self.cancelButtonExtraInputs
+        self._pageContext["cancelButtonExtraInputs"] = json.dumps(self.cancelButtonExtraInputs)
         self._pageContext["cancelDestinationURL"] = self.cancelDestinationURL
         self._pageContext["cancelDestination"] = self.destinationPage
         self._pageContext["cancelButtonName"] = self.cancelButtonName
@@ -82,7 +82,7 @@ class GenericView(object):
 
     @property
     def cancelButtonExtraInputs(self):
-        return json.dumps(self._cancelButtonExtraInputs) or None
+        return self._cancelButtonExtraInputs or {}
 
     @property
     def cancelButtonName(self):

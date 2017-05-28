@@ -74,7 +74,6 @@ class CastingPostInstance(post.GenericPostInstance):
 class CreateCastingPostView(post.GenericCreatePostView):
     def __init__(self, *args, **kwargs):
         kwargs["postType"] = constants.CASTING_POST
-        #self._projectID = None
         self._project = None
         self._attributes = None
         super(CreateCastingPostView, self).__init__(*args, **kwargs)
@@ -82,11 +81,12 @@ class CreateCastingPostView(post.GenericCreatePostView):
     @property
     def cancelButtonExtraInputs(self):
         if not self._cancelButtonExtraInputs:
-            self._cancelButtonExtraInputs = {}
+            self._cancelButtonExtraInputs = super(CreateCastingPostView, self).cancelButtonExtraInputs
         if not self.post.record.title:
             # Skip to project should be done since this cancels the casting post
             self._cancelButtonExtraInputs["skipToProject"] = True
-        return json.dumps(self._cancelButtonExtraInputs)
+        print self._cancelButtonExtraInputs
+        return self._cancelButtonExtraInputs
 
     @property
     def pageContext(self):

@@ -1,6 +1,7 @@
 import post
 import constants
 import models
+import helpers
 
 
 class ProjectPostInstance(post.GenericPostInstance):
@@ -26,11 +27,36 @@ class CreateProjectPostView(post.GenericCreatePostView):
         kwargs["postType"] = constants.PROJECT_POST
         super(CreateProjectPostView, self).__init__(*args, **kwargs)
 
+    """
+    @property
+    def projectID(self):
+        if self._projectID is None:
+            return self.postID
+        return self._projectID"""
+    @property
+    def projectID(self):
+        if self._projectID is None:
+            self._projectID = self.request.POST.get("projectID", helpers.getMessageFromKey(self.request, "projectID"))
+        return self._projectID
+
+    @property
+    def postID(self):
+        if self._postID is None:
+            self._postID = self.projectID
+        return self._postID
+
     @property
     def cancelSource(self):
         if self._cancelSource is None:
             self._cancelSource = self.currentPage
         return self._cancelSource 
+
+    @property
+    def cancelButtonExtraInputs(self):
+        if not self._cancelButtonExtraInputs:
+            self._cancelButtonExtraInputs = super(CreateProjectPostView, self).cancelButtonExtraInputs or {}
+        self._cancelButtonExtraInputs["projectID"] = self.postID
+        return self._cancelButtonExtraInputs
 
     def cancelPage(self):
         pass

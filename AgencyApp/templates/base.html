@@ -161,6 +161,7 @@
                     extraInputs.push({key: "{{ cancel }}", value: "True"});
                     {% if cancelButtonExtraInputs %}
                         var cancelButtonExtraInputs = {{ cancelButtonExtraInputs|safe }};
+                        console.log(cancelButtonExtraInputs)
                         for(var key in cancelButtonExtraInputs){
                             extraInputs.push({key: key, value: cancelButtonExtraInputs[key]});
                         }
