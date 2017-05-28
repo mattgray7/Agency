@@ -55,9 +55,7 @@ function updatePostFollow(){
 					 - Unpaid
 				{% endif %}
 			{% endif %}
-			{% if post.poster == request.user.username %}<br>
-			{{project}}<br>
-			{{projectID}}
+			{% if post.poster == request.user.username %}
 				{% if isCasting or isWork %}
 					{% if project and projectID %}
 						<form method='post' action="/post/view/{{ projectID }}/">

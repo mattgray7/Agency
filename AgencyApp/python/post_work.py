@@ -23,6 +23,7 @@ class WorkPostInstance(post.GenericPostInstance):
         if self.record:
             self.record.profession = self.request.POST.get("profession")
             self.record.paid = self.request.POST.get("paid", False) and True
+            self.record.projectID = self.request.POST.get("projectID")
             self.record.save()
             return True
         return False

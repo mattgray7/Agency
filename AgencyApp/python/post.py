@@ -178,7 +178,7 @@ class GenericCreatePostView(views.PictureFormView):
                 except constants.POST_DATABASE_MAP.get(self.postType).DoesNotExist:
                     pass
                 else:
-                    projectID = projectPost.projectID
+                    projectID = projectPost.postID
             self._projectID = projectID
         return self._projectID
 
@@ -229,7 +229,7 @@ class GenericCreatePostView(views.PictureFormView):
 
     def cancelPage(self):
         super(GenericCreatePostView, self).cancelPage()
-        if self.request.POST.get(constants.CANCEL) == "True" and not self.record.post.title:
+        if self.request.POST.get(constants.CANCEL) == "True" and not self.post.record.title:
             self.post.database.objects.filter(postID=self.postID).delete()
 
     @property
@@ -247,6 +247,7 @@ class GenericCreatePostView(views.PictureFormView):
     def pageContext(self):
         self._pageContext["post"] = self.post.record
         self._pageContext["project"] = self.project
+        self._pageContext["projectID"] = self.projectID
         self._pageContext["isEvent"] = isEventPost(self.postID)
         self._pageContext["isProject"] = isProjectPost(self.postID)
         self._pageContext["isCollaboration"] = isCollaborationPost(self.postID)
@@ -334,7 +335,6 @@ class GenericViewPostView(views.GenericFormView):
     @property
     def postID(self):
         if self._postID is None:
-            print 'post id is {0}'.format(self.postID)
             self._postID = self.request.get("postID") or helpers.getMessageFromKey(self.request, "postID")
         return self._postID
 
