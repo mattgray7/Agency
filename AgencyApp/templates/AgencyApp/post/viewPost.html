@@ -139,7 +139,15 @@ function updatePostFollow(){
 		<h4> Desired physical attributes </h4>
 		{% for attribute in attributes %}
 			<ul>
-				<li> {{attribute.name}}: {{attribute.value}}</li>
+				<li> {{attribute.name}}: 
+					{% if attribute.value == True  or attribute.value == "True" %}
+						&#10004;
+					{% elif attribute.value == False or attribute.value == "False" %}
+						X
+					{% else %}
+						{{ attribute.value }}
+					{% endif %}
+				</li>
 			</ul>
 		{% endfor %}
 	{% endif %}

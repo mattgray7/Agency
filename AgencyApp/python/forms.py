@@ -58,6 +58,7 @@ class CreateCollaborationPostForm(GenericCreatePostForm):
 class CreateCastingPostForm(GenericCreatePostForm):
     paid = forms.BooleanField(label="Paid", required=False)
     projectID = forms.CharField(widget=forms.HiddenInput, required=False, max_length=10)
+    descriptionEnabled = forms.BooleanField(widget=forms.HiddenInput, required=False)
 
 
 

@@ -89,9 +89,11 @@
 					if(currentInput.id.substring(0, 10) == "attributes"){
 						if(currentInput.disabled){
 							currentInput.disabled = false;
+							document.getElementById("physicalAttributesEnabledDiv").innerHTML = "<input type='hidden' name='descriptionEnabled' value='True' />";
 							document.getElementById("physicalAttributesDivLabel").innerHTML = '<font color="black">Physical attributes</font>';
 						}else{
 							currentInput.disabled = true;
+							document.getElementById("physicalAttributesEnabledDiv").innerHTML = "<input type='hidden' name='descriptionEnabled' value='False' />";
 							document.getElementById("physicalAttributesDivLabel").innerHTML = '<font color="gray">Physical attributes</font>';
 						}
 					}
@@ -100,8 +102,13 @@
 			</script>
 			<br>
 			<h5 style="display:inline;"> You can specify the physical characteristics of the role, which we can use to notify actors with matching traits of your casting post. Your post will still be visible without physical criteria enabled.</h5>
-			Enable physical criteria
-			<input type="checkbox" onclick="enableActorDescriptions();" value="Enable physical criteria" />
+			<br>
+			Enable physical attributes
+			{% if post.descriptionEnabled %}
+				<input type="checkbox" onclick="enableActorDescriptions();" value="Enable physical criteria" checked/>
+			{% else %}
+				<input type="checkbox" onclick="enableActorDescriptions();" value="Enable physical criteria"/>
+			{% endif %}
 			<br><br>
 
 			<div id="physicalAttributesDiv">
@@ -110,12 +117,26 @@
 				</h4>
 				<table>
 					{% for attribute in attributes %}
-						<tr><td>{{attribute.name}}: <input type='text' value='{{attribute.value}}' id="attributes.{{attribute.name}}" name='attributes.{{attribute.name}}' disabled='disabled'></td></tr>
+						<tr><td>{{attribute.name}}: 
+							{% if attribute.value == True or attribute.value == "True" %}
+								<input type='checkbox' value='{{attribute.value}}' id="attributes.{{attribute.name}}" name='attributes.{{attribute.name}}' disabled='disabled' checked>
+							{% elif attribute.value == False or attribute.value == "False" %}
+								<input type='checkbox' value='{{attribute.value}}' id="attributes.{{attribute.name}}" name='attributes.{{attribute.name}}' disabled='disabled'>
+							{% else %}
+								<input type='text' value='{{attribute.value}}' id="attributes.{{attribute.name}}" name='attributes.{{attribute.name}}' disabled='disabled'>
+							{% endif %}
+							</td></tr>
 					{% endfor %}
+
 				</table>
+				<div id="physicalAttributesEnabledDiv"></div>
 			</div>
 			
-
+			<script>
+				{% if post.descriptionEnabled %}
+					$(document).ready(enableActorDescriptions());
+				{% endif %}
+			</script>
 		{% endif %}
 		{% if post.title %}
 			<input type="submit" value="Update" />

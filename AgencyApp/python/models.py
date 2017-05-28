@@ -76,6 +76,7 @@ class CollaborationPost(AbstractPost):
 class CastingPost(AbstractPost):
     projectID = models.CharField(max_length=10)
     paid = models.BooleanField(default=False)
+    descriptionEnabled = models.BooleanField(default=False)
 
 class Actor(models.Model):
     username = models.CharField(max_length=200)

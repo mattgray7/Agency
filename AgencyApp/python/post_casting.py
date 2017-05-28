@@ -33,11 +33,6 @@ class CastingPostInstance(post.GenericPostInstance):
         if self.record:
             self.record.paid = self.request.POST.get("paid", False) and True  #get value will be 'true' instead of True
             self.record.projectID = self.projectID
-
-            for formInput in self.request.POST:
-                if formInput.startswith("attribute"):
-                    splitted = formInput.split(".")
-
             self.record.save()
             return self.saveActorAttributes()
         return False
@@ -45,18 +40,33 @@ class CastingPostInstance(post.GenericPostInstance):
     def saveActorAttributes(self):
         attributes = {}
         error = False
-        for formInput in self.request.POST:
-            if formInput.startswith("attribute"):
-                splitted = formInput.split(".")
-                attribute = {splitted[1]: self.request.POST.get(formInput)}
-                try:
-                    attributeObj = models.ActorDescriptionStringAttribute(postID=self.postID,
-                                                                          attributeName = splitted[1],
-                                                                          attributeValue = self.request.POST.get(formInput))
-                    attributeObj.save()
-                except Exception as e:
-                    error = True
-                    print "Error saving attribute: {0}".format(e)
+        if self.request.POST.get("descriptionEnabled", "False") == "False":
+            self.record.descriptionEnabled = False
+            self.record.save()
+            print "enabled is false"
+        else:
+            self.record.descriptionEnabled = True
+            self.record.save()
+            print "enabled is true"
+            for formInput in self.request.POST:
+                if formInput.startswith("attribute"):
+                    self.record.save()
+                    splitted = formInput.split(".")
+                    attribute = {splitted[1]: self.request.POST.get(formInput)}
+                    print "looking at attribute {0}".format(attribute)
+                    try:
+                        if self.request.POST.get(formInput) in [True, False, "True", "False"]:
+                            attributeObj = models.ActorDescriptionBooleanAttribute(postID=self.postID,
+                                                                                   attributeName = splitted[1],
+                                                                                   attributeValue = bool(self.request.POST.get(formInput)))
+                        else:
+                            attributeObj = models.ActorDescriptionStringAttribute(postID=self.postID,
+                                                                                  attributeName = splitted[1],
+                                                                                  attributeValue = self.request.POST.get(formInput))
+                        attributeObj.save()
+                    except Exception as e:
+                        error = True
+                        print "Error saving attribute: {0}".format(e)
         return not error
 
 
@@ -210,7 +220,6 @@ def getSelectedCastingAttributeValues(postID):
     for attribute in sorted(chain(models.ActorDescriptionStringAttribute.objects.filter(postID=postID),
                                   models.ActorDescriptionBooleanAttribute.objects.filter(postID=postID))):
         selectedAttributes.append({"name": attribute.attributeName, "value": attribute.attributeValue})
-
     return _getAttributeDict(selectedAttributes)
 
 def _getAttributeDict(selectedAttributes):
