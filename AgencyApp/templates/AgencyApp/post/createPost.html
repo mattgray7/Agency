@@ -117,11 +117,22 @@
 				</h4>
 				<table>
 					{% for attribute in attributes %}
-						<tr><td>{{attribute.name}}: 
+						<tr><td>
+							<script>
+							function changeAttributeBool(attributeName, newBoolValue){
+								var attributeInputDiv = document.getElementById(attributeName + "BoolDiv");
+								if(attributeInputDiv != null){
+									attributeInputDiv.innerHTML = "<input type='hidden' name='attributes.{{attribute.name}}' value='" + newBoolValue + "'>"
+								}
+							}
+							</script>
+							{{attribute.name}}: 
 							{% if attribute.value == True or attribute.value == "True" %}
-								<input type='checkbox' value='{{attribute.value}}' id="attributes.{{attribute.name}}" name='attributes.{{attribute.name}}' disabled='disabled' checked>
+								<div id="{{attribute.name}}BoolDiv"></div>
+								<input type='checkbox' value='{{attribute.value}}' id="attributes.{{attribute.name}}" name='{{attribute.name}}' disabled='disabled' onclick='changeAttributeBool("{{attribute.name}}", "False");' checked>
 							{% elif attribute.value == False or attribute.value == "False" %}
-								<input type='checkbox' value='{{attribute.value}}' id="attributes.{{attribute.name}}" name='attributes.{{attribute.name}}' disabled='disabled'>
+								<div id="{{attribute.name}}BoolDiv"></div>
+								<input type='checkbox' value='{{attribute.value}}' id="attributes.{{attribute.name}}" name='{{attribute.name}}' disabled='disabled' onclick='changeAttributeBool("{{attribute.name}}", "True");' >
 							{% else %}
 								<input type='text' value='{{attribute.value}}' id="attributes.{{attribute.name}}" name='attributes.{{attribute.name}}' disabled='disabled'>
 							{% endif %}
