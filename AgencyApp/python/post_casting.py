@@ -77,6 +77,7 @@ class CreateCastingPostView(post.GenericCreatePostView):
         kwargs["postType"] = constants.CASTING_POST
         self._projectID = None
         self._project = None
+        self._attributes = None
         super(CreateCastingPostView, self).__init__(*args, **kwargs)
 
     def cancelPage(self):
@@ -130,8 +131,18 @@ class CreateCastingPostView(post.GenericCreatePostView):
         self._pageContext["viewProject"] = constants.VIEW_POST
         self._pageContext["project"] = self.project
         self._pageContext["projectID"] = self.projectID
-        self._pageContext["attributes"] = getSelectedCastingAttributeValues(self.postID)
+        self._pageContext["attributes"] = self.attributes
         return self._pageContext
+
+    @property
+    def attributes(self):
+        if self._attributes is None:
+            if models.CastingPost.objects.get(postID=self.postID).descriptionEnabled:
+                self._attributes = getSelectedCastingAttributeValues(self.postID)
+            else:
+                self._attributes = constants.ACTOR_ATTRIBUTE_DICT
+                print "not enabled"
+        return self._attributes
 
     @property
     def postID(self):
