@@ -32,7 +32,6 @@ class WorkPostInstance(post.GenericPostInstance):
 class CreateWorkPostView(post.GenericCreatePostView):
     def __init__(self, *args, **kwargs):
         kwargs["postType"] = constants.WORK_POST
-        self._projectID = None
         super(CreateWorkPostView, self).__init__(*args, **kwargs)
 
     @property
@@ -40,15 +39,6 @@ class CreateWorkPostView(post.GenericCreatePostView):
         if self._post is None:
             self._post = WorkPostInstance(request=self.request, postID=self.postID, projectID=self.projectID, postType=constants.WORK_POST)
         return self._post
-
-    @property
-    def cancelButtonExtraInputs(self):
-        if not self._cancelButtonExtraInputs:
-            self._cancelButtonExtraInputs = {}
-        if not self.post.record.title:
-            # Skip to project should be done since this cancels the casting post
-            self._cancelButtonExtraInputs["skipToProject"] = True
-        return self._cancelButtonExtraInputs
 
     @property
     def formInitialValues(self):

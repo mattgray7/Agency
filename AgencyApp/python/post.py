@@ -180,7 +180,6 @@ class GenericCreatePostView(views.PictureFormView):
                 else:
                     projectID = projectPost.postID
             self._projectID = projectID
-            print "projectID is {0}".format(self._projectID)
         return self._projectID
 
     @property
@@ -307,7 +306,6 @@ class GenericCreatePostView(views.PictureFormView):
         if self.post.record:
             self._formInitialValues["title"] = self.post.record.title
             self._formInitialValues["description"] = self.post.record.description
-        print self._formInitialValues
         return self._formInitialValues
 
     def processForm(self):
@@ -341,7 +339,6 @@ class GenericViewPostView(views.GenericFormView):
                 else:
                     projectID = projectPost.postID
             self._projectID = projectID
-            print "self.Porject id is {0}".format(self._projectID)
         return self._projectID
 
     @property
