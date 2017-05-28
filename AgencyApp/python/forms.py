@@ -48,9 +48,10 @@ class CreateProjectPostForm(GenericCreatePostForm):
     status = forms.CharField(label="Production status", required=False, max_length=50)
 
 class CreateWorkPostForm(GenericCreatePostForm):
-    projectPostID = forms.CharField(widget=forms.HiddenInput, required=False, max_length=10)
+    projectID = forms.CharField(widget=forms.HiddenInput, required=False, max_length=10)
     profession = forms.CharField(label="Profession", max_length=200, required=True)
     paid = forms.BooleanField(label="Paid", required=False)
+    status = forms.CharField(max_length=50, required=False)
 
 class CreateCollaborationPostForm(GenericCreatePostForm):
     profession = forms.CharField(label="Profession", max_length=200, required=True)
@@ -59,6 +60,8 @@ class CreateCastingPostForm(GenericCreatePostForm):
     paid = forms.BooleanField(label="Paid", required=False)
     projectID = forms.CharField(widget=forms.HiddenInput, required=False, max_length=10)
     descriptionEnabled = forms.BooleanField(widget=forms.HiddenInput, required=False)
+    status = forms.CharField(max_length=50, required=False)
+
 
 
 

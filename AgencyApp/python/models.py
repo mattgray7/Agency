@@ -66,9 +66,10 @@ class ProjectPost(AbstractPost):
     status = models.CharField(max_length=50, default=None, blank=True, null=True)
 
 class WorkPost(AbstractPost):
-    projectPostID = models.CharField(max_length=10)
+    projectID = models.CharField(max_length=10)
     profession = models.CharField(max_length=200)
     paid = models.BooleanField(default=False)
+    status = models.CharField(max_length=50, default="Available")
 
 class CollaborationPost(AbstractPost):
     profession = models.CharField(max_length=200)
@@ -77,6 +78,7 @@ class CastingPost(AbstractPost):
     projectID = models.CharField(max_length=10)
     paid = models.BooleanField(default=False)
     descriptionEnabled = models.BooleanField(default=False)
+    status = models.CharField(max_length=50, default="Available")
 
 class Actor(models.Model):
     username = models.CharField(max_length=200)

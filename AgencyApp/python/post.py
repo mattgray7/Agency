@@ -13,6 +13,8 @@ import browse
 import string, random
 import json
 
+
+
 # =================== Simple post views ===================== #
 
 class CreatePostTypesView(views.GenericFormView):
@@ -158,6 +160,8 @@ class GenericPostInstance(object):
 class GenericCreatePostView(views.PictureFormView):
     def __init__(self, *args, **kwargs):
         self._postID = kwargs.get("postID")
+        self._projectID = None
+        self._project = None
         self._postType = kwargs.get("postType")
         self._post = None
         super(GenericCreatePostView, self).__init__(*args, **kwargs)
@@ -165,10 +169,30 @@ class GenericCreatePostView(views.PictureFormView):
         self._pictureModelFieldName = "postPicture"
 
     @property
+    def projectID(self):
+        if self._projectID is None:
+            projectID = self.request.POST.get("projectID") or helpers.getMessageFromKey(self.request, "projectID")
+            if not projectID:
+                try:
+                    projectPost = constants.POST_DATABASE_MAP.get(self.postType).objects.get(postID=self.postID)
+                except constants.POST_DATABASE_MAP.get(self.postType).DoesNotExist:
+                    pass
+                else:
+                    projectID = projectPost.projectID
+            self._projectID = projectID
+        return self._projectID
+
+    @property
+    def project(self):
+        if self._project is None:
+            if self.projectID:
+                self._project = projectPost.ProjectPostInstance(request=self.request, postID=self.projectID, postType=constants.PROJECT_POST)
+        return self._project
+
+    @property
     def postID(self):
         if self._postID is None:
-            self._postID = self.request.POST.get("postID") or helpers.getMessageFromKey(self.request,
-                                                                                        "postID")
+            self._postID = self.request.POST.get("postID")
             if not self._postID:
                 self._postID = helpers.createUniqueID(destDatabase=constants.POST_DATABASE_MAP.get(self.postType),
                                                       idKey="postID")
@@ -189,9 +213,23 @@ class GenericCreatePostView(views.PictureFormView):
             self._cancelSource = self.sourcePage
         return self._cancelSource
 
+    @property
+    def cancelButtonExtraInputs(self):
+        if not self._cancelButtonExtraInputs:
+            self._cancelButtonExtraInputs = {}
+        #if not self.post.record.title:
+        #    # Skip to project should be done since this cancels the casting post
+        #    self._cancelButtonExtraInputs["skipToProject"] = True
+
+        if not self._cancelButtonExtraInputs.get("projectID"):
+            self._cancelButtonExtraInputs["projectID"] = self.projectID
+        if not self._cancelButtonExtraInputs.get("postID"):
+            self._cancelButtonExtraInputs["postID"] = self.postID
+        return json.dumps(self._cancelButtonExtraInputs)
+
     def cancelPage(self):
         super(GenericCreatePostView, self).cancelPage()
-        if self.sourcePage != constants.VIEW_POST and self.request.POST.get(constants.CANCEL) == "True":
+        if self.request.POST.get(constants.CANCEL) == "True" and not self.record.post.title:
             self.post.database.objects.filter(postID=self.postID).delete()
 
     @property
@@ -208,6 +246,7 @@ class GenericCreatePostView(views.PictureFormView):
     @property
     def pageContext(self):
         self._pageContext["post"] = self.post.record
+        self._pageContext["project"] = self.project
         self._pageContext["isEvent"] = isEventPost(self.postID)
         self._pageContext["isProject"] = isProjectPost(self.postID)
         self._pageContext["isCollaboration"] = isCollaborationPost(self.postID)
@@ -286,6 +325,8 @@ class GenericCreatePostView(views.PictureFormView):
 class GenericViewPostView(views.GenericFormView):
     def __init__(self, *args, **kwargs):
         self._postID = kwargs.get("postID")
+        self._projectID = None
+        self._project = None
         self._post = None
         super(GenericViewPostView, self).__init__(*args, **kwargs)
         self._postType = None
@@ -293,8 +334,30 @@ class GenericViewPostView(views.GenericFormView):
     @property
     def postID(self):
         if self._postID is None:
+            print 'post id is {0}'.format(self.postID)
             self._postID = self.request.get("postID") or helpers.getMessageFromKey(self.request, "postID")
         return self._postID
+
+    @property
+    def projectID(self):
+        if self._projectID is None:
+            projectID = self.request.POST.get("projectID", helpers.getMessageFromKey(self.request, "projectID"))
+            if not projectID or projectID in ["null", "none"]:
+                try:
+                    projectPost = constants.POST_DATABASE_MAP.get(self.postType).objects.get(postID=self.postID)
+                except constants.POST_DATABASE_MAP.get(self.postType).DoesNotExist:
+                    pass
+                else:
+                    projectID = projectPost.postID
+            self._projectID = projectID
+        return self._projectID
+
+    @property
+    def project(self):
+        if self._project is None:
+            if self.projectID:
+                self._project = projectPost.ProjectPostInstance(request=self.request, postID=self.projectID, postType=constants.PROJECT_POST)
+        return self._project
 
     @property
     def post(self):
@@ -357,6 +420,9 @@ class GenericViewPostView(views.GenericFormView):
         self._pageContext["isCollaboration"] = isCollaborationPost(self.postID)
         self._pageContext["isWork"] = isWorkPost(self.postID)
         self._pageContext["isCasting"] = isCastingPost(self.postID)
+        if self.projectID:
+            self._pageContext["projectID"] = self.projectID
+        self._pageContext["project"] = self.project
         self._pageContext["following"] = isFollowingPost(self.postID, self.request.user.username)
         return self._pageContext
 
@@ -377,7 +443,7 @@ class GenericViewPostView(views.GenericFormView):
 
 # ================================================================================================== #
 
-
+import post_project as projectPost
 
 # ========================================= Post functions =========================================  #
 

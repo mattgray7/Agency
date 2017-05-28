@@ -3,7 +3,6 @@ import constants
 import models
 import helpers
 
-import post_project as projectPost
 import json
 from itertools import chain
 
@@ -75,17 +74,10 @@ class CastingPostInstance(post.GenericPostInstance):
 class CreateCastingPostView(post.GenericCreatePostView):
     def __init__(self, *args, **kwargs):
         kwargs["postType"] = constants.CASTING_POST
-        self._projectID = None
+        #self._projectID = None
         self._project = None
         self._attributes = None
         super(CreateCastingPostView, self).__init__(*args, **kwargs)
-
-    def cancelPage(self):
-        super(CreateCastingPostView, self).cancelPage()
-        if self.request.POST.get(constants.CANCEL) == "True":
-            # Delete post that was just created
-            if not self.post.record.title:
-                self.post.database.objects.filter(postID=self.postID).delete()
 
     @property
     def cancelButtonExtraInputs(self):
@@ -94,40 +86,14 @@ class CreateCastingPostView(post.GenericCreatePostView):
         if not self.post.record.title:
             # Skip to project should be done since this cancels the casting post
             self._cancelButtonExtraInputs["skipToProject"] = True
-
-        if not self._cancelButtonExtraInputs.get("projectID"):
-            self._cancelButtonExtraInputs["projectID"] = self.projectID
-        if not self._cancelButtonExtraInputs.get("postID"):
-            self._cancelButtonExtraInputs["postID"] = self.postID
         return json.dumps(self._cancelButtonExtraInputs)
-
-    @property
-    def project(self):
-        if self._project is None:
-            if self.projectID:
-                self._project = projectPost.ProjectPostInstance(request=self.request, postID=self.projectID, postType=constants.PROJECT_POST)
-        return self._project
-
-    @property
-    def projectID(self):
-        """The project associated with the role being cast"""
-        if self._projectID is None:
-            projectID = self.request.POST.get("projectID") or helpers.getMessageFromKey(self.request, "projectID")
-            if not projectID:
-                try:
-                    castingPost = models.CastingPost.objects.get(postID=self.postID)
-                except models.CastingPost.DoesNotExist:
-                    pass
-                else:
-                    projectID = castingPost.projectID
-            self._projectID = projectID
-        return self._projectID
 
     @property
     def pageContext(self):
         self._pageContext = super(CreateCastingPostView, self).pageContext
         self._pageContext["isProject"] = False
-        self._pageContext.get("possibleDestinations", {})["casting"] = constants.VIEW_POST
+        self._pageContext["possibleDestinations"] = {"casting": constants.VIEW_POST,
+                                                     "work": constants.VIEW_POST}
         self._pageContext["viewProject"] = constants.VIEW_POST
         self._pageContext["project"] = self.project
         self._pageContext["projectID"] = self.projectID
@@ -141,17 +107,7 @@ class CreateCastingPostView(post.GenericCreatePostView):
                 self._attributes = getSelectedCastingAttributeValues(self.postID)
             else:
                 self._attributes = constants.ACTOR_ATTRIBUTE_DICT
-                print "not enabled"
         return self._attributes
-
-    @property
-    def postID(self):
-        if self._postID is None:
-            self._postID = self.request.POST.get("postID")
-            if not self._postID:
-                self._postID = helpers.createUniqueID(destDatabase=models.CastingPost,
-                                                      idKey="postID")
-        return self._postID
 
     @property
     def post(self):
@@ -166,22 +122,23 @@ class CreateCastingPostView(post.GenericCreatePostView):
             self._formInitialValues["paid"] = self.post.record.paid
             self._formInitialValues["postID"] = self.post.record.postID
             self._formInitialValues["projectID"] = self.projectID
+            self._formInitialValues["status"] = self.post.record.status
         return self._formInitialValues
 
 
 class ViewCastingPostView(post.GenericViewPostView):
     def __init__(self, *args, **kwargs):
-        self._projectID = None
-        self._project = None
         self._attributes = None
         super(ViewCastingPostView, self).__init__(*args, **kwargs)
 
     @property
     def pageContext(self):
         self._pageContext = super(ViewCastingPostView, self).pageContext
-        self._pageContext["project"] = self.project
-        self._pageContext["projectID"] = self.projectID
-        self._pageContext.get("possibleDestinations", {})["createCasting"] = constants.CREATE_CASTING_POST
+        self._pageContext["possibleDestinations"] = {"edit": constants.EDIT_POST,
+                                                     "createCasting": constants.CREATE_CASTING_POST,
+                                                     "createWork": constants.CREATE_WORK_POST,
+                                                     "viewCasting": constants.VIEW_POST,
+                                                     "viewWork": constants.VIEW_POST}
         if self.attributes:
             self._pageContext["attributes"] = self.attributes
         return self._pageContext
@@ -192,25 +149,6 @@ class ViewCastingPostView(post.GenericViewPostView):
             if models.CastingPost.objects.get(postID=self.postID).descriptionEnabled:
                 self._attributes = getSelectedCastingAttributeValues(self.postID)
         return self._attributes
-
-    @property
-    def projectID(self):
-        if self._projectID is None:
-            projectID = self.request.POST.get("projectID", helpers.getMessageFromKey(self.request, "projectID"))
-            if not projectID or projectID in ["null", "none"]:
-                try:
-                    projectID = models.CastingPost.objects.get(postID=self.postID).projectID
-                except models.CastingPost.DoesNotExist:
-                    pass
-            self._projectID = projectID
-        return self._projectID
-
-    @property
-    def project(self):
-        if self._project is None:
-            if self.projectID:
-                self._project = projectPost.ProjectPostInstance(request=self.request, postID=self.projectID, postType=constants.PROJECT_POST)
-        return self._project
 
     @property
     def post(self):

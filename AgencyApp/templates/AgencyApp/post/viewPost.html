@@ -54,11 +54,13 @@ function updatePostFollow(){
 				{% else %}
 					 - Unpaid
 				{% endif %}
-
-				{% if post.poster == request.user.username %}
-					{% if isCasting %}
-						{% if project and projectID %}
-							<form method='post' action="/post/view/{{ projectID }}/">
+			{% endif %}
+			{% if post.poster == request.user.username %}<br>
+			{{project}}<br>
+			{{projectID}}
+				{% if isCasting or isWork %}
+					{% if project and projectID %}
+						<form method='post' action="/post/view/{{ projectID }}/">
 								{% csrf_token %}
 								<input type="hidden" name="source" value="{{ next }}" />
 								<input type="hidden" name="next" value="{{ next }}" />
@@ -94,11 +96,10 @@ function updatePostFollow(){
 								});
 							}
 							</script>
-							<button onclick="showPossibleProjects();"> Add casting post to project </button>
+							<button onclick="showPossibleProjects();"> Add post to project </button>
 
 						{% endif %}
 					{% endif %}
-				{% endif %}
 			{% endif %}
 		{% endif %}
 	</h3>
@@ -189,7 +190,7 @@ function updatePostFollow(){
 					{% endfor %}
 				</table>
 			{% else %}
-				<h5> No roles registered </h5>
+				<h5> No roles posted. </h5>
 			{% endif %}
 		{% if post.poster == request.user.username %}
 			<form method='post' action="/post/view/{{ post.postID }}/">
@@ -201,7 +202,55 @@ function updatePostFollow(){
 				<input type="submit" value="Add a new role to cast" />
 			</form>
 		{% endif %}
-	{% endif %}
+
+		{% if workPosts %}
+			<h5> Crew jobs posted </h5>
+				<table>
+					<tr><td></td><td> Job</td><td> Description </td><td> Paid</td></tr>
+					{% for workPost in workPosts %}
+						<tr><td>
+								{% if workPost.postPicture %}
+									<img src="{{ workPost.postPicture.url }}" height="50px" width="70px"/>
+								{% else %}
+									<img height="50px" width="70px"/>
+								{% endif %}
+						</td>
+						<td>
+							<form method='post' action="/post/view/{{ workPost.postID }}/">
+								{% csrf_token %}
+								<input type="hidden" name="source" value="{{ next }}" />
+								<input type="hidden" name="next" value="{{ next }}" />
+								<input type="hidden" name="destination" value="{{ possibleDestinations.viewWork }}" />
+								<input type="hidden" name="postID" value="{{ workPost.postID }}" />
+								<input type="hidden" name="projectID" value="{{ post.postID }}" />
+								<input type="submit" value="{{ workPost.title }}" />
+							</form>
+						</td>
+						<td>
+							{{workPost.description}}
+						</td>
+						<td>
+							{% if workPost.paid %}
+								&#10004;
+							{% endif %}
+						</td>
+					</tr>
+					{% endfor %}
+				</table>
+			{% else %}
+				<h5> No crew jobs posted. </h5>
+			{% endif %}
+			{% if post.poster == request.user.username %}
+				<form method='post' action="/post/view/{{ post.postID }}/">
+					{% csrf_token %}
+					<input type="hidden" name="source" value="{{ next }}" />
+					<input type="hidden" name="next" value="{{ next }}" />
+					<input type="hidden" name="destination" value="{{ possibleDestinations.createWork }}" />
+					<input type="hidden" name="projectID" value="{{ post.postID }}" />
+					<input type="submit" value="Add a new crew job" />
+				</form>
+			{% endif %}
+		{% endif %}
 	<p>
 {% else %}
 	<h4>No post found</h4>

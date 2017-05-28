@@ -42,6 +42,7 @@ def getDestinationURL(request, destPageName, currentPageName=None):
             if request.POST.get("skipToProject", False):
                 if request.POST.get("projectID"):
                     postID = request.POST.get("projectID")
+                    print "SETTING POST ID TO PROJECT ID"
                 else:
                     destPageName = constants.HOME
         destURL = destURL.format(postID)
