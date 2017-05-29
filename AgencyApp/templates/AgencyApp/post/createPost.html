@@ -63,18 +63,18 @@
 	{% endif %}
 
 	{% if post.title %}
-		<form method='post' action="/post/edit/{{post.postID}}/" name='createForm' enctype="multipart/form-data">
+		<form method='post' action="/post/edit/{{post.postID}}/" name='createForm' id='createForm' enctype="multipart/form-data">
 	{% else %}
 		{% if isEvent %}
-			<form method='post' action="/post/create/event/" name='createForm' enctype="multipart/form-data">
+			<form method='post' action="/post/create/event/" name='createForm' id='createForm' enctype="multipart/form-data">
 		{% elif isProject %}
-			<form method='post' action="/post/create/project/" name='createForm' enctype="multipart/form-data">
+			<form method='post' action="/post/create/project/" name='createForm' id='createForm' enctype="multipart/form-data">
 		{% elif isCollaboration %}
-			<form method='post' action="/post/create/collaboration/" name='createForm' enctype="multipart/form-data">
+			<form method='post' action="/post/create/collaboration/" name='createForm' id='createForm' enctype="multipart/form-data">
 		{% elif isWork %}
-			<form method='post' action="/post/create/work/" name='createForm' enctype="multipart/form-data">
+			<form method='post' action="/post/create/work/" name='createForm' id='createForm' enctype="multipart/form-data">
 		{% elif isCasting %}
-			<form method='post' action="/post/create/casting/" name='castingPostForm' enctype="multipart/form-data" id='castingPostForm'>
+			<form method='post' action="/post/create/casting/" name='createForm' id='createForm' enctype="multipart/form-data" id='castingPostForm'>
 		{% endif %}
 	{% endif %}
 		{% csrf_token %}
@@ -99,7 +99,6 @@
 					var currentInput = inputs[i]
 					if(currentInput.id.substring(0, 10) == "attributes"){
 						if(currentInput.disabled){
-							console.log("ENABLING")
 							currentInput.disabled = false;
 							document.getElementById("physicalAttributesEnabledDiv").innerHTML = "<input type='hidden' name='descriptionEnabled' value='True' />";
 							document.getElementById("physicalAttributesDivLabel").innerHTML = '<font color="black">Physical attributes</font>';
@@ -185,13 +184,10 @@
 	{% if isCasting %}
 		<script>
 		$(document).ready(function(){
-
-
 			{% for attribute in attributes %}
-				console.log("looking att attributes.{{attribute.name}}Div")
 				var attributeDiv = document.getElementById("attributes.{{attribute.name}}Div")
 				if(attributeDiv != null){
-					var attributeString = "<select form='castingPostForm' name='attributes.{{attribute.name}}' id='attributes.{{attribute.name}}'' disabled='disabled'>";
+					var attributeString = "<select form='createForm' name='attributes.{{attribute.name}}' id='attributes.{{attribute.name}}' disabled='disabled'>";
 					{% for option in attribute.options %}
 						attributeString += "<option value='{{ option }}'>{{option}}</option>"
 					{% endfor %}
@@ -204,18 +200,6 @@
 				toggleActorDescriptions();
 			{% endif %}
 		});
-
-			/*var divs = document.getElementsByTagName("div")
-			var attributeString = "";
-			for(var i=0; i < divs.length; i++){
-				if(div[i].substring(0, 10) == "attributes"){
-					attributeString += "<select form='castingPostForm' name='attributes.{{attribute.name}}' id='attributes.{{attribute.name}}'' disabled='disabled'>";
-					{% for option in attribute.options %}
-											<option value="{{ option }}">{{option}}</option>
-										{% endfor %}
-									</select>
-			}
-		});*/
 		</script>
 	{% endif %}
 

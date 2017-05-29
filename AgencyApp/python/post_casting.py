@@ -49,7 +49,6 @@ class CastingPostInstance(post.GenericPostInstance):
                 if formInput.startswith("attributes."):
                     splitted = formInput.split(".")
                     attribute = {splitted[1]: self.request.POST.get(formInput)}
-                    print "saving attribute {0}".format(attribute)
                     if self.request.POST.get(formInput) in [True, False, "True", "False", "true", "false"]:
                         try:
                             attributeModel = models.ActorDescriptionBooleanAttribute.objects.get(postID=self.postID,
@@ -63,8 +62,7 @@ class CastingPostInstance(post.GenericPostInstance):
                         try:
                             attributeModel = models.ActorDescriptionStringAttribute.objects.get(postID=self.postID,
                                                                                                 attributeName = splitted[1])
-                            setattr(attributeModel, splitted[1], self.request.POST.get(formInput))
-                            print "setting model {0} with input {1} as {2}".format(attributeModel, attributeModel.attributeValue, self.request.POST.get(formInput))
+                            attributeModel.attributeValue = self.request.POST.get(formInput)
                         except models.ActorDescriptionStringAttribute.DoesNotExist:
                             attributeModel = models.ActorDescriptionStringAttribute(postID=self.postID,
                                                                                     attributeName = splitted[1],
