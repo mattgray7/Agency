@@ -27,16 +27,13 @@ class CreateProjectPostView(post.GenericCreatePostView):
         kwargs["postType"] = constants.PROJECT_POST
         super(CreateProjectPostView, self).__init__(*args, **kwargs)
 
-    """
-    @property
-    def projectID(self):
-        if self._projectID is None:
-            return self.postID
-        return self._projectID"""
     @property
     def projectID(self):
         if self._projectID is None:
             self._projectID = self.request.POST.get("projectID", helpers.getMessageFromKey(self.request, "projectID"))
+            if not self._projectID:
+                self._projectID = helpers.createUniqueID(destDatabase=models.ProjectPost,
+                                                        idKey="postID")
         return self._projectID
 
     @property

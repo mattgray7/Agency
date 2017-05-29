@@ -36,6 +36,7 @@ def getDestinationURL(request, destPageName, currentPageName=None):
             destURL = destURL.format(username)
             messages.add_message(request, messages.INFO,
                                  "profileName:{0}".format(username))
+    print request.POST
     if request.POST.get('postID'):
         postID = request.POST.get("postID")
         if destPageName == constants.VIEW_POST and request.POST.get(constants.CANCEL) == "True":

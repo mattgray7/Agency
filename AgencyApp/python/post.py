@@ -83,6 +83,7 @@ class GenericPostInstance(object):
         if self._postID is None:
             self._postID = self.request.POST.get("postID") or helpers.getMessageFromKey(self.request,
                                                                                         "postID")
+            print "gathered post id is {0}".format(self._postID)
         return self._postID
 
     @property
@@ -192,7 +193,9 @@ class GenericCreatePostView(views.PictureFormView):
     @property
     def postID(self):
         if self._postID is None:
+            print "accessing postID"
             self._postID = self.request.POST.get("postID")
+            print "postIDIIID is {0}".format(self._postID)
             if not self._postID:
                 self._postID = helpers.createUniqueID(destDatabase=constants.POST_DATABASE_MAP.get(self.postType),
                                                       idKey="postID")
