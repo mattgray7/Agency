@@ -62,7 +62,7 @@ function updatePostFollow(){
 								{% csrf_token %}
 								<input type="hidden" name="source" value="{{ next }}" />
 								<input type="hidden" name="next" value="{{ next }}" />
-								<input type="hidden" name="destination" value="{{ possibleDestinations.viewProject }}" />
+								<input type="hidden" name="destination" value="{{ possibleDestinations.viewPost }}" />
 								<input type="hidden" name="postID" value="{{ projectID }}" />
 								<input type="hidden" name="projectID" value="{{ projectID }}" />
 								Project: <input type="submit" value="{{ project.record.title }}" />
@@ -77,7 +77,7 @@ function updatePostFollow(){
 									type : 'POST',
 									dataType: "json",
 									success : function(data) {
-										if(data["projects"] != null){
+										if(data["projects"].length > 0){
 											document.getElementById("possibleProjects").innerHTML = "<br><h5 style='display:inline'> Existing projects: </h5>";
 											for(var i=0; i < data["projects"].length; i++){
 												var project = data["projects"][i];
@@ -89,12 +89,15 @@ function updatePostFollow(){
 												var projectForm = createPageRedirectForm("{{ next }}", "{{ next }}", "{{ possibleDestinations.viewPost }}", "{{ currentPageURL }}", extraInputs, document.getElementById("possibleProjects"), project["projectName"])
 												document.getElementById("possibleProjects").innerHTML += "<br><br>";
 											}
+										}else{
+											document.getElementById("possibleProjects").innerHTML += "<h6> No projects currently registered </h6>";
 										}
+										document.getElementById("addPostToProjectButton").hidden = true;
 									}
 								});
 							}
 							</script>
-							<button onclick="showPossibleProjects();"> Add post to project </button>
+							<button onclick="showPossibleProjects();" id="addPostToProjectButton"> Add post to project </button>
 
 						{% endif %}
 					{% endif %}

@@ -171,15 +171,8 @@ class GenericCreatePostView(views.PictureFormView):
     @property
     def projectID(self):
         if self._projectID is None:
-            projectID = self.request.POST.get("projectID") or helpers.getMessageFromKey(self.request, "projectID")
-            if not projectID:
-                try:
-                    projectPost = constants.POST_DATABASE_MAP.get(self.postType).objects.get(postID=self.postID)
-                except constants.POST_DATABASE_MAP.get(self.postType).DoesNotExist:
-                    pass
-                else:
-                    projectID = projectPost.postID
-            self._projectID = projectID
+            self._projectID = self.request.POST.get("projectID") or helpers.getMessageFromKey(self.request, "projectID")
+
         return self._projectID
 
     @property
@@ -334,13 +327,6 @@ class GenericViewPostView(views.GenericFormView):
     def projectID(self):
         if self._projectID is None:
             projectID = self.request.POST.get("projectID", helpers.getMessageFromKey(self.request, "projectID"))
-            if not projectID or projectID in ["null", "none"]:
-                try:
-                    projectPost = constants.POST_DATABASE_MAP.get(self.postType).objects.get(postID=self.postID)
-                except constants.POST_DATABASE_MAP.get(self.postType).DoesNotExist:
-                    pass
-                else:
-                    projectID = projectPost.postID
             self._projectID = projectID
         return self._projectID
 
@@ -404,6 +390,7 @@ class GenericViewPostView(views.GenericFormView):
         self._pageContext["possibleSources"] = {"profile": constants.PROFILE}
         self._pageContext["possibleDestinations"] = {"edit": constants.EDIT_POST,
                                                      "profile": constants.PROFILE,
+                                                     "viewPost": constants.VIEW_POST,
                                                      "browse": {"events": constants.BROWSE_EVENTS,
                                                                 "projects": constants.BROWSE_PROJECTS,
                                                                 "users": constants.BROWSE_USERS,

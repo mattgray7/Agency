@@ -38,6 +38,8 @@ def getDestinationURL(request, destPageName, currentPageName=None):
                                  "profileName:{0}".format(username))
     if request.POST.get('postID'):
         postID = request.POST.get("postID")
+
+        # Cancel from editing casting/work post to skip directly back to the project
         if destPageName == constants.VIEW_POST and request.POST.get(constants.CANCEL) == "True":
             if request.POST.get("skipToProject", False):
                 if request.POST.get("projectID"):

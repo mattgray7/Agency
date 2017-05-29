@@ -195,7 +195,6 @@
                     var divID = $(this).attr('id');
                     var cleanedName = divID.replace(/[0-9]/g, '');
                     if(cleanedName == "cancelButton"){
-                        console.log("{{ cancelDestination}}")
                         createCancelButton(document.getElementById('cancelButton'), "{{ cancelDestination }}", "{{ cancelDestinationURL }}", "{{ cancelButtonName }}");
                     }else if(cleanedName == "profileRedirectButton"){
                         createProfileRedirectButton(document.getElementById(divID), $(this).attr("innerHTML"), "{{ currentPageURL }}");
