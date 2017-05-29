@@ -81,6 +81,7 @@ class CreateCastingPostView(post.GenericCreatePostView):
     def pageContext(self):
         self._pageContext = super(CreateCastingPostView, self).pageContext
         self._pageContext["attributes"] = self.attributes
+        self._pageContext["descriptionEnabled"] = self.post.record.descriptionEnabled
         return self._pageContext
 
     @property
