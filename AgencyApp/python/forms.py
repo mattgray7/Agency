@@ -49,7 +49,7 @@ class CreateProjectPostForm(GenericCreatePostForm):
     status = forms.CharField(label="Production status", required=False, max_length=50)
 
 class CreateWorkPostForm(GenericCreatePostForm):
-    profession = forms.CharField(label="Profession", max_length=200, required=True)
+    profession = forms.CharField(widget=forms.HiddenInput, max_length=200, required=True)
     paid = forms.BooleanField(label="Paid", required=False)
     status = forms.CharField(max_length=50, required=False)
 

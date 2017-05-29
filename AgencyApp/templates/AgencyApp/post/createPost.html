@@ -72,7 +72,7 @@
 		{% elif isCollaboration %}
 			<form method='post' action="/post/create/collaboration/" name='createForm' id='createForm' enctype="multipart/form-data">
 		{% elif isWork %}
-			<form method='post' action="/post/create/work/" name='createForm' id='createForm' enctype="multipart/form-data">
+			<form method='post' action="/post/create/work/" name='createForm' id='createForm' enctype="multipart/form-data" onsubmit="return submitWorkForm()">
 		{% elif isCasting %}
 			<form method='post' action="/post/create/casting/" name='createForm' id='createForm' enctype="multipart/form-data" id='castingPostForm'>
 		{% endif %}
@@ -150,9 +150,6 @@
 							{% else %}
 								{% if attribute.options %}
 									<div id="attributes.{{attribute.name}}Div"></div>
-									<script>
-										attributeDivIdList.push("{{attribute.name}}Div")
-									</script>
 								{% elif attribute.value and attribute.value != "None" %}
 									<input type='text' value='{{attribute.value}}' id="attributes.{{attribute.name}}" name="attributes.{{attribute.name}}" disabled='disabled'>
 								{% else %}
@@ -167,6 +164,9 @@
 					<input type='hidden' name='descriptionEnabled' value='{{ descriptionEnabled }}' />
 				</div>
 			</div>
+
+		{% elif isWork %}
+			<div id='professionListDiv'></div>
 		{% endif %}
 		{% if post.title %}
 			<input type="submit" value="Update" />
@@ -199,6 +199,32 @@
 				toggleActorDescriptions();
 			{% endif %}
 		});
+		</script>
+	{% endif %}
+
+	{% if isWork %}
+		<script>
+			function submitWorkForm(){
+				var form = document.getElementById("createForm")
+				document.getElementById("id_profession").value = document.getElementById("professionSelect").value;
+				return form.submit()
+			}
+
+			$(document).ready(function(){
+				var professionDiv = document.getElementById("professionListDiv")
+				if(professionDiv != null){
+					var attributeString = "Profession: <select form='createForm' name='professionSelect' id='professionSelect'>";
+					{% for possibleProfession in professionList %}
+						{% if chosenProfession == possibleProfession %}
+							attributeString += "<option value='{{ possibleProfession }}' selected='selected'>{{ possibleProfession }}</option>"
+						{% else %}
+							attributeString += "<option value='{{ possibleProfession }}'>{{ possibleProfession }}</option>"
+						{% endif %}
+					{% endfor %}
+					attributeString += "</select>";
+					professionDiv.innerHTML = attributeString;
+				}
+			});
 		</script>
 	{% endif %}
 

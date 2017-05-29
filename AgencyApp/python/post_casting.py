@@ -96,7 +96,7 @@ class CreateCastingPostView(post.GenericCreatePostView):
     @property
     def post(self):
         if self._post is None:
-            self._post = CastingPostInstance(request=self.request, postID=self.postID, projectID=self.projectID)
+            self._post = CastingPostInstance(request=self.request, postID=self.postID, projectID=self.projectID, postType=constants.CREATE_CASTING_POST)
         return self._post
 
     @property

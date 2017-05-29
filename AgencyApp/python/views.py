@@ -105,7 +105,6 @@ def editPost(request, postID):
     elif post.isCastingPost(postID):
         view = castingPost.CreateCastingPostView(request=request, currentPage=constants.EDIT_POST, postID=postID)
     else:
-        print "ERROR SELECTING EDIT POST VIEW"
         raise
     return view.process()
 

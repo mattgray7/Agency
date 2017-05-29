@@ -21,7 +21,7 @@ class WorkPostInstance(post.GenericPostInstance):
 
     def saveModelFormValues(self):
         if self.record:
-            self.record.profession = self.request.POST.get("profession")
+            self.record.profession = self.request.POST.get("professionSelect")
             self.record.paid = self.request.POST.get("paid", False) and True
             self.record.projectID = self.request.POST.get("projectID")
             self.record.save()
@@ -39,6 +39,13 @@ class CreateWorkPostView(post.GenericCreatePostView):
         if self._post is None:
             self._post = WorkPostInstance(request=self.request, postID=self.postID, projectID=self.projectID, postType=constants.WORK_POST)
         return self._post
+
+    @property
+    def pageContext(self):
+        self._pageContext = super(CreateWorkPostView, self).pageContext
+        self._pageContext["professionList"] = constants.PROFESSIONS
+        self._pageContext["chosenProfession"] = self.post.record.profession
+        return self._pageContext
 
     @property
     def formInitialValues(self):
