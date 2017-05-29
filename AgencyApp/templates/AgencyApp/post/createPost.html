@@ -153,11 +153,6 @@
 									<script>
 										attributeDivIdList.push("{{attribute.name}}Div")
 									</script>
-									<!--<select form='castingPostForm' name='attributes.{{attribute.name}}' id="attributes.{{attribute.name}}" disabled='disabled'>
-										{% for option in attribute.options %}
-											<option value="{{ option }}">{{option}}</option>
-										{% endfor %}
-									</select>-->
 								{% elif attribute.value and attribute.value != "None" %}
 									<input type='text' value='{{attribute.value}}' id="attributes.{{attribute.name}}" name="attributes.{{attribute.name}}" disabled='disabled'>
 								{% else %}
@@ -189,7 +184,11 @@
 				if(attributeDiv != null){
 					var attributeString = "<select form='createForm' name='attributes.{{attribute.name}}' id='attributes.{{attribute.name}}' disabled='disabled'>";
 					{% for option in attribute.options %}
-						attributeString += "<option value='{{ option }}'>{{option}}</option>"
+						{% if attribute.value == option %}
+							attributeString += "<option value='{{ option }}' selected='selected'>{{option}}</option>"
+						{% else %}
+							attributeString += "<option value='{{ option }}'>{{option}}</option>"
+						{% endif %}
 					{% endfor %}
 					attributeString += "</select>";
 					attributeDiv.innerHTML = attributeString
