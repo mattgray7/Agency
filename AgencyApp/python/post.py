@@ -273,6 +273,9 @@ class GenericCreatePostView(views.PictureFormView):
             self._cancelButtonExtraInputs = super(GenericCreatePostView, self).cancelButtonExtraInputs or {}
         self._cancelButtonExtraInputs["postID"] = self.postID
         self._cancelButtonExtraInputs["projectID"] = self.projectID
+        if self.projectID and not self.post.record.title:
+            # Cancel back to project if canceling a new post and the poroject exists
+            self._cancelButtonExtraInputs["skipToProject"] = True
         return self._cancelButtonExtraInputs
 
     @property

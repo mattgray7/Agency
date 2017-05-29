@@ -57,7 +57,7 @@ function updatePostFollow(){
 			{% endif %}
 			{% if post.poster == request.user.username %}
 				{% if isCasting or isWork %}
-					{% if project and projectID %}
+					{% if project and projectID and project.record.title %}
 						<form method='post' action="/post/view/{{ projectID }}/">
 								{% csrf_token %}
 								<input type="hidden" name="source" value="{{ next }}" />
