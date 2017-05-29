@@ -52,7 +52,7 @@ class Profession(models.Model):
 
 class AbstractPost(models.Model):
     postID = models.CharField(max_length=10)
-    projectID = models.CharField(max_length=10)
+    projectID = models.CharField(max_length=10, blank=True, null=True)
     poster = models.CharField(max_length=200)
     title = models.CharField(max_length=500, default=None, blank=True, null=True)
     description = models.CharField(max_length=5000, default=None, blank=True, null=True)

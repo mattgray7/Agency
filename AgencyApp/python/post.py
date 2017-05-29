@@ -171,8 +171,7 @@ class GenericCreatePostView(views.PictureFormView):
     @property
     def projectID(self):
         if self._projectID is None:
-            self._projectID = self.request.POST.get("projectID") or helpers.getMessageFromKey(self.request, "projectID")
-
+            self._projectID = self.request.POST.get("projectID", helpers.getMessageFromKey(self.request, "projectID"))
         return self._projectID
 
     @property
@@ -326,8 +325,7 @@ class GenericViewPostView(views.GenericFormView):
     @property
     def projectID(self):
         if self._projectID is None:
-            projectID = self.request.POST.get("projectID", helpers.getMessageFromKey(self.request, "projectID"))
-            self._projectID = projectID
+            self._projectID = self.request.POST.get("projectID", helpers.getMessageFromKey(self.request, "projectID"))
         return self._projectID
 
     @property
