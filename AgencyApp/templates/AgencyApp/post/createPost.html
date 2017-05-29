@@ -74,7 +74,7 @@
 		{% elif isWork %}
 			<form method='post' action="/post/create/work/" name='createForm' enctype="multipart/form-data">
 		{% elif isCasting %}
-			<form method='post' action="/post/create/casting/" name='createForm' enctype="multipart/form-data">
+			<form method='post' action="/post/create/casting/" name='castingPostForm' enctype="multipart/form-data" id='castingPostForm'>
 		{% endif %}
 	{% endif %}
 		{% csrf_token %}
@@ -82,12 +82,24 @@
 
 		{% if isCasting %}
 			<script>
-			function enableActorDescriptions(){
-				var inputs = document.getElementsByTagName("input");
+			function toggleActorDescriptions(){
+				// Create input list
+				var tagInputs = document.getElementsByTagName("input")
+				var selectInputs = document.getElementsByTagName("select");
+				var inputs = []
+				for(var i=0; i < tagInputs.length; i++){
+					inputs.push(tagInputs[i]);
+				}
+				for(var i=0; i < selectInputs.length; i++){
+					inputs.push(selectInputs[i]);
+				}
+
+				// toggle the enable
 				for(var i=0; i < inputs.length; i++){
 					var currentInput = inputs[i]
 					if(currentInput.id.substring(0, 10) == "attributes"){
 						if(currentInput.disabled){
+							console.log("ENABLING")
 							currentInput.disabled = false;
 							document.getElementById("physicalAttributesEnabledDiv").innerHTML = "<input type='hidden' name='descriptionEnabled' value='True' />";
 							document.getElementById("physicalAttributesDivLabel").innerHTML = '<font color="black">Physical attributes</font>';
@@ -105,9 +117,9 @@
 			<br>
 			Enable physical attributes
 			{% if post.descriptionEnabled %}
-				<input type="checkbox" onclick="enableActorDescriptions();" value="Enable physical criteria" checked/>
+				<input type="checkbox" onclick="toggleActorDescriptions();" value="Enable physical criteria" checked/>
 			{% else %}
-				<input type="checkbox" onclick="enableActorDescriptions();" value="Enable physical criteria"/>
+				<input type="checkbox" onclick="toggleActorDescriptions();" value="Enable physical criteria"/>
 			{% endif %}
 			<br><br>
 
@@ -116,6 +128,9 @@
 					<div id="physicalAttributesDivLabel"><font color="gray">Physical attributes</font></div>
 				</h4>
 				<table>
+					<script>
+					var attributeDivIdList = [];
+					</script>
 					{% for attribute in attributes %}
 						<tr><td>
 							<script>
@@ -134,22 +149,30 @@
 								<div id="{{attribute.name}}BoolDiv"></div>
 								<input type='checkbox' value='{{attribute.value}}' id="attributes.{{attribute.name}}" name='{{attribute.name}}' disabled='disabled' onclick='changeAttributeBool("{{attribute.name}}", "True");' >
 							{% else %}
-								<input type='text' value='{{attribute.value}}' id="attributes.{{attribute.name}}" name='attributes.{{attribute.name}}' disabled='disabled'>
+								{% if attribute.options %}
+									<div id="attributes.{{attribute.name}}Div"></div>
+									<script>
+										attributeDivIdList.push("{{attribute.name}}Div")
+									</script>
+									<!--<select form='castingPostForm' name='attributes.{{attribute.name}}' id="attributes.{{attribute.name}}" disabled='disabled'>
+										{% for option in attribute.options %}
+											<option value="{{ option }}">{{option}}</option>
+										{% endfor %}
+									</select>-->
+								{% elif attribute.value and attribute.value != "None" %}
+									<input type='text' value='{{attribute.value}}' id="attributes.{{attribute.name}}" name="attributes.{{attribute.name}}" disabled='disabled'>
+								{% else %}
+									<input type='text' value='' id="attributes.{{attribute.name}}" name="attributes.{{attribute.name}}" disabled='disabled'>
+								{% endif %}
 							{% endif %}
 							</td></tr>
 					{% endfor %}
 
 				</table>
-				<div id="physicalAttributesEnabledDiv">
+				<div id="physicalAttributesEnabledDiv" style="display:inline";>
 					<input type='hidden' name='descriptionEnabled' value='{{ descriptionEnabled }}' />
 				</div>
 			</div>
-			
-			<script>
-				{% if post.descriptionEnabled %}
-					$(document).ready(enableActorDescriptions());
-				{% endif %}
-			</script>
 		{% endif %}
 		{% if post.title %}
 			<input type="submit" value="Update" />
@@ -158,4 +181,42 @@
 		{% endif %}
 	</form>
 	<div id="cancelButton"></div>
+
+	{% if isCasting %}
+		<script>
+		$(document).ready(function(){
+
+
+			{% for attribute in attributes %}
+				console.log("looking att attributes.{{attribute.name}}Div")
+				var attributeDiv = document.getElementById("attributes.{{attribute.name}}Div")
+				if(attributeDiv != null){
+					var attributeString = "<select form='castingPostForm' name='attributes.{{attribute.name}}' id='attributes.{{attribute.name}}'' disabled='disabled'>";
+					{% for option in attribute.options %}
+						attributeString += "<option value='{{ option }}'>{{option}}</option>"
+					{% endfor %}
+					attributeString += "</select>";
+					attributeDiv.innerHTML = attributeString
+				}
+			{% endfor %}
+
+			{% if post.descriptionEnabled %}
+				toggleActorDescriptions();
+			{% endif %}
+		});
+
+			/*var divs = document.getElementsByTagName("div")
+			var attributeString = "";
+			for(var i=0; i < divs.length; i++){
+				if(div[i].substring(0, 10) == "attributes"){
+					attributeString += "<select form='castingPostForm' name='attributes.{{attribute.name}}' id='attributes.{{attribute.name}}'' disabled='disabled'>";
+					{% for option in attribute.options %}
+											<option value="{{ option }}">{{option}}</option>
+										{% endfor %}
+									</select>
+			}
+		});*/
+		</script>
+	{% endif %}
+
 {% endblock %}
