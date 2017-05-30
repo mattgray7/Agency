@@ -116,6 +116,20 @@
 
         {% block content %}{% endblock %}
         <script>
+            function addStatusBar(statusDivName, statusSelectName, defaultStatus){
+                if(defaultStatus.length == 0){
+                    defaultStatus = "Open";
+                }
+                var statusDiv = document.getElementById(statusDivName)
+                if(statusDiv != null){
+                    {% if statusOptions %}
+                        var statusOptions = {{ statusOptions|safe }};
+                        var selectForm = createSelectForm("createForm", statusSelectName, statusOptions, defaultStatus);
+                        statusDiv.innerHTML = selectForm;
+                    {% endif %}
+                }
+            }
+
             function createSelectForm(formName, selectName, options, selected){
                 var formString = "<select form='" + formName + "' name='" + selectName + "' id='" + selectName + "'>";
                 for(var i=0; i < options.length; i++){
@@ -174,7 +188,6 @@
                     extraInputs.push({key: "{{ cancel }}", value: "True"});
                     {% if cancelButtonExtraInputs %}
                         var cancelButtonExtraInputs = {{ cancelButtonExtraInputs|safe }};
-                        console.log(cancelButtonExtraInputs)
                         for(var key in cancelButtonExtraInputs){
                             extraInputs.push({key: key, value: cancelButtonExtraInputs[key]});
                         }

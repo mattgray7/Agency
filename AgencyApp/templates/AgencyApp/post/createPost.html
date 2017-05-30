@@ -63,25 +63,25 @@
 	{% endif %}
 
 	{% if post.title %}
-		<form method='post' action="/post/edit/{{post.postID}}/" name='createForm' id='createForm' enctype="multipart/form-data">
+		<form method='post' action="/post/edit/{{post.postID}}/" name='createForm' id='createForm' enctype="multipart/form-data" onsubmit="return submitForm()">
 	{% else %}
 		{% if isEvent %}
-			<form method='post' action="/post/create/event/" name='createForm' id='createForm' enctype="multipart/form-data">
+			<form method='post' action="/post/create/event/" name='createForm' id='createForm' enctype="multipart/form-data" onsubmit="return submitForm()">
 		{% elif isProject %}
-			<form method='post' action="/post/create/project/" name='createForm' id='createForm' enctype="multipart/form-data">
+			<form method='post' action="/post/create/project/" name='createForm' id='createForm' enctype="multipart/form-data" onsubmit="return submitForm()">
 		{% elif isCollaboration %}
-			<form method='post' action="/post/create/collaboration/" name='createForm' id='createForm' enctype="multipart/form-data">
+			<form method='post' action="/post/create/collaboration/" name='createForm' id='createForm' enctype="multipart/form-data" onsubmit="return submitForm()">
 		{% elif isWork %}
-			<form method='post' action="/post/create/work/" name='createForm' id='createForm' enctype="multipart/form-data" onsubmit="return submitWorkForm()">
+			<form method='post' action="/post/create/work/" name='createForm' id='createForm' enctype="multipart/form-data" onsubmit="return submitForm()">
 		{% elif isCasting %}
-			<form method='post' action="/post/create/casting/" name='createForm' id='createForm' enctype="multipart/form-data" id='castingPostForm'>
+			<form method='post' action="/post/create/casting/" name='createForm' id='createForm' enctype="multipart/form-data" onsubmit="return submitForm()">
 		{% endif %}
 	{% endif %}
 		{% csrf_token %}
 		{{ form.as_p }}
-		{% if isCasting %}
+		Status: <div id="statusDiv" style="display:inline"></div><br><br>
 
-			<div id="castingStatusDiv"></div>
+		{% if isCasting %}
 			<script>
 			function toggleActorDescriptions(){
 				// Create input list
@@ -167,7 +167,7 @@
 			</div>
 
 		{% elif isWork %}
-			<div id='professionListDiv'></div>
+			<div id='professionListDiv'></div><br>
 		{% endif %}
 		{% if post.title %}
 			<input type="submit" value="Update" />
@@ -180,15 +180,23 @@
 	<script>
 		// Handle select bars
 		$(document).ready(function(){
-			{% if isWork %}
+			{% if isProject %}
+				addStatusBar("statusDiv", "statusSelect", "{{ post.status }}")
+			{% elif isWork %}
+				addStatusBar("statusDiv", "statusSelect", "{{ post.status }}")
+
 				// Add profession select bar to work post
 				var professionDiv = document.getElementById("professionListDiv")
 				if(professionDiv != null){
 					var professionOptions = {{ professionList|safe }};
-					var selectForm = createSelectForm("createForm", "professionSelect", professionOptions, "{{ chosenProfession }}");
+					var selectForm = "Profession:" + createSelectForm("createForm", "professionSelect", professionOptions, "{{ chosenProfession }}");
 					professionDiv.innerHTML = selectForm;
 				}
 			{% elif isCasting %}
+				// Casting status select bar
+				addStatusBar("statusDiv", "statusSelect", "{{ post.status }}")
+
+				// Casting attributes select bar
 				{% for attribute in attributes %}
 					var attributeDiv = document.getElementById("attributes.{{attribute.name}}Div")
 					if(attributeDiv != null){
@@ -209,16 +217,18 @@
 				{% endif %}
 			{% endif %}		
 		});
-	</script>
 
-	{% if isWork %}
-		<script>
-			function submitWorkForm(){
-				var form = document.getElementById("createForm")
+		function submitForm(){
+			var form = document.getElementById("createForm")
+			{% if isWork %}
 				document.getElementById("id_profession").value = document.getElementById("professionSelect").value;
-				return form.submit()
+			{% endif %}
+			var statusDiv = document.getElementById("statusSelect");
+			if(statusDiv != null){
+				document.getElementById("id_status").value = statusDiv.value;
+			}
+			return form.submit()
 			}
 		</script>
-	{% endif %}
 
 {% endblock %}

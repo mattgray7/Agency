@@ -15,11 +15,7 @@ class ProjectPostInstance(post.GenericPostInstance):
         return True
 
     def saveModelFormValues(self):
-        if self.record:
-            self.record.status = self.request.POST.get("status", "")
-            self.record.save()
-            return True
-        return False
+        return True
 
 
 class CreateProjectPostView(post.GenericCreatePostView):
@@ -71,6 +67,12 @@ class CreateProjectPostView(post.GenericCreatePostView):
             self._formInitialValues["status"] = self.post.record.status
         return self._formInitialValues
 
+    @property
+    def pageContext(self):
+        self._pageContext = super(CreateProjectPostView, self).pageContext
+        self._pageContext["statusOptions"] = constants.PROJECT_STATUS_LIST
+        self._pageContext["defaultStatus"] = "In production"
+        return self._pageContext
 
 class ViewProjectPostView(post.GenericViewPostView):
     def __init__(self, *args, **kwargs):

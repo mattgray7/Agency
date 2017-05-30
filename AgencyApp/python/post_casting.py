@@ -107,7 +107,6 @@ class CreateCastingPostView(post.GenericCreatePostView):
             self._formInitialValues["paid"] = self.post.record.paid
             self._formInitialValues["postID"] = self.post.record.postID
             self._formInitialValues["projectID"] = self.projectID
-            self._formInitialValues["status"] = self.post.record.status
         return self._formInitialValues
 
 

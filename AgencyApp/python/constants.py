@@ -79,8 +79,8 @@ ACTOR_ATTRIBUTE_DICT = [{"name": "Hair color",
 						 "value": True}]
 
 PROJECT_STATUS_LIST = ["Pre-production", "In production", "Post production", "Screening"]
-CASTING_STATUS_LIST = ["Casting soon", "Available", "Casted"]
-WORK_STATUS_LUST = ["Available", "Position filled"]
+CASTING_STATUS_LIST = ["Opening soon", "Open", "Closed"]
+WORK_STATUS_LIST = ["Hiring", "Filled"]
 PROFILE_STATUS_LIST = ["Currently available", "Currently unavailable"]
 
 

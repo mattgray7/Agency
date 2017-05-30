@@ -122,6 +122,7 @@ class GenericPostInstance(object):
             self.record.title = self.request.POST.get("title", "")
             self.record.poster = self.request.POST.get("poster", "")
             self.record.description = self.request.POST.get("description", "")
+            self.record.status = self.request.POST.get("status", "")
             if self.request.FILES.get("postPicture"):
                 self._record.postPicture = self.request.FILES.get("postPicture")
             self.record.save()

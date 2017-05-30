@@ -58,18 +58,18 @@ class AbstractPost(models.Model):
     description = models.CharField(max_length=5000, default=None, blank=True, null=True)
     postPicturePath = models.CharField(max_length=5000, default=None, blank=True, null=True)
     postPicture = models.ImageField(default=None, upload_to=image_directory_path, storage=imageStorage, blank=True, null=True)
+    status = models.CharField(max_length=50, default="Available", blank=True, null=True)
 
 class EventPost(AbstractPost):
     location = models.CharField(max_length=1000, default=None, blank=True, null=True)
     date = models.DateField(default=None, blank=True, null=True)
 
 class ProjectPost(AbstractPost):
-    status = models.CharField(max_length=50, default=None, blank=True, null=True)
+    pass
 
 class WorkPost(AbstractPost):
     profession = models.CharField(max_length=200)
     paid = models.BooleanField(default=False)
-    status = models.CharField(max_length=50, default="Available")
 
 class CollaborationPost(AbstractPost):
     profession = models.CharField(max_length=200)
@@ -77,7 +77,6 @@ class CollaborationPost(AbstractPost):
 class CastingPost(AbstractPost):
     paid = models.BooleanField(default=False)
     descriptionEnabled = models.BooleanField(default=False)
-    status = models.CharField(max_length=50, default="Available")
 
 class Actor(models.Model):
     username = models.CharField(max_length=200)

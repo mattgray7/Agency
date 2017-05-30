@@ -40,18 +40,18 @@ class GenericCreatePostForm(BaseForm):
     postPicture = forms.ImageField(label="Picture", required=False)
     title = forms.CharField(label="Title", max_length=500, required=True)
     description = forms.CharField(label="Description", required=True, max_length=5000)
+    status = forms.CharField(widget=forms.HiddenInput, max_length=50, required=False)
 
 class CreateEventPostForm(GenericCreatePostForm):
     location = forms.CharField(label="Location", required=True, max_length=1000)
     date = forms.DateField(widget=forms.DateInput(attrs={'class':'datepicker'}))
 
 class CreateProjectPostForm(GenericCreatePostForm):
-    status = forms.CharField(label="Production status", required=False, max_length=50)
+    pass
 
 class CreateWorkPostForm(GenericCreatePostForm):
     profession = forms.CharField(widget=forms.HiddenInput, max_length=200, required=True)
     paid = forms.BooleanField(label="Paid", required=False)
-    status = forms.CharField(widget=forms.HiddenInput, max_length=50, required=False)
 
 class CreateCollaborationPostForm(GenericCreatePostForm):
     profession = forms.CharField(label="Profession", max_length=200, required=True)
@@ -59,7 +59,6 @@ class CreateCollaborationPostForm(GenericCreatePostForm):
 class CreateCastingPostForm(GenericCreatePostForm):
     paid = forms.BooleanField(label="Paid", required=False)
     descriptionEnabled = forms.BooleanField(widget=forms.HiddenInput, required=False)
-    status = forms.CharField(max_length=50, required=False)
 
 
 

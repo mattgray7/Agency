@@ -45,6 +45,8 @@ class CreateWorkPostView(post.GenericCreatePostView):
         self._pageContext = super(CreateWorkPostView, self).pageContext
         self._pageContext["professionList"] = json.dumps(constants.PROFESSIONS)
         self._pageContext["chosenProfession"] = self.post.record.profession
+        self._pageContext["statusOptions"] = constants.WORK_STATUS_LIST
+
         return self._pageContext
 
     @property

@@ -38,7 +38,6 @@ function updatePostFollow(){
 			<h5>Located at {{post.location}} on {{post.date}}</h5>
 		{% elif isProject %}
 			Project {{ post.title }}
-			<h5>Status: {{ post.status }}</h5>
 		{% elif isCollaboration %}
 			(Looking for collaboration) {{ post.title }} <br>
 			Looking for a {{ post.profession }}
@@ -114,15 +113,20 @@ function updatePostFollow(){
 		</div>
 	</button>
 
+	<br><br>
+	<h5 style="display:inline"> Posted by <div style="display:inline" id="profileRedirectButton">{{post.poster}}</div> </h5><br>
+	<h5 style="display:inline"> Description:</h5>
+	{% if post.description %}
+		{{ post.description }}
+	{% else %}
+		No description provided.
+	{% endif %}
+	<br><br>
 
-	<h5> Posted by <div id="profileRedirectButton">{{post.poster}}</div> </h5>
-	<h5> Description:<br>
-		{% if post.description %}
-			{{ post.description }}
-		{% else %}
-			No description provided.
-		{% endif %}
-	</h5>
+	{% if post.status %}
+		<h5 style="display:inline">Status:</h5> {{post.status}}<br><br>
+	{% endif %}
+
 	{% if post.poster == request.user.username %}
 		<form method='post' action="/post/view/{{ post.postID }}/">
 			{% csrf_token %}
