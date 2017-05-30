@@ -116,6 +116,19 @@
 
         {% block content %}{% endblock %}
         <script>
+            function createSelectForm(formName, selectName, options, selected){
+                var formString = "<select form='" + formName + "' name='" + selectName + "' id='" + selectName + "'>";
+                for(var i=0; i < options.length; i++){
+                    if(options[i] == selected){
+                        formString += "<option value='" + options[i] + "' selected='selected'>" + options[i] + "</option>"
+                    }else{
+                        formString += "<option value='" + options[i] + "'>" + options[i] + "</option>"
+                    }
+                }
+                formString += "</select>";
+                return formString
+            }
+
             function createFormInput(type, name, value){
                 var input = document.createElement("input");
                 input.setAttribute("type", type);

@@ -70,9 +70,6 @@ ACTOR_ATTRIBUTE_DICT = [{"name": "Hair color",
 						{"name": "Age range (years)",
 						 "value": "18 - 25",
 						 "options": ["0 - 12", "12 - 18", "18 - 25", "25 - 40", "40 - 55", "55+"]},
-						{"name": "Ethnicity",
-						 "value": "Caucasian",
-						 "options": ["Asian", "European", "North American", "Spanish", "South American", "other"]},
 						 {"name": "Identified gender",
 						 "value": "Male",
 						 "options": ["Male", "Female", "Other"]},
@@ -80,6 +77,12 @@ ACTOR_ATTRIBUTE_DICT = [{"name": "Hair color",
 						 "value": None},
 						{"name": "Available now",
 						 "value": True}]
+
+PROJECT_STATUS_LIST = ["Pre-production", "In production", "Post production", "Screening"]
+CASTING_STATUS_LIST = ["Casting soon", "Available", "Casted"]
+WORK_STATUS_LUST = ["Available", "Position filled"]
+PROFILE_STATUS_LIST = ["Currently available", "Currently unavailable"]
+
 
 URL_MAP = {HOME: "/",
 		   LOGIN:"/login/",

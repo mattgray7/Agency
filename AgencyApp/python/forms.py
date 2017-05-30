@@ -51,7 +51,7 @@ class CreateProjectPostForm(GenericCreatePostForm):
 class CreateWorkPostForm(GenericCreatePostForm):
     profession = forms.CharField(widget=forms.HiddenInput, max_length=200, required=True)
     paid = forms.BooleanField(label="Paid", required=False)
-    status = forms.CharField(max_length=50, required=False)
+    status = forms.CharField(widget=forms.HiddenInput, max_length=50, required=False)
 
 class CreateCollaborationPostForm(GenericCreatePostForm):
     profession = forms.CharField(label="Profession", max_length=200, required=True)

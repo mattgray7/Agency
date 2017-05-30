@@ -79,8 +79,9 @@
 	{% endif %}
 		{% csrf_token %}
 		{{ form.as_p }}
-
 		{% if isCasting %}
+
+			<div id="castingStatusDiv"></div>
 			<script>
 			function toggleActorDescriptions(){
 				// Create input list
@@ -176,31 +177,39 @@
 	</form>
 	<div id="cancelButton"></div>
 
-	{% if isCasting %}
-		<script>
+	<script>
+		// Handle select bars
 		$(document).ready(function(){
-			{% for attribute in attributes %}
-				var attributeDiv = document.getElementById("attributes.{{attribute.name}}Div")
-				if(attributeDiv != null){
-					var attributeString = "<select form='createForm' name='attributes.{{attribute.name}}' id='attributes.{{attribute.name}}' disabled='disabled'>";
-					{% for option in attribute.options %}
-						{% if attribute.value == option %}
-							attributeString += "<option value='{{ option }}' selected='selected'>{{option}}</option>"
-						{% else %}
-							attributeString += "<option value='{{ option }}'>{{option}}</option>"
-						{% endif %}
-					{% endfor %}
-					attributeString += "</select>";
-					attributeDiv.innerHTML = attributeString
+			{% if isWork %}
+				// Add profession select bar to work post
+				var professionDiv = document.getElementById("professionListDiv")
+				if(professionDiv != null){
+					var professionOptions = {{ professionList|safe }};
+					var selectForm = createSelectForm("createForm", "professionSelect", professionOptions, "{{ chosenProfession }}");
+					professionDiv.innerHTML = selectForm;
 				}
-			{% endfor %}
+			{% elif isCasting %}
+				{% for attribute in attributes %}
+					var attributeDiv = document.getElementById("attributes.{{attribute.name}}Div")
+					if(attributeDiv != null){
+						{% if attribute.options %}
+							var attributeOptions = {{ attribute.options|safe }}
+							var selectForm = createSelectForm("createForm", "attributes.{{attribute.name}}", attributeOptions, "{{attribute.value}}")
+							attributeDiv.innerHTML = selectForm;
 
-			{% if post.descriptionEnabled %}
-				toggleActorDescriptions();
-			{% endif %}
+							var attributeSelectForm = document.getElementById("attributes.{{attribute.name}}");
+							if(attributeSelectForm != null){
+								attributeSelectForm.disabled = "disabled";
+							}
+						{% endif %}
+					}
+				{% endfor %}
+				{% if post.descriptionEnabled %}
+					toggleActorDescriptions();
+				{% endif %}
+			{% endif %}		
 		});
-		</script>
-	{% endif %}
+	</script>
 
 	{% if isWork %}
 		<script>
@@ -209,22 +218,6 @@
 				document.getElementById("id_profession").value = document.getElementById("professionSelect").value;
 				return form.submit()
 			}
-
-			$(document).ready(function(){
-				var professionDiv = document.getElementById("professionListDiv")
-				if(professionDiv != null){
-					var attributeString = "Profession: <select form='createForm' name='professionSelect' id='professionSelect'>";
-					{% for possibleProfession in professionList %}
-						{% if chosenProfession == possibleProfession %}
-							attributeString += "<option value='{{ possibleProfession }}' selected='selected'>{{ possibleProfession }}</option>"
-						{% else %}
-							attributeString += "<option value='{{ possibleProfession }}'>{{ possibleProfession }}</option>"
-						{% endif %}
-					{% endfor %}
-					attributeString += "</select>";
-					professionDiv.innerHTML = attributeString;
-				}
-			});
 		</script>
 	{% endif %}
 

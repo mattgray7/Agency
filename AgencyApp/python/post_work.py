@@ -43,7 +43,7 @@ class CreateWorkPostView(post.GenericCreatePostView):
     @property
     def pageContext(self):
         self._pageContext = super(CreateWorkPostView, self).pageContext
-        self._pageContext["professionList"] = constants.PROFESSIONS
+        self._pageContext["professionList"] = json.dumps(constants.PROFESSIONS)
         self._pageContext["chosenProfession"] = self.post.record.profession
         return self._pageContext
 
