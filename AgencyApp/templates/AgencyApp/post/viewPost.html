@@ -156,8 +156,53 @@ function updatePostFollow(){
 	{% endif %}
 
 	{% if isProject %}
-		<br>
-			{% if castingPosts %}
+		{% if eventPosts %}
+			<h5> Events posted </h5>
+				<table>
+					<tr><td></td><td> Title </td><td> Date </td><td> Location</td></tr>
+					{% for eventPost in eventPosts %}
+						<tr><td>
+								{% if eventPost.postPicture %}
+									<img src="{{ eventPost.postPicture.url }}" height="50px" width="70px"/>
+								{% else %}
+									<img height="50px" width="70px"/>
+								{% endif %}
+						</td>
+						<td>
+							<form method='post' action="/post/view/{{ eventPost.postID }}/">
+								{% csrf_token %}
+								<input type="hidden" name="source" value="{{ next }}" />
+								<input type="hidden" name="next" value="{{ next }}" />
+								<input type="hidden" name="destination" value="{{ possibleDestinations.viewEvent }}" />
+								<input type="hidden" name="postID" value="{{ eventPost.postID }}" />
+								<input type="hidden" name="projectID" value="{{ post.postID }}" />
+								<input type="submit" value="{{ eventPost.title }}" />
+							</form>
+						</td>
+						<td>
+							{{eventPost.date}}
+						</td>
+						<td>
+							{{eventPost.location}}
+						</td>
+					</tr>
+					{% endfor %}
+				</table>
+			{% else %}
+				<h5> No Events </h5>
+			{% endif %}
+		{% if post.poster == request.user.username %}
+				<form method='post' action="/post/view/{{ post.postID }}/">
+					{% csrf_token %}
+					<input type="hidden" name="source" value="{{ next }}" />
+					<input type="hidden" name="next" value="{{ next }}" />
+					<input type="hidden" name="destination" value="{{ possibleDestinations.createEvent }}" />
+					<input type="hidden" name="projectID" value="{{ post.postID }}" />
+					<input type="submit" value="Add a new event" />
+				</form>
+		{% endif %}
+
+		{% if castingPosts %}
 			<h5> Acting roles posted </h5>
 				<table>
 					<tr><td></td><td> Role</td><td> Description </td><td> Paid</td></tr>

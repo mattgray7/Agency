@@ -79,6 +79,7 @@ class ViewProjectPostView(post.GenericViewPostView):
         super(ViewProjectPostView, self).__init__(*args, **kwargs)
         self._castingPosts = None
         self._workPosts = None
+        self._eventPosts = None
 
     @property
     def castingPosts(self):
@@ -91,6 +92,12 @@ class ViewProjectPostView(post.GenericViewPostView):
         if self._workPosts is None:
             self._workPosts = models.WorkPost.objects.filter(projectID=self.postID)
         return self._workPosts
+
+    @property
+    def eventPosts(self):
+        if self._eventPosts is None:
+            self._eventPosts = models.EventPost.objects.filter(projectID=self.postID)
+        return self._eventPosts
 
     @property
     def post(self):
@@ -107,9 +114,12 @@ class ViewProjectPostView(post.GenericViewPostView):
                                                      "viewCasting": constants.VIEW_POST,
                                                      "createWork": constants.CREATE_WORK_POST,
                                                      "viewWork": constants.VIEW_POST,
-                                                     "viewPost": constants.VIEW_POST}
+                                                     "viewPost": constants.VIEW_POST,
+                                                     "viewEvent": constants.VIEW_POST,
+                                                     "createEvent": constants.CREATE_EVENT_POST}
         self._pageContext["castingPosts"] = self.castingPosts
         self._pageContext["workPosts"] = self.workPosts
+        self._pageContext["eventPosts"] = self.eventPosts
         self._pageContext["project"] = self.post
         self._pageContext["projectID"] = self.post.record.postID
         return self._pageContext
