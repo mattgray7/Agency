@@ -30,6 +30,7 @@ urlpatterns = [
     url(r'^post/view/(?P<postID>[A-Za-z0-9]+)/follow/$', ajax.followPost, name='followPost'),
     url(r'^ajax/getPostFollowingBool/$', ajax.getPostFollowingBool, name='getPostFollowingBool'),
     url(r'^ajax/getUserProjects/$', ajax.getUserProjects, name='getUserProjects'),
+    url(r'^ajax/deletePostFromDB/$', ajax.deletePostFromDB, name='deletePostFromDB'),  #TODO find a way to secure this link
 
 
     # Browse

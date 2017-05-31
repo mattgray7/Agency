@@ -8,6 +8,9 @@
     </head>
 
     <script>
+    // Deconstructor functinos to run when a toolbar source is selected
+    var toolbarDeconstructorFunctions = [];
+
     // using jQuery
     function getCookie(name) {
         var cookieValue = null;
@@ -57,7 +60,7 @@
             <table width="100%;">
                 <tr>
                     <td width="80%">
-                        <form action="/" method="post">
+                        <form action="/" method="post" onclick="submitToolbar(this);">
                             {% csrf_token %}
                             <input type="hidden" name="source" value="{{ next }}">
                             <input type="hidden" name="next" value="{{ toolbarDestinations.home }}">
@@ -65,7 +68,7 @@
                         </form>
                     </td>
                     <td>
-                        <form action="/browse/" method="post">
+                        <form action="/browse/" method="post" onclick="submitToolbar(this);">
                             {% csrf_token %}
                             <input type="hidden" name="source" value="{{ source }}">
                             <input type="hidden" name="next" value="{{ toolbarDestinations.browse }}">
@@ -74,7 +77,7 @@
                     </td>
                     {% if request.user.is_authenticated %}
                         <td>
-                            <form action="/post/" method="post">
+                            <form action="/post/" method="post" onclick="submitToolbar(this);">
                                 {% csrf_token %}
                                 <input type="hidden" name="source" value="{{ source }}">
                                 <input type="hidden" name="next" value="{{ toolbarDestinations.post }}">
@@ -83,7 +86,7 @@
                         </td>
 
                         <td>
-                            <form action="/user/{{ request.user.username }}/" method="post">
+                            <form action="/user/{{ request.user.username }}/" method="post" onclick="submitToolbar(this);">
                                 {% csrf_token %}
                                 <input type="hidden" name="source" value="{{ source }}">
                                 <input type="hidden" name="next" value="{{ toolbarDestinations.profile }}">
@@ -91,7 +94,7 @@
                             </form>
                         </td>
                         <td>
-                            <form action="/logout/" method="post">
+                            <form action="/logout/" method="post" onclick="submitToolbar(this);">
                                 {% csrf_token %}
                                 <input type="hidden" name="source" value="{{ source }}">
                                 <input type="hidden" name="next" value="{{ toolbarDestinations.logout }}">
@@ -100,7 +103,7 @@
                         </td>
                     {% else %}
                         <td>
-                            <form action="/login/" method="post">
+                            <form action="/login/" method="post" onclick="submitToolbar(this);">
                                 {% csrf_token %}
                                 <input type="hidden" name="source" value="{{ source }}">
                                 <input type="hidden" name="next" value="{{ toolbarDestinations.login }}">
@@ -116,6 +119,15 @@
 
         {% block content %}{% endblock %}
         <script>
+            function submitToolbar(form){
+                if(toolbarDeconstructorFunctions.length > 0){
+                    for(var i=0; i < toolbarDeconstructorFunctions.length; i++){
+                        toolbarDeconstructorFunctions[i]();
+                    }
+                }
+                return form.submit()
+            }
+
             function addStatusBar(statusDivName, statusSelectName, defaultStatus){
                 if(defaultStatus.length == 0){
                     defaultStatus = "Open";

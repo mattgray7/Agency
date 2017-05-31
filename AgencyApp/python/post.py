@@ -243,6 +243,7 @@ class GenericCreatePostView(views.PictureFormView):
         self._pageContext["isWork"] = isWorkPost(self.postID)
         self._pageContext["isCasting"] = isCastingPost(self.postID)
         self._pageContext["hideStatus"] = False
+        self._pageContext["postType"] = self.post.postType
         return self._pageContext
 
     @property

@@ -12,6 +12,20 @@
 	      // You can put more options here.
 	    });
 	  });
+
+	  function deletePostFromDB(postID, postType){
+	  	$.ajax({
+			url : "/ajax/deletePostFromDB/",
+			data : {"postID": postID, "postType": postType},
+			type : 'POST',
+			dataType: "json",
+			success : function(data) {
+				if(!data["success"]){
+					console.log("failure, " + data["errors"]);
+				}
+			}
+		});
+	  }
 	  </script>
 
 	{% if errors %}
@@ -77,13 +91,13 @@
 			<form method='post' action="/post/create/casting/" name='createForm' id='createForm' enctype="multipart/form-data" onsubmit="return submitForm()">
 		{% endif %}
 	{% endif %}
-		{% csrf_token %}
-		{{ form.as_p }}
-		{% if not hideStatus %}
-			Status: <div id="statusDiv" style="display:inline"></div><br><br>
-		{% endif %}
+	{% csrf_token %}
+	{{ form.as_p }}
+	{% if not hideStatus %}
+		Status: <div id="statusDiv" style="display:inline"></div><br><br>
+	{% endif %}
 
-		{% if isCasting %}
+	{% if isCasting %}
 			<script>
 			function toggleActorDescriptions(){
 				// Create input list
@@ -168,26 +182,34 @@
 				</div>
 			</div>
 
-		{% elif isWork %}
-			<div id='professionListDiv'></div><br>
-		{% endif %}
-		{% if post.title %}
-			<input type="submit" value="Update" />
-		{% else %}
-			<input type="submit" value="Create" />
-		{% endif %}
+	{% elif isWork %}
+		<div id='professionListDiv'></div><br>
+	{% endif %}
+
+	{% if post.title %}
+		<input type="submit" value="Update" />
+	{% else %}
+		<input type="submit" value="Create" />
+	{% endif %}
 	</form>
 	<div id="cancelButton"></div>
 
 	<script>
-		// Handle select bars
 		$(document).ready(function(){
+			// run a deconstructor to delete a post from the db if user navigates away from this page without canceling
+			toolbarDeconstructorFunctions.push(function(){
+				{% if not post.record.title %}
+					// New record, need to delete
+					deletePostFromDB("{{ post.postID }}", "{{ postType }}")
+				{% endif %}
+			})
+
+			// Handle select bars
 			{% if not hideStatus %}
 				addStatusBar("statusDiv", "statusSelect", "{{ post.status }}")
 			{% endif %}
 
 			{% if isWork %}
-
 				// Add profession select bar to work post
 				var professionDiv = document.getElementById("professionListDiv")
 				if(professionDiv != null){

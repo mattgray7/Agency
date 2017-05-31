@@ -40,7 +40,7 @@ class CreateCollaborationPostView(post.GenericCreatePostView):
     @property
     def post(self):
         if self._post is None:
-            self._post = CollaborationPostInstance(request=self.request, postID=self.postID)
+            self._post = CollaborationPostInstance(request=self.request, postID=self.postID, postType=constants.COLLABORATION_POST)
         return self._post
 
     @property
@@ -60,6 +60,6 @@ class ViewCollaborationPostView(post.GenericViewPostView):
     def post(self):
         if self._post is None:
             if self.postID:
-                self._post = CollaborationPostInstance(request=self.request, postID=self.postID)
+                self._post = CollaborationPostInstance(request=self.request, postID=self.postID, postType=constants.COLLABORATION_POST)
         return self._post
 
