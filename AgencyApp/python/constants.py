@@ -51,7 +51,7 @@ EDIT_ACTOR_DESCRIPTION = "EDIT_ACTOR_DESCRIPTION"
 PROFESSIONS = ["Actor", "Acting Coach", "Art Director", "Assistant Director", "Assistant Camera Operator",
 			   "Boom Operator", "Camera Operator", "Casting Director", "Choreographer", "Cinematographer",
 			   "CG Animator", "Compositor", "Costume Designer", "Concept Artist", "Dancer", "Director",
-			   "Editor", "Film Festival Director", "Film Festival Volunteer", "Graphic Designer", "Grip",
+			   "Editor", "Electrician", "Film Festival Director", "Film Festival Volunteer", "Graphic Designer", "Grip",
 			   "Hair Stylist", "Key Grip", "Lighting Technician", "Location Manager", "Makeup Artist",
 			   "Marketing", "Music Composer", "Music Supervisor", "Music Editor", "Musician", "Photographer",
 			   "Producer", "Production Assistant", "Production Caterer", "Production Coordinator",
