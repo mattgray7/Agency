@@ -74,6 +74,7 @@ class GenericPostInstance(object):
         self.request = kwargs.get("request")
         self._postID = kwargs.get("postID")
         self._postType = kwargs.get("postType")
+        self._projectID = kwargs.get("projectID")
         self._record = None
         self._database = None
         self.errors = []
@@ -85,6 +86,15 @@ class GenericPostInstance(object):
                                                                                         "postID")
         return self._postID
 
+    @property
+    def projectID(self):
+        if self._projectID is None:
+            self._projectID = self.request.POST.get("projectID") or helpers.getMessageFromKey(self.request,
+                                                                                              "ptojectID")
+            if self._projectID is None:
+                if self.record.projectID:
+                    self._projectID = self.record.projectID
+        return self._projectID
     @property
     def record(self):
         if self._record is None:
@@ -328,6 +338,9 @@ class GenericViewPostView(views.GenericFormView):
     def projectID(self):
         if self._projectID is None:
             self._projectID = self.request.POST.get("projectID", helpers.getMessageFromKey(self.request, "projectID"))
+            if self._projectID is None:
+                if self.post.record.projectID:
+                    self._projectID = self.post.record.projectID
         return self._projectID
 
     @property

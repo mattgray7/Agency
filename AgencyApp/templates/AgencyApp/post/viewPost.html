@@ -50,10 +50,12 @@ function updatePostFollow(){
 				{% else %}
 					 - Unpaid
 				{% endif %}
+			{% elif isEvent %}
+				Event {{ post.title }} 
+				<h5>Located at {{post.location}} on {{post.date}}</h5>
 			{% endif %}
 			{% if post.poster == request.user.username %}
-				{% if isCasting or isWork %}
-					{% if project and projectID and project.record.title %}
+				{% if project and projectID and project.record.title %}
 						<form method='post' action="/post/view/{{ projectID }}/">
 								{% csrf_token %}
 								<input type="hidden" name="source" value="{{ next }}" />
@@ -62,8 +64,8 @@ function updatePostFollow(){
 								<input type="hidden" name="postID" value="{{ projectID }}" />
 								<input type="hidden" name="projectID" value="{{ projectID }}" />
 								Project: <input type="submit" value="{{ project.record.title }}" />
-							</form>
-						{% else %}
+						</form>
+				{% else %}
 							<div id="possibleProjects"></div>
 							<script>
 							function showPossibleProjects(){
@@ -93,10 +95,8 @@ function updatePostFollow(){
 								});
 							}
 							</script>
-							<button onclick="showPossibleProjects();" id="addPostToProjectButton"> Add post to project </button>
-
-						{% endif %}
-					{% endif %}
+							<button onclick="showPossibleProjects();" id="addPostToProjectButton"> Add post to project </button><br>
+				{% endif %}
 			{% endif %}
 		{% endif %}
 	</h3>

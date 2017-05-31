@@ -22,6 +22,7 @@ class EventPostInstance(post.GenericPostInstance):
         if self.record:
             self.record.location = self.request.POST.get("location", "")
             self.record.date = self.request.POST.get("date", "")
+            self.record.projectID = self.request.POST.get("projectID")
             self.record.save()
             return True
         return False
@@ -33,9 +34,15 @@ class CreateEventPostView(post.GenericCreatePostView):
         super(CreateEventPostView, self).__init__(*args, **kwargs)
 
     @property
+    def pageContext(self):
+        self._pageContext = super(CreateEventPostView, self).pageContext
+        self._pageContext["hideStatus"] = True
+        return self._pageContext
+
+    @property
     def post(self):
         if self._post is None:
-            self._post = EventPostInstance(request=self.request, postID=self.postID)
+            self._post = EventPostInstance(request=self.request, postID=self.postID, projectID=self.projectID)
         return self._post
 
     @property
@@ -44,6 +51,7 @@ class CreateEventPostView(post.GenericCreatePostView):
         if self.post.record:
             self._formInitialValues["location"] = self.post.record.location
             self._formInitialValues["date"] = self.post.record.date
+            self._formInitialValues["projectID"] = self.projectID
         return self._formInitialValues
 
 

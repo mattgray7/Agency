@@ -46,7 +46,6 @@ class CreateWorkPostView(post.GenericCreatePostView):
         self._pageContext["professionList"] = json.dumps(constants.PROFESSIONS)
         self._pageContext["chosenProfession"] = self.post.record.profession
         self._pageContext["statusOptions"] = constants.WORK_STATUS_LIST
-
         return self._pageContext
 
     @property
@@ -68,6 +67,6 @@ class ViewWorkPostView(post.GenericViewPostView):
     def post(self):
         if self._post is None:
             if self.postID:
-                self._post = WorkPostInstance(request=self.request, postID=self.postID)
+                self._post = WorkPostInstance(request=self.request, postID=self.postID, postType=constants.WORK_POST)
         return self._post
 

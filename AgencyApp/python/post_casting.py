@@ -13,18 +13,6 @@ class CastingPostInstance(post.GenericPostInstance):
         super(CastingPostInstance, self).__init__(*args, **kwargs)
         self._database = models.CastingPost
 
-    @property
-    def projectID(self):
-        """The project associated with the role being cast"""
-        if self._projectID is None:
-            if post.isProjectPost(self.postID):
-                self._projectID = self.postID
-            else:
-                self._projectID = self.request.POST.get("projectID") or helpers.getMessageFromKey(self.request, "projectID")
-                if not post.isProjectPost(self._projectID):
-                    self._projectID = None
-        return self._projectID
-
     def checkModelFormValues(self):
         return True
 
@@ -138,7 +126,8 @@ class ViewCastingPostView(post.GenericViewPostView):
     @property
     def post(self):
         if self._post is None:
-            self._post = CastingPostInstance(request=self.request, postID=self.postID, projectID=self.projectID, postType=constants.CASTING_POST)
+            # Cant pass projectID as it will lead to infinite loop
+            self._post = CastingPostInstance(request=self.request, postID=self.postID, postType=constants.CASTING_POST)
         return self._post
 
 
