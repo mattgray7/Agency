@@ -173,7 +173,7 @@ function updatePostFollow(){
 								{% csrf_token %}
 								<input type="hidden" name="source" value="{{ next }}" />
 								<input type="hidden" name="next" value="{{ next }}" />
-								<input type="hidden" name="destination" value="{{ possibleDestinations.viewEvent }}" />
+								<input type="hidden" name="destination" value="{{ possibleDestinations.viewPost }}" />
 								<input type="hidden" name="postID" value="{{ eventPost.postID }}" />
 								<input type="hidden" name="projectID" value="{{ post.postID }}" />
 								<input type="submit" value="{{ eventPost.title }}" />
@@ -219,7 +219,7 @@ function updatePostFollow(){
 								{% csrf_token %}
 								<input type="hidden" name="source" value="{{ next }}" />
 								<input type="hidden" name="next" value="{{ next }}" />
-								<input type="hidden" name="destination" value="{{ possibleDestinations.viewCasting }}" />
+								<input type="hidden" name="destination" value="{{ possibleDestinations.viewPost }}" />
 								<input type="hidden" name="postID" value="{{ castingPost.postID }}" />
 								<input type="hidden" name="projectID" value="{{ post.postID }}" />
 								<input type="submit" value="{{ castingPost.title }}" />
@@ -267,7 +267,7 @@ function updatePostFollow(){
 								{% csrf_token %}
 								<input type="hidden" name="source" value="{{ next }}" />
 								<input type="hidden" name="next" value="{{ next }}" />
-								<input type="hidden" name="destination" value="{{ possibleDestinations.viewWork }}" />
+								<input type="hidden" name="destination" value="{{ possibleDestinations.viewPost }}" />
 								<input type="hidden" name="postID" value="{{ workPost.postID }}" />
 								<input type="hidden" name="projectID" value="{{ post.postID }}" />
 								<input type="submit" value="{{ workPost.title }}" />

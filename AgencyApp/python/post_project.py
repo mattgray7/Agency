@@ -110,13 +110,11 @@ class ViewProjectPostView(post.GenericViewPostView):
     def pageContext(self):
         self._pageContext = super(ViewProjectPostView, self).pageContext
         self._pageContext["possibleDestinations"] = {"edit": constants.CREATE_PROJECT_POST,
-                                                     "createCasting": constants.CREATE_CASTING_POST,
-                                                     "viewCasting": constants.VIEW_POST,
-                                                     "createWork": constants.CREATE_WORK_POST,
-                                                     "viewWork": constants.VIEW_POST,
                                                      "viewPost": constants.VIEW_POST,
-                                                     "viewEvent": constants.VIEW_POST,
-                                                     "createEvent": constants.CREATE_EVENT_POST}
+                                                     "createCasting": constants.CREATE_CASTING_POST,
+                                                     "createWork": constants.CREATE_WORK_POST,
+                                                     "createEvent": constants.CREATE_EVENT_POST
+                                                     }
         self._pageContext["castingPosts"] = self.castingPosts
         self._pageContext["workPosts"] = self.workPosts
         self._pageContext["eventPosts"] = self.eventPosts
