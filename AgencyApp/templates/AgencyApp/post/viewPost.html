@@ -29,7 +29,7 @@ function updatePostFollow(){
 {% if post %}
 	{% if post.postPicture %}
 		<div id="postPicture">
-			<img src="{{ post.postPicture.url }}" height="150px" width="175px"/>
+			<img src="{{ post.postPicture.url }}" height="150px" width="120px"/>
 		</div>
 	{% endif %}
 
@@ -98,15 +98,17 @@ function updatePostFollow(){
 				{% endif %}
 		{% endif %}
 	</h3>
-	<button onclick="updatePostFollow();">
-		<div id="followButtonText">
-			{% if following %}
-				Unfollow
-			{% else %}
-				Follow
-			{% endif %}
-		</div>
-	</button>
+	{% if user.is_authenticated %}
+		<button onclick="updatePostFollow();">
+			<div id="followButtonText">
+				{% if following %}
+					Unfollow
+				{% else %}
+					Follow
+				{% endif %}
+			</div>
+		</button>
+	{% endif %}
 
 	<br><br>
 	<h5 style="display:inline"> Posted by: <div style="display:inline" id="profileRedirectButton">{{post.poster}}</div> </h5><br>
@@ -161,9 +163,9 @@ function updatePostFollow(){
 					{% for eventPost in eventPosts %}
 						<tr><td>
 								{% if eventPost.postPicture %}
-									<img src="{{ eventPost.postPicture.url }}" height="50px" width="70px"/>
+									<img src="{{ eventPost.postPicture.url }}" height="80px" width="65px"/>
 								{% else %}
-									<img height="50px" width="70px"/>
+									<img height="80px" width="65px"/>
 								{% endif %}
 						</td>
 						<td>
@@ -207,9 +209,9 @@ function updatePostFollow(){
 					{% for castingPost in castingPosts %}
 						<tr><td>
 								{% if castingPost.postPicture %}
-									<img src="{{ castingPost.postPicture.url }}" height="50px" width="70px"/>
+									<img src="{{ castingPost.postPicture.url }}" height="80px" width="65px"/>
 								{% else %}
-									<img height="50px" width="70px"/>
+									<img height="80px" width="65px"/>
 								{% endif %}
 						</td>
 						<td>
@@ -258,9 +260,9 @@ function updatePostFollow(){
 					{% for workPost in workPosts %}
 						<tr><td>
 								{% if workPost.postPicture %}
-									<img src="{{ workPost.postPicture.url }}" height="50px" width="70px"/>
+									<img src="{{ workPost.postPicture.url }}" height="80px" width="65px"/>
 								{% else %}
-									<img height="50px" width="70px"/>
+									<img height="80px" width="65px"/>
 								{% endif %}
 						</td>
 						<td>
