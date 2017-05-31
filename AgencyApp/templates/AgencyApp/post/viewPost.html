@@ -54,7 +54,6 @@ function updatePostFollow(){
 				Event {{ post.title }} 
 				<h5>Located at {{post.location}} on {{post.date}}</h5>
 			{% endif %}
-			{% if post.poster == request.user.username %}
 				{% if project and projectID and project.record.title %}
 						<form method='post' action="/post/view/{{ projectID }}/">
 								{% csrf_token %}
@@ -97,7 +96,6 @@ function updatePostFollow(){
 							</script>
 							<button onclick="showPossibleProjects();" id="addPostToProjectButton"> Add post to project </button><br>
 				{% endif %}
-			{% endif %}
 		{% endif %}
 	</h3>
 	<button onclick="updatePostFollow();">
@@ -111,7 +109,7 @@ function updatePostFollow(){
 	</button>
 
 	<br><br>
-	<h5 style="display:inline"> Posted by <div style="display:inline" id="profileRedirectButton">{{post.poster}}</div> </h5><br>
+	<h5 style="display:inline"> Posted by: <div style="display:inline" id="profileRedirectButton">{{post.poster}}</div> </h5><br>
 	<h5 style="display:inline"> Description:</h5>
 	{% if post.description %}
 		{{ post.description }}
