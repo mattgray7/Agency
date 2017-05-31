@@ -1,12 +1,10 @@
 import os
-import urllib
 import datetime
 import django
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "Agency.settings")
 django.setup()
 
 from django.contrib.auth.models import User
-from django.core.files import File
 import AgencyApp.python.models as models
 import AgencyApp.python.helpers as helpers
 
@@ -50,8 +48,6 @@ project1ProjectPost = models.ProjectPost(postID=project1ProjectID,
 									title="The Great Gatsby",
 									description="Modern reimagining set in project1 York",
 									status="In production")
-picResult = urllib.urlretrieve("/Users/MattGray/Projects/Agency/Agency/scripts/media/greatGatsby.jpg")
-project1ProjectPost.postPicture = File(open(picResult[0]))
 project1ProjectPost.save()
 
 # Nick Carraway casting post
@@ -63,8 +59,6 @@ project1CastingPost = models.CastingPost(postID=project1CastingPostID,
 									description="Young male lead",
 									status="Open",
 									paid=True)
-picResult = urllib.urlretrieve("/Users/MattGray/Projects/Agency/Agency/scripts/media/nickCarraway.png")
-project1CastingPost.postPicture = File(open(picResult[0]))
 project1CastingPost.save()
 
 # Jay Gatsby casting post
@@ -76,8 +70,6 @@ project1CastingPost2 = models.CastingPost(postID=project1CastingPostID2,
 									description="Middle-aged male lead",
 									status="Open",
 									paid=True)
-picResult = urllib.urlretrieve("/Users/MattGray/Projects/Agency/Agency/scripts/media/jayGatsby.jpg")
-project1CastingPost2.postPicture = File(open(picResult[0]))
 project1CastingPost2.save()
 
 # Daisy Buchanen casting post
@@ -85,12 +77,10 @@ project1CastingPostID3 = helpers.createUniqueID(models.CastingPost, "postID")
 project1CastingPost3 = models.CastingPost(postID=project1CastingPostID3,
 									projectID=project1ProjectID,
 									poster="mattgray",
-									title="Daisy Buchanan",
+									title="Daisy Buchanen",
 									description="Mid-20s brunette female lead",
 									status="Open",
 									paid=True)
-picResult = urllib.urlretrieve("/Users/MattGray/Projects/Agency/Agency/scripts/media/daisyBuchanan.png")
-project1CastingPost3.postPicture = File(open(picResult[0]))
 project1CastingPost3.save()
 
 # Photographer job post
@@ -103,8 +93,6 @@ project1WorkPost = models.WorkPost(postID=project1WorkPostID,
 								 paid=True,
 								 profession="Photographer",
 								 status="Hiring")
-picResult = urllib.urlretrieve("/Users/MattGray/Projects/Agency/Agency/scripts/media/photographer.jpg")
-project1WorkPost.postPicture = File(open(picResult[0]))
 project1WorkPost.save()
 
 # Open table read event
@@ -116,6 +104,4 @@ project1EventPost = models.EventPost(postID=project1EventPostID,
 								 description="Casting for all roles",
 								 location="Hyatt Vancouver",
 								 date=datetime.datetime(2017, 06, 02))
-picResult = urllib.urlretrieve("/Users/MattGray/Projects/Agency/Agency/scripts/media/castingCall.jpeg")
-project1EventPost.postPicture = File(open(picResult[0]))
 project1EventPost.save()
