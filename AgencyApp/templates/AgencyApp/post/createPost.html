@@ -79,7 +79,9 @@
 	{% endif %}
 		{% csrf_token %}
 		{{ form.as_p }}
-		Status: <div id="statusDiv" style="display:inline"></div><br><br>
+		{% if not hideStatus %}
+			Status: <div id="statusDiv" style="display:inline"></div><br><br>
+		{% endif %}
 
 		{% if isCasting %}
 			<script>
@@ -180,10 +182,11 @@
 	<script>
 		// Handle select bars
 		$(document).ready(function(){
-			{% if isProject %}
+			{% if not hideStatus %}
 				addStatusBar("statusDiv", "statusSelect", "{{ post.status }}")
-			{% elif isWork %}
-				addStatusBar("statusDiv", "statusSelect", "{{ post.status }}")
+			{% endif %}
+
+			{% if isWork %}
 
 				// Add profession select bar to work post
 				var professionDiv = document.getElementById("professionListDiv")
@@ -193,9 +196,6 @@
 					professionDiv.innerHTML = selectForm;
 				}
 			{% elif isCasting %}
-				// Casting status select bar
-				addStatusBar("statusDiv", "statusSelect", "{{ post.status }}")
-
 				// Casting attributes select bar
 				{% for attribute in attributes %}
 					var attributeDiv = document.getElementById("attributes.{{attribute.name}}Div")

@@ -32,6 +32,12 @@ class CreateCollaborationPostView(post.GenericCreatePostView):
         super(CreateCollaborationPostView, self).__init__(*args, **kwargs)
 
     @property
+    def pageContext(self):
+    	self._pageContext = super(CreateCollaborationPostView, self).pageContext
+    	self._pageContext["hideStatus"] = True
+    	return self._pageContext
+
+    @property
     def post(self):
         if self._post is None:
             self._post = CollaborationPostInstance(request=self.request, postID=self.postID)

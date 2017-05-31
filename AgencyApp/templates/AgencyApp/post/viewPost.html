@@ -33,16 +33,13 @@ function updatePostFollow(){
 		</div>
 	{% endif %}
 
-	<h3>{% if isEvent %}
-			Event {{ post.title }} 
-			<h5>Located at {{post.location}} on {{post.date}}</h5>
-		{% elif isProject %}
+	<h3>{% if isProject %}
 			Project {{ post.title }}
 		{% elif isCollaboration %}
 			(Looking for collaboration) {{ post.title }} <br>
 			Looking for a {{ post.profession }}
 		{% else %}
-
+			<!-- Add project select or project redirect -->
 			{% if isWork %}
 				(Looking for crew) {{ post.title }} <br>
 				Looking for a {{ post.profession }}
