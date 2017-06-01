@@ -56,7 +56,7 @@ PROFESSIONS = ["Acting Coach", "Art Director", "Assistant Director", "Assistant 
 			   "Marketing", "Music Composer", "Music Supervisor", "Music Editor", "Musician", "Photographer",
 			   "Producer", "Production Assistant", "Production Caterer", "Production Coordinator",
 			   "Production Designer", "Production Manager", "Prop Master", "Screenwriter",
-			   "Script Coordinator/Supervisor", "Set Coordinator", "Set Decorator", "Set Design",
+			   "Script Coordinator/Supervisor", "Set Coordinator", "Set Decorator", "Set Designer",
 			   "SFX Technician", "SFX Supervisor", "Songwriter", "Sound Editor", "Sound Engineer",
 			   "Storyboard Artist", "Stunt Coordinator", "Stunt Artist", "Talent Management", "VFX Arist",
 			   "VFX Supervisor", "Voice Artist", "Wardrobe Supervisor"]

@@ -36,23 +36,6 @@ project1UserAccount.profilePicture = File(open(picResult[0]))
 project1UserAccount.save()
 
 
-# User 2
-project1User2 = User.objects.create_user(username="amybolt",
-                                   email="amy.bolt@hotmail.com",
-                                   password="m",
-                                   first_name="amy",
-                                   last_name="bolt")
-project1User2.save()
-project1UserAccount2 = models.UserAccount(username="amybolt",
-							 		email="amy.bolt@hotmail.com",
-                             		firstName="amy",
-                             		lastName="bolt",
-                             		setupComplete=True)
-picResult = urllib.urlretrieve("/Users/MattGray/Projects/Agency/Agency/scripts/media/amyBoltProfile.jpg")
-project1UserAccount2.profilePicture = File(open(picResult[0]))
-project1UserAccount2.save()
-
-
 # Great Gatsby project
 project1ProjectID = helpers.createUniqueID(models.ProjectPost, "postID")
 project1ProjectPost = models.ProjectPost(postID=project1ProjectID,
@@ -135,6 +118,50 @@ picResult = urllib.urlretrieve("/Users/MattGray/Projects/Agency/Agency/scripts/m
 project1EventPost.postPicture = File(open(picResult[0]))
 project1EventPost.save()
 
+# ====================
+
+
+# Add more user stuff
+# User 2
+user2 = User.objects.create_user(username="amybolt",
+                                   email="amy.bolt@hotmail.com",
+                                   password="m",
+                                   first_name="amy",
+                                   last_name="bolt")
+user2.save()
+userAccount2 = models.UserAccount(username="amybolt",
+							 		email="amy.bolt@hotmail.com",
+                             		firstName="amy",
+                             		lastName="bolt",
+                             		actingInterest=True,
+                             		collaborationInterest=True,
+                             		workInterest=True,
+                             		setupComplete=True)
+picResult = urllib.urlretrieve("/Users/MattGray/Projects/Agency/Agency/scripts/media/amyBoltProfile.jpg")
+userAccount2.profilePicture = File(open(picResult[0]))
+userAccount2.save()
+
+# Add some professions
+professionList = [models.Profession(username="mattgray", professionName="Cinematographer"),
+				  models.Profession(username="mattgray", professionName="Photographer"),
+				  models.Profession(username="mattgray", professionName="VFX Artist"),
+				  models.Profession(username="mattgray", professionName="Writer"),
+				  models.Profession(username="amybolt", professionName="Dancer"),
+				  models.Profession(username="amybolt", professionName="Songwriter"),
+				  models.Profession(username="amybolt", professionName="Photographer"),
+				  models.Profession(username="amybolt", professionName="Set designer")]
+for profession in professionList:
+	profession.save()
+
+
+# Add follows
+postFollow = models.PostFollow(postID=project1EventPostID, username="amybolt")
+postFollow.save()
+postFollow = models.PostFollow(postID=project1ProjectPost, username="amybolt")
+postFollow.save()
+postFollow = models.PostFollow(postID=project1CastingPostID3, username="amybolt")
+postFollow.save()
+
 
 # Collaborator post
 collabPostID = helpers.createUniqueID(models.CollaborationPost, "postID")
@@ -147,7 +174,4 @@ collabPost = models.CollaborationPost(postID=collabPostID,
 picResult = urllib.urlretrieve("/Users/MattGray/Projects/Agency/Agency/scripts/media/collabPost.jpg")
 collabPost.postPicture = File(open(picResult[0]))
 collabPost.save()
-
-
-
 
