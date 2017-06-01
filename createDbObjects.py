@@ -157,7 +157,7 @@ for profession in professionList:
 # Add follows
 postFollow = models.PostFollow(postID=project1EventPostID, username="amybolt")
 postFollow.save()
-postFollow = models.PostFollow(postID=project1ProjectPost, username="amybolt")
+postFollow = models.PostFollow(postID=project1ProjectID, username="amybolt")
 postFollow.save()
 postFollow = models.PostFollow(postID=project1CastingPostID3, username="amybolt")
 postFollow.save()

@@ -15,37 +15,112 @@
 		<input type="hidden" name="source" value="{{ next }}" />
 		<input type="hidden" name="next" value="{{ next }}" />
 		<input type="hidden" name="destination" value="{{ destination }}">
-		{% for attribute in masterAttributes %}
-			<br>
-				{{ attribute.name }}
-				{% if attribute.value == True or attribute.value == False %}
-					<script>
-					function updateBoolCheckboxValue(newValue){
-						var checkboxValueDiv = document.getElementById("{{attribute.name}}.value")
-						if(checkboxValueDiv != null){
-							checkboxValueDiv.innerHTML = "<input type='hidden' name='attribute.{{attribute.name}}' value='" + newValue +"'>";
+		<script>
+				function toggleActorDescriptions(){
+					// Create input list
+					var tagInputs = document.getElementsByTagName("input")
+					var selectInputs = document.getElementsByTagName("select");
+					var inputs = []
+					for(var i=0; i < tagInputs.length; i++){
+						inputs.push(tagInputs[i]);
+					}
+					for(var i=0; i < selectInputs.length; i++){
+						inputs.push(selectInputs[i]);
+					}
+
+					// toggle the enable
+					for(var i=0; i < inputs.length; i++){
+						var currentInput = inputs[i]
+						if(currentInput.id.substring(0, 10) == "attributes"){
+							if(currentInput.disabled){
+								currentInput.disabled = false;
+								document.getElementById("physicalAttributesEnabledDiv").innerHTML = "<input type='hidden' name='descriptionEnabled' value='True' />";
+								document.getElementById("physicalAttributesDivLabel").innerHTML = '<font color="black">Physical attributes</font>';
+							}else{
+								currentInput.disabled = true;
+								document.getElementById("physicalAttributesEnabledDiv").innerHTML = "<input type='hidden' name='descriptionEnabled' value='False' />";
+								document.getElementById("physicalAttributesDivLabel").innerHTML = '<font color="gray">Physical attributes</font>';
+							}
 						}
 					}
-					</script>
+				}
+			</script>
+			<br>
+			<h5 style="display:inline;"> You can specify the physical characteristics of the role, which we can use to notify actors with matching traits of your casting post. Your post will still be visible without physical criteria enabled.</h5>
+			<br>
+			Enable physical attributes
+			{% if post.descriptionEnabled %}
+				<input type="checkbox" onclick="toggleActorDescriptions();" value="Enable physical criteria" checked/>
+			{% else %}
+				<input type="checkbox" onclick="toggleActorDescriptions();" value="Enable physical criteria"/>
+			{% endif %}
+			<br><br>
 
-					{% if attribute.value == True %}
-						<input type="checkbox" name="checkbox" checked onclick="updateBoolCheckboxValue('False');">
-						<div id="{{attribute.name}}.value"></div>
-					{% elif attribute.value == False %}
-						<input type="checkbox" name="checkbox" onclick="updateBoolCheckboxValue('True');">
-						<div id="{{attribute.name}}.value"></div>
-					{% else %}
-						<input type="input" name="attribute.{{attribute.name}}" value="{{attribute.value}}">
-					{% endif %}
-				{% else %}
-				<input type="input" name="attribute.{{attribute.name}}" value="{{attribute.value}}">
-				{% endif %}
-		{% endfor %}
+			<div id="physicalAttributesDiv">
+				<h4 style="display:inline;">
+					<div id="physicalAttributesDivLabel"><font color="gray">Physical attributes</font></div>
+				</h4>
+				<table>
+					<script>
+					var attributeDivIdList = [];
+					</script>
+					{% for attribute in attributes %}
+						<tr><td>
+							<script>
+							function changeAttributeBool(attributeName, newBoolValue){
+								var attributeInputDiv = document.getElementById(attributeName + "BoolDiv");
+								if(attributeInputDiv != null){
+									attributeInputDiv.innerHTML = "<input type='hidden' name='attributes.{{attribute.name}}' value='" + newBoolValue + "'>"
+								}
+							}
+							</script>
+							{{attribute.name}}: 
+							{% if attribute.value == True or attribute.value == "True" %}
+								<div id="{{attribute.name}}BoolDiv"></div>
+								<input type='checkbox' value='{{attribute.value}}' id="attributes.{{attribute.name}}" name='{{attribute.name}}' disabled='disabled' onclick='changeAttributeBool("{{attribute.name}}", "False");' checked>
+							{% elif attribute.value == False or attribute.value == "False" %}
+								<div id="{{attribute.name}}BoolDiv"></div>
+								<input type='checkbox' value='{{attribute.value}}' id="attributes.{{attribute.name}}" name='{{attribute.name}}' disabled='disabled' onclick='changeAttributeBool("{{attribute.name}}", "True");' >
+							{% else %}
+								{% if attribute.options %}
+									<div id="attributes.{{attribute.name}}Div"></div>
+								{% elif attribute.value and attribute.value != "None" %}
+									<input type='text' value='{{attribute.value}}' id="attributes.{{attribute.name}}" name="attributes.{{attribute.name}}" disabled='disabled'>
+								{% else %}
+									<input type='text' value='' id="attributes.{{attribute.name}}" name="attributes.{{attribute.name}}" disabled='disabled'>
+								{% endif %}
+							{% endif %}
+							</td></tr>
+					{% endfor %}
+
+				</table>
+				<div id="physicalAttributesEnabledDiv" style="display:inline";>
+					<input type='hidden' name='descriptionEnabled' value='{{ descriptionEnabled }}' />
+				</div>
+			</div>
 		<br><br><input type="submit" value="Update attributes" />
 	</form>
 	<div id="cancelButton"></div>
+	<script>
+		$(document).ready(function(){
+			{% for attribute in attributes %}
+					var attributeDiv = document.getElementById("attributes.{{attribute.name}}Div")
+					if(attributeDiv != null){
+						{% if attribute.options %}
+							var attributeOptions = {{ attribute.options|safe }}
+							var selectForm = createSelectForm("createForm", "attributes.{{attribute.name}}", attributeOptions, "{{attribute.value}}")
+							attributeDiv.innerHTML = selectForm;
 
-
-
-
+							var attributeSelectForm = document.getElementById("attributes.{{attribute.name}}");
+							if(attributeSelectForm != null){
+								attributeSelectForm.disabled = "disabled";
+							}
+						{% endif %}
+					}
+				{% endfor %}
+				{% if post.descriptionEnabled %}
+					toggleActorDescriptions();
+				{% endif %}
+		});
+	</script>
 {% endblock %}

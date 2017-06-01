@@ -76,9 +76,10 @@ ACTOR_ATTRIBUTE_DICT = [{"name": "Hair color",
 						 "value": "Male",
 						 "options": ["Male", "Female", "Other"]},
 						{"name": "Height",
-						 "value": None},
-						{"name": "Available now",
-						 "value": True}]
+						 "value": None}]
+
+ACTOR_DESCRIPTION_PAGE_TYPES = {"castingPost": CASTING_POST,
+								"profile": PROFILE}
 
 PROJECT_STATUS_LIST = ["Pre-production", "In production", "Post production", "Screening"]
 CASTING_STATUS_LIST = ["Opening soon", "Open", "Closed"]
@@ -248,7 +249,4 @@ BROWSE_POST_PAGE_MAP = {EVENT_POST: BROWSE_EVENTS,
                         COLLABORATION_POST: BROWSE_POSTS,
                         WORK_POST: BROWSE_POSTS,
                         CASTING_POST: BROWSE_POSTS}
-
-
-
 

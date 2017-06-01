@@ -137,8 +137,7 @@ function updatePostFollow(){
 			<input type="submit" value="Edit Post" />
 		</form>
 	{% endif %}
-
-	{% if isCasting and attributes %}
+	{% if isCasting and descriptionEnabled and attributes %}
 		<h4> Desired physical attributes </h4>
 		{% for attribute in attributes %}
 			<ul>

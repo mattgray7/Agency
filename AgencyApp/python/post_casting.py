@@ -5,6 +5,7 @@ import helpers
 
 import json
 from itertools import chain
+import actorDescription
 
 class CastingPostInstance(post.GenericPostInstance):
     def __init__(self, *args, **kwargs):
@@ -27,7 +28,7 @@ class CastingPostInstance(post.GenericPostInstance):
     def saveActorAttributes(self):
         attributes = {}
         error = False
-        if self.request.POST.get("descriptionEnabled", "False") == "False":
+        if self.request.POST.get("descriptionEnabled", False) in ["False", False]:
             self.record.descriptionEnabled = False
             self.record.save()
         else:
@@ -62,26 +63,23 @@ class CastingPostInstance(post.GenericPostInstance):
 class CreateCastingPostView(post.GenericCreatePostView):
     def __init__(self, *args, **kwargs):
         kwargs["postType"] = constants.CASTING_POST
-        self._attributes = None
         super(CreateCastingPostView, self).__init__(*args, **kwargs)
+        self._attributeListObject = None
+
+    @property
+    def attributeListObject(self):
+        if self._attributeListObject is None:
+            self._attributeListObject = actorDescription.CastingPostAttributes(request=self.request, postID=self.postID, pageType=constants.CASTING_POST)
+        return self._attributeListObject
 
     @property
     def pageContext(self):
         self._pageContext = super(CreateCastingPostView, self).pageContext
-        self._pageContext["attributes"] = self.attributes
+        self._pageContext["attributes"] = self.attributeListObject.attributes
         self._pageContext["descriptionEnabled"] = self.post.record.descriptionEnabled
         self._pageContext["statusOptions"] = constants.CASTING_STATUS_LIST
         self._pageContext["defaultStatus"] = "Open"
         return self._pageContext
-
-    @property
-    def attributes(self):
-        if self._attributes is None:
-            if models.CastingPost.objects.get(postID=self.postID).descriptionEnabled:
-                self._attributes = getSelectedCastingAttributeValues(self.postID)
-            else:
-                self._attributes = constants.ACTOR_ATTRIBUTE_DICT
-        return self._attributes
 
     @property
     def post(self):
@@ -101,8 +99,8 @@ class CreateCastingPostView(post.GenericCreatePostView):
 
 class ViewCastingPostView(post.GenericViewPostView):
     def __init__(self, *args, **kwargs):
-        self._attributes = None
         super(ViewCastingPostView, self).__init__(*args, **kwargs)
+        self._attributeListObject = None
 
     @property
     def pageContext(self):
@@ -112,16 +110,16 @@ class ViewCastingPostView(post.GenericViewPostView):
                                                      "createWork": constants.CREATE_WORK_POST,
                                                      "viewCasting": constants.VIEW_POST,
                                                      "viewWork": constants.VIEW_POST}
-        if self.attributes:
-            self._pageContext["attributes"] = self.attributes
+        if self.attributeListObject.attributes:
+            self._pageContext["attributes"] = self.attributeListObject.attributes
+            self._pageContext["descriptionEnabled"] = self.post.record.descriptionEnabled
         return self._pageContext
 
     @property
-    def attributes(self):
-        if self._attributes is None:
-            if models.CastingPost.objects.get(postID=self.postID).descriptionEnabled:
-                self._attributes = getSelectedCastingAttributeValues(self.postID)
-        return self._attributes
+    def attributeListObject(self):
+        if self._attributeListObject is None:
+            self._attributeListObject = actorDescription.CastingPostAttributes(request=self.request, postID=self.postID, pageType=constants.CASTING_POST)
+        return self._attributeListObject
 
     @property
     def post(self):
@@ -129,34 +127,5 @@ class ViewCastingPostView(post.GenericViewPostView):
             # Cant pass projectID as it will lead to infinite loop
             self._post = CastingPostInstance(request=self.request, postID=self.postID, postType=constants.CASTING_POST)
         return self._post
-
-
-def getSelectedActorAttributeValues(username=None):
-    """ Returns the default values of constants.ACTOR_ATTRIBUTE_DICT with any selected values changed"""
-    selectedAttributes = []
-    for attribute in sorted(chain(models.ActorDescriptionStringAttribute.objects.filter(username=username),
-                                  models.ActorDescriptionBooleanAttribute.objects.filter(username=username))):
-        selectedAttributes.append({"name": attribute.attributeName, "value": attribute.attributeValue})
-    return _getAttributeDict(selectedAttributes)
-
-
-def getSelectedCastingAttributeValues(postID):
-    if models.CastingPost.objects.get(postID=postID).descriptionEnabled:
-        selectedAttributes = []
-        for attribute in sorted(chain(models.ActorDescriptionStringAttribute.objects.filter(postID=postID),
-                                      models.ActorDescriptionBooleanAttribute.objects.filter(postID=postID))):
-            selectedAttributes.append({"name": attribute.attributeName, "value": attribute.attributeValue})
-        return _getAttributeDict(selectedAttributes)
-    else:
-        return constants.ACTOR_ATTRIBUTE_DICT
-
-
-def _getAttributeDict(selectedAttributes):
-    attributeDict = constants.ACTOR_ATTRIBUTE_DICT
-    for attribute in attributeDict:
-        for selectedAttribute in selectedAttributes:
-            if attribute.get("name") == selectedAttribute.get("name") and attribute.get("value") != selectedAttribute.get("value"):
-                attribute["value"] = selectedAttribute.get("value")
-    return attributeDict
 
 

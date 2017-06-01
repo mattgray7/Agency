@@ -34,9 +34,11 @@ class UserAccount(models.Model):
     workInterest = models.BooleanField(default=False)       # lookinf for non-acting jobs
     crewInterest = models.BooleanField(default=False)       # looking for a crew
     collaborationInterest = models.BooleanField(default=False) # looking to collaborate
-    actingInterest = models.BooleanField(default=False)     # looking for acting jobs
     castingInterest = models.BooleanField(default=False)    # looking for actors
     profilePicture = models.ImageField(default=None, upload_to=image_directory_path, storage=imageStorage)
+    
+    actingInterest = models.BooleanField(default=False)     # looking for acting jobs
+    actorDescriptionEnabled = models.BooleanField(default=False)        # enabled physical description
 
     reelLink = models.CharField(max_length=500, default='')
     imdbLink = models.CharField(max_length=500, default='')

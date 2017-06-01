@@ -20,6 +20,8 @@ import post_casting as castingPost
 import os
 from itertools import chain
 
+import actorDescription
+
 
 class LoginView(views.GenericFormView):
     def __init__(self, *args, **kwargs):
@@ -284,14 +286,6 @@ class EditProfessionsView(GenericEditAccountView):
             except Exception as e:
                 print "Could not create profession entry: {0}".format(e)
                 return False
-
-            if profession == 'Actor':
-                actorEntry = Actor(username=self.username)
-                try:
-                    actorEntry.save()
-                except Exception as e:
-                    print "Could not create actor entry: {0}".format(e)
-                    pass
         return True
 
 
@@ -370,7 +364,7 @@ class EditBackgroundView(GenericEditAccountView):
     @property
     def destinationPage(self):
         if self._destinationPage is None:
-            if self.actorProfessionSelected() :
+            if self.userAccount.actingInterest:
                 if PROFILE in [self.sourcePage, self.request.POST.get("destination")]:
                     self._destinationPage = PROFILE
                 else:
@@ -378,14 +372,6 @@ class EditBackgroundView(GenericEditAccountView):
             else:
                 self._destinationPage = PROFILE
         return self._destinationPage
-
-    def actorProfessionSelected(self):
-        isActor = None
-        try:
-            isActor = Actor.objects.get(username=self.username)
-        except Actor.DoesNotExist:
-            print "not an actor"
-        return isActor
 
     @property
     def cancelDestination(self):
@@ -415,6 +401,14 @@ class EditBackgroundView(GenericEditAccountView):
 class EditActorDescriptionView(GenericEditAccountView):
     def __init__(self, *args, **kwargs):
         super(EditActorDescriptionView, self).__init__(*args, **kwargs)
+        self._attributes = None
+        self._attributeListObject = None
+
+    @property
+    def attributeListObject(self):
+        if self._attributeListObject is None:
+            self._attributeListObject = actorDescription.ProfileAttributes(request=self.request, username=self.username, pageType=PROFILE)
+        return self._attributeListObject
 
     @property
     def destinationPage(self):
@@ -438,35 +432,50 @@ class EditActorDescriptionView(GenericEditAccountView):
 
     @property
     def pageContext(self):
-        self._pageContext["masterAttributes"] = castingPost.getSelectedActorAttributeValues(self.username)
+        self._pageContext["attributes"] = self.attributeListObject.attributes
+        self._pageContext["descriptionEnabled"] = self.userAccount.actorDescriptionEnabled
         return self._pageContext
 
     def processForm(self):
         """Overriding asbtract method"""
         newAttributes = []
         for formInput in self.formData:
-            splittedFormInput = formInput.split('.')
-            if splittedFormInput[0] == "attribute":
-                newAttributes.append({"name": splittedFormInput[-1], "value": self.request.POST.get(formInput)})
+            if formInput.startswith("attributes."):
+                self.userAccount.actorDescriptionEnabled = True
+                self.userAccount.save()
+                print "looking at input {0}".format(formInput)
+                splitted = formInput.split('.')
+                newAttributes.append({"name": splitted[1], "value": self.request.POST.get(formInput)})
 
         ActorDescriptionStringAttribute.objects.filter(username=self.username).delete()
         ActorDescriptionBooleanAttribute.objects.filter(username=self.username).delete()
 
         for attribute in newAttributes:
+            print "attr {0}".format(attribute)
             if attribute["value"] in [True, False, "True", "False", "true", "false"]:
-                entry = ActorDescriptionBooleanAttribute(username=self.username,
-                                                         attributeName=attribute["name"],
-                                                         attributeValue = attribute["value"])
+                try:
+                    attributeModel = ActorDescriptionBooleanAttribute.objects.get(username=self.username,
+                                                                                         attributeName=splitted[1])
+                    attributeModel.attributeValue = self.request.POST.get(formInput) in [True, "True", "true"] or False
+                    print "saving existing model"
+                except models.ActorDescriptionBooleanAttribute.DoesNotExist:
+                    attributeModel = ActorDescriptionBooleanAttribute(username=self.username,
+                                                                      attributeName = splitted[1],
+                                                                      attributeValue = bool(self.request.POST.get(formInput)))
+                    print "new model"
             else:
-                entry = ActorDescriptionStringAttribute(username=self.username,
-                                                         attributeName=attribute["name"],
-                                                         attributeValue = attribute["value"])
-            try:
-                entry.save()
-            except:
-                return False
+                try:
+                    attributeModel = ActorDescriptionStringAttribute.objects.get(username=self.username,
+                                                                                         attributeName = splitted[1])
+                    attributeModel.attributeValue = self.request.POST.get(formInput)
+                    print "saving existing model8"
+                except ActorDescriptionStringAttribute.DoesNotExist:
+                    attributeModel = ActorDescriptionStringAttribute(username=self.username,
+                                                                     attributeName = splitted[1],
+                                                                     attributeValue = self.request.POST.get(formInput))
+                    print "new model"
+            attributeModel.save()
         return True
-
 
 
 def _getIncomingSource(request):
