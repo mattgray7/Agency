@@ -20,9 +20,11 @@ class CreateAccountForm(BaseForm):
     lastName = forms.CharField(label="Last Name", max_length=50)
 
 class EditInterestsForm(BaseForm):
-    work = forms.BooleanField(label="Work", required=False)
-    crew = forms.BooleanField(label="Crew", required=False)
-    collaboration = forms.BooleanField(label="Collaboration", required=False)
+    work = forms.BooleanField(label="Looking for on/off set work", required=False)
+    crew = forms.BooleanField(label="Looking for crew members", required=False)
+    collaboration = forms.BooleanField(label="Looking for collaborators for a project", required=False)
+    acting = forms.BooleanField(label="Looking for acting & extra work", required=False)
+    casting = forms.BooleanField(label="Looking for actors for a project", required=False)
 
 class EditPictureForm(BaseForm):
     profilePicture = forms.FileField(label="New profile picture", required=False)

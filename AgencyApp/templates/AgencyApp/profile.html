@@ -7,7 +7,9 @@
 				<img src="{{ profileUserAccount.profilePicture.url }}" height="150px" width="175px"/>
 			</div>
 		{% else %}
-			<h5> No profile picture added</h5>
+			<div id="profilePic">
+				<img height="150px" width="175px"/>
+			</div>
 		{% endif %}
 		{% if viewingOwnProfile %}
 			<form action="{{ currentPageURL }}" method="post">
@@ -49,13 +51,19 @@
 		<h3> {{ profileUserAccount.firstName }} is looking for... </h3>
 		<ul>
 			{% if profileUserAccount.workInterest %}
-				<li>Work</li>
+				<li>Crew work</li>
 			{% endif %}
 			{% if profileUserAccount.crewInterest %}
-				<li>A crew</li>
+				<li>Production crew members</li>
 			{% endif %}
 			{% if profileUserAccount.collaborationInterest %}
-				<li>Collaboration</li>
+				<li>Collaborators</li>
+			{% endif %}
+			{% if profileUserAccount.actingInterest %}
+				<li>Acting and extra work</li>
+			{% endif %}
+			{% if profileUserAccount.castingInterest %}
+				<li>Actors and extras</li>
 			{% endif %}
 		</ul>
 		{% if viewingOwnProfile %}

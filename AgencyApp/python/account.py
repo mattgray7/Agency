@@ -222,6 +222,8 @@ class EditInterestsView(GenericEditAccountView):
         self._formInitialValues["work"] = self.userAccount.workInterest
         self._formInitialValues["crew"] = self.userAccount.crewInterest
         self._formInitialValues["collaboration"] = self.userAccount.collaborationInterest
+        self._formInitialValues["acting"] = self.userAccount.actingInterest
+        self._formInitialValues["casting"] = self.userAccount.castingInterest
         return self._formInitialValues
 
     def processForm(self):
@@ -229,6 +231,8 @@ class EditInterestsView(GenericEditAccountView):
         self.userAccount.workInterest = self.formData.get('work', False)
         self.userAccount.crewInterest = self.formData.get('crew', False)
         self.userAccount.collaborationInterest = self.formData.get('collaboration', False)
+        self.userAccount.actingInterest = self.formData.get("acting", False)
+        self.userAccount.castingInterest = self.formData.get("casting", False)
         try:
             self.userAccount.save()
         except:

@@ -31,9 +31,11 @@ class UserAccount(models.Model):
     firstName = models.CharField(max_length=100)
     lastName = models.CharField(max_length=100)
     setupComplete = models.BooleanField(default=False)
-    workInterest = models.BooleanField(default=False)
-    crewInterest = models.BooleanField(default=False)
-    collaborationInterest = models.BooleanField(default=False)
+    workInterest = models.BooleanField(default=False)       # lookinf for non-acting jobs
+    crewInterest = models.BooleanField(default=False)       # looking for a crew
+    collaborationInterest = models.BooleanField(default=False) # looking to collaborate
+    actingInterest = models.BooleanField(default=False)     # looking for acting jobs
+    castingInterest = models.BooleanField(default=False)    # looking for actors
     profilePicture = models.ImageField(default=None, upload_to=image_directory_path, storage=imageStorage)
 
     reelLink = models.CharField(max_length=500, default='')

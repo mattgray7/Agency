@@ -25,7 +25,8 @@ project1UserAccount = models.UserAccount(username="mattgray",
 							 		email="matt.gray.1993@gmail.com",
                              		firstName="matt",
                              		lastName="gray",
-                             		setupComplete=True)
+                             		setupComplete=True,
+                             		crewInterest=True)
 project1UserAccount.save()
 
 
@@ -48,7 +49,7 @@ project1ProjectID = helpers.createUniqueID(models.ProjectPost, "postID")
 project1ProjectPost = models.ProjectPost(postID=project1ProjectID,
 									poster="mattgray",
 									title="The Great Gatsby",
-									description="Modern reimagining set in project1 York",
+									description="Modern reimagining set in New York",
 									status="In production")
 picResult = urllib.urlretrieve("/Users/MattGray/Projects/Agency/Agency/scripts/media/greatGatsby.jpg")
 project1ProjectPost.postPicture = File(open(picResult[0]))
