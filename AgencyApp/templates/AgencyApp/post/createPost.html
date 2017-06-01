@@ -184,6 +184,8 @@
 
 	{% elif isWork %}
 		<div id='professionListDiv'></div><br>
+	{% elif isCollaboration %}
+		<div id='collaboratorRoleDiv'></div><br>
 	{% endif %}
 
 	{% if post.title %}
@@ -237,6 +239,14 @@
 				{% if post.descriptionEnabled %}
 					toggleActorDescriptions();
 				{% endif %}
+			{% elif isCollaboration %}
+				// Add profession select bar to work post
+				var collaboratorRoleDiv = document.getElementById("collaboratorRoleDiv")
+				if(collaboratorRoleDiv != null){
+					var collaboratorRoleOptions = {{ collaboratorRoleOptions|safe }};
+					var selectForm = "Collaborator role:" + createSelectForm("createForm", "collaboratorRoleSelect", collaboratorRoleOptions, "{{ collaboratorRole }}");
+					collaboratorRoleDiv.innerHTML = selectForm;
+				}
 			{% endif %}		
 		});
 
@@ -244,6 +254,8 @@
 			var form = document.getElementById("createForm")
 			{% if isWork %}
 				document.getElementById("id_profession").value = document.getElementById("professionSelect").value;
+			{% elif isCollaboration %}
+				document.getElementById("id_collaboratorRole").value = document.getElementById("collaboratorRoleSelect").value;
 			{% endif %}
 			var statusDiv = document.getElementById("statusSelect");
 			if(statusDiv != null){

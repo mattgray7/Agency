@@ -74,7 +74,7 @@ class WorkPost(AbstractPost):
     paid = models.BooleanField(default=False)
 
 class CollaborationPost(AbstractPost):
-    profession = models.CharField(max_length=200)
+    collaboratorRole = models.CharField(max_length=200)
 
 class CastingPost(AbstractPost):
     paid = models.BooleanField(default=False)

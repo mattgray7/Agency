@@ -36,8 +36,8 @@ function updatePostFollow(){
 	<h3>{% if isProject %}
 			Project {{ post.title }}
 		{% elif isCollaboration %}
-			(Looking for collaboration) {{ post.title }} <br>
-			Looking for a {{ post.profession }}
+			Looking for a {{ post.collaboratorRole }} <br>
+			{{ post.title }} 
 		{% else %}
 			<!-- Add project select or project redirect -->
 			{% if isWork %}

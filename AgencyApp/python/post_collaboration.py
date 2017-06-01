@@ -10,17 +10,11 @@ class CollaborationPostInstance(post.GenericPostInstance):
         self._database = models.CollaborationPost
 
     def checkModelFormValues(self):
-        valid = False
-        if self.request.method == "POST":
-            if len(self.request.POST.get("profession", "")) < 1:
-                self.errors.append("Missing profession")
-            else:
-                valid = True
-        return valid
+        return True
 
     def saveModelFormValues(self):
         if self.record:
-            self.record.profession = self.request.POST.get("profession", "")
+            self.record.collaboratorRole = self.request.POST.get("collaboratorRole", "")
             self.record.save()
             return True
         return False
@@ -34,6 +28,8 @@ class CreateCollaborationPostView(post.GenericCreatePostView):
     @property
     def pageContext(self):
     	self._pageContext = super(CreateCollaborationPostView, self).pageContext
+    	self._pageContext["collaboratorRoleOptions"] = constants.COLLABORATOR_OPTIONS
+    	self._pageContext["collaboratorRole"] = self.post.record.collaboratorRole
     	self._pageContext["hideStatus"] = True
     	return self._pageContext
 
@@ -48,7 +44,7 @@ class CreateCollaborationPostView(post.GenericCreatePostView):
         self._formInitialValues = super(CreateCollaborationPostView, self).formInitialValues
         self._formInitialValues["postID"] = self.postID
         if self.post.record:
-            self._formInitialValues["profession"] = self.post.record.profession
+            self._formInitialValues["collaboratorRole"] = self.post.record.collaboratorRole
         return self._formInitialValues
 
 

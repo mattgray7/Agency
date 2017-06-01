@@ -56,7 +56,7 @@ class CreateWorkPostForm(GenericCreatePostForm):
     paid = forms.BooleanField(label="Paid", required=False)
 
 class CreateCollaborationPostForm(GenericCreatePostForm):
-    profession = forms.CharField(label="Profession", max_length=200, required=True)
+    collaboratorRole = forms.CharField(widget=forms.HiddenInput, max_length=200, required=True)
 
 class CreateCastingPostForm(GenericCreatePostForm):
     paid = forms.BooleanField(label="Paid", required=False)

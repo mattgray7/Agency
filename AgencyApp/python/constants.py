@@ -48,7 +48,7 @@ EDIT_PROFESSIONS = "EDIT_PROFESSIONS"
 EDIT_BACKGROUND = "EDIT_BACKGROUND"
 EDIT_ACTOR_DESCRIPTION = "EDIT_ACTOR_DESCRIPTION"
 
-PROFESSIONS = ["Actor", "Acting Coach", "Art Director", "Assistant Director", "Assistant Camera Operator",
+PROFESSIONS = ["Acting Coach", "Art Director", "Assistant Director", "Assistant Camera Operator",
 			   "Boom Operator", "Camera Operator", "Casting Director", "Choreographer", "Cinematographer",
 			   "CG Animator", "Compositor", "Costume Designer", "Concept Artist", "Dancer", "Director",
 			   "Editor", "Electrician", "Film Festival Director", "Film Festival Volunteer", "Graphic Designer", "Grip",
@@ -60,6 +60,8 @@ PROFESSIONS = ["Actor", "Acting Coach", "Art Director", "Assistant Director", "A
 			   "SFX Technician", "SFX Supervisor", "Songwriter", "Sound Editor", "Sound Engineer",
 			   "Storyboard Artist", "Stunt Coordinator", "Stunt Artist", "Talent Management", "VFX Arist",
 			   "VFX Supervisor", "Voice Artist", "Wardrobe Supervisor"]
+
+COLLABORATOR_OPTIONS = ["Director", "Director of photography", "Musical artist", "Screenwriter", "Story writer", "Other"]
 
 ACTOR_ATTRIBUTE_DICT = [{"name": "Hair color",
 						 "value": "black",
