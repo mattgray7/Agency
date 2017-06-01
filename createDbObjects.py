@@ -26,7 +26,13 @@ project1UserAccount = models.UserAccount(username="mattgray",
                              		firstName="matt",
                              		lastName="gray",
                              		setupComplete=True,
-                             		crewInterest=True)
+                             		crewInterest=True,
+                             		castingInterest=True,
+                             		workInterest=True,
+                             		actingInterest=True,
+                             		collaborationInterest=True)
+picResult = urllib.urlretrieve("/Users/MattGray/Projects/Agency/Agency/scripts/media/mattGrayProfile.jpg")
+project1UserAccount.profilePicture = File(open(picResult[0]))
 project1UserAccount.save()
 
 
@@ -42,7 +48,10 @@ project1UserAccount2 = models.UserAccount(username="amybolt",
                              		firstName="amy",
                              		lastName="bolt",
                              		setupComplete=True)
+picResult = urllib.urlretrieve("/Users/MattGray/Projects/Agency/Agency/scripts/media/amyBoltProfile.jpg")
+project1UserAccount2.profilePicture = File(open(picResult[0]))
 project1UserAccount2.save()
+
 
 # Great Gatsby project
 project1ProjectID = helpers.createUniqueID(models.ProjectPost, "postID")
@@ -54,6 +63,7 @@ project1ProjectPost = models.ProjectPost(postID=project1ProjectID,
 picResult = urllib.urlretrieve("/Users/MattGray/Projects/Agency/Agency/scripts/media/greatGatsby.jpg")
 project1ProjectPost.postPicture = File(open(picResult[0]))
 project1ProjectPost.save()
+
 
 # Nick Carraway casting post
 project1CastingPostID = helpers.createUniqueID(models.CastingPost, "postID")
@@ -68,6 +78,7 @@ picResult = urllib.urlretrieve("/Users/MattGray/Projects/Agency/Agency/scripts/m
 project1CastingPost.postPicture = File(open(picResult[0]))
 project1CastingPost.save()
 
+
 # Jay Gatsby casting post
 project1CastingPostID2 = helpers.createUniqueID(models.CastingPost, "postID")
 project1CastingPost2 = models.CastingPost(postID=project1CastingPostID2,
@@ -81,6 +92,7 @@ picResult = urllib.urlretrieve("/Users/MattGray/Projects/Agency/Agency/scripts/m
 project1CastingPost2.postPicture = File(open(picResult[0]))
 project1CastingPost2.save()
 
+
 # Daisy Buchanen casting post
 project1CastingPostID3 = helpers.createUniqueID(models.CastingPost, "postID")
 project1CastingPost3 = models.CastingPost(postID=project1CastingPostID3,
@@ -93,6 +105,7 @@ project1CastingPost3 = models.CastingPost(postID=project1CastingPostID3,
 picResult = urllib.urlretrieve("/Users/MattGray/Projects/Agency/Agency/scripts/media/daisyBuchanan.png")
 project1CastingPost3.postPicture = File(open(picResult[0]))
 project1CastingPost3.save()
+
 
 # Photographer job post
 project1WorkPostID = helpers.createUniqueID(models.WorkPost, "postID")
@@ -108,6 +121,7 @@ picResult = urllib.urlretrieve("/Users/MattGray/Projects/Agency/Agency/scripts/m
 project1WorkPost.postPicture = File(open(picResult[0]))
 project1WorkPost.save()
 
+
 # Open table read event
 project1EventPostID = helpers.createUniqueID(models.EventPost, "postID")
 project1EventPost = models.EventPost(postID=project1EventPostID,
@@ -120,3 +134,20 @@ project1EventPost = models.EventPost(postID=project1EventPostID,
 picResult = urllib.urlretrieve("/Users/MattGray/Projects/Agency/Agency/scripts/media/castingCall.jpeg")
 project1EventPost.postPicture = File(open(picResult[0]))
 project1EventPost.save()
+
+
+# Collaborator post
+collabPostID = helpers.createUniqueID(models.CollaborationPost, "postID")
+collabPost = models.CollaborationPost(postID=collabPostID,
+								 projectID=project1ProjectID,
+								 poster="amybolt",
+								 title="The Yosemite Project",
+								 description="I wrote a sick screenplay and am looking for a director",
+								 collaboratorRole="Director")
+picResult = urllib.urlretrieve("/Users/MattGray/Projects/Agency/Agency/scripts/media/collabPost.jpg")
+collabPost.postPicture = File(open(picResult[0]))
+collabPost.save()
+
+
+
+
