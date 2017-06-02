@@ -34,30 +34,14 @@ class CastingPostInstance(post.GenericPostInstance):
         else:
             self.record.descriptionEnabled = True
             self.record.save()
-            for formInput in self.request.POST:
-                if formInput.startswith("attributes."):
-                    splitted = formInput.split(".")
-                    attribute = {splitted[1]: self.request.POST.get(formInput)}
-                    if self.request.POST.get(formInput) in [True, False, "True", "False", "true", "false"]:
-                        try:
-                            attributeModel = models.ActorDescriptionBooleanAttribute.objects.get(postID=self.postID,
-                                                                                                 attributeName=splitted[1])
-                            attributeModel.attributeValue = self.request.POST.get(formInput) in [True, "True", "true"] or False
-                        except models.ActorDescriptionBooleanAttribute.DoesNotExist:
-                            attributeModel = models.ActorDescriptionBooleanAttribute(postID=self.postID,
-                                                                                     attributeName = splitted[1],
-                                                                                     attributeValue = bool(self.request.POST.get(formInput)))
-                    else:
-                        try:
-                            attributeModel = models.ActorDescriptionStringAttribute.objects.get(postID=self.postID,
-                                                                                                attributeName = splitted[1])
-                            attributeModel.attributeValue = self.request.POST.get(formInput)
-                        except models.ActorDescriptionStringAttribute.DoesNotExist:
-                            attributeModel = models.ActorDescriptionStringAttribute(postID=self.postID,
-                                                                                    attributeName = splitted[1],
-                                                                                    attributeValue = self.request.POST.get(formInput))
-                    attributeModel.save()
-        return not error
+
+            # Save the actor attributes
+            attributeObject = actorDescription.CastingPostAttributes(request=self.request,
+                                                                     postID=self.postID,
+                                                                     pageType=constants.CASTING_POST)
+            attributeObject.save()
+        return True
+
 
 
 class CreateCastingPostView(post.GenericCreatePostView):

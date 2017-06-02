@@ -42,6 +42,20 @@ class ActorAttributes(object):
             self._attributes = attributeDict
         return self._attributes
 
+    def save(self):
+        for formInput in self.request.POST:
+            if formInput.startswith("attributes."):
+                splitted = formInput.split(".")
+                attribute = {splitted[1]: self.request.POST.get(formInput)}
+                attributeIsBool = self.request.POST.get(formInput) in [True, False, "True", "False", "true", "false"]
+                attributeModel = self.getExistingModelRecord(attributeName=splitted[1], attributeIsBool=attributeIsBool)
+                if attributeModel:
+                    attributeModel.attributeValue = self.request.POST.get(formInput) in [True, "True", "true"] or False
+                    attributeModel.save()
+                else:
+                    self.saveNewRecord(attributeName=splitted[1], attributeValue=self.request.POST.get(formInput),
+                                       attributeIsBool=attributeIsBool)
+
 
 class ProfileAttributes(ActorAttributes):
     def __init__(self, *args, **kwargs):
@@ -60,6 +74,32 @@ class ProfileAttributes(ActorAttributes):
                                                  models.ActorDescriptionBooleanAttribute.objects.filter(username=self.username)))
         return self._descriptionList
 
+    def getExistingModelRecord(self, attributeName, attributeIsBool):
+        record = None
+        database = None
+        if attributeIsBool:
+            database = models.ActorDescriptionBooleanAttribute
+        else:
+            database = models.ActorDescriptionStringAttribute
+
+        try:
+            record = database.objects.get(username=self.username, attributeName=attributeName)
+        except database.DoesNotExist:
+            pass
+        return record
+
+    def saveNewRecord(self, attributeName, attributeValue, attributeIsBool):
+        if attributeIsBool:
+            attributeModel = models.ActorDescriptionBooleanAttribute(username=self.username,
+                                                                     attributeName = attributeName,
+                                                                     attributeValue = attributeValue)
+        else:
+            attributeModel = models.ActorDescriptionStringAttribute(username=self.username,
+                                                                    attributeName = attributeName,
+                                                                    attributeValue = attributeValue)
+        return attributeModel.save()
+
+
 class CastingPostAttributes(ActorAttributes):
     def __init__(self, *args, **kwargs):
         super(CastingPostAttributes, self).__init__(*args, **kwargs)
@@ -76,3 +116,29 @@ class CastingPostAttributes(ActorAttributes):
             self._descriptionList = sorted(chain(models.ActorDescriptionStringAttribute.objects.filter(postID=self.postID),
                                                  models.ActorDescriptionBooleanAttribute.objects.filter(postID=self.postID)))
         return self._descriptionList
+
+    def getExistingModelRecord(self, attributeName, attributeIsBool):
+        record = None
+        database = None
+        if attributeIsBool:
+            database = models.ActorDescriptionBooleanAttribute
+        else:
+            database = models.ActorDescriptionStringAttribute
+
+        try:
+            record = database.objects.get(postID=self.postID, attributeName=attributeName)
+        except database.DoesNotExist:
+            pass
+        return record
+
+    def saveNewRecord(self, attributeName, attributeValue, attributeIsBool):
+        if attributeIsBool:
+            attributeModel = models.ActorDescriptionBooleanAttribute(postID=self.postID,
+                                                                     attributeName = attributeName,
+                                                                     attributeValue = attributeValue)
+        else:
+            attributeModel = models.ActorDescriptionStringAttribute(postID=self.postID,
+                                                                    attributeName = attributeName,
+                                                                    attributeValue = attributeValue)
+        return attributeModel.save()
+
