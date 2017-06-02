@@ -3,7 +3,7 @@
 {% block content %}
 <script>var userLoggedIn = false;</script>
 
-{% if request.user.is_authenticated %}
+<!--{% if request.user.is_authenticated %}
 	<script>userLoggedIn = true;</script>
 	{% if source == possibleSources.login %}
 		<h3> Welcome back {{ request.user.first_name }}!</h3>
@@ -11,8 +11,48 @@
 	<h1>What to do you want to do?</h1>
 {% else %}
 	<h1>Welcome to The Agency! Let's get started, what are you looking for?</h1>
+{% endif %}-->
+
+{% if not request.user.is_authenticated %}
+	<script>userLoggedIn = true;</script>
+	<div id="banner" class="container">
+		<div class="title">
+			<h2>Welcome to the VanFilmCollective</h2>
+				<span class="byline">A place for filmmakers, both amateur and professional, to connect and create.</span>
+		</div>
+		<!--<ul class="actions">
+			<li><a href="/browse/" class="button">Browse</a></li>
+		</ul>-->
+	</div>
+
+	<div id="wrapper">
+	<div id="three-column" class="container">
+		<div class="title">
+			<h2>Explore the Vancouver film world.</h2>
+			<span class="byline">Check out film work posts, events in your area, and more.</span>
+		</div>
+		<div class="boxA">
+			<!-- For the user side: someone looking to get a job-->
+			<span class="fa fa-cloud-download"></span>
+			<p>View posts seeking actors, on and off set workers, and collaborators</p>
+			<a href="/browse/" class="button button-alt">View posts</a>
+		</div>
+		<div class="boxB">
+			<span class="fa fa-cogs"></span>
+			<p>View profiles of registered filmmakers and industry professionals</p>
+			<a href="/browse/users/" class="button button-alt">View users</a>
+		</div>
+		<div class="boxC">
+			<span class="fa fa-wrench"></span>
+			<p> Create an account and get involved in the VanFilmCollective</p>
+			<a href="/account/create/basic/" class="button button-alt">Create account</a>
+		</div>
+	</div>
+</div>
+{% else %}
+	<div id="mainChoice"></div>
 {% endif %}
-<div id="mainChoice"></div>
+
 
 <!--<script>
 function getWelcomeMsg(){ 

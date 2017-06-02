@@ -65,6 +65,7 @@
 	.image
 	{
 		display: inline-block;
+		background-size: cover;
 	}
 	
 	.image img
@@ -277,7 +278,7 @@
 	#wrapper
 	{
 		position: relative;
-		padding: 0em 0em 0em 0em;
+		padding: 1em 1em 1em 1em;
 		background: #FFF;
 	}
 
@@ -320,6 +321,7 @@
 	{
 		text-decoration: none;
 		color: rgba(255,255,255,1);
+		cursor: pointer;
 	}
 
 /*********************************************************************************/
@@ -363,7 +365,7 @@
 		border: 2px solid rgba(255,255,255,1);
 		border-radius: 6px;
 		color: rgba(255,255,255,1);
-		box-sizing: border-box;
+		cursor: pointer;
 	}
 	
 	#menu .active a
@@ -377,14 +379,16 @@
 	{
 	}
 
+
 /*********************************************************************************/
 /* Banner                                                                        */
 /*********************************************************************************/
 
 	#banner
 	{
-		padding-top: 10em;
+		padding-top: 5em;
 		text-align: center;
+		background: #111111 url(images/camera.jpg);
 	}
 	
 	#banner .title h2
@@ -504,7 +508,7 @@
 	#three-column .fa
 	{
 		display: block;
-		padding: 1em 0em;
+		padding: 1em 2em;
 		color: rgba(0,0,0,1);
 		font-size: 2em;
 	}
