@@ -5,10 +5,13 @@
         <link rel="stylesheet" href="{% static "/AgencyApp/css/style.css" %}">
         <script type="text/javascript" src="{% static "/AgencyApp/jquery-3.2.0.min.js" %}"></script>
         <script type="text/javascript" src="{% static "/AgencyApp/jquery-ui.js" %}"></script>
+        <link href="http://fonts.googleapis.com/css?family=Didact+Gothic" rel="stylesheet" />
+        <link href="{% static "/AgencyApp/css/default.css" %}" rel="stylesheet" type="text/css" media="all" />
+        <link href="{% static "/AgencyApp/css/fonts.css" %}" rel="stylesheet" type="text/css" media="all" />
     </head>
 
     <script>
-    // Deconstructor functinos to run when a toolbar source is selected
+    // Deconstructor functions to run when a toolbar source is selected
     var toolbarDeconstructorFunctions = [];
 
     // using jQuery
@@ -57,63 +60,70 @@
 
     <body>
         {% block header %}
-            <table width="100%;">
-                <tr>
-                    <td width="80%">
-                        <form action="/" method="post" onclick="submitToolbar(this);">
-                            {% csrf_token %}
-                            <input type="hidden" name="source" value="{{ next }}">
-                            <input type="hidden" name="next" value="{{ toolbarDestinations.home }}">
-                            <input type="submit" value="Van Film Collective">
-                        </form>
-                    </td>
-                    <td>
-                        <form action="/browse/" method="post" onclick="submitToolbar(this);">
-                            {% csrf_token %}
-                            <input type="hidden" name="source" value="{{ source }}">
-                            <input type="hidden" name="next" value="{{ toolbarDestinations.browse }}">
-                            <input type="submit" value="Browse">
-                        </form>
-                    </td>
-                    {% if request.user.is_authenticated %}
-                        <td>
-                            <form action="/post/" method="post" onclick="submitToolbar(this);">
+            <div id="header-wrapper">
+                <div id="header">
+                    <div id="logo">
+                        <h1>
+                            <form action="/" method="post" onclick="submitToolbar(this);">
                                 {% csrf_token %}
-                                <input type="hidden" name="source" value="{{ source }}">
-                                <input type="hidden" name="next" value="{{ toolbarDestinations.post }}">
-                                <input type="submit" value="Post">
+                                <input type="hidden" name="source" value="{{ next }}">
+                                <input type="hidden" name="next" value="{{ toolbarDestinations.home }}">
+                                <!--<input type="submit" value="Van Film Collective">-->
+                                <a onclick="this.submit()">Van Film Collective</a>
                             </form>
-                        </td>
+                        </h1>
+                    </div>
+                    <div id="menu">
+                        <ul>
+                            <li>
+                                <form action="/browse/" method="post" onclick="submitToolbar(this);">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="source" value="{{ source }}">
+                                    <input type="hidden" name="next" value="{{ toolbarDestinations.browse }}">
+                                    <a onclick="this.submit()">Browse</a>
+                                </form>
+                            </li>
+                            {% if request.user.is_authenticated %}
+                                <li>
+                                    <form action="/post/" method="post" onclick="submitToolbar(this);">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="source" value="{{ source }}">
+                                        <input type="hidden" name="next" value="{{ toolbarDestinations.post }}">
+                                        <a onclick="this.submit()">Post</a>
+                                    </form>
+                                </li>
 
-                        <td>
-                            <form action="/user/{{ request.user.username }}/" method="post" onclick="submitToolbar(this);">
-                                {% csrf_token %}
-                                <input type="hidden" name="source" value="{{ source }}">
-                                <input type="hidden" name="next" value="{{ toolbarDestinations.profile }}">
-                                <input type="submit" value="{{ request.user.first_name }} {{ request.user.last_name }}">
-                            </form>
-                        </td>
-                        <td>
-                            <form action="/logout/" method="post" onclick="submitToolbar(this);">
-                                {% csrf_token %}
-                                <input type="hidden" name="source" value="{{ source }}">
-                                <input type="hidden" name="next" value="{{ toolbarDestinations.logout }}">
-                                <input type="submit" value="Logout">
-                            </form>
-                        </td>
-                    {% else %}
-                        <td>
-                            <form action="/login/" method="post" onclick="submitToolbar(this);">
-                                {% csrf_token %}
-                                <input type="hidden" name="source" value="{{ source }}">
-                                <input type="hidden" name="next" value="{{ toolbarDestinations.login }}">
-                                <input type="hidden" name="destination" value="{{ default }}">
-                                <input type="submit" value="Login">
-                            </form>
-                        </td>
-                    {% endif %}
-                </tr>
-            </table>
+                                <li>
+                                    <form action="/user/{{ request.user.username }}/" method="post" onclick="submitToolbar(this);">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="source" value="{{ source }}">
+                                        <input type="hidden" name="next" value="{{ toolbarDestinations.profile }}">
+                                        <a onclick="this.submit()">{{ request.user.first_name }} {{ request.user.last_name }}</a>
+                                    </form>
+                                </li>
+                                <li>
+                                    <form action="/logout/" method="post" onclick="submitToolbar(this);">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="source" value="{{ source }}">
+                                        <input type="hidden" name="next" value="{{ toolbarDestinations.logout }}">
+                                        <a onclick="this.submit()">Logout</a>
+                                    </form>
+                                </li>
+                            {% else %}
+                                <li>
+                                    <form action="/login/" method="post" onclick="submitToolbar(this);">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="source" value="{{ source }}">
+                                        <input type="hidden" name="next" value="{{ toolbarDestinations.login }}">
+                                        <input type="hidden" name="destination" value="{{ default }}">
+                                        <a onclick="this.submit()">Login</a>
+                                    </form>
+                                </li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
             <br><br>
         {% endblock %}
 
