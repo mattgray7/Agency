@@ -1,6 +1,7 @@
 import models
 import constants
 import post
+import copy
 from itertools import chain
 
 class ActorAttributes(object):
@@ -33,7 +34,7 @@ class ActorAttributes(object):
     @property
     def attributes(self):
         if self._attributes is None:
-            attributeDict = constants.ACTOR_ATTRIBUTE_DICT
+            attributeDict = copy.deepcopy(constants.ACTOR_ATTRIBUTE_DICT)
             if self.selectedAttributes and len(self.selectedAttributes) > 0:
                 for attribute in attributeDict:
                     for selectedAttribute in self.selectedAttributes:
@@ -131,8 +132,6 @@ class ProfileAttributes(ActorAttributes):
             attributeModel = models.ActorDescriptionStringAttribute(username=self.username,
                                                                     attributeName = attributeName,
                                                                     attributeValue = attributeValue)
-
-
         return attributeModel.save()
 
 
