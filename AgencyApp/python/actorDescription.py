@@ -50,7 +50,10 @@ class ActorAttributes(object):
                 attributeIsBool = self.request.POST.get(formInput) in [True, False, "True", "False", "true", "false"]
                 attributeModel = self.getExistingModelRecord(attributeName=splitted[1], attributeIsBool=attributeIsBool)
                 if attributeModel:
-                    attributeModel.attributeValue = self.request.POST.get(formInput) in [True, "True", "true"] or False
+                    if attributeIsBool:
+                        attributeModel.attributeValue = self.request.POST.get(formInput) in [True, "True", "true"] or False
+                    else:
+                        attributeModel.attributeValue = self.request.POST.get(formInput)
                     attributeModel.save()
                 else:
                     self.saveNewRecord(attributeName=splitted[1], attributeValue=self.request.POST.get(formInput),
