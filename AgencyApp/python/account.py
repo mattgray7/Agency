@@ -438,43 +438,7 @@ class EditActorDescriptionView(GenericEditAccountView):
 
     def processForm(self):
         """Overriding asbtract method"""
-        newAttributes = []
-        for formInput in self.formData:
-            if formInput.startswith("attributes."):
-                self.userAccount.actorDescriptionEnabled = True
-                self.userAccount.save()
-                print "looking at input {0}".format(formInput)
-                splitted = formInput.split('.')
-                newAttributes.append({"name": splitted[1], "value": self.request.POST.get(formInput)})
-
-        ActorDescriptionStringAttribute.objects.filter(username=self.username).delete()
-        ActorDescriptionBooleanAttribute.objects.filter(username=self.username).delete()
-
-        for attribute in newAttributes:
-            print "attr {0}".format(attribute)
-            if attribute["value"] in [True, False, "True", "False", "true", "false"]:
-                try:
-                    attributeModel = ActorDescriptionBooleanAttribute.objects.get(username=self.username,
-                                                                                         attributeName=splitted[1])
-                    attributeModel.attributeValue = self.request.POST.get(formInput) in [True, "True", "true"] or False
-                    print "saving existing model"
-                except models.ActorDescriptionBooleanAttribute.DoesNotExist:
-                    attributeModel = ActorDescriptionBooleanAttribute(username=self.username,
-                                                                      attributeName = splitted[1],
-                                                                      attributeValue = bool(self.request.POST.get(formInput)))
-                    print "new model"
-            else:
-                try:
-                    attributeModel = ActorDescriptionStringAttribute.objects.get(username=self.username,
-                                                                                         attributeName = splitted[1])
-                    attributeModel.attributeValue = self.request.POST.get(formInput)
-                    print "saving existing model8"
-                except ActorDescriptionStringAttribute.DoesNotExist:
-                    attributeModel = ActorDescriptionStringAttribute(username=self.username,
-                                                                     attributeName = splitted[1],
-                                                                     attributeValue = self.request.POST.get(formInput))
-                    print "new model"
-            attributeModel.save()
+        self.attributeListObject.save()
         return True
 
 

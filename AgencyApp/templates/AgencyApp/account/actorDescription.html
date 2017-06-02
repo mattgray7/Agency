@@ -2,7 +2,6 @@
 
 {% block content %}
 	<h2>Specify physical attributes</h2>
-	<h6> If you've selected acting as an interested profession, you can specify your <br>physical characteristics so that casting agents can search for exactly who <br>they're looking for. It's completey optional and will increase your networking exposure.</h6>
 	{% if errors %}
 		<ul>
 			{% for error in errors %}
@@ -10,7 +9,9 @@
 			{% endfor %}
 		</ul>
 	{% endif %}
-	<form method='post' action='{{ currentPageURL }}'>
+	<!-- dont put select inputs directly in form, just reference the form name in the select tag and it will pass them -->
+	<!-- need enctype to use select form -->
+	<form method='post' action='{{ currentPageURL }}' name='createForm' id='createForm' enctype="multipart/form-data">
 		{% csrf_token %}
 		<input type="hidden" name="source" value="{{ next }}" />
 		<input type="hidden" name="next" value="{{ next }}" />
@@ -27,7 +28,6 @@
 					for(var i=0; i < selectInputs.length; i++){
 						inputs.push(selectInputs[i]);
 					}
-
 					// toggle the enable
 					for(var i=0; i < inputs.length; i++){
 						var currentInput = inputs[i]
@@ -46,19 +46,20 @@
 				}
 			</script>
 			<br>
-			<h5 style="display:inline;"> You can specify the physical characteristics of the role, which we can use to notify actors with matching traits of your casting post. Your post will still be visible without physical criteria enabled.</h5>
+			<h5 style="display:inline;"> If you've selected acting as an interested profession, you can specify your physical characteristics so that casting agents can search for exactly who they're looking for. It's completey optional and may increase your networking exposure.</h5><br>
 			<br>
-			Enable physical attributes
-			{% if post.descriptionEnabled %}
-				<input type="checkbox" onclick="toggleActorDescriptions();" value="Enable physical criteria" checked/>
-			{% else %}
-				<input type="checkbox" onclick="toggleActorDescriptions();" value="Enable physical criteria"/>
-			{% endif %}
-			<br><br>
+			<br>
 
-			<div id="physicalAttributesDiv">
+			<div id="physicalAttributesDiv" >
 				<h4 style="display:inline;">
-					<div id="physicalAttributesDivLabel"><font color="gray">Physical attributes</font></div>
+					{% if descriptionEnabled %}
+						<input type="checkbox" onclick="toggleActorDescriptions();" checked/>
+					{% else %}
+						<input type="checkbox" onclick="toggleActorDescriptions();" />
+					{% endif %}
+					<div id="physicalAttributesDivLabel" style="display:inline;">
+						<font color="gray">Physical attributes</font>
+					</div>
 				</h4>
 				<table>
 					<script>
@@ -104,21 +105,22 @@
 	<script>
 		$(document).ready(function(){
 			{% for attribute in attributes %}
-					var attributeDiv = document.getElementById("attributes.{{attribute.name}}Div")
-					if(attributeDiv != null){
-						{% if attribute.options %}
-							var attributeOptions = {{ attribute.options|safe }}
-							var selectForm = createSelectForm("createForm", "attributes.{{attribute.name}}", attributeOptions, "{{attribute.value}}")
-							attributeDiv.innerHTML = selectForm;
+				var attributeDiv = document.getElementById("attributes.{{attribute.name}}Div")
+				if(attributeDiv != null){
+					{% if attribute.options %}
+						var attributeOptions = {{ attribute.options|safe }}
+						var selectForm = createSelectForm("createForm", "attributes.{{attribute.name}}", attributeOptions, "{{attribute.value}}")
+						attributeDiv.innerHTML = selectForm;
 
-							var attributeSelectForm = document.getElementById("attributes.{{attribute.name}}");
-							if(attributeSelectForm != null){
-								attributeSelectForm.disabled = "disabled";
-							}
+						// Set select bar to disabled as that is the default for the rest of the form
+						var attributeSelectForm = document.getElementById("attributes.{{attribute.name}}");
+						if(attributeSelectForm != null){
+							attributeSelectForm.disabled = "disabled";
+						}
 						{% endif %}
 					}
 				{% endfor %}
-				{% if post.descriptionEnabled %}
+				{% if descriptionEnabled %}
 					toggleActorDescriptions();
 				{% endif %}
 		});

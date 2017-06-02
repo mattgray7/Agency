@@ -26,20 +26,11 @@ class CastingPostInstance(post.GenericPostInstance):
         return False
 
     def saveActorAttributes(self):
-        attributes = {}
-        error = False
-        if self.request.POST.get("descriptionEnabled", False) in ["False", False]:
-            self.record.descriptionEnabled = False
-            self.record.save()
-        else:
-            self.record.descriptionEnabled = True
-            self.record.save()
-
-            # Save the actor attributes
-            attributeObject = actorDescription.CastingPostAttributes(request=self.request,
-                                                                     postID=self.postID,
-                                                                     pageType=constants.CASTING_POST)
-            attributeObject.save()
+        # Will handle the deletion of objects if disabled
+        attributeObject = actorDescription.CastingPostAttributes(request=self.request,
+                                                                 postID=self.postID,
+                                                                 pageType=constants.CASTING_POST)
+        attributeObject.save()
         return True
 
 

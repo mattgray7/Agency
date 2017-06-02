@@ -62,17 +62,19 @@
 			{% if profileUserAccount.actingInterest %}
 				<li>
 					Acting and extra work
-					<form action="{{ currentPageURL }}" method="post">
-						{% csrf_token %}
-						<input type="hidden" name="source" value="{{ next }}" />
-						<input type="hidden" name="current" value="{{ next }}" />
-						<input type="hidden" name="destination" value="{{ possibleDestinations.actorDescription }}" /> 
-						{% if viewingOwnAccount and userAccount.actorDescriptionEnabled %}
-							<input type="submit" value="Edit actor description" />
-						{% else %}
-							<input type="submit" value="Enabled actor descriptions" />
-						{% endif %}
-					</form>
+					{% if viewingOwnProfile %}
+						<form style="display:inline" action="{{ currentPageURL }}" method="post">
+							{% csrf_token %}
+							<input type="hidden" name="source" value="{{ next }}" />
+							<input type="hidden" name="current" value="{{ next }}" />
+							<input type="hidden" name="destination" value="{{ possibleDestinations.actorDescription }}" /> 
+							{% if profileUserAccount.actorDescriptionEnabled %}
+								<input type="submit" value="Edit actor description" />
+							{% else %}
+								<input type="submit" value="Enable actor descriptions" />
+							{% endif %}
+						</form>
+					{% endif %}
 				</li>
 			{% endif %}
 			{% if profileUserAccount.castingInterest %}
