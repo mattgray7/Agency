@@ -68,8 +68,7 @@
                                 {% csrf_token %}
                                 <input type="hidden" name="source" value="{{ next }}">
                                 <input type="hidden" name="next" value="{{ toolbarDestinations.home }}">
-                                <!--<input type="submit" value="Van Film Collective">-->
-                                <a onclick="this.submit()">Van Film Collective</a>
+                                <a>Van Film Collective</a>
                             </form>
                         </h1>
                     </div>
@@ -80,7 +79,7 @@
                                     {% csrf_token %}
                                     <input type="hidden" name="source" value="{{ source }}">
                                     <input type="hidden" name="next" value="{{ toolbarDestinations.browse }}">
-                                    <a onclick="this.submit()">Browse</a>
+                                    <a>Browse</a>
                                 </form>
                             </li>
                             {% if request.user.is_authenticated %}
@@ -89,7 +88,7 @@
                                         {% csrf_token %}
                                         <input type="hidden" name="source" value="{{ source }}">
                                         <input type="hidden" name="next" value="{{ toolbarDestinations.post }}">
-                                        <a onclick="this.submit()">Post</a>
+                                        <a>Post</a>
                                     </form>
                                 </li>
 
@@ -98,7 +97,7 @@
                                         {% csrf_token %}
                                         <input type="hidden" name="source" value="{{ source }}">
                                         <input type="hidden" name="next" value="{{ toolbarDestinations.profile }}">
-                                        <a onclick="this.submit()">{{ request.user.first_name }} {{ request.user.last_name }}</a>
+                                        <a>{{ request.user.first_name }} {{ request.user.last_name }}</a>
                                     </form>
                                 </li>
                                 <li>
@@ -106,7 +105,7 @@
                                         {% csrf_token %}
                                         <input type="hidden" name="source" value="{{ source }}">
                                         <input type="hidden" name="next" value="{{ toolbarDestinations.logout }}">
-                                        <a onclick="this.submit()">Logout</a>
+                                        <a>Logout</a>
                                     </form>
                                 </li>
                             {% else %}
@@ -116,7 +115,7 @@
                                         <input type="hidden" name="source" value="{{ source }}">
                                         <input type="hidden" name="next" value="{{ toolbarDestinations.login }}">
                                         <input type="hidden" name="destination" value="{{ default }}">
-                                        <a onclick="this.submit()">Login</a>
+                                        <a>Login</a>
                                     </form>
                                 </li>
                             {% endif %}
@@ -241,11 +240,13 @@
             $(document).ready(function(){
                 $(document).find('div').each(function(){
                     var divID = $(this).attr('id');
-                    var cleanedName = divID.replace(/[0-9]/g, '');
-                    if(cleanedName == "cancelButton"){
-                        createCancelButton(document.getElementById('cancelButton'), "{{ cancelDestination }}", "{{ cancelDestinationURL }}", "{{ cancelButtonName }}");
-                    }else if(cleanedName == "profileRedirectButton"){
-                        createProfileRedirectButton(document.getElementById(divID), $(this).attr("innerHTML"), "{{ currentPageURL }}");
+                    if(divID != null){
+                        var cleanedName = divID.replace(/[0-9]/g, '');
+                        if(cleanedName == "cancelButton"){
+                            createCancelButton(document.getElementById('cancelButton'), "{{ cancelDestination }}", "{{ cancelDestinationURL }}", "{{ cancelButtonName }}");
+                        }else if(cleanedName == "profileRedirectButton"){
+                            createProfileRedirectButton(document.getElementById(divID), $(this).attr("innerHTML"), "{{ currentPageURL }}");
+                        }
                     }
                 });
             });

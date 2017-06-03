@@ -1,8 +1,6 @@
 {% extends "base.html" %}
 
 {% block content %}
-<script>var userLoggedIn = false;</script>
-
 <!--{% if request.user.is_authenticated %}
 	<script>userLoggedIn = true;</script>
 	{% if source == possibleSources.login %}
@@ -14,7 +12,6 @@
 {% endif %}-->
 
 {% if not request.user.is_authenticated %}
-	<script>userLoggedIn = true;</script>
 	<div id="banner" class="container">
 		<div class="title">
 			<h2>Welcome to the VanFilmCollective</h2>
@@ -84,12 +81,11 @@ var projectChoice = "<button onclick='viewProjects();'> View current projects</b
 window.onload = displayMainChoice();
 
 function displayMainChoice(){
-	if (userLoggedIn){
-		var toDisplay = mainChoice;
-	}else{
-		var toDisplay = mainChoice + createAccountButton;
-	}
-	document.getElementById('mainChoice').innerHTML = toDisplay;
+	{% if request.user.is_authenticated %}
+		document.getElementById('mainChoice').innerHTML = mainChoice;
+	{% endif %}
+	
+
 }
 
 function eventsChosen(){
