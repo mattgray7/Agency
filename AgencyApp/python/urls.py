@@ -1,10 +1,11 @@
 import views
 import ajax
+import constants
 
 from django.conf.urls import url
 
 urlpatterns = [
-    url(r'^$', views.displayHome, name='displayHome'),
+    url(r'^$', views.handleURL, name=constants.HOME),
 
     # Create account
     url(r'^account/create/basic/$', views.createAccount, name='createAccount'),
@@ -16,8 +17,8 @@ urlpatterns = [
     url(r'^account/edit/description/$', views.editActorDescription, name='editActorDescription'),
 
     # Create posts
-    url(r'^post/$', views.createPost, name='createPost'),
-    url(r'^post/create/$', views.createPostChoice, name='createPostChoice'),
+    url(r'^post/$', views.handleURL, name=constants.CREATE_POST),
+    url(r'^post/create/$', views.createPostChoice, name=constants.CREATE_POST),
     url(r'^post/edit/(?P<postID>[A-Za-z0-9]+)/$', views.editPost, name='editPost'),
     url(r'^post/view/(?P<postID>[A-Za-z0-9]+)/$', views.viewPost, name='viewPost'),
     url(r'^post/create/event/$', views.createEventPost, name='createEvent'),
@@ -49,5 +50,5 @@ urlpatterns = [
     url(r'^login/$', views.login, name='login'),
     url(r'^logout/$', views.logout, name='logout'),
     #url(r'^ajax/$', ajax.call, name='ajax'),
-    url(r'^user/(?P<username>[A-Za-z0-9]+)/$', views.displayProfile, name='displayProfile'),
+    url(r'^user/(?P<username>[A-Za-z0-9]+)/$', views.handleURL, name=constants.PROFILE),
 ]

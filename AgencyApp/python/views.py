@@ -29,16 +29,32 @@ import post_work as workPost
 import post_casting as castingPost
 
 
+def returnAjax(request, view, destPageName):
+    success = view.processForm()
+    destURL = helpers.getDestinationURL(request=request, destPageName=destPageName)
+    return JsonResponse({"destURL": destURL, "success": success})
+
+def returnHTTP(view):
+    # TODO anything to do here?
+    return view.process()
+
+def handleRequest(request, view):
+    if request.POST.get("ajax", False):
+        return returnAjax(request=request, view=view, destPageName=request.POST.get("next"))
+    else:
+        return returnHTTP(view=view)
+
+def handleURL(request):
+    urlPageName = request.resolver_match.url_name
+    print "urlPageName is {0}".format(urlPageName)
+    view = constants.VIEW_CLASS_MAP.get(urlPageName)(request=request, currentPage=urlPageName)
+    return handleRequest(request=request, view=view)
+
 # ============================== Basic pages ================================== #
 
 def displayHome(request):
-    view = home.HomeView(request=request, currentPage=constants.HOME)
-    if request.POST.get("ajax", False):
-        success = view.processForm()
-        destURL = helpers.getDestinationURL(request=request, destPageName=request.POST.get("next"))
-        return JsonResponse({"destURL": destURL})
-    else:
-        return view.process()
+    #view = home.HomeView(request=request, currentPage=constants.HOME)
+    return handleRequest(request, view)
 
 def login(request):
     view = account.LoginView(request=request, currentPage=constants.LOGIN)
@@ -50,12 +66,7 @@ def logout(request):
 
 def displayProfile(request, username):
     view = profile.ProfileView(request=request, username=username, currentPage=constants.PROFILE)
-    if request.POST.get("ajax", False):
-        success = view.processForm()
-        destURL = helpers.getDestinationURL(request=request, destPageName=request.POST.get("next"))
-        return JsonResponse({"destURL": destURL})
-    else:
-        return view.process()
+    return handleRequest(request, view)
 
 # ============================================================================= #
 
@@ -98,8 +109,9 @@ def createAccountFinish(request):
 # ============================== Create post pages ============================== #
 
 def createPost(request):
+    print request.resolver_match.url_name
     view = post.CreatePostTypesView(request=request, currentPage=constants.CREATE_POST)
-    return view.process()
+    return handleRequest(request, view)
 
 def createPostChoice(request):
     view = post.CreatePostChoiceView(request=request, currentPage=constants.CREATE_POST_CHOICE)

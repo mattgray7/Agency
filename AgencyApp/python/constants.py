@@ -1,6 +1,10 @@
 import forms
 import models
 
+import post
+import home
+import profile
+
 # Source page enums:
 HOME = "HOME"
 LOGIN = "LOGIN"
@@ -184,6 +188,10 @@ FORM_MAP = {HOME: forms.BaseForm,
 			EDIT_POST: None,
 			VIEW_POST: None
 			}
+
+VIEW_CLASS_MAP = {CREATE_POST: post.CreatePostTypesView,
+			   	  HOME: home.HomeView,
+			   	  PROFILE: profile.ProfileView}
 
 HTML_MAP = {HOME: 'AgencyApp/home.html',
 			LOGIN: 'AgencyApp/account/login.html',
