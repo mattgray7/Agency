@@ -5,6 +5,13 @@ import post
 import home
 import profile
 import browse
+import account
+
+import post_casting as castingPost
+import post_event as eventPost
+import post_project as projectPost
+import post_work as workPost
+import post_collaboration as collaborationPost
 
 # Source page enums:
 HOME = "HOME"
@@ -105,9 +112,6 @@ URL_MAP = {HOME: "/",
 		   EDIT_PROFILE_PICTURE: "/account/edit/picture/",
 		   EDIT_BACKGROUND: "/account/edit/background/",
 		   EDIT_ACTOR_DESCRIPTION: "/account/edit/description/",
-		   #CREATE_EVENT: "/create/event/",
-		   #EDIT_EVENT: "/edit/event/{0}/",
-		   #VIEW_EVENT: "/view/event/{0}/",
 
 		   # Post creation
 		   CREATE_POST: "/post/",
@@ -190,14 +194,35 @@ FORM_MAP = {HOME: forms.BaseForm,
 			VIEW_POST: None
 			}
 
-VIEW_CLASS_MAP = {CREATE_POST: post.CreatePostTypesView,
-			   	  HOME: home.HomeView,
+VIEW_CLASS_MAP = {HOME: home.HomeView,
+				  LOGIN: account.LoginView,
+				  LOGOUT: account.LogoutView,
 			   	  PROFILE: profile.ProfileView,
-			   	  BROWSE_CHOICE: browse.BrowseChoiceView,
-			   	  BROWSE_EVENTS: browse.BrowseEventsView,
-			   	  BROWSE_PROJECTS: browse.BrowseProjectsView,
-			   	  BROWSE_USERS: browse.BrowseUsersView,
-			   	  BROWSE_POSTS: browse.BrowsePostsView}
+
+                  BROWSE_CHOICE: browse.BrowseChoiceView,
+                  BROWSE_EVENTS: browse.BrowseEventsView,
+                  BROWSE_PROJECTS: browse.BrowseProjectsView,
+                  BROWSE_USERS: browse.BrowseUsersView,
+                  BROWSE_POSTS: browse.BrowsePostsView,
+
+			   	  # Create posts
+			   	  CREATE_POST: post.CreatePostTypesView,	# event, project, work, collab, casting
+			   	  CREATE_POST_CHOICE: post.CreatePostChoiceView,		# just btw work, collab, and casting
+			   	  CREATE_EVENT_POST: eventPost.CreateEventPostView,
+			   	  CREATE_PROJECT_POST: projectPost.CreateProjectPostView,
+			   	  CREATE_WORK_POST: workPost.CreateWorkPostView,
+			   	  CREATE_CASTING_POST: castingPost.CreateCastingPostView,
+			   	  CREATE_COLLABORATION_POST: collaborationPost.CreateCollaborationPostView,
+
+			   	  # Account creation:
+			   	  CREATE_BASIC_ACCOUNT: account.CreateAccountView,
+			   	  CREATE_BASIC_ACCOUNT_FINISH: account.CreateAccountFinishView,
+			   	  EDIT_INTERESTS: account.EditInterestsView,
+			   	  EDIT_PROFESSIONS: account.EditProfessionsView,
+			   	  EDIT_PROFILE_PICTURE: account.EditPictureView,
+			   	  EDIT_BACKGROUND: account.EditBackgroundView,
+			   	  EDIT_ACTOR_DESCRIPTION: account.EditActorDescriptionView
+			   	  }
 
 HTML_MAP = {HOME: 'AgencyApp/home.html',
 			LOGIN: 'AgencyApp/account/login.html',

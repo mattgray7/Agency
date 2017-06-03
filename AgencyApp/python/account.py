@@ -11,7 +11,6 @@ from forms import *
 from models import UserAccount, Profession
 from helpers import getMessageFromKey
 
-from constants import *
 import constants
 import helpers
 import genericViews as views
@@ -36,11 +35,11 @@ class LoginView(views.GenericFormView):
         postMsg = "You must login to create a post."
         eventMsg = "You must login to create an event."
         projectMsg = "You must login to create a project."
-        if self.destinationPage == CREATE_POST_CHOICE and postMsg not in self._pageErrors:
+        if self.destinationPage == constants.CREATE_POST_CHOICE and postMsg not in self._pageErrors:
             self._pageErrors.append(postMsg)
-        elif self.destinationPage == CREATE_EVENT_POST and eventMsg not in self._pageErrors:
+        elif self.destinationPage == constants.CREATE_EVENT_POST and eventMsg not in self._pageErrors:
             self._pageErrors.append(eventMsg)
-        elif self.destinationPage == CREATE_PROJECT_POST and projectMsg not in self._pageErrors:
+        elif self.destinationPage == constants.CREATE_PROJECT_POST and projectMsg not in self._pageErrors:
             self._pageErrors.append(projectMsg)
         return self._pageErrors
 
@@ -51,17 +50,18 @@ class LoginView(views.GenericFormView):
 
     def processForm(self):
         """Overriding asbtract method"""
-        self._username = _getProfileNameFromEmail(self.formData.get('email'))
-        if self._username is None:
-            self._pageErrors.append("{0} is not a registered email.".format(self.formData.get('email')))
-        else:
-            user = authenticate(username=self.username, password=self.formData.get('password'))
-            if user is not None:
-                # Login was a success
-                login(self.request, user)
-                return True
+        if not self.request.POST.get("ajax", False):
+            self._username = _getProfileNameFromEmail(self.formData.get('email'))
+            if self._username is None:
+                self._pageErrors.append("{0} is not a registered email.".format(self.formData.get('email')))
             else:
-                self._pageErrors.append("Email and password do not match.")
+                user = authenticate(username=self.username, password=self.formData.get('password'))
+                if user is not None:
+                    # Login was a success
+                    login(self.request, user)
+                    return True
+                else:
+                    self._pageErrors.append("Email and password do not match.")
  
 
 class LogoutView(views.GenericFormView):
@@ -91,7 +91,7 @@ class CreateAccountView(views.GenericFormView):
     def cancelDestination(self):
         """Override to continue the profile setup process"""
         if self._cancelDestination is None:
-            self._cancelDestination = HOME
+            self._cancelDestination = constants.HOME
         return self._cancelDestination
 
     @property
@@ -147,9 +147,9 @@ class CreateAccountFinishView(views.GenericFormView):
 
     @property
     def pageContext(self):
-        self._pageContext["possibleDestinations"] = {"event": CREATE_EVENT_POST,
-                                                     "post": CREATE_POST,
-                                                     "browse": BROWSE_CHOICE}
+        self._pageContext["possibleDestinations"] = {"event": constants.CREATE_EVENT_POST,
+                                                     "post": constants.CREATE_POST,
+                                                     "browse": constants.BROWSE_CHOICE}
         return self._pageContext
 
     def checkFormValidity(self):
@@ -176,7 +176,7 @@ class GenericEditAccountView(views.GenericFormView):
 
     @property
     def cancelButtonName(self):
-        if self.sourcePage != PROFILE:
+        if self.sourcePage != constants.PROFILE:
             self._cancelButtonName = "Skip"
         else:
             self._cancelButtonName = "Back"
@@ -202,7 +202,7 @@ class EditInterestsView(GenericEditAccountView):
     @property
     def nextButtonString(self):
         if self._nextButtonString is None:
-            if self.sourcePage == PROFILE:
+            if self.sourcePage == constants.PROFILE:
                 self._nextButtonString = "Update interests"
 
             else:
@@ -213,10 +213,10 @@ class EditInterestsView(GenericEditAccountView):
     def cancelDestination(self):
         """Override to continue the profile setup process"""
         if self._cancelDestination is None:
-            if self.destinationPage == EDIT_PROFESSIONS:
-                self._cancelDestination = EDIT_PROFESSIONS
+            if self.destinationPage == constants.EDIT_PROFESSIONS:
+                self._cancelDestination = constants.EDIT_PROFESSIONS
             else:
-                self._cancelDestination = PROFILE
+                self._cancelDestination = constants.PROFILE
         return self._cancelDestination
 
     @property
@@ -250,7 +250,7 @@ class EditProfessionsView(GenericEditAccountView):
     @property
     def nextButtonString(self):
         if self._nextButtonString is None:
-            if self.sourcePage == PROFILE:
+            if self.sourcePage == constants.PROFILE:
                 self._nextButtonString = "Update professions"
             else:
                 self._nextButtonString = "Add interested professions"
@@ -260,10 +260,10 @@ class EditProfessionsView(GenericEditAccountView):
     def cancelDestination(self):
         """Override to continue the profile setup process"""
         if self._cancelDestination is None:
-            if self.destinationPage == EDIT_PROFILE_PICTURE:
-                self._cancelDestination = EDIT_PROFILE_PICTURE
+            if self.destinationPage == constants.EDIT_PROFILE_PICTURE:
+                self._cancelDestination = constants.EDIT_PROFILE_PICTURE
             else:
-                self._cancelDestination = PROFILE
+                self._cancelDestination = constants.PROFILE
         return self._cancelDestination
 
     @property
@@ -272,7 +272,7 @@ class EditProfessionsView(GenericEditAccountView):
             self._pageContext["selectedProfessions"] = [x.professionName for x in Profession.objects.filter(username=self.username)]
         except Profession.DoesNotExist:
             self._pageContext["selectedProfessions"] = []
-        self._pageContext["professionList"] = PROFESSIONS
+        self._pageContext["professionList"] = constants.PROFESSIONS
         return self._pageContext
 
     def processForm(self):
@@ -299,7 +299,7 @@ class EditPictureView(GenericEditAccountView):
     @property
     def nextButtonString(self):
         if self._nextButtonString is None:
-            if self.sourcePage == PROFILE:
+            if self.sourcePage == constants.PROFILE:
                 self._nextButtonString = "Update profile picture"
             else:
                 self._nextButtonString = "Add profile picture"
@@ -309,10 +309,10 @@ class EditPictureView(GenericEditAccountView):
     def cancelDestination(self):
         """Override to continue the profile setup process"""
         if self._cancelDestination is None:
-            if self.destinationPage == EDIT_BACKGROUND:
-                self._cancelDestination = EDIT_BACKGROUND
+            if self.destinationPage == constants.EDIT_BACKGROUND:
+                self._cancelDestination = constants.EDIT_BACKGROUND
             else:
-                self._cancelDestination = PROFILE
+                self._cancelDestination = constants.PROFILE
         return self._cancelDestination
 
     @property
@@ -324,7 +324,7 @@ class EditPictureView(GenericEditAccountView):
     @property
     def filename(self):
         if self._filename is None:
-            self._filename = MEDIA_FILE_NAME_MAP.get(EDIT_PROFILE_PICTURE, "tempfile")
+            self._filename = MEDIA_FILE_NAME_MAP.get(constants.EDIT_PROFILE_PICTURE, "tempfile")
         return self._filename
 
     def processForm(self):
@@ -349,7 +349,7 @@ class EditBackgroundView(GenericEditAccountView):
     @property
     def nextButtonString(self):
         if self._nextButtonString is None:
-            if self.sourcePage == PROFILE:
+            if self.sourcePage == constants.PROFILE:
                 self._nextButtonString = "Update background"
             else:
                 self._nextButtonString = "Add background information"
@@ -365,12 +365,12 @@ class EditBackgroundView(GenericEditAccountView):
     def destinationPage(self):
         if self._destinationPage is None:
             if self.userAccount.actingInterest:
-                if PROFILE in [self.sourcePage, self.request.POST.get("destination")]:
-                    self._destinationPage = PROFILE
+                if constants.PROFILE in [self.sourcePage, self.request.POST.get("destination")]:
+                    self._destinationPage = constants.PROFILE
                 else:
-                    self._destinationPage = EDIT_ACTOR_DESCRIPTION
+                    self._destinationPage = constants.EDIT_ACTOR_DESCRIPTION
             else:
-                self._destinationPage = PROFILE
+                self._destinationPage = constants.PROFILE
         return self._destinationPage
 
     @property
@@ -407,19 +407,19 @@ class EditActorDescriptionView(GenericEditAccountView):
     @property
     def attributeListObject(self):
         if self._attributeListObject is None:
-            self._attributeListObject = actorDescription.ProfileAttributes(request=self.request, username=self.username, pageType=PROFILE)
+            self._attributeListObject = actorDescription.ProfileAttributes(request=self.request, username=self.username, pageType=constants.PROFILE)
         return self._attributeListObject
 
     @property
     def destinationPage(self):
         if self._destinationPage is None:
-            self._destinationPage = PROFILE
+            self._destinationPage = constants.PROFILE
         return self._destinationPage
 
     @property
     def nextButtonString(self):
         if self._nextButtonString is None:
-            if self.sourcePage == PROFILE:
+            if self.sourcePage == constants.PROFILE:
                 self._nextButtonString = "Update physical description"
             else:
                 self._nextButtonString = "Add physical description"

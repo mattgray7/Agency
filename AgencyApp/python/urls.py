@@ -6,26 +6,29 @@ from django.conf.urls import url
 
 urlpatterns = [
     url(r'^$', views.handleURL, name=constants.HOME),
+    url(r'^login/$', views.handleURL, name=constants.LOGIN),
+    url(r'^logout/$', views.handleURL, name=constants.LOGOUT),
+    url(r'^user/(?P<username>[A-Za-z0-9]+)/$', views.handleUsernameURL, name=constants.PROFILE),
 
     # Create account
-    url(r'^account/create/basic/$', views.createAccount, name='createAccount'),
-    url(r'^account/create/finish/$', views.createAccountFinish, name='createAccountFinish'),
-    url(r'^account/edit/picture/$', views.editPicture, name='editPicture'),
-    url(r'^account/edit/interests/$', views.editInterests, name='editInterests'),
-    url(r'^account/edit/professions/$', views.editProfessions, name='editProfessions'),
-    url(r'^account/edit/background/$', views.editBackground, name='editBackground'),
-    url(r'^account/edit/description/$', views.editActorDescription, name='editActorDescription'),
+    url(r'^account/create/basic/$', views.handleURL, name=constants.CREATE_BASIC_ACCOUNT),
+    url(r'^account/create/finish/$', views.handleURL, name=constants.CREATE_BASIC_ACCOUNT_FINISH),
+    url(r'^account/edit/picture/$', views.handleURL, name=constants.EDIT_PROFILE_PICTURE),
+    url(r'^account/edit/interests/$', views.handleURL, name=constants.EDIT_INTERESTS,),
+    url(r'^account/edit/professions/$', views.handleURL, name=constants.EDIT_PROFESSIONS),
+    url(r'^account/edit/background/$', views.handleURL, name=constants.EDIT_BACKGROUND),
+    url(r'^account/edit/description/$', views.handleURL, name=constants.EDIT_ACTOR_DESCRIPTION),
 
     # Create posts
     url(r'^post/$', views.handleURL, name=constants.CREATE_POST),
     url(r'^post/create/$', views.handleURL, name=constants.CREATE_POST_CHOICE),
     url(r'^post/edit/(?P<postID>[A-Za-z0-9]+)/$', views.handleEditPostIDURL, name=constants.EDIT_POST),
     url(r'^post/view/(?P<postID>[A-Za-z0-9]+)/$', views.handleViewPostIDURL, name=constants.VIEW_POST),
-    url(r'^post/create/event/$', views.createEventPost, name='createEvent'),
-    url(r'^post/create/collaboration/$', views.createCollaborationPost, name='createCollaborationPost'),
-    url(r'^post/create/work/$', views.createWorkPost, name='createWorkPost'),
-    url(r'^post/create/project/$', views.createProjectPost, name='createProjectPost'),
-    url(r'^post/create/casting/$', views.createCastingPost, name='createCastingPost'),
+    url(r'^post/create/event/$', views.handleURL, name=constants.CREATE_EVENT_POST),
+    url(r'^post/create/collaboration/$', views.handleURL, name=constants.CREATE_COLLABORATION_POST),
+    url(r'^post/create/work/$', views.handleURL, name=constants.CREATE_WORK_POST),
+    url(r'^post/create/project/$', views.handleURL, name=constants.CREATE_PROJECT_POST),
+    url(r'^post/create/casting/$', views.handleURL, name=constants.CREATE_CASTING_POST),
 
     # Ajax calls
     url(r'^post/view/(?P<postID>[A-Za-z0-9]+)/follow/$', ajax.followPost, name='followPost'),
@@ -40,10 +43,4 @@ urlpatterns = [
     url(r'^browse/projects/$', views.handleURL, name=constants.BROWSE_PROJECTS),
     url(r'^browse/users/$', views.handleURL, name=constants.BROWSE_USERS),
     url(r'^browse/posts/$', views.handleURL, name=constants.BROWSE_POSTS),
-
-    # Other
-    url(r'^login/$', views.login, name='login'),
-    url(r'^logout/$', views.logout, name='logout'),
-    #url(r'^ajax/$', ajax.call, name='ajax'),
-    url(r'^user/(?P<username>[A-Za-z0-9]+)/$', views.handleUsernameURL, name=constants.PROFILE),
 ]
