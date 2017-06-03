@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.contrib.auth.models import User
 from models import UserAccount
 
+from django.http import JsonResponse
 from django.core.files.storage import default_storage
 from django.core.files.base import ContentFile
 
@@ -19,6 +20,7 @@ import profile
 import account
 import browse
 import post
+import helpers
 
 import post_event as eventPost
 import post_project as projectPost
@@ -31,7 +33,12 @@ import post_casting as castingPost
 
 def displayHome(request):
     view = home.HomeView(request=request, currentPage=constants.HOME)
-    return view.process()
+    if request.POST.get("ajax", False):
+        success = view.processForm()
+        destURL = helpers.getDestinationURL(request=request, destPageName=request.POST.get("next"))
+        return JsonResponse({"destURL": destURL})
+    else:
+        return view.process()
 
 def login(request):
     view = account.LoginView(request=request, currentPage=constants.LOGIN)
@@ -43,7 +50,12 @@ def logout(request):
 
 def displayProfile(request, username):
     view = profile.ProfileView(request=request, username=username, currentPage=constants.PROFILE)
-    return view.process()
+    if request.POST.get("ajax", False):
+        success = view.processForm()
+        destURL = helpers.getDestinationURL(request=request, destPageName=request.POST.get("next"))
+        return JsonResponse({"destURL": destURL})
+    else:
+        return view.process()
 
 # ============================================================================= #
 

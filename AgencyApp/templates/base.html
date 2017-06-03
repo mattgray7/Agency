@@ -11,7 +11,7 @@
     </head>
 
     <script>
-    // Deconstructor functions to run when a toolbar source is selected
+    // Deconstructor functions to run when a toolbar source is selected (eg deleting a newly created post when leaving the create post page)
     var toolbarDeconstructorFunctions = [];
 
     // using jQuery
@@ -134,7 +134,31 @@
                         toolbarDeconstructorFunctions[i]();
                     }
                 }
-                return form.submit()
+
+                // Create dict to pass to function
+                ajaxDict = {}
+                if(form.elements.length > 0){
+                    for(var i=0; i < form.elements.length; i++){
+                        var element = form.elements[i];
+                        if(element.type === "text" || element.type == "hidden"){
+                            ajaxDict[element.name] = element.value;
+                        }
+                    }
+                }
+                ajaxDict["ajax"] = "True";
+                $.ajax({
+                    url : form.action,
+                    data : ajaxDict,
+                    type : 'POST',
+                    dataType: "json",
+                    success : function(data) {
+                        if(data["destURL"] != null){
+                            window.location.href = data["destURL"];
+                        }else{
+                            return form.submit()
+                        }
+                    }
+                });
             }
 
             function addStatusBar(statusDivName, statusSelectName, defaultStatus){

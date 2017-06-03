@@ -97,5 +97,6 @@ class ProfileView(views.GenericFormView):
         # !!!!!!!!!!
         if self._pageErrors:
             self._pageContext["errors"] = self.pageErrors
+        print "returning rendering"
         return render(self.request, constants.HTML_MAP.get(self.currentPage), self.pageContext)
 
