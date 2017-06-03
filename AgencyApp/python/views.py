@@ -46,15 +46,53 @@ def handleRequest(request, view):
 
 def handleURL(request):
     urlPageName = request.resolver_match.url_name
-    print "urlPageName is {0}".format(urlPageName)
     view = constants.VIEW_CLASS_MAP.get(urlPageName)(request=request, currentPage=urlPageName)
     return handleRequest(request=request, view=view)
 
-# ============================== Basic pages ================================== #
+def handleUsernameURL(request, username):
+    urlPageName = request.resolver_match.url_name
+    view = constants.VIEW_CLASS_MAP.get(urlPageName)(request=request, currentPage=urlPageName, username=username)
+    return handleRequest(request=request, view=view)
 
-def displayHome(request):
-    #view = home.HomeView(request=request, currentPage=constants.HOME)
-    return handleRequest(request, view)
+def handlePostIDURL(request, postID):
+    urlPageName = request.resolver_match.url_name
+    view = constants.VIEW_CLASS_MAP.get(urlPageName)(request=request, currentPage=urlPageName, postID=postID)
+    return handleRequest(request=request, view=view)
+
+def handleEditPostIDURL(request, postID):
+    urlPageName = request.resolver_match.url_name
+    if post.isEventPost(postID):
+        view = eventPost.CreateEventPostView(request=request, currentPage=constants.EDIT_POST, postID=postID)
+    elif post.isCollaborationPost(postID):
+        view = collaborationPost.CreateCollaborationPostView(request=request, currentPage=constants.EDIT_POST, postID=postID)
+    elif post.isWorkPost(postID):
+        view = workPost.CreateWorkPostView(request=request, currentPage=constants.EDIT_POST, postID=postID)
+    elif post.isProjectPost(postID):
+        view = projectPost.CreateProjectPostView(request=request, currentPage=constants.EDIT_POST, postID=postID)
+    elif post.isCastingPost(postID):
+        view = castingPost.CreateCastingPostView(request=request, currentPage=constants.EDIT_POST, postID=postID)
+    else:
+        view = constants.VIEW_CLASS_MAP.get(urlPageName)(request=request, currentPage=urlPageName, postID=postID)
+    return handleRequest(request=request, view=view)
+
+def handleViewPostIDURL(request, postID):
+    urlPageName = request.resolver_match.url_name
+    if post.isEventPost(postID):
+        view = eventPost.ViewEventPostView(request=request, currentPage=constants.VIEW_POST, postID=postID)
+    elif post.isProjectPost(postID):
+        view = projectPost.ViewProjectPostView(request=request, currentPage=constants.VIEW_POST, postID=postID)
+    elif post.isCollaborationPost(postID):
+        view = collaborationPost.ViewCollaborationPostView(request=request, currentPage=constants.VIEW_POST, postID=postID)
+    elif post.isWorkPost(postID):
+        view = workPost.ViewWorkPostView(request=request, currentPage=constants.VIEW_POST, postID=postID)
+    elif post.isCastingPost(postID):
+        view = castingPost.ViewCastingPostView(request=request, currentPage=constants.VIEW_POST, postID=postID)
+    else:
+        view = constants.VIEW_CLASS_MAP.get(urlPageName)(request=request, currentPage=urlPageName, postID=postID)
+    return handleRequest(request=request, view=view)
+    
+
+# ============================== Basic pages ================================== #
 
 def login(request):
     view = account.LoginView(request=request, currentPage=constants.LOGIN)
@@ -63,10 +101,6 @@ def login(request):
 def logout(request):
     view = account.LogoutView(request=request, currentPage=constants.LOGOUT)
     return view.process()
-
-def displayProfile(request, username):
-    view = profile.ProfileView(request=request, username=username, currentPage=constants.PROFILE)
-    return handleRequest(request, view)
 
 # ============================================================================= #
 
@@ -117,37 +151,6 @@ def createPostChoice(request):
     view = post.CreatePostChoiceView(request=request, currentPage=constants.CREATE_POST_CHOICE)
     return view.process()
 
-def editPost(request, postID):
-    if post.isEventPost(postID):
-        view = eventPost.CreateEventPostView(request=request, currentPage=constants.EDIT_POST, postID=postID)
-    elif post.isCollaborationPost(postID):
-        view = collaborationPost.CreateCollaborationPostView(request=request, currentPage=constants.EDIT_POST, postID=postID)
-    elif post.isWorkPost(postID):
-        view = workPost.CreateWorkPostView(request=request, currentPage=constants.EDIT_POST, postID=postID)
-    elif post.isProjectPost(postID):
-        view = projectPost.CreateProjectPostView(request=request, currentPage=constants.EDIT_POST, postID=postID)
-    elif post.isCastingPost(postID):
-        view = castingPost.CreateCastingPostView(request=request, currentPage=constants.EDIT_POST, postID=postID)
-    else:
-        raise
-    return view.process()
-
-def viewPost(request, postID):
-    if post.isEventPost(postID):
-        view = eventPost.ViewEventPostView(request=request, currentPage=constants.VIEW_POST, postID=postID)
-    elif post.isProjectPost(postID):
-        view = projectPost.ViewProjectPostView(request=request, currentPage=constants.VIEW_POST, postID=postID)
-    elif post.isCollaborationPost(postID):
-        view = collaborationPost.ViewCollaborationPostView(request=request, currentPage=constants.VIEW_POST, postID=postID)
-    elif post.isWorkPost(postID):
-        view = workPost.ViewWorkPostView(request=request, currentPage=constants.VIEW_POST, postID=postID)
-    elif post.isCastingPost(postID):
-        view = castingPost.ViewCastingPostView(request=request, currentPage=constants.VIEW_POST, postID=postID)
-    else:
-        print "ERROR SELECTING EDIT VIEW POST VIEW, postID is {0}".format(postID)
-        raise
-    return view.process()
-
 def createEventPost(request):
     view = eventPost.CreateEventPostView(request=request, currentPage=constants.CREATE_EVENT_POST)
     return view.process()
@@ -169,28 +172,4 @@ def createCastingPost(request):
     return view.process()
 
 # ====================================================================================== #
-
-
-
-# ===================================== Browse pages ==================================== #
-
-def browseChoice(request):
-    view = browse.BrowseChoiceView(request=request, currentPage=constants.BROWSE_CHOICE)
-    return view.process()
-
-def browseEvents(request):
-    view = browse.BrowseEventsView(request=request, currentPage=constants.BROWSE_EVENTS)
-    return view.process()
-
-def browseProjects(request):
-    view = browse.BrowseProjectsView(request=request, currentPage=constants.BROWSE_PROJECTS)
-    return view.process()
-
-def browseUsers(request):
-    view = browse.BrowseUsersView(request=request, currentPage=constants.BROWSE_USERS)
-    return view.process()
-
-def browsePosts(request):
-    view = browse.BrowsePostsView(request=request, currentPage=constants.BROWSE_POSTS)
-    return view.process()
 

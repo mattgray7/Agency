@@ -18,9 +18,9 @@ urlpatterns = [
 
     # Create posts
     url(r'^post/$', views.handleURL, name=constants.CREATE_POST),
-    url(r'^post/create/$', views.createPostChoice, name=constants.CREATE_POST),
-    url(r'^post/edit/(?P<postID>[A-Za-z0-9]+)/$', views.editPost, name='editPost'),
-    url(r'^post/view/(?P<postID>[A-Za-z0-9]+)/$', views.viewPost, name='viewPost'),
+    url(r'^post/create/$', views.handleURL, name=constants.CREATE_POST_CHOICE),
+    url(r'^post/edit/(?P<postID>[A-Za-z0-9]+)/$', views.handleEditPostIDURL, name=constants.EDIT_POST),
+    url(r'^post/view/(?P<postID>[A-Za-z0-9]+)/$', views.handleViewPostIDURL, name=constants.VIEW_POST),
     url(r'^post/create/event/$', views.createEventPost, name='createEvent'),
     url(r'^post/create/collaboration/$', views.createCollaborationPost, name='createCollaborationPost'),
     url(r'^post/create/work/$', views.createWorkPost, name='createWorkPost'),
@@ -35,20 +35,15 @@ urlpatterns = [
 
 
     # Browse
-    url(r'^browse/$', views.browseChoice, name='browseChoice'),
-    url(r'^browse/events/$', views.browseEvents, name='browseEvents'),
-    url(r'^browse/projects/$', views.browseProjects, name='browseProjects'),
-    url(r'^browse/users/$', views.browseUsers, name='browseUsers'),
-    url(r'^browse/posts/$', views.browsePosts, name='browsePosts'),
+    url(r'^browse/$', views.handleURL, name=constants.BROWSE_CHOICE),
+    url(r'^browse/events/$', views.handleURL, name=constants.BROWSE_EVENTS),
+    url(r'^browse/projects/$', views.handleURL, name=constants.BROWSE_PROJECTS),
+    url(r'^browse/users/$', views.handleURL, name=constants.BROWSE_USERS),
+    url(r'^browse/posts/$', views.handleURL, name=constants.BROWSE_POSTS),
 
     # Other
-    #url(r'^browse/events/$', views.browseEvents, name='browseEvents'),
-    #url(r'^browse/projects/$', views.browseProjects, name='browseProjects'),
-    #url(r'^browse/posts/collaboration/$', views.browseCollaborationPosts, name='browseCollaborationPosts'),
-    #url(r'^browse/posts/work/$', views.browseWorkPosts, name='browseWorkPosts'),
-    #url(r'^browse/posts/$', views.browsePosts, name='browsePosts'),
     url(r'^login/$', views.login, name='login'),
     url(r'^logout/$', views.logout, name='logout'),
     #url(r'^ajax/$', ajax.call, name='ajax'),
-    url(r'^user/(?P<username>[A-Za-z0-9]+)/$', views.handleURL, name=constants.PROFILE),
+    url(r'^user/(?P<username>[A-Za-z0-9]+)/$', views.handleUsernameURL, name=constants.PROFILE),
 ]

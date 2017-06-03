@@ -4,6 +4,7 @@ import models
 import post
 import home
 import profile
+import browse
 
 # Source page enums:
 HOME = "HOME"
@@ -191,7 +192,12 @@ FORM_MAP = {HOME: forms.BaseForm,
 
 VIEW_CLASS_MAP = {CREATE_POST: post.CreatePostTypesView,
 			   	  HOME: home.HomeView,
-			   	  PROFILE: profile.ProfileView}
+			   	  PROFILE: profile.ProfileView,
+			   	  BROWSE_CHOICE: browse.BrowseChoiceView,
+			   	  BROWSE_EVENTS: browse.BrowseEventsView,
+			   	  BROWSE_PROJECTS: browse.BrowseProjectsView,
+			   	  BROWSE_USERS: browse.BrowseUsersView,
+			   	  BROWSE_POSTS: browse.BrowsePostsView}
 
 HTML_MAP = {HOME: 'AgencyApp/home.html',
 			LOGIN: 'AgencyApp/account/login.html',
