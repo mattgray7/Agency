@@ -14,12 +14,25 @@
 </script>
 
 <div id="searchBar">
+	<div id="searchOptions"></div>
 		<ul>
-	   		<li id="postListOption"><a href="/browse/posts/">Posts</a></li>
-			<li id="projectListOption"><a href="/browse/projects/">Projects</a></li>
-			<li id="eventListOption"><a href="/browse/events/">Events</a></li>
-			<li id="userListOption"><a href="/browse/users/">Users</a></li>
+	   		<li id="searchOptions.post"><a href="/browse/posts/">Posts</a></li>
+			<li id="searchOptions.project"><a href="/browse/projects/">Projects</a></li>
+			<li id="searchOptions.event"><a href="/browse/events/">Events</a></li>
+			<li id="searchOptions.user"><a href="/browse/users/">Users</a></li>
 		</ul>
+		<br>
+		<div id="secondSearchOptions">
+			<div id="postSearchOptions" style="display:none">
+				<ul>
+					<li id="secondSearchOptions.casting"><a onclick='filterPosts("casting");'>Casting</a></li>
+					<li id="secondSearchOptions.work"><a onclick='filterPosts("work");'>Set Work</a></li>
+					<li id="secondSearchOptions.collaboration"><a onclick='filterPosts("collaboration");'>Collaboration</a></li>
+				</ul>
+			</div>
+
+		</div>
+	</div>
 	<br>
 	<input type="text" placeholder="Search" name="searchInput" id="searchInput" />
 	<button onclick="search()"> Search</button>
@@ -330,49 +343,74 @@
 		form.submit();
 	}
 
+	function displayEvents(){
+		document.getElementById("searchOptions.event").className = "active";
+		{% if events %}
+			document.getElementById("eventsViewDiv").innerHTML = createViewEventsTable();
+		{% else %}
+			document.getElementById("eventsViewDiv").innerHTML = "<h3> No events posted </h3>";
+		{% endif %}
+	}
+
+	function displayPosts(){
+		secondSearchOptions = document.getElementById("postSearchOptions");
+		if(secondSearchOptions != null){
+			secondSearchOptions.style.display = "block";
+			document.getElementById("secondSearchOptions.work").className = "active";
+			document.getElementById("searchOptions.post").className = "active";
+			filterPosts("casting");
+		}
+	}
+
+	function filterPosts(postType){
+		var postDivHTML = "";
+		document.getElementById("secondSearchOptions.casting").className = "";
+		document.getElementById("secondSearchOptions.work").className = "";
+		document.getElementById("secondSearchOptions.collaboration").className = "";
+		if(postType === "casting"){
+			document.getElementById("secondSearchOptions.casting").className = "active";
+			{% if posts.casting %}
+				postDivHTML += createViewCastingPostTable();
+			{% else %}
+				postDivHTML +="<h3> No casting ads posted</h3>";
+			{% endif %}
+		}else if(postType === "work"){
+			document.getElementById("secondSearchOptions.work").className = "active";
+			{% if posts.work %}
+				postDivHTML += createViewWorkPostTable();
+			{% else %}
+				postDivHTML +="<h3> No work ads posted</h3>";
+			{% endif %}
+		}else if(postType === "collaboration"){
+			document.getElementById("secondSearchOptions.collaboration").className = "active";
+			{% if posts.collaboration %}
+				postDivHTML += createViewCollabPostTable();
+			{% else %}
+				postDivHTML +="<h3> No collaboration ads posted</h3>";
+			{% endif %}
+		}
+		document.getElementById("postsViewDiv").innerHTML = postDivHTML;
+	}
+
 	$(document).ready(function(){
 		if("{{browseType}}" == "{{possibleViews.events}}"){
-			document.getElementById("eventListOption").className = "active";
-			{% if events %}
-				document.getElementById("eventsViewDiv").innerHTML = createViewEventsTable();
-			{% else %}
-				document.getElementById("eventsViewDiv").innerHTML = "<h3> No events posted </h3>";
-			{% endif %}
+			displayEvents();
 		}else if("{{browseType}}" == "{{possibleViews.projects}}"){
-			document.getElementById("projectListOption").className = "active";
+			document.getElementById("searchOptions.project").className = "active";
 			{% if projects %}
 				document.getElementById("projectsViewDiv").innerHTML = createViewProjectsTable();
 			{% else %}
 				document.getElementById("projectsViewDiv").innerHTML = "<h3> No projects posted </h3>";
 			{% endif %}
 		}else if("{{browseType}}" == "{{possibleViews.users}}"){
-			document.getElementById("userListOption").className = "active";
+			document.getElementById("searchOptions.user").className = "active";
 			{% if posterNameMap %}
 				document.getElementById("usersViewDiv").innerHTML = createViewUsersTable();
 			{% else %}
 				document.getElementById("usersViewDiv").innerHTML = "<h3> No users registered</h3>";
 			{% endif %}
 		}else if("{{browseType}}" == "{{possibleViews.posts}}"){
-			document.getElementById("postListOption").className = "active";
-			var postDivHTML = "";
-			{% if posts.collaboration %}
-				postDivHTML += createViewCollabPostTable();
-			{% else %}
-				postDivHTML +="<h3> No collaboration ads posted</h3>";
-			{% endif %}
-
-			{% if posts.work %}
-				postDivHTML += createViewWorkPostTable();
-			{% else %}
-				postDivHTML +="<h3> No work ads posted</h3>";
-			{% endif %}
-
-			{% if posts.casting %}
-				postDivHTML += createViewCastingPostTable();
-			{% else %}
-				postDivHTML +="<h3> No casting ads posted</h3>";
-			{% endif %}
-			document.getElementById("postsViewDiv").innerHTML = postDivHTML;
+			displayPosts();
 		}
 	});
 </script>
