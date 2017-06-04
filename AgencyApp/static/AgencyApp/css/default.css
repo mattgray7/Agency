@@ -370,7 +370,7 @@
 	#menu li:hover a, #menu li.active a, #menu li.active span
 	{
 		border: 2px solid rgba(255,255,255,1);
-		border-radius: 6px;
+		border-radius: 0px;
 		color: rgba(255,255,255,1);
 		cursor: pointer;
 	}
@@ -383,6 +383,60 @@
 	}
 	
 	#menu .icon
+	{
+	}
+
+/*********************************************************************************/
+/* Search bar                                                                        */
+/*********************************************************************************/
+
+
+	#searchBar
+	{
+		
+	}
+	
+	#searchBar ul
+	{
+		display: inline-block;
+	}
+	
+	#searchBar li
+	{
+		display: block;
+		float: left;
+		text-align: center;
+	}
+	
+	#searchBar li a, #searchBar li span
+	{
+		padding: .75em 1.0em;
+		letter-spacing: 1px;
+		text-decoration: none;
+		text-transform: uppercase;
+		font-size: 0.8em;
+		color: rgba(255,255,255,0.80);
+
+		border: 1px solid rgba(255,255,255,0);
+		border-radius: 1px;
+	}
+	
+	#searchBar li:hover a, #searchBar li.active a, #searchBar li.active span
+	{
+		border: 1px solid rgba(255,255,255,1);
+		border-radius: 0px;
+		color: rgba(255,255,255,1);
+		cursor: pointer;
+	}
+	
+	#searchBar .active a
+	{
+		border: 1px solid rgba(255,255,255,1);
+		border-radius: 6px;
+		color: rgba(255,255,255,1);
+	}
+	
+	#searchBar .icon
 	{
 	}
 
