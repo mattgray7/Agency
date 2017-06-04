@@ -30,6 +30,14 @@
 					<li id="secondSearchOptions.collaboration"><a onclick='filterPosts("collaboration");'>Collaboration</a></li>
 				</ul>
 			</div>
+			<div id="userSearchOptions" style="display:none">
+				<ul>
+					<li id="secondSearchOptions.actors"><a onclick='filterUsers("actors");'>Actors</a></li>
+					<li id="secondSearchOptions.workers"><a onclick='filterUsers("workers");'>On-set Workers</a></li>
+					<li id="secondSearchOptions.other"><a onclick='filterUsers("other");'>Other</a></li>
+
+				</ul>
+			</div>
 
 		</div>
 	</div>
@@ -182,7 +190,7 @@
 		return tableString;
 	};
 
-	function createViewUsersTable(){
+	function createViewUsersTable(userType){
 		var tableString = '<h3>Browse users</h3>';
 		{% if users %}
 			tableString += '<table>';
@@ -191,23 +199,33 @@
 								"<td> Seeking </td>" +
 							"</tr>");
 
-			//Add each event
-			var posterNameMap = {{ posterNameMap|safe }};
-			{% for userObj in users %}
-				var pictureCol = '<td>';
-				{% if userObj.profilePicture %}
-					pictureCol += '<img src="{{ userObj.profilePicture.url }}" height="50px" width="70px"/>'
-				{% else %}
-					pictureCol += '<img height="50px" width="70px"/>'
-				{% endif %}
-				pictureCol += '</td>';
-				tableString += ("<tr>" + pictureCol +
-									"<td><button onclick='createProfileRedirectForm(" + '"{{userObj.username}}"' + ");'>" + posterNameMap["{{userObj.username}}"] + "</button></td>" +
-								"</tr>");
-
-			{% endfor %}
+			var userList = null;
+			if(userType === "actors"){
+				userList = {{actors|safe}};
+			}else if(userType === "workers"){
+				userList = {{workers|safe}};
+			}else{
+				userList = {{other|safe}};
+			}
+			var posterNameMap = {{postNameMap|safe}};
+			console.log("userList is " + userList)
+			if(userList != null){
+				for(var i=0; i < userList.length; i++){
+					var pictureCol = '<td>';
+					var userObj = userList[i];
+					if(userObj[profilePicture != null){
+						pictureCol += '<img src="' + userObj["profilePicture"]["url"] + '" height="50px" width="70px"/>'
+					}else{}
+						pictureCol += '<img height="50px" width="70px"/>'
+					}
+					pictureCol += '</td>';
+					tableString += ("<tr>" + pictureCol +
+										"<td><button onclick='createProfileRedirectForm(" + '"' + userObj["username}}"] + '");'> + posterNameMap[userObj["username"]] + "</button></td>" +
+									"</tr>");
+				}
+			}
+			{% endif %}
 			tableString += "</table>";
-		{% endif %}
 		return tableString;
 	};
 
@@ -392,6 +410,35 @@
 		document.getElementById("postsViewDiv").innerHTML = postDivHTML;
 	}
 
+	function displayUsers(){
+		secondSearchOptions = document.getElementById("userSearchOptions");
+		if(secondSearchOptions != null){
+			secondSearchOptions.style.display = "block";
+			document.getElementById("searchOptions.user").className = "active";
+			filterUsers("actors");
+		}
+	}
+
+	function filterUsers(userType){
+		var postDivHTML = "";
+		document.getElementById("secondSearchOptions.actors").className = "";
+		document.getElementById("secondSearchOptions.workers").className = "";
+		document.getElementById("secondSearchOptions.other").className = "";
+		if(userType === "actors"){
+			document.getElementById("secondSearchOptions.actors").className = "active";
+		}else if(userType === "workers"){
+			document.getElementById("secondSearchOptions.workers").className = "active";
+		}else{
+			document.getElementById("secondSearchOptions.other").className = "active";
+		}
+
+		{% if posterNameMap %}
+			document.getElementById("usersViewDiv").innerHTML = createViewUsersTable(userType);
+		{% else %}
+			document.getElementById("usersViewDiv").innerHTML = "<h3> No users registered</h3>";
+		{% endif %}
+	}
+
 	$(document).ready(function(){
 		if("{{browseType}}" == "{{possibleViews.events}}"){
 			displayEvents();
@@ -403,12 +450,7 @@
 				document.getElementById("projectsViewDiv").innerHTML = "<h3> No projects posted </h3>";
 			{% endif %}
 		}else if("{{browseType}}" == "{{possibleViews.users}}"){
-			document.getElementById("searchOptions.user").className = "active";
-			{% if posterNameMap %}
-				document.getElementById("usersViewDiv").innerHTML = createViewUsersTable();
-			{% else %}
-				document.getElementById("usersViewDiv").innerHTML = "<h3> No users registered</h3>";
-			{% endif %}
+			displayUsers();
 		}else if("{{browseType}}" == "{{possibleViews.posts}}"){
 			displayPosts();
 		}
