@@ -6,8 +6,8 @@ from django.http import HttpResponseRedirect
 from forms import *
 
 from models import UserAccount, Profession
-from helpers import getMessageFromKey
 
+import helpers
 import constants
 import helpers
 import genericViews as views

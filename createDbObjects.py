@@ -7,8 +7,9 @@ django.setup()
 
 from django.contrib.auth.models import User
 from django.core.files import File
-import AgencyApp.python.models as models
 import AgencyApp.python.helpers as helpers
+import AgencyApp.python.models as models
+
 
 print "Flushing database..."
 os.system("python /Users/MattGray/Projects/Agency/Agency/manage.py flush")

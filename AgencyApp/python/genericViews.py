@@ -13,8 +13,6 @@ import os
 import simplejson as json
 
 
-getBaseContext = helpers.getBaseContext
-
 class GenericView(object):
     def __init__(self, *args, **kwargs):
         self.request = kwargs.get("request")

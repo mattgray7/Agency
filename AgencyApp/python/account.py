@@ -8,9 +8,7 @@ from django.db import IntegrityError
 from django.http import HttpResponseRedirect
 from forms import *
 
-from models import UserAccount, Profession
-from helpers import getMessageFromKey
-
+import models
 import constants
 import helpers
 import genericViews as views
@@ -124,11 +122,11 @@ class CreateAccountView(views.GenericFormView):
                                                 password=self.formData.get('password'),
                                                 first_name=firstName,
                                                 last_name=lastName)
-                userAccount = UserAccount(email=self.formData.get('email'),
-                                          username=self.username,
-                                          firstName=firstName,
-                                          lastName=lastName,
-                                          setupComplete=False)
+                userAccount = models.UserAccount(email=self.formData.get('email'),
+                                                 username=self.username,
+                                                 firstName=firstName,
+                                                 lastName=lastName,
+                                                 setupComplete=False)
                 try:
                     user.save()
                     userAccount.save()
@@ -269,8 +267,8 @@ class EditProfessionsView(GenericEditAccountView):
     @property
     def pageContext(self):
         try:
-            self._pageContext["selectedProfessions"] = [x.professionName for x in Profession.objects.filter(username=self.username)]
-        except Profession.DoesNotExist:
+            self._pageContext["selectedProfessions"] = [x.professionName for x in models.Profession.objects.filter(username=self.username)]
+        except models.Profession.DoesNotExist:
             self._pageContext["selectedProfessions"] = []
         self._pageContext["professionList"] = constants.PROFESSIONS
         return self._pageContext
@@ -278,9 +276,9 @@ class EditProfessionsView(GenericEditAccountView):
     def processForm(self):
         """Overriding asbtract method"""
         professionsSelected = self.formData.getlist("professions")
-        Profession.objects.filter(username=self.username).delete()
+        models.Profession.objects.filter(username=self.username).delete()
         for profession in professionsSelected:
-            entry = Profession(username=self.username, professionName=profession)
+            entry = models.Profession(username=self.username, professionName=profession)
             try:
                 entry.save()
             except Exception as e:
@@ -457,8 +455,8 @@ def _emailIsRegistered(email):
 
 def _getProfileNameFromEmail(email):
     try:
-        user = UserAccount.objects.get(email=email)
-    except UserAccount.DoesNotExist:
+        user = models.UserAccount.objects.get(email=email)
+    except models.UserAccount.DoesNotExist:
         return None
     else:
         return user.username
@@ -466,7 +464,7 @@ def _getProfileNameFromEmail(email):
 
 def _getProfileNameFromName(firstName, lastName):
     tempName = "{0}{1}".format(firstName, lastName)
-    numConflictingNames = len(UserAccount.objects.filter(username__startswith=tempName))
+    numConflictingNames = len(models.UserAccount.objects.filter(username__startswith=tempName))
     if numConflictingNames > 0:
         # if mattgray exists, new name will be mattgray1
         tempName += str(numConflictingNames)
