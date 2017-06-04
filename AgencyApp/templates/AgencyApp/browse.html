@@ -191,41 +191,68 @@
 	};
 
 	function createViewUsersTable(userType){
-		var tableString = '<h3>Browse users</h3>';
-		{% if users %}
+		var tableTitle = "<h3> Browse users</h3>"
+		var userList = [];
+		if(userType === "actors"){
+			tableTitle = "<h3> Browse actors</h3>"
+			{% for actor in actors %}
+				var actorObj = {username: "{{actor.username}}",
+								profilePictureURL: null};
+				{% if actor.profilePicture %}
+					actorObj["profilePictureURL"] = "{{actor.profilePicture.url}}";
+				{% endif %}
+				userList.push(actorObj)
+			{% endfor %}
+		}else if(userType === "workers"){
+			tableTitle = "<h3> Browse on-set workers</h3>"
+			{% for worker in workers %}
+				var workerObj = {username: "{{worker.username}}",
+								 profilePictureURL: null};
+				{% if worker.profilePicture %}
+					workerObj["profilePictureURL"] = "{{worker.profilePicture.url}}";
+				{% endif %}
+				userList.push(workerObj)
+			{% endfor %}
+		}else{
+			tableTitle = "<h3> Browse other amateur and professional filmmakers</h3>"
+			{% for user in other %}
+				var userObj = {username: "{{worker.username}}",
+							   profilePictureURL: null};
+				{% if userObj.profilePicture %}
+					userObjObj["profilePictureURL"] = "{{user.profilePicture.url}}";
+				{% endif %}
+				userList.push(userObj)
+			{% endfor %}
+		}
+
+		var tableString = tableTitle;
+		if(userList.length > 0){
 			tableString += '<table>';
 			tableString += ("<tr><td></td>" +
 								"<td> Name </td>" +
 								"<td> Seeking </td>" +
 							"</tr>");
 
-			var userList = null;
-			if(userType === "actors"){
-				userList = {{actors|safe}};
-			}else if(userType === "workers"){
-				userList = {{workers|safe}};
-			}else{
-				userList = {{other|safe}};
-			}
-			var posterNameMap = {{postNameMap|safe}};
+			var posterNameMap = {{ posterNameMap|safe }};
 			console.log("userList is " + userList)
 			if(userList != null){
+				console.log("userList is not null, length is " + userList.length)
 				for(var i=0; i < userList.length; i++){
-					var pictureCol = '<td>';
 					var userObj = userList[i];
-					if(userObj[profilePicture != null){
-						pictureCol += '<img src="' + userObj["profilePicture"]["url"] + '" height="50px" width="70px"/>'
-					}else{}
-						pictureCol += '<img height="50px" width="70px"/>'
+					var pictureCol = '<td>';
+					if(userObj["profilePictureURL"] != null){
+						pictureCol += '<img src="' + userObj["profilePictureURL"] + '" height="50px" width="70px" />'
+					}else{
+						pictureCol += '<img height="50px" width="70px" />'
 					}
 					pictureCol += '</td>';
-					tableString += ("<tr>" + pictureCol +
-										"<td><button onclick='createProfileRedirectForm(" + '"' + userObj["username}}"] + '");'> + posterNameMap[userObj["username"]] + "</button></td>" +
-									"</tr>");
+					var newRow = ("<tr>" + pictureCol + "<td><button onclick='createProfileRedirectForm(" + '"' + userObj["username"] + '");' + "'>" + posterNameMap[userObj["username"]] + "</button></td>" + "</tr>");
+					tableString += newRow;
 				}
 			}
-			{% endif %}
-			tableString += "</table>";
+		}
+		tableString += "</table>";
+		console.log("RETURNING TABLE STRING " + tableString)
 		return tableString;
 	};
 
@@ -433,7 +460,9 @@
 		}
 
 		{% if posterNameMap %}
-			document.getElementById("usersViewDiv").innerHTML = createViewUsersTable(userType);
+			var userTable = createViewUsersTable(userType);
+			console.log("SETTING USER TABLE " + userTable)
+			document.getElementById("usersViewDiv").innerHTML = userTable;
 		{% else %}
 			document.getElementById("usersViewDiv").innerHTML = "<h3> No users registered</h3>";
 		{% endif %}

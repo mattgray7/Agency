@@ -181,40 +181,8 @@ class BrowseUsersView(GenericBrowseView):
             actorUsernames = [user.username for user in self.actorUsers]
             workerUsernames = [user.username for user in self.workerUsers]
             otherUsernames = set([user.username for user in models.UserAccount.objects.all()]) - set(actorUsernames) - set(workerUsernames)
-            print "otherUsernames are {0}".format(otherUsernames)
             self._otherUsers = models.UserAccount.objects.filter(username__in=otherUsernames)
         return self._otherUsers
-
-    @property
-    def userList(self):
-        if self._userList is None:
-            self._userList =  {"actors": [], "workers": [], "other": []}
-            for user in models.UserAccount.objects.all():
-                userObj = models.UserAccount.objects.get(username=user.username)
-
-                # Add to actor list
-                userIsActor = userObj.actingInterest
-                if not userIsActor:
-                    try:
-                        actorProfession = models.Profession.objects.get(username=user.username, professionName="Actor")
-                    except models.Profession.DoesNotExist:
-                        pass
-                    else:
-                        userIsActor = actorProfession is not None
-
-                # Add to worker list
-                userIsWorker = userObj.workInterest
-                if not userIsWorker:
-                    userProfessions = models.Profession.objects.filter(username=user.username)
-                    userIsActor = len(userProfessions) > 0
-
-                if userIsActor:
-                    self._userList["actors"].append(user)
-                elif userIsWorker:
-                    self._userList["workers"].append(user)
-                else:
-                    self._userList["other"].append(user)
-        return self._userList
 
     @property
     def pageContext(self):
