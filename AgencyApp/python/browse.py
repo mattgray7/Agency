@@ -172,7 +172,6 @@ class BrowseUsersView(GenericBrowseView):
         if self._workerUsers is None:
             workerUsernames = [user.username for user in models.Profession.objects.all()]
             self._workUsers = models.UserAccount.objects.filter(username__in=workerUsernames)
-            print "work users are {0}".format(self._workUsers)
         return self._workUsers
 
     @property

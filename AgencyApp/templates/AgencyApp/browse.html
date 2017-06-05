@@ -216,10 +216,10 @@
 		}else{
 			tableTitle = "<h3> Browse other amateur and professional filmmakers</h3>"
 			{% for user in other %}
-				var userObj = {username: "{{worker.username}}",
+				var userObj = {username: "{{user.username}}",
 							   profilePictureURL: null};
-				{% if userObj.profilePicture %}
-					userObjObj["profilePictureURL"] = "{{user.profilePicture.url}}";
+				{% if user.profilePicture %}
+					userObj["profilePictureURL"] = "{{user.profilePicture.url}}";
 				{% endif %}
 				userList.push(userObj)
 			{% endfor %}
@@ -234,9 +234,7 @@
 							"</tr>");
 
 			var posterNameMap = {{ posterNameMap|safe }};
-			console.log("userList is " + userList)
 			if(userList != null){
-				console.log("userList is not null, length is " + userList.length)
 				for(var i=0; i < userList.length; i++){
 					var userObj = userList[i];
 					var pictureCol = '<td>';
@@ -252,7 +250,6 @@
 			}
 		}
 		tableString += "</table>";
-		console.log("RETURNING TABLE STRING " + tableString)
 		return tableString;
 	};
 
@@ -461,7 +458,6 @@
 
 		{% if posterNameMap %}
 			var userTable = createViewUsersTable(userType);
-			console.log("SETTING USER TABLE " + userTable)
 			document.getElementById("usersViewDiv").innerHTML = userTable;
 		{% else %}
 			document.getElementById("usersViewDiv").innerHTML = "<h3> No users registered</h3>";
