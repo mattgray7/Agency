@@ -38,7 +38,6 @@
 
 				</ul>
 			</div>
-
 		</div>
 	</div>
 	<br>
@@ -230,7 +229,7 @@
 			tableString += '<table>';
 			tableString += ("<tr><td></td>" +
 								"<td> Name </td>" +
-								"<td> Seeking </td>" +
+								"<td> Professions </td>" +
 							"</tr>");
 
 			var posterNameMap = {{ posterNameMap|safe }};
@@ -244,7 +243,14 @@
 						pictureCol += '<img height="50px" width="70px" />'
 					}
 					pictureCol += '</td>';
-					var newRow = ("<tr>" + pictureCol + "<td><button onclick='createProfileRedirectForm(" + '"' + userObj["username"] + '");' + "'>" + posterNameMap[userObj["username"]] + "</button></td>" + "</tr>");
+
+					var professionCol = "<td>";
+					{% if posterProfessionMap %}
+						var posterProfessionMap = {{ posterProfessionMap|safe }};
+						professionCol += posterProfessionMap[userObj["username"]];
+					{% endif %}
+					professionCol += "</td>";
+					var newRow = ("<tr>" + pictureCol + "<td><button onclick='createProfileRedirectForm(" + '"' + userObj["username"] + '");' + "'>" + posterNameMap[userObj["username"]] + "</button></td>" + professionCol + "</tr>");
 					tableString += newRow;
 				}
 			}

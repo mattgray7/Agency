@@ -34,6 +34,7 @@ class GenericBrowseView(views.GenericFormView):
         super(GenericBrowseView, self).__init__(*args, **kwargs)
         self._followingPostIDs = None
         self._posterNameMap = None
+        self._posterProfessionMap = None
  
     @property
     def nextPostID(self):
@@ -101,6 +102,16 @@ class GenericBrowseView(views.GenericFormView):
         return self._posterNameMap
 
     @property
+    def posterProfessionMap(self):
+        if self._posterProfessionMap is None:
+            self._posterProfessionMap = {}
+            for name in self.posterNameMap:
+                professions = models.Profession.objects.filter(username=name)
+                if professions:
+                    self._posterProfessionMap[name] = ", ".join([x.professionName for x in professions])
+        return self._posterProfessionMap
+
+    @property
     def pageContext(self):
         self._pageContext["possibleViews"] = {"events": constants.BROWSE_EVENTS,
                                               "projects": constants.BROWSE_PROJECTS,
@@ -111,6 +122,7 @@ class GenericBrowseView(views.GenericFormView):
                                                      "browse": constants.BROWSE_CHOICE}
         self._pageContext["followingPostIDs"] = self.followingPostIDs
         self._pageContext["posterNameMap"] = json.dumps(self.posterNameMap)
+        self._pageContext["posterProfessionMap"] = json.dumps(self.posterProfessionMap)
         self._pageContext["browseType"] = self.currentPage
         return self._pageContext
 
