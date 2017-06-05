@@ -97,7 +97,7 @@ class GenericBrowseView(views.GenericFormView):
         if self._posterNameMap is None:
             self._posterNameMap = {}
             for account in models.UserAccount.objects.all():
-                self._posterNameMap[account.username] = "{0} {1}".format(account.firstName, account.lastName)
+                self._posterNameMap[account.username] = helpers.capitalizeName("{0} {1}".format(account.firstName, account.lastName))
         return self._posterNameMap
 
     @property

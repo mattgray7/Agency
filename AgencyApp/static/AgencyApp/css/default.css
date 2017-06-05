@@ -440,7 +440,7 @@
 	{
 	}
 	
-	#postSearchOptions li a, #postSearchOptions li span
+	#secondSearchOptions li a, #secondSearchOptions li span
 	{
 		padding: .6em .8em;
 		letter-spacing: 1px;
@@ -453,7 +453,7 @@
 		border-radius: 1px;
 	}
 	
-	#postSearchOptions li:hover a, #postSearchOptions li.active a, #postSearchOptions li.active span
+	#secondSearchOptions li:hover a, #secondSearchOptions li.active a, #secondSearchOptions li.active span
 	{
 		border: 1px solid rgba(255,255,255,1);
 		border-radius: 0px;
