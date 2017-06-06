@@ -78,6 +78,21 @@
 		color: #000;
 		overflow: hidden;
 	}
+
+	.squareButtonTable td.active a, .squareButtonTable li.active span
+	{
+		border: 2px solid rgba(255,255,255,1);
+		border-radius: 0px;
+		color: rgba(255,255,255,1);
+		cursor: pointer;
+	}
+	
+	.squareButtonTable .active td
+	{
+		border: 2px solid rgba(255,255,255,1);
+		border-radius: 6px;
+		color: rgba(255,255,255,1);
+	}
 	
 	.squareButton {
 	    width: 170px;
@@ -91,7 +106,6 @@
 		display: table-cell;
 	}
 
-
 	.squareButton h1 {
 		color: #fff;
 		height: 100%;
@@ -102,6 +116,72 @@
 		color: #000;
 	}
 
+	#professionChoicePanel {
+		width: 250px;
+		height: 479px;
+		background: #232323;
+		display: table-cell;
+		vertical-align: middle;
+  		text-align: center;
+	}
+
+	#professionChoiceSubPanel {
+		width: 240px;
+		height: 469px;
+		margin: 5px auto 0px auto;
+		display: inline-block;
+		background: #c9cacc;
+		color: #fff;
+		letter-spacing: 1px;
+		text-decoration: none;
+		font-weight: 700;
+		font-size: 0.5em;
+		overflow: scroll;
+	}
+
+	.professionsSelectRow{
+		width: 225px;
+		padding: 0em 0.5em;
+		letter-spacing: 1px;
+		text-decoration: none;
+		text-transform: uppercase;
+		font-size: 1.0em;
+		color: #000;
+		float: left;
+
+		border: 1px solid rgba(0,0,0,1);
+		border-radius: 6px;
+	}
+	
+	.professionsSelectRow:hover{
+		width: 225px;
+		padding: 0em 0.5em;
+		letter-spacing: 1px;
+		text-decoration: none;
+		text-transform: uppercase;
+		font-size: 1.0em;
+		color: rgba(255,255,255,1);
+		float: left;
+
+		background: #414142;
+		cursor: pointer;
+	}
+
+	.professionsSelectRow a:hover{
+		color: rgba(255,255,255,1);
+	}
+
+	.professionsSelectList td a, .professionsSelectList td span
+	{
+		padding: 0.5em 0.5em;
+		letter-spacing: 1px;
+		text-decoration: none;
+		text-transform: uppercase;
+		font-size: 1.5em;
+		color: rgba(0,0,0,1.0);
+		float: left;
+	}
+	
 /*********************************************************************************/
 /* Image Style                                                                   */
 /*********************************************************************************/
@@ -327,13 +407,13 @@
 		width: 950px;
 	}
 
-	#wrapper a:hover /* not working */
+	/*#wrapper a:hover
 	{
 		padding: 1em 2em;
 		border-color: rgba(1,1,0,.8);
 		color: rgba(1,0,1,.8);
 		cursor: pointer;
-	}	
+	}*/
 
 /*********************************************************************************/
 /* Header                                                                        */

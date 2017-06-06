@@ -19,8 +19,15 @@
 			var professionChoiceDiv = document.getElementById("professionChoicePanel")
 			if(professionChoiceDiv != null){
 				{% if professions %}
+					var professionListString = "<table class='professionsSelectList'>";
 					var professions = {{ professions|safe }};
-					console.log(professions[key])
+					for(var i=0; i < professions[key].length; i++){
+						console.log("adding profession " + professions[key][i])
+						professionListString += "<tr><td class='professionsSelectRow'><a onclick='addProfession(" + '"' + professions[key][i] + '");' + "'> " + professions[key][i] + "</a><input type='checkbox' name='" + professions[key][i] + "' value='false' style='float:right; margin: 9px 5px 0px 0px;' /></td></tr>";
+					}
+					professionListString += "</table>";
+					console.log(professionListString)
+					document.getElementById("professionChoiceSubPanel").innerHTML = professionListString;
 				{% endif %}
 			}
 		}
@@ -30,6 +37,9 @@
 			<h2>What kind of jobs are you looking for?</h2>
 			<div id="wrapper">
 				<table id="workInterestPanel">
+					<tr>
+						<td colspan='2'> <h3 class="title">Select your interested professions</h3></td>
+					</tr>
 					<tr>
 						<td>
 							<table class="squareButtonTable">
@@ -57,7 +67,9 @@
 						</td>
 						<td>
 							<div id="professionChoicePanel">
+								<div id="professionChoiceSubPanel"></div>
 							</div>
+						</td>
 					</tr>
 				</table>
 			</div>
@@ -66,8 +78,8 @@
 
 
 		function selectWorkInterest(){
-	
-			document.getElementById("interestsDiv").innerHTML = document.getElementById("workInterestDiv").innerHTML
+			document.getElementById("interestsDiv").innerHTML = "";
+			document.getElementById("workInterestDiv").style.display = "block";
 		}
 
 		function selectHireInterest(){
