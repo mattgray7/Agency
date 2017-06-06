@@ -120,7 +120,7 @@
 	function createViewEventsTable(){
 		var tableString = '<h3>Browse events</h3>';
 		{% if events %}
-			tableString += '<table>';
+			tableString += '<table class="browseTable">';
 			tableString += ("<tr> " +
 								"<td></td>"	+  //post picture
 								"<td> Title </td>" +
@@ -154,7 +154,7 @@
 	function createViewProjectsTable(){
 		var tableString = '<h3>Browse projects</h3>';
 		{% if projects %}
-			tableString += '<table>';
+			tableString += '<table class="browseTable">';
 			tableString += ("<tr><td></td>" +
 								"<td> Title </td>" +
 								"<td> Posted by </td>" +
@@ -219,7 +219,7 @@
 
 		var tableString = tableTitle;
 		if(userList.length > 0){
-			tableString += '<table>';
+			tableString += '<table class="browseTable">';
 			tableString += ("<tr><td></td>" +
 								"<td> Name </td>" +
 								"<td> Professions </td>" +
@@ -259,7 +259,7 @@
 	function createViewCollabPostTable(){
 		var tableString = '<h3>Browse posts seeking collaborators</h3>';
 		{% if posts.collaboration %}
-			tableString += '<table>';
+			tableString += '<table class="browseTable">';
 			tableString += ("<tr><td></td>" +
 								"<td> Title </td>" +
 								"<td> Posted by </td>" +
@@ -291,7 +291,7 @@
 	function createViewWorkPostTable(){
 		var tableString = '<h3>Browse posts seeking crew members</h3>';
 		{% if posts.work %}
-			tableString += '<table>';
+			tableString += '<table class="browseTable">';
 			tableString += ("<tr><td></td>" +
 								"<td> Title </td>" +
 								"<td> Posted by </td>" +
@@ -330,7 +330,7 @@
 	function createViewCastingPostTable(){
 		var tableString = '<h3>Browse casting posts</h3>';
 		{% if posts.casting %}
-			tableString += '<table>';
+			tableString += '<table class="browseTable">';
 			tableString += ("<tr><td></td>" +
 								"<td> Title </td>" +
 								"<td> Posted by </td>" +
