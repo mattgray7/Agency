@@ -202,6 +202,7 @@ class EditInterestsView(GenericEditAccountView):
     def pageContext(self):
         self._pageContext = super(EditInterestsView, self).pageContext
         self._pageContext["possibleDestinations"] = {"interests": constants.EDIT_INTERESTS}
+        self._pageContext["professions"] = constants.PROFESSIONS
         return self._pageContext
 
     @property

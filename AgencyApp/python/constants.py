@@ -60,7 +60,26 @@ EDIT_PROFESSIONS = "EDIT_PROFESSIONS"
 EDIT_BACKGROUND = "EDIT_BACKGROUND"
 EDIT_ACTOR_DESCRIPTION = "EDIT_ACTOR_DESCRIPTION"
 
-PROFESSIONS = ["Acting Coach", "Art Director", "Assistant Director", "Assistant Camera Operator",
+PROFESSIONS = {"acting": ["Actor", "Dancer", "Extra", "Stand-in", "Model", "Voice Actor"],
+			   "creative": ["Art Director", "Director", "Director of Photography", "Graphic Designer",
+			   				"Film Festival Director", "Musician", "Screenwriter", "Songwriter"],
+			   "onSetProduction": ["Assistant Director","Assistant Camera Operator",
+			   					   "Boom Operator", "Camera Operator", "Caterer", "Cinematographer",
+			   					   "Electrician", "Grip", "Hair Stylist", "Key Grip", "Lighting Technician",
+			   					   "Location Manager", "Makeup Artist", "Photographer", "Production Assistant",
+			   					   "Prop Master", "Script Coordinator", "Set Coordinator", "Set Decorator",
+			   					   "Set Designer", "SFX Technician", "SFX Supervisor", "Stunt Coordinator",
+			   					   "Stunt Artist", "Wardrobe Supervisor"],
+			   "offSetProduction": ["Acting Coach", "Art Director", "Producer", "Production Coordinator",
+			   						"Production Coordinator", "Production Designer", "Production Manager", "Voice Artist"],
+			   "preProduction": ["Casting Director", "Choreographer", "Costume Designer", "Concept Artist",
+			   					 "Producer", "Screenwriter", "Storyboard Artist"],
+			   "postProduction": ["CG Animator", "Digital Compositor", "Editor", "Marketing", "Music Composer",
+			   					  "Music Supervisor", "Music Editor", "Producer", "Sound Editor", "Sound Engineer",
+			   					  "VFX Arist", "VFX Supervisor"]}
+
+
+'''PROFESSIONS = ["Acting Coach", "Art Director", "Assistant Director", "Assistant Camera Operator",
 			   "Boom Operator", "Camera Operator", "Casting Director", "Choreographer", "Cinematographer",
 			   "CG Animator", "Compositor", "Costume Designer", "Concept Artist", "Dancer", "Director",
 			   "Editor", "Electrician", "Film Festival Director", "Film Festival Volunteer", "Graphic Designer", "Grip",
@@ -69,9 +88,9 @@ PROFESSIONS = ["Acting Coach", "Art Director", "Assistant Director", "Assistant 
 			   "Producer", "Production Assistant", "Production Caterer", "Production Coordinator",
 			   "Production Designer", "Production Manager", "Prop Master", "Screenwriter",
 			   "Script Coordinator/Supervisor", "Set Coordinator", "Set Decorator", "Set Designer",
-			   "SFX Technician", "SFX Supervisor", "Songwriter", "Sound Editor", "Sound Engineer",
+			   "SFX Technician", "SFX Supervisor", , "Sound Editor", "Sound Engineer",
 			   "Storyboard Artist", "Stunt Coordinator", "Stunt Artist", "Talent Management", "VFX Arist",
-			   "VFX Supervisor", "Voice Artist", "Wardrobe Supervisor"]
+			   "VFX Supervisor", "Voice Artist", "Wardrobe Supervisor"]'''
 
 COLLABORATOR_OPTIONS = ["Director", "Director of photography", "Musical artist", "Screenwriter", "Story writer", "Other"]
 

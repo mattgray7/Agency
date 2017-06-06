@@ -11,32 +11,53 @@
 
 	{% if next == possibleDestinations.interests %}
 		<script>
-		function getSquareButtonColumn(label){
-			return ("<td><div class='squareButton'><h1><br><br><br>" + label + "<br><br><br><br></h1></div></td>");
+		function getSquareButtonColumn(label, onclickString){
+			return ('<td onclick="' + onclickString + '"><div class="squareButton"><h1><br><br><br>' + label + '<br><br><br><br></h1></div></td>');
+		}
+
+		function filterProfessions(key){
+			var professionChoiceDiv = document.getElementById("professionChoicePanel")
+			if(professionChoiceDiv != null){
+				{% if professions %}
+					var professions = {{ professions|safe }};
+					console.log(professions[key])
+				{% endif %}
+			}
 		}
 		</script>
 
 		<div id="workInterestDiv" style="display:none;">
 			<h2>What kind of jobs are you looking for?</h2>
 			<div id="wrapper">
-				<table class="squareButtonTable">
+				<table id="workInterestPanel">
 					<tr>
-						<script>
-						document.write(getSquareButtonColumn("Acting &amp; Extra"));
-						document.write(getSquareButtonColumn("Creative"));
-						</script>
-					</tr>
-					<tr>
-						<script>
-						document.write(getSquareButtonColumn("Production - On set"));
-						document.write(getSquareButtonColumn("Production - Off set"));
-						</script>
-					</tr>
-					<tr>
-						<script>
-						document.write(getSquareButtonColumn("Pre Production"));
-						document.write(getSquareButtonColumn("Post Production"));
-						</script>
+						<td>
+							<table class="squareButtonTable">
+								<thead>
+								</thead>
+								<tr>
+									<script>
+									document.write(getSquareButtonColumn("Acting &amp; Extra", "filterProfessions('acting');"));
+									document.write(getSquareButtonColumn("Creative", "filterProfessions('creative');"));
+									</script>
+								</tr>
+								<tr>
+									<script>
+									document.write(getSquareButtonColumn("Production - On set", "filterProfessions('onSetProduction');"));
+									document.write(getSquareButtonColumn("Production - Off set", "filterProfessions('offSetProduction');"));
+									</script>
+								</tr>
+								<tr>
+									<script>
+									document.write(getSquareButtonColumn("Pre Production", "filterProfessions('preProduction');"));
+									document.write(getSquareButtonColumn("Post Production", "filterProfessions('postProduction');"));
+									</script>
+								</tr>
+							</table>
+						</td>
+						<td>
+							<div id="professionChoicePanel">
+							</div>
 					</tr>
 				</table>
 			</div>

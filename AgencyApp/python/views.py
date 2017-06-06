@@ -5,7 +5,6 @@ import helpers
 import os
 import simplejson as json
 
-# Must be done after GenericView defined
 import genericViews as views
 import home
 import profile
