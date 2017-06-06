@@ -57,6 +57,40 @@
 		width: 900px;
 	}
 	
+	.squareButton {
+	    background: #232323;
+	    width: 160px;
+	    height: 160px;
+	    padding: 1em 1.5em;
+		letter-spacing: 1px;
+		text-decoration: none;
+		font-weight: 700;
+		font-size: 0.5em;
+		text-align: center;
+		color: rgba(255,255,255,0.80);
+		border: 2px solid rgba(255,255,255,1);
+		border-radius: 6px;
+		display: table-cell;
+	}
+
+	.squareButton:hover {
+	  left: -250px;
+	}
+
+	.squareButton h1 {
+	    color: #fff;
+	    display: inline-block;
+		height: 100px;
+		width: 150px;
+
+		/*ext-align: center;
+		float: center;
+		display: block;
+	  	width: 20px;
+	  		  	top: 50%; left: 50%;
+
+	  	height: 20px;*/
+	}
 /*********************************************************************************/
 /* Image Style                                                                   */
 /*********************************************************************************/
@@ -482,6 +516,17 @@
 		width: 150px;
 	}
 
+	#workInterestDiv {
+	  display: table-cell;
+	}
+
+	#workInterestDiv:hover {
+	  left: -250px;
+	}
+
+	#workInterestDiv.show {
+	  left: 0px;
+	}
 
 /*********************************************************************************/
 /* Banner                                                                        */
