@@ -31,10 +31,7 @@ class UserAccount(models.Model):
     firstName = models.CharField(max_length=100)
     lastName = models.CharField(max_length=100)
     setupComplete = models.BooleanField(default=False)
-    workInterest = models.BooleanField(default=False)       # lookinf for non-acting jobs
-    crewInterest = models.BooleanField(default=False)       # looking for a crew
-    collaborationInterest = models.BooleanField(default=False) # looking to collaborate
-    castingInterest = models.BooleanField(default=False)    # looking for actors
+
     profilePicture = models.ImageField(default=None, upload_to=image_directory_path, storage=imageStorage)
     
     actingInterest = models.BooleanField(default=False)     # looking for acting jobs
@@ -46,6 +43,11 @@ class UserAccount(models.Model):
 
     def __str__(self):
         return self.username
+
+class Interest(models.Model):
+    username = models.CharField(max_length=100)
+    name = models.CharField(max_length=100)     #work/hire
+    subInterestName = models.CharField(max_length=100)  #acting/onset/offset/preprod/creative/postprod or #hiring/hiring_permanent/casting/collaborating
 
 class Profession(models.Model):
     username = models.CharField(max_length=100)

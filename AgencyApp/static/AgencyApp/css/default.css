@@ -54,7 +54,7 @@
 	{
 		overflow: hidden;
 		margin: 0em auto;
-		width: 1200px;
+		width: 900px;
 	}
 	
 /*********************************************************************************/
@@ -170,6 +170,7 @@
 		font-weight: 700;
 		font-size: 1em;
 		color: #FFF;
+		cursor: pointer;
 	}
 	
 	.button-alt
@@ -177,8 +178,9 @@
 		padding: 1em 2em;
 		border-color: rgba(0,0,0,.8);
 		color: rgba(0,0,0,.8);
+		cursor: pointer;
 	}
-		
+
 /*********************************************************************************/
 /* 4-column                                                                      */
 /*********************************************************************************/
@@ -212,14 +214,14 @@
 	.boxB,
 	.boxC
 	{
-		width: 384px;
+		width: 288px;
 	}
 
 	.boxA,
 	.boxB
 	{
 		float: left;
-		margin-right: 20px;
+		margin-right: 10px;
 	}
 	
 	.boxC
@@ -277,7 +279,16 @@
 		position: relative;
 		padding: 1em 1em 1em 1em;
 		background: #FFF;
+		width: 950px;
 	}
+
+	#wrapper a:hover /* not working */
+	{
+		padding: 1em 2em;
+		border-color: rgba(1,1,0,.8);
+		color: rgba(1,0,1,.8);
+		cursor: pointer;
+	}	
 
 /*********************************************************************************/
 /* Header                                                                        */

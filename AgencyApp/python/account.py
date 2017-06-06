@@ -196,6 +196,13 @@ class GenericEditAccountView(views.GenericFormView):
 class EditInterestsView(GenericEditAccountView):
     def __init__(self, *args, **kwargs):
         super(EditInterestsView, self).__init__(*args, **kwargs)
+        self._existingInterests = None
+
+    @property
+    def pageContext(self):
+        self._pageContext = super(EditInterestsView, self).pageContext
+        self._pageContext["possibleDestinations"] = {"interests": constants.EDIT_INTERESTS}
+        return self._pageContext
 
     @property
     def nextButtonString(self):
@@ -218,13 +225,13 @@ class EditInterestsView(GenericEditAccountView):
         return self._cancelDestination
 
     @property
-    def formInitialValues(self):
-        self._formInitialValues["work"] = self.userAccount.workInterest
-        self._formInitialValues["crew"] = self.userAccount.crewInterest
-        self._formInitialValues["collaboration"] = self.userAccount.collaborationInterest
-        self._formInitialValues["acting"] = self.userAccount.actingInterest
-        self._formInitialValues["casting"] = self.userAccount.castingInterest
-        return self._formInitialValues
+    def existingInterests(self):
+        if self._existingInterests is None:
+            userInterests = models.Interest.objects.filter(username=self.username)
+            self._existingInterests = {"work": [], "hire": []}
+            for interest in userInterests:
+                self._existingInterests[interest.name].append(interest.subInterestName)
+        return self._existingInterests
 
     def processForm(self):
         """Overriding asbtract method"""

@@ -1,7 +1,6 @@
 {% extends "base.html" %}
 
 {% block content %}
-	<h2>Looking for...</h2>
 	{% if errors %}
 		<ul>
 			{% for error in errors %}
@@ -10,7 +9,54 @@
 		</ul>
 	{% endif %}
 
-	<h2>{{ formTitle }}</h2>
+	{% if next == possibleDestinations.interests %}
+		<script>
+
+		function selectWorkInterest(){
+			console.log("work selected");
+		}
+
+		function selectHireInterest(){
+			console.log("hire selected");
+		}
+
+		function selectOtherInterest(){
+			console.log("other selected");
+		}
+
+		</script>
+
+		<div id="wrapper" width="20%">
+			<div id="three-column" class="container">
+				<div class="title">
+					<h2>What are your interests?</h2>
+					<span class="byline">Specify what you are looking for.</span>
+				</div>
+				<div class="boxA">
+					<!-- For the user side: someone looking to get a job-->
+					<h2>Job Seeking</h2>
+					<span class="fa fa-cloud-download"></span>
+					<p>Look for a job in the Vancouver film industry in anything from acting to set work to post production. Your profile will be public to casting agents and those looking to hire.</p>
+					<a onclick="selectWorkInterest()" class="button button-alt">Looking for a job</a>
+				</div>
+				<div class="boxB">
+					<h2>Casting and Hiring</h2>
+					<span class="fa fa-cogs"></span>
+					<p>Create casting posts and job posts for both permanent and project-specific positions. You can also post in search of collaborators for a new project.</p>
+					<a onclick="selectHireInterest()" class="button button-alt">Looking to hire, collaborate, or cast a role</a>
+				</div>
+				<div class="boxC">
+					<h2> Explore </h2>
+					<span class="fa fa-wrench"></span>
+					<p> Explore the film industry around you. Check out local events, view projects that are currently being shot in Vancouver, </p>
+					<a onclick="selectOtherInterest()" class="button button-alt">Other</a>
+				</div>
+			</div>
+		</div>
+
+	{% endif %}
+
+
 	{% if userAccount %}
 		{% if userAccount.profilePicture %}
 			<div id="profilePicture">
