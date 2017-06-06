@@ -11,8 +11,26 @@
 
 	{% if next == possibleDestinations.interests %}
 		<script>
+
+		var chosenProfessionList = []
+
 		function getSquareButtonColumn(label, onclickString){
 			return ('<td onclick="' + onclickString + '"><div class="squareButton"><h1><br><br><br>' + label + '<br><br><br><br></h1></div></td>');
+		}
+
+		function addProfession(profession){
+			var professionCheckbox = document.getElementById(profession + "_checkbox");
+			if(professionCheckbox != null){
+				if(professionCheckbox.checked){
+					// Remove profession
+					professionCheckbox.checked = false;
+					chosenProfessionList[profession] = null;		//needs to be fixed
+				}else{
+					// Add profession
+					chosenProfessionList.push({profession: true});
+					professionCheckbox.checked = "checked";
+				}
+			}
 		}
 
 		function filterProfessions(key){
@@ -22,11 +40,9 @@
 					var professionListString = "<table class='professionsSelectList'>";
 					var professions = {{ professions|safe }};
 					for(var i=0; i < professions[key].length; i++){
-						console.log("adding profession " + professions[key][i])
-						professionListString += "<tr><td class='professionsSelectRow'><a onclick='addProfession(" + '"' + professions[key][i] + '");' + "'> " + professions[key][i] + "</a><input type='checkbox' name='" + professions[key][i] + "' value='false' style='float:right; margin: 9px 5px 0px 0px;' /></td></tr>";
+						professionListString += "<tr><td class='professionsSelectRow'><a onclick='addProfession(" + '"' + professions[key][i] + '");' + "'> " + professions[key][i] + "</a><input type='checkbox' id='" + professions[key][i] + "_checkbox' value='false' style='float:right; margin: 8px 5px 0px 0px;' /></td></tr>";
 					}
 					professionListString += "</table>";
-					console.log(professionListString)
 					document.getElementById("professionChoiceSubPanel").innerHTML = professionListString;
 				{% endif %}
 			}
@@ -38,7 +54,7 @@
 			<div id="wrapper">
 				<table id="workInterestPanel">
 					<tr>
-						<td colspan='2'> <h3 class="title">Select your interested professions</h3></td>
+						<td colspan='2'><center> <h3 style="color:#000;">Select your interested professions</h3></center></td>
 					</tr>
 					<tr>
 						<td>
@@ -47,8 +63,8 @@
 								</thead>
 								<tr>
 									<script>
-									document.write(getSquareButtonColumn("Acting &amp; Extra", "filterProfessions('acting');"));
-									document.write(getSquareButtonColumn("Creative", "filterProfessions('creative');"));
+									document.write(getSquareButtonColumn("Acting &amp; Performing", "filterProfessions('acting');"));
+									document.write(getSquareButtonColumn("Creative Positions", "filterProfessions('creative');"));
 									</script>
 								</tr>
 								<tr>
