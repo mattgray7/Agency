@@ -10,45 +10,35 @@
 	{% endif %}
 
 	{% if next == possibleDestinations.interests %}
+		<script>
+		function getSquareButtonColumn(label){
+			return ("<td><div class='squareButton'><h1><br><br><br>" + label + "<br><br><br><br></h1></div></td>");
+		}
+		</script>
+
 		<div id="workInterestDiv" style="display:none;">
 			<h2>What kind of jobs are you looking for?</h2>
 			<div id="wrapper">
-			<table class="squareButtonTable">
-				<tr>
-					<td>
-						<div class="squareButton">
-						    <h1><br><br><br><br>Acting &amp; Extra<br><br><br><br><br></h1>
-						</div>
-					</td>
-					<td>
-						<div class="squareButton">
-						    <h1><br><br><br><br>Production - On set<br><br><br><br><br></h1>
-						</div>
-					</td>
-					<td>
-						<div class="squareButton">
-						    <h1><br><br><br><br>Production - Off set<br><br><br><br><br></h1>
-						</div>
-					</td>
-				</tr>
-				<tr>
-					<td>
-						<div class="squareButton">
-						    <h1><br><br><br><br>Pre Production<br><br><br><br><br></h1>
-						</div>
-					</td>
-					<td>
-						<div class="squareButton">
-						    <h1><br><br><br><br>Post Production<br><br><br><br><br></h1>
-						</div>
-					</td>
-					<td>
-						<div class="squareButton">
-						    <h1><br><br><br><br>Creative<br><br><br><br><br></h1>
-						</div>
-					</td>
-				</tr>
-			</table>
+				<table class="squareButtonTable">
+					<tr>
+						<script>
+						document.write(getSquareButtonColumn("Acting &amp; Extra"));
+						document.write(getSquareButtonColumn("Creative"));
+						</script>
+					</tr>
+					<tr>
+						<script>
+						document.write(getSquareButtonColumn("Production - On set"));
+						document.write(getSquareButtonColumn("Production - Off set"));
+						</script>
+					</tr>
+					<tr>
+						<script>
+						document.write(getSquareButtonColumn("Pre Production"));
+						document.write(getSquareButtonColumn("Post Production"));
+						</script>
+					</tr>
+				</table>
 			</div>
 		</div>
 		<script>
@@ -69,7 +59,7 @@
 
 		</script>
 		<div id="interestsDiv">
-			<div id="wrapper">
+			<div id="wrapper" width="700px;">
 				<div id="three-column" class="container">
 					<div class="title">
 						<h2>What are your interests?</h2>
