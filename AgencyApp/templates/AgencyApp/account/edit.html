@@ -11,49 +11,45 @@
 
 	{% if next == possibleDestinations.interests %}
 		<div id="workInterestDiv" style="display:none;">
+			<h2>What kind of jobs are you looking for?</h2>
+			<div id="wrapper">
 			<table class="squareButtonTable">
 				<tr>
 					<td>
 						<div class="squareButton">
-							<br><br><br><br><br><br><br>
-						    <h1>Acting &amp; Extra</h1>
+						    <h1><br><br><br><br>Acting &amp; Extra<br><br><br><br><br></h1>
 						</div>
 					</td>
 					<td>
 						<div class="squareButton">
-							<br><br><br><br><br><br><br>
-						    <h1>Production - On set</h1>
+						    <h1><br><br><br><br>Production - On set<br><br><br><br><br></h1>
 						</div>
 					</td>
 					<td>
 						<div class="squareButton">
-							<br><br><br><br><br><br><br>
-						    <h1>Production - Off set</h1>
+						    <h1><br><br><br><br>Production - Off set<br><br><br><br><br></h1>
 						</div>
 					</td>
 				</tr>
 				<tr>
 					<td>
 						<div class="squareButton">
-							<br><br><br><br><br><br><br>
-						    <h1>Pre Production</h1>
+						    <h1><br><br><br><br>Pre Production<br><br><br><br><br></h1>
 						</div>
 					</td>
 					<td>
 						<div class="squareButton">
-							<br><br><br><br><br><br><br>
-						    <h1>Post Production</h1>
+						    <h1><br><br><br><br>Post Production<br><br><br><br><br></h1>
 						</div>
 					</td>
 					<td>
 						<div class="squareButton">
-							<br><br><br><br><br><br><br>
-						    <h1>Creative</h1>
+						    <h1><br><br><br><br>Creative<br><br><br><br><br></h1>
 						</div>
 					</td>
 				</tr>
 			</table>
-
+			</div>
 		</div>
 		<script>
 
@@ -124,6 +120,6 @@
 			<input type="submit" value="{{ nextButtonString }}" />
 		</form>
 	{% endif %}
-	<div id="cancelButton"></div>
+	<div id="cancelButton" class="button"></div>
 
 {% endblock %}
