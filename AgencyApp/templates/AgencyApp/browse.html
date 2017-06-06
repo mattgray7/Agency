@@ -134,15 +134,11 @@
 			//Add each event
 
 			{% for eventObj in events %}
-				var pictureCol = '<td>';
+				var picURL = null;
 				{% if eventObj.postPicture %}
-					pictureCol += '<img src="{{ eventObj.postPicture.url }}" height="50px" width="70px"/>'
-				{% else %}
-					pictureCol += '<img height="50px" width="70px"/>'
+					picURL = "{{ eventObj.postPicture.url }}"
 				{% endif %}
-				pictureCol += '</td>';
-
-				tableString += ("<tr>" + pictureCol +
+				tableString += ("<tr>" + getPictureCol(picURL, "browseImage") +
 									"<td><button onclick='createPostRedirectForm(" + '"{{eventObj.postID}}","{{possibleDestinations.viewPost}}"' + ");'>{{eventObj.title}}</button></td>" +
 									"<td><div id='" + getNextProfileName() + "'>{{eventObj.poster}}</td>" +
 									"<td>{{eventObj.date}}</td>" +
@@ -169,14 +165,11 @@
 
 			//Add each event
 			{% for projectObj in projects %}
-				var pictureCol = '<td>';
+				var picURL = null;
 				{% if projectObj.postPicture %}
-					pictureCol += '<img src="{{ projectObj.postPicture.url }}" height="50px" width="70px"/>'
-				{% else %}
-					pictureCol += '<img height="50px" width="70px"/>'
+					picURL = "{{ projectObj.postPicture.url }}"
 				{% endif %}
-				pictureCol += '</td>';
-				tableString += ("<tr>" + pictureCol +
+				tableString += ("<tr>" + getPictureCol(picURL, "browseImage") +
 									"<td><button onclick='createPostRedirectForm(" + '"{{projectObj.postID}}","{{possibleDestinations.viewPost}}"' + ");'>{{projectObj.title}}</button></td>" +
 										"<td><div id='" + getNextProfileName() + "'>{{projectObj.poster}}</td>" +
 									"<td>{{projectObj.status}}</td>" +
@@ -236,21 +229,14 @@
 			if(userList != null){
 				for(var i=0; i < userList.length; i++){
 					var userObj = userList[i];
-					var pictureCol = '<td>';
-					if(userObj["profilePictureURL"] != null){
-						pictureCol += '<img src="' + userObj["profilePictureURL"] + '" height="100px" width="150px" />'
-					}else{
-						pictureCol += '<img height="100px" width="150px" />'
-					}
-					pictureCol += '</td>';
-
+					
 					var professionCol = "<td>";
 					{% if posterProfessionMap %}
 						var posterProfessionMap = {{ posterProfessionMap|safe }};
 						professionCol += posterProfessionMap[userObj["username"]];
 					{% endif %}
 					professionCol += "</td>";
-					var newRow = ("<tr>" + pictureCol + "<td><button onclick='createProfileRedirectForm(" + '"' + userObj["username"] + '");' + "'>" + posterNameMap[userObj["username"]] + "</button></td>" + professionCol + "</tr>");
+					var newRow = ("<tr>" + getPictureCol(userObj["profilePictureURL"], "browseImage") + "<td><button onclick='createProfileRedirectForm(" + '"' + userObj["username"] + '");' + "'>" + posterNameMap[userObj["username"]] + "</button></td>" + professionCol + "</tr>");
 					tableString += newRow;
 				}
 			}
@@ -258,6 +244,17 @@
 		tableString += "</table>";
 		return tableString;
 	};
+
+	function getPictureCol(sourceURL, className){
+		pictureCol = "<td>"
+		if(sourceURL != null && sourceURL != ""){
+			pictureCol += '<img class="' + className + '" width="150px" src="' + sourceURL + '" />';
+		}else{
+			pictureCol += '<img class="' + className + '" width="150px" height="150px">';
+		}
+		pictureCol += "</td>";
+		return pictureCol;
+	}
 
 	function createViewCollabPostTable(){
 		var tableString = '<h3>Browse posts seeking collaborators</h3>';
@@ -273,14 +270,11 @@
 
 			//Add each event
 			{% for collabObj in posts.collaboration %}
-				var pictureCol = '<td>';
+				var picURL = null;
 				{% if collabObj.postPicture %}
-					pictureCol += '<img src="{{ collabObj.postPicture.url }}" height="50px" width="70px"/>'
-				{% else %}
-					pictureCol += '<img height="50px" width="70px"/>'
+					picURL = "{{ collabObj.postPicture.url }}"
 				{% endif %}
-				pictureCol += '</td>';
-				tableString += ("<tr>" + pictureCol +
+				tableString += ("<tr>" + getPictureCol(picURL, "browseImage") +
 									"<td><button onclick='createPostRedirectForm(" + '"{{collabObj.postID}}","{{possibleDestinations.viewPost}}"' + ");'>{{collabObj.title}}</button></td>" +
 									"<td><div id='" + getNextProfileName() + "'>{{collabObj.poster}}</td>" +
 									"<td>{{collabObj.collaboratorRole}}</td>" +
@@ -309,14 +303,11 @@
 
 			//Add each event
 			{% for workObj in posts.work %}
-				var pictureCol = '<td>';
+				var picURL = null;
 				{% if workObj.postPicture %}
-					pictureCol += '<img src="{{ workObj.postPicture.url }}" height="50px" width="70px"/>'
-				{% else %}
-					pictureCol += '<img height="50px" width="70px"/>'
+					picURL = "{{ workObj.postPicture.url }}"
 				{% endif %}
-				pictureCol += '</td>';
-				tableString += ("<tr>" + pictureCol +
+				tableString += ("<tr>" + getPictureCol(picURL, "browseImage") +
 									"<td><button onclick='createPostRedirectForm(" + '"{{workObj.postID}}","{{possibleDestinations.viewPost}}"' + ");'>{{workObj.title}}</button></td>" +
 									"<td><div id='" + getNextProfileName() + "'>{{workObj.poster}}</td>" +
 									"<td>{{workObj.profession}}</td>" +
@@ -350,14 +341,11 @@
 
 			//Add each event
 			{% for castingObj in posts.casting %}
-				var pictureCol = '<td>';
+				var picURL = null;
 				{% if castingObj.postPicture %}
-					pictureCol += '<img src="{{ castingObj.postPicture.url }}" height="50px" width="70px"/>'
-				{% else %}
-					pictureCol += '<img height="50px" width="70px"/>'
+					picURL = "{{ castingObj.postPicture.url }}"
 				{% endif %}
-				pictureCol += '</td>';
-				tableString += ("<tr>" + pictureCol +
+				tableString += ("<tr>" + getPictureCol(picURL, "browseImage") +
 									"<td><button onclick='createPostRedirectForm(" + '"{{castingObj.postID}}","{{possibleDestinations.viewPost}}"' + ");'>{{castingObj.title}}</button></td>" +
 									"<td><div id='" + getNextProfileName() + "'>{{castingObj.poster}}</td>" +
 									"<td>{{castingObj.description}}</td>")

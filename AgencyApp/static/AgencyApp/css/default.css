@@ -63,14 +63,12 @@
 
 	.image
 	{
-		display: inline-block;
-		background-size: cover;
+		display: block;
 	}
 	
 	.image img
 	{
 		display: block;
-		width: 100%;
 	}
 	
 	.image-full
@@ -467,7 +465,13 @@
 		color: rgba(255,255,255,1);
 	}
 
-secondSearchOptions
+	.browseImage
+	{
+		max-width: 100%;
+		width: 150px;
+	}
+
+
 /*********************************************************************************/
 /* Banner                                                                        */
 /*********************************************************************************/
