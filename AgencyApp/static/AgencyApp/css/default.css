@@ -116,7 +116,7 @@
 		color: #000;
 	}
 
-	#professionChoicePanel {
+	.profession3ColumnsFullPanel {
 		width: 250px;
 		height: 479px;
 		background: #232323;
@@ -125,7 +125,7 @@
   		text-align: center;
 	}
 
-	#professionChoiceSubPanel {
+	.profession3ColumnsFullPanel_1 {
 		width: 240px;
 		height: 469px;
 		margin: 5px auto 0px auto;
@@ -139,7 +139,7 @@
 		overflow: scroll;
 	}
 
-	.professionsSelectRow{
+	.professionsSelectColumn{
 		width: 225px;
 		padding: 0em 0.5em;
 		letter-spacing: 1px;
@@ -148,12 +148,13 @@
 		font-size: 1.0em;
 		color: #000;
 		float: left;
+		background: #efefef;
 
 		border: 1px solid rgba(0,0,0,1);
 		border-radius: 6px;
 	}
 	
-	.professionsSelectRow:hover{
+	.professionsSelectColumn:hover{
 		width: 225px;
 		padding: 0em 0.5em;
 		letter-spacing: 1px;
@@ -167,7 +168,7 @@
 		cursor: pointer;
 	}
 
-	.professionsSelectRow a:hover{
+	.professionsSelectColumn a:hover{
 		color: rgba(255,255,255,1);
 	}
 

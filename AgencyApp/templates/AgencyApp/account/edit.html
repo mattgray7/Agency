@@ -18,18 +18,38 @@
 			return ('<td onclick="' + onclickString + '"><div class="squareButton"><h1><br><br><br>' + label + '<br><br><br><br></h1></div></td>');
 		}
 
-		function addProfession(profession){
+		function toggleProfession(profession){
 			var professionCheckbox = document.getElementById(profession + "_checkbox");
+			var professionRowID = profession + "_rowID";
 			if(professionCheckbox != null){
 				if(professionCheckbox.checked){
-					// Remove profession
-					professionCheckbox.checked = false;
-					chosenProfessionList[profession] = null;		//needs to be fixed
+					professionCheckbox.checked = null;
+					removeProfession(profession, professionRowID)
 				}else{
-					// Add profession
-					chosenProfessionList.push({profession: true});
 					professionCheckbox.checked = "checked";
+					addProfession(profession, professionRowID)
 				}
+			}
+		}
+
+		function addProfession(profession, professionRowID){
+			var table = document.getElementById("chosenProfessionTable");
+			if(table != null && chosenProfessionList.indexOf(profession) < 0){
+				chosenProfessionList.push(profession);
+				var newProfessionRow = table.insertRow(-1);
+				newProfessionRow.id = professionRowID;
+				var newProfessionCell = newProfessionRow.insertCell(0);
+				newProfessionCell.className = "professionsSelectColumn"
+				newProfessionCell.innerHTML = "<a> " + profession + "</a><a onclick='toggleProfession(" + '"' + profession + '");' + "' style='float:right; margin: 0px 5px 0px 0px;' /> X</a>";
+			}
+		}
+
+		function removeProfession(profession, professionRowID){
+			var professionIndex = chosenProfessionList.indexOf(profession);
+			if(professionIndex >= 0){
+				chosenProfessionList.splice(professionIndex, 1);		// Second argument is # of elements to cutout
+				var professionRow = document.getElementById(professionRowID);
+    			professionRow.parentNode.removeChild(professionRow);
 			}
 		}
 
@@ -40,7 +60,7 @@
 					var professionListString = "<table class='professionsSelectList'>";
 					var professions = {{ professions|safe }};
 					for(var i=0; i < professions[key].length; i++){
-						professionListString += "<tr><td class='professionsSelectRow'><a onclick='addProfession(" + '"' + professions[key][i] + '");' + "'> " + professions[key][i] + "</a><input type='checkbox' id='" + professions[key][i] + "_checkbox' value='false' style='float:right; margin: 8px 5px 0px 0px;' /></td></tr>";
+						professionListString += "<tr><td class='professionsSelectColumn' onclick='toggleProfession(" + '"' + professions[key][i] + '");' + "'><a> " + professions[key][i] + "</a><input type='checkbox' id='" + professions[key][i] + "_checkbox' value='false' style='float:right; margin: 8px 5px 0px 0px;' /></td></tr>";
 					}
 					professionListString += "</table>";
 					document.getElementById("professionChoiceSubPanel").innerHTML = professionListString;
@@ -54,7 +74,7 @@
 			<div id="wrapper">
 				<table id="workInterestPanel">
 					<tr>
-						<td colspan='2'><center> <h3 style="color:#000;">Select your interested professions</h3></center></td>
+						<td colspan="3"><center> <h3 style="color:#000;">Select your interested professions</h3></center></td>
 					</tr>
 					<tr>
 						<td>
@@ -82,10 +102,19 @@
 							</table>
 						</td>
 						<td>
-							<div id="professionChoicePanel">
-								<div id="professionChoiceSubPanel"></div>
+							<div id="professionChoicePanel" class="profession3ColumnsFullPanel">
+								<div id="professionChoiceSubPanel" class="profession3ColumnsFullPanel_1"></div>
 							</div>
 						</td>
+						<td>
+							<div id="chosenProfessionChoicePanel" class="profession3ColumnsFullPanel">
+								<div id="chosenProfessionChoiceSubPanel" class="profession3ColumnsFullPanel_1">
+									<table id="chosenProfessionTable" class="professionsSelectList">
+									</table>
+								</div>
+							</div>
+						</td>
+
 					</tr>
 				</table>
 			</div>
@@ -96,6 +125,7 @@
 		function selectWorkInterest(){
 			document.getElementById("interestsDiv").innerHTML = "";
 			document.getElementById("workInterestDiv").style.display = "block";
+			filterProfessions("acting");
 		}
 
 		function selectHireInterest(){
