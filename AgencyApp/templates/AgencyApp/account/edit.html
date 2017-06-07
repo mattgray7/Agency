@@ -21,14 +21,14 @@
 		function toggleProfession(profession){
 			var professionCheckbox = document.getElementById(profession + "_checkbox");
 			var professionRowID = profession + "_rowID";
-			if(professionCheckbox != null){
-				if(professionCheckbox.checked){
-					professionCheckbox.checked = null;
-					removeProfession(profession, professionRowID)
-				}else{
-					professionCheckbox.checked = "checked";
-					addProfession(profession, professionRowID)
+			if(chosenProfessionList.indexOf(profession) >= 0){
+				if(professionCheckbox != null){
+					professionCheckbox.checked = false;
 				}
+				removeProfession(profession, professionRowID)
+			}else{
+				professionCheckbox.checked = "checked";
+				addProfession(profession, professionRowID)
 			}
 		}
 
@@ -40,9 +40,11 @@
 				newProfessionRow.id = professionRowID;
 				var newProfessionCell = newProfessionRow.insertCell(0);
 				newProfessionCell.className = "professionsSelectColumn"
-				newProfessionCell.innerHTML = "<a> " + profession + "</a><a onclick='toggleProfession(" + '"' + profession + '");' + "' style='float:right; margin: 0px 5px 0px 0px;' /> X</a>";
+				newProfessionCell.onclick = '"toggleProfession(' + "'" + profession + "'" + ');"';
+				newProfessionCell.innerHTML = "<a> " + profession + "</a><a onclick='toggleProfession(" + '"' + profession + '"' + ");' style='float:right; margin: 0px 5px 0px 0px;' /> X</a>";
 			}
 		}
+
 
 		function removeProfession(profession, professionRowID){
 			var professionIndex = chosenProfessionList.indexOf(profession);
