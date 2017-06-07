@@ -82,13 +82,16 @@
 					var professionListString = "<table class='professionsSelectList'>";
 					var professions = {{ professions|safe }};
 					for(var i=0; i < professions[key].length; i++){
-						professionListString += "<tr><td class='professionsSelectColumn' onclick='toggleProfession(" + '"' + professions[key][i] + '");' + "'><a> " + professions[key][i] + "</a><input type='checkbox' id='" + professions[key][i] + "_checkbox' value='false' style='float:right; margin: 8px 5px 0px 0px;' /></td></tr>";
+						var checkedValue = "";
+						if(chosenProfessionList.indexOf(professions[key][i]) >= 0){
+							checkedValue = "checked";
+						}
+						professionListString += "<tr><td class='professionsSelectColumn' onclick='toggleProfession(" + '"' + professions[key][i] + '");' + "'><a> " + professions[key][i] + "</a><input type='checkbox' id='" + professions[key][i] + "_checkbox' " + checkedValue + " style='float:right; margin: 8px 5px 0px 0px;' /></td></tr>";
 					}
 					professionListString += "</table>";
 					document.getElementById("professionChoiceSubPanel").innerHTML = professionListString;
 					var professionFilterButtonDiv = document.getElementById(key + "SquareButton");
 					if(professionFilterButtonDiv != null){
-						console.log(professionFilterButtonDiv.id)
 						professionFilterButtonDiv.className = "squareButtonActive";
 					}
 				{% endif %}
