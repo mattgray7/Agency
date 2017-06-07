@@ -188,11 +188,17 @@
                 return formString
             }
 
-            function createFormInput(type, name, value){
+            function createFormInput(type, name, value, id){
                 var input = document.createElement("input");
                 input.setAttribute("type", type);
                 input.setAttribute("name", name);
                 input.setAttribute("value", value);
+                if(value == null || value == undefined){
+                    input.setAttribute("style", "display: none;");
+                }
+                if(id != null){
+                    input.setAttribute("id", id);
+                }
                 return input;
             };
 
@@ -209,12 +215,13 @@
                 var form = document.createElement("form");
                 form.setAttribute('method', "post");
                 form.setAttribute('action', formProcessURL);
+                form.setAttribute('id', 'redirectForm');
 
                 form.appendChild(createFormInput("hidden", "source", source));
                 form.appendChild(createFormInput("hidden", "next", next));
                 form.appendChild(createFormInput("hidden", "destination", destination));
                 form.appendChild(createFormInput("hidden", "csrfmiddlewaretoken", getCookie("csrftoken")));
-                form.appendChild(createFormInput("submit", null, submitButtonValue));
+                form.appendChild(createFormInput("submit", null, submitButtonValue, "submitButton"));
 
                 // add extra hidden inputs
                 if(extraHiddenInputs.length > 0){
@@ -223,6 +230,14 @@
                     }
                 };
                 formParent.appendChild(form);
+
+                if(submitButtonValue == null){
+                    // Use the entire div as a back button
+                    var submitButtonDiv = document.getElementById("submitButton");
+                    if(submitButtonDiv != null && formParent != document.body){
+                        formParent.onclick = function(){form.submit()};
+                    }
+                }
                 return form;
             }
 
@@ -238,7 +253,7 @@
                         }
                     {% endif %}
         
-                    var cancelButtonForm = createPageRedirectForm("{{ cancelSource }}", "{{ next }}", destination, destinationURL, extraInputs, cancelButtonDiv, buttonName)
+                    var cancelButtonForm = createPageRedirectForm("{{ cancelSource }}", "{{ next }}", destination, destinationURL, extraInputs, cancelButtonDiv)
                 }
             }
 
