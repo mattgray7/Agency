@@ -146,25 +146,46 @@
 						<h2>What are your interests?</h2>
 						<span class="byline">Specify what you are looking for.</span>
 					</div>
-					<div class="boxA">
-						<!-- For the user side: someone looking to get a job-->
-						<h2>Job Seeking</h2>
-						<span class="fa fa-cloud-download"></span>
-						<p>Look for a job in the Vancouver film industry in anything from acting to set work to post production. Your profile will be public to casting agents and those looking to hire.</p>
-						<a onclick="selectWorkInterest()" class="button button-alt">Looking for a job</a>
-					</div>
-					<div class="boxB">
-						<h2>Casting and Hiring</h2>
-						<span class="fa fa-cogs"></span>
-						<p>Create casting posts and job posts for both permanent and project-specific positions. You can also post in search of collaborators for a new project.</p>
-						<a onclick="selectHireInterest()" class="button button-alt">Looking to hire, collaborate, or cast a role</a>
-					</div>
-					<div class="boxC">
-						<h2> Explore </h2>
-						<span class="fa fa-wrench"></span>
-						<p> Explore the film industry around you. Check out local events, view projects that are currently being shot in Vancouver, </p>
-						<a onclick="selectOtherInterest()" class="button button-alt">Other</a>
-					</div>
+					<table>
+						<tr>
+							<td class="boxA">
+								<h2>Job Seeking</h2>
+								<span class="fa fa-cloud-download"></span>
+							</td>
+							<td class="boxB">
+								<h2>Casting and Hiring</h2>
+								<span class="fa fa-cogs"></span>
+							</td>
+							<td class="boxC">
+								<h2> Explore </h2>
+								<span class="fa fa-wrench"></span>
+							</td>
+						</tr>
+						<tr>
+							<td class="boxA">
+								<p>Look for a job in the Vancouver film industry in anything from acting to set work to post production. Your profile will be public to casting agents and those looking to hire.</p>
+							</td>
+							<td class="boxB">
+								<p>Create casting posts and job posts for both permanent and project-specific positions. You can also post in search of collaborators for a new project.</p><br>
+							</td>
+							<td class="boxC">
+								<p> Explore the film industry around you. Check out local events, view projects that are currently being shot in Vancouver, </p><br><br><br>
+							</td>
+						</tr>
+						<tr>
+							<td class="boxA">
+								<a onclick="selectWorkInterest()" class="button button-alt button-bottom">Looking for a job</a>
+							</td>
+							<td class="boxB">
+								<a onclick="selectHireInterest()" class="button button-alt button-bottom">Looking to hire, collaborate, or cast a role</a>
+							</td>
+							<td class="boxC">
+								<a onclick="selectOtherInterest()" class="button button-alt button-bottom">Other</a>
+							</td>
+						</tr>
+
+
+					</table>
 				</div>
 			</div>
 		</div>

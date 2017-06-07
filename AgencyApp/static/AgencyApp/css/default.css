@@ -61,6 +61,18 @@
 	  display: table-cell;
 	}
 
+	#interestsDiv
+	{
+		display: table-cell;
+	}
+
+	#interestsDiv a
+	{
+		display: inline-block;
+		vertical-align: bottom;
+		width: 75%;
+	}
+
 	.squareButtonTable table {
 	}	
 
@@ -316,6 +328,12 @@
 		background: rgba(0, 0, 0, .9);
 	}
 
+	.button-bottom
+	{
+		vertical-align: bottom;
+		bottom:   0;
+	}
+
 /*********************************************************************************/
 /* 4-column                                                                      */
 /*********************************************************************************/
@@ -362,6 +380,14 @@
 	.boxC
 	{
 		float: right;
+		display: table-cell;
+	}
+
+	.boxC a
+	{
+		bottom: 0;
+		display: inline-block;
+    	vertical-align: bottom;
 	}
 
 /*********************************************************************************/
