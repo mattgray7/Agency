@@ -39,7 +39,9 @@
 				}
 				removeProfession(profession, professionRowID)
 			}else{
-				professionCheckbox.checked = "checked";
+				if(professionCheckbox != null){
+					professionCheckbox.checked = "checked";
+				}
 				addProfession(profession, professionRowID)
 			}
 		}
@@ -95,7 +97,6 @@
 					document.getElementById("professionChoicePanel").innerHTML = professionListString;
 					var professionFilterButtonDiv = document.getElementById(key + "SquareButton");
 					if(professionFilterButtonDiv != null){
-						console.log("setting div to active " + professionFilterButtonDiv)
 						professionFilterButtonDiv.className = "squareButtonActive";
 						var professionFilterButtonParentDiv = document.getElementById(key + "SquareButton_parentCell");
 						if(professionFilterButtonParentDiv != null){
@@ -162,10 +163,14 @@
 
 		<script>
 
-
 		function selectWorkInterest(){
 			document.getElementById("interestsDiv").innerHTML = "";
 			document.getElementById("workInterestDiv").style.display = "block";
+			{% if existingProfessions %}
+				{% for profession in existingProfessions %}
+					toggleProfession("{{profession.professionName}}")
+				{% endfor %}
+			{% endif %}
 			filterProfessions("acting");
 		}
 

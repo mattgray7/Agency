@@ -196,13 +196,21 @@ class GenericEditAccountView(views.GenericFormView):
 class EditInterestsView(GenericEditAccountView):
     def __init__(self, *args, **kwargs):
         super(EditInterestsView, self).__init__(*args, **kwargs)
+        self._existingProfessions = None
 
     @property
     def pageContext(self):
         self._pageContext = super(EditInterestsView, self).pageContext
         self._pageContext["possibleDestinations"] = {"interests": constants.EDIT_INTERESTS}
         self._pageContext["professions"] = constants.PROFESSIONS
+        self._pageContext["existingProfessions"] = self.existingProfessions
         return self._pageContext
+
+    @property
+    def existingProfessions(self):
+        if self._existingProfessions is None:
+            self._existingProfessions = models.Profession.objects.filter(username=self.username, mainInterest="work")
+        return self._existingProfessions
 
     @property
     def nextButtonString(self):
