@@ -231,12 +231,10 @@
                 };
                 formParent.appendChild(form);
 
-                if(submitButtonValue == null){
-                    // Use the entire div as a back button
-                    var submitButtonDiv = document.getElementById("submitButton");
-                    if(submitButtonDiv != null && formParent != document.body){
-                        formParent.onclick = function(){form.submit()};
-                    }
+                // Use the entire div as a back button
+                var submitButtonDiv = document.getElementById("submitButton");
+                if(submitButtonDiv != null && formParent != document.body){
+                    formParent.onclick = function(){form.submit()};
                 }
                 return form;
             }
@@ -253,7 +251,15 @@
                         }
                     {% endif %}
         
-                    var cancelButtonForm = createPageRedirectForm("{{ cancelSource }}", "{{ next }}", destination, destinationURL, extraInputs, cancelButtonDiv)
+                    var cancelButtonForm = createPageRedirectForm("{{ cancelSource }}", "{{ next }}", destination, destinationURL, extraInputs, cancelButtonDiv, buttonName)
+                    var label = document.getElementById("cancelButtonLabel");
+                    if(label != null){
+                        if(buttonName != null){
+                            label.innerHTML = buttonName;
+                        }else{
+                            label.innerHTML = "Back";
+                        }
+                    }
                 }
             }
 

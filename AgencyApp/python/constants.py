@@ -71,7 +71,7 @@ PROFESSIONS = {"acting": ["Actor", "Dancer", "Extra", "Stand-in", "Model", "Voic
 			   					   "Set Designer", "SFX Technician", "SFX Supervisor", "Stunt Coordinator",
 			   					   "Stunt Artist", "Wardrobe Supervisor"],
 			   "offSetProduction": ["Acting Coach", "Art Director", "Producer", "Production Coordinator",
-			   						"Production Coordinator", "Production Designer", "Production Manager", "Voice Artist"],
+			   						"Production Designer", "Production Manager", "Voice Artist"],
 			   "preProduction": ["Casting Director", "Choreographer", "Costume Designer", "Concept Artist",
 			   					 "Producer", "Screenwriter", "Storyboard Artist"],
 			   "postProduction": ["CG Animator", "Digital Compositor", "Editor", "Marketing", "Music Composer",
