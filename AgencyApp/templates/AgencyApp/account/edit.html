@@ -18,6 +18,17 @@
 			return ('<td onclick="' + onclickString + '"><div class="squareButton"><h1><br><br><br>' + label + '<br><br><br><br></h1></div></td>');
 		}
 
+		function submitForm(){
+			var formButtonDiv = document.getElementById("continueButton");
+			var extraInputs = []
+            for(var i=0; i < chosenProfessionList.length; i++){
+            	var profession = chosenProfessionList[i];
+            	extraInputs.push({key: "profession." + profession, value: true})
+            }
+			var form = createPageRedirectForm("{{next}}", "{{next}}", "{{destination}}", "{{currentPageURL}}", extraInputs, formButtonDiv);
+			form.submit();
+		}
+
 		function toggleProfession(profession){
 			var professionCheckbox = document.getElementById(profession + "_checkbox");
 			var professionRowID = profession + "_rowID";
@@ -121,6 +132,7 @@
 				</table>
 			</div>
 		</div>
+
 		<script>
 
 
@@ -189,8 +201,7 @@
 		</div>
 	{% endif %}
 	<div id="cancelButton" class="button"><div id="cancelButtonLabel"></div></div>
-
-
+	<div id="continueButton" class="button" onclick="submitForm()"><div id="continueButtonLabel">Continue</div></div>
 
 
 	<!--{% if userAccount %}

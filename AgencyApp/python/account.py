@@ -196,7 +196,6 @@ class GenericEditAccountView(views.GenericFormView):
 class EditInterestsView(GenericEditAccountView):
     def __init__(self, *args, **kwargs):
         super(EditInterestsView, self).__init__(*args, **kwargs)
-        self._existingInterests = None
 
     @property
     def pageContext(self):
@@ -225,27 +224,27 @@ class EditInterestsView(GenericEditAccountView):
                 self._cancelDestination = constants.PROFILE
         return self._cancelDestination
 
-    @property
-    def existingInterests(self):
-        if self._existingInterests is None:
-            userInterests = models.Interest.objects.filter(username=self.username)
-            self._existingInterests = {"work": [], "hire": []}
-            for interest in userInterests:
-                self._existingInterests[interest.name].append(interest.subInterestName)
-        return self._existingInterests
+    def getProfessionInterest(self, profession):
+        for interest in constants.PROFESSIONS:
+            if profession in constants.PROFESSIONS[interest]:
+                return interest
 
     def processForm(self):
         """Overriding asbtract method"""
-        self.userAccount.workInterest = self.formData.get('work', False)
-        self.userAccount.crewInterest = self.formData.get('crew', False)
-        self.userAccount.collaborationInterest = self.formData.get('collaboration', False)
-        self.userAccount.actingInterest = self.formData.get("acting", False)
-        self.userAccount.castingInterest = self.formData.get("casting", False)
-        try:
-            self.userAccount.save()
-        except:
-            self.errors.append("Could not connect to UserAccount database")
-            return False
+        interestType = self.request.POST.get("interestType", "work")
+        for formInput in self.request.POST:
+            if formInput.startswith("profession."):
+                profession = formInput.split(".")[1]
+                subInterest = self.getProfessionInterest(profession)
+                matchingProfessions = models.Profession.objects.filter(username=self.username, mainInterest=interestType,
+                                                                       subInterest=subInterest, professionName=profession)
+                if not matchingProfessions:
+                    newProfession = models.Profession(username=self.username, mainInterest=interestType,
+                                                      subInterest=subInterest, professionName=profession)
+                    newProfession.save()
+                else:
+                    #TODO
+                    pass
         return True
 
 

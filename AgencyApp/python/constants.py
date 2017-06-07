@@ -79,19 +79,6 @@ PROFESSIONS = {"acting": ["Actor", "Dancer", "Extra", "Stand-in", "Model", "Voic
 			   					  "VFX Arist", "VFX Supervisor"]}
 
 
-'''PROFESSIONS = ["Acting Coach", "Art Director", "Assistant Director", "Assistant Camera Operator",
-			   "Boom Operator", "Camera Operator", "Casting Director", "Choreographer", "Cinematographer",
-			   "CG Animator", "Compositor", "Costume Designer", "Concept Artist", "Dancer", "Director",
-			   "Editor", "Electrician", "Film Festival Director", "Film Festival Volunteer", "Graphic Designer", "Grip",
-			   "Hair Stylist", "Key Grip", "Lighting Technician", "Location Manager", "Makeup Artist",
-			   "Marketing", "Music Composer", "Music Supervisor", "Music Editor", "Musician", "Photographer",
-			   "Producer", "Production Assistant", "Production Caterer", "Production Coordinator",
-			   "Production Designer", "Production Manager", "Prop Master", "Screenwriter",
-			   "Script Coordinator/Supervisor", "Set Coordinator", "Set Decorator", "Set Designer",
-			   "SFX Technician", "SFX Supervisor", , "Sound Editor", "Sound Engineer",
-			   "Storyboard Artist", "Stunt Coordinator", "Stunt Artist", "Talent Management", "VFX Arist",
-			   "VFX Supervisor", "Voice Artist", "Wardrobe Supervisor"]'''
-
 COLLABORATOR_OPTIONS = ["Director", "Director of photography", "Musical artist", "Screenwriter", "Story writer", "Other"]
 
 ACTOR_ATTRIBUTE_DICT = [{"name": "Hair color",
