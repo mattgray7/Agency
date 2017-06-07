@@ -241,6 +241,7 @@ class EditInterestsView(GenericEditAccountView):
     def processForm(self):
         """Overriding asbtract method"""
         interestType = self.request.POST.get("interestType", "work")
+        models.Profession.objects.filter(username=self.username, mainInterest=interestType).delete()
         for formInput in self.request.POST:
             if formInput.startswith("profession."):
                 profession = formInput.split(".")[1]
