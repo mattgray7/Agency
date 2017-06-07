@@ -76,7 +76,7 @@ PROFESSIONS = {"acting": ["Actor", "Dancer", "Extra", "Stand-in", "Model", "Voic
 			   					 "Producer", "Screenwriter", "Storyboard Artist"],
 			   "postProduction": ["CG Animator", "Digital Compositor", "Editor", "Marketing", "Music Composer",
 			   					  "Music Supervisor", "Music Editor", "Producer", "Sound Editor", "Sound Engineer",
-			   					  "VFX Arist", "VFX Supervisor"]}
+			   					  "VFX Artist", "VFX Supervisor"]}
 
 
 COLLABORATOR_OPTIONS = ["Director", "Director of photography", "Musical artist", "Screenwriter", "Story writer", "Other"]
