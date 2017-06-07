@@ -90,23 +90,9 @@
 		color: #000;
 		overflow: hidden;
 	}
-
-	.squareButtonTable td.active a, .squareButtonTable li.active span
-	{
-		border: 2px solid rgba(255,255,255,1);
-		border-radius: 0px;
-		color: rgba(255,255,255,1);
-		cursor: pointer;
-	}
 	
-	.squareButtonTable .active td
+	.squareButton
 	{
-		border: 2px solid rgba(255,255,255,1);
-		border-radius: 6px;
-		color: rgba(255,255,255,1);
-	}
-	
-	.squareButton {
 	    width: 170px;
 	    padding: 0em 0em;
 		letter-spacing: 1px;
@@ -127,6 +113,26 @@
 	.squareButton h1:hover {
 		color: #000;
 	}
+
+	.squareButtonActive
+	{
+		width: 170px;
+	    padding: 0em 0em;
+		letter-spacing: 1px;
+		text-decoration: none;
+		font-weight: 700;
+		font-size: 0.5em;
+		text-align: center;
+		background: #fff;
+		color: #000;
+		display: table-cell;
+	}/*
+
+	.squareButtonActive h1 {
+		color: #fff;
+		height: 100%;
+		width: 100%;
+	}*/
 
 	.profession3ColumnsFullPanel {
 		width: 250px;

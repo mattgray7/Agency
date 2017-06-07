@@ -13,9 +13,10 @@
 		<script>
 
 		var chosenProfessionList = []
+		var professionInterests = ["acting", "creative", "preProduction", "postProduction", "onSetProduction", "offSetProduction"];
 
-		function getSquareButtonColumn(label, onclickString){
-			return ('<td onclick="' + onclickString + '"><div class="squareButton"><h1><br><br><br>' + label + '<br><br><br><br></h1></div></td>');
+		function getSquareButtonColumn(label, onclickString, idName){
+			return ('<td onclick="' + onclickString + '" ><div class="squareButton" id="' + idName + '"><h1><br><br><br>' + label + '<br><br><br><br></h1></div></td>');
 		}
 
 		function submitForm(){
@@ -68,6 +69,14 @@
 
 		function filterProfessions(key){
 			var professionChoiceDiv = document.getElementById("professionChoicePanel")
+
+			for(var i=0; i < professionInterests.length; i++){
+				var interestDiv = document.getElementById(professionInterests[i] + "SquareButton");
+				if(interestDiv != null){
+					interestDiv.className = "squareButton";
+				}
+			}
+
 			if(professionChoiceDiv != null){
 				{% if professions %}
 					var professionListString = "<table class='professionsSelectList'>";
@@ -77,6 +86,11 @@
 					}
 					professionListString += "</table>";
 					document.getElementById("professionChoiceSubPanel").innerHTML = professionListString;
+					var professionFilterButtonDiv = document.getElementById(key + "SquareButton");
+					if(professionFilterButtonDiv != null){
+						console.log(professionFilterButtonDiv.id)
+						professionFilterButtonDiv.className = "squareButtonActive";
+					}
 				{% endif %}
 			}
 		}
@@ -96,20 +110,20 @@
 								</thead>
 								<tr>
 									<script>
-									document.write(getSquareButtonColumn("Acting &amp; Performing", "filterProfessions('acting');"));
-									document.write(getSquareButtonColumn("Creative Positions", "filterProfessions('creative');"));
+									document.write(getSquareButtonColumn("Acting &amp; Performing", "filterProfessions('acting');", 'actingSquareButton'));
+									document.write(getSquareButtonColumn("Creative Positions", "filterProfessions('creative');", 'creativeSquareButton'));
 									</script>
 								</tr>
 								<tr>
 									<script>
-									document.write(getSquareButtonColumn("Production - On set", "filterProfessions('onSetProduction');"));
-									document.write(getSquareButtonColumn("Production - Off set", "filterProfessions('offSetProduction');"));
+									document.write(getSquareButtonColumn("Production - On set", "filterProfessions('onSetProduction');", 'onSetProductionSquareButton'));
+									document.write(getSquareButtonColumn("Production - Off set", "filterProfessions('offSetProduction');", 'offSetProductionSquareButton'));
 									</script>
 								</tr>
 								<tr>
 									<script>
-									document.write(getSquareButtonColumn("Pre Production", "filterProfessions('preProduction');"));
-									document.write(getSquareButtonColumn("Post Production", "filterProfessions('postProduction');"));
+									document.write(getSquareButtonColumn("Pre Production", "filterProfessions('preProduction');", 'preProductionSquareButton'));
+									document.write(getSquareButtonColumn("Post Production", "filterProfessions('postProduction');", 'postProductionSquareButton'));
 									</script>
 								</tr>
 							</table>
