@@ -78,9 +78,10 @@
 
 	.squareButtonTable td {
 		background: #232323;
-		border: 4px solid #fff;
+		border: 4px solid #000;
 		border-radius: 6px;
 		text-decoration: none;
+		overflow: hidden;
 	}
 
 	.squareButtonTable td:hover {
@@ -93,7 +94,8 @@
 	
 	.squareButton
 	{
-	    width: 170px;
+	    width: 147px;
+	    height: 147.5px;
 	    padding: 0em 0em;
 		letter-spacing: 1px;
 		text-decoration: none;
@@ -101,13 +103,13 @@
 		font-size: 0.5em;
 		text-align: center;
 		color: rgba(255,255,255,1);
-		display: table-cell;
+		display: table;
 	}
 
 	.squareButton h1 {
 		color: #fff;
-		height: 100%;
-		width: 100%;
+		display: table-cell;
+		vertical-align: middle;
 	}
 
 	.squareButton h1:hover {
@@ -116,7 +118,8 @@
 
 	.squareButtonActive
 	{
-		width: 170px;
+		width: 147px;
+		height: 147.5px;
 	    padding: 0em 0em;
 		letter-spacing: 1px;
 		text-decoration: none;
@@ -125,26 +128,17 @@
 		text-align: center;
 		background: #fff;
 		color: #000;
-		display: table-cell;
-	}/*
-
-	.squareButtonActive h1 {
-		color: #fff;
-		height: 100%;
-		width: 100%;
-	}*/
-
-	.profession3ColumnsFullPanel {
-		width: 250px;
-		height: 479px;
-		background: #232323;
-		display: table-cell;
-		vertical-align: middle;
-  		text-align: center;
+		display: table;
 	}
 
-	.profession3ColumnsFullPanel_1 {
-		width: 240px;
+	.squareButtonActive h1 {
+		color: #000;
+		display: table-cell;
+		vertical-align: middle;
+	}
+
+	.profession3ColumnsFullPanel {
+		width: 295px;
 		height: 469px;
 		margin: 5px auto 0px auto;
 		display: inline-block;
@@ -155,10 +149,12 @@
 		font-weight: 700;
 		font-size: 0.5em;
 		overflow: scroll;
+		border: 3px solid rgba(0,0,0,1);
+		border-radius: 6px;
 	}
 
 	.professionsSelectColumn{
-		width: 225px;
+		width: 281px;
 		padding: 0em 0.5em;
 		letter-spacing: 1px;
 		text-decoration: none;
@@ -173,15 +169,7 @@
 	}
 	
 	.professionsSelectColumn:hover{
-		width: 225px;
-		padding: 0em 0.5em;
-		letter-spacing: 1px;
-		text-decoration: none;
-		text-transform: uppercase;
-		font-size: 1.0em;
 		color: rgba(255,255,255,1);
-		float: left;
-
 		background: #414142;
 		cursor: pointer;
 	}

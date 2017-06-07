@@ -16,7 +16,7 @@
 		var professionInterests = ["acting", "creative", "preProduction", "postProduction", "onSetProduction", "offSetProduction"];
 
 		function getSquareButtonColumn(label, onclickString, idName){
-			return ('<td onclick="' + onclickString + '" ><div class="squareButton" id="' + idName + '"><h1><br><br><br>' + label + '<br><br><br><br></h1></div></td>');
+			return ('<td onclick="' + onclickString + '" ><div class="squareButton" id="' + idName + '"><h1>' + label + '</h1></div></td>');
 		}
 
 		function submitForm(){
@@ -68,15 +68,18 @@
 		}
 
 		function filterProfessions(key){
-			var professionChoiceDiv = document.getElementById("professionChoicePanel")
-
 			for(var i=0; i < professionInterests.length; i++){
 				var interestDiv = document.getElementById(professionInterests[i] + "SquareButton");
 				if(interestDiv != null){
 					interestDiv.className = "squareButton";
+					var professionFilterButtonParentDiv = document.getElementById(professionInterests[i]+ "SquareButton_parentCell");
+					/*if(professionFilterButtonParentDiv != null){
+						professionFilterButtonParentDiv.className = "";
+					}*/
 				}
 			}
 
+			var professionChoiceDiv = document.getElementById("professionChoicePanel")
 			if(professionChoiceDiv != null){
 				{% if professions %}
 					var professionListString = "<table class='professionsSelectList'>";
@@ -89,10 +92,15 @@
 						professionListString += "<tr><td class='professionsSelectColumn' onclick='toggleProfession(" + '"' + professions[key][i] + '");' + "'><a> " + professions[key][i] + "</a><input type='checkbox' id='" + professions[key][i] + "_checkbox' " + checkedValue + " style='float:right; margin: 8px 5px 0px 0px;' /></td></tr>";
 					}
 					professionListString += "</table>";
-					document.getElementById("professionChoiceSubPanel").innerHTML = professionListString;
+					document.getElementById("professionChoicePanel").innerHTML = professionListString;
 					var professionFilterButtonDiv = document.getElementById(key + "SquareButton");
 					if(professionFilterButtonDiv != null){
+						console.log("setting div to active " + professionFilterButtonDiv)
 						professionFilterButtonDiv.className = "squareButtonActive";
+						var professionFilterButtonParentDiv = document.getElementById(key + "SquareButton_parentCell");
+						if(professionFilterButtonParentDiv != null){
+							professionFilterButtonParentDiv.className = "squareButtonCellActive";
+						}
 					}
 				{% endif %}
 			}
@@ -104,12 +112,12 @@
 			<div id="wrapper">
 				<table id="workInterestPanel">
 					<tr>
-						<td><center><font color="black">1. Choose your field</font></center></td>
-						<td><center><font color="black">2. Add your professions</font></center></td>
-						<td><center><font color="black">3. Confirm your selections</font></center></td>
+						<td width="34%"><center><font color="black">1. Choose your field</font></center></td>
+						<td width="33%"><center><font color="black">2. Add your professions</font></center></td>
+						<td width="33%"><center><font color="black">3. Confirm your selections</font></center></td>
 					</tr>
 					<tr>
-						<td>
+						<td width="34%">
 							<table class="squareButtonTable">
 								<thead>
 								</thead>
@@ -133,17 +141,17 @@
 								</tr>
 							</table>
 						</td>
-						<td>
+						<td width="33%">
 							<div id="professionChoicePanel" class="profession3ColumnsFullPanel">
-								<div id="professionChoiceSubPanel" class="profession3ColumnsFullPanel_1"></div>
+								<!--<div id="professionChoiceSubPanel" class="profession3ColumnsFullPanel_1"></div>-->
 							</div>
 						</td>
-						<td>
+						<td width="33%">
 							<div id="chosenProfessionChoicePanel" class="profession3ColumnsFullPanel">
-								<div id="chosenProfessionChoiceSubPanel" class="profession3ColumnsFullPanel_1">
+								<!--<div id="chosenProfessionChoiceSubPanel" class="profession3ColumnsFullPanel_1">-->
 									<table id="chosenProfessionTable" class="professionsSelectList">
 									</table>
-								</div>
+								
 							</div>
 						</td>
 
