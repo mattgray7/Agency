@@ -192,8 +192,10 @@
                 var input = document.createElement("input");
                 input.setAttribute("type", type);
                 input.setAttribute("name", name);
-                input.setAttribute("value", value);
-                if(value == null || value == undefined){
+                // Temp hack to stop displaying form submit button when addinv div buttons
+                if(value != "Skip" && value != "Back"){
+                    input.setAttribute("value", value);
+                }else{
                     input.setAttribute("style", "display: none;");
                 }
                 if(id != null){

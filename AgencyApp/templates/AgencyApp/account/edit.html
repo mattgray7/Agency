@@ -43,7 +43,7 @@
             	var profession = chosenProfessionList[i];
             	extraInputs.push({key: "profession." + profession, value: true})
             }
-			var form = createPageRedirectForm("{{next}}", "{{next}}", "{{destination}}", "{{currentPageURL}}", extraInputs, formButtonDiv);
+			var form = createPageRedirectForm("{{next}}", "{{next}}", "{{destination}}", "{{currentPageURL}}", extraInputs, null);
 			form.submit();
 		}
 
@@ -211,6 +211,14 @@
 						</td>
 
 					</tr>
+					<tr>
+						<td colspan="3">
+							<center>
+								<div id="cancelButton" class="wrapperButton"><div id="cancelButtonLabel"></div></div>
+								<div id="continueButton" class="wrapperButton" onclick="submitForm()"><div id="continueButtonLabel">Continue</div>
+							</center>
+						</td>
+					</tr>
 				</table>
 			</div>
 		</div>
@@ -286,9 +294,6 @@
 			</div>
 		</div>
 	{% endif %}
-	<div id="cancelButton" class="button"><div id="cancelButtonLabel"></div></div>
-	<div id="continueButton" class="button" onclick="submitForm()"><div id="continueButtonLabel">Continue</div></div>
-
 
 	<!--{% if userAccount %}
 		{% if userAccount.profilePicture %}

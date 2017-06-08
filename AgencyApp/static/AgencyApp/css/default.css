@@ -300,18 +300,37 @@
 		cursor: pointer;
 	}
 
-	#cancelButton
+	.wrapperButton
 	{
-		.button;
-		margin-left: 1em;
+		display: inline-block;
+		width: 22%;
+		padding: 1em 2em 1em 2em;
+		letter-spacing: 0.10em;
+		padding: 1.40em 3em;
+		border: 2px solid rgba(0,0,0,1);
+		border-radius: 6px;
+		text-decoration: none;
+		font-weight: 700;
+		font-size: 1em;
+		color: #000;
+		cursor: pointer;
 	}
 
-	#cancelButton:hover
+	.wrapperButton:hover
 	{
-		border-color: rgba(0,0,0,.8);
-		color: rgba(0,0,0,1);
+		display: inline-block;
+		width: 22%;
+		padding: 1em 2em 1em 2em;
+		letter-spacing: 0.10em;
+		padding: 1.40em 3em;
+		border: 2px solid rgba(0,0,0,1);
+		border-radius: 6px;
+		text-decoration: none;
+		font-weight: 700;
+		font-size: 1em;
+		color: #FFF;
 		cursor: pointer;
-		background: rgba(255, 255, 255, 1);
+		background: #232323;
 	}
 	
 	.button-alt
