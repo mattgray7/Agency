@@ -62,6 +62,24 @@
 	}
 
 
+	.largeCheckbox
+	{
+		/* Double-sized Checkboxes */
+		-ms-transform: scale(2); /* IE */
+		-moz-transform: scale(2); /* FF */
+		-webkit-transform: scale(1.8); /* Safari and Chrome */
+		-o-transform: scale(2); /* Opera */
+		 padding: 10px;
+	}
+
+	.largeCheckboxText
+	{
+		font-size: 110%;
+  		display: inline;
+  		vertical-align: top;
+		top:   0;
+	}
+
 	.hireOptionTable
 	{
 		table-layout: fixed; 
@@ -73,11 +91,12 @@
 		border-radius: 6px;
 		background: #efefef;
 		color: #000;
+		top:0 ;
 	}
 
 	.hireTableColumn
 	{
-		height: 500px;
+		height: 590px;
 		table-layout:fixed;
 		width: 100%;
 	}
