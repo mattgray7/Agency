@@ -13,13 +13,30 @@
 		<script>
 
 		var chosenProfessionList = []
+		var activeFilter = "acting"
 		var professionInterests = ["acting", "creative", "preProduction", "postProduction", "onSetProduction", "offSetProduction"];
 
-		function getSquareButtonColumn(label, onclickString, idName){
-			return ('<td onclick="' + onclickString + '" ><div class="squareButton" id="' + idName + '"><h1>' + label + '</h1></div></td>');
+		function addSquareButtonColumn(label, onclickString, idName){
+			// Writes a table cell containing a square button
+			var squareButtonString = '<td id="' + idName + '_cell" onclick="' + onclickString + '" ><div class="squareButton" id="' + idName + '"><h1>' + label + '</h1></div></td>';
+			document.write(squareButtonString);
+			var buttonCell = document.getElementById(idName + "_cell");
+			var buttonDiv = document.getElementById(idName);
+
+			$("[id='" + idName + "_cell']").hover(function(){
+				setChildColor(this.id, "h1", "#000");
+			},
+			function(){
+				if(buttonDiv.className === "squareButtonActive"){
+					setChildColor(this.id, "h1", "#000");
+				}else{
+					setChildColor(this.id, "h1", "#fff");
+				}
+			});
 		}
 
 		function submitForm(){
+			// Submits the submit profession button
 			var formButtonDiv = document.getElementById("continueButton");
 			var extraInputs = []
             for(var i=0; i < chosenProfessionList.length; i++){
@@ -31,6 +48,7 @@
 		}
 
 		function toggleProfession(profession){
+			// If profession is in chosenProfessionList, remove from the list, otherwise, add it (and do all relevant front end changes)
 			var professionCheckbox = document.getElementById(profession + "_checkbox");
 			var professionRowID = profession + "_selectedRowID";
 			if(chosenProfessionList.indexOf(profession) >= 0){
@@ -47,6 +65,7 @@
 		}
 
 		function addProfession(profession, professionRowID){
+			// Adds a profession to the chosenProfessionTable displayed on the right
 			var table = document.getElementById("chosenProfessionTable");
 			if(table != null && chosenProfessionList.indexOf(profession) < 0){
 				chosenProfessionList.push(profession);
@@ -57,16 +76,18 @@
 				newProfessionCell.onclick = '"toggleProfession(' + "'" + profession + "'" + ');"';
 				newProfessionCell.innerHTML = "<a> " + profession + "</a><a onclick='toggleProfession(" + '"' + profession + '"' + ");' style='float:right; margin: 0px 5px 0px 0px;' /> X</a>";
 				$("[id='" + professionRowID + "']").hover(function(){
-						setRowTextColor(this.id, "#fff");
+						// On row hover, set the a text to white
+						setChildColor(this.id, "a", "#fff");
 					},
 					function(){
-						setRowTextColor(this.id, "#000");
+						// On row unhover, set the a text back to black
+						setChildColor(this.id, "a", "#000");
 				});
 			}
 		}
 
-
 		function removeProfession(profession, professionRowID){
+			// Removes a profession from the chosenProfessionList, and fron the selected list displayed in the chosenProfessionTable
 			var professionIndex = chosenProfessionList.indexOf(profession);
 			if(professionIndex >= 0){
 				chosenProfessionList.splice(professionIndex, 1);		// Second argument is # of elements to cutout
@@ -75,30 +96,28 @@
 			}
 		}
 
-		function setRowTextColor(rowID, color){
-			var row = document.getElementById(rowID);
-			var links = row.getElementsByTagName("a");
-			for(var i=0; i < links.length; i++){
-				links[i].style.color = color;
+		function setChildColor(parentID, tag, color){
+			// Sets all children of parentID of element type tag to color
+			var parent = document.getElementById(parentID);
+			var children = parent.getElementsByTagName(tag);
+			for(var i=0; i < children.length; i++){
+				children[i].style.color = color;
 			}
 		}
 
 		function filterProfessions(key){
+			// When square button pressed, filter the possible professions displayed. Key is the field of the profession (acting, creative, etc)
 			for(var i=0; i < professionInterests.length; i++){
 				var interestDiv = document.getElementById(professionInterests[i] + "SquareButton");
 				if(interestDiv != null){
 					interestDiv.className = "squareButton";
-					var professionFilterButtonParentDiv = document.getElementById(professionInterests[i]+ "SquareButton_parentCell");
-					/*if(professionFilterButtonParentDiv != null){
-						professionFilterButtonParentDiv.className = "";
-					}*/
 				}
 			}
 
 			var professionChoiceDiv = document.getElementById("professionChoicePanel")
 			if(professionChoiceDiv != null){
 				{% if professions %}
-					// Add profession choices to panel
+					// Add possible profession choices to panel
 					var professionListString = "<table class='professionsSelectList'>";
 					var professions = {{ professions|safe }};
 					var professionRows = [];
@@ -116,23 +135,26 @@
 					professionListString += "</table>";
 					document.getElementById("professionChoicePanel").innerHTML = professionListString;
 
+					// On filter, set all square button text to white
+					setChildColor("squareButtonTable", "h1", "#fff");
+
 					// Add active class to square buttons
-					var professionFilterButtonDiv = document.getElementById(key + "SquareButton");
+					var buttonDivId = key + "SquareButton";
+					var professionFilterButtonDiv = document.getElementById(buttonDivId);
 					if(professionFilterButtonDiv != null){
 						professionFilterButtonDiv.className = "squareButtonActive";
-						var professionFilterButtonParentDiv = document.getElementById(key + "SquareButton_parentCell");
-						if(professionFilterButtonParentDiv != null){
-							professionFilterButtonParentDiv.className = "squareButtonCellActive";
-						}
+
+						// Set the active squre button text to black
+						setChildColor(buttonDivId, "h1", "#000");
 					}
 
 					// Add hover to each of the rows
 					for(var i=0; i < professionRows.length; i++){
 						$("[id='" + professionRows[i] + "']").hover(function(){
-							setRowTextColor(this.id, "#fff");
+							setChildColor(this.id, "a", "#fff");
 						},
 						function(){
-							setRowTextColor(this.id, "#000");
+							setChildColor(this.id, "a", "#000");
 						});
 					}
 				{% endif %}
@@ -151,25 +173,25 @@
 					</tr>
 					<tr>
 						<td width="34%">
-							<table class="squareButtonTable">
+							<table class="squareButtonTable" id="squareButtonTable">
 								<thead>
 								</thead>
 								<tr>
 									<script>
-									document.write(getSquareButtonColumn("Acting &amp; Performing", "filterProfessions('acting');", 'actingSquareButton'));
-									document.write(getSquareButtonColumn("Creative Positions", "filterProfessions('creative');", 'creativeSquareButton'));
+									addSquareButtonColumn("Acting &amp; Performing", "filterProfessions('acting');", 'actingSquareButton');
+									addSquareButtonColumn("Creative Positions", "filterProfessions('creative');", 'creativeSquareButton');
 									</script>
 								</tr>
 								<tr>
 									<script>
-									document.write(getSquareButtonColumn("Production - On set", "filterProfessions('onSetProduction');", 'onSetProductionSquareButton'));
-									document.write(getSquareButtonColumn("Production - Off set", "filterProfessions('offSetProduction');", 'offSetProductionSquareButton'));
+									addSquareButtonColumn("Production - On set", "filterProfessions('onSetProduction');", 'onSetProductionSquareButton');
+									addSquareButtonColumn("Production - Off set", "filterProfessions('offSetProduction');", 'offSetProductionSquareButton');
 									</script>
 								</tr>
 								<tr>
 									<script>
-									document.write(getSquareButtonColumn("Pre Production", "filterProfessions('preProduction');", 'preProductionSquareButton'));
-									document.write(getSquareButtonColumn("Post Production", "filterProfessions('postProduction');", 'postProductionSquareButton'));
+									addSquareButtonColumn("Pre Production", "filterProfessions('preProduction');", 'preProductionSquareButton');
+									addSquareButtonColumn("Post Production", "filterProfessions('postProduction');", 'postProductionSquareButton');
 									</script>
 								</tr>
 							</table>

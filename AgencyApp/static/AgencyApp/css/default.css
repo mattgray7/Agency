@@ -112,10 +112,6 @@
 		vertical-align: middle;
 	}
 
-	.squareButton h1:hover {
-		color: #000;
-	}
-
 	.squareButtonActive
 	{
 		width: 147px;
@@ -132,7 +128,6 @@
 	}
 
 	.squareButtonActive h1 {
-		color: #000;
 		display: table-cell;
 		vertical-align: middle;
 	}
