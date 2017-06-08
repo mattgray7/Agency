@@ -223,6 +223,8 @@
 		</div>
 
 		<script>
+		var hireTypes = ["hireProject", "hirePermanent", "casting", "collaborating"];
+
 		function selectHireProject(){
 			console.log('selectHireProject')
 		}
@@ -238,6 +240,34 @@
 		function selectCollaborating(){
 			console.log('selectCollaborating')
 		}
+
+		function addPanelHover(panelType){
+			var panelId = panelType + "PanelCell";
+			$("[id='" + panelId + "']").hover(function(){
+				this.style.background = "#4f4f4f";
+				var children = this.getElementsByTagName("td");
+				for(var i=0; i < children.length; i++){
+					children[i].style.background = "#4f4f4f";
+					children[i].style.color = "#FFF";
+					children[i].cursor = "pointer";
+				}
+			},
+			function(){
+				this.style.background = "#efefef";
+				var children = this.getElementsByTagName("td");
+				for(var i=0; i < children.length; i++){
+					children[i].style.background = "#efefef";
+					children[i].style.color = "#000";
+				}
+			});
+		}
+
+		$(document).ready(function(){
+			for(var i=0; i < hireTypes.length; i++){
+				addPanelHover(hireTypes[i]);
+			};
+		});
+
 		</script>
 
 		<div id="hireInterestDiv" style="display:none;">
@@ -249,7 +279,7 @@
 					</div>
 					<table class="hireOptionTable">
 						<tr>
-							<td>
+							<td id="hireProjectPanelCell">
 								<table class="hireTableColumn">
 									<tr style="height:30px; overflow:hidden;">
 										<td>
@@ -275,7 +305,7 @@
 								</table>
 							</td>
 
-							<td>
+							<td id="hirePermanentPanelCell">
 								<table class="hireTableColumn">
 									<tr style="height:30px; overflow:hidden;">
 										<td>
@@ -301,7 +331,7 @@
 								</table>
 							</td>
 
-							<td >
+							<td id="castingPanelCell">
 								<table class="hireTableColumn">
 									<tr style="height:15px; overflow:hidden;">
 										<td>
@@ -327,7 +357,7 @@
 								</table>
 							</td>
 
-							<td>
+							<td id="collaboratingPanelCell">
 								<table class="hireTableColumn">
 									<tr style="height:15px; overflow:hidden;">
 										<td>
