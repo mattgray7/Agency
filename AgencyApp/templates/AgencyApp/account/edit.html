@@ -32,7 +32,7 @@
 
 		function toggleProfession(profession){
 			var professionCheckbox = document.getElementById(profession + "_checkbox");
-			var professionRowID = profession + "_rowID";
+			var professionRowID = profession + "_selectedRowID";
 			if(chosenProfessionList.indexOf(profession) >= 0){
 				if(professionCheckbox != null){
 					professionCheckbox.checked = false;
@@ -56,6 +56,12 @@
 				newProfessionCell.className = "professionsSelectColumn"
 				newProfessionCell.onclick = '"toggleProfession(' + "'" + profession + "'" + ');"';
 				newProfessionCell.innerHTML = "<a> " + profession + "</a><a onclick='toggleProfession(" + '"' + profession + '"' + ");' style='float:right; margin: 0px 5px 0px 0px;' /> X</a>";
+				$("[id='" + professionRowID + "']").hover(function(){
+						setRowTextColor(this.id, "#fff");
+					},
+					function(){
+						setRowTextColor(this.id, "#000");
+				});
 			}
 		}
 
@@ -66,6 +72,14 @@
 				chosenProfessionList.splice(professionIndex, 1);		// Second argument is # of elements to cutout
 				var professionRow = document.getElementById(professionRowID);
     			professionRow.parentNode.removeChild(professionRow);
+			}
+		}
+
+		function setRowTextColor(rowID, color){
+			var row = document.getElementById(rowID);
+			var links = row.getElementsByTagName("a");
+			for(var i=0; i < links.length; i++){
+				links[i].style.color = color;
 			}
 		}
 
@@ -84,17 +98,25 @@
 			var professionChoiceDiv = document.getElementById("professionChoicePanel")
 			if(professionChoiceDiv != null){
 				{% if professions %}
+					// Add profession choices to panel
 					var professionListString = "<table class='professionsSelectList'>";
 					var professions = {{ professions|safe }};
+					var professionRows = [];
+					var professionCols = [];
 					for(var i=0; i < professions[key].length; i++){
 						var checkedValue = "";
 						if(chosenProfessionList.indexOf(professions[key][i]) >= 0){
 							checkedValue = "checked";
 						}
-						professionListString += "<tr><td class='professionsSelectColumn' onclick='toggleProfession(" + '"' + professions[key][i] + '");' + "'><a> " + professions[key][i] + "</a><input type='checkbox' id='" + professions[key][i] + "_checkbox' " + checkedValue + " style='float:right; margin: 8px 5px 0px 0px;' /></td></tr>";
+						var rowID = professions[key][i] + "_rowID";		//put the hover on the row element
+						professionRows.push(rowID);
+						var colID = professions[key][i] + "_colID";		//change the 
+						professionListString += "<tr id='" + rowID + "'><td class='professionsSelectColumn' id='" + colID + "'onclick='toggleProfession(" + '"' + professions[key][i] + '");' + "'><a> " + professions[key][i] + "</a><input type='checkbox' id='" + professions[key][i] + "_checkbox' " + checkedValue + " style='float:right; margin: 8px 5px 0px 0px;' /></td></tr>";
 					}
 					professionListString += "</table>";
 					document.getElementById("professionChoicePanel").innerHTML = professionListString;
+
+					// Add active class to square buttons
 					var professionFilterButtonDiv = document.getElementById(key + "SquareButton");
 					if(professionFilterButtonDiv != null){
 						professionFilterButtonDiv.className = "squareButtonActive";
@@ -102,6 +124,16 @@
 						if(professionFilterButtonParentDiv != null){
 							professionFilterButtonParentDiv.className = "squareButtonCellActive";
 						}
+					}
+
+					// Add hover to each of the rows
+					for(var i=0; i < professionRows.length; i++){
+						$("[id='" + professionRows[i] + "']").hover(function(){
+							setRowTextColor(this.id, "#fff");
+						},
+						function(){
+							setRowTextColor(this.id, "#000");
+						});
 					}
 				{% endif %}
 			}
