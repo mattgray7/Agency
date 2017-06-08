@@ -11,7 +11,6 @@
 
 	{% if next == possibleDestinations.interests %}
 		<script>
-
 		var chosenProfessionList = []
 		var activeFilter = "acting"
 		var professionInterests = ["acting", "creative", "preProduction", "postProduction", "onSetProduction", "offSetProduction"];
@@ -224,6 +223,122 @@
 		</div>
 
 		<script>
+		function selectHireProject(){
+			console.log('selectHireProject')
+		}
+
+		function selectHirePermanent(){
+			console.log('selectHirePermanent')
+		}
+
+		function selectCasting(){
+			console.log('selectCasting')
+		}
+
+		function selectCollaborating(){
+			console.log('selectCollaborating')
+		}
+		</script>
+
+		<div id="hireInterestDiv" style="display:none;">
+			<div id="wrapper" width="700px;">
+				<div id="four-column" class="container">
+					<div class="title">
+						<h2>What are your interests?</h2>
+						<span class="byline">Specify your hiring needs</span>
+					</div>
+					<table class="hireOptionTable">
+						<tr>
+							<td>
+								<table class="hireTableColumn">
+									<tr>
+										<td class="box1">
+											<h2>Hire position for a project</h2>
+											<span class="fa fa-cloud-download"></span>
+										</td>
+									</tr>
+									<tr>
+										<td class="box1">
+											<h4>Hire position for a project description</h4>
+										</td>
+									</tr>
+									<tr>
+										<td class="box1">
+											<a onclick="selectHireProject()" class="button button-alt button-bottom">Hiring - Project</a>
+										</td>
+									</tr>
+								</table>
+							</td>
+
+							<td>
+								<table class="hireTableColumn">
+									<tr>
+										<td class="box2">
+											<h2>Hire for permanent position</h2>
+											<span class="fa fa-cloud-download"></span>
+										</td>
+									</tr>
+									<tr>
+										<td class="box2">
+											<h4>Hire for permanent or contract position description</h4>
+										</td>
+									</tr>
+									<tr>
+										<td class="box2">
+											<a onclick="selectHirePermanent()" class="button button-alt button-bottom">Hiring - Permanent</a>
+										</td>
+									</tr>
+								</table>
+							</td>
+
+							<td >
+								<table class="hireTableColumn">
+									<tr>
+										<td class="box3">
+											<h2>Cast a role for a project</h2>
+											<span class="fa fa-cloud-download"></span>
+										</td>
+									</tr>
+									<tr>
+										<td class="box3">
+											<h4>Casting post description</h4>
+										</td>
+									</tr>
+									<tr>
+										<td class="box3">
+											<a onclick="selectCasting()" class="button button-alt button-bottom">Casting</a>
+										</td>
+									</tr>
+								</table>
+							</td>
+
+							<td>
+								<table class="hireTableColumn">
+									<tr>
+										<td class="box4">
+											<h2>Looking for collaborators</h2>
+											<span class="fa fa-cloud-download"></span>
+										</td>
+									</tr>
+									<tr>
+										<td class="box4">
+											<h4>Looking for collaborators description</h4>
+										</td>
+									</tr>
+									<tr>
+										<td class="box4">
+											<a onclick="selectCollaborating()" class="button button-alt button-bottom">Collaborating</a>
+										</td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+		</div>
+
+		<script>
 
 		function selectWorkInterest(){
 			document.getElementById("interestsDiv").innerHTML = "";
@@ -237,7 +352,13 @@
 		}
 
 		function selectHireInterest(){
-			console.log("hire selected");
+			document.getElementById("interestsDiv").innerHTML = "";
+			document.getElementById("hireInterestDiv").style.display = "block";
+			{% if existingHireInterests %}
+				{% for hireInterest in existingHireInterests %}
+					toggleHireInterest("{{hireInterest.subInterest}}")
+				{% endfor %}
+			{% endif %}
 		}
 
 		function selectOtherInterest(){
@@ -280,12 +401,14 @@
 						</tr>
 						<tr>
 							<td class="boxA">
+								<br>
 								<a onclick="selectWorkInterest()" class="button button-alt button-bottom">Looking for a job</a>
 							</td>
 							<td class="boxB">
 								<a onclick="selectHireInterest()" class="button button-alt button-bottom">Looking to hire, collaborate, or cast a role</a>
 							</td>
 							<td class="boxC">
+								<br>
 								<a onclick="selectOtherInterest()" class="button button-alt button-bottom">Other</a>
 							</td>
 						</tr>
