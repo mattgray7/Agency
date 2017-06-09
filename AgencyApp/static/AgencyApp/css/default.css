@@ -144,6 +144,11 @@
 		color: #000;
 	}
 
+	.hireButtonWidth
+	{
+		width: 100%;
+	}
+
 	#interestsDiv
 	{
 		display: table-cell;
@@ -404,7 +409,6 @@
 		display: inline-block;
 		padding: 1em 3em 1em 3em;
 		letter-spacing: 0.10em;
-		margin-top: 2em;
 		border: 3px solid #000;
 		border-radius: 6px;
 		text-decoration: none;
