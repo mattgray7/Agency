@@ -108,14 +108,14 @@
 
 	.hireTableButton
 	{
-		width:67%;
+		height: 50px;
 	}
 
 	.hireTableColumn
 	{
-		height: 450px;
+		height: 400px;
 		table-layout:fixed;
-		width: 100%;
+		width: 200px;
 		cursor: pointer;
 		border: 3px solid #000;
 		border-radius: 4px;
@@ -126,9 +126,9 @@
 
 	.hireTableColumnActive
 	{
-		height: 450px;
+		height: 400px;
 		table-layout:fixed;
-		width: 100%;
+		width: 200px;
 		cursor: pointer;
 		border: 3px solid #000;
 		border-radius: 4px;
@@ -446,7 +446,7 @@
 	.grayHover:hover
 	{
 		color: #FFF;
-		background: #727171;
+		background: #bababa;
 	}
 
 	.greenHover:hover
@@ -526,6 +526,7 @@
 	.box3,
 	.box4
 	{
+		width: 20%;
 	}
 	
 	.box1,
@@ -539,7 +540,6 @@
 	.box4
 	{
 		/*float: right;*/
-		float: left;
 		margin-right: 20px;
 	}
 	
