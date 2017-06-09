@@ -44,11 +44,11 @@ class UserAccount(models.Model):
     def __str__(self):
         return self.username
 
-class Profession(models.Model):
+class Interest(models.Model):
     username = models.CharField(max_length=100)
     mainInterest = models.CharField(max_length=100) #work/hire
     subInterest = models.CharField(max_length=100) #acting/onset/offset/preprod/creative/postprod or #hiring/hiring_permanent/casting/collaborating
-    professionName = models.CharField(max_length=100)
+    professionName = models.CharField(max_length=100)   # only for work interest
 
     def __str__(self):
         return self.professionName

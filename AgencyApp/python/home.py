@@ -5,12 +5,11 @@ from django.contrib import messages
 from django.http import HttpResponseRedirect
 from forms import *
 
-from models import UserAccount, Profession
-
 import helpers
 import constants
 import helpers
 import genericViews as views
+import models
 
 
 class HomeView(views.GenericFormView):

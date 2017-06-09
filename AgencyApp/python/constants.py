@@ -78,7 +78,7 @@ PROFESSIONS = {"acting": ["Actor", "Dancer", "Extra", "Stand-in", "Model", "Voic
 			   					  "Music Supervisor", "Music Editor", "Producer", "Sound Editor", "Sound Engineer",
 			   					  "VFX Artist", "VFX Supervisor"]}
 
-
+HIRE_TYPES = ["hireProject", "hirePermanent", "casting", "collaborating"]
 COLLABORATOR_OPTIONS = ["Director", "Director of photography", "Musical artist", "Screenwriter", "Story writer", "Other"]
 
 ACTOR_ATTRIBUTE_DICT = [{"name": "Hair color",

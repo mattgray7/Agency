@@ -209,7 +209,7 @@ class EditInterestsView(GenericEditAccountView):
     @property
     def existingProfessions(self):
         if self._existingProfessions is None:
-            self._existingProfessions = models.Profession.objects.filter(username=self.username, mainInterest="work")
+            self._existingProfessions = models.Interest.objects.filter(username=self.username, mainInterest="work")
         return self._existingProfessions
 
     @property
@@ -241,20 +241,28 @@ class EditInterestsView(GenericEditAccountView):
     def processForm(self):
         """Overriding asbtract method"""
         interestType = self.request.POST.get("interestType", "work")
-        models.Profession.objects.filter(username=self.username, mainInterest=interestType).delete()
-        for formInput in self.request.POST:
-            if formInput.startswith("profession."):
-                profession = formInput.split(".")[1]
-                subInterest = self.getProfessionInterest(profession)
-                matchingProfessions = models.Profession.objects.filter(username=self.username, mainInterest=interestType,
-                                                                       subInterest=subInterest, professionName=profession)
-                if not matchingProfessions:
-                    newProfession = models.Profession(username=self.username, mainInterest=interestType,
-                                                      subInterest=subInterest, professionName=profession)
-                    newProfession.save()
-                else:
-                    #TODO
-                    pass
+        models.Interest.objects.filter(username=self.username, mainInterest=interestType).delete()
+        if interestType == "work":
+            for formInput in self.request.POST:
+                if formInput.startswith("profession."):
+                    profession = formInput.split(".")[1]
+                    subInterest = self.getProfessionInterest(profession)
+                    matchingProfessions = models.Interest.objects.filter(username=self.username, mainInterest=interestType,
+                                                                           subInterest=subInterest, professionName=profession)
+                    if not matchingProfessions:
+                        newProfession = models.Interest(username=self.username, mainInterest=interestType,
+                                                        subInterest=subInterest, professionName=profession)
+                        newProfession.save()
+        elif interestType == "hire":
+            for formInput in self.request.POST:
+                if formInput.startswith("hireType."):
+                    hireType = formInput.split(".")[1]
+                    newHireInterest = models.Interest.objects.filter(username=self.username, mainInterest=interestType,
+                                                                     subInterest=hireType)
+                    if not newHireInterest:
+                        newHireInterest = models.Interest(username=self.username, mainInterest=interestType,
+                                                          subInterest=hireType)
+                        newHireInterest.save()
         return True
 
 
@@ -284,8 +292,8 @@ class EditProfessionsView(GenericEditAccountView):
     @property
     def pageContext(self):
         try:
-            self._pageContext["selectedProfessions"] = [x.professionName for x in models.Profession.objects.filter(username=self.username)]
-        except models.Profession.DoesNotExist:
+            self._pageContext["selectedProfessions"] = [x.professionName for x in models.Interest.objects.filter(username=self.username)]
+        except models.Interest.DoesNotExist:
             self._pageContext["selectedProfessions"] = []
         self._pageContext["professionList"] = constants.PROFESSIONS
         return self._pageContext
@@ -293,9 +301,9 @@ class EditProfessionsView(GenericEditAccountView):
     def processForm(self):
         """Overriding asbtract method"""
         professionsSelected = self.formData.getlist("professions")
-        models.Profession.objects.filter(username=self.username).delete()
+        models.Interest.objects.filter(username=self.username).delete()
         for profession in professionsSelected:
-            entry = models.Profession(username=self.username, professionName=profession)
+            entry = models.Interest(username=self.username, professionName=profession)
             try:
                 entry.save()
             except Exception as e:

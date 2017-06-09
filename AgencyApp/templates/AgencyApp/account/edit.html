@@ -34,14 +34,20 @@
 			});
 		}
 
-		function submitForm(){
+		function submitForm(formType){
 			// Submits the submit profession button
 			var formButtonDiv = document.getElementById("continueButton");
 			var extraInputs = []
-            for(var i=0; i < chosenProfessionList.length; i++){
-            	var profession = chosenProfessionList[i];
-            	extraInputs.push({key: "profession." + profession, value: true})
-            }
+			extraInputs.push({key: "interestType", value: formType})
+			if(formType === "work"){
+	            for(var i=0; i < chosenProfessionList.length; i++){
+	            	extraInputs.push({key: "profession." + chosenProfessionList[i], value: true})
+	            }
+	        }else if(formType === "hire"){
+	        	for(var i=0; i < chosenHireTypes.length; i++){
+	        		extraInputs.push({key: "hireType." + chosenHireTypes[i], vlaue: true})
+	        	}
+	        }
 			var form = createPageRedirectForm("{{next}}", "{{next}}", "{{destination}}", "{{currentPageURL}}", extraInputs, null);
 			form.submit();
 		}
@@ -214,7 +220,7 @@
 						<td colspan="3">
 							<center>
 								<div id="cancelButton" class="wrapperButton"><div id="cancelButtonLabel">Back</div></div>
-								<div id="continueButton" class="wrapperButton" onclick="submitForm()"><div id="continueButtonLabel">Continue</div>
+								<div id="continueButton" class="wrapperButton" onclick="submitForm('work')"><div id="continueButtonLabel">Continue</div>
 							</center>
 						</td>
 					</tr>
@@ -485,7 +491,7 @@
 								</div>'
 							</td>
 							<td colspan="2" style="position:relative; height:100px;">
-								<div id="continueButton" class="whiteButton blackHover" style="width:330px; position:absolute; top:0; left:0;" onclick="submitForm()">
+								<div id="continueButton" class="whiteButton blackHover" style="width:330px; position:absolute; top:0; left:0;" onclick="submitForm('hire')">
 									<div id="continueButtonLabel"><br>Continue<br><br></div>
 								</div>
 							</td>
