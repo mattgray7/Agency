@@ -17,6 +17,7 @@ class ProfileView(views.GenericFormView):
         self._profileUserAccount = None
         self._profileProfessions = None
         self._profilePosts = None
+        self._profileInterests = None
 
     @property
     def currentPageURL(self):
@@ -39,6 +40,18 @@ class ProfileView(views.GenericFormView):
                 # get the rest of the profile attributes
                 self._profileUserAccount = models.UserAccount.objects.get(username=self._desiredProfileUsername)
         return self._profileUserAccount
+
+    @property
+    def profileInterests(self):
+        if self._profileInterests is None:
+            self._profileInterests = {"work": None, "hire": None}
+            workInterests = models.Interest.objects.filter(username=self._desiredProfileUsername, mainInterest="work")
+            hireInterests = models.Interest.objects.filter(username=self._desiredProfileUsername, mainInterest="hire")
+            if workInterests:
+                self._profileInterests["work"] = workInterests;
+            if hireInterests:
+                self._profileInterests["hire"] = hireInterests;
+        return self._profileInterests
 
     @property
     def profileProfessions(self):
@@ -69,6 +82,7 @@ class ProfileView(views.GenericFormView):
         self._pageContext["viewingOwnProfile"] = self.userViewingOwnProfile
         self._pageContext["profileUserAccount"] = self.profileUserAccount
         self._pageContext["profileProfessions"] = self.profileProfessions
+        self._pageContext["profileInterests"] = self.profileInterests
         self._pageContext["profilePosts"] = self.profilePosts
         self._pageContext["possibleDestinations"] = {"picture": constants.EDIT_PROFILE_PICTURE,
                                                      "background": constants.EDIT_BACKGROUND,

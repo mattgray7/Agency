@@ -48,16 +48,39 @@
 		<br>
 
 		<!-- Interests -->
-		<h3> {{ profileUserAccount.firstName }} is looking for... </h3>
+		<h3> Interests: </h3>
 		<ul>
-			{% if profileUserAccount.workInterest %}
-				<li>Crew work</li>
+			{% if profileInterests.work %}
+				<li>
+					<script>
+						function getTruncatedProfessionList(){
+							var professionString = "";
+							{% if profileInterests.work %}
+								var addProfession = true;
+								{% for interest in profileInterests.work %}
+									if(professionString.length < 30){
+										professionString += "{{ interest.professionName }}"
+									}else{
+										if(addProfession){
+											professionString += " and " + ({{ profileInterests.work|length }} - {{ forloop.counter }}) + " more jobs."
+											addProfession = false;
+										}
+									}
+									if(addProfession){
+										professionString += ", ";
+									}
+								{% endfor %}
+							{% endif %}
+							return professionString
+						}
+						document.write("Seeking work as a " + getTruncatedProfessionList());
+					</script>
+
+				</li>
 			{% endif %}
-			{% if profileUserAccount.crewInterest %}
-				<li>Production crew members</li>
-			{% endif %}
-			{% if profileUserAccount.collaborationInterest %}
-				<li>Collaborators</li>
+			{% if profileInterests.hire %}
+				<li>Hiring!
+				</li>
 			{% endif %}
 			{% if profileUserAccount.actingInterest %}
 				<li>
@@ -76,9 +99,6 @@
 						</form>
 					{% endif %}
 				</li>
-			{% endif %}
-			{% if profileUserAccount.castingInterest %}
-				<li>Actors and extras for a project</li>
 			{% endif %}
 		</ul>
 		{% if viewingOwnProfile %}
