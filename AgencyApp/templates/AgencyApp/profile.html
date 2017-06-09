@@ -79,8 +79,20 @@
 				</li>
 			{% endif %}
 			{% if profileInterests.hire %}
-				<li>Hiring!
-				</li>
+				{% for interest in profileInterests.hire %}
+					{% if interest.subInterest == "hireProject" %}
+						<li>Hiring for a project</li>
+					{% endif %}
+					{% if interest.subInterest == "hirePermanent" %}
+						<li>Hiring for a permanent position</li>
+					{% endif %}
+					{% if interest.subInterest == "casting" %}
+						<li>Casting roles for a project</li>
+					{% endif %}
+					{% if interest.subInterest == "collaborating" %}
+						<li>Looking for collaborators</li>
+					{% endif %}
+				{% endfor %}
 			{% endif %}
 			{% if profileUserAccount.actingInterest %}
 				<li>
