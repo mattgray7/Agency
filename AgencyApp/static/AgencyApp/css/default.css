@@ -141,8 +141,7 @@
 		border: 3px solid #000;
 		border-radius: 4px;
 		background: #232323;
-		/*color: #000;
-		top:0 ;*/
+		color: #000;
 	}
 
 	.hireTableColumnElement
@@ -392,6 +391,52 @@
 		cursor: pointer;
 	}
 
+	.blackButtonWhiteText
+	{
+		display: inline-block;
+		padding: 1em 2em 1em 2em;
+		letter-spacing: 0.10em;
+		margin-top: 2em;
+		padding: 1.40em 3em;
+		border: 3px solid #000;
+		border-radius: 6px;
+		text-decoration: none;
+		font-weight: 700;
+		font-size: 1em;
+		color: #FFF;
+		cursor: pointer;
+		background: #232323;
+	}
+
+	.blackButtonWhiteText:hover
+	{
+		color: #000;
+		background: #FFF;
+	}
+
+	.whiteButtonBlackText
+	{
+		display: inline-block;
+		padding: 1em 2em 1em 2em;
+		letter-spacing: 0.10em;
+		margin-top: 2em;
+		padding: 1.40em 3em;
+		border: 3px solid #000;
+		border-radius: 6px;
+		text-decoration: none;
+		font-weight: 700;
+		font-size: 1em;
+		color: #000;
+		cursor: pointer;
+		background: #FFF;
+	}
+
+	.whiteButtonBlackText:hover
+	{
+		color: #FFF;
+		background: #232323;
+	}
+
 	.wrapperButton
 	{
 		display: inline-block;
@@ -469,7 +514,9 @@
 	
 	.box4
 	{
-		float: right;
+		/*float: right;*/
+		float: left;
+		margin-right: 20px;
 	}
 	
 /*********************************************************************************/
