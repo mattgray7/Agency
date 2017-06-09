@@ -106,9 +106,14 @@
 		cursor: pointer;
 	}*/
 
+	.hireTableButton
+	{
+		width:67%;
+	}
+
 	.hireTableColumn
 	{
-		height: 590px;
+		height: 450px;
 		table-layout:fixed;
 		width: 100%;
 		cursor: pointer;
@@ -119,22 +124,9 @@
 		top:0 ;
 	}
 
-	.hireTableColumn:hover
-	{
-		height: 590px;
-		table-layout:fixed;
-		width: 100%;
-		cursor: pointer;
-		border: 3px solid #000;
-		border-radius: 4px;
-		background: #4f4f4f;
-		color: #FFF;
-		top:0 ;
-	}
-
 	.hireTableColumnActive
 	{
-		height: 590px;
+		height: 450px;
 		table-layout:fixed;
 		width: 100%;
 		cursor: pointer;
@@ -391,13 +383,12 @@
 		cursor: pointer;
 	}
 
-	.blackButtonWhiteText
+	.blackButton
 	{
 		display: inline-block;
-		padding: 1em 2em 1em 2em;
+		padding: 1em 3em 1em 3em;
 		letter-spacing: 0.10em;
 		margin-top: 2em;
-		padding: 1.40em 3em;
 		border: 3px solid #000;
 		border-radius: 6px;
 		text-decoration: none;
@@ -408,19 +399,12 @@
 		background: #232323;
 	}
 
-	.blackButtonWhiteText:hover
-	{
-		color: #000;
-		background: #FFF;
-	}
-
-	.whiteButtonBlackText
+	.whiteButton
 	{
 		display: inline-block;
-		padding: 1em 2em 1em 2em;
+		padding: 1em 3em 1em 3em;
 		letter-spacing: 0.10em;
 		margin-top: 2em;
-		padding: 1.40em 3em;
 		border: 3px solid #000;
 		border-radius: 6px;
 		text-decoration: none;
@@ -431,10 +415,50 @@
 		background: #FFF;
 	}
 
-	.whiteButtonBlackText:hover
+	.grayButton
+	{
+		display: inline-block;
+		padding: 1em 3em 1em 3em;
+		letter-spacing: 0.10em;
+		margin-top: 2em;
+		border: 3px solid #000;
+		border-radius: 6px;
+		text-decoration: none;
+		font-weight: 700;
+		font-size: 1em;
+		color: #FFF;
+		cursor: pointer;
+		background: #a3a3a3;
+	}
+
+	.blackHover:hover
 	{
 		color: #FFF;
 		background: #232323;
+	}
+
+	.whiteHover:hover
+	{
+		color: #000;
+		background: #FFF;
+	}
+
+	.grayHover:hover
+	{
+		color: #FFF;
+		background: #727171;
+	}
+
+	.greenHover:hover
+	{
+		color: #000;
+		background: #d2ffcc;
+	}
+
+	.redHover:hover
+	{
+		color: #000;
+		background: #f7c3c3;
 	}
 
 	.wrapperButton

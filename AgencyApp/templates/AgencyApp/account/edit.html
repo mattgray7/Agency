@@ -253,9 +253,11 @@
 					children[i].cursor = "pointer";
 				}
 
+				// Change hover on activation
 				var childrenButtons = panel.getElementsByTagName("a");
 				for (var i=0; i < childrenButtons.length; i++){
-					childrenButtons[i].className = "whiteButtonBlackText";
+					//childrenButtons[i].className = "whiteButton redHover";
+					childrenButtons[i].text = "Disable";
 				}
 			}
 		}
@@ -272,56 +274,58 @@
 			var panel = document.getElementById(hireType + "PanelCell")
 			if(panel != null){
 				panel.className = "hireTableColumn";
-				panel.style.background = "#4f4f4f";
+				panel.style.background = "#e0dede";
 				var children = panel.getElementsByTagName("td");
 				for(var i=0; i < children.length; i++){
-					children[i].style.background = "#4f4f4f";
-					children[i].style.color = "#FFF";
+					children[i].style.background = "#e0dede";
+					children[i].style.color = "#000";
 					children[i].cursor = "pointer";
 				}
 
+				// Change hover on activation
 				var childrenButtons = panel.getElementsByTagName("a");
 				for (var i=0; i < childrenButtons.length; i++){
-					childrenButtons[i].className = "blackButtonWhiteText";
+					childrenButtons[i].text = "Enable";
 				}
 			}
 		}
 
 		function addPanelHover(panelType){
 			var panelId = panelType + "PanelCell";
+			var panel = document.getElementById(panelId);
+			var buttonId = panelType + "ToggleButton";
 			$("[id='" + panelId + "']").hover(function(){
-				if(!this.className.endsWith("Active")){
-					this.style.background = "#4f4f4f";
-					var children = this.getElementsByTagName("td");
-					for(var i=0; i < children.length; i++){
-						children[i].style.background = "#4f4f4f";
-						children[i].style.color = "#FFF";
-						children[i].cursor = "pointer";
-					}
-				}else{
-					this.style.background = "#232323";
-					var children = this.getElementsByTagName("td");
+				if(panel.className.endsWith("Active")){
+					/*panel.style.background = "#232323";
+					var children = panel.getElementsByTagName("td");
 					for(var i=0; i < children.length; i++){
 						children[i].style.background = "##232323";
 						children[i].style.color = "#FFF";
+						children[i].cursor = "pointer";
+					}*/
+				}else{
+					panel.style.background = "#e0dede";
+					var children = panel.getElementsByTagName("td");
+					for(var i=0; i < children.length; i++){
+						children[i].style.background = "#e0dede";
+						children[i].style.color = "#000";
 						children[i].cursor = "pointer";
 					}
 				}
 			},
 			function(){
-				if(this.className.endsWith("Active")){
-					setChildColor(this.id, "h1", "#FFF");
-					this.style.background = "#232323";
-					var children = this.getElementsByTagName("td");
+				if(panel.className.endsWith("Active")){
+					setChildColor(panel.id, "h1", "#FFF");
+					panel.style.background = "#232323";
+					var children = panel.getElementsByTagName("td");
 					for(var i=0; i < children.length; i++){
 						children[i].style.background = "#232323";
 						children[i].style.color = "#FFF";
 					}
 				}else{
-					console.log("unhover, not active")
-					setChildColor(this.id, "h1", "#000");
-					this.style.background = "#efefef";
-					var children = this.getElementsByTagName("td");
+					setChildColor(panel.id, "h1", "#000");
+					panel.style.background = "#efefef";
+					var children = panel.getElementsByTagName("td");
 					for(var i=0; i < children.length; i++){
 						children[i].style.background = "#efefef";
 						children[i].style.color = "#000";
@@ -347,7 +351,7 @@
 					</div>
 					<table class="hireOptionTable">
 						<tr>
-							<td id="hireProjectPanelCell" onclick="toggleHireType('hireProject');" class="hireTableColumn">
+							<td id="hireProjectPanelCell" class="hireTableColumn">
 								<table id="hireProjectTable" style="height:100%">
 									<tr style="height:30px; overflow:hidden;">
 										<td class="hireTableColumnElement" style="padding: 0.3em 0em 0em 0.4em">
@@ -367,15 +371,15 @@
 											</div>
 										</td>
 									</tr>
-									<!--<tr>
+									<tr>
 										<td class="box1 hireTableColumnElement">
-											<a onclick="selectHireProject()" class="blackButtonWhiteText button-bottom">Hiring - Project</a>
+											<a onclick="toggleHireType('hireProject');" class="whiteButton grayHover" id="hireProjectToggleButton">Enable</a>
 										</td>
-									</tr>-->
+									</tr>
 								</table>
 							</td>
 
-							<td id="hirePermanentPanelCell" onclick="toggleHireType('hirePermanent');" class="hireTableColumn">
+							<td id="hirePermanentPanelCell" class="hireTableColumn">
 								<table id="hirePermanentTable" style="height:100%">
 									<tr style="height:30px; overflow:hidden;">
 										<td class="hireTableColumnElement" style="padding: 0.3em 0em 0em 0.4em">
@@ -396,15 +400,14 @@
 											</div>
 										</td>
 									</tr>
-									<!--<tr>
+									<tr>
 										<td class="box2 hireTableColumnElement">
-											<a onclick="selectHirePermanent()" class="button button-alt button-bottom">Hiring - Permanent</a>
-										</td>
-									</tr>-->
+											<a onclick="toggleHireType('hirePermanent');" class="whiteButton grayHover" id="hirePermanentToggleButton">Enable</a></td>
+									</tr>
 								</table>
 							</td>
 
-							<td id="castingPanelCell" onclick="toggleHireType('casting');" class="hireTableColumn">
+							<td id="castingPanelCell" class="hireTableColumn">
 								<table id="castingTable" style="height:100%">
 									<tr style="height:15px; overflow:hidden;">
 										<td class="hireTableColumnElement" style="padding: 0.4em 0em 0em 0.4em">
@@ -423,15 +426,15 @@
 											database to find actors available in the Vancouver area.</div>
 										</td>
 									</tr>
-									<!--<tr>
+									<tr>
 										<td class="box3 hireTableColumnElement">
-											<a onclick="selectCasting()" class="button button-alt button-bottom">Casting</a>
+											<a onclick="toggleHireType('casting');" class="whiteButton grayHover" id="castingToggleButton">Enable</a>
 										</td>
-									</tr>-->
+									</tr>
 								</table>
 							</td>
 
-							<td id="collaboratingPanelCell" onclick="toggleHireType('collaborating');" class="hireTableColumn">
+							<td id="collaboratingPanelCell" class="hireTableColumn">
 								<table id="collaboratingTable" style="height:100%">
 									<tr style="height:15px; overflow:hidden;">
 										<td class="hireTableColumnElement" style="padding: 0.4em 0em 0em 0.4em">
@@ -451,12 +454,20 @@
 												looking to collaborate.</div>
 										</td>
 									</tr>
-									<!--<tr>
+									<tr>
 										<td class="box4 hireTableColumnElement">
-											<a onclick="selectCollaborating()" class="button button-alt button-bottom">Collaborating</a>
+											<a onclick="toggleHireType('collaborating');" class="whiteButton grayHover hireTableButton" id="collaboratingToggleButton">Enable</a>
 										</td>
-									</tr>-->
+									</tr>
 								</table>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<center>
+									<div id="cancelButton" class="wrapperButton"><div id="cancelButtonLabel"></div></div>
+									<div id="continueButton" class="wrapperButton" onclick="submitForm()"><div id="continueButtonLabel">Continue</div>
+								</center>
 							</td>
 						</tr>
 					</table>
