@@ -224,40 +224,94 @@
 
 		<script>
 		var hireTypes = ["hireProject", "hirePermanent", "casting", "collaborating"];
+		var chosenHireTypes = [];
 
-		function selectHireProject(){
-			console.log('selectHireProject')
+		function toggleHireType(hireType){
+			if(chosenHireTypes.indexOf(hireType) < 0){
+				activateHireType(hireType);
+			}else{
+				console.log("deactivating hireType")
+				deactivateHireType(hireType);
+			}
 		}
 
-		function selectHirePermanent(){
-			console.log('selectHirePermanent')
+		function activateHireType(hireType){
+			if(chosenHireTypes.indexOf(hireType) < 0){
+				chosenHireTypes.push(hireType);
+			}
+			var checkbox = document.getElementById(hireType + "Checkbox");
+			if(checkbox != null){
+				checkbox.checked = "checked"
+			}
+			var table = document.getElementById(hireType + "Table")
+			if(table != null){
+				table.className = "hireTableColumnActive";
+				var children = table.getElementsByTagName("td");
+				for(var i=0; i < children.length; i++){
+					children[i].style.background = "#232323";
+					children[i].style.color = "#FFF";
+					children[i].cursor = "pointer";
+				}
+			}
 		}
 
-		function selectCasting(){
-			console.log('selectCasting')
-		}
-
-		function selectCollaborating(){
-			console.log('selectCollaborating')
-		}
-
-		function addPanelHover(panelType){
-			var panelId = panelType + "PanelCell";
-			$("[id='" + panelId + "']").hover(function(){
-				this.style.background = "#4f4f4f";
-				var children = this.getElementsByTagName("td");
+		function deactivateHireType(hireType){
+			var hireTypeIndex = chosenHireTypes.indexOf(hireType);
+			if(hireTypeIndex >= 0){
+				chosenHireTypes.splice(hireTypeIndex, 1);		// Second argument is # of elements to cutout
+			}
+			var checkbox = document.getElementById(hireType + "Checkbox");
+			if(checkbox != null){
+				checkbox.checked = false;
+			}
+			var table = document.getElementById(hireType + "Table")
+			if(table != null){
+				table.className = "hireTableColumn";
+				var children = table.getElementsByTagName("td");
 				for(var i=0; i < children.length; i++){
 					children[i].style.background = "#4f4f4f";
 					children[i].style.color = "#FFF";
 					children[i].cursor = "pointer";
 				}
+			}
+		}
+
+		function addPanelHover(panelType){
+			var panelId = panelType + "PanelCell";
+			var tableId = panelType + "Table";
+			var table = document.getElementById(tableId)
+			var tableIsActive = (table != null && table.className.endsWith("Active"));
+			console.log(tableIsActive)
+			$("[id='" + panelId + "']").hover(function(){
+				if(table == null || !table.className.endsWith("Active")){
+					this.style.background = "#4f4f4f";
+					var children = this.getElementsByTagName("td");
+					for(var i=0; i < children.length; i++){
+						children[i].style.background = "#4f4f4f";
+						children[i].style.color = "#FFF";
+						children[i].cursor = "pointer";
+					}
+				}else{
+					console.log("hover is active")
+				}
 			},
 			function(){
-				this.style.background = "#efefef";
-				var children = this.getElementsByTagName("td");
-				for(var i=0; i < children.length; i++){
-					children[i].style.background = "#efefef";
-					children[i].style.color = "#000";
+				if(table != null && table.className.endsWith("Active")){
+					setChildColor(this.id, "h1", "#FFF");
+					this.style.background = "#232323";
+					var children = this.getElementsByTagName("td");
+					for(var i=0; i < children.length; i++){
+						children[i].style.background = "#232323";
+						children[i].style.color = "#FFF";
+					}
+				}else{
+					setChildColor(this.id, "h1", "#000");
+					this.style.background = "#efefef";
+					var children = this.getElementsByTagName("td");
+					for(var i=0; i < children.length; i++){
+						children[i].style.background = "#efefef";
+						children[i].style.color = "#000";
+					}
 				}
 			});
 		}
@@ -279,104 +333,104 @@
 					</div>
 					<table class="hireOptionTable">
 						<tr>
-							<td id="hireProjectPanelCell">
-								<table class="hireTableColumn">
+							<td id="hireProjectPanelCell" onclick="toggleHireType('hireProject');">
+								<table id="hireProjectTable" class="hireTableColumn">
 									<tr style="height:30px; overflow:hidden;">
-										<td>
-											<input type="checkbox" name="hireProject" class="largeCheckbox" style="float:left"/>
+										<td class="hireTableColumnElement">
+											<input type="checkbox" name="hireProject" id="hireProjectCheckbox" class="largeCheckbox" style="float:left"/>
 										</td>
 									</tr>
 									<tr>
-										<td class="box1">
+										<td class="box1 hireTableColumnElement">
 											<h2>Hire position for a project</h2>
 											<span class="fa fa-cloud-download"></span>
 										</td>
 									</tr>
 									<tr>
-										<td class="box1">
+										<td class="box1 hireTableColumnElement">
 											<h4>Hire position for a project description</h4>
 										</td>
 									</tr>
 									<tr>
-										<td class="box1">
+										<td class="box1 hireTableColumnElement">
 											<a onclick="selectHireProject()" class="button button-alt button-bottom">Hiring - Project</a>
 										</td>
 									</tr>
 								</table>
 							</td>
 
-							<td id="hirePermanentPanelCell">
-								<table class="hireTableColumn">
+							<td id="hirePermanentPanelCell" onclick="toggleHireType('hirePermanent');">
+								<table id="hirePermanentTable" class="hireTableColumn">
 									<tr style="height:30px; overflow:hidden;">
-										<td>
-											<input type="checkbox" name="hirePermanent" class="largeCheckbox" style="float:left" />
+										<td class="hireTableColumnElement">
+											<input type="checkbox" name="hirePermanent" id="hirePermanentCheckbox" class="largeCheckbox" style="float:left" />
 										</td>
 									</tr>
 									<tr>
-										<td class="box2">
+										<td class="box2 hireTableColumnElement">
 											<h2>Hire for permanent position</h2>
 											<span class="fa fa-cloud-download"></span>
 										</td>
 									</tr>
 									<tr>
-										<td class="box2">
+										<td class="box2 hireTableColumnElement">
 											<h4>Hire for permanent or contract position description</h4>
 										</td>
 									</tr>
 									<tr>
-										<td class="box2">
+										<td class="box2 hireTableColumnElement">
 											<a onclick="selectHirePermanent()" class="button button-alt button-bottom">Hiring - Permanent</a>
 										</td>
 									</tr>
 								</table>
 							</td>
 
-							<td id="castingPanelCell">
-								<table class="hireTableColumn">
+							<td id="castingPanelCell" onclick="toggleHireType('casting');">
+								<table id="castingTable" class="hireTableColumn">
 									<tr style="height:15px; overflow:hidden;">
-										<td>
-											<input type="checkbox" name="casting" class="largeCheckbox" style="float:left"/>
+										<td class="hireTableColumnElement">
+											<input type="checkbox" name="casting" id="castingCheckbox" class="largeCheckbox" style="float:left"/>
 										</td>
 									</tr>
 									<tr>
-										<td class="box3">
+										<td class="box3 hireTableColumnElement">
 											<h2>Cast a role for a project</h2>
 											<span class="fa fa-cloud-download"></span>
 										</td>
 									</tr>
 									<tr>
-										<td class="box3">
+										<td class="box3 hireTableColumnElement">
 											<h4>Casting post description</h4>
 										</td>
 									</tr>
 									<tr>
-										<td class="box3">
+										<td class="box3 hireTableColumnElement">
 											<a onclick="selectCasting()" class="button button-alt button-bottom">Casting</a>
 										</td>
 									</tr>
 								</table>
 							</td>
 
-							<td id="collaboratingPanelCell">
-								<table class="hireTableColumn">
+							<td id="collaboratingPanelCell" onclick="toggleHireType('collaborating');">
+								<table id="collaboratingTable" class="hireTableColumn">
 									<tr style="height:15px; overflow:hidden;">
-										<td>
-											<input type="checkbox" name="collaborating" class="largeCheckbox" style="float:left"/>
+										<td class="hireTableColumnElement">
+											<input type="checkbox" name="collaborating" id="collaboratingCheckbox" class="largeCheckbox" style="float:left"/>
 										</td>
 									</tr>
 									<tr>
-										<td class="box4">
+										<td class="box4 hireTableColumnElement">
 											<h2>Looking for collaborators</h2>
 											<span class="fa fa-cloud-download"></span>
 										</td>
 									</tr>
 									<tr>
-										<td class="box4">
+										<td class="box4 hireTableColumnElement">
 											<h4>Looking for collaborators description</h4>
 										</td>
 									</tr>
 									<tr>
-										<td class="box4">
+										<td class="box4 hireTableColumnElement">
 											<a onclick="selectCollaborating()" class="button button-alt button-bottom">Collaborating</a>
 										</td>
 									</tr>

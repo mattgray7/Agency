@@ -80,19 +80,24 @@
 		top: 0;
 	}
 
+	.topLeftCheckbox
+	{
+		padding: 0.5em 0.5em 1em 1em;
+	}
+
 	.hireOptionTable
 	{
 		table-layout: fixed; 
 	}
 
-	.hireOptionTable td
+	/*.hireOptionTable td
 	{
 		border: 3px solid #000;
 		border-radius: 4px;
 		background: #efefef;
 		color: #000;
 		top:0 ;
-	}
+	}*/
 
 	/*.hireOptionTable td:hover
 	{
@@ -107,12 +112,45 @@
 		table-layout:fixed;
 		width: 100%;
 		cursor: pointer;
+		border: 3px solid #000;
+		border-radius: 4px;
+		background: #efefef;
+		color: #000;
+		top:0 ;
 	}
 
-	.hireTableColumn td
+	.hireTableColumn:hover
 	{
-		border: 0px;
+		height: 590px;
+		table-layout:fixed;
+		width: 100%;
+		cursor: pointer;
+		border: 3px solid #000;
+		border-radius: 4px;
+		background: #4f4f4f;
+		color: #FFF;
+		top:0 ;
+	}
+
+	.hireTableColumnActive
+	{
+		height: 590px;
+		table-layout:fixed;
+		width: 100%;
+		cursor: pointer;
+		border: 3px solid #000;
+		border-radius: 4px;
+		background: #232323;
+		/*color: #000;
+		top:0 ;*/
+	}
+
+	.hireTableColumnElement
+	{
+		border: none;
 		padding: 1em 1em 1em 1em;
+		background: #efefef;
+		color: #000;
 	}
 
 	#interestsDiv
