@@ -479,6 +479,15 @@
 		background: #f7c3c3;
 	}
 
+	.interestChoiceButton
+	{
+		height: 30px;
+		width: 67%;
+		display: inline-block;
+		padding: 1em 3em 3em 3em;
+		border: 2px solid #000;
+	}
+
 	.wrapperButton
 	{
 		display: inline-block;
