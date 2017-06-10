@@ -511,14 +511,18 @@
 			mainDiv.innerHTML = interestChoiceDiv.innerHTML;
 		}
 
-		function selectWorkInterest(){
+		var workInterestLoaded = false;
+		function selectWorkInterest(firstTimeDisplay){
 			var workInterestDiv = document.getElementById("workInterestDiv");
 			if(workInterestDiv != null){
 				mainDiv.innerHTML = workInterestDiv.innerHTML;
 				{% if existingProfessions %}
-					{% for profession in existingProfessions %}
-						toggleProfession("{{profession.professionName}}")
-					{% endfor %}
+					if(!workInterestLoaded){
+						{% for profession in existingProfessions %}
+							toggleProfession("{{profession.professionName}}")
+						{% endfor %}
+					}
+					workInterestLoaded = true;
 				{% endif %}
 				filterProfessions("acting");
 			}
