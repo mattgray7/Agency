@@ -34,21 +34,71 @@ class UserAccount(models.Model):
 
     profilePicture = models.ImageField(default=None, upload_to=image_directory_path, storage=imageStorage)
     
-    actingInterest = models.BooleanField(default=False)     # looking for acting jobs
     actorDescriptionEnabled = models.BooleanField(default=False)        # enabled physical description
 
     reelLink = models.CharField(max_length=500, default='')
     imdbLink = models.CharField(max_length=500, default='')
     bio = models.CharField(max_length=1000, default='')
 
+    def __init__(self, *args, **kwargs):
+        super(UserAccount, self).__init__(*args, **kwargs)
+        self._actorInterest = None
+        self._workInterest = None
+        self._hireInterest = None
+        self._otherInterest = None
+
     def __str__(self):
         return self.username
 
+    @property
+    def actorInterest(self):
+        if self._actorInterest is None:
+            try:
+                actorInterest = Interest.objects.get(username=self.username, mainInterest="work", subInterest="acting", professionName="Actor")
+            except Interest.DoesNotExist:
+                self._actorInterest = False
+            else:
+                self._actorInterest = True
+        return self._actorInterest
+
+    @property
+    def workInterest(self):
+        if self._workInterest is None:
+            workInterests = Interest.objects.filter(username=self.username, mainInterest="work")
+            if workInterests:
+                self._workInterest = True
+            else:
+                self._workInterest = False
+        return self._workInterest
+
+    @property
+    def hireInterest(self):
+        if self._hireInterest is None:
+            hireInterests = Interest.objects.filter(username=self.username, mainInterest="hire")
+            if hireInterests:
+                self._hireInterest = True
+            else:
+                self._hireInterest = False
+        return self._hireInterest
+
+    @property
+    def otherInterest(self):
+        if self._otherInterest is None:
+            try:
+                otherInterest = Interest.objects.get(username=self.username, mainInterest="other")
+            except Interest.DoesNotExist:
+                self._otherInterest = False
+            else:
+                self._othernterest = True
+        return self._otherInterest
+
+
 class Interest(models.Model):
     username = models.CharField(max_length=100)
-    mainInterest = models.CharField(max_length=100) #work/hire
+    mainInterest = models.CharField(max_length=100) #work/hire/other
     subInterest = models.CharField(max_length=100) #acting/onset/offset/preprod/creative/postprod or #hiring/hiring_permanent/casting/collaborating
     professionName = models.CharField(max_length=100)   # only for work interest
+    actingDescriptionEnabled = models.BooleanField(default=False)      #only for acting interests
 
     def __str__(self):
         return self.professionName
