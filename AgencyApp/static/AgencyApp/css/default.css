@@ -388,6 +388,20 @@
 		cursor: pointer;
 	}
 
+	.profileButton
+	{
+		padding: 0.4em 0.2em 0.4em 0.2em;
+		letter-spacing: 0.10em;
+		border: 1px solid #000;
+		border-radius: 6px;
+		text-decoration: none;
+		font-weight: 700;
+		font-size: 0.8em;
+		color: #000;
+		cursor: pointer;
+		background: #FFF;
+	}
+
 	.blackButton
 	{
 		display: inline-block;
