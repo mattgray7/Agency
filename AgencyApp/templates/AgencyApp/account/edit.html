@@ -21,9 +21,11 @@
 			// Writes a table cell containing a square button
 			var squareButtonString = '<td id="' + idName + '_cell" onclick="' + onclickString + '" ><div class="squareButton" id="' + idName + '"><h1>' + label + '</h1></div></td>';
 			document.write(squareButtonString);
-			var buttonCell = document.getElementById(idName + "_cell");
-			var buttonDiv = document.getElementById(idName);
+			addSquareButtonHover(idName + "_cell")
+		}
 
+		function addSquareButtonHover(idName){
+			var buttonDiv = document.getElementById(idName);
 			$("[id='" + idName + "_cell']").hover(function(){
 				setChildColor(this.id, "h1", "#000");
 			},
@@ -118,6 +120,9 @@
 				var interestDiv = document.getElementById(professionInterests[i] + "SquareButton");
 				if(interestDiv != null){
 					interestDiv.className = "squareButton";
+
+					//Re-add hover listener after the div has been made visible
+					addSquareButtonHover(interestDiv.id)
 				}
 			}
 
