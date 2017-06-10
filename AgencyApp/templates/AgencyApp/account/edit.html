@@ -349,13 +349,6 @@
 				}
 			});
 		}
-
-		$(document).ready(function(){
-			for(var i=0; i < hireTypes.length; i++){
-				addPanelHover(hireTypes[i]);
-			};
-		});
-
 		</script>
 
 		<div id="hiringInterestDiv" style="display:none;">
@@ -539,6 +532,9 @@
 					activateHireType("{{hiringInterest.subInterest}}")
 				{% endfor %}
 			{% endif %}
+			for(var i=0; i < hireTypes.length; i++){
+				addPanelHover(hireTypes[i]);
+			};
 		}
 
 		function selectOtherInterest(){
