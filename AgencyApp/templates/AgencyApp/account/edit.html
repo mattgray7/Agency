@@ -10,6 +10,8 @@
 	{% endif %}
 
 	{% if next == possibleDestinations.interests %}
+		<div id="mainDiv"></div>
+
 		<script>
 		var chosenProfessionList = []
 		var activeFilter = "acting"
@@ -217,12 +219,15 @@
 
 					</tr>
 					<tr>
-						<td colspan="3">
+						<td colspan="3" style="height:100px; width:100%;" onclick="selectInterestChoice();">
 							<center>
-								<div id="cancelButton" class="wrapperButton"><div id="cancelButtonLabel">Back</div></div>
-								<div id="continueButton" class="wrapperButton" onclick="submitForm('work')"><div id="continueButtonLabel">Continue</div>
+								<div id="backButton" class="whiteButton blackHover" style="width:38.6%; float:left;">
+									<div id="backButtonLabel"><br>Back<br><br></div>
+								</div>
+								<div id="continueButton" class="whiteButton blackHover" style="width:38%; float:right; margin: 0px 7px 0px 0px" onclick="submitForm('work')">
+									<div id="continueButtonLabel"><br>Continue<br><br></div>
+								</div>
 							</center>
-						</td>
 					</tr>
 				</table>
 			</div>
@@ -485,9 +490,9 @@
 							</td>
 						</tr>
 						<tr>
-							<td colspan="2" style="position:relative; height:100px">
-								<div id="cancelButton" class="whiteButton blackHover" style="width:330px; position:absolute; top:0; left:0;">
-									<div id="cancelButtonLabel"><br>Back<br><br></div>
+							<td colspan="2" style="position:relative; height:100px" onclick="selectInterestChoice();">
+								<div id="backButton" class="whiteButton blackHover" style="width:330px; position:absolute; top:0; left:0;">
+									<div id="backButtonLabel"><br>Back<br><br></div>
 								</div>'
 							</td>
 							<td colspan="2" style="position:relative; height:100px;">
@@ -502,21 +507,28 @@
 		</div>
 
 		<script>
+		var mainDiv = document.getElementById("mainDiv");
+		function selectInterestChoice(){
+			var interestChoiceDiv = document.getElementById("interestChoiceDiv");
+			mainDiv.innerHTML = interestChoiceDiv.innerHTML;
+		}
 
 		function selectWorkInterest(){
-			document.getElementById("interestsDiv").innerHTML = "";
-			document.getElementById("workInterestDiv").style.display = "block";
-			{% if existingProfessions %}
-				{% for profession in existingProfessions %}
-					toggleProfession("{{profession.professionName}}")
-				{% endfor %}
-			{% endif %}
-			filterProfessions("acting");
+			var workInterestDiv = document.getElementById("workInterestDiv");
+			if(workInterestDiv != null){
+				mainDiv.innerHTML = workInterestDiv.innerHTML;
+				{% if existingProfessions %}
+					{% for profession in existingProfessions %}
+						toggleProfession("{{profession.professionName}}")
+					{% endfor %}
+				{% endif %}
+				filterProfessions("acting");
+			}
 		}
 
 		function selectHiringInterest(){
-			document.getElementById("interestsDiv").innerHTML = "";
-			document.getElementById("hiringInterestDiv").style.display = "block";
+			var hiringInterestDiv = document.getElementById("hiringInterestDiv");
+			mainDiv.innerHTML = hiringInterestDiv.innerHTML
 			{% if existingHiringInterests %}
 				{% for hiringInterest in existingHiringInterests %}
 					activateHireType("{{hiringInterest.subInterest}}")
@@ -528,8 +540,12 @@
 			console.log("other selected");
 		}
 
+		$(document).ready(function(){
+			selectInterestChoice();
+		})
+
 		</script>
-		<div id="interestsDiv">
+		<div id="interestChoiceDiv" style="display: none;">
 			<div id="wrapper" width="700px;">
 				<div id="three-column" class="container">
 					<!-- Back to profile button -->
