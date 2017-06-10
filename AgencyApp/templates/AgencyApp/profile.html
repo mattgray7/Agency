@@ -94,6 +94,9 @@
 					{% endif %}
 				{% endfor %}
 			{% endif %}
+			{% if profileInterests.other %}
+				<li>No interests registered.</li>
+			{% endif %}
 			{% if profileUserAccount.actingInterest %}
 				<li>
 					Acting and extra work

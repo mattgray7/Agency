@@ -250,7 +250,18 @@ class EditInterestsView(GenericEditAccountView):
     def processForm(self):
         """Overriding asbtract method"""
         interestType = self.request.POST.get("interestType", "work")
-        models.Interest.objects.filter(username=self.username, mainInterest=interestType).delete()
+
+        if interestType == "other":
+            # Delete all work and hire interests
+            models.Interest.objects.filter(username=self.username, mainInterest="work").delete()
+            models.Interest.objects.filter(username=self.username, mainInterest="hire").delete()
+        else:
+            # Just delete the existing interests for what you are about to edit
+            models.Interest.objects.filter(username=self.username, mainInterest=interestType).delete()
+
+        # Delete all other interests (if still set to other, will be re-added)
+        models.Interest.objects.filter(username=self.username, mainInterest="other").delete()
+
         if interestType == "work":
             for formInput in self.request.POST:
                 if formInput.startswith("profession."):
@@ -266,12 +277,17 @@ class EditInterestsView(GenericEditAccountView):
             for formInput in self.request.POST:
                 if formInput.startswith("hireType."):
                     hireType = formInput.split(".")[1]
-                    newHireInterest = models.Interest.objects.filter(username=self.username, mainInterest=interestType,
+                    newHireInterests = models.Interest.objects.filter(username=self.username, mainInterest=interestType,
                                                                      subInterest=hireType)
-                    if not newHireInterest:
+                    if not newHireInterests:
                         newHireInterest = models.Interest(username=self.username, mainInterest=interestType,
                                                           subInterest=hireType)
                         newHireInterest.save()
+        elif interestType == "other":
+            newOtherInterests = models.Interest.objects.filter(username=self.username, mainInterest=interestType)
+            if not newOtherInterests:
+                newOtherInterest = models.Interest(username=self.username, mainInterest=interestType)
+                newOtherInterest.save()
         return True
 
 

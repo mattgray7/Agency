@@ -44,13 +44,16 @@ class ProfileView(views.GenericFormView):
     @property
     def profileInterests(self):
         if self._profileInterests is None:
-            self._profileInterests = {"work": None, "hire": None}
+            self._profileInterests = {"work": None, "hire": None, "other": None}
             workInterests = models.Interest.objects.filter(username=self._desiredProfileUsername, mainInterest="work")
             hireInterests = models.Interest.objects.filter(username=self._desiredProfileUsername, mainInterest="hire")
+            otherInterests = models.Interest.objects.filter(username=self._desiredProfileUsername, mainInterest="other")
             if workInterests:
                 self._profileInterests["work"] = workInterests;
             if hireInterests:
                 self._profileInterests["hire"] = hireInterests;
+            if otherInterests:
+                self._profileInterests["other"] = otherInterests;
         return self._profileInterests
 
     @property
