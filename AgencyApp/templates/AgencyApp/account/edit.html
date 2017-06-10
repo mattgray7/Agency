@@ -600,19 +600,37 @@
 						</tr>
 						<tr>
 							<td class="boxA">
-								<div class="whiteButton blackHover interestChoiceButton" onclick="selectWorkInterest()">
-									<br>Looking for a job<br>
-								</div>
+								{% if existingProfessions %}
+									<div class="blackButton whiteHover interestChoiceButton" onclick="selectWorkInterest()">
+										<br>Looking for a job &#10004;<br>
+									</div>
+								{% else %}
+									<div class="whiteButton blackHover interestChoiceButton" onclick="selectWorkInterest()">
+										<br>Looking for a job<br>
+									</div>
+								{% endif %}
 							</td>
-							<td class="boxB">
-								<div class="whiteButton blackHover interestChoiceButton" onclick="selectHiringInterest()">
-									Looking to hire, collaborate, or cast a role
-								</div>
+							<td class="boxB" style="position:relative;">
+								{% if existingHiringInterests %}
+									<div class="blackButton whiteHover interestChoiceButton" style="margin: 0em 0em 2em 0em" onclick="selectHiringInterest()">
+										Looking to hire, collaborate, or cast a role &#10004;
+									</div>
+								{% else %}
+									<div class="whiteButton blackHover interestChoiceButton" onclick="selectHiringInterest()">
+										Looking to hire, collaborate, or cast a role
+									</div>
+								{% endif %}
 							</td>
 							<td class="boxC">
-								<div class="whiteButton blackHover interestChoiceButton" onclick="selectOtherInterest()">
-									<br>Other<br>
-								</div>
+								{% if not existingProfessions and not existingHiringInterests %}
+									<div class="blackButton whiteHover interestChoiceButton" onclick="selectOtherInterest()">
+										<br>Other &#10004;<br>
+									</div>
+								{% else %}
+									<div class="whiteButton blackHover interestChoiceButton" onclick="selectOtherInterest()">
+										<br>Other<br>
+									</div>
+								{% endif %}
 							</td>
 						</tr>
 					</table>
