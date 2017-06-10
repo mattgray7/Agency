@@ -197,6 +197,7 @@ class EditInterestsView(GenericEditAccountView):
     def __init__(self, *args, **kwargs):
         super(EditInterestsView, self).__init__(*args, **kwargs)
         self._existingProfessions = None
+        self._existingHiringInterests = None
 
     @property
     def pageContext(self):
@@ -205,6 +206,7 @@ class EditInterestsView(GenericEditAccountView):
                                                      "profile": constants.PROFILE}
         self._pageContext["professions"] = constants.PROFESSIONS
         self._pageContext["existingProfessions"] = self.existingProfessions
+        self._pageContext["existingHiringInterests"] = self.existingHiringInterests
         return self._pageContext
 
     @property
@@ -212,6 +214,12 @@ class EditInterestsView(GenericEditAccountView):
         if self._existingProfessions is None:
             self._existingProfessions = models.Interest.objects.filter(username=self.username, mainInterest="work")
         return self._existingProfessions
+
+    @property
+    def existingHiringInterests(self):
+        if self._existingHiringInterests is None:
+            self._existingHiringInterests = models.Interest.objects.filter(username=self.username, mainInterest="hire")
+        return self._existingHiringInterests
 
     @property
     def nextButtonString(self):

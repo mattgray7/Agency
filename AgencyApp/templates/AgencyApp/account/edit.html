@@ -348,7 +348,7 @@
 
 		</script>
 
-		<div id="hireInterestDiv" style="display:none;">
+		<div id="hiringInterestDiv" style="display:none;">
 			<div id="wrapper" width="700px;">
 				<div id="four-column" class="container">
 					<div class="title">
@@ -514,12 +514,12 @@
 			filterProfessions("acting");
 		}
 
-		function selectHireInterest(){
+		function selectHiringInterest(){
 			document.getElementById("interestsDiv").innerHTML = "";
-			document.getElementById("hireInterestDiv").style.display = "block";
-			{% if existingHireInterests %}
-				{% for hireInterest in existingHireInterests %}
-					toggleHireInterest("{{hireInterest.subInterest}}")
+			document.getElementById("hiringInterestDiv").style.display = "block";
+			{% if existingHiringInterests %}
+				{% for hiringInterest in existingHiringInterests %}
+					activateHireType("{{hiringInterest.subInterest}}")
 				{% endfor %}
 			{% endif %}
 		}
@@ -578,7 +578,7 @@
 								<a onclick="selectWorkInterest()" class="button button-alt button-bottom">Looking for a job</a>
 							</td>
 							<td class="boxB">
-								<a onclick="selectHireInterest()" class="button button-alt button-bottom">Looking to hire, collaborate, or cast a role</a>
+								<a onclick="selectHiringInterest()" class="button button-alt button-bottom">Looking to hire, collaborate, or cast a role</a>
 							</td>
 							<td class="boxC">
 								<br>
