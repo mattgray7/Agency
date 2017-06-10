@@ -56,7 +56,6 @@ SETUP_ACCOUNT_FINISH = "SETUP_ACCOUNT_FINISH"
 
 EDIT_INTERESTS = "EDIT_INTERESTS"
 EDIT_PROFILE_PICTURE = "EDIT_PROFILE_PICTURE"
-EDIT_PROFESSIONS = "EDIT_PROFESSIONS"
 EDIT_BACKGROUND = "EDIT_BACKGROUND"
 EDIT_ACTOR_DESCRIPTION = "EDIT_ACTOR_DESCRIPTION"
 
@@ -114,7 +113,6 @@ URL_MAP = {HOME: "/",
 		   CREATE_BASIC_ACCOUNT_FINISH: "/account/create/finish/",
 		   SETUP_ACCOUNT_FINISH: "/account/create/finish/",
 		   EDIT_INTERESTS: "/account/edit/interests/",
-		   EDIT_PROFESSIONS: "/account/edit/professions/",
 		   EDIT_PROFILE_PICTURE: "/account/edit/picture/",
 		   EDIT_BACKGROUND: "/account/edit/background/",
 		   EDIT_ACTOR_DESCRIPTION: "/account/edit/description/",
@@ -148,8 +146,7 @@ DEFAULT_PAGE_MAP = {HOME: HOME,
 					# Account creations
 					CREATE_BASIC_ACCOUNT: CREATE_BASIC_ACCOUNT_FINISH,
 					CREATE_BASIC_ACCOUNT_FINISH: EDIT_INTERESTS,
-					EDIT_INTERESTS: EDIT_PROFESSIONS,
-					EDIT_PROFESSIONS: EDIT_PROFILE_PICTURE,
+					EDIT_INTERESTS: EDIT_PROFILE_PICTURE,
 					EDIT_PROFILE_PICTURE: EDIT_BACKGROUND,
 					EDIT_BACKGROUND: HOME,
 					EDIT_ACTOR_DESCRIPTION: HOME,
@@ -184,7 +181,6 @@ FORM_MAP = {HOME: forms.BaseForm,
 			# Account creation
 			CREATE_BASIC_ACCOUNT: forms.CreateAccountForm,
 			EDIT_INTERESTS: forms.EditInterestsForm,
-			EDIT_PROFESSIONS: None,	#manual
 			EDIT_PROFILE_PICTURE: forms.EditPictureForm,
 			EDIT_BACKGROUND: forms.EditBackgroundForm,
 			EDIT_ACTOR_DESCRIPTION: None, #manual
@@ -224,7 +220,6 @@ VIEW_CLASS_MAP = {HOME: home.HomeView,
 			   	  CREATE_BASIC_ACCOUNT: account.CreateAccountView,
 			   	  CREATE_BASIC_ACCOUNT_FINISH: account.CreateAccountFinishView,
 			   	  EDIT_INTERESTS: account.EditInterestsView,
-			   	  EDIT_PROFESSIONS: account.EditProfessionsView,
 			   	  EDIT_PROFILE_PICTURE: account.EditPictureView,
 			   	  EDIT_BACKGROUND: account.EditBackgroundView,
 			   	  EDIT_ACTOR_DESCRIPTION: account.EditActorDescriptionView
@@ -239,11 +234,9 @@ HTML_MAP = {HOME: 'AgencyApp/home.html',
 			CREATE_BASIC_ACCOUNT_FINISH: 'AgencyApp/account/finish.html',
 			SETUP_ACCOUNT_FINISH: 'AgencyApp/account/finish.html',
 			#EDIT_INTERESTS: 'AgencyApp/account/interests.html',
-			EDIT_PROFESSIONS: 'AgencyApp/account/professions.html',
 			#EDIT_BACKGROUND: 'AgencyApp/account/background.html',
 			#EDIT_PROFILE_PICTURE: 'AgencyApp/account/picture.html',
 			EDIT_INTERESTS: 'AgencyApp/account/edit.html',
-			#EDIT_PROFESSIONS: 'AgencyApp/account/edit.html',
 			EDIT_PROFILE_PICTURE: 'AgencyApp/account/edit.html',
 			EDIT_BACKGROUND: 'AgencyApp/account/edit.html',
 			EDIT_ACTOR_DESCRIPTION: 'AgencyApp/account/actorDescription.html',

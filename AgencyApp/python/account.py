@@ -235,8 +235,8 @@ class EditInterestsView(GenericEditAccountView):
     def cancelDestination(self):
         """Override to continue the profile setup process"""
         if self._cancelDestination is None:
-            if self.destinationPage == constants.EDIT_PROFESSIONS:
-                self._cancelDestination = constants.EDIT_PROFESSIONS
+            if self.destinationPage == constants.EDIT_PROFILE_PICTURE:
+                self._cancelDestination = constants.EDIT_PROFILE_PICTURE
             else:
                 self._cancelDestination = constants.PROFILE
         return self._cancelDestination
@@ -288,52 +288,6 @@ class EditInterestsView(GenericEditAccountView):
             if not newOtherInterests:
                 newOtherInterest = models.Interest(username=self.username, mainInterest=interestType)
                 newOtherInterest.save()
-        return True
-
-
-class EditProfessionsView(GenericEditAccountView):
-    def __init__(self, *args, **kwargs):
-        super(EditProfessionsView, self).__init__(*args, **kwargs)
-
-    @property
-    def nextButtonString(self):
-        if self._nextButtonString is None:
-            if self.sourcePage == constants.PROFILE:
-                self._nextButtonString = "Update professions"
-            else:
-                self._nextButtonString = "Add interested professions"
-        return self._nextButtonString
-
-    @property
-    def cancelDestination(self):
-        """Override to continue the profile setup process"""
-        if self._cancelDestination is None:
-            if self.destinationPage == constants.EDIT_PROFILE_PICTURE:
-                self._cancelDestination = constants.EDIT_PROFILE_PICTURE
-            else:
-                self._cancelDestination = constants.PROFILE
-        return self._cancelDestination
-
-    @property
-    def pageContext(self):
-        try:
-            self._pageContext["selectedProfessions"] = [x.professionName for x in models.Interest.objects.filter(username=self.username)]
-        except models.Interest.DoesNotExist:
-            self._pageContext["selectedProfessions"] = []
-        self._pageContext["professionList"] = constants.PROFESSIONS
-        return self._pageContext
-
-    def processForm(self):
-        """Overriding asbtract method"""
-        professionsSelected = self.formData.getlist("professions")
-        models.Interest.objects.filter(username=self.username).delete()
-        for profession in professionsSelected:
-            entry = models.Interest(username=self.username, professionName=profession)
-            try:
-                entry.save()
-            except Exception as e:
-                print "Could not create profession entry: {0}".format(e)
-                return False
         return True
 
 
@@ -412,7 +366,7 @@ class EditBackgroundView(GenericEditAccountView):
     @property
     def destinationPage(self):
         if self._destinationPage is None:
-            if self.userAccount.actingInterest:
+            if self.userAccount.actorInterest:
                 if constants.PROFILE in [self.sourcePage, self.request.POST.get("destination")]:
                     self._destinationPage = constants.PROFILE
                 else:

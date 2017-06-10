@@ -639,7 +639,7 @@
 		</div>
 	{% endif %}
 
-	<!--{% if userAccount %}
+	{% if userAccount %}
 		{% if userAccount.profilePicture %}
 			<div id="profilePicture">
 				<img src="{{ userAccount.profilePicture.url }}" height="150px" width="175px"/>
@@ -657,6 +657,6 @@
 			{{ form.as_p }}
 			<input type="submit" value="{{ nextButtonString }}" />
 		</form>
-	{% endif %}-->
+	{% endif %}
 
 {% endblock %}
