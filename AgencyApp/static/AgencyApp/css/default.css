@@ -70,6 +70,7 @@
 		-webkit-transform: scale(1.8); /* Safari and Chrome */
 		-o-transform: scale(2); /* Opera */
 		 padding: 10px;
+		 cursor: pointer;
 	}
 
 	.largeCheckboxText
