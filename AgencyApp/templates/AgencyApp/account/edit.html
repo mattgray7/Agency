@@ -40,7 +40,6 @@
 
 		function submitForm(formType){
 			// Submits the submit profession button
-			var formButtonDiv = document.getElementById("continueButton");
 			var extraInputs = []
 			extraInputs.push({key: "interestType", value: formType})
 			if(formType === "work"){
@@ -69,11 +68,11 @@
 				if(professionCheckbox != null){
 					professionCheckbox.checked = "checked";
 				}
-				addProfession(profession, professionRowID)
+				addProfessionToSelectedTable(profession, professionRowID)
 			}
 		}
 
-		function addProfession(profession, professionRowID){
+		function addProfessionToSelectedTable(profession, professionRowID){
 			// Adds a profession to the chosenProfessionTable displayed on the right
 			var table = document.getElementById("chosenProfessionTable");
 			if(table != null && chosenProfessionList.indexOf(profession) < 0){
@@ -224,15 +223,16 @@
 
 					</tr>
 					<tr>
-						<td colspan="3" style="height:100px; width:100%;" onclick="selectInterestChoice();">
+						<td colspan="3" style="height:100px; width:100%;">
 							<center>
-								<div id="backButton" class="whiteButton blackHover" style="width:38.6%; float:left;">
+								<div id="backButton" class="whiteButton blackHover" style="width:38.6%; float:left;" onclick="selectInterestChoice();">
 									<div id="backButtonLabel"><br>Back<br><br></div>
 								</div>
 								<div id="continueButton" class="whiteButton blackHover" style="width:38.4%; float:right; margin: 0px 4px 0px 0px" onclick="submitForm('work')">
 									<div id="continueButtonLabel"><br>Continue<br><br></div>
 								</div>
 							</center>
+						</td>
 					</tr>
 				</table>
 			</div>
@@ -517,12 +517,17 @@
 			if(workInterestDiv != null){
 				mainDiv.innerHTML = workInterestDiv.innerHTML;
 				{% if existingProfessions %}
-					if(!workInterestLoaded){
+					chosenProfessionList = [];
+					if(workInterestLoaded){
 						{% for profession in existingProfessions %}
-							toggleProfession("{{profession.professionName}}")
+							addProfessionToSelectedTable("{{profession}}", "{{profession}}_selectedRowID");
+						{% endfor %}
+					}else{
+						workInterestLoaded = true;
+						{% for profession in existingProfessions %}
+							toggleProfession("{{profession}}");
 						{% endfor %}
 					}
-					workInterestLoaded = true;
 				{% endif %}
 				filterProfessions("acting");
 			}
