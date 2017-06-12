@@ -9,6 +9,30 @@
 		</ul>
 	{% endif %}
 
+	<script>
+		function submitForm(formName){
+			var form = document.getElementById(formName)
+			return form.submit();
+		}
+
+		function submitFormWithExtraParameters(formType){
+			// Submits the submit profession button
+			var extraInputs = []
+			extraInputs.push({key: "interestType", value: formType})
+			if(formType === "work"){
+				for(var i=0; i < chosenProfessionList.length; i++){
+					extraInputs.push({key: "profession." + chosenProfessionList[i], value: true})
+				}
+			}else if(formType === "hire"){
+				for(var i=0; i < chosenHireTypes.length; i++){
+					extraInputs.push({key: "hireType." + chosenHireTypes[i], vlaue: true})
+				}
+			}
+			var form = createPageRedirectForm("{{next}}", "{{next}}", "{{destination}}", "{{currentPageURL}}", extraInputs, null);
+			form.submit();
+		}
+	</script>
+
 	{% if next == possibleDestinations.interests %}
 		<div id="mainDiv"></div>
 
@@ -36,23 +60,6 @@
 					setChildColor(this.id, "h1", "#fff");
 				}
 			});
-		}
-
-		function submitForm(formType){
-			// Submits the submit profession button
-			var extraInputs = []
-			extraInputs.push({key: "interestType", value: formType})
-			if(formType === "work"){
-	            for(var i=0; i < chosenProfessionList.length; i++){
-	            	extraInputs.push({key: "profession." + chosenProfessionList[i], value: true})
-	            }
-	        }else if(formType === "hire"){
-	        	for(var i=0; i < chosenHireTypes.length; i++){
-	        		extraInputs.push({key: "hireType." + chosenHireTypes[i], vlaue: true})
-	        	}
-	        }
-			var form = createPageRedirectForm("{{next}}", "{{next}}", "{{destination}}", "{{currentPageURL}}", extraInputs, null);
-			form.submit();
 		}
 
 		function toggleProfession(profession){
@@ -100,7 +107,7 @@
 			if(professionIndex >= 0){
 				chosenProfessionList.splice(professionIndex, 1);		// Second argument is # of elements to cutout
 				var professionRow = document.getElementById(professionRowID);
-    			professionRow.parentNode.removeChild(professionRow);
+				professionRow.parentNode.removeChild(professionRow);
 			}
 		}
 
@@ -226,10 +233,10 @@
 						<td colspan="3" style="height:100px; width:100%;">
 							<center>
 								<div id="backButton" class="whiteButton blackHover" style="width:38.6%; float:left;" onclick="selectInterestChoice();">
-									<div id="backButtonLabel"><br>Back<br><br></div>
+									<br>Back<br><br>
 								</div>
-								<div id="continueButton" class="whiteButton blackHover" style="width:38.4%; float:right; margin: 0px 4px 0px 0px" onclick="submitForm('work')">
-									<div id="continueButtonLabel"><br>Continue<br><br></div>
+								<div id="continueButton" class="whiteButton blackHover" style="width:38.4%; float:right; margin: 0px 4px 0px 0px" onclick="submitFormWithExtraParameters('work')">
+									<br>Continue<br><br>
 								</div>
 							</center>
 						</td>
@@ -490,12 +497,12 @@
 						<tr>
 							<td colspan="2" style="position:relative; height:100px" onclick="selectInterestChoice();">
 								<div id="backButton" class="whiteButton blackHover" style="width:328px; position:absolute; top:0; left:0;">
-									<div id="backButtonLabel"><br>Back<br><br></div>
+									<br>Back<br><br>
 								</div>'
 							</td>
 							<td colspan="2" style="position:relative; height:100px;">
-								<div id="continueButton" class="whiteButton blackHover" style="width:328px; position:absolute; top:0; left:0;" onclick="submitForm('hire')">
-									<div id="continueButtonLabel"><br>Continue<br><br></div>
+								<div id="continueButton" class="whiteButton blackHover" style="width:328px; position:absolute; top:0; left:0;" onclick="submitFormWithExtraParameters('hire')">
+									<br>Continue<br><br>
 								</div>
 							</td>
 						</tr>
@@ -547,7 +554,7 @@
 		}
 
 		function selectOtherInterest(){
-			submitForm("other");
+			submitFormWithExtraParameters("other");
 		}
 
 		$(document).ready(function(){
@@ -639,29 +646,32 @@
 		</div>
 	{% elif next == possibleDestinations.background %}
 		<div class="whiteFormPanel">
-			<form class="form-style-7" id="editForm">
+			<form class="form-style-7" id="editForm" method="post" action="{{ currentPageURL }}">
+				{% csrf_token %}
 				<h1>ADD BACKGROUND</h1>
 				<ul>
 					<script>
 						{% for field in form %}
+							var lineString = '';
 							if(!('{{field}}'.includes("hidden"))){
-								var lineString = "<li><label for='name'>{{field.label}}</label>";
+								lineString = "<li><label for='name'>{{field.label}}</label>";
 								if("{{field.name}}" != "bio"){
 									lineString += "<input type='text' name='{{field.name}}' maxlength='100' value='{{field.value}}'></li>";
 								}else{
 									lineString += "<textarea cols='100' rows ='20' name='bio' form='editForm' style='height:100px;'> {{ field.value }}</textarea></li>"
 								}
-								document.write(lineString);
-
+							}else{
+								lineString += '{{field}}';
 							}
+							document.write(lineString);
 						{% endfor %}
 					</script>
 					<li style="position:relative; height:100px width:100%;">
 						<div id="backButton" class="whiteButton blackHover" style="width:24.1%;">
-							<div id="backButtonLabel"><br>Back<br><br></div>
-						</div>'
-						<div id="continueButton" class="whiteButton blackHover" style="width:24.1%;" onclick="submitForm('hire')">
-							<div id="continueButtonLabel"><br>Continue<br><br></div>
+							<br>Back<br><br>
+						</div>
+						<div id="continueButton" class="whiteButton blackHover" style="width:24.1%;" onclick="submitForm('editForm')">
+							<br>Continue<br><br>
 						</div>
 					</li>
 				</ul>
