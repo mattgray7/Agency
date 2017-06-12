@@ -691,8 +691,8 @@
 				
 					{% if userAccount and userAccount.profilePicture %}
 						<center>
-							<div id="profilePicture" class="profilePicturePanel">
-								<img src="{{ userAccount.profilePicture.url }}" style="width:100%"/>
+							<div id="profilePictureDiv" class="profilePicturePanel">
+								<img id="profilePicture" src="{{ userAccount.profilePicture.url }}" style="width:100%"/>
 							</div>
 						</center>
 					{% endif %}
@@ -718,6 +718,22 @@
 				</div>
 			</div>
 		</center>
+
+		<script>
+			function previewProfilePicture(input) {
+			    if (input.files && input.files[0]) {
+			        var reader = new FileReader();
+			        reader.onload = function (e) {
+			            $('#profilePicture').attr('src', e.target.result);
+			        }
+			        reader.readAsDataURL(input.files[0]);
+			    }
+			}
+
+			$("#id_profilePicture").change(function(){
+			    previewProfilePicture(this);
+			});
+		</script>
 
 	{% endif %}
 
