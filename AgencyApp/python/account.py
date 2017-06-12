@@ -321,6 +321,8 @@ class EditPictureView(GenericEditAccountView):
     def pageContext(self):
         self._pageContext = super(EditPictureView, self).pageContext
         self._pageContext["userAccount"] = self.userAccount
+        self._pageContext["possibleDestinations"] = {"picture": constants.EDIT_PROFILE_PICTURE,
+                                                     "profile": constants.PROFILE}
         return self._pageContext
 
     @property

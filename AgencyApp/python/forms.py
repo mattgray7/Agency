@@ -25,7 +25,7 @@ class EditInterestsForm(BaseForm):
     other = forms.BooleanField(label="Other", required=False)
 
 class EditPictureForm(BaseForm):
-    profilePicture = forms.FileField(label="New profile picture", required=False)
+    profilePicture = forms.FileField(label="Add picture", required=False)
 
 class EditBackgroundForm(BaseForm):
     reel = forms.CharField(label="Reel Link", required=False, max_length=500)

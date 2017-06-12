@@ -86,26 +86,43 @@
 		padding: 0.5em 0.5em 1em 1em;
 	}
 
+	.profilePictureDiv
+	{
+		color: #000;
+		background: #FFF;
+		width: 400px;
+		height:500px;
+		text-align: center;
+		padding: 1.5em;
+		border: 2px solid #000;
+		border-radius: 6px;
+	}
+
+	.profilePicturePanel
+	{
+		margin: 10px 0px 0px 0px;
+		width:300px;
+		height:300px;
+		background: #000;
+		vertical-align: middle;
+		display: table-cell;
+	}
+
+	.profilePicturePanel
+	{
+		margin:10px;
+	}
+
+	#editPictureForm p
+	{
+		margin-left: 50px;
+	}
+
 	.hireOptionTable
 	{
 		table-layout: fixed; 
 	}
 
-	/*.hireOptionTable td
-	{
-		border: 3px solid #000;
-		border-radius: 4px;
-		background: #efefef;
-		color: #000;
-		top:0 ;
-	}*/
-
-	/*.hireOptionTable td:hover
-	{
-		background: #4f4f4f;
-		color: #FFF;
-		cursor: pointer;
-	}*/
 
 	.hireTableButton
 	{

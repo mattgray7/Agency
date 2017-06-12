@@ -62,7 +62,7 @@
 										professionString += "{{ interest.professionName }}"
 									}else{
 										if(addProfession){
-											professionString += " and " + ({{ profileInterests.work|length }} - {{ forloop.counter }}) + " more jobs."
+											professionString += " and " + ({{ profileInterests.work|length }} - {{ forloop.counter }} + 1) + " more jobs."
 											addProfession = false;
 										}
 									}

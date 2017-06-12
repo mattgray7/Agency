@@ -646,9 +646,9 @@
 		</div>
 	{% elif next == possibleDestinations.background %}
 		<div class="whiteFormPanel">
-			<form class="form-style-7" id="editForm" method="post" action="{{ currentPageURL }}">
+			<form class="form-style-7" id="editBackgroundForm" method="post" action="{{ currentPageURL }}">
 				{% csrf_token %}
-				<h1>ADD BACKGROUND</h1>
+				<h1>Edit Background</h1>
 				<ul>
 					<script>
 						{% for field in form %}
@@ -670,19 +670,45 @@
 						<div id="backButton" class="whiteButton blackHover" style="width:24.1%;">
 							<br>Back<br><br>
 						</div>
-						<div id="continueButton" class="whiteButton blackHover" style="width:24.1%;" onclick="submitForm('editForm')">
+						<div id="continueButton" class="whiteButton blackHover" style="width:24.1%;" onclick="submitForm('editBackgroundForm')">
 							<br>Continue<br><br>
 						</div>
 					</li>
 				</ul>
 			</form>
 		</div>
+	{% elif next == possibleDestinations.picture %}
+		<center>
+			<div id="profilePicturePanel" class="profilePictureDiv">
+					<h1> Edit Profile Picture </h1><br>
+					{% if userAccount %}
+						{% if userAccount.profilePicture %}
+							<center>
+								<div id="profilePicture" class="profilePicturePanel">
+									<img src="{{ userAccount.profilePicture.url }}" style="width:100%"/>
+								</div>
+							</center>
+						{% endif %}
+					{% endif %}
+
+					<br>
+						<form method="post" id="editPictureForm" action="{{ currentPageURL }}" enctype="multipart/form-data" style="text-slign: center;">
+							{% csrf_token %} 
+							{{ form.as_p }}
+							<div id="backButton" class="whiteButton blackHover" style="width:24.1%; height:28px;">
+								Remove
+							</div>
+							<div id="continueButton" class="whiteButton blackHover" style="width:24.1%; height:28px" onclick="submitForm('editPictureForm')">
+								Update
+							</div>
+						</form>
+				</div>
+			</div>
+		</center>
 
 	{% endif %}
 
-
-
-	{% if userAccount %}
+	<!--{% if userAccount %}
 		{% if userAccount.profilePicture %}
 			<div id="profilePicture">
 				<img src="{{ userAccount.profilePicture.url }}" height="150px" width="175px"/>
@@ -700,6 +726,6 @@
 			{{ form.as_p }}
 			<input type="submit" value="{{ nextButtonString }}" />
 		</form>
-	{% endif %}
+	{% endif %}-->
 
 {% endblock %}
