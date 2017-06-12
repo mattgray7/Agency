@@ -637,7 +637,40 @@
 				</div>
 			</div>
 		</div>
+	{% elif next == possibleDestinations.background %}
+		<div class="whiteFormPanel">
+			<form class="form-style-7" id="editForm">
+				<h1>ADD BACKGROUND</h1>
+				<ul>
+					<script>
+						{% for field in form %}
+							if(!('{{field}}'.includes("hidden"))){
+								var lineString = "<li><label for='name'>{{field.label}}</label>";
+								if("{{field.name}}" != "bio"){
+									lineString += "<input type='text' name='{{field.name}}' maxlength='100' value='{{field.value}}'></li>";
+								}else{
+									lineString += "<textarea cols='100' rows ='20' name='bio' form='editForm' style='height:100px;'> {{ field.value }}</textarea></li>"
+								}
+								document.write(lineString);
+
+							}
+						{% endfor %}
+					</script>
+					<li style="position:relative; height:100px width:100%;">
+						<div id="backButton" class="whiteButton blackHover" style="width:24.1%;">
+							<div id="backButtonLabel"><br>Back<br><br></div>
+						</div>'
+						<div id="continueButton" class="whiteButton blackHover" style="width:24.1%;" onclick="submitForm('hire')">
+							<div id="continueButtonLabel"><br>Continue<br><br></div>
+						</div>
+					</li>
+				</ul>
+			</form>
+		</div>
+
 	{% endif %}
+
+
 
 	{% if userAccount %}
 		{% if userAccount.profilePicture %}

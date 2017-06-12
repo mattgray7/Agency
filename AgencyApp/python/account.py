@@ -349,6 +349,13 @@ class EditBackgroundView(GenericEditAccountView):
         super(EditBackgroundView, self).__init__(*args, **kwargs)
 
     @property
+    def pageContext(self):
+        self._pageContext = super(EditBackgroundView, self).pageContext
+        self._pageContext["possibleDestinations"] = {"profile": constants.PROFILE,
+                                                     "background": constants.EDIT_BACKGROUND}
+        return self._pageContext
+
+    @property
     def nextButtonString(self):
         if self._nextButtonString is None:
             if self.sourcePage == constants.PROFILE:
