@@ -31,6 +31,11 @@
 			var form = createPageRedirectForm("{{next}}", "{{next}}", "{{destination}}", "{{currentPageURL}}", extraInputs, null);
 			form.submit();
 		}
+
+		function returnToProfile(){
+			var form = createPageRedirectForm("{{ next }}", "{{ next }}", "{{ possibleDestinations.profile }}", "/user/{{request.user.username}}/", [], null, null)
+			form.submit()
+		}
 	</script>
 
 	{% if next == possibleDestinations.interests %}
@@ -567,13 +572,7 @@
 				<div id="three-column" class="container">
 					<!-- Back to profile button -->
 					{% if cancelDestination == possibleDestinations.profile %}
-						<script>
-						function returnToProfile(){
-							var form = createPageRedirectForm("{{ next }}", "{{ next }}", "{{ possibleDestinations.profile }}", "/user/{{request.user.username}}/", [], null, null)
-							form.submit()
-						}
-						</script>
-						<div id="backToProfileButton" style="width:170px;padding: 1em 0em 0em 0em;"><a onclick="returnToProfile(this);" class="profileButton blackHover" style="float:left">Back to profile</a></div><br><br>
+						<div id="backToProfileButton" style="width:170px;padding: 1em 0em 0em 0em;"><a onclick="returnToProfile();" class="profileButton blackHover" style="float:left">Back to profile</a></div><br><br>
 					{% endif %}
 					<div class="title">
 						<h2>What are your interests?</h2>
@@ -679,25 +678,39 @@
 		</div>
 	{% elif next == possibleDestinations.picture %}
 		<center>
-			<div id="profilePicturePanel" class="profilePictureDiv">
-					<h1> Edit Profile Picture </h1><br>
-					{% if userAccount %}
-						{% if userAccount.profilePicture %}
-							<center>
-								<div id="profilePicture" class="profilePicturePanel">
-									<img src="{{ userAccount.profilePicture.url }}" style="width:100%"/>
-								</div>
-							</center>
-						{% endif %}
-					{% endif %}
-
+			{% if userAccount and userAccount.profilePicture %}
+				<div id="profilePicturePanel" class="profilePictureDiv">
+					<div id="backToProfileButton" style="width:170px; padding: 0em 0em 0em 0em; margin: -10px;"><a onclick="returnToProfile();" class="profileButton blackHover" style="float:left">Back to profile</a>
+					</div><br><br>
+					<h1> Edit Profile Picture </h1>
+			{% else %}
+				<div id="profilePicturePanel" class="newProfilePictureDiv">
+					<h1> Add Profile Picture </h1>
+			{% endif %}
 					<br>
+				
+					{% if userAccount and userAccount.profilePicture %}
+						<center>
+							<div id="profilePicture" class="profilePicturePanel">
+								<img src="{{ userAccount.profilePicture.url }}" style="width:100%"/>
+							</div>
+						</center>
+					{% endif %}
+					<br>
+
 						<form method="post" id="editPictureForm" action="{{ currentPageURL }}" enctype="multipart/form-data" style="text-slign: center;">
 							{% csrf_token %} 
 							{{ form.as_p }}
-							<div id="backButton" class="whiteButton blackHover" style="width:24.1%; height:28px;">
-								Remove
-							</div>
+
+							{% if userAccount and userAccount.profilePicture %}
+								<div id="removeButton" class="whiteButton blackHover" style="width:24.1%; height:28px;">
+									Remove
+								</div>
+							{% else %}
+								<div id="skipButton" class="whiteButton blackHover" style="width:24.1%; height:28px;">
+									Skip
+								</div>
+							{% endif %}
 							<div id="continueButton" class="whiteButton blackHover" style="width:24.1%; height:28px" onclick="submitForm('editPictureForm')">
 								Update
 							</div>

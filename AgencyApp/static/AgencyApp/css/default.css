@@ -91,7 +91,19 @@
 		color: #000;
 		background: #FFF;
 		width: 400px;
-		height:500px;
+		height:530px;
+		text-align: center;
+		padding: 1.5em;
+		border: 2px solid #000;
+		border-radius: 6px;
+	}
+
+	.newProfilePictureDiv
+	{
+		color: #000;
+		background: #FFF;
+		width: 400px;
+		height:200px;
 		text-align: center;
 		padding: 1.5em;
 		border: 2px solid #000;
@@ -406,7 +418,7 @@
 
 	.profileButton
 	{
-		padding: 0.4em 0.2em 0.4em 0.2em;
+		padding: 0.4em 0.4em 0.4em 0.4em;
 		letter-spacing: 0.10em;
 		border: 1px solid #000;
 		border-radius: 6px;
