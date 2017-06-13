@@ -14,6 +14,9 @@ import AgencyApp.python.models as models
 print "Flushing database..."
 os.system("python /Users/MattGray/Projects/Agency/Agency/manage.py flush")
 
+print "\nDeleting media..."
+os.system("rm -r /Users/MattGray/Projects/Agency/Agency/media/*")
+
 #=================== Project 1
 # User 1
 project1User = User.objects.create_user(username="mattgray",
@@ -27,8 +30,10 @@ project1UserAccount = models.UserAccount(username="mattgray",
                              		firstName="matt",
                              		lastName="gray",
                              		setupComplete=True)
+os.makedirs("/Users/MattGray/Projects/Agency/Agency/media/mattgray/")
 picResult = urllib.urlretrieve("/Users/MattGray/Projects/Agency/Agency/scripts/media/mattGrayProfile.jpg")
 project1UserAccount.profilePicture = File(open(picResult[0]))
+project1UserAccount.profilePicture.name = "/profile.jpg"
 project1UserAccount.save()
 
 
@@ -41,6 +46,7 @@ project1ProjectPost = models.ProjectPost(postID=project1ProjectID,
 									status="In production")
 picResult = urllib.urlretrieve("/Users/MattGray/Projects/Agency/Agency/scripts/media/greatGatsby.jpg")
 project1ProjectPost.postPicture = File(open(picResult[0]))
+project1ProjectPost.postPicture.name = "/project_{0}.jpg".format(project1ProjectID)
 project1ProjectPost.save()
 
 
@@ -55,6 +61,7 @@ project1CastingPost = models.CastingPost(postID=project1CastingPostID,
 									paid=True)
 picResult = urllib.urlretrieve("/Users/MattGray/Projects/Agency/Agency/scripts/media/nickCarraway.png")
 project1CastingPost.postPicture = File(open(picResult[0]))
+project1CastingPost.postPicture.name = "/casting_{0}.jpg".format(project1CastingPostID)
 project1CastingPost.save()
 
 
@@ -69,6 +76,7 @@ project1CastingPost2 = models.CastingPost(postID=project1CastingPostID2,
 									paid=True)
 picResult = urllib.urlretrieve("/Users/MattGray/Projects/Agency/Agency/scripts/media/jayGatsby.jpg")
 project1CastingPost2.postPicture = File(open(picResult[0]))
+project1CastingPost2.postPicture.name = "/casting_{0}.jpg".format(project1CastingPostID2)
 project1CastingPost2.save()
 
 
@@ -83,6 +91,7 @@ project1CastingPost3 = models.CastingPost(postID=project1CastingPostID3,
 									paid=True)
 picResult = urllib.urlretrieve("/Users/MattGray/Projects/Agency/Agency/scripts/media/daisyBuchanan.png")
 project1CastingPost3.postPicture = File(open(picResult[0]))
+project1CastingPost3.postPicture.name = "/casting_{0}.jpg".format(project1CastingPostID3)
 project1CastingPost3.save()
 
 
@@ -98,6 +107,7 @@ project1WorkPost = models.WorkPost(postID=project1WorkPostID,
 								 status="Hiring")
 picResult = urllib.urlretrieve("/Users/MattGray/Projects/Agency/Agency/scripts/media/photographer.jpg")
 project1WorkPost.postPicture = File(open(picResult[0]))
+project1WorkPost.postPicture.name = "/work_{0}.jpg".format(project1WorkPostID)
 project1WorkPost.save()
 
 
@@ -112,6 +122,7 @@ project1EventPost = models.EventPost(postID=project1EventPostID,
 								 date=datetime.datetime(2017, 06, 02))
 picResult = urllib.urlretrieve("/Users/MattGray/Projects/Agency/Agency/scripts/media/castingCall.jpeg")
 project1EventPost.postPicture = File(open(picResult[0]))
+project1EventPost.postPicture.name = "/event_{0}.jpg".format(project1EventPostID)
 project1EventPost.save()
 
 # ====================
@@ -130,8 +141,10 @@ userAccount2 = models.UserAccount(username="amybolt",
                              		firstName="amy",
                              		lastName="bolt",
                              		setupComplete=True)
+os.makedirs("/Users/MattGray/Projects/Agency/Agency/media/amybolt/")
 picResult = urllib.urlretrieve("/Users/MattGray/Projects/Agency/Agency/scripts/media/amyBoltProfile.jpg")
 userAccount2.profilePicture = File(open(picResult[0]))
+userAccount2.profilePicture.name = "/profile.jpg"
 userAccount2.save()
 
 # Add some professions
@@ -166,5 +179,6 @@ collabPost = models.CollaborationPost(postID=collabPostID,
 								 collaboratorRole="Director")
 picResult = urllib.urlretrieve("/Users/MattGray/Projects/Agency/Agency/scripts/media/collabPost.jpg")
 collabPost.postPicture = File(open(picResult[0]))
+collabPost.postPicture.name = "/collaboration_{0}.jpg".format(collabPostID)
 collabPost.save()
 

@@ -339,7 +339,7 @@ class PictureFormView(GenericFormView):
             self._pictureModelPictureField = self.request.FILES.get(self.pictureModelFieldName)
             self.pictureModel.save()
 
-            # Rename event file
+            # Rename picture file
             if self.pictureModelPictureField:
                 newPath = os.path.join(os.path.dirname(self.pictureModelPictureField.path), self.filename)
                 os.rename(self.pictureModelPictureField.path, newPath)
