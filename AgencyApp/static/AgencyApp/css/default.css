@@ -86,7 +86,7 @@
 		padding: 0.5em 0.5em 1em 1em;
 	}
 
-	.profilePictureDiv
+	.profilePicturePanel
 	{
 		color: #000;
 		background: #FFF;
@@ -98,7 +98,7 @@
 		border-radius: 6px;
 	}
 
-	.newProfilePictureDiv
+	.newProfilePicturePanel
 	{
 		color: #000;
 		background: #FFF;
@@ -110,7 +110,7 @@
 		border-radius: 6px;
 	}
 
-	.profilePicturePanel
+	.profilePictureDiv
 	{
 		margin: 10px 0px 0px 0px;
 		width:300px;
@@ -118,12 +118,10 @@
 		background: #000;
 		vertical-align: middle;
 		display: table-cell;
+		border: 1px solid #000;
+		border-radius: 6px;
 	}
 
-	.profilePicturePanel
-	{
-		margin:10px;
-	}
 
 	#editPictureForm p
 	{

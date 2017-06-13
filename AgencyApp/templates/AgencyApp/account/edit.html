@@ -647,6 +647,9 @@
 		<div class="whiteFormPanel">
 			<form class="form-style-7" id="editBackgroundForm" method="post" action="{{ currentPageURL }}">
 				{% csrf_token %}
+				{% if cancelDestination == possibleDestinations.profile %}
+					<div id="backToProfileButton" style="width:170px; margin: -10px 0px 0px -10px;"><a onclick="returnToProfile();" class="profileButton blackHover" style="float:left">Back to profile</a></div><br><br>
+				{% endif %}
 				<h1>Edit Background</h1>
 				<ul>
 					<script>
@@ -666,32 +669,36 @@
 						{% endfor %}
 					</script>
 					<li style="position:relative; height:100px width:100%;">
-						<div id="backButton" class="whiteButton blackHover" style="width:24.1%;">
-							<br>Back<br><br>
-						</div>
-						<div id="continueButton" class="whiteButton blackHover" style="width:24.1%;" onclick="submitForm('editBackgroundForm')">
-							<br>Continue<br><br>
+						<div id="continueButton" class="whiteButton blackHover" style="width:75%; height:28px" onclick="submitForm('editBackgroundForm')">
+							Continue<br><br>
 						</div>
 					</li>
 				</ul>
 			</form>
 		</div>
 	{% elif next == possibleDestinations.picture %}
+		<script>
+		function removeProfilePicture(){
+			console.log("removing profile picture")
+		}
+		</script>
+
+
 		<center>
 			{% if userAccount and userAccount.profilePicture %}
-				<div id="profilePicturePanel" class="profilePictureDiv">
+				<div id="profilePicturePanel" class="profilePicturePanel">
 					<div id="backToProfileButton" style="width:170px; padding: 0em 0em 0em 0em; margin: -10px;"><a onclick="returnToProfile();" class="profileButton blackHover" style="float:left">Back to profile</a>
 					</div><br><br>
 					<h1> Edit Profile Picture </h1>
 			{% else %}
-				<div id="profilePicturePanel" class="newProfilePictureDiv">
+				<div id="profilePicturePanel" class="newProfilePicturePanel">
 					<h1> Add Profile Picture </h1>
 			{% endif %}
 					<br>
 				
 					{% if userAccount and userAccount.profilePicture %}
 						<center>
-							<div id="profilePictureDiv" class="profilePicturePanel">
+							<div id="profilePictureDiv" class="profilePictureDiv">
 								<img id="profilePicture" src="{{ userAccount.profilePicture.url }}" style="width:100%"/>
 							</div>
 						</center>
@@ -703,7 +710,7 @@
 							{{ form.as_p }}
 
 							{% if userAccount and userAccount.profilePicture %}
-								<div id="removeButton" class="whiteButton blackHover" style="width:24.1%; height:28px;">
+								<div id="removeButton" class="whiteButton blackHover" style="width:24.1%; height:28px;" onclick="removeProfilePicture();">
 									Remove
 								</div>
 							{% else %}
