@@ -26,8 +26,7 @@ project1UserAccount = models.UserAccount(username="mattgray",
 							 		email="matt.gray.1993@gmail.com",
                              		firstName="matt",
                              		lastName="gray",
-                             		setupComplete=True,
-                             		actingInterest=True)
+                             		setupComplete=True)
 picResult = urllib.urlretrieve("/Users/MattGray/Projects/Agency/Agency/scripts/media/mattGrayProfile.jpg")
 project1UserAccount.profilePicture = File(open(picResult[0]))
 project1UserAccount.save()
@@ -130,21 +129,20 @@ userAccount2 = models.UserAccount(username="amybolt",
 							 		email="amy.bolt@hotmail.com",
                              		firstName="amy",
                              		lastName="bolt",
-                             		actingInterest=True,
                              		setupComplete=True)
 picResult = urllib.urlretrieve("/Users/MattGray/Projects/Agency/Agency/scripts/media/amyBoltProfile.jpg")
 userAccount2.profilePicture = File(open(picResult[0]))
 userAccount2.save()
 
 # Add some professions
-professionList = [models.Profession(username="mattgray", mainInterest="work", subInterest="onSetProduction", professionName="Cinematographer"),
-				  models.Profession(username="mattgray", mainInterest="work", subInterest="preProduction", professionName="Choreographer"),
-				  models.Profession(username="mattgray", mainInterest="work", subInterest="postProduction", professionName="VFX Artist"),
-				  models.Profession(username="mattgray", mainInterest="work", subInterest="preProduction", professionName="Screenwriter"),
-				  models.Profession(username="amybolt", mainInterest="work", subInterest="acting", professionName="Dancer"),
-				  models.Profession(username="amybolt", mainInterest="work", subInterest="creative", professionName="Songwriter"),
-				  models.Profession(username="amybolt", mainInterest="work", subInterest="onSetProduction", professionName="Photographer"),
-				  models.Profession(username="amybolt", mainInterest="work", subInterest="offSetProduction", professionName="Production Coordinator")]
+professionList = [models.Interest(username="mattgray", mainInterest="work", subInterest="onSetProduction", professionName="Cinematographer"),
+				  models.Interest(username="mattgray", mainInterest="work", subInterest="preProduction", professionName="Choreographer"),
+				  models.Interest(username="mattgray", mainInterest="work", subInterest="postProduction", professionName="VFX Artist"),
+				  models.Interest(username="mattgray", mainInterest="work", subInterest="preProduction", professionName="Screenwriter"),
+				  models.Interest(username="amybolt", mainInterest="work", subInterest="acting", professionName="Dancer"),
+				  models.Interest(username="amybolt", mainInterest="work", subInterest="creative", professionName="Songwriter"),
+				  models.Interest(username="amybolt", mainInterest="work", subInterest="onSetProduction", professionName="Photographer"),
+				  models.Interest(username="amybolt", mainInterest="work", subInterest="offSetProduction", professionName="Production Coordinator")]
 for profession in professionList:
 	profession.save()
 

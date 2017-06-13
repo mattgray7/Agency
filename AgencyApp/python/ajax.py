@@ -1,3 +1,4 @@
+import os
 from django.http import JsonResponse
 
 import post
@@ -41,3 +42,19 @@ def deletePostFromDB(request):
 			postDB.objects.filter(postID=postID).delete()
 			success = True
 	return JsonResponse({"success": success, "errors": errors})
+
+
+def deleteProfilePicture(request):
+	if request.user.is_authenticated:
+		try:
+			userAccount = models.UserAccount.objects.get(username=request.user.username)
+		except models.UserAccount.DoesNotExist:
+			pass
+		else:
+			if userAccount.profilePicture:
+				picturePath = userAccount.profilePicture.path
+				userAccount.profilePicture = None
+				userAccount.save()
+				os.remove(picturePath)
+	return JsonResponse({"success": True})
+

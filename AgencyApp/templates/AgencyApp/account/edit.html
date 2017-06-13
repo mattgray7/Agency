@@ -680,6 +680,15 @@
 		<script>
 		function removeProfilePicture(){
 			console.log("removing profile picture")
+			$.ajax({
+                    url : "/ajax/deleteProfilePicture/",
+                    data : {},
+                    type : 'POST',
+                    dataType: "json",
+                    success : function(data) {
+                        returnToProfile();
+                    }
+                });
 		}
 		</script>
 

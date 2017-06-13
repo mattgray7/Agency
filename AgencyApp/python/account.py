@@ -291,7 +291,7 @@ class EditInterestsView(GenericEditAccountView):
         return True
 
 
-class EditPictureView(GenericEditAccountView):
+class EditPictureView(GenericEditAccountView, views.PictureFormView):
     def __init__(self, *args, **kwargs):
         super(EditPictureView, self).__init__(*args, **kwargs)
         self._pictureModel = self.userAccount
@@ -328,7 +328,7 @@ class EditPictureView(GenericEditAccountView):
     @property
     def filename(self):
         if self._filename is None:
-            self._filename = MEDIA_FILE_NAME_MAP.get(constants.EDIT_PROFILE_PICTURE, "tempfile")
+            self._filename = constants.MEDIA_FILE_NAME_MAP.get(constants.EDIT_PROFILE_PICTURE, "tempfile")
         return self._filename
 
     def processForm(self):

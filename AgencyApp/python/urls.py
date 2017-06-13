@@ -34,6 +34,8 @@ urlpatterns = [
     url(r'^ajax/getPostFollowingBool/$', ajax.getPostFollowingBool, name='getPostFollowingBool'),
     url(r'^ajax/getUserProjects/$', ajax.getUserProjects, name='getUserProjects'),
     url(r'^ajax/deletePostFromDB/$', ajax.deletePostFromDB, name='deletePostFromDB'),  #TODO find a way to secure this link
+    url(r'^ajax/deleteProfilePicture/$', ajax.deleteProfilePicture, name='deleteProfilePicture'),  #TODO find a way to secure this link
+
 
 
     # Browse
