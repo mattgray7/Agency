@@ -678,6 +678,13 @@
 		</div>
 	{% elif next == possibleDestinations.picture %}
 		<script>
+		function skipProfilePicture(){
+			var extraInputs = []
+            extraInputs.push({key: "{{ cancel }}", value: "True"});
+			var form = createPageRedirectForm("{{next}}", "{{next}}", "{{cancelDestination}}", "{{currentPageURL}}", extraInputs, null);
+			form.submit();
+		}
+
 		function removeProfilePicture(){
 			console.log("removing profile picture")
 			$.ajax({
@@ -723,7 +730,7 @@
 									Remove
 								</div>
 							{% else %}
-								<div id="skipButton" class="whiteButton blackHover" style="width:24.1%; height:28px;">
+								<div id="skipButton" class="whiteButton blackHover" style="width:24.1%; height:28px;" onclick="skipProfilePicture();">
 									Skip
 								</div>
 							{% endif %}
