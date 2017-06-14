@@ -11,7 +11,7 @@
 	}*/
 
 	.profileTableMainColumn{
-		height: 600px;
+		height: 800px;
 		width: 25%;
 		border: 0px;
 		/*padding: 0em 0.3em 0em 0.3em;*/
@@ -28,15 +28,16 @@
 	}
 	.profilePicturePanel
 	{
-		height: 380px;
+		min-height: 390px;
+
 	}
 	.interestsPanel
 	{
-		height: 220px;
+		height: 403px;
 	}
 	.messagePanel
 	{
-		height: 100px;
+		height: 300px;
 	}
 	.postsPanel
 	{
@@ -44,7 +45,11 @@
 	}
 	.commentsPanel
 	{
-		height: 119px;
+		height: 319px;
+	}
+	.rightPanel
+	{
+		height: 100%;
 	}
 	.hoverContainer
 	{

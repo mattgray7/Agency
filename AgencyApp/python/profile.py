@@ -18,7 +18,15 @@ class ProfileView(views.GenericFormView):
         self._profileProfessions = None
         self._profilePosts = None
         self._profileInterests = None
+        self._profileLinks = None
         self._displayName = None
+
+    @property
+    def profileLinks(self):
+        if self._profileLinks is None:
+            self._profileLinks = [{"url": self.profileUserAccount.imdbLink, "label": "IMDB"},
+                                  {"url": self.profileUserAccount.reelLink, "label": "Reel"}]
+        return self._profileLinks
 
     @property
     def displayName(self):
@@ -97,6 +105,7 @@ class ProfileView(views.GenericFormView):
         self._pageContext["profileProfessions"] = self.profileProfessions
         self._pageContext["profileInterests"] = self.profileInterests
         self._pageContext["profilePosts"] = self.profilePosts
+        self._pageContext["profileLinks"] = self.profileLinks
         self._pageContext["possibleDestinations"] = {"picture": constants.EDIT_PROFILE_PICTURE,
                                                      "background": constants.EDIT_BACKGROUND,
                                                      "interests": constants.EDIT_INTERESTS,

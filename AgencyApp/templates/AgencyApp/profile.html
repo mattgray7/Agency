@@ -14,11 +14,11 @@
 		<div id="profilePageDiv">
 			<table id="profilePageTable" class="profileTable">
 				<tr>
-					<td class="profileTableMainColumn" style="width:30%;">
+					<td class="profileTableMainColumn">
 						<table style="height:100%; width:100%; border-spacing:0.2em; margin: 0px -5px 0px 5px;">
 							<tr>
 								<td class="profilePanel profilePicturePanel">
-									<div id="profilePictureBoundingBox" class="hoverContainer" style="width:250px; height:250px; background: #000; border-radius:6px; vertical-align: middle; display: table-cell;">
+									<div id="profilePictureBoundingBox" class="hoverContainer" style="width:250px; height:250px; background: #000; border: 2px solid #000; border-radius:6px; vertical-align: middle; display: table-cell;">
 										{% if profileUserAccount.profilePicture %}
 											<div id="profilePictureDiv">
 												<img src="{{ profileUserAccount.profilePicture.url }}" style="width:250px;"/>
@@ -38,17 +38,32 @@
 										{% if profileUserAccount.mainProfession %}
 											<h3> {{profileUserAccount.mainProfession}} </h3>
 										{% endif %}
+										{% if profileUserAccount.bio %}
+											<p style="margin: 0px;"> {{ profileUserAccount.bio }} </p>
+										{% endif %}
 									</div>
+
+									{% if profileLinks %}
+										<div id="profileLinksDiv" style="height: 30px; padding: 0.5em 0em 0em 0em;">
+											{% for link in profileLinks %}
+												{% if link.url and link.label %}
+													<div class="whiteButton blackHover" style="padding: 1px 4px 1px 4px; display:inline" onclick="window.location.href='{{link.url}}';">
+														{{ link.label }}
+													</div>
+												{% endif %}
+											{% endfor %}
+										</div>
+									{% endif %}
 								</td>
 							</tr>
 							<tr>
-								<td class="profilePanel interestsPanel" style="width:256px">
+								<td class="profilePanel interestsPanel" style="width:259px">
 									interests
 								</td>
 							</tr>
 						</table>
 					</td>
-					<td colspan="2" class="profileTableMainColumn" style="width:55%;">
+					<td colspan="2" class="profileTableMainColumn" style="width:50%; max-width:50%">
 						<table style="height:100%;">
 							<!--<tr>
 								<td>
@@ -59,22 +74,30 @@
 							</tr>-->
 							<tr>
 								<td>
-									<div class="profilePanel postsPanel" style="width: 500px;">
+									<div class="profilePanel postsPanel" style="min-width: 400px; width:100%;">
 										posts and shit
 									</div>
 								</td>
 							</tr>
-							<tr>
-								<td>
-									<div class="profilePanel commentsPanel" style="width: 500px;">
+							<tr style="max-width: 400px;">
+								<td >
+									<div class="profilePanel commentsPanel" style="min-width: 400px; width:100%;">
 										Comments and shit
 									</div>
 								</td>
 							</tr>
 						</table>
 					</td>
-					<td class="profileTableMainColumn" style="width:15%">
-						right column
+					<td class="profileTableMainColumn" style="width:20%">
+						<table style="height:100%;">
+							<tr>
+								<td>
+									<div class="profilePanel rightPanel" style="min-width: 100px; width:100%;">
+										other stuff
+									</div>
+								</td>
+							</tr>
+						</table>
 					</td>
 				</tr>
 			</table>
