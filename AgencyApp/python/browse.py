@@ -106,7 +106,7 @@ class GenericBrowseView(views.GenericFormView):
         if self._posterProfessionMap is None:
             self._posterProfessionMap = {}
             for name in self.posterNameMap:
-                professions = models.Profession.objects.filter(username=name)
+                professions = models.Interest.objects.filter(username=name, mainInterest="work")
                 if professions:
                     self._posterProfessionMap[name] = ", ".join([x.professionName for x in professions])
         return self._posterProfessionMap
@@ -182,7 +182,7 @@ class BrowseUsersView(GenericBrowseView):
     @property
     def workerUsers(self):
         if self._workerUsers is None:
-            workerUsernames = [user.username for user in models.Profession.objects.all()]
+            workerUsernames = [user.username for user in models.Interest.objects.filter(mainInterest="work")]
             self._workUsers = models.UserAccount.objects.filter(username__in=workerUsernames)
         return self._workUsers
 
