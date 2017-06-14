@@ -2,14 +2,19 @@
 	{
 		width: 100%;
 		min-width: 700px;
-		background: #FFF;
+		background: #232323;
 		color: #000;
 	}
+	/*.profileTable td
+	{
+		padding:0.2em 0.08em 0.2em 0.08em;
+	}*/
+
 	.profileTableMainColumn{
 		height: 600px;
 		width: 25%;
 		border: 0px;
-		padding: 0.3em 0.3em 0em 0.3em;
+		/*padding: 0em 0.3em 0em 0.3em;*/
 	}
 	.profilePanel
 	{
@@ -17,19 +22,30 @@
     	vertical-align: top;
 		border: 2px solid #000;
 		border-radius: 6px;
+		background: #FFF;
+		padding: 0.5em;
+
 	}
 	.profilePicturePanel
 	{
-		height: 500px;
-		padding: 0.5em;
+		height: 380px;
 	}
-
 	.interestsPanel
 	{
-		height: 300px;
-		width: 97.3%;
+		height: 220px;
 	}
-
+	.messagePanel
+	{
+		height: 100px;
+	}
+	.postsPanel
+	{
+		height: 480px;
+	}
+	.commentsPanel
+	{
+		height: 119px;
+	}
 	.hoverContainer
 	{
 	  position: relative;

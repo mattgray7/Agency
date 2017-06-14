@@ -23,8 +23,9 @@ class ProfileView(views.GenericFormView):
     @property
     def displayName(self):
         if self._displayName is None:
-            self._displayName = helpers.capitalizeName("{0} {1}".format(self.profileUserAccount.firstName,
-                                                                        self.profileUserAccount.lastName))
+            if self.profileUserAccount:
+                self._displayName = helpers.capitalizeName("{0} {1}".format(self.profileUserAccount.firstName,
+                                                                            self.profileUserAccount.lastName))
         return self._displayName
 
     @property

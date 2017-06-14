@@ -29,7 +29,10 @@ project1UserAccount = models.UserAccount(username="mattgray",
 							 		email="matt.gray.1993@gmail.com",
                              		firstName="matt",
                              		lastName="gray",
-                             		setupComplete=True)
+                             		setupComplete=True,
+                             		imdbLink="http://www.imdb.com/name/nm6547223/?ref_=ttfc_fc_cl_t47",
+                             		bio="I love dogs, films, and video games.",
+                             		mainProfession="Cinematographer")
 os.makedirs("/Users/MattGray/Projects/Agency/Agency/media/mattgray/")
 picResult = urllib.urlretrieve("/Users/MattGray/Projects/Agency/Agency/scripts/media/mattGrayProfile.jpg")
 project1UserAccount.profilePicture = File(open(picResult[0]))

@@ -14,8 +14,8 @@
 		<div id="profilePageDiv">
 			<table id="profilePageTable" class="profileTable">
 				<tr>
-					<td class="profileTableMainColumn" style="width:30%">
-						<table style="height:100%; width:100%">
+					<td class="profileTableMainColumn" style="width:30%;">
+						<table style="height:100%; width:100%; border-spacing:0.2em; margin: 0px -5px 0px 5px;">
 							<tr>
 								<td class="profilePanel profilePicturePanel">
 									<div id="profilePictureBoundingBox" class="hoverContainer" style="width:250px; height:250px; background: #000; border-radius:6px; vertical-align: middle; display: table-cell;">
@@ -35,18 +35,43 @@
 									</div>
 									<div id="profileNameDiv">
 										<h1>{{ displayName }} </h1>
+										{% if profileUserAccount.mainProfession %}
+											<h3> {{profileUserAccount.mainProfession}} </h3>
+										{% endif %}
 									</div>
 								</td>
 							</tr>
 							<tr>
-								<td class="profilePanel interestsPanel">
+								<td class="profilePanel interestsPanel" style="width:256px">
 									interests
 								</td>
 							</tr>
 						</table>
 					</td>
 					<td colspan="2" class="profileTableMainColumn" style="width:55%;">
-						posts and shit
+						<table style="height:100%;">
+							<!--<tr>
+								<td>
+									<div class="messagePanel profilePanel" style="width: 500px;">
+										Send a message placeholder
+									</div>
+								</td>
+							</tr>-->
+							<tr>
+								<td>
+									<div class="profilePanel postsPanel" style="width: 500px;">
+										posts and shit
+									</div>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<div class="profilePanel commentsPanel" style="width: 500px;">
+										Comments and shit
+									</div>
+								</td>
+							</tr>
+						</table>
 					</td>
 					<td class="profileTableMainColumn" style="width:15%">
 						right column
