@@ -86,7 +86,7 @@
 		padding: 0.5em 0.5em 1em 1em;
 	}
 
-	.profilePicturePanel
+	.editProfilePicturePanel
 	{
 		color: #000;
 		background: #FFF;
@@ -121,7 +121,6 @@
 		border: 1px solid #000;
 		border-radius: 6px;
 	}
-
 
 	#editPictureForm p
 	{

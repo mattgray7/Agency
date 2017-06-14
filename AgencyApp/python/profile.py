@@ -18,6 +18,14 @@ class ProfileView(views.GenericFormView):
         self._profileProfessions = None
         self._profilePosts = None
         self._profileInterests = None
+        self._displayName = None
+
+    @property
+    def displayName(self):
+        if self._displayName is None:
+            self._displayName = helpers.capitalizeName("{0} {1}".format(self.profileUserAccount.firstName,
+                                                                        self.profileUserAccount.lastName))
+        return self._displayName
 
     @property
     def currentPageURL(self):
@@ -82,6 +90,7 @@ class ProfileView(views.GenericFormView):
 
     @property
     def pageContext(self):
+        self._pageContext["displayName"] = self.displayName
         self._pageContext["viewingOwnProfile"] = self.userViewingOwnProfile
         self._pageContext["profileUserAccount"] = self.profileUserAccount
         self._pageContext["profileProfessions"] = self.profileProfessions

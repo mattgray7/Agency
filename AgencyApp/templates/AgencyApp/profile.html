@@ -1,8 +1,62 @@
 {% extends "base.html" %}
 
 {% block content %}
+
+	<script>
+	function redirect(destination){
+		// Redirects to to destination
+		var form = createPageRedirectForm("{{next}}", "{{next}}", destination, "{{currentPageURL}}", null, null);
+		form.submit();
+	}
+	</script>
+
 	{% if profileUserAccount %}
-		{% if profileUserAccount.profilePicture %}
+		<div id="profilePageDiv">
+			<table id="profilePageTable" class="profileTable">
+				<tr>
+					<td class="profileTableMainColumn" style="width:30%">
+						<table style="height:100%; width:100%">
+							<tr>
+								<td class="profilePanel profilePicturePanel">
+									<div id="profilePictureBoundingBox" class="hoverContainer" style="width:250px; height:250px; background: #000; border-radius:6px; vertical-align: middle; display: table-cell;">
+										{% if profileUserAccount.profilePicture %}
+											<div id="profilePictureDiv">
+												<img src="{{ profileUserAccount.profilePicture.url }}" style="width:250px;"/>
+											</div>
+										{% else %}
+											<div id="profilePictureDiv">
+												<img />
+											</div>
+										{% endif %}
+										{% if viewingOwnProfile %}
+											<div class="overlay"></div>
+	  										<div class="hoverButton"><a onclick="redirect('{{ possibleDestinations.picture }}');"> Edit </a></div>
+	  									{% endif %}
+									</div>
+									<div id="profileNameDiv">
+										<h1>{{ displayName }} </h1>
+									</div>
+								</td>
+							</tr>
+							<tr>
+								<td class="profilePanel interestsPanel">
+									interests
+								</td>
+							</tr>
+						</table>
+					</td>
+					<td colspan="2" class="profileTableMainColumn" style="width:55%;">
+						posts and shit
+					</td>
+					<td class="profileTableMainColumn" style="width:15%">
+						right column
+					</td>
+				</tr>
+			</table>
+		</div>
+
+
+		<!--{% if profileUserAccount.profilePicture %}
 			<div id="profilePic">
 				<img src="{{ profileUserAccount.profilePicture.url }}" height="150px" width="175px"/>
 			</div>
@@ -16,19 +70,16 @@
 				{% csrf_token %}
 				<input type="hidden" name="source" value="{{ next }}" />
 				<input type="hidden" name="current" value="{{ next }}" />
-				<input type="hidden" name="destination" value="{{ possibleDestinations.picture }}" /> <!-- return to profile when done -->
+				<input type="hidden" name="destination" value="{{ possibleDestinations.picture }}" />
 				<input type="submit" value="Edit profile picture" />
 			</form>
 		{% endif %}
 		<h1><u> {{ profileUserAccount.firstName }} {{ profileUserAccount.lastName }}</u></h1>
 
-		<!-- Bio -->
 		{% if profileUserAccount.bio %}
-			<!-- TODO make bio editable on the page with js -->
 			{{profileUserAccount.bio}}<br>
 		{% endif %}
 
-		<!-- Background -->
 		{% if profileUserAccount.reelLink %}
 			<a href="{{profileUserAccount.reelLink}}">Reel</a>
 		{% endif %}
@@ -41,13 +92,12 @@
 				{% csrf_token %}
 				<input type="hidden" name="source" value="{{ next }}" />
 				<input type="hidden" name="current" value="{{ next }}" />
-				<input type="hidden" name="destination" value="{{ possibleDestinations.background }}" /> <!-- return to profile when done -->
+				<input type="hidden" name="destination" value="{{ possibleDestinations.background }}" />
 				<input type="submit" value="Edit background" />
 			</form>
 		{% endif %}
 		<br>
 
-		<!-- Interests -->
 		<h3> Interests: </h3>
 		<ul>
 			{% if profileInterests.work %}
@@ -121,13 +171,12 @@
 				{% csrf_token %}
 				<input type="hidden" name="source" value="{{ next }}" />
 				<input type="hidden" name="current" value="{{ next }}" />
-				<input type="hidden" name="destination" value="{{ possibleDestinations.interests }}" /> <!-- return to profile when done -->
+				<input type="hidden" name="destination" value="{{ possibleDestinations.interests }}" />
 				<input type="submit" value="Edit profile interests" />
 			</form>
 		{% endif %}
 		<br>
 
-		<!-- Professions -->
 		{% if profileProfessions %}
 			<h3> {{ profileUserAccount.firstName }}'s interested professions include...</h3>
 			<ul>
@@ -143,12 +192,11 @@
 				{% csrf_token %}
 				<input type="hidden" name="source" value="{{ next }}" />
 				<input type="hidden" name="current" value="{{ next }}" />
-				<input type="hidden" name="destination" value="{{ possibleDestinations.professions }}" /> <!-- return to profile when done -->
+				<input type="hidden" name="destination" value="{{ possibleDestinations.professions }}" />
 				<input type="submit" value="Edit professions" />
 			</form>
 		{% endif %}
 
-		<!-- Events -->
 		{% if profileEvents %}
 			<br><h3>Events {{ profileUserAccount.firstName }} has posted...</h3>
 				{% for event in profileEvents %}
@@ -163,8 +211,6 @@
 				{% endfor %}
 		{% endif %}
 
-
-		<!-- Posts -->
 		{% if profilePosts %}
 			{% if profilePosts.events %}
 		    	<br>
@@ -237,6 +283,7 @@
 				{% endfor %}
 			{% endif %}
 		{% endif %}	
+	-->
 	{% else %}
 		No user with name {{ profileUsername }} found.
 	{% endif %}
