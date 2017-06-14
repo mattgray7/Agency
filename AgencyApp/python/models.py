@@ -39,6 +39,7 @@ class UserAccount(models.Model):
     reelLink = models.CharField(max_length=500, default='')
     imdbLink = models.CharField(max_length=500, default='')
     bio = models.CharField(max_length=1000, default='')
+    mainProfession = models.CharField(max_length=200, default='')
 
     def __init__(self, *args, **kwargs):
         super(UserAccount, self).__init__(*args, **kwargs)

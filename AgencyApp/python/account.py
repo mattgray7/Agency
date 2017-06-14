@@ -394,6 +394,8 @@ class EditBackgroundView(GenericEditAccountView):
         self._formInitialValues["reel"] = self.userAccount.reelLink
         self._formInitialValues["imdb"] = self.userAccount.imdbLink
         self._formInitialValues["bio"] = self.userAccount.bio
+        self._formInitialValues["mainProfession"] = self.userAccount.mainProfession
+
         return self._formInitialValues
 
     def processForm(self):
@@ -401,6 +403,7 @@ class EditBackgroundView(GenericEditAccountView):
         self.userAccount.reelLink = self.formData.get('reel')
         self.userAccount.imdbLink = self.formData.get('imdb')
         self.userAccount.bio = self.formData.get('bio')
+        self.userAccount.mainProfession = self.formData.get("mainProfession")
         try:
             self.userAccount.save()
             return True
