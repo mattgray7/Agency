@@ -441,6 +441,7 @@
 		color: #FFF;
 		cursor: pointer;
 		background: #232323;
+		transition: background .20s ease;
 	}
 
 	.whiteButton
@@ -456,6 +457,7 @@
 		color: #000;
 		cursor: pointer;
 		background: #FFF;
+		transition: background .20s ease;
 	}
 
 	.grayButton
@@ -472,24 +474,28 @@
 		color: #FFF;
 		cursor: pointer;
 		background: #a3a3a3;
+		transition: background .20s ease;
 	}
 
 	.blackHover:hover
 	{
 		color: #FFF;
 		background: #232323;
+		transition: background .20s ease;
 	}
 
 	.whiteHover:hover
 	{
 		color: #000;
 		background: #FFF;
+		transition: background .20s ease;
 	}
 
 	.grayHover:hover
 	{
 		color: #FFF;
 		background: #bababa;
+		transition: background .20s ease;
 	}
 
 	.greenHover:hover

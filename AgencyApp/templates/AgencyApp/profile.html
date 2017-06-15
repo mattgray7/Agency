@@ -29,34 +29,34 @@
 											</div>
 										{% endif %}
 										{% if viewingOwnProfile %}
-											<div class="overlay"></div>
+											<div class="grayAlphaOverlay"></div>
 	  										<div class="hoverButton"><a onclick="redirect('{{ possibleDestinations.picture }}');"> Edit </a></div>
 	  									{% endif %}
 									</div>
-									<div id="profileBackgroundDiv">
-										<div id="profileBackgroundTextDiv" class="hoverContainer" style="width: 250px; word-wrap: break-word;">
+									<div id="profileBackgroundDiv" class="hoverContainer">
+										<div id="profileBackgroundTextDiv" style="width: 245px; word-wrap: break-word; padding: 0em 0.3em 0em 0.3em;">
 											<h1>{{ displayName }} </h1>
 											{% if profileUserAccount.mainProfession %}
 												<h3> {{profileUserAccount.mainProfession}} </h3>
 											{% endif %}
 											{% if profileUserAccount.bio %}
-												<p style="margin: 0px;"> {{ profileUserAccount.bio }} </p>
+												<p class="profileBioText"> {{ profileUserAccount.bio }} </p>
 											{% endif %}
 
 											{% if viewingOwnProfile %}
-												<div class="overlay"></div>
-		  										<div class="hoverButton"><a onclick="redirect('{{ possibleDestinations.background }}');"> Edit </a></div>
+												<!--<div class="grayOutlineOverlay"></div>-->
+		  										<div class="hoverButton"><a onclick="redirect('{{ possibleDestinations.background }}');"> <font style="color:#000;">Edit </font></a></div>
 		  									{% endif %}
 										</div>
 
 										{% if profileLinks %}
 											<div id="profileLinksDiv" style="height: 30px; padding: 0.5em 0em 0em 0em;">
-												<table style="border-width:6px; margin: 0px 0px 0px -5px;">
+												<table style="border-width:6px;">
 													<tr>
 														{% for link in profileLinks %}
 															{% if link.url and link.label %}
 																<td>
-																	<div class="whiteButton blackHover" style="padding: 1px 4px 1px 4px; display:inline" onclick="window.location.href='{{link.url}}';">
+																	<div class="whiteButton blackHover" style="padding: 1px 4px 1px 4px; display:inline; z-index:2; position: relative;" onclick="window.location.href='{{link.url}}';">
 																		{{ link.label }}
 																	</div>
 																</td>
