@@ -127,23 +127,30 @@
 							<tr>
 								<td class="profilePanel interestsPanel" style="width:259px">
 									<div id="interestsPanel" class="hoverContainer">
-										<div class="hoverButton">
-		  									<a onclick="redirect('{{ possibleDestinations.interests }}');"> <font style="color:#000;">Edit </font></a>
-		  								</div>
 										<table>
 											{% if profileUserAccount.workInterest or profileUserAccount.hireInterest %}
 												{% if profileUserAccount.workInterest and profileUserAccount.hireInterest %}
 													<tr>
 														<td style="display: inline;">
-															<div class="blackButton" id="workToggleInterestButton" onclick="toggleInterest(this, 'work');" style="padding: 1px 37px 1px 37px; display:inline; z-index:2; position: relative; border-radius: 1px;">
+															<div class="blackButton" id="workToggleInterestButton" onclick="toggleInterest(this, 'work');" style="padding: 1px 37px 1px 37px; display:inline; z-index:1; position: relative; border-radius: 1px;">
 																Work
 															</div>
-															<div class="whiteButton" id="hireToggleInterestButton" onclick="toggleInterest(this, 'hire');" style="padding: 1px 37px 1px 37px; display:inline; z-index:2; position: relative; border-radius: 1px;">
+															<div class="whiteButton" id="hireToggleInterestButton" onclick="toggleInterest(this, 'hire');" style="padding: 1px 37px 1px 37px; display:inline; z-index:1; position: relative; border-radius: 1px;">
 																Hiring
 															</div>
-													</td>
+														</td>
 													</tr>
 												{% endif %}
+
+												<!-- Move the hover edit button lower if work/hire button exists -->
+												{% if profileUserAccount.workInterest and profileUserAccount.hireInterest %}
+													<div class="hoverButton" style="z-index:2; top: 40px;">
+												{% else %}
+													<div class="hoverButton" style="z-index:2; top: 15px;">
+												{% endif %}
+													<a onclick="redirect('{{ possibleDestinations.interests }}');"> <font style="color:#000;">Edit </font></a>
+												</div>
+
 												{% if profileUserAccount.workInterest %}
 													<tr>
 														<td>
