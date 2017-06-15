@@ -40,6 +40,7 @@
 			{% endif %}
 			return returnString;
 		}
+
 		function toggleInterest(buttonElement, interestType){
 			if(interestType != activeInterest){
 				// Set this button to active
@@ -62,6 +63,7 @@
 				}
 			}
 		}
+
 		function getInterestTitle(interestType){
 			var headerTag = "<h2>";
 			{% if profileUserAccount.workInterest and profileUserAccount.hireInterest %}
@@ -77,6 +79,22 @@
 				interestTitle = "<h3>No interests selected</h3>";
 			}
 			return interestTitle
+		}
+
+		var profileTabs = ["background", "posts", "events", "reviews"];
+		function selectProfileTab(tabType){
+			for(var i=0; i < profileTabs.length; i++){
+				var buttonId = profileTabs[i] + "ProfileButton";
+				var profileButtonDiv = document.getElementById(buttonId);
+				if(profileButtonDiv != null){
+					if(profileTabs[i] === tabType){
+						profileButtonDiv.className = "profileTabButtonActive";
+					}else{
+						profileButtonDiv.className = "profileTabButtonInactive";
+					}
+				}
+					
+			}
 		}
 	</script>
 
@@ -186,17 +204,19 @@
 					</td>
 					<td colspan="2" class="profileTableMainColumn" style="width:50%; max-width:50%: position:relative;">
 						<table style="height:100%; position:absolute; top: 100px;">
-							<!--<tr>
-								<td>
-									<div class="messagePanel profilePanel" style="width: 500px;">
-										Send a message placeholder
-									</div>
-								</td>
-							</tr>-->
 							<tr>
 								<td>
 									<div class="profilePanel postsPanel" style="min-width: 400px; width:100%;">
-										posts and shit
+										<table>
+											<tr>
+												<td style="text-align:center;">
+													<div class="profileTabButtonActive" id="backgroundProfileButton" onclick="selectProfileTab('background')">Background</div>
+													<div class="profileTabButtonInactive" id="postsProfileButton" onclick="selectProfileTab('posts')">Posts</div>
+													<div class="profileTabButtonInactive" id="eventsProfileButton" onclick="selectProfileTab('events')">Events</div>
+													<div class="profileTabButtonInactive" id="reviewsProfileButton" onclick="selectProfileTab('reviews')">Reviews</div>
+												</td>
+											</tr>
+										</table>
 									</div>
 								</td>
 							</tr>
