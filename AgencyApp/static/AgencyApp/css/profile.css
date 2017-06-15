@@ -37,9 +37,24 @@
 		font-weight: 500;
 		font-size: 0.9em;
 	}
+	.profileProfessionList
+	{
+		
+	}
+	.profileProfessionList li
+	{
+		color: rgba(0,0,0,0.8);
+	}
+	.profileProfessionList li:hover
+	{
+		color: rgba(0,0,0,1.0);
+		cursor: pointer;
+		font-weight: 1000;
+		font-size: 1.2em;
+	}
 	.interestsPanel
 	{
-		height: 403px;
+		min-height: 75px;
 	}
 	.messagePanel
 	{

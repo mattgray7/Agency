@@ -45,7 +45,9 @@
 
 											{% if viewingOwnProfile %}
 												<!--<div class="grayOutlineOverlay"></div>-->
-		  										<div class="hoverButton"><a onclick="redirect('{{ possibleDestinations.background }}');"> <font style="color:#000;">Edit </font></a></div>
+		  										<div class="hoverButton">
+		  											<a onclick="redirect('{{ possibleDestinations.background }}');"> <font style="color:#000;">Edit </font></a>
+		  										</div>
 		  									{% endif %}
 										</div>
 
@@ -71,7 +73,119 @@
 							</tr>
 							<tr>
 								<td class="profilePanel interestsPanel" style="width:259px">
-									interests
+									<div id="interestsPanel" class="hoverContainer">
+										<div class="hoverButton">
+		  									<a onclick="redirect('{{ possibleDestinations.interests }}');"> <font style="color:#000;">Edit </font></a>
+		  								</div>
+		  								<script>
+			  								function getProfessionList(){
+			  									var returnString = '';
+			  									{% if profileInterests.work %}
+			  										returnString += '<div class="profileProfessionList"><ul>';
+													{% for interest in profileInterests.work %}
+														returnString += '<li> {{interest.professionName}} </li>'
+													{% endfor %}
+													returnString += '</ul></div>';
+												{% endif %}
+												return returnString;
+			  								}
+			  								function getHiringList(){
+			  									var returnString = '';
+			  									{% if profileInterests.hire %}
+													returnString += '<div class="profileProfessionList"><ul>'
+													{% for interest in profileInterests.hire %}
+														{% if interest.subInterest == "hireProject" %}
+															returnString += "<li>Projects</li>";
+														{% elif interest.subInterest == "hirePermanent" %}
+															returnString += "<li>Permanent Positions</li>";
+														{% elif interest.subInterest == "casting" %}
+															returnString += "<li>Casting</li>";
+														{% elif interest.subInterest == "collaborating" %}
+															returnString += "<li>Collaborating</li>"
+														{% endif %}
+													{% endfor %}
+													returnString += "</ul></div>";
+												{% endif %}
+												return returnString;
+			  								}
+			  								function toggleInterest(buttonElement, interestType){
+			  									if(interestType != activeInterest){
+			  										// Set this button to active
+			  										var newActiveButtonId = interestType + "ToggleInterestButton";
+			  										var newActiveButton = document.getElementById(newActiveButtonId);
+			  										if(newActiveButton != null){
+			  											newActiveButton.className = "blackButton";
+			  										}
+
+			  										var oldActiveButtonId = activeInterest + "ToggleInterestButton";
+			  										var oldActiveButton = document.getElementById(oldActiveButtonId);
+			  										if(oldActiveButton != null){
+			  											oldActiveButton.className = "whiteButton";
+			  										}
+			  										activeInterest = interestType;
+
+			  										if(interestType === "work"){
+			  											document.getElementById("interestContent").innerHTML = getProfessionList();
+			  										}else if(interestType === "hire"){
+			  											document.getElementById("interestContent").innerHTML = getHiringList();
+			  										}
+
+			  									}
+			  								}
+		  								</script>
+										<table>
+											{% if profileUserAccount.workInterest or profileUserAccount.hireInterest %}
+												{% if profileUserAccount.workInterest and profileUserAccount.hireInterest %}
+													<script>
+														var activeInterest = "work";
+													</script>
+													<tr>
+														<td style="display: inline;">
+															<div class="blackButton" id="workToggleInterestButton" onclick="toggleInterest(this, 'work');" style="padding: 1px 37px 1px 37px; display:inline; z-index:2; position: relative; border-radius: 1px;">
+																Work
+															</div>
+															<div class="whiteButton" id="hireToggleInterestButton" onclick="toggleInterest(this, 'hire');" style="padding: 1px 37px 1px 37px; display:inline; z-index:2; position: relative; border-radius: 1px;">
+																Hiring
+															</div>
+													</td>
+													</tr>
+												{% endif %}
+												{% if profileUserAccount.workInterest %}
+													<tr>
+														<td>
+															<h1> Seeking Work</h1>
+														</td>
+													</tr>
+												{% elif profileUserAccount.hireInterest %}
+													<tr>
+														<td>
+															<h1> Hiring </h1>
+														</td>
+													</tr>
+												{% endif %}
+												<tr>
+													<td>
+														<div id="interestContent">
+															<script>
+																{% if profileUserAccount.workInterest %}
+																	document.write(getProfessionList());
+																{% elif profileUserAccount.hireInterest %}
+																	document.write(getHiringList());
+																{% endif %}
+															</script>
+														</div>
+													</td>
+												</tr>
+											{% else %}
+												<tr>
+													<td>
+															No interests selected
+														</td>
+													</tr>
+												</tr>
+											{% endif %}
+										</table>
+									</div>
 								</td>
 							</tr>
 						</table>
