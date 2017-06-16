@@ -123,7 +123,26 @@
 						{% endif %}
 						displayString += getPictureTag(picURL, "profileProjectListElementImage", "100px;");
 
-						displayString += "<div class='profileProjectListElementText'><h3>{{projectPost.title}}</h3><h5>{{projectPost.status}}</h5><br><br></div>"
+						displayString += "<div class='profileProjectListElementText'><h3>{{projectPost.title}}</h3><h5>{{projectPost.status}}<br>"
+						{% if projectPost.openRoles|length > 0 %}
+							displayString += "{{projectPost.openRoles|length}} "
+							{% if projectPost.openRoles|length == 1 %}
+								displayString += "role";
+							{% else %}
+								displayString += "roles";
+							{% endif %}
+							displayString += " available<br>"
+						{% endif %}
+						{% if projectPost.openJobs|length > 0 %}
+							displayString += "Hiring for {{projectPost.openJobs|length}} "
+							{% if projectPost.openJobs|length == 1 %}
+								displayString += "position";
+							{% else %}
+								displayString += "positions";
+							{% endif %}
+							displayString += "<br>"
+						{% endif %}
+						displayString += "</h5><br></div>";
 
 
 						/*<a onclick='redirectToPost(" + '"{{ projectPost.postID }}");' + "'>{{projectPost.title}}</a></div></li>";*/

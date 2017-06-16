@@ -112,14 +112,43 @@ class AbstractPost(models.Model):
     description = models.CharField(max_length=5000, default=None, blank=True, null=True)
     postPicturePath = models.CharField(max_length=5000, default=None, blank=True, null=True)
     postPicture = models.ImageField(default=None, upload_to=image_directory_path, storage=imageStorage, blank=True, null=True)
-    status = models.CharField(max_length=50, default="Available", blank=True, null=True)
+    status = models.CharField(max_length=50, default="Open", blank=True, null=True)
 
 class EventPost(AbstractPost):
     location = models.CharField(max_length=1000, default=None, blank=True, null=True)
     date = models.DateField(default=None, blank=True, null=True)
 
 class ProjectPost(AbstractPost):
-    pass
+    def __init__(self, *args, **kwargs):
+        super(ProjectPost, self).__init__(*args, **kwargs)
+        self._openRoles = None
+        self._totalRoles = None
+        self._openJobs = None
+        self._totalJobs = None
+
+    @property
+    def openRoles(self):
+        if self._openRoles is None:
+            self._openRoles = CastingPost.objects.filter(projectID=self.postID, status="Open")
+        return self._openRoles
+
+    @property
+    def totalRoles(self):
+        if self._totalRoles is None:
+            self._totalRoles = CastingPost.objects.filter(projectID=self.postID)
+        return self._totalRoles
+
+    @property
+    def openJobs(self):
+        if self._openJobs is None:
+            self._openJobs = WorkPost.objects.filter(projectID=self.postID, status="Hiring")
+        return self._openJobs
+
+    @property
+    def totalJobs(self):
+        if self._totalJobs is None:
+            self._totalJobs = WorkPost.objects.filter(projectID=self.postID)
+        return self._totalJobs
 
 class WorkPost(AbstractPost):
     profession = models.CharField(max_length=200)
