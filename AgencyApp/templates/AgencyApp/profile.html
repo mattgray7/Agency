@@ -110,47 +110,53 @@
 				displayReviews();
 			}
 		}
+
+		function createProjectListElement(projectID, projectPictureURL, title, status, numOpenRoles, numOpenJobs){
+			var projectString = "<li id='profileProjectListElement_" + projectID + "' class='profileProjectListElement' onclick='redirectToPost(" + '"' + projectID + '");' + "'>"
+			projectString += getPictureTag(projectPictureURL, "profileProjectListElementImage", "100px;");
+			projectString += "<div class='profileProjectListElementText'><h3>" + title + "</h3><h5>" + status + "<br>"
+			if(numOpenRoles > 0){
+				projectString += parseInt(numOpenRoles) + " ";
+				if(numOpenRoles === 1){
+					projectString += "role";
+				}else{
+					projectString += "roles";
+				}
+				projectString += " available<br>"
+			}
+			if(numOpenJobs > 0){
+				projectString += "Hiring for " + parseInt(numOpenJobs) + " ";
+				if(numOpenJobs === 1){
+					projectString += "position";
+				}else{
+					projectString += "positions";
+				}
+			}
+			projectString += "<br></h5><br></div></li>";
+			return projectString
+		}
+
+		function createCurrentProjectList(){
+			{% if profilePosts.projects and profilePosts.projects.current %}
+				var displayString = "<div id='currentProjectPanel' class='currentProjectPanel'><ul class='profileProjectList'><li><h2>Current Projects</h2></li>";
+				{% for projectPost in profilePosts.projects.current %}
+					var picURL = null
+					{% if projectPost.postPicture %}
+						picURL = "{{ projectPost.postPicture.url }}"
+					{% endif %}
+
+
+					displayString += createProjectListElement("{{projectPost.postID}}", picURL, "{{projectPost.title}}", "{{projectPost.status}}", "{{projectPost.openRoles|length}} ", "{{projectPost.openJobs|length}} ")
+				{% endfor %}
+			{% endif %}
+			displayString += "</ul></div>";
+			return displayString;
+		}
+
 		function displayBackground(){
 			var profileDisplayPanelDiv = document.getElementById("profileDisplayPanel")
 			if(profileDisplayPanelDiv != null){
-				{% if profilePosts.projects and profilePosts.projects.current %}
-					var displayString = "<div id='currentProjectPanel' class='currentProjectPanel'><ul class='profileProjectList'><li><h2>Current Projects</h2></li>";
-					{% for projectPost in profilePosts.projects.current %}
-						var rowID = "profileProjectListElement_{{projectPost.postID}}";
-						displayString += "<li id='" + rowID + "' class='profileProjectListElement' onclick='redirectToPost(" + '"{{projectPost.postID}}")' + "'>"
-						var picURL = null
-						{% if projectPost.postPicture %}
-							picURL = "{{ projectPost.postPicture.url }}"
-						{% endif %}
-						displayString += getPictureTag(picURL, "profileProjectListElementImage", "100px;");
-
-						displayString += "<div class='profileProjectListElementText'><h3>{{projectPost.title}}</h3><h5>{{projectPost.status}}<br>"
-						{% if projectPost.openRoles|length > 0 %}
-							displayString += "{{projectPost.openRoles|length}} "
-							{% if projectPost.openRoles|length == 1 %}
-								displayString += "role";
-							{% else %}
-								displayString += "roles";
-							{% endif %}
-							displayString += " available<br>"
-						{% endif %}
-						{% if projectPost.openJobs|length > 0 %}
-							displayString += "Hiring for {{projectPost.openJobs|length}} "
-							{% if projectPost.openJobs|length == 1 %}
-								displayString += "position";
-							{% else %}
-								displayString += "positions";
-							{% endif %}
-							displayString += "<br>"
-						{% endif %}
-						displayString += "</h5><br></div>";
-
-
-						/*<a onclick='redirectToPost(" + '"{{ projectPost.postID }}");' + "'>{{projectPost.title}}</a></div></li>";*/
-					{% endfor %}
-				{% endif %}
-				displayString += "</ul></div>";
-				profileDisplayPanel.innerHTML = displayString;
+				profileDisplayPanelDiv.innerHTML = createCurrentProjectList();
 			}
 		}
 
@@ -325,13 +331,7 @@
 									</div>
 								</td>
 							</tr>
-							<tr style="max-width: 400px;">
-								<td >
-									<div class="profilePanel commentsPanel" style="min-width: 400px; width:100%;">
-										Comments and shit
-									</div>
-								</td>
-							</tr>
+							
 						</table>
 					</td>
 					<td class="profileTableMainColumn" style="width:20%">

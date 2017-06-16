@@ -63,11 +63,10 @@
             var picture= "";
             if(sourceURL != null && sourceURL != ""){
                 picture += '<img class="' + className + '" width="' + width + '" src="' + sourceURL + '" />';
-                }else{
-                    picture += '<img class="' + className + '" width="' + width + '" height="150px">';
-                }
-            console.log("picture is " + picture)
-                return picture;
+            }else{
+                picture += '<img class="' + className + '" width="' + width + '" height="150px">';
+            }
+            return picture;
         }
     </script>
 
