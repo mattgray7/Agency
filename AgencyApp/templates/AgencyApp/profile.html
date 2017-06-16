@@ -90,11 +90,12 @@
 				var profileButtonBorderCoverDiv = document.getElementById(borderCoverId)
 				if(profileButtonDiv != null && profileButtonBorderCoverDiv != null){
 					if(profileTabs[i] === tabType){
+						profileButtonBorderCoverDiv.style.opacity = "1";
+						profileButtonBorderCoverDiv.style.background = "#FFF"
 						profileButtonDiv.className = "profileTabButtonActive";
-						profileButtonBorderCoverDiv.style.display = "block";
 					}else{
+						profileButtonBorderCoverDiv.style.opacity = "0";
 						profileButtonDiv.className = "profileTabButtonInactive";
-						profileButtonBorderCoverDiv.style.display = "none";
 					}
 				}
 			}
@@ -282,7 +283,7 @@
 													</div>
 													<div class="profileTabButtonInactive" id="reviewsProfileButton" onclick="selectProfileTab('reviews')" style="margin-right: -3px;">
 														Reviews
-														<div id="reviewsBorderCover" class="profileTabBorderCover"></div>
+														<div id="reviewsBorderCover" class="profileTabBorderCover" style="width: 132%;"></div>
 													</div>
 												</td>
 											</tr>
