@@ -85,14 +85,20 @@
 		function selectProfileTab(tabType){
 			for(var i=0; i < profileTabs.length; i++){
 				var buttonId = profileTabs[i] + "ProfileButton";
+				var borderCoverId = profileTabs[i] + "BorderCover";
 				var profileButtonDiv = document.getElementById(buttonId);
-				if(profileButtonDiv != null){
+				var profileButtonBorderCoverDiv = document.getElementById(borderCoverId)
+				if(profileButtonDiv != null && profileButtonBorderCoverDiv != null){
 					if(profileTabs[i] === tabType){
 						profileButtonDiv.className = "profileTabButtonActive";
+						profileButtonBorderCoverDiv.style.display = "block";
 					}else{
 						profileButtonDiv.className = "profileTabButtonInactive";
+						profileButtonBorderCoverDiv.style.display = "none";
 					}
 				}
+
+
 					
 			}
 		}
@@ -210,10 +216,29 @@
 										<table>
 											<tr>
 												<td style="text-align:center;">
-													<div class="profileTabButtonActive" id="backgroundProfileButton" onclick="selectProfileTab('background')">Background</div>
-													<div class="profileTabButtonInactive" id="postsProfileButton" onclick="selectProfileTab('posts')">Posts</div>
-													<div class="profileTabButtonInactive" id="eventsProfileButton" onclick="selectProfileTab('events')">Events</div>
-													<div class="profileTabButtonInactive" id="reviewsProfileButton" onclick="selectProfileTab('reviews')">Reviews</div>
+													<div class="profileTabButtonActive" id="backgroundProfileButton" onclick="selectProfileTab('background')" style="margin-left: 0px;">
+														Background
+														<div id="backgroundBorderCover" class="profileTabBorderCover" style="display:block;"></div>
+													</div>
+													<div class="profileTabButtonInactive" id="postsProfileButton" onclick="selectProfileTab('posts')">
+														Posts
+														<div id="postsBorderCover" class="profileTabBorderCover"></div>
+													</div>
+													<div class="profileTabButtonInactive" id="eventsProfileButton" onclick="selectProfileTab('events')">
+														Events
+														<div id="eventsBorderCover" class="profileTabBorderCover"></div>
+													</div>
+													<div class="profileTabButtonInactive" id="reviewsProfileButton" onclick="selectProfileTab('reviews')">
+														Reviews
+														<div id="reviewsBorderCover" class="profileTabBorderCover"></div>
+													</div>
+												</td>
+											</tr>
+											<tr>
+												<td>
+													<div class="profileDisplayPanel">
+
+													</div>
 												</td>
 											</tr>
 										</table>
