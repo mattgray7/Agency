@@ -111,7 +111,6 @@
 
 	.profileDisplayPanel
 	{
-		height: 400px;
 		background: #FFF;
 		color: #000;
 		border: 2px solid #000;
@@ -122,8 +121,8 @@
 		padding: 0.5em;
 	}
 
-	.currentProjectPanel
-	{
+	.projectListPanel
+		{
 		width: 99%;
 		border: 2px solid #000;
 		border-radius: 2px;
