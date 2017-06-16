@@ -17,6 +17,7 @@ class ProfileView(views.GenericFormView):
         self._profileUserAccount = None
         self._profileProfessions = None
         self._profilePosts = None
+        self._profileProjects = None
         self._profileInterests = None
         self._profileLinks = None
         self._displayName = None
@@ -93,9 +94,19 @@ class ProfileView(views.GenericFormView):
                 self._profilePosts["events"] = models.EventPost.objects.filter(poster=self.profileUserAccount.username)
                 self._profilePosts["collaboration"] = models.CollaborationPost.objects.filter(poster=self.profileUserAccount.username)
                 self._profilePosts["work"] = models.WorkPost.objects.filter(poster=self.profileUserAccount.username)
-                self._profilePosts["projects"] = models.ProjectPost.objects.filter(poster=self.profileUserAccount.username)
+                self._profilePosts["projects"] = self.profileProjects
                 self._profilePosts["casting"] = models.CastingPost.objects.filter(poster=self.profileUserAccount.username)
         return self._profilePosts
+
+    @property
+    def profileProjects(self):
+        if self._profileProjects is None:
+            self._profileProjects = {"current": models.ProjectPost.objects.filter(poster=self.profileUserAccount.username,
+                                                                                  status__in=["Pre-production", "In production", "Post production", "Screening"]),
+                                     "completed": models.ProjectPost.objects.filter(poster=self.profileUserAccount.username,
+                                                                                   status="Completed")
+                                     }
+        return self._profileProjects
 
     @property
     def pageContext(self):

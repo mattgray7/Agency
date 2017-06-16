@@ -97,18 +97,6 @@
 		transition: background .20s ease;
 	}
 
-	.profileDisplayPanel
-	{
-		height: 400px;
-		background: #FFF;
-		color: #000;
-		border: 2px solid #000;
-		border-radius: 2px;
-		margin-top: -13px;
-		position: relative;
-		z-index: 2;
-	}
-
 	.profileTabBorderCover
 	{
 		width: 132.5%;
@@ -119,6 +107,60 @@
 		z-index: 3;
 		opacity: 0;
 		transition: background .2s ease;
+	}
+
+	.profileDisplayPanel
+	{
+		height: 400px;
+		background: #FFF;
+		color: #000;
+		border: 2px solid #000;
+		border-radius: 2px;
+		margin-top: -13px;
+		position: relative;
+		z-index: 2;
+		padding: 0.5em;
+	}
+
+	.currentProjectPanel
+	{
+		width: 99%;
+		border: 2px solid #000;
+		border-radius: 2px;
+	}
+
+	.profileProjectList
+	{
+		padding: 0.5em;
+	}
+
+	.profileProjectListElement
+	{
+		border: 1px solid #b5b5b5;
+		border-radius: 3px;
+		padding: 0.5em;
+		text-align: right;
+	}
+
+	.profileProjectListElementImage
+	{
+		float: left;
+		display:inline;
+	}
+
+	.profileProjectListElementText
+	{
+		text-align: right;
+	}
+
+	.profileProjectListElementText h3
+	{
+		margin: 0px;
+	}
+
+	.profileProjectListElementText h5
+	{
+		margin: 0px;
 	}
 
 	.interestsPanel

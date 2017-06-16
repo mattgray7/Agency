@@ -113,7 +113,23 @@
 		function displayBackground(){
 			var profileDisplayPanelDiv = document.getElementById("profileDisplayPanel")
 			if(profileDisplayPanelDiv != null){
-				var displayString = "displaying background";
+				{% if profilePosts.projects and profilePosts.projects.current %}
+					var displayString = "<div id='currentProjectPanel' class='currentProjectPanel'><ul class='profileProjectList'><li><h2>Current Projects</h2></li>";
+					{% for projectPost in profilePosts.projects.current %}
+						displayString += "<li class='profileProjectListElement'>"
+						var picURL = null
+						{% if projectPost.postPicture %}
+							picURL = "{{ projectPost.postPicture.url }}"
+						{% endif %}
+						displayString += getPictureTag(picURL, "profileProjectListElementImage", "100px;");
+
+						displayString += "<div class='profileProjectListElementText'><h3>{{projectPost.title}}</h3><h5>{{projectPost.status}}</h5><br><br></div>"
+
+
+						/*<a onclick='redirectToPost(" + '"{{ projectPost.postID }}");' + "'>{{projectPost.title}}</a></div></li>";*/
+					{% endfor %}
+				{% endif %}
+				displayString += "</ul></div>";
 				profileDisplayPanel.innerHTML = displayString;
 			}
 		}
@@ -121,14 +137,7 @@
 		function displayPosts(){
 			var profileDisplayPanelDiv = document.getElementById("profileDisplayPanel")
 			if(profileDisplayPanelDiv != null){
-				var displayString = "<ul class='displayPostsList'>";
-				{% if profilePosts.projects %}
-					displayString += "<li>Projects</li>";
-					{% for projectPost in profilePosts.projects %}
-						displayString += "<li><a onclick='redirectToPost(" + '"{{ projectPost.postID }}");' + "'>{{projectPost.title}}</a></li>";
-					{% endfor %}
-				{% endif %}
-				displayString += "</ul>";
+				var displayString = "displaying posts";
 				profileDisplayPanel.innerHTML = displayString;
 			}
 		}
@@ -340,8 +349,8 @@
 					{% endif %}
 				}
 
-				//selectProfileTab("background");
-				selectProfileTab("posts")
+				selectProfileTab("background");
+				//selectProfileTab("posts")
 			</script>
 		</div>
 

@@ -13,51 +13,62 @@
     </head>
 
     <script>
-    // Deconstructor functions to run when a toolbar source is selected (eg deleting a newly created post when leaving the create post page)
-    var toolbarDeconstructorFunctions = [];
+        // Deconstructor functions to run when a toolbar source is selected (eg deleting a newly created post when leaving the create post page)
+        var toolbarDeconstructorFunctions = [];
 
-    // using jQuery
-    function getCookie(name) {
-        var cookieValue = null;
-        if (document.cookie && document.cookie != '') {
-            var cookies = document.cookie.split(';');
-            for (var i = 0; i < cookies.length; i++) {
-                var cookie = jQuery.trim(cookies[i]);
-                // Does this cookie string begin with the name we want?
-                if (cookie.substring(0, name.length + 1) == (name + '=')) {
-                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                    break;
+        // using jQuery
+        function getCookie(name) {
+            var cookieValue = null;
+            if (document.cookie && document.cookie != '') {
+                var cookies = document.cookie.split(';');
+                for (var i = 0; i < cookies.length; i++) {
+                    var cookie = jQuery.trim(cookies[i]);
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
                 }
             }
+            return cookieValue;
         }
-        return cookieValue;
-    }
-    var csrftoken = getCookie('csrftoken');
-    function csrfSafeMethod(method) {
-        // these HTTP methods do not require CSRF protection
-        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
-    }
-    $.ajaxSetup({
-        beforeSend: function(xhr, settings) {
-            if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
-                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+        var csrftoken = getCookie('csrftoken');
+        function csrfSafeMethod(method) {
+            // these HTTP methods do not require CSRF protection
+            return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+        }
+        $.ajaxSetup({
+            beforeSend: function(xhr, settings) {
+                if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                    xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                }
             }
-        }
-    });
+        });
 
-    //Indexed div names for multiple profile names being displayed on a page
-    var profileIndex = 0;
-    var profileName = "profileRedirectButton"
-    var profileIndexedName = profileName + profileIndex.toString()
-    function getNextProfileName(){
-        // remove numbers and return current name
-        var cleanedName = profileIndexedName.replace(/[0-9]/g, '');
-        var newName = profileName + profileIndex.toString();
-        var oldName = profileIndexedName;
-        profileIndexedName = newName;
-        profileIndex = profileIndex + 1;
-        return newName
-    }
+        //Indexed div names for multiple profile names being displayed on a page
+        var profileIndex = 0;
+        var profileName = "profileRedirectButton"
+        var profileIndexedName = profileName + profileIndex.toString()
+        function getNextProfileName(){
+            // remove numbers and return current name
+            var cleanedName = profileIndexedName.replace(/[0-9]/g, '');
+            var newName = profileName + profileIndex.toString();
+            var oldName = profileIndexedName;
+            profileIndexedName = newName;
+            profileIndex = profileIndex + 1;
+            return newName
+        }
+
+        function getPictureTag(sourceURL, className, width){
+            var picture= "";
+            if(sourceURL != null && sourceURL != ""){
+                picture += '<img class="' + className + '" width="' + width + '" src="' + sourceURL + '" />';
+                }else{
+                    picture += '<img class="' + className + '" width="' + width + '" height="150px">';
+                }
+            console.log("picture is " + picture)
+                return picture;
+        }
     </script>
 
     <body>
