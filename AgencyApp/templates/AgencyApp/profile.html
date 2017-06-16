@@ -116,7 +116,8 @@
 				{% if profilePosts.projects and profilePosts.projects.current %}
 					var displayString = "<div id='currentProjectPanel' class='currentProjectPanel'><ul class='profileProjectList'><li><h2>Current Projects</h2></li>";
 					{% for projectPost in profilePosts.projects.current %}
-						displayString += "<li class='profileProjectListElement'>"
+						var rowID = "profileProjectListElement_{{projectPost.postID}}";
+						displayString += "<li id='" + rowID + "' class='profileProjectListElement' onclick='redirectToPost(" + '"{{projectPost.postID}}")' + "'>"
 						var picURL = null
 						{% if projectPost.postPicture %}
 							picURL = "{{ projectPost.postPicture.url }}"
