@@ -149,8 +149,21 @@
 
 	.profileProjectListElementImage
 	{
+		width: 80px;
+		display: table-cell;
+		vertical-align: middle;
+	}
+
+	.profileProjectListElementImageContainer
+	{
 		float: left;
-		display:inline;
+		display: inline;
+		background: #000;
+		height: 80px;
+		width: 80px;
+		border: 1px solid #000;
+		border-radius: 3px;
+
 	}
 
 	.profileProjectListElementText

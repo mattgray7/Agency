@@ -62,9 +62,19 @@
         function getPictureTag(sourceURL, className, width){
             var picture= "";
             if(sourceURL != null && sourceURL != ""){
-                picture += '<img class="' + className + '" width="' + width + '" src="' + sourceURL + '" />';
+                picture += '<img class="' + className + '" '
+                if(width != null){
+                    picture += 'width="' + width + '" ';
+                }
+                picture += 'src="' + sourceURL + '" />';
             }else{
-                picture += '<img class="' + className + '" width="' + width + '" height="150px">';
+                picture += '<img class="' + className + '" '
+                if(width != null){
+                    picture += 'width="' + width + '" ';
+                }else{
+                    picture += 'width="100px;" ';
+                }
+                picture += 'height="100px"; />';
             }
             return picture;
         }

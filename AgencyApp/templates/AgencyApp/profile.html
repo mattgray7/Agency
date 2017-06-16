@@ -113,7 +113,7 @@
 
 		function createProjectListElement(projectID, projectPictureURL, title, status, numOpenRoles, numOpenJobs){
 			var projectString = "<li id='profileProjectListElement_" + projectID + "' class='profileProjectListElement' onclick='redirectToPost(" + '"' + projectID + '");' + "'>"
-			projectString += getPictureTag(projectPictureURL, "profileProjectListElementImage", "100px;");
+			projectString += "<div class='profileProjectListElementImageContainer'>" + getPictureTag(projectPictureURL, "profileProjectListElementImage", "") + "</div>";
 			projectString += "<div class='profileProjectListElementText'><h3>" + title + "</h3><h5>" + status + "<br>"
 			if(numOpenRoles > 0){
 				projectString += parseInt(numOpenRoles) + " ";
