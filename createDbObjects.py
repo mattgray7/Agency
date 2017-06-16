@@ -17,6 +17,8 @@ os.system("python /Users/MattGray/Projects/Agency/Agency/manage.py flush")
 print "\nDeleting media..."
 os.system("rm -r /Users/MattGray/Projects/Agency/Agency/media/*")
 
+print "\nCreating new user network.\n"
+
 #=================== Project 1
 # User 1
 project1User = User.objects.create_user(username="mattgray",
@@ -40,18 +42,41 @@ project1UserAccount.profilePicture.name = "/profile.jpg"
 project1UserAccount.save()
 
 
+def createProject(poster, title, description, status, picURL):
+	projectID = helpers.createUniqueID(models.ProjectPost, "postID")
+	projectPost = models.ProjectPost(postID=projectID,
+									 projectID=projectID,
+									 poster=poster,
+									 title=title,
+									 description=description,
+									 status=status)
+	if picURL:
+		picResult = urllib.urlretrieve(picURL)
+		projectPost.postPicture = File(open(picResult[0]))
+		projectPost.postPicture.name = "/project_{0}.jpg".format(projectID)
+	projectPost.save()
+	return projectPost
+
 # Great Gatsby project
-project1ProjectID = helpers.createUniqueID(models.ProjectPost, "postID")
-project1ProjectPost = models.ProjectPost(postID=project1ProjectID,
-									poster="mattgray",
+project1ProjectPost = createProject(poster="mattgray",
 									title="The Great Gatsby",
 									description="Modern reimagining set in New York",
-									status="In production")
-picResult = urllib.urlretrieve("/Users/MattGray/Projects/Agency/Agency/scripts/media/greatGatsby.jpg")
-project1ProjectPost.postPicture = File(open(picResult[0]))
-project1ProjectPost.postPicture.name = "/project_{0}.jpg".format(project1ProjectID)
-project1ProjectPost.save()
+									status="In production",
+									picURL="/Users/MattGray/Projects/Agency/Agency/scripts/media/greatGatsby.jpg")
+project1ProjectID = project1ProjectPost.projectID
 
+
+project2ProjectPost = createProject(poster="mattgray",
+									title="The Kings of Summer",
+									description="Three kids build a house in the woods and run away from their families",
+									status="Completed",
+									picURL="/Users/MattGray/Projects/Agency/Agency/scripts/media/kingsOfSummer.jpg")
+
+project3ProjectPost = createProject(poster="mattgray",
+									title="Valerian",
+									description="A space opera from Luc Besson based on the legendary French comic books.",
+									status="Pre-production",
+									picURL="/Users/MattGray/Projects/Agency/Agency/scripts/media/valerian.jpg")
 
 # Nick Carraway casting post
 project1CastingPostID = helpers.createUniqueID(models.CastingPost, "postID")
