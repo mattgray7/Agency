@@ -97,9 +97,47 @@
 						profileButtonBorderCoverDiv.style.display = "none";
 					}
 				}
+			}
 
+			if(tabType === "background"){
+				displayBackground();
+			}else if(tabType === "posts"){
+				displayPosts();
+			}else if(tabType === "events"){
+				displayEvents();
+			}else if(tabType === "reviews"){
+				displayReviews();
+			}
+		}
+		function displayBackground(){
+			var profileDisplayPanelDiv = document.getElementById("profileDisplayPanel")
+			if(profileDisplayPanelDiv != null){
+				var displayString = "displaying background";
+				profileDisplayPanel.innerHTML = displayString;
+			}
+		}
 
-					
+		function displayPosts(){
+			var profileDisplayPanelDiv = document.getElementById("profileDisplayPanel")
+			if(profileDisplayPanelDiv != null){
+				var displayString = "displaying posts";
+				profileDisplayPanel.innerHTML = displayString;
+			}
+		}
+
+		function displayEvents(){
+			var profileDisplayPanelDiv = document.getElementById("profileDisplayPanel")
+			if(profileDisplayPanelDiv != null){
+				var displayString = "displaying events";
+				profileDisplayPanel.innerHTML = displayString;
+			}
+		}
+
+		function displayReviews(){
+			var profileDisplayPanelDiv = document.getElementById("profileDisplayPanel")
+			if(profileDisplayPanelDiv != null){
+				var displayString = "displaying reviews";
+				profileDisplayPanel.innerHTML = displayString;
 			}
 		}
 	</script>
@@ -216,15 +254,15 @@
 										<table>
 											<tr>
 												<td style="text-align:center;">
-													<div class="profileTabButtonActive" id="backgroundProfileButton" onclick="selectProfileTab('background')" style="margin-left: 0px;">
+													<div class="profileTabButtonInactive" id="backgroundProfileButton" onclick="selectProfileTab('background')" style="margin-left: 0px;">
 														Background
-														<div id="backgroundBorderCover" class="profileTabBorderCover" style="display:block;"></div>
+														<div id="backgroundBorderCover" class="profileTabBorderCover"></div>
 													</div>
 													<div class="profileTabButtonInactive" id="postsProfileButton" onclick="selectProfileTab('posts')">
 														Posts
 														<div id="postsBorderCover" class="profileTabBorderCover"></div>
 													</div>
-													<div class="profileTabButtonInactive" id="eventsProfileButton" onclick="selectProfileTab('events')">
+													<div class="profileTabButtonInactive" id="eventsProfileButton" onclick="selectProfileTab('events')" style="margin-left: -1px;">
 														Events
 														<div id="eventsBorderCover" class="profileTabBorderCover"></div>
 													</div>
@@ -236,9 +274,7 @@
 											</tr>
 											<tr>
 												<td>
-													<div class="profileDisplayPanel">
-
-													</div>
+													<div id="profileDisplayPanel" class="profileDisplayPanel"></div>
 												</td>
 											</tr>
 										</table>
@@ -288,6 +324,8 @@
 						interestTitleDiv.innerHTML = getInterestTitle("other")
 					{% endif %}
 				}
+
+				selectProfileTab("background");
 			</script>
 		</div>
 
