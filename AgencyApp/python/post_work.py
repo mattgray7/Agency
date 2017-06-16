@@ -70,3 +70,10 @@ class ViewWorkPostView(post.GenericViewPostView):
                 self._post = WorkPostInstance(request=self.request, postID=self.postID, postType=constants.WORK_POST)
         return self._post
 
+    def createProjectChild(self):
+        try:
+            newJob = models.ProjectJob.objects.get(postID=self.postID, projectID=self.projectID)
+        except models.ProjectJob.DoesNotExist:
+            newJob = models.ProjectJob(postID=self.postID, projectID=self.projectID, status="Hiring")
+            newJob.save()
+

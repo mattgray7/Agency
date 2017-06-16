@@ -103,4 +103,9 @@ class ViewCastingPostView(post.GenericViewPostView):
             self._post = CastingPostInstance(request=self.request, postID=self.postID, postType=constants.CASTING_POST)
         return self._post
 
-
+    def createProjectChild(self):
+        try:
+            newRole = models.ProjectRole.objects.get(postID=self.postID, projectID=self.projectID)
+        except models.ProjectRole.DoesNotExist:
+            newRole = models.ProjectRole(postID=self.postID, projectID=self.projectID, status="Open")
+            newRole.save()

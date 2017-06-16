@@ -150,6 +150,18 @@ class ProjectPost(AbstractPost):
             self._totalJobs = WorkPost.objects.filter(projectID=self.postID)
         return self._totalJobs
 
+class ProjectJob(models.Model):
+    postID = models.CharField(max_length=10)        # Same as job post
+    projectID = models.CharField(max_length=10, blank=True, null=True)
+    status = models.CharField(max_length=50, default="Available", blank=True, null=True)
+    username = models.CharField(max_length=200, blank=True, null=True)
+
+class ProjectRole(models.Model):
+    postID = models.CharField(max_length=10)        # Same as casting post
+    projectID = models.CharField(max_length=10, blank=True, null=True)
+    status = models.CharField(max_length=50, default="Open", blank=True, null=True)
+    username = models.CharField(max_length=200, blank=True, null=True)
+
 class WorkPost(AbstractPost):
     profession = models.CharField(max_length=200)
     paid = models.BooleanField(default=False)

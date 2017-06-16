@@ -420,6 +420,10 @@ class GenericViewPostView(views.GenericFormView):
         self._pageContext["following"] = isFollowingPost(self.postID, self.request.user.username)
         return self._pageContext
 
+    def createProjectChild(self):
+        """ To be overridden in child class, will create a ProjectRole or ProjectJob for ex"""
+        pass
+
     def processForm(self):
         success = False
         if self.request.POST.get("setProject") == "True":
@@ -430,6 +434,7 @@ class GenericViewPostView(views.GenericFormView):
                 except Exception as e:
                     print "Error adding casting post to project: {0}".format(e)
                 else:
+                    self.createProjectChild()
                     success = True
         else:
             success = True
