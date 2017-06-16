@@ -54,7 +54,8 @@
 	}
 	.profileTabButtonInactive
 	{
-		width: 100px;
+		width: 18.1%;
+		min-width: 93px;
 		padding: 10px 15px 10px 15px;
 		display: inline-block;
 		letter-spacing: 0.10em;
@@ -71,7 +72,8 @@
 	}
 	.profileTabButtonActive
 	{
-		width: 100px;
+		width: 18.1%;
+		min-width: 93px;
 		padding: 10px 15px 15px 15px;
 		display: inline-block;
 		letter-spacing: 0.10em;
@@ -107,14 +109,14 @@
 
 	.profileTabBorderCover
 	{
-		width: 130px;
+		width: 133%;
 		background: #FFF;
 		height: 15px;
 		margin: 0px 0px -15px -15px;
 		position: relative;
 		z-index: 3;
 		display: none;
-		transition: display 2s ease;
+		transition: display .4s ease;
 	}
 
 	.interestsPanel
@@ -127,6 +129,7 @@
 	}
 	.postsPanel
 	{
+		min-width: 500px;
 	}
 	.commentsPanel
 	{
