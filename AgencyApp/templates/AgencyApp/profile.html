@@ -91,7 +91,7 @@
 				if(profileButtonDiv != null && profileButtonBorderCoverDiv != null){
 					if(profileTabs[i] === tabType){
 						profileButtonBorderCoverDiv.style.opacity = "1";
-						profileButtonBorderCoverDiv.style.background = "#efefef"
+						profileButtonBorderCoverDiv.style.background = "#FFF"
 						profileButtonDiv.className = "profileTabButtonActive";
 					}else{
 						profileButtonBorderCoverDiv.style.opacity = "0";
@@ -330,11 +330,11 @@
 														Background
 														<div id="backgroundBorderCover" class="profileTabBorderCover"></div>
 													</div>
-													<div class="profileTabButtonInactive" id="postsProfileButton" onclick="selectProfileTab('posts')" style="margin-left: -2.5px;">
+													<div class="profileTabButtonInactive" id="postsProfileButton" onclick="selectProfileTab('posts')" style="margin-left:2px;">
 														Posts
 														<div id="postsBorderCover" class="profileTabBorderCover"></div>
 													</div>
-													<div class="profileTabButtonInactive" id="eventsProfileButton" onclick="selectProfileTab('events')" style="margin-left: -2.5px;">
+													<div class="profileTabButtonInactive" id="eventsProfileButton" onclick="selectProfileTab('events')" style="margin-right: 1px">
 														Events
 														<div id="eventsBorderCover" class="profileTabBorderCover"></div>
 													</div>
