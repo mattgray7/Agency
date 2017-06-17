@@ -126,6 +126,8 @@
 		width: 99%;
 		border: 2px solid #000;
 		border-radius: 2px;
+		max-height: 330px;
+		overflow: scroll;
 	}
 
 	.profileProjectList
@@ -149,7 +151,9 @@
 
 	.profileProjectListElementImage
 	{
-		width: 80px;
+		margin: 0 auto;
+		max-height: 80px;
+		max-width: 80px;
 		display: table-cell;
 		vertical-align: middle;
 	}
@@ -163,6 +167,7 @@
 		width: 80px;
 		border: 1px solid #000;
 		border-radius: 3px;
+		text-align: middle;
 
 	}
 

@@ -78,6 +78,24 @@ project3ProjectPost = createProject(poster="mattgray",
 									status="Pre-production",
 									picURL="/Users/MattGray/Projects/Agency/Agency/scripts/media/valerian.jpg")
 
+project4ProjectPost = createProject(poster="mattgray",
+									title="There Will Be Blood",
+									description="A study of a man obsessed with power during the oil boom.",
+									status="Completed",
+									picURL="/Users/MattGray/Projects/Agency/Agency/scripts/media/thereWillBeBlood.jpg")
+
+project5ProjectPost = createProject(poster="mattgray",
+									title="Arrival",
+									description="As an alien ship appears on Earth, one cunning linguist may be our only hope of survival.",
+									status="Post production",
+									picURL="/Users/MattGray/Projects/Agency/Agency/scripts/media/arrival.jpg")
+
+project6ProjectPost = createProject(poster="mattgray",
+									title="Fantastic Beasts and Where To Find Them",
+									description="Newt Scamander must wrangle mythical beasts in 1920s New York in this Harry Potter spinoff.",
+									status="Post production",
+									picURL="/Users/MattGray/Projects/Agency/Agency/scripts/media/fantasticBeasts.jpg")
+
 # Nick Carraway casting post
 project1CastingPostID = helpers.createUniqueID(models.CastingPost, "postID")
 project1CastingPost = models.CastingPost(postID=project1CastingPostID,
