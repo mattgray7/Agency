@@ -91,7 +91,7 @@
 				if(profileButtonDiv != null && profileButtonBorderCoverDiv != null){
 					if(profileTabs[i] === tabType){
 						profileButtonBorderCoverDiv.style.opacity = "1";
-						profileButtonBorderCoverDiv.style.background = "#FFF"
+						profileButtonBorderCoverDiv.style.background = "#383838"
 						profileButtonDiv.className = "profileTabButtonActive";
 					}else{
 						profileButtonBorderCoverDiv.style.opacity = "0";
@@ -123,6 +123,8 @@
 					projectString += "roles";
 				}
 				projectString += " available<br>"
+			}else{
+				projectString += "<br>";
 			}
 			if(numOpenJobs > 0){
 				projectString += "Hiring for " + parseInt(numOpenJobs) + " ";
@@ -131,8 +133,10 @@
 				}else{
 					projectString += "positions";
 				}
+			}else{
+				projectString += "<br>";
 			}
-			projectString += "<br></h5><br></div></li>";
+			projectString += "</h5></div></li>";
 			return projectString
 		}
 
@@ -173,7 +177,7 @@
 		function displayBackground(){
 			var profileDisplayPanelDiv = document.getElementById("profileDisplayPanel")
 			if(profileDisplayPanelDiv != null){
-				profileDisplayPanelDiv.innerHTML = createCurrentProjectsList() + "<br>" + createPastProjectsList();
+				profileDisplayPanelDiv.innerHTML = createCurrentProjectsList() + createPastProjectsList();
 
 			}
 		}

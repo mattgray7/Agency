@@ -87,7 +87,7 @@ project4ProjectPost = createProject(poster="mattgray",
 project5ProjectPost = createProject(poster="mattgray",
 									title="Arrival",
 									description="As an alien ship appears on Earth, one cunning linguist may be our only hope of survival.",
-									status="Post production",
+									status="Completed",
 									picURL="/Users/MattGray/Projects/Agency/Agency/scripts/media/arrival.jpg")
 
 project6ProjectPost = createProject(poster="mattgray",
