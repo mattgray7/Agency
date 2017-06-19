@@ -3,27 +3,53 @@
 {% block content %}
 
 <script>
-var currentlyFollowing = ("{{ following }}" == "True");
-function updatePostFollow(){ 
-	$.ajax({
-		url : "/post/view/{{ post.postID }}/follow/",
-		data : {},
-		type : 'POST',
-		dataType: "json",
-		success : function(data) {
-			if(data["success"]){
-				if(currentlyFollowing){
-					document.getElementById("followButtonText").innerHTML = "Follow";
+	var currentlyFollowing = ("{{ following }}" == "True");
+	function updatePostFollow(){ 
+		$.ajax({
+			url : "/post/view/{{ post.postID }}/follow/",
+			data : {},
+			type : 'POST',
+			dataType: "json",
+			success : function(data) {
+				if(data["success"]){
+					if(currentlyFollowing){
+						document.getElementById("followButtonText").innerHTML = "Follow";
+					}else{
+						document.getElementById("followButtonText").innerHTML = "Unfollow";
+					}
+					currentlyFollowing = !currentlyFollowing;
 				}else{
-					document.getElementById("followButtonText").innerHTML = "Unfollow";
+					console.log("Error following post:" + data)
 				}
-				currentlyFollowing = !currentlyFollowing;
-			}else{
-				console.log("Error following post:" + data)
 			}
-		}
-	});
-}
+		});
+	}
+
+	function showPossibleProjects(){
+		$.ajax({
+			url : "/ajax/getUserProjects/",
+			data : {},
+			type : 'POST',
+			dataType: "json",
+			success : function(data) {
+				if(data["projects"].length > 0){
+					document.getElementById("possibleProjects").innerHTML = "<br><h5 style='display:inline'> Existing projects: </h5>";
+					for(var i=0; i < data["projects"].length; i++){
+						var project = data["projects"][i];
+						var extraInputs = []
+						extraInputs.push({key: "projectID", value: project["projectID"]});
+						extraInputs.push({key: "postID", value: "{{ post.postID }}"});
+						extraInputs.push({key: "setProject", value: "True"});
+						var projectForm = createPageRedirectForm("{{ next }}", "{{ next }}", "{{ possibleDestinations.viewPost }}", "{{ currentPageURL }}", extraInputs, document.getElementById("possibleProjects"), project["projectName"])
+						document.getElementById("possibleProjects").innerHTML += "<br><br>";
+					}
+				}else{
+					document.getElementById("possibleProjects").innerHTML += "<h6> No projects currently registered </h6>";
+				}
+				document.getElementById("addPostToProjectButton").hidden = true;
+			}	
+		});
+	}
 </script>
 
 <div id="mainViewPanel" class="mainViewPanel">
@@ -50,7 +76,52 @@ function updatePostFollow(){
 					</td>
 					<td style="margin-top: 0px;">
 						<div id="postInfo" class="postInfo" colspan="2">
-							{{post.title}}
+							<h1 class="postInfoTitle">
+								<a onclick='redirectToPost("{{post.postID}}");'> {{ post.title }} </a>
+							</h1>
+							<h4 class="postInfoSubTitle">
+								{% if isProject %}
+									Director: <br>
+									Writer:
+							</h4>
+							<div class="postInfoContent">
+									{{ post.status }}<br>
+									{{ post.description }}
+								{% elif isCollaboration %}
+										Looking for a {{ post.collaboratorRole }} <br>
+										{{ post.title }} 
+									{% else %}
+										{% if isWork %}
+											(Looking for crew) {{ post.title }} <br>
+											Looking for a {{ post.profession }}
+										{% elif isCasting %}
+											Casting a role: {{ post.title }}
+											{% if post.paid %}
+												 - Paid&#10004;
+											{% else %}
+												 - Unpaid
+											{% endif %}
+										{% elif isEvent %}
+											Event {{ post.title }} 
+											<h5>Located at {{post.location}} on {{post.date}}</h5>
+										{% endif %}
+											{% if project and projectID and project.record.title %}
+													<form method='post' action="/post/view/{{ projectID }}/">
+															{% csrf_token %}
+															<input type="hidden" name="source" value="{{ next }}" />
+															<input type="hidden" name="next" value="{{ next }}" />
+															<input type="hidden" name="destination" value="{{ possibleDestinations.viewPost }}" />
+															<input type="hidden" name="postID" value="{{ projectID }}" />
+															<input type="hidden" name="projectID" value="{{ projectID }}" />
+															Project: <input type="submit" value="{{ project.record.title }}" />
+													</form>
+											{% else %}
+														<div id="possibleProjects"></div>
+														
+														<button onclick="showPossibleProjects();" id="addPostToProjectButton"> Add post to project </button><br>
+											{% endif %}
+									{% endif %}
+							
 						</div>
 					</td>
 				</tr>

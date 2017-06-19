@@ -37,3 +37,19 @@
 		margin-top: 1px;
 		height: 234px;
 	}
+	.postInfoTitle a
+	{
+		color: #1e1e1e;
+		font-size: 1em;
+	}
+	.postInfoTitle a:hover
+	{
+		cursor: pointer;
+		color: #3d3d3d;
+	}
+	.postInfoSubTitle
+	{
+		padding: 0.2em;
+		margin-top: 0px;
+		margin-bottom: 0px;
+	}

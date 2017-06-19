@@ -205,13 +205,6 @@
 				profileDisplayPanel.innerHTML = displayString;
 			}
 		}
-
-		function redirectToPost(postID){
-			var extraInputs = []
-            extraInputs.push({key: "postID", value: postID});
-			var form = createPageRedirectForm("{{next}}", "{{next}}", "{{possibleDestinations.viewPost}}", "{{currentPageURL}}", extraInputs, null);
-			form.submit();
-		}
 	</script>
 
 	{% if profileUserAccount %}
