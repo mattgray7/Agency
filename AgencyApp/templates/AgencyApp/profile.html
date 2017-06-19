@@ -293,15 +293,17 @@
 											{% endif %}
 
 											<!-- Move the hover edit button lower if work/hire button exists -->
-											{% if profileUserAccount.workInterest and profileUserAccount.hireInterest %}
-												<div class="hoverButton" style="z-index:2; top: 45px;">
-											{% elif profileUserAccount.workInterest or profileUserAccount.hireInterest%}
-												<div class="hoverButton" style="z-index:2; top: 9px;">
-											{% else %}
-												<div class="hoverButton" style="z-index:2; top: 5px;">
+											{% if viewingOwnProfile %}
+												{% if profileUserAccount.workInterest and profileUserAccount.hireInterest %}
+													<div class="hoverButton" style="z-index:2; top: 45px;">
+												{% elif profileUserAccount.workInterest or profileUserAccount.hireInterest%}
+													<div class="hoverButton" style="z-index:2; top: 9px;">
+												{% else %}
+													<div class="hoverButton" style="z-index:2; top: 5px;">
+												{% endif %}
+													<a onclick="redirect('{{ possibleDestinations.interests }}');"> <font style="color:#000;">Edit </font></a>
+												</div>
 											{% endif %}
-												<a onclick="redirect('{{ possibleDestinations.interests }}');"> <font style="color:#000;">Edit </font></a>
-											</div>
 											<tr>
 												<td>
 													<div id="interestTitle"></div>
