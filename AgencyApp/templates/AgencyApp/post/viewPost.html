@@ -26,6 +26,41 @@ function updatePostFollow(){
 }
 </script>
 
+<div id="mainViewPanel" class="mainViewPanel">
+	{% if post %}
+		<div id="postPanel" class="postPanel">
+			<table style="width:99%;">
+				<tr>
+					<td style="width: 250px;">
+						<div id="postPicturePanel" class="postPicture">
+							<div id="postPictureBoundingBox" class="hoverContainer" style="width:250px; height:250px; background: #000; border: 2px solid #000; border-radius:3px; vertical-align: middle; display: table-cell;">
+								<div id="postPicture">
+									{% if post.postPicture %}
+										<img src="{{ post.postPicture.url }}" style="width:250px;"/>
+									{% else %}
+										<img />
+									{% endif %}
+								</div>
+								{% if viewingOwnProfile %}
+									<div class="grayAlphaOverlay"></div>
+				  					<div class="hoverButton"><a onclick="redirect('{{ possibleDestinations.edit }}');"> Edit </a></div>
+				  				{% endif %}
+							</div>
+						</div>
+					</td>
+					<td style="margin-top: 0px;">
+						<div id="postInfo" class="postInfo" colspan="2">
+							{{post.title}}
+						</div>
+					</td>
+				</tr>
+			</table>
+		</div>
+	{% endif %}
+</div>
+
+
+
 {% if post %}
 	{% if post.postPicture %}
 		<div id="postPicture">
