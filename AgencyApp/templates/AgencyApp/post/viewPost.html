@@ -51,13 +51,23 @@
 		});
 	}
 
-	function createUserStringWithLinks(userList, listTitle, pluralizeTitle){
-		for(var i=0; i < userList.length; i++){
-			console.log(userList[i])
+	var projectTabs = ["roles", "jobs", "events"] 
+	function selectProjectTab(tabType){
+		for(var i=0; i < projectTabs.length; i++){
+			var buttonId = projectTabs[i] + "Button";
+			var borderCoverId = projectTabs[i] + "BorderCover";
+			var projectButtonDiv = document.getElementById(buttonId);
+			var projectButtonBorderCoverDiv = document.getElementById(borderCoverId)
+			if(projectButtonDiv != null && projectButtonBorderCoverDiv != null){
+				if(projectTabs[i] === tabType){
+					projectButtonDiv.className = "projectTabButtonActive";
+				} else {
+					projectButtonDiv.className = "projectTabButtonInactive";		
+				}
+			}
 		}
-		return "hi"
-
 	}
+	
 </script>
 
 <div id="mainViewPanel" class="mainViewPanel">
@@ -208,19 +218,19 @@
 						<table style="width:100%; margin-left: 2px; margin-right:-10px">
 							<tr style="text-align: center">
 								<td>
-									<div class="projectTabButtonActive" id="backgroundProfileButton" onclick="selectProfileTab('background')">
+									<div class="projectTabButtonActive" id="rolesButton" onclick="selectProjectTab('roles')">
 										Roles
-										<div id="backgroundBorderCover" class="profileTabBorderCover"></div>
+										<div id="rolesBorderCover" class="profileTabBorderCover"></div>
 									</div>
 								</td>
 								<td>
-									<div class="projectTabButtonInactive" id="postsProfileButton" onclick="selectProfileTab('posts')" style="margin: 0px -2px 0px 0px; width:95%;">
+									<div class="projectTabButtonInactive" id="jobsButton" onclick="selectProjectTab('jobs')" style="margin: 0px -2px 0px 0px; width:95%;">
 										Jobs
-										<div id="postsBorderCover" class="profileTabBorderCover"></div>
+										<div id="jobsBorderCover" class="profileTabBorderCover"></div>
 									</div>
 								</td>
 								<td>
-									<div class="projectTabButtonInactive" id="eventsProfileButton" onclick="selectProfileTab('events')">
+									<div class="projectTabButtonInactive" id="eventsButton" onclick="selectProjectTab('events')">
 										Events
 										<div id="eventsBorderCover" class="profileTabBorderCover"></div>
 									</div>
