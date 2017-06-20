@@ -60,7 +60,7 @@ def createProject(poster, title, description, status, picURL):
 # Great Gatsby project
 project1ProjectPost = createProject(poster="mattgray",
 									title="The Great Gatsby",
-									description="Modern reimagining set in New York",
+									description="The Great Gatsby follows Fitzgerald-like, would-be writer Nick Carraway (Tobey Maguire) as he leaves the Midwest and comes to New York City in the spring of 1922, an era of loosening morals, glittering jazz and bootleg kings. Chasing his own American Dream, Nick lands next door to a mysterious, party-giving millionaire, Jay Gatsby (Leonardo DiCaprio) and across the bay from his cousin, Daisy (Carey Mulligan) and her philandering, blue-blooded husband, Tom Buchanan (Joel Edgerton).",
 									status="In production",
 									picURL="/Users/MattGray/Projects/Agency/Agency/scripts/media/greatGatsby.jpg")
 project1ProjectID = project1ProjectPost.projectID

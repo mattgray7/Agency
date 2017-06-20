@@ -162,7 +162,9 @@
 										{% endfor %}
 									{% endif %}
 									<br>
-									{{ post.description }}
+									<div id="postDescription" class="postDescription">
+										{{ post.description }}
+									</div>
 								{% elif isCollaboration %}
 										Looking for a {{ post.collaboratorRole }} <br>
 										{{ post.title }} 
