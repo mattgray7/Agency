@@ -116,12 +116,11 @@ def createProjectJob(projectID, username, status, profession, title, description
 	jobPost.save()
 	return jobID
 
-def createProjectRole(projectID, username, status, title, characterName, characterDescription,
-					  paid, picURL=None):
+def createProjectRole(projectID, username, status, title, characterName, paid, shortCharacterDescription=None, characterDescription=None, picURL=None):
 	roleID = helpers.createUniqueID(models.ProjectRole, "postID")
 	projectRole = models.ProjectRole(postID=roleID, projectID=projectID, status=status,
 								   	 username=username, characterName=characterName, 
-								   	 characterDescription=characterDescription)
+								   	 characterDescription=characterDescription, shortCharacterDescription=shortCharacterDescription)
 	projectRole.save()
 	"""TODO should not have poster as username when I fix the post system"""
 	rolePost = models.CastingPost(postID=roleID, projectID=projectID, poster=username,
@@ -167,7 +166,8 @@ project1WorkPost6RoleId = createProjectRole(projectID=project1ProjectID,
 								 		    username="liamcarson",
 								 		    title="Male lead needed",
 								 		    characterName="Nick Carraway",
-								 		    characterDescription="Be real innocent looking",
+								 		    characterDescription="A guy that gets taken in by this rich guy and then some stuff happens idk I kind of forget the book it was so long ago.",
+								 		    shortCharacterDescription="24-30 innocent looking male, he should be soft spoken and calm",
 								 		    paid=True,
 								 		    status="Cast",
 								 		    picURL="/Users/MattGray/Projects/Agency/Agency/scripts/media/nickCarraway.png")
@@ -176,7 +176,8 @@ project1WorkPost7RoleId = createProjectRole(projectID=project1ProjectID,
 								 		    username="sachahusband",
 								 		    title="Male lead needed",
 								 		    characterName="Jay Gatsby",
-								 		    characterDescription="Own the room",
+								 		    characterDescription='The guy that the book is named after, so he must be kinf od important right. That makes sense. Anyways, he is rich and you should look like you are.',
+								 		    shortCharacterDescription="Lead male aged 40-50",
 								 		    paid=True,
 								 		    status="Cast",
 								 		    picURL="/Users/MattGray/Projects/Agency/Agency/scripts/media/jayGatsby.jpg")
@@ -185,7 +186,8 @@ project1WorkPost8RoleId = createProjectRole(projectID=project1ProjectID,
 								 		    username="amybolt",
 								 		    title="Female lead",
 								 		    characterName="Daisy Buchanan",
-								 		    characterDescription="Mid-20s brunette female lead",
+								 		    characterDescription="This chick is like so random its ridiculous. wow weird, i have run out of things to think of.",
+								 		    shortCharacterDescription="Mid-20s brunette female lead",
 								 		    paid=True,
 								 		    status="Cast",
 								 		    picURL="/Users/MattGray/Projects/Agency/Agency/scripts/media/daisyBuchanan.png")
@@ -201,7 +203,8 @@ project1RoleId2 = createProjectRole(projectID=project1ProjectID,
 								 	username="mattgray",
 								 	title="Looking for young 20-something female to play a random guy's gf",
 								 	characterName="Mona Lisa Saperstein",
-								 	characterDescription="She is the wooooooooooorst",
+								 	characterDescription = "She is the worst. It is unbelievable how bad she is. She is the brother of jean rakphio saperstein, so actress must look related.",
+								 	shortCharacterDescription="She is the wooooooooooorst",
 								 	paid=True,
 								 	status="Open")
 

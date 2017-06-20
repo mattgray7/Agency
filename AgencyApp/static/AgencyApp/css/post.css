@@ -10,6 +10,16 @@
 		border-radius: 4px;
 		padding: .5em;
 	}
+	.mainViewPanel a
+	{
+		color: #1e1e1e;
+		font-weight: 900;
+	}
+	.mainViewPanel a:hover
+	{
+		cursor: pointer;
+		color: #3d3d3d;
+	}
 	.postPanel
 	{
 		min-width: 680px;
@@ -35,15 +45,6 @@
 		margin-left: 0px;
 		margin-top: 1px;
 		height: 234px;
-	}
-	.postInfoTitle a
-	{
-		color: #1e1e1e;
-	}
-	.postInfoTitle a:hover
-	{
-		cursor: pointer;
-		color: #3d3d3d;
 	}
 	.postInfoSubTitle
 	{
@@ -76,16 +77,29 @@
 	{
 		overflow: scroll;
 		max-width: 800px;
-		width: 99%;
+		width: 100%;
 	}
 	.projectContentListElement
 	{
-		height: 300px;
+		height: 350px;
 		width: 200px;
 		background: #efefef;
 		min-width: 200px;
 		border: 2px solid #000;
 		border-radius: 4px;
+		text-align: center;
+	}
+	.projectContentListElementPicturePanel
+	{
+		height: 150px;
+		width: 150px;
+		background: #000;
+		margin: 0 auto;
+	}
+	.projectContentListElementText
+	{
+		height: 120px;
+		overflow: scroll;
 	}
 	.projectTabButtonInactive
 	{

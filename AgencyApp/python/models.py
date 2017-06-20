@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 import json
 from django.db import models
 from django.core.files.storage import FileSystemStorage
+import helpers
 
 from django.conf import settings
 imageStorage = FileSystemStorage(
@@ -50,6 +51,10 @@ class UserAccount(models.Model):
 
     def __str__(self):
         return self.username
+
+    @property
+    def cleanName(self):
+        return helpers.capitalizeName("{0} {1}".format(self.firstName, self.lastName))
 
     @property
     def actorInterest(self):
@@ -196,6 +201,7 @@ class ProjectRole(models.Model):
     username = models.CharField(max_length=200, blank=True, null=True)      # only filled if Cast
     characterName = models.CharField(max_length=200)
     characterDescription = models.CharField(max_length=1000, blank=True, null=True)
+    shortCharacterDescription = models.CharField(max_length=200, blank=True, null=True)
 
 class WorkPost(AbstractPost):
     profession = models.CharField(max_length=200)
