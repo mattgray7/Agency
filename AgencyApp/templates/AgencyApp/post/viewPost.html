@@ -88,14 +88,16 @@
 								<a onclick='redirectToPost("{{post.postID}}");'> {{ post.title }} </a>
 							</h1>
 							<h4 class="postInfoSubTitle">
+								{{ post.status }}
+							</h4>
+							<div class="postInfoContent">
 								{% if isProject %}
 									{% if post.directors %}
 										{% if post.directors|length == 1 %}
-											Director: 
+											Director:
 										{% else %}
 											Directors:
 										{% endif %}
-
 										{% for director in post.directors %}
 											<a onclick="redirectToUser('{{director}}');" class="userLink">
 												<script>
@@ -107,9 +109,59 @@
 											</a>
 										{% endfor %}
 									{% endif %}
-							</h4>
-							<div class="postInfoContent">
-									{{ post.status }}<br>
+									{% if post.writers %}
+										<br>
+										{% if post.writers|length == 1 %}
+											Writer:
+										{% else %}
+											Writers:
+										{% endif %}
+
+										{% for writer in post.writers %}
+											<a onclick="redirectToUser('{{writer}}');" class="userLink">
+												<script>
+													document.write(posterNameMap["{{writer}}"]);
+													{% if not forloop.last %}
+														document.write(", ");
+													{% endif %}
+												</script>
+											</a>
+										{% endfor %}
+									{% endif %}
+									{% if post.producers %}
+										<br>
+										{% if post.producers|length == 1 %}
+											Producer:
+										{% else %}
+											Producers:
+										{% endif %}
+
+										{% for producer in post.producers %}
+											<a onclick="redirectToUser('{{producer}}');" class="userLink">
+												<script>
+													document.write(posterNameMap["{{producer}}"]);
+													{% if not forloop.last %}
+														document.write(", ");
+													{% endif %}
+												</script>
+											</a>
+										{% endfor %}
+									{% endif %}
+									{% if post.actors %}
+										<br>
+										Starring:
+										{% for actor in post.actors %}
+											<a onclick="redirectToUser('{{actor}}');" class="userLink">
+												<script>
+													document.write(posterNameMap["{{actor}}"]);
+													{% if not forloop.last %}
+														document.write(", ");
+													{% endif %}
+												</script>
+											</a>
+										{% endfor %}
+									{% endif %}
+									<br>
 									{{ post.description }}
 								{% elif isCollaboration %}
 										Looking for a {{ post.collaboratorRole }} <br>

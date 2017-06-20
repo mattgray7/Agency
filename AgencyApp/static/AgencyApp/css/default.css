@@ -400,6 +400,7 @@
 	.userLink
 	{
 		color: #000;
+		font-weight: 900;
 	}
 
 	.userLink:hover

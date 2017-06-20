@@ -165,11 +165,24 @@ def createProjectJob(projectID, username, status, profession, title, description
 								   username=username, profession=profession)
 	projectJob.save()
 
-	projectPost = models.WorkPost(postID=jobID, projectID=projectID, poster=username,
-								  title=title, description=description, paid=paid, profession=profession,
-								  status=status)
-	projectPost.save()
+	jobPost = models.WorkPost(postID=jobID, projectID=projectID, poster=username,
+							  title=title, description=description, paid=paid, profession=profession,
+							  status=status)
+	jobPost.save()
 	return jobID
+
+def createProjectRole(projectID, username, status, title, description, characterName, characterDescription,
+					  paid, picURL=None):
+	jobID = helpers.createUniqueID(models.ProjectRole, "postID")
+	projectRole = models.ProjectRole(postID=jobID, projectID=projectID, status=status,
+								   	 username=username, characterName=characterName, 
+								   	 characterDescription=characterDescription)
+	projectRole.save()
+
+	rolePost = models.CastingPost(postID=jobID, projectID=projectID, poster=username,
+								  title=title, description=description, paid=paid,
+								  status=status)
+	rolePost.save()
 
 project1WorkPost2JobId = createProjectJob(projectID=project1ProjectID,
 								 		  username="mattgray",
@@ -178,7 +191,6 @@ project1WorkPost2JobId = createProjectJob(projectID=project1ProjectID,
 								 		  paid=True,
 								 		  profession="Director",
 								 		  status="Filled")
-
 project1WorkPost3JobId = createProjectJob(projectID=project1ProjectID,
 								 		  username="amybolt",
 								 		  title="Co-Director Needed",
@@ -186,6 +198,28 @@ project1WorkPost3JobId = createProjectJob(projectID=project1ProjectID,
 								 		  paid=True,
 								 		  profession="Director",
 								 		  status="Filled")
+project1WorkPost4JobId = createProjectJob(projectID=project1ProjectID,
+								 		  username="adamcramer",
+								 		  title="SFX Heavy show, need supervisor",
+								 		  description="Head/Producer of SFX",
+								 		  paid=True,
+								 		  profession="Producer",
+								 		  status="Filled")
+project1WorkPost5JobId = createProjectJob(projectID=project1ProjectID,
+								 		  username="amybolt",
+								 		  title="Screenwriter wanted",
+								 		  description="I need someone to write this script from my idea",
+								 		  paid=True,
+								 		  profession="Screenwriter",
+								 		  status="Filled")
+project1WorkPost5JobId = createProjectRole(projectID=project1ProjectID,
+								 		  username="adamcramer",
+								 		  title="Male lead needed",
+								 		  description="Be a star",
+								 		  characterName="Jay Gatsby",
+								 		  characterDescription="Fuckin baller yo",
+								 		  paid=True,
+								 		  status="Cast")
 
 # Open table read event
 project1EventPostID = helpers.createUniqueID(models.EventPost, "postID")
@@ -202,26 +236,32 @@ project1EventPost.postPicture.name = "/event_{0}.jpg".format(project1EventPostID
 project1EventPost.save()
 
 # ====================
-
+def createUser(username, email, password, firstName, lastName, picURL=None):
+	user = User.objects.create_user(username=username,
+                                   	email=email,
+                                   	password=password,
+                                   	first_name=firstName,
+                                   	last_name=lastName)
+	user.save()
+	userAccount = models.UserAccount(username=username,
+								 		email=email,
+	                             		firstName=firstName,
+	                             		lastName=lastName,
+	                             		setupComplete=True)
+	os.makedirs("/Users/MattGray/Projects/Agency/Agency/media/{0}/".format(username))
+	if picURL:
+		picResult = urllib.urlretrieve(picURL)
+		userAccount.profilePicture = File(open(picResult[0]))
+		userAccount.profilePicture.name = "/profile.jpg"
+		userAccount.save()
 
 # Add more user stuff
 # User 2
-user2 = User.objects.create_user(username="amybolt",
-                                   email="amy.bolt@hotmail.com",
-                                   password="m",
-                                   first_name="amy",
-                                   last_name="bolt")
-user2.save()
-userAccount2 = models.UserAccount(username="amybolt",
-							 		email="amy.bolt@hotmail.com",
-                             		firstName="amy",
-                             		lastName="bolt",
-                             		setupComplete=True)
-os.makedirs("/Users/MattGray/Projects/Agency/Agency/media/amybolt/")
-picResult = urllib.urlretrieve("/Users/MattGray/Projects/Agency/Agency/scripts/media/amyBoltProfile.jpg")
-userAccount2.profilePicture = File(open(picResult[0]))
-userAccount2.profilePicture.name = "/profile.jpg"
-userAccount2.save()
+user2 = createUser("amybolt", "amy.bolt@hotmail.com", "m", "amy", "bolt",
+				   "/Users/MattGray/Projects/Agency/Agency/scripts/media/amyBoltProfile.jpg")
+user3 = createUser("adamcramer", "adam.cramos@gmail.com", "m", "adam", "cramer",
+				   "/Users/MattGray/Projects/Agency/Agency/scripts/media/adamCramerProfile.jpg")
+
 
 # Add some professions
 professionList = [models.Interest(username="mattgray", mainInterest="work", subInterest="onSetProduction", professionName="Cinematographer"),
