@@ -95,6 +95,7 @@
             var extraInputs = []
             extraInputs.push({key: "username", value: username});
             var form = createPageRedirectForm("{{next}}", "{{next}}", "{{toolbarDestinations.profile}}", "{{currentPageURL}}", extraInputs, null);
+            console.log("form is " + form)
             form.submit();
         }
     </script>

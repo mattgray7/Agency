@@ -32,7 +32,7 @@ def getDestinationURL(request, destPageName, currentPageName=None):
 
     # Add specific values for profile usernames and eventIDs in the url
     if destPageName == constants.PROFILE:
-        username = request.POST.get('profileName', request.user.username)
+        username = request.POST.get('profileName', request.POST.get('username', request.user.username))
         if username:
             destURL = destURL.format(username)
             messages.add_message(request, messages.INFO,

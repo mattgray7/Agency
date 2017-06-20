@@ -99,7 +99,10 @@
 										{% for director in post.directors %}
 											<a onclick="redirectToUser('{{director}}');" class="userLink">
 												<script>
-													document.write(posterNameMap["{{director}}"] + ", ");
+													document.write(posterNameMap["{{director}}"]);
+													{% if not forloop.last %}
+														document.write(", ");
+													{% endif %}
 												</script>
 											</a>
 										{% endfor %}

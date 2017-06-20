@@ -169,13 +169,20 @@ def createProjectJob(projectID, username, status, profession, title, description
 								  title=title, description=description, paid=paid, profession=profession,
 								  status=status)
 	projectPost.save()
-	print "just saved {0}".format(projectPost)
 	return jobID
 
 project1WorkPost2JobId = createProjectJob(projectID=project1ProjectID,
 								 		  username="mattgray",
-								 		  title="DirectorNeeded",
+								 		  title="Director Needed",
 								 		  description="Head of production",
+								 		  paid=True,
+								 		  profession="Director",
+								 		  status="Filled")
+
+project1WorkPost3JobId = createProjectJob(projectID=project1ProjectID,
+								 		  username="amybolt",
+								 		  title="Co-Director Needed",
+								 		  description="Head of directing",
 								 		  paid=True,
 								 		  profession="Director",
 								 		  status="Filled")
