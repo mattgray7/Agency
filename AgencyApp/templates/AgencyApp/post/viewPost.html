@@ -66,6 +66,39 @@
 				}
 			}
 		}
+
+		if(tabType === "roles"){
+			selectRoles();
+		}else if(tabType == "jobs"){
+			selectJobs();
+		}else if(tabType == "events"){
+			selectEvents();
+		}
+	}
+
+	function selectRoles(){
+		var listDiv = document.getElementById("projectContentList");
+		var contentString = "";
+		if(listDiv != null){
+			{% if post.totalRoles %}
+				contentString += "<table><tr>";
+				{% for role in post.totalRoles %}
+					contentString += "<td class='projectContentListElement'>Hi</td>"
+				{% endfor %}
+				contentString += "</tr></table>"
+			{% else %}
+				contentString += "No roles registered."
+			{% endif %}
+		}
+		listDiv.innerHTML = contentString
+	}
+
+	function selectJobs(){
+		console.log("jobs")
+	}
+
+	function selectEvents(){
+		console.log("events")
 	}
 	
 </script>
@@ -218,7 +251,7 @@
 						<table style="width:100%; margin-left: 2px; margin-right:-10px">
 							<tr style="text-align: center">
 								<td>
-									<div class="projectTabButtonActive" id="rolesButton" onclick="selectProjectTab('roles')">
+									<div class="projectTabButtonInactive" id="rolesButton" onclick="selectProjectTab('roles')">
 										Roles
 										<div id="rolesBorderCover" class="profileTabBorderCover"></div>
 									</div>
@@ -241,10 +274,18 @@
 				</tr>
 				<tr>
 					<td colspan="3">
-						<div id="projectContentPanel" class="projectContentPanel"></div>
+						<div id="projectContentPanel" class="projectContentPanel">
+							<div id="projectContentList" class="projectContentList">
+
+							</div>
+						</div>
 					</td>
 				</tr>
 			</table>
+			<script>
+				//Default display should be to show cast
+				selectProjectTab("roles")
+			</script>
 		</div>
 	{% endif %}
 </div>

@@ -96,66 +96,11 @@ project6ProjectPost = createProject(poster="mattgray",
 									status="Post production",
 									picURL="/Users/MattGray/Projects/Agency/Agency/scripts/media/fantasticBeasts.jpg")
 
-# Nick Carraway casting post
-project1CastingPostID = helpers.createUniqueID(models.CastingPost, "postID")
-project1CastingPost = models.CastingPost(postID=project1CastingPostID,
-									projectID=project1ProjectID,
-									poster="mattgray",
-									title="Nick Carraway",
-									description="Young male lead",
-									status="Open",
-									paid=True)
-picResult = urllib.urlretrieve("/Users/MattGray/Projects/Agency/Agency/scripts/media/nickCarraway.png")
-project1CastingPost.postPicture = File(open(picResult[0]))
-project1CastingPost.postPicture.name = "/casting_{0}.jpg".format(project1CastingPostID)
-project1CastingPost.save()
-
-
-# Jay Gatsby casting post
-project1CastingPostID2 = helpers.createUniqueID(models.CastingPost, "postID")
-project1CastingPost2 = models.CastingPost(postID=project1CastingPostID2,
-									projectID=project1ProjectID,
-									poster="mattgray",
-									title="Jay Gatsby",
-									description="Middle-aged male lead",
-									status="Open",
-									paid=True)
-picResult = urllib.urlretrieve("/Users/MattGray/Projects/Agency/Agency/scripts/media/jayGatsby.jpg")
-project1CastingPost2.postPicture = File(open(picResult[0]))
-project1CastingPost2.postPicture.name = "/casting_{0}.jpg".format(project1CastingPostID2)
-project1CastingPost2.save()
-
-
-# Daisy Buchanen casting post
-project1CastingPostID3 = helpers.createUniqueID(models.CastingPost, "postID")
-project1CastingPost3 = models.CastingPost(postID=project1CastingPostID3,
-									projectID=project1ProjectID,
-									poster="mattgray",
-									title="Daisy Buchanan",
-									description="Mid-20s brunette female lead",
-									status="Open",
-									paid=True)
-picResult = urllib.urlretrieve("/Users/MattGray/Projects/Agency/Agency/scripts/media/daisyBuchanan.png")
-project1CastingPost3.postPicture = File(open(picResult[0]))
-project1CastingPost3.postPicture.name = "/casting_{0}.jpg".format(project1CastingPostID3)
-project1CastingPost3.save()
-
-
-# Photographer job post
-project1WorkPostID = helpers.createUniqueID(models.WorkPost, "postID")
-project1WorkPost = models.WorkPost(postID=project1WorkPostID,
-								 projectID=project1ProjectID,
-								 poster="mattgray",
-								 title="Stills photographer needed",
-								 description="3 days on set",
-								 paid=True,
-								 profession="Photographer",
-								 status="Hiring")
-picResult = urllib.urlretrieve("/Users/MattGray/Projects/Agency/Agency/scripts/media/photographer.jpg")
-project1WorkPost.postPicture = File(open(picResult[0]))
-project1WorkPost.postPicture.name = "/work_{0}.jpg".format(project1WorkPostID)
-project1WorkPost.save()
-
+project7ProjectPost = createProject(poster="johnstongray",
+									title="Reel Adults",
+									description="James, a film school drop out and his best friend Tyson embark on a fucking crazy journey as they make their FIRST FEATURE FILM!!!",
+									status="Completed",
+									picURL="/Users/MattGray/Projects/Agency/Agency/scripts/media/reelAdults.jpg")
 
 
 def createProjectJob(projectID, username, status, profession, title, description, paid, picURL=None):
@@ -171,18 +116,24 @@ def createProjectJob(projectID, username, status, profession, title, description
 	jobPost.save()
 	return jobID
 
-def createProjectRole(projectID, username, status, title, description, characterName, characterDescription,
+def createProjectRole(projectID, username, status, title, characterName, characterDescription,
 					  paid, picURL=None):
-	jobID = helpers.createUniqueID(models.ProjectRole, "postID")
-	projectRole = models.ProjectRole(postID=jobID, projectID=projectID, status=status,
+	roleID = helpers.createUniqueID(models.ProjectRole, "postID")
+	projectRole = models.ProjectRole(postID=roleID, projectID=projectID, status=status,
 								   	 username=username, characterName=characterName, 
 								   	 characterDescription=characterDescription)
 	projectRole.save()
 
-	rolePost = models.CastingPost(postID=jobID, projectID=projectID, poster=username,
-								  title=title, description=description, paid=paid,
+	rolePost = models.CastingPost(postID=roleID, projectID=projectID, poster=username,
+								  title=title, description=characterDescription, paid=paid,
 								  status=status)
 	rolePost.save()
+	if picURL:
+		picResult = urllib.urlretrieve(picURL)
+		rolePost.postPicture = File(open(picResult[0]))
+		rolePost.postPicture.name = "/casting_{0}.jpg".format(roleID)
+		rolePost.save()
+	return roleID
 
 project1WorkPost2JobId = createProjectJob(projectID=project1ProjectID,
 								 		  username="mattgray",
@@ -212,14 +163,72 @@ project1WorkPost5JobId = createProjectJob(projectID=project1ProjectID,
 								 		  paid=True,
 								 		  profession="Screenwriter",
 								 		  status="Filled")
-project1WorkPost5JobId = createProjectRole(projectID=project1ProjectID,
+project1WorkPost6RoleId = createProjectRole(projectID=project1ProjectID,
+								 		    username="liamcarson",
+								 		    title="Male lead needed",
+								 		    characterName="Nick Carraway",
+								 		    characterDescription="Be real innocent looking",
+								 		    paid=True,
+								 		    status="Cast",
+								 		    picURL="/Users/MattGray/Projects/Agency/Agency/scripts/media/nickCarraway.png")
+
+project1WorkPost7RoleId = createProjectRole(projectID=project1ProjectID,
+								 		    username="sachahusband",
+								 		    title="Male lead needed",
+								 		    characterName="Jay Gatsby",
+								 		    characterDescription="Own the room",
+								 		    paid=True,
+								 		    status="Cast",
+								 		    picURL="/Users/MattGray/Projects/Agency/Agency/scripts/media/jayGatsby.jpg")
+
+project1WorkPost8RoleId = createProjectRole(projectID=project1ProjectID,
+								 		    username="amybolt",
+								 		    title="Female lead",
+								 		    characterName="Daisy Buchanan",
+								 		    characterDescription="Mid-20s brunette female lead",
+								 		    paid=True,
+								 		    status="Cast",
+								 		    picURL="/Users/MattGray/Projects/Agency/Agency/scripts/media/daisyBuchanan.png")
+
+project2JobId = createProjectJob(projectID=project7ProjectPost.projectID,
+								 		    username="johnstongray",
+								 		    title="Creator",
+								 		    description="I wrote the whole thing",
+								 		    paid=True,
+								 		    profession="Director",
+								 		    status="Filled")
+
+project2RoleId = createProjectRole(projectID=project7ProjectPost.projectID,
+								 	username="johnstongray",
+								 	title="blah",
+								 	characterName="James",
+								 	characterDescription="Own the room",
+								 	paid=True,
+								 	status="Cast")
+
+project2JobID = createProjectJob(projectID=project1ProjectID,
 								 		  username="adamcramer",
-								 		  title="Male lead needed",
-								 		  description="Be a star",
-								 		  characterName="Jay Gatsby",
-								 		  characterDescription="Fuckin baller yo",
+								 		  title="SFX Heavy show, need supervisor",
+								 		  description="Head/Producer of SFX",
 								 		  paid=True,
-								 		  status="Cast")
+								 		  profession="Producer",
+								 		  status="Filled")
+
+# Photographer job post
+project1WorkPostID = helpers.createUniqueID(models.WorkPost, "postID")
+project1WorkPost = models.WorkPost(postID=project1WorkPostID,
+								 projectID=project1ProjectID,
+								 poster="mattgray",
+								 title="Stills photographer needed",
+								 description="3 days on set",
+								 paid=True,
+								 profession="Photographer",
+								 status="Hiring")
+picResult = urllib.urlretrieve("/Users/MattGray/Projects/Agency/Agency/scripts/media/photographer.jpg")
+project1WorkPost.postPicture = File(open(picResult[0]))
+project1WorkPost.postPicture.name = "/work_{0}.jpg".format(project1WorkPostID)
+project1WorkPost.save()
+
 
 # Open table read event
 project1EventPostID = helpers.createUniqueID(models.EventPost, "postID")
@@ -248,7 +257,9 @@ def createUser(username, email, password, firstName, lastName, picURL=None):
 	                             		firstName=firstName,
 	                             		lastName=lastName,
 	                             		setupComplete=True)
-	os.makedirs("/Users/MattGray/Projects/Agency/Agency/media/{0}/".format(username))
+	userMediaDir = "/Users/MattGray/Projects/Agency/Agency/media/{0}/".format(username)
+	if not os.path.exists(userMediaDir):
+		os.makedirs(userMediaDir)
 	if picURL:
 		picResult = urllib.urlretrieve(picURL)
 		userAccount.profilePicture = File(open(picResult[0]))
@@ -261,7 +272,12 @@ user2 = createUser("amybolt", "amy.bolt@hotmail.com", "m", "amy", "bolt",
 				   "/Users/MattGray/Projects/Agency/Agency/scripts/media/amyBoltProfile.jpg")
 user3 = createUser("adamcramer", "adam.cramos@gmail.com", "m", "adam", "cramer",
 				   "/Users/MattGray/Projects/Agency/Agency/scripts/media/adamCramerProfile.jpg")
-
+user4 = createUser("johnstongray", "johnston.gray@gmail.com", "m", "johnston", "gray",
+				   "/Users/MattGray/Projects/Agency/Agency/scripts/media/johnstonGrayProfile.jpg")
+user5 = createUser("sachahusband", "sasha.husband@gmail.com", "m", "sasha", "husband",
+				   "/Users/MattGray/Projects/Agency/Agency/scripts/media/sachaHusbandProfile.jpg")
+user6 = createUser("liamcarson", "liam.carson@gmail.com", "m", "liam", "carson",
+				   "/Users/MattGray/Projects/Agency/Agency/scripts/media/liamCarsonProfile.jpg")
 
 # Add some professions
 professionList = [models.Interest(username="mattgray", mainInterest="work", subInterest="onSetProduction", professionName="Cinematographer"),
@@ -271,7 +287,18 @@ professionList = [models.Interest(username="mattgray", mainInterest="work", subI
 				  models.Interest(username="amybolt", mainInterest="work", subInterest="acting", professionName="Dancer"),
 				  models.Interest(username="amybolt", mainInterest="work", subInterest="creative", professionName="Songwriter"),
 				  models.Interest(username="amybolt", mainInterest="work", subInterest="onSetProduction", professionName="Photographer"),
-				  models.Interest(username="amybolt", mainInterest="work", subInterest="offSetProduction", professionName="Production Coordinator")]
+				  models.Interest(username="amybolt", mainInterest="work", subInterest="offSetProduction", professionName="Production Coordinator"),
+				  models.Interest(username="adamcramer", mainInterest="work", subInterest="onSetProduction", professionName="SFX Technician"),
+				  models.Interest(username="adamcramer", mainInterest="work", subInterest="onSetProduction", professionName="SFX Supervisor"),
+				  models.Interest(username="johnstongray", mainInterest="work", subInterest="onSetProduction", professionName="Cinematographer"),
+				  models.Interest(username="johnstongray", mainInterest="work", subInterest="acting", professionName="Actor"),
+				  models.Interest(username="johnstongray", mainInterest="work", subInterest="onSetProduction", professionName="Set Decorator"),
+				  models.Interest(username="johnstongray", mainInterest="work", subInterest="creative", professionName="Screenwriter"),
+				  models.Interest(username="johnstongray", mainInterest="work", subInterest="creative", professionName="Director"),
+				  models.Interest(username="liamcarson", mainInterest="work", subInterest="acting", professionName="Model"),
+				  models.Interest(username="sachahusband", mainInterest="work", subInterest="creative", professionName="Screenwriter"),
+				  models.Interest(username="sachahusband", mainInterest="work", subInterest="creative", professionName="Director"),
+				  models.Interest(username="sachahusband", mainInterest="work", subInterest="creative", professionName="Director of Photography")]
 for profession in professionList:
 	profession.save()
 
@@ -280,8 +307,6 @@ for profession in professionList:
 postFollow = models.PostFollow(postID=project1EventPostID, username="amybolt")
 postFollow.save()
 postFollow = models.PostFollow(postID=project1ProjectID, username="amybolt")
-postFollow.save()
-postFollow = models.PostFollow(postID=project1CastingPostID3, username="amybolt")
 postFollow.save()
 
 

@@ -141,8 +141,9 @@
 		}
 
 		function createCurrentProjectsList(){
+			var displayString = "";
 			{% if profilePosts.projects and profilePosts.projects.current %}
-				var displayString = "<div id='currentProjectPanel' class='projectListPanel'><ul class='profileProjectList'><li><h2>Current Projects</h2></li>";
+				displayString += "<div id='currentProjectPanel' class='projectListPanel'><ul class='profileProjectList'><li><h2>Current Projects</h2></li>";
 				{% for projectPost in profilePosts.projects.current %}
 					var picURL = null
 					{% if projectPost.postPicture %}
@@ -152,14 +153,15 @@
 
 					displayString += createProjectListElement("{{projectPost.postID}}", picURL, "{{projectPost.title}}", "{{projectPost.status}}", "{{projectPost.openRoles|length}} ", "{{projectPost.openJobs|length}} ")
 				{% endfor %}
+				displayString += "</ul></div>";
 			{% endif %}
-			displayString += "</ul></div>";
 			return displayString;
 		}
 
 		function createPastProjectsList(){
+			var displayString = "";
 			{% if profilePosts.projects and profilePosts.projects.completed %}
-				var displayString = "<div id='pastProjectPanel' class='projectListPanel'><ul class='profileProjectList'><li><h2>Past Projects</h2></li>";
+				displayString += "<div id='pastProjectPanel' class='projectListPanel'><ul class='profileProjectList'><li><h2>Past Projects</h2></li>";
 				{% for projectPost in profilePosts.projects.completed %}
 					var picURL = null
 					{% if projectPost.postPicture %}
@@ -169,8 +171,8 @@
 
 					displayString += createProjectListElement("{{projectPost.postID}}", picURL, "{{projectPost.title}}", "{{projectPost.status}}", "{{projectPost.openRoles|length}} ", "{{projectPost.openJobs|length}} ")
 				{% endfor %}
+				displayString += "</ul></div>";
 			{% endif %}
-			displayString += "</ul></div>";
 			return displayString;
 		}
 

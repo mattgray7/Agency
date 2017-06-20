@@ -122,7 +122,7 @@
 		transition: color .20s ease;
 	}
 
-	.profileTabBorderCover
+	.projectTabBorderCover
 	{
 		width: 132.5%;
 		background: #232323;
@@ -132,5 +132,16 @@
 		z-index: 3;
 		opacity: 0;
 		transition: background .2s ease;
+	}
+
+	.projectContentList
+	{
+		overflow: scroll;
+	}
+	.projectContentListElement
+	{
+		height: 100px;
+		width: 100px;
+		background: #000;
 	}
 
