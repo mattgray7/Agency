@@ -191,6 +191,7 @@ class ProjectJob(models.Model):
 class ProjectRole(models.Model):
     postID = models.CharField(max_length=10)        # Same as casting post
     projectID = models.CharField(max_length=10, blank=True, null=True)
+    roleType = models.CharField(max_length=100, default="Acting", blank=True, null=True)
     status = models.CharField(max_length=50, default="Open", blank=True, null=True)     # Open or Cast
     username = models.CharField(max_length=200, blank=True, null=True)      # only filled if Cast
     characterName = models.CharField(max_length=200)

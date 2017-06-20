@@ -80,10 +80,18 @@
 		var listDiv = document.getElementById("projectContentList");
 		var contentString = "";
 		if(listDiv != null){
-			{% if post.totalRoles %}
+			{% if roles %}
 				contentString += "<table><tr>";
-				{% for role in post.totalRoles %}
-					contentString += "<td class='projectContentListElement'>Hi</td>"
+				{% for roleObj in roles %}
+					contentString += "<td class='projectContentListElement'>"
+					{% if roleObj.role.status == "Cast" and roleObj.actor %}
+						contentString += "{{roleObj.role.characterName}} - Cast<br>{{roleObj.actor.username}}"
+					{% elif roleObj.role.status == "Open" and roleObj.post %}
+						contentString += "{{roleObj.role.characterName}} - Open "
+					{% else %}
+						contentString += "{{roleObj.role.characterName}}"
+					{% endif %}
+					contentString += "</td>";
 				{% endfor %}
 				contentString += "</tr></table>"
 			{% else %}

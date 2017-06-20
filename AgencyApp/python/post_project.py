@@ -80,6 +80,7 @@ class ViewProjectPostView(post.GenericViewPostView):
         self._castingPosts = None
         self._workPosts = None
         self._eventPosts = None
+        self._roles = None
 
     @property
     def castingPosts(self):
@@ -107,6 +108,29 @@ class ViewProjectPostView(post.GenericViewPostView):
         return self._post
 
     @property
+    def roles(self):
+        if not self._roles:
+            projectRoles = models.ProjectRole.objects.filter(projectID=self.postID)
+            if projectRoles:
+                self._roles = []
+                for role in projectRoles:
+                    newRole = {"role": role}
+                    if role.status == "Cast":
+                        try:
+                            actor = models.UserAccount.objects.get(username=role.username)
+                        except models.UserAccount.DoesNotExist:
+                            actor = None
+                        newRole["actor"] = actor
+                    elif role.status == "Open":
+                        try:
+                            post = models.CastingPost.objects.get(postID=role.postID)
+                        except models.CastingPost.DoesNotExist:
+                            post = None
+                        newRole["post"] = post
+                    self._roles.append(newRole)
+        return self._roles
+
+    @property
     def pageContext(self):
         self._pageContext = super(ViewProjectPostView, self).pageContext
         self._pageContext["possibleDestinations"] = {"edit": constants.CREATE_PROJECT_POST,
@@ -120,5 +144,7 @@ class ViewProjectPostView(post.GenericViewPostView):
         self._pageContext["eventPosts"] = self.eventPosts
         self._pageContext["project"] = self.post
         self._pageContext["projectID"] = self.post.record.postID
+
+        self._pageContext["roles"] = self.roles
         return self._pageContext
 
