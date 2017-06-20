@@ -57,7 +57,7 @@
 		width: 18.1%;
 		height: 20px;
 		min-width: 93px;
-		padding: 10px 15px 10px 15px;
+		padding: 10px 15px 15px 15px;
 		display: inline-block;
 		letter-spacing: 0.10em;
 		border: 1px solid #FFF;
@@ -74,7 +74,7 @@
 	{
 		width: 18.1%;
 		min-width: 93px;
-		padding: 10px 15px 15px 15px;
+		padding: 10px 15px 20px 15px;
 		height: 20px;
 		display: inline-block;
 		letter-spacing: 0.10em;
@@ -90,9 +90,14 @@
 	}
 	.profileTabButtonInactive:hover
 	{
-		color: #FFF;
-		background: #232323;
-		transition: background .20s ease;
+		color: #c6c6c6;
+		transition: color .20s ease;
+	}
+
+	.profileTabButtonActive:hover
+	{
+		color: #6d6d6d;
+		transition: color .20s ease;
 	}
 
 	.profileTabBorderCover
