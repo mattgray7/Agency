@@ -123,7 +123,7 @@ def createProjectRole(projectID, username, status, title, characterName, charact
 								   	 username=username, characterName=characterName, 
 								   	 characterDescription=characterDescription)
 	projectRole.save()
-
+	"""TODO should not have poster as username when I fix the post system"""
 	rolePost = models.CastingPost(postID=roleID, projectID=projectID, poster=username,
 								  title=title, description=characterDescription, paid=paid,
 								  status=status)
@@ -190,6 +190,14 @@ project1WorkPost8RoleId = createProjectRole(projectID=project1ProjectID,
 								 		    status="Cast",
 								 		    picURL="/Users/MattGray/Projects/Agency/Agency/scripts/media/daisyBuchanan.png")
 
+project1RoleId2 = createProjectRole(projectID=project1ProjectID,
+								 	username="mattgray",
+								 	title="Looking for young 20-something male to play a random guy",
+								 	characterName="Clark",
+								 	characterDescription="Looks like he comes from a wealthy family",
+								 	paid=True,
+								 	status="Open")
+
 project2JobId = createProjectJob(projectID=project7ProjectPost.projectID,
 								 		    username="johnstongray",
 								 		    title="Creator",
@@ -213,6 +221,8 @@ project2JobID = createProjectJob(projectID=project1ProjectID,
 								 		  paid=True,
 								 		  profession="Producer",
 								 		  status="Filled")
+
+
 
 # Photographer job post
 project1WorkPostID = helpers.createUniqueID(models.WorkPost, "postID")
