@@ -3,8 +3,7 @@
 		width: 100%;
 		min-width: 731px;
 		max-width: 900px;
-		height: 90%;			/*temp*/
-		background: #FFF;
+		/*background: #FFF;*/
 		color: #000;
 		text-align: center;
 		border: 2px solid #000;
@@ -15,7 +14,7 @@
 	{
 		min-width: 680px;
 		min-height: 300px;
-		background: #eaeaea;
+		background: #232323;
 		color: #000;
 		border: 2px solid #000;
 		border-radius: 4px;
@@ -64,11 +63,74 @@
 	}
 	.projectContentPanel
 	{
-		padding: 0.5em;
 		background: #FFF;
-		border: 2px solid #000;
-		border-radius: 4px;
-		margin-right: -5px;
+		border-radius: 2px;
+		border: 4px solid #FFF;
+		margin-right: -2px;
 		height: 200px;
+		margin-top: -13px;
+		position: relative;
+		z-index: 2;
+		margin-left: 5px;
+
+	}
+	.projectTabButtonInactive
+	{
+		height: 20px;
+		width: 100%;
+		min-width: 227px;
+		padding: 10px 0px 20px 0px;
+		display: inline-block;
+		letter-spacing: 0.10em;
+		border: 1px solid #FFF;
+		border-radius: 3px;
+		text-align: center;
+		font-weight: 700;
+		font-size: 1em;
+		color: #FFF;
+		cursor: pointer;
+		background: #232323;
+		transition: background .20s ease;
+	}
+	.projectTabButtonActive
+	{
+		width: 100%;
+		min-width: 227px;
+		padding: 10px 0px 20px 0px;
+		height: 20px;
+		display: inline-block;
+		letter-spacing: 0.10em;
+		border: 1px solid #FFF;
+		border-radius: 3px;
+		text-align: center;
+		font-weight: 700;
+		font-size: 1em;
+		color: #000;
+		cursor: pointer;
+		background: #FFF;
+		transition: background .20s ease;
+	}
+	.projectTabButtonInactive:hover
+	{
+		color: #c6c6c6;
+		transition: color .20s ease;
+	}
+
+	.projectTabButtonActive:hover
+	{
+		color: #6d6d6d;
+		transition: color .20s ease;
+	}
+
+	.profileTabBorderCover
+	{
+		width: 132.5%;
+		background: #232323;
+		height: 2px;
+		margin: 7px 0px -15px -15px;
+		position: relative;
+		z-index: 3;
+		opacity: 0;
+		transition: background .2s ease;
 	}
 

@@ -67,7 +67,7 @@
 				<tr>
 					<td style="width: 250px;">
 						<div id="postPicturePanel" class="postPicture">
-							<div id="postPictureBoundingBox" class="hoverContainer" style="width:250px; height:250px; background: #000; border: 2px solid #000; border-radius:3px; vertical-align: middle; display: table-cell;">
+							<div id="postPictureBoundingBox" class="hoverContainer" style="width:250px; height:250px; background: #000; border: 2px solid #FFF; border-radius:3px; vertical-align: middle; display: table-cell;">
 								<div id="postPicture">
 									{% if post.postPicture %}
 										<img src="{{ post.postPicture.url }}" style="width:250px;"/>
@@ -204,10 +204,34 @@
 					</td>
 				</tr>
 				<tr>
-					<td colspan="3" style="width: 100%; padding: 0.3em; margin-right: 0px;">
-						<div id="projectContentPanel" class="projectContentPanel">
-
-						</div>
+					<td colspan="3" >
+						<table style="width:100%; margin-left: 2px; margin-right:-10px">
+							<tr style="text-align: center">
+								<td>
+									<div class="projectTabButtonActive" id="backgroundProfileButton" onclick="selectProfileTab('background')">
+										Roles
+										<div id="backgroundBorderCover" class="profileTabBorderCover"></div>
+									</div>
+								</td>
+								<td>
+									<div class="projectTabButtonInactive" id="postsProfileButton" onclick="selectProfileTab('posts')" style="margin: 0px -2px 0px 0px; width:95%;">
+										Jobs
+										<div id="postsBorderCover" class="profileTabBorderCover"></div>
+									</div>
+								</td>
+								<td>
+									<div class="projectTabButtonInactive" id="eventsProfileButton" onclick="selectProfileTab('events')">
+										Events
+										<div id="eventsBorderCover" class="profileTabBorderCover"></div>
+									</div>
+								</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="3">
+						<div id="projectContentPanel" class="projectContentPanel"></div>
 					</td>
 				</tr>
 			</table>
