@@ -18,6 +18,9 @@
         // Deconstructor functions to run when a toolbar source is selected (eg deleting a newly created post when leaving the create post page)
         var toolbarDeconstructorFunctions = [];
 
+        // Maps usernames to display friendly names (mainly capitalize)
+        var posterNameMap = {{ posterNameMap|safe }};
+
         // using jQuery
         function getCookie(name) {
             var cookieValue = null;
@@ -85,6 +88,13 @@
             var extraInputs = []
             extraInputs.push({key: "postID", value: postID});
             var form = createPageRedirectForm("{{next}}", "{{next}}", "{{possibleDestinations.viewPost}}", "{{currentPageURL}}", extraInputs, null);
+            form.submit();
+        }
+
+        function redirectToUser(username){
+            var extraInputs = []
+            extraInputs.push({key: "username", value: username});
+            var form = createPageRedirectForm("{{next}}", "{{next}}", "{{toolbarDestinations.profile}}", "{{currentPageURL}}", extraInputs, null);
             form.submit();
         }
     </script>

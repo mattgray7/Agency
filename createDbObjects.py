@@ -157,6 +157,29 @@ project1WorkPost.postPicture.name = "/work_{0}.jpg".format(project1WorkPostID)
 project1WorkPost.save()
 
 
+
+def createProjectJob(projectID, username, status, profession, title, description, paid, picURL=None):
+	jobID = helpers.createUniqueID(models.ProjectJob, "postID")
+
+	projectJob = models.ProjectJob(postID=jobID, projectID=projectID, status=status,
+								   username=username, profession=profession)
+	projectJob.save()
+
+	projectPost = models.WorkPost(postID=jobID, projectID=projectID, poster=username,
+								  title=title, description=description, paid=paid, profession=profession,
+								  status=status)
+	projectPost.save()
+	print "just saved {0}".format(projectPost)
+	return jobID
+
+project1WorkPost2JobId = createProjectJob(projectID=project1ProjectID,
+								 		  username="mattgray",
+								 		  title="DirectorNeeded",
+								 		  description="Head of production",
+								 		  paid=True,
+								 		  profession="Director",
+								 		  status="Filled")
+
 # Open table read event
 project1EventPostID = helpers.createUniqueID(models.EventPost, "postID")
 project1EventPost = models.EventPost(postID=project1EventPostID,

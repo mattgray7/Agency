@@ -50,6 +50,14 @@
 			}	
 		});
 	}
+
+	function createUserStringWithLinks(userList, listTitle, pluralizeTitle){
+		for(var i=0; i < userList.length; i++){
+			console.log(userList[i])
+		}
+		return "hi"
+
+	}
 </script>
 
 <div id="mainViewPanel" class="mainViewPanel">
@@ -81,8 +89,21 @@
 							</h1>
 							<h4 class="postInfoSubTitle">
 								{% if isProject %}
-									Director: <br>
-									Writer:
+									{% if post.directors %}
+										{% if post.directors|length == 1 %}
+											Director: 
+										{% else %}
+											Directors:
+										{% endif %}
+
+										{% for director in post.directors %}
+											<a onclick="redirectToUser('{{director}}');" class="userLink">
+												<script>
+													document.write(posterNameMap["{{director}}"] + ", ");
+												</script>
+											</a>
+										{% endfor %}
+									{% endif %}
 							</h4>
 							<div class="postInfoContent">
 									{{ post.status }}<br>

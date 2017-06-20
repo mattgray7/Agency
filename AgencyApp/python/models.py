@@ -125,6 +125,34 @@ class ProjectPost(AbstractPost):
         self._totalRoles = None
         self._openJobs = None
         self._totalJobs = None
+        self._directors = None
+        self._writers = None
+        self._actors = None
+        self._producers = None
+
+    @property
+    def directors(self):
+        if self._directors is None:
+            self._directors = [x.username for x in ProjectJob.objects.filter(projectID=self.projectID, profession="Director")]
+        return self._directors
+
+    @property
+    def writers(self):
+        if self._writers is None:
+            self._writers = [x.username for x in ProjectJob.objects.filter(projectID=self.projectID, profession__in=["Writer", "Screenwriter", "Story writer"])]
+        return self._writers
+
+    @property
+    def actors(self):
+        if self._actors is None:
+            self._actors = [x.username for x in ProjectRole.objects.filter(projectID=self.projectID, status="Cast")]
+        return self._actors
+
+    @property
+    def producers(self):
+        if self._producers is None:
+            self._producers = [x.username for x in ProjectJob.objects.filter(projectID=self.projectID, profession="Producer")]
+        return self._producers
 
     @property
     def openRoles(self):
@@ -151,16 +179,19 @@ class ProjectPost(AbstractPost):
         return self._totalJobs
 
 class ProjectJob(models.Model):
-    postID = models.CharField(max_length=10)        # Same as job post
+    postID = models.CharField(max_length=10)        # connected to the post for this job
     projectID = models.CharField(max_length=10, blank=True, null=True)
-    status = models.CharField(max_length=50, default="Available", blank=True, null=True)
-    username = models.CharField(max_length=200, blank=True, null=True)
+    status = models.CharField(max_length=50, default="Hiring", blank=True, null=True)        # Hiring or Filled
+    username = models.CharField(max_length=200, blank=True, null=True)      # only filled if status is Filled
+    profession = models.CharField(max_length=200)
 
 class ProjectRole(models.Model):
     postID = models.CharField(max_length=10)        # Same as casting post
     projectID = models.CharField(max_length=10, blank=True, null=True)
-    status = models.CharField(max_length=50, default="Open", blank=True, null=True)
-    username = models.CharField(max_length=200, blank=True, null=True)
+    status = models.CharField(max_length=50, default="Open", blank=True, null=True)     # Open or Cast
+    username = models.CharField(max_length=200, blank=True, null=True)      # only filled if Cast
+    characterName = models.CharField(max_length=200)
+    characterDescription = models.CharField(max_length=1000, blank=True, null=True)
 
 class WorkPost(AbstractPost):
     profession = models.CharField(max_length=200)

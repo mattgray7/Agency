@@ -4,6 +4,7 @@ from django.http import HttpResponseRedirect
 import constants
 import random, string
 import models
+import json
 
 def redirect(request, currentPage, destinationPage):
     """Returns an HttpResonseRedirect of the desired URL can be resolved (see getDestinationURL for 
@@ -120,7 +121,8 @@ def getBaseContext(request):
                 }
     returnDict["posterNameMap"] = {}
     for account in models.UserAccount.objects.all():
-        returnDict["posterNameMap"]["account.username"] = "{0} {1}".format(account.firstName, account.lastName)
+        returnDict["posterNameMap"][account.username] = capitalizeName("{0} {1}".format(account.firstName, account.lastName))
+    returnDict["posterNameMap"] = json.dumps(returnDict["posterNameMap"])
     return returnDict
 
 

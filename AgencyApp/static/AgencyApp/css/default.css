@@ -397,6 +397,17 @@
 /* Button Style                                                                  */
 /*********************************************************************************/
 
+	.userLink
+	{
+		color: #000;
+	}
+
+	.userLink:hover
+	{
+		color: #a09f9f;
+		cursor: pointer;
+	}
+
 	.button
 	{
 		display: inline-block;
