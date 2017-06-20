@@ -197,6 +197,13 @@ project1RoleId2 = createProjectRole(projectID=project1ProjectID,
 								 	characterDescription="Looks like he comes from a wealthy family",
 								 	paid=True,
 								 	status="Open")
+project1RoleId2 = createProjectRole(projectID=project1ProjectID,
+								 	username="mattgray",
+								 	title="Looking for young 20-something female to play a random guy's gf",
+								 	characterName="Mona Lisa Saperstein",
+								 	characterDescription="She is the wooooooooooorst",
+								 	paid=True,
+								 	status="Open")
 
 project2JobId = createProjectJob(projectID=project7ProjectPost.projectID,
 								 		    username="johnstongray",
