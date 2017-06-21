@@ -7,6 +7,7 @@ import constants
 import models
 import helpers
 import genericViews as views
+import post_project as projectPost
 
 
 class ProfileView(views.GenericFormView):
@@ -16,8 +17,8 @@ class ProfileView(views.GenericFormView):
         self._userViewingOwnProfile = False
         self._profileUserAccount = None
         self._profileProfessions = None
-        self._profilePosts = None
         self._profileProjects = None
+        self._profilePosts = None
         self._profileInterests = None
         self._profileLinks = None
         self._displayName = None
@@ -100,13 +101,44 @@ class ProfileView(views.GenericFormView):
 
     @property
     def profileProjects(self):
-        if self._profileProjects is None:
-            self._profileProjects = {"current": models.ProjectPost.objects.filter(poster=self.profileUserAccount.username,
-                                                                                  status__in=["Pre-production", "In production", "Post production", "Screening"]),
-                                     "completed": models.ProjectPost.objects.filter(poster=self.profileUserAccount.username,
-                                                                                   status="Completed")
-                                     }
+        if not self._profileProjects:
+            self._profileProjects = []
+            existingProjects = {}
+            for role in models.ProjectRole.objects.filter(username=self.profileUserAccount.username, status="Cast"):
+                project = projectPost.getProjectObject(role.projectID)
+                if project:
+                    if project.postID in existingProjects.keys():
+                        existingProjectObjects[project.postID]["roles"].append(role)
+                    else:
+                        existingProjects[project.postID] = {"project": project, "roles": [role], "jobs": [],
+                                                            "status": self._getProjectDisplayStatus(project)}
+
+            for job in models.ProjectJob.objects.filter(username=self.profileUserAccount.username, status="Filled"):
+                project = projectPost.getProjectObject(job.projectID)
+                if project:
+                    if project.postID in existingProjects.keys():
+                        existingProjects[project.postID]["jobs"].append(job)
+                    else:
+                        existingProjects[project.postID] = {"project": project, "roles": [], "jobs": [job],
+                                                            "status": self._getProjectDisplayStatus(project)}
+
+            for project in models.ProjectPost.objects.filter(poster=self.profileUserAccount.username):
+                if project.postID in existingProjects.keys():
+                    existingProjects[project.postID]["jobs"].append("Creator")
+                else:
+                    existingProjects[project.postID] = {"project": project, "roles": [], "jobs": ["Creator"],
+                                                       "status": self._getProjectDisplayStatus(project)}
+            for projectID in existingProjects.keys():
+                self._profileProjects.append(existingProjects[projectID])
         return self._profileProjects
+
+    def _getProjectDisplayStatus(self, project):
+        status = None
+        if project.status in ["Pre-production", "In production", "Post production", "Screening"]:
+            status = "current"
+        elif project.status in ["Completed"]:
+            status = "past"
+        return status
 
     @property
     def pageContext(self):

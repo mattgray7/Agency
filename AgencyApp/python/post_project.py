@@ -159,3 +159,11 @@ class ViewProjectPostView(post.GenericViewPostView):
         self._pageContext["events"] = self.events
         return self._pageContext
 
+
+def getProjectObject(projectID):
+    try:
+        project = models.ProjectPost.objects.get(postID=projectID)
+    except models.ProjectPost.DoesNotExist:
+        pass
+    else:
+        return project

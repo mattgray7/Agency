@@ -140,36 +140,26 @@
 			return projectString
 		}
 
-		function createCurrentProjectsList(){
+		function createProjectsList(status){
 			var displayString = "";
-			{% if profilePosts.projects and profilePosts.projects.current %}
-				displayString += "<div id='currentProjectPanel' class='projectListPanel'><ul class='profileProjectList'><li><h2>Current Projects</h2></li>";
-				{% for projectPost in profilePosts.projects.current %}
-					var picURL = null
-					{% if projectPost.postPicture %}
-						picURL = "{{ projectPost.postPicture.url }}"
-					{% endif %}
+			{% if profilePosts.projects %}
+				displayString += "<div id='" + status + "ProjectPanel' class='projectListPanel'><ul class='profileProjectList'><li><h2>"
+				if(status === "current"){
+					displayString += "Current Projects";
+				}else{
+					displayString += "Past Projects";
+				}
+				displayString += "</h2></li>";
+				{% for projectPost in profilePosts.projects %}
+					
+					if("{{projectPost.status}}" === status){
+						var picURL = null
+						{% if projectPost.project.postPicture %}
+							picURL = "{{ projectPost.project.postPicture.url }}"
+						{% endif %}
 
-
-					displayString += createProjectListElement("{{projectPost.postID}}", picURL, "{{projectPost.title}}", "{{projectPost.status}}", "{{projectPost.openRoles|length}} ", "{{projectPost.openJobs|length}} ")
-				{% endfor %}
-				displayString += "</ul></div>";
-			{% endif %}
-			return displayString;
-		}
-
-		function createPastProjectsList(){
-			var displayString = "";
-			{% if profilePosts.projects and profilePosts.projects.completed %}
-				displayString += "<div id='pastProjectPanel' class='projectListPanel'><ul class='profileProjectList'><li><h2>Past Projects</h2></li>";
-				{% for projectPost in profilePosts.projects.completed %}
-					var picURL = null
-					{% if projectPost.postPicture %}
-						picURL = "{{ projectPost.postPicture.url }}"
-					{% endif %}
-
-
-					displayString += createProjectListElement("{{projectPost.postID}}", picURL, "{{projectPost.title}}", "{{projectPost.status}}", "{{projectPost.openRoles|length}} ", "{{projectPost.openJobs|length}} ")
+						displayString += createProjectListElement("{{projectPost.project.postID}}", picURL, "{{projectPost.project.title}}", "{{projectPost.project.status}}", "{{projectPost.project.openRoles|length}} ", "{{projectPost.project.openJobs|length}} ")
+					}
 				{% endfor %}
 				displayString += "</ul></div>";
 			{% endif %}
@@ -179,7 +169,7 @@
 		function displayBackground(){
 			var profileDisplayPanelDiv = document.getElementById("profileDisplayPanel")
 			if(profileDisplayPanelDiv != null){
-				profileDisplayPanelDiv.innerHTML = createCurrentProjectsList() + createPastProjectsList();
+				profileDisplayPanelDiv.innerHTML = createProjectsList("current") + createProjectsList("past");
 
 			}
 		}
