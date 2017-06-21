@@ -67,13 +67,16 @@
 				}
 			}
 		}
-		document.getElementById("projectContentList").innerHTML = "";
 		if(tabType === "roles"){
 			selectRoles();
 		}else if(tabType == "jobs"){
 			selectJobs();
 		}else if(tabType == "events"){
 			selectEvents();
+		}
+		var contentDiv = document.getElementById("projectContentList")
+		if(contentDiv != null){
+			contentDiv.scrollLeft = 0;
 		}
 	}
 
@@ -364,7 +367,7 @@
 									</div>
 								</td>
 								<td>
-									<div class="projectTabButtonInactive" id="eventsButton" onclick="selectProjectTab('events')">
+									<div class="projectTabButtonInactive" id="eventsButton" onclick="selectProjectTab('events')" style="margin-right: -3px;">
 										Events
 										<div id="eventsBorderCover" class="profileTabBorderCover"></div>
 									</div>
