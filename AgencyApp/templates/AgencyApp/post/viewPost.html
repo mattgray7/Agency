@@ -176,7 +176,30 @@
 	}
 
 	function selectEvents(){
-		console.log("events")
+		var listDiv = document.getElementById("projectContentList");
+		var contentString = "";
+		if(listDiv != null){
+			{% if events %}
+				contentString += "<table><tr>";
+				{% for eventObj in events %}
+					contentString += "<td class='projectContentListElement grayBackground grayHover' onclick='redirectToPost(" + '"{{eventObj.post.postID}}");' + "'>";
+					// eventPic
+					contentString += "<div class='projectContentListElementPicturePanel'><div class='projectContentListElementPicture'>";
+					{% if eventObj.post.postPicture %}
+						contentString += '<img src="{{ eventObj.post.postPicture.url }}" style="max-width: 150px; max-height:150px;"/>'
+					{% else %}
+						contentString += '<img src="{{images.noPicture}}" style="width: 150px; max-height: 150px;">';
+					{% endif %}
+					contentString += "</div></div><br>";
+					contentString += "<div class='projectContentListElementText'><h2>{{eventObj.post.title}}</h2><h3>{{eventObj.post.date}}<br>Location: {{eventObj.post.location}}</h3><p>{{eventObj.post.description}}</p></div>";
+					contentString += "</td>";
+				{% endfor %}
+				contentString += "</tr></table>"
+			{% else %}
+				contentString += "No events registered."
+			{% endif %}
+		}
+		listDiv.innerHTML = contentString
 	}
 	
 </script>

@@ -77,29 +77,9 @@ class CreateProjectPostView(post.GenericCreatePostView):
 class ViewProjectPostView(post.GenericViewPostView):
     def __init__(self, *args, **kwargs):
         super(ViewProjectPostView, self).__init__(*args, **kwargs)
-        self._castingPosts = None
-        self._workPosts = None
-        self._eventPosts = None
         self._roles = None
         self._jobs = None
-
-    @property
-    def castingPosts(self):
-        if self._castingPosts is None:
-            self._castingPosts = models.CastingPost.objects.filter(projectID=self.postID)
-        return self._castingPosts
-
-    @property
-    def workPosts(self):
-        if self._workPosts is None:
-            self._workPosts = models.WorkPost.objects.filter(projectID=self.postID)
-        return self._workPosts
-
-    @property
-    def eventPosts(self):
-        if self._eventPosts is None:
-            self._eventPosts = models.EventPost.objects.filter(projectID=self.postID)
-        return self._eventPosts
+        self._events = None
 
     @property
     def post(self):
@@ -152,6 +132,16 @@ class ViewProjectPostView(post.GenericViewPostView):
                     self._jobs.append(newJob)
         return self._jobs
 
+    @property
+    def events(self):
+        if not self._events:
+            projectEvents = models.EventPost.objects.filter(projectID=self.postID)
+            if projectEvents:
+                self._events = []
+                for event in projectEvents:
+                    newEvent = {"post": event}          # Simple for now, but want to keep same structure and may add more thing in the future(attendees, etc)
+                    self._events.append(newEvent)
+        return self._events
 
     @property
     def pageContext(self):
@@ -162,13 +152,10 @@ class ViewProjectPostView(post.GenericViewPostView):
                                                      "createWork": constants.CREATE_WORK_POST,
                                                      "createEvent": constants.CREATE_EVENT_POST
                                                      }
-        self._pageContext["castingPosts"] = self.castingPosts
-        self._pageContext["workPosts"] = self.workPosts
-        self._pageContext["eventPosts"] = self.eventPosts
         self._pageContext["project"] = self.post
         self._pageContext["projectID"] = self.post.record.postID
-
         self._pageContext["roles"] = self.roles
         self._pageContext["jobs"] = self.jobs
+        self._pageContext["events"] = self.events
         return self._pageContext
 

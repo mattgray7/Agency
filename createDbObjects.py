@@ -149,21 +149,21 @@ def createProjectRole(projectID, username, status, title, characterName, paid, s
 project1WorkPost2JobId = createProjectJob(projectID=project1ProjectID,
 								 		  username="mattgray",
 								 		  title="Director Needed",
-								 		  description="Head of production",
+								 		  shortDescription="Head of production",
 								 		  paid=True,
 								 		  profession="Director",
 								 		  status="Filled")
 project1WorkPost3JobId = createProjectJob(projectID=project1ProjectID,
 								 		  username="amybolt",
 								 		  title="Co-Director Needed",
-								 		  description="Head of directing",
+								 		  shortDescription="Head of directing",
 								 		  paid=True,
 								 		  profession="Director",
 								 		  status="Filled")
 project1WorkPost5JobId = createProjectJob(projectID=project1ProjectID,
 								 		  username="mattgray",
 								 		  title="Photographer needed",
-								 		  description="I need someone to shoot our set while filiming",
+								 		  shortDescription="I need someone to shoot our set while filiming",
 								 		  paid=True,
 								 		  profession="Photographer",
 								 		  status="Hiring",
@@ -171,14 +171,14 @@ project1WorkPost5JobId = createProjectJob(projectID=project1ProjectID,
 project1WorkPost4JobId = createProjectJob(projectID=project1ProjectID,
 								 		  username="adamcramer",
 								 		  title="SFX Heavy show, need supervisor",
-								 		  description="Head/Producer of SFX",
+								 		  shortDescription="Head/Producer of SFX",
 								 		  paid=True,
 								 		  profession="Producer",
 								 		  status="Filled")
 project1WorkPost5JobId = createProjectJob(projectID=project1ProjectID,
 								 		  username="amybolt",
 								 		  title="Screenwriter wanted",
-								 		  description="I need someone to write this script from my idea",
+								 		  shortDescription="I need someone to write this script from my idea",
 								 		  paid=True,
 								 		  profession="Screenwriter",
 								 		  status="Filled")
@@ -245,14 +245,6 @@ project2RoleId = createProjectRole(projectID=project7ProjectPost.projectID,
 								 	characterDescription="Own the room",
 								 	paid=True,
 								 	status="Cast")
-
-project2JobID = createProjectJob(projectID=project1ProjectID,
-								 		  username="adamcramer",
-								 		  title="SFX Heavy show, need supervisor",
-								 		  description="Head/Producer of SFX",
-								 		  paid=True,
-								 		  profession="Producer",
-								 		  status="Filled")
 
 # Open table read event
 project1EventPostID = helpers.createUniqueID(models.EventPost, "postID")
