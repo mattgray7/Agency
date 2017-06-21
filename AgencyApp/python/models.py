@@ -192,6 +192,8 @@ class ProjectJob(models.Model):
     status = models.CharField(max_length=50, default="Hiring", blank=True, null=True)        # Hiring or Filled
     username = models.CharField(max_length=200, blank=True, null=True)      # only filled if status is Filled
     profession = models.CharField(max_length=200)
+    description = models.CharField(max_length=1000, blank=True, null=True)
+    shortDescription = models.CharField(max_length=200, blank=True, null=True)
 
 class ProjectRole(models.Model):
     postID = models.CharField(max_length=10)        # Same as casting post

@@ -81,6 +81,7 @@ class ViewProjectPostView(post.GenericViewPostView):
         self._workPosts = None
         self._eventPosts = None
         self._roles = None
+        self._jobs = None
 
     @property
     def castingPosts(self):
@@ -131,6 +132,28 @@ class ViewProjectPostView(post.GenericViewPostView):
         return self._roles
 
     @property
+    def jobs(self):
+        if not self._jobs:
+            projectJobs = models.ProjectJob.objects.filter(projectID=self.postID)
+            if projectJobs:
+                self._jobs = []
+                for job in projectJobs:
+                    try:
+                        post = models.WorkPost.objects.get(postID=job.postID)
+                    except models.WorkPost.DoesNotExist:
+                        post = None
+                    newJob = {"job": job, "post": post}
+                    if job.status == "Filled":
+                        try:
+                            user = models.UserAccount.objects.get(username=job.username)
+                        except models.UserAccount.DoesNotExist:
+                            user = None
+                        newJob["user"] = user
+                    self._jobs.append(newJob)
+        return self._jobs
+
+
+    @property
     def pageContext(self):
         self._pageContext = super(ViewProjectPostView, self).pageContext
         self._pageContext["possibleDestinations"] = {"edit": constants.CREATE_PROJECT_POST,
@@ -146,5 +169,6 @@ class ViewProjectPostView(post.GenericViewPostView):
         self._pageContext["projectID"] = self.post.record.postID
 
         self._pageContext["roles"] = self.roles
+        self._pageContext["jobs"] = self.jobs
         return self._pageContext
 

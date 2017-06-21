@@ -109,17 +109,23 @@ project7ProjectPost = createProject(poster="johnstongray",
 									picURL="/Users/MattGray/Projects/Agency/Agency/scripts/media/reelAdults.jpg")
 
 
-def createProjectJob(projectID, username, status, profession, title, description, paid, picURL=None):
+def createProjectJob(projectID, username, status, profession, title, paid, shortDescription=None, description=None, picURL=None):
 	jobID = helpers.createUniqueID(models.ProjectJob, "postID")
 
 	projectJob = models.ProjectJob(postID=jobID, projectID=projectID, status=status,
-								   username=username, profession=profession)
+								   username=username, profession=profession, shortDescription=shortDescription, description=description)
 	projectJob.save()
 
 	jobPost = models.WorkPost(postID=jobID, projectID=projectID, poster=username,
 							  title=title, description=description, paid=paid, profession=profession,
 							  status=status)
 	jobPost.save()
+
+	if picURL:
+		picResult = urllib.urlretrieve(picURL)
+		jobPost.postPicture = File(open(picResult[0]))
+		jobPost.postPicture.name = "/work_{0}.jpg".format(jobID)
+		jobPost.save()
 	return jobID
 
 def createProjectRole(projectID, username, status, title, characterName, paid, shortCharacterDescription=None, characterDescription=None, picURL=None):
@@ -154,6 +160,14 @@ project1WorkPost3JobId = createProjectJob(projectID=project1ProjectID,
 								 		  paid=True,
 								 		  profession="Director",
 								 		  status="Filled")
+project1WorkPost5JobId = createProjectJob(projectID=project1ProjectID,
+								 		  username="mattgray",
+								 		  title="Photographer needed",
+								 		  description="I need someone to shoot our set while filiming",
+								 		  paid=True,
+								 		  profession="Photographer",
+								 		  status="Hiring",
+								 		  picURL="/Users/MattGray/Projects/Agency/Agency/scripts/media/photographer.jpg")
 project1WorkPost4JobId = createProjectJob(projectID=project1ProjectID,
 								 		  username="adamcramer",
 								 		  title="SFX Heavy show, need supervisor",
@@ -168,6 +182,7 @@ project1WorkPost5JobId = createProjectJob(projectID=project1ProjectID,
 								 		  paid=True,
 								 		  profession="Screenwriter",
 								 		  status="Filled")
+
 project1WorkPost6RoleId = createProjectRole(projectID=project1ProjectID,
 								 		    username="liamcarson",
 								 		    title="Male lead needed",
@@ -238,24 +253,6 @@ project2JobID = createProjectJob(projectID=project1ProjectID,
 								 		  paid=True,
 								 		  profession="Producer",
 								 		  status="Filled")
-
-
-
-# Photographer job post
-project1WorkPostID = helpers.createUniqueID(models.WorkPost, "postID")
-project1WorkPost = models.WorkPost(postID=project1WorkPostID,
-								 projectID=project1ProjectID,
-								 poster="mattgray",
-								 title="Stills photographer needed",
-								 description="3 days on set",
-								 paid=True,
-								 profession="Photographer",
-								 status="Hiring")
-picResult = urllib.urlretrieve("/Users/MattGray/Projects/Agency/Agency/scripts/media/photographer.jpg")
-project1WorkPost.postPicture = File(open(picResult[0]))
-project1WorkPost.postPicture.name = "/work_{0}.jpg".format(project1WorkPostID)
-project1WorkPost.save()
-
 
 # Open table read event
 project1EventPostID = helpers.createUniqueID(models.EventPost, "postID")
