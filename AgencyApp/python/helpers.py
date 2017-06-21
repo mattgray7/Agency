@@ -117,7 +117,8 @@ def getBaseContext(request):
                                          "post": constants.CREATE_POST},
                 "source": source,
                 "default": constants.DEFAULT,
-                "cancel": constants.CANCEL
+                "cancel": constants.CANCEL,
+                "images": {"noProfilePicture": constants.NO_PROFILE_PICTURE_PATH}
                 }
     returnDict["posterNameMap"] = {}
     for account in models.UserAccount.objects.all():

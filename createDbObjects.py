@@ -17,6 +17,12 @@ os.system("python /Users/MattGray/Projects/Agency/Agency/manage.py flush")
 print "\nDeleting media..."
 os.system("rm -r /Users/MattGray/Projects/Agency/Agency/media/*")
 
+print "\nCopying default images to media"
+defaultImagesDir = "/Users/MattGray/Projects/Agency/Agency/media/default/"
+if not os.path.exists(defaultImagesDir):
+	os.makedirs(defaultImagesDir)
+os.system("cp /Users/MattGray/Projects/Agency/Agency/AgencyApp/static/AgencyApp/css/images/default/* {0}".format(defaultImagesDir))
+
 print "\nCreating new user network.\n"
 
 #=================== Project 1

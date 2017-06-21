@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load staticfiles %}
 
 {% block content %}
 
@@ -90,16 +91,14 @@
 						{% if roleObj.actor.profilePicture %}
 							contentString += '<img src="{{ roleObj.actor.profilePicture.url }}" style="max-width: 150px; max-height:150px;"/>'
 						{% else %}
-							contentString += '<img style="width: 150px; max-height: 150px;">'
+							contentString += '<img src="{{images.noProfilePicture}}" style="width: 150px; max-height: 150px;">';
 						{% endif %}
 						contentString += "</div></div><br>";
-
-
 						contentString += "<div class='projectContentListElementText'><h2>{{roleObj.role.characterName}}</h2><p>{{roleObj.role.shortCharacterDescription}}</p></div>"
 					{% elif roleObj.role.status == "Open" and roleObj.post %}
 						contentString += "{{roleObj.role.characterName}} - Open "
 					{% else %}
-						contentString += "{{roleObj.role.characterName}}"
+						contentString += "{{roleObj.role.characterName}}, {{roleObj.role.status}}, {{roleObj.actor}}"
 					{% endif %}
 					contentString += "</td>";
 				{% endfor %}
