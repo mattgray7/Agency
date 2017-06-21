@@ -97,6 +97,8 @@
 		width: 150px;
 		background: #000;
 		margin: 0 auto;
+		border: 1px solid #000;
+		border-radius: 3px;
 	}
 	.projectContentListElementText
 	{
