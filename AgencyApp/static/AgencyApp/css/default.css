@@ -505,8 +505,13 @@
 
 	.grayHover:hover
 	{
-		color: #FFF;
 		background: #bababa;
+		transition: background .20s ease;
+	}
+
+	.darkGreenHover:hover
+	{
+		background: #bce0b5;
 		transition: background .20s ease;
 	}
 
@@ -520,6 +525,16 @@
 	{
 		color: #000;
 		background: #f7c3c3;
+	}
+
+	.grayBackground
+	{
+		background: #efefef;
+	}
+
+	.greenBackground
+	{
+		background: #e4f4e3;
 	}
 
 	.interestChoiceButton

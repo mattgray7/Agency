@@ -84,8 +84,9 @@
 			{% if roles %}
 				contentString += "<table><tr>";
 				{% for roleObj in roles %}
-					contentString += "<td class='projectContentListElement'>"
 					{% if roleObj.role.status == "Cast" and roleObj.actor %}
+						contentString += "<td class='projectContentListElement grayBackground grayHover' onclick='redirectToPost(" + '"{{roleObj.role.postID}}");' + "'>";
+
 						// CAST label
 						contentString += "<div style='text-align: left;margin-top: -20px; margin-left: 5px; padding: 0em 0em 0.7em 0em; font-weight: 500;'><h3 style='display: inline;'>CAST</h3> - <a onclick='redirectToUser(" + '"{{roleObj.actor.username}}");' + "'>{{roleObj.actor.cleanName}}</a></div>"
 
@@ -99,6 +100,7 @@
 						contentString += "</div></div><br>";
 						contentString += "<div class='projectContentListElementText'><h2>{{roleObj.role.characterName}}</h2><p>{{roleObj.role.shortCharacterDescription}}</p></div>"
 					{% elif roleObj.role.status == "Open" and roleObj.post %}
+						contentString += "<td class='projectContentListElement greenBackground darkGreenHover' onclick='redirectToPost(" + '"{{roleObj.role.postID}}");' + "'>"
 						contentString += "<div style='text-align: left;margin-top: -20px; margin-left: 5px; padding: 0em 0em 0.7em 0em; font-weight: 500;'><h3 style='display: inline;'>AVAILABLE</h3></div>";
 
 						// postPic
