@@ -212,7 +212,8 @@ project1RoleId2 = createProjectRole(projectID=project1ProjectID,
 								 	characterDescription = "She is the worst. It is unbelievable how bad she is. She is the brother of jean rakphio saperstein, so actress must look related.",
 								 	shortCharacterDescription="She is the wooooooooooorst",
 								 	paid=True,
-								 	status="Open")
+								 	status="Open",
+								 	picURL="/Users/MattGray/Projects/Agency/Agency/scripts/media/randomChickDrawing.jpg")
 
 project2JobId = createProjectJob(projectID=project7ProjectPost.projectID,
 								 		    username="johnstongray",

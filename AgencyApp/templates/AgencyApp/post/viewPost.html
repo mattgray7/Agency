@@ -86,8 +86,11 @@
 				{% for roleObj in roles %}
 					contentString += "<td class='projectContentListElement'>"
 					{% if roleObj.role.status == "Cast" and roleObj.actor %}
-						// profilePicBoundary
-						contentString += "<div style='text-align: left;margin-top: -20px; margin-left: 5px; padding: 0em 0em 0.7em 0em; font-weight: 500;'><h3 style='display: inline;'>CAST</h3> - <a onclick='redirectToUser(" + '"{{roleObj.actor.username}}");' + "'>{{roleObj.actor.cleanName}}</a></div><div class='projectContentListElementPicturePanel'><div class='projectContentListElementPicture'>";
+						// CAST label
+						contentString += "<div style='text-align: left;margin-top: -20px; margin-left: 5px; padding: 0em 0em 0.7em 0em; font-weight: 500;'><h3 style='display: inline;'>CAST</h3> - <a onclick='redirectToUser(" + '"{{roleObj.actor.username}}");' + "'>{{roleObj.actor.cleanName}}</a></div>"
+
+						// profilePic
+						contentString += "<div class='projectContentListElementPicturePanel'><div class='projectContentListElementPicture'>";
 						{% if roleObj.actor.profilePicture %}
 							contentString += '<img src="{{ roleObj.actor.profilePicture.url }}" style="max-width: 150px; max-height:150px;"/>'
 						{% else %}
@@ -96,7 +99,18 @@
 						contentString += "</div></div><br>";
 						contentString += "<div class='projectContentListElementText'><h2>{{roleObj.role.characterName}}</h2><p>{{roleObj.role.shortCharacterDescription}}</p></div>"
 					{% elif roleObj.role.status == "Open" and roleObj.post %}
-						contentString += "{{roleObj.role.characterName}} - Open "
+						contentString += "<div style='text-align: left;margin-top: -20px; margin-left: 5px; padding: 0em 0em 0.7em 0em; font-weight: 500;'><h3 style='display: inline;'>AVAILABLE</h3></div>";
+
+						// postPic
+						contentString += "<div class='projectContentListElementPicturePanel'><div class='projectContentListElementPicture'>";
+						{% if roleObj.post.postPicture %}
+							contentString += '<img src="{{ roleObj.post.postPicture.url }}" style="max-width: 150px; max-height:150px;"/>'
+						{% else %}
+							contentString += '<img src="{{images.noProfilePicture}}" style="width: 150px; max-height: 150px;">';
+						{% endif %}
+						contentString += "</div></div><br>";
+						contentString += "<div class='projectContentListElementText'><h2>{{roleObj.role.characterName}}</h2><p>{{roleObj.role.shortCharacterDescription}}</p></div>"
+
 					{% else %}
 						contentString += "{{roleObj.role.characterName}}, {{roleObj.role.status}}, {{roleObj.actor}}"
 					{% endif %}
