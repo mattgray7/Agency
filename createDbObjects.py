@@ -277,6 +277,7 @@ def createUser(username, email, password, firstName, lastName, picURL=None):
 	                             		firstName=firstName,
 	                             		lastName=lastName,
 	                             		setupComplete=True)
+	userAccount.save()
 	userMediaDir = "/Users/MattGray/Projects/Agency/Agency/media/{0}/".format(username)
 	if not os.path.exists(userMediaDir):
 		os.makedirs(userMediaDir)
@@ -296,8 +297,8 @@ user4 = createUser("johnstongray", "johnston.gray@gmail.com", "m", "johnston", "
 				   "/Users/MattGray/Projects/Agency/Agency/scripts/media/johnstonGrayProfile.jpg")
 user5 = createUser("sachahusband", "sasha.husband@gmail.com", "m", "sasha", "husband",
 				   "/Users/MattGray/Projects/Agency/Agency/scripts/media/sachaHusbandProfile.jpg")
-user6 = createUser("liamcarson", "liam.carson@gmail.com", "m", "liam", "carson",
-				   "/Users/MattGray/Projects/Agency/Agency/scripts/media/liamCarsonProfile.jpg")
+user6 = createUser("liamcarson", "liam.carson@gmail.com", "m", "liam", "carson")
+				   #"/Users/MattGray/Projects/Agency/Agency/scripts/media/liamCarsonProfile.jpg")
 
 # Add some professions
 professionList = [models.Interest(username="mattgray", mainInterest="work", subInterest="onSetProduction", professionName="Cinematographer"),
