@@ -111,11 +111,12 @@
 			}
 		}
 
-		function createProjectListElement(projectID, projectPictureURL, title, status, numOpenRoles, numOpenJobs){
+		function createProjectListElement(projectID, projectPictureURL, title, status, involvementString){
 			var projectString = "<li id='profileProjectListElement_" + projectID + "' class='profileProjectListElement' onclick='redirectToPost(" + '"' + projectID + '");' + "'>"
 			projectString += "<div class='profileProjectListElementImageContainer'>" + getPictureTag(projectPictureURL, "profileProjectListElementImage", "") + "</div>";
-			projectString += "<div class='profileProjectListElementText'><h3>" + title + "</h3><h5>" + status + "<br>"
-			if(numOpenRoles > 0){
+			projectString += "<div class='profileProjectListElementText'><h3>" + title + "</h3><h5>" + status + "<br>" + involvementString + "<br>"
+
+			/*if(numOpenRoles > 0){
 				projectString += parseInt(numOpenRoles) + " ";
 				if(numOpenRoles === 1){
 					projectString += "role";
@@ -135,9 +136,35 @@
 				}
 			}else{
 				projectString += "<br>";
-			}
+			}*/
 			projectString += "</h5></div></li>";
 			return projectString
+		}
+
+		function getInvolvementString(rolesString, jobsString, creator){
+			var jobs = JSON.parse(jobsString.replace(/&quot;/g, '"'));
+			var roles = JSON.parse(rolesString.replace(/&quot;/g, '"'));
+			var returnString = "";
+			if(creator === "True"){
+				returnString += "Creator<br>";
+			}
+			if(roles.length > 0){
+				if(roles.length === 1){
+					returnString += "Actor (" + roles[0] + ")<br>"
+				}else{
+					returnString += "Actor (" + roles.length + " roles)<br>"
+				}
+			}
+			if(jobs.length > 0){
+				returnString += "Worked as ";
+				for(var i=0; i < jobs.length; i++){
+					returnString += jobs[i]
+					if(i != jobs.length-1){
+						returnString += ", ";
+					}
+				}
+			}
+			return returnString
 		}
 
 		function createProjectsList(status){
@@ -158,7 +185,8 @@
 							picURL = "{{ projectPost.project.postPicture.url }}"
 						{% endif %}
 
-						displayString += createProjectListElement("{{projectPost.project.postID}}", picURL, "{{projectPost.project.title}}", "{{projectPost.project.status}}", "{{projectPost.project.openRoles|length}} ", "{{projectPost.project.openJobs|length}} ")
+						var involvementString = getInvolvementString("{{projectPost.roles}}", "{{projectPost.jobs}}", "{{projectPost.creator}}")
+						displayString += createProjectListElement("{{projectPost.project.postID}}", picURL, "{{projectPost.project.title}}", "{{projectPost.project.status}}", involvementString)
 					}
 				{% endfor %}
 				displayString += "</ul></div>";
