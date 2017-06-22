@@ -17,11 +17,14 @@ class ProfileView(views.GenericFormView):
         self._userViewingOwnProfile = False
         self._profileUserAccount = None
         self._profileProfessions = None
-        self._profileProjects = None
         self._profilePosts = None
         self._profileInterests = None
         self._profileLinks = None
         self._displayName = None
+
+        self._profileProjects = None
+        self._hasCurrentProjects = False
+        self._hasPastProjects = False
 
     @property
     def profileLinks(self):
@@ -100,6 +103,14 @@ class ProfileView(views.GenericFormView):
         return self._profilePosts
 
     @property
+    def hasCurrentProjects(self):
+        return self._hasCurrentProjects
+
+    @property
+    def hasPastProjects(self):
+        return self._hasPastProjects
+
+    @property
     def profileProjects(self):
         if not self._profileProjects:
             self._profileProjects = []
@@ -133,6 +144,10 @@ class ProfileView(views.GenericFormView):
             for projectID in existingProjects.keys():
                 existingProjects[projectID]["roles"] = json.dumps(existingProjects[projectID]["roles"])
                 existingProjects[projectID]["jobs"] = json.dumps(existingProjects[projectID]["jobs"])
+                if existingProjects[projectID]["status"] == "current":
+                    self._hasCurrentProjects = True
+                elif existingProjects[projectID]["status"] == "past":
+                    self._hasPastProjects = True
                 self._profileProjects.append(existingProjects[projectID])
         return self._profileProjects
 
@@ -153,6 +168,8 @@ class ProfileView(views.GenericFormView):
         self._pageContext["profileInterests"] = self.profileInterests
         self._pageContext["profilePosts"] = self.profilePosts
         self._pageContext["profileLinks"] = self.profileLinks
+        self._pageContext["hasCurrentProjects"] = self.hasCurrentProjects
+        self._pageContext["hasPastProjects"] = self.hasPastProjects
         self._pageContext["possibleDestinations"] = {"picture": constants.EDIT_PROFILE_PICTURE,
                                                      "background": constants.EDIT_BACKGROUND,
                                                      "interests": constants.EDIT_INTERESTS,

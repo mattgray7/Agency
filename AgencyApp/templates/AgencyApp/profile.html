@@ -145,8 +145,12 @@
 			var jobs = JSON.parse(jobsString.replace(/&quot;/g, '"'));
 			var roles = JSON.parse(rolesString.replace(/&quot;/g, '"'));
 			var returnString = "";
+			var padCount = 0;
 			if(creator === "True"){
 				returnString += "Creator<br>";
+				padCount -= 1;
+			}else{
+				padCount += 1;
 			}
 			if(roles.length > 0){
 				if(roles.length === 1){
@@ -154,6 +158,8 @@
 				}else{
 					returnString += "Actor (<a onclick='redirectToPost(" + '"' + projectID + '");' + "'>" + roles.length + " roles</a>)<br>"
 				}
+			}else{
+				padCount += 1;
 			}
 			if(jobs.length > 0){
 				returnString += "Worked as ";
@@ -162,6 +168,13 @@
 					if(i != jobs.length-1){
 						returnString += ", ";
 					}
+				}
+			}else{
+				padCount += 1
+			}
+			if(padCount > 0){
+				for(var i=0; i < padCount-1; i++){
+					returnString += "<br>";
 				}
 			}
 			return returnString
@@ -197,8 +210,17 @@
 		function displayBackground(){
 			var profileDisplayPanelDiv = document.getElementById("profileDisplayPanel")
 			if(profileDisplayPanelDiv != null){
-				profileDisplayPanelDiv.innerHTML = createProjectsList("current") + createProjectsList("past");
-
+				var backgroundString = "";
+				{% if hasCurrentProjects %}
+					backgroundString += createProjectsList("current")
+				{% endif %}
+				{% if hasPastProjects %}
+					backgroundString += createProjectsList("past")
+				{% endif %}
+				if(backgroundString === ""){
+					backgroundString = "{{profileUserAccount.firstName}} has not registered any projects."
+				}
+				profileDisplayPanelDiv.innerHTML = backgroundString;
 			}
 		}
 
