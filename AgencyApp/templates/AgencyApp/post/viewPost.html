@@ -16,7 +16,7 @@
 					if(currentlyFollowing){
 						document.getElementById("followButtonText").innerHTML = "Follow";
 					}else{
-						document.getElementById("followButtonText").innerHTML = "Unfollow";
+						document.getElementById("followButtonText").innerHTML = "Following &#10004;";
 					}
 					currentlyFollowing = !currentlyFollowing;
 				}else{
@@ -231,8 +231,25 @@
 						</div>
 					</td>
 					<td style="margin-top: 0px;">
-						<div id="postInfo" class="postInfo hoverContainer" colspan="2">
-							<h1 class="postInfoTitle">
+						<div id="postInfo" class="postInfo" colspan="2">
+							<div id='topRightPostButton' style='position:relative'>
+								<div style="position: absolute; top: 0; right: 0;">
+									{% if userIsAdmin %}
+										<button class="whiteButton blackHover" onclick="redirectToEditPost('{{projectID}}');" style="padding: 0.5em 0.5em 0.5em 0.5em; font-weight: 400; font-size: 0.8em;">Edit</button>
+									{% elif user.is_authenticated %}
+										<button class="whiteButton blackHover" onclick="updatePostFollow();" style="padding: 0.5em 0.5em 0.5em 0.5em; font-weight: 400; font-size: 0.8em;">
+											<div id="followButtonText">
+												{% if following %}
+													Following &#10004;
+												{% else %}
+													Follow
+												{% endif %}
+											</div>
+										</button>
+									{% endif %}
+								</div>
+							</div>
+							<h1 class="postInfoTitle" style="display: inline;">
 								<a onclick='redirectToPost("{{post.postID}}");'> {{ post.title }} </a>
 							</h1>
 							<h4 class="postInfoSubTitle">
@@ -313,11 +330,6 @@
 									<div id="postDescription" class="postDescription">
 										{{ post.description }}
 									</div>
-									{% if userIsAdmin %}
-										<div class="hoverButton" style="z-index:2;">
-											<a onclick="redirectToEditPost('{{projectID}}');">Edit</a>
-										</div>
-									{% endif %}
 								<!--{% elif isCollaboration %}
 										Looking for a {{ post.collaboratorRole }} <br>
 										{{ post.title }} 
@@ -474,17 +486,6 @@
 				{% endif %}
 		{% endif %}
 	</h3>
-	{% if user.is_authenticated %}
-		<button onclick="updatePostFollow();">
-			<div id="followButtonText">
-				{% if following %}
-					Unfollow
-				{% else %}
-					Follow
-				{% endif %}
-			</div>
-		</button>
-	{% endif %}
 
 	<br><br>
 	<h5 style="display:inline"> Posted by: <div style="display:inline" id="profileRedirectButton">{{post.poster}}</div> </h5><br>
