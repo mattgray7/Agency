@@ -300,7 +300,8 @@
 
 	.whiteHoverButton a:hover {
 	  cursor: pointer;
-	  color: #a5a5a5;
+	  color: #ededed;
+	  text-shadow: -0.3px 0 black, 0 0.3px black, 0.3px 0 black, 0 -0.3px black;
 	}
 
 	.hoverContainer:hover .hoverButton {
