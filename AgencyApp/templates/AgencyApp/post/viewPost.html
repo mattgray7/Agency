@@ -214,8 +214,8 @@
 			<table style="width:99%;">
 				<tr>
 					<td style="width: 250px;">
-						<div id="postPicturePanel" class="postPicture">
-							<div id="postPictureBoundingBox" class="hoverContainer" style="width:250px; height:250px; background: #000; border: 1px solid #FFF; border-radius:3px; vertical-align: middle; display: table-cell;">
+						<div id="postPicturePanel" class="postPicture hoverContainer">
+							<div id="postPictureBoundingBox" style="width:250px; height:250px; background: #000; border: 1px solid #FFF; border-radius:3px; vertical-align: middle; display: table-cell;">
 								<div id="postPicture">
 									{% if post.postPicture %}
 										<img src="{{ post.postPicture.url }}" style="width:250px;"/>
@@ -223,15 +223,15 @@
 										<img />
 									{% endif %}
 								</div>
-								{% if viewingOwnProfile %}
+								{% if userIsAdmin %}
 									<div class="grayAlphaOverlay"></div>
-				  					<div class="hoverButton"><a onclick="redirect('{{ possibleDestinations.edit }}');"> Edit </a></div>
+				  					<div class="whiteHoverButton"><a onclick="redirectToEditPost('{{projectID}}');" style="margin-top: 10px; margin-right: 6px;" > Edit </a></div>
 				  				{% endif %}
 							</div>
 						</div>
 					</td>
 					<td style="margin-top: 0px;">
-						<div id="postInfo" class="postInfo" colspan="2">
+						<div id="postInfo" class="postInfo hoverContainer" colspan="2">
 							<h1 class="postInfoTitle">
 								<a onclick='redirectToPost("{{post.postID}}");'> {{ post.title }} </a>
 							</h1>
@@ -313,6 +313,11 @@
 									<div id="postDescription" class="postDescription">
 										{{ post.description }}
 									</div>
+									{% if userIsAdmin %}
+										<div class="hoverButton" style="z-index:2;">
+											<a onclick="redirectToEditPost('{{projectID}}');">Edit</a>
+										</div>
+									{% endif %}
 								<!--{% elif isCollaboration %}
 										Looking for a {{ post.collaboratorRole }} <br>
 										{{ post.title }} 
@@ -347,7 +352,7 @@
 														<button onclick="showPossibleProjects();" id="addPostToProjectButton"> Add post to project </button><br>
 											{% endif %}
 									{% endif %}-->
-							
+							</div>
 						</div>
 					</td>
 				</tr>

@@ -259,6 +259,7 @@
 	.hoverContainer:hover .grayAlphaOverlay {
 	  display: block;
 	  background: rgba(0, 0, 0, .3);
+	  transition: background .25s ease;
 	}
 	.hoverButton {
 	  position: absolute;
@@ -269,19 +270,47 @@
 	}
 
 	.hoverButton a {
-	  	color: #FFF;
-	  	z-index: 1;
+	  	color: #000;
 	  	letter-spacing: 1px;
 		text-decoration: none;
-		font-weight: 700;
+		font-weight: 600;
 		font-size: 1em;
 	}
 
 	.hoverButton a:hover {
 	  cursor: pointer;
-	  text-decoration: underline;
+	}
+
+	.whiteHoverButton {
+	  position: absolute;
+	  right: 5px;
+	  top: 5px;
+	  opacity: 0;
+	  transition: opacity .25s ease;
+	}
+
+	.whiteHoverButton a {
+	  	color: #FFF;
+	  	letter-spacing: 1px;
+		text-decoration: none;
+		font-weight: 600;
+		font-size: 1em;
+
+	}
+
+	.whiteHoverButton a:hover {
+	  cursor: pointer;
+	  color: #a5a5a5;
 	}
 
 	.hoverContainer:hover .hoverButton {
 	  opacity: 1;
+	  transition: opacity .25s ease;
 	}
+
+	.hoverContainer:hover .whiteHoverButton {
+	  opacity: 1;
+	  transition: opacity .25s ease;
+	}
+
+

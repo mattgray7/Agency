@@ -205,6 +205,10 @@ class ProjectRole(models.Model):
     characterDescription = models.CharField(max_length=1000, blank=True, null=True)
     shortCharacterDescription = models.CharField(max_length=200, blank=True, null=True)
 
+class ProjectAdmin(models.Model):
+    projectID = models.CharField(max_length=10)
+    username = models.CharField(max_length=10)
+
 class WorkPost(AbstractPost):
     profession = models.CharField(max_length=200)
     paid = models.BooleanField(default=False)

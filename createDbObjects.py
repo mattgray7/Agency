@@ -63,6 +63,10 @@ def createProject(poster, title, description, status, picURL):
 	projectPost.save()
 	return projectPost
 
+def createProjectAdmin(projectID, username):
+	newAdmin = models.ProjectAdmin(projectID=projectID, username=username)
+	newAdmin.save()
+
 # Great Gatsby project
 project1ProjectPost = createProject(poster="mattgray",
 									title="The Great Gatsby",
@@ -71,6 +75,9 @@ project1ProjectPost = createProject(poster="mattgray",
 									picURL="/Users/MattGray/Projects/Agency/Agency/scripts/media/greatGatsby.jpg")
 project1ProjectID = project1ProjectPost.projectID
 
+project1Admin = createProjectAdmin(project1ProjectID, "mattgray")
+project1Admin2 = createProjectAdmin(project1ProjectID, "amybolt")
+project1Admin2 = createProjectAdmin(project1ProjectID, "adamcramer")
 
 project2ProjectPost = createProject(poster="mattgray",
 									title="The Kings of Summer",
