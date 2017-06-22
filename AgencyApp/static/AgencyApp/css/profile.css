@@ -5,10 +5,18 @@
 		background: #232323;
 		color: #000;
 	}
-	/*.profileTable td
+
+	.profileTable a
 	{
-		padding:0.2em 0.08em 0.2em 0.08em;
-	}*/
+		color: #000;
+		font-weight: 900;
+	}
+	.profileTable a:hover
+	{
+		color: #4f4f4f;
+		text-shadow: -0.2px 0 black, 0 0.2px black, 0.2px 0 black, 0 -0.2px black;
+		cursor: pointer;
+	}
 
 	.profileTableMainColumn{
 		width: 25%;

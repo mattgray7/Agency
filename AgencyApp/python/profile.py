@@ -107,19 +107,21 @@ class ProfileView(views.GenericFormView):
             for role in models.ProjectRole.objects.filter(username=self.profileUserAccount.username, status="Cast"):
                 project = projectPost.getProjectObject(role.projectID)
                 if project:
+                    roleObj = {"postID": role.postID, "characterName": role.characterName}
                     if project.postID in existingProjects.keys():
-                        existingProjectObjects[project.postID]["roles"].append(role.characterName)
+                        existingProjectObjects[project.postID]["roles"].append(roleObj)
                     else:
-                        existingProjects[project.postID] = {"project": project, "roles": [role.characterName], "jobs": [],
+                        existingProjects[project.postID] = {"project": project, "roles": [roleObj], "jobs": [],
                                                             "status": self._getProjectDisplayStatus(project), "creator": False}
 
             for job in models.ProjectJob.objects.filter(username=self.profileUserAccount.username, status="Filled"):
                 project = projectPost.getProjectObject(job.projectID)
                 if project:
+                    jobObj = {"postID": job.postID, "profession": job.profession}
                     if project.postID in existingProjects.keys():
-                        existingProjects[project.postID]["jobs"].append(job.profession)
+                        existingProjects[project.postID]["jobs"].append(jobObj)
                     else:
-                        existingProjects[project.postID] = {"project": project, "roles": [], "jobs": [job.profession],
+                        existingProjects[project.postID] = {"project": project, "roles": [], "jobs": [jobObj],
                                                             "status": self._getProjectDisplayStatus(project), "creator": False}
 
             for project in models.ProjectPost.objects.filter(poster=self.profileUserAccount.username):
@@ -130,7 +132,6 @@ class ProfileView(views.GenericFormView):
                                                        "status": self._getProjectDisplayStatus(project), "creator": True}
             for projectID in existingProjects.keys():
                 existingProjects[projectID]["roles"] = json.dumps(existingProjects[projectID]["roles"])
-                print existingProjects[projectID]["roles"]
                 existingProjects[projectID]["jobs"] = json.dumps(existingProjects[projectID]["jobs"])
                 self._profileProjects.append(existingProjects[projectID])
         return self._profileProjects

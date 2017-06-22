@@ -18,7 +18,9 @@
 	.mainViewPanel a:hover
 	{
 		cursor: pointer;
-		color: #3d3d3d;
+		/*color: #adadad;*/
+		color: #4f4f4f;
+		text-shadow: -0.2px 0 black, 0 0.2px black, 0.2px 0 black, 0 -0.2px black;
 	}
 	.postPanel
 	{
@@ -90,6 +92,12 @@
 	.projectContentListElement:hover
 	{
 		cursor: pointer;
+	}
+	.projectContentListElement a:hover
+	{
+		cursor: pointer;
+		color: #FFF;
+		text-shadow: -0.7px 0 black, 0 0.7px black, 0.7px 0 black, 0 -0.7px black;
 	}
 	.projectContentListElementPicturePanel
 	{

@@ -141,7 +141,7 @@
 			return projectString
 		}
 
-		function getInvolvementString(rolesString, jobsString, creator){
+		function getInvolvementString(projectID, rolesString, jobsString, creator){
 			var jobs = JSON.parse(jobsString.replace(/&quot;/g, '"'));
 			var roles = JSON.parse(rolesString.replace(/&quot;/g, '"'));
 			var returnString = "";
@@ -150,15 +150,15 @@
 			}
 			if(roles.length > 0){
 				if(roles.length === 1){
-					returnString += "Actor (" + roles[0] + ")<br>"
+					returnString += "Actor (<a onclick='redirectToPost(" + '"' + roles[0]["postID"] + '");' + "'>" + roles[0]["characterName"] + "</a>)<br>"
 				}else{
-					returnString += "Actor (" + roles.length + " roles)<br>"
+					returnString += "Actor (<a onclick='redirectToPost(" + '"' + projectID + '");' + "'>" + roles.length + " roles</a>)<br>"
 				}
 			}
 			if(jobs.length > 0){
 				returnString += "Worked as ";
 				for(var i=0; i < jobs.length; i++){
-					returnString += jobs[i]
+					returnString += "<a onclick='redirectToPost(" + '"' + jobs[i]["postID"] + '");' + "'>" +  jobs[i]["profession"] + "</a>";
 					if(i != jobs.length-1){
 						returnString += ", ";
 					}
@@ -185,7 +185,7 @@
 							picURL = "{{ projectPost.project.postPicture.url }}"
 						{% endif %}
 
-						var involvementString = getInvolvementString("{{projectPost.roles}}", "{{projectPost.jobs}}", "{{projectPost.creator}}")
+						var involvementString = getInvolvementString("{{projectPost.project.postID}}", "{{projectPost.roles}}", "{{projectPost.jobs}}", "{{projectPost.creator}}")
 						displayString += createProjectListElement("{{projectPost.project.postID}}", picURL, "{{projectPost.project.title}}", "{{projectPost.project.status}}", involvementString)
 					}
 				{% endfor %}

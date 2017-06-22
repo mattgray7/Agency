@@ -80,13 +80,6 @@
 		}
 	}
 
-	function redirectToUserWithHover(username){
-		if (!e) var e = window.event;
-		e.cancelBubble = true;
-		if (e.stopPropagation) e.stopPropagation();
-		redirectToUser(username)
-	}
-
 	function selectRoles(){
 		var listDiv = document.getElementById("projectContentList");
 		var contentString = "";
@@ -99,7 +92,7 @@
 						contentString += "<td id='" + roleID + "' class='projectContentListElement grayBackground grayHover' onclick='redirectToPost(" + '"{{roleObj.role.postID}}");' + "'>";
 
 						// CAST label
-						contentString += "<div style='text-align: left;margin-top: -20px; margin-left: 5px; padding: 0em 0em 0.7em 0em; font-weight: 500;'><h3 style='display: inline;'>CAST</h3> - <a onclick='redirectToUserWithHover(" + '"{{roleObj.actor.username}}");' + "'>{{roleObj.actor.cleanName}}</a></div>"
+						contentString += "<div style='text-align: left;margin-top: -20px; margin-left: 5px; padding: 0em 0em 0.7em 0em; font-weight: 500;'><h3 style='display: inline;'>CAST</h3> - <a onclick='redirectToUser(" + '"{{roleObj.actor.username}}");' + "'>{{roleObj.actor.cleanName}}</a></div>"
 
 						// profilePic
 						contentString += "<div class='projectContentListElementPicturePanel'><div class='projectContentListElementPicture'>";
@@ -148,7 +141,7 @@
 						contentString += "<td class='projectContentListElement grayBackground grayHover' onclick='redirectToPost(" + '"{{jobObj.job.postID}}");' + "'>";
 
 						// CAST label
-						contentString += "<div style='text-align: left;margin-top: -20px; margin-left: 5px; padding: 0em 0em 0.7em 0em; font-weight: 500;'><h3 style='display: inline;'>FILLED</h3> - <a onclick='redirectToUserWithHover(" + '"{{jobObj.user.username}}");' + "'>{{jobObj.user.cleanName}}</a></div>"
+						contentString += "<div style='text-align: left;margin-top: -20px; margin-left: 5px; padding: 0em 0em 0.7em 0em; font-weight: 500;'><h3 style='display: inline;'>FILLED</h3> - <a onclick='redirectToUser(" + '"{{jobObj.user.username}}");' + "'>{{jobObj.user.cleanName}}</a></div>"
 
 						// profilePic
 						contentString += "<div class='projectContentListElementPicturePanel'><div class='projectContentListElementPicture'>";
