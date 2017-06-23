@@ -435,17 +435,27 @@
 									{% endif %}
 
 
-									<h4 class="postInfoSubTitle" style="display: inline; margin-top: -10px;">
+									<h4 class="postInfoSubTitle" style="">
+										{% if project and project.record %}
+											Project: <a onclick='redirectToPost("{{ project.record.postID }}");' >{{ project.record.title }}</a><br>
+										{% endif %}
+										{% if castingRole.shortCharacterDescription %}
+											{{castingRole.shortCharacterDescription}}<br>
+										{% endif %}
+										{% if post.paid %}
+											Compensation: Paid &#10004;<br>
+										{% else %}
+											Compensation: None<br>
+										{% endif %}
 										{% if castingRole.status == "Cast" and actor %}
-											<br>
 											Played by <a onclick='redirectToUser("{{actor.username}}");'>{{ actor.cleanName }}</a>
 										{% endif %}
-										<br>
-										{% if project and project.record %}
-											Project: <a onclick='redirectToPost("{{ project.record.postID }}");' >{{ project.record.title }}</a>
-										{% endif %}
 									</h4>
-									<div class="postInfoContent"></div>
+									<div class="postInfoContent">
+										{% if castingRole.characterDescription %}
+											{{castingRole.characterDescription}}
+										{% endif %}
+									</div>
 								</div>
 							</td>
 						</tr>
