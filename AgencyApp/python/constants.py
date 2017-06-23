@@ -13,6 +13,7 @@ import post_project as projectPost
 import post_work as workPost
 import post_collaboration as collaborationPost
 
+NO_PICTURE_PATH = "/media/default/noPicture.jpg"
 NO_PROFILE_PICTURE_PATH = "/media/default/noProfilePicture.jpg"
 
 # Source page enums:
