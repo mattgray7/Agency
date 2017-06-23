@@ -381,8 +381,10 @@
 				<div id="postPanel" class="postPanelFullHeight">
 					<table style="width:99%;">
 						<tr>
+							{% if post.postPicture or actor.profilePicture %}
 							<td style="width: 250px; margin-top: 0px; height: 100%; position: relative; padding: 0.5em">
 								<ul>
+								{% if post.postPicture %}
 									<li>
 										<div id="postPicturePanel" class="postPicture hoverContainer">
 											<div id="postPictureBoundingBox" style="width:250px; height:250px; background: #000; border: 1px solid #FFF; border-radius:3px; vertical-align: middle; display: table-cell;">
@@ -400,7 +402,8 @@
 											</div>
 										</div>
 									</li>
-								{% if castingRole.status == "Cast" and actor %}
+								{% endif %}
+								{% if castingRole.status == "Cast" and actor  and actor.profilePicture %}
 									<li>
 										<div id="actorPicturePanel" class="postPicture">
 											<div id="actorPictureBoundingBox" style="width:250px; height:250px; background: #000; border: 1px solid #FFF; border-radius:3px; vertical-align: middle; display: table-cell;">
@@ -417,14 +420,15 @@
 								{% endif %}
 								</ul>
 							</td>
+							{% endif %}
 							<td style="margin-top: 0px; position:relative;">
 								<div id="postInfo" class="postInfoFullHeight" colspan="2" style="position: absolute; top: 0; margin-top:12px; margin-left: -10px;">
 									<div id='topRightPostButton' style='position:relative'>
 										<div style="position: absolute; top: 0; right: 0; padding: 0.5em">
 											{% if userIsAdmin %}
-												<button class="whiteButton blackHover" onclick="redirectToEditPost('{{projectID}}');" style="padding: 0.3em 0.5em 0.3em 0.5em; font-weight: 400; font-size: 0.9em;">Edit</button>
+												<button class="whiteButton blackHover" onclick="redirectToEditPost('{{projectID}}');" style="padding: 0.25em 0.5em 0.25em 0.5em; font-weight: 400; font-size: 1em;">Edit</button>
 											{% elif user.is_authenticated %}
-												<button class="whiteButton blackHover" onclick="updatePostFollow();" style="padding: 0.3em 0.5em 0.3em 0.5em; font-weight: 400; font-size: 0.8em;">
+												<button class="whiteButton blackHover" onclick="updatePostFollow();" style="padding: 0.25em 0.5em 0.25em 0.5em; font-weight: 400; font-size: 1em;">
 													<div id="followButtonText">
 														{% if following %}
 															Following &#10004;
@@ -453,7 +457,7 @@
 										</div>
 									{% else %}
 										<div style="position:relative; display: inline;">
-											<div class="grayButton" id="castStatusLabel" style="margin-top: 9px; margin-left: 6px; padding: 0.1em 0.3em 0.15em 0.3em; position: absolute; color: #000; background: #e5e5e5; font-size: 0.95em">
+											<div class="grayButton" id="castStatusLabel" style="margin-top: 9px; margin-left: 6px; padding: 0.1em 0.3em 0.15em 0.3em; position: absolute; color: #000; background: #e5e5e5;">
 												Cast
 											</div>
 										</div>
