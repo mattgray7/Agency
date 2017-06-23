@@ -76,6 +76,16 @@ class ViewCastingPostView(post.GenericViewPostView):
     def __init__(self, *args, **kwargs):
         super(ViewCastingPostView, self).__init__(*args, **kwargs)
         self._attributeListObject = None
+        self._castingRole = None
+
+    @property
+    def castingRole(self):
+        if self._castingRole is None:
+            try:
+                self._castingRole = models.ProjectRole.objects.get(postID=self.postID)
+            except models.ProjectRole.DoesNotExist:
+                pass
+        return self._castingRole
 
     @property
     def pageContext(self):
@@ -85,6 +95,7 @@ class ViewCastingPostView(post.GenericViewPostView):
                                                      "createWork": constants.CREATE_WORK_POST,
                                                      "viewCasting": constants.VIEW_POST,
                                                      "viewWork": constants.VIEW_POST}
+        self._pageContext["castingRole"] = self.castingRole
         if self.attributeListObject.attributes:
             self._pageContext["attributes"] = self.attributeListObject.attributes
             self._pageContext["descriptionEnabled"] = self.post.record.descriptionEnabled

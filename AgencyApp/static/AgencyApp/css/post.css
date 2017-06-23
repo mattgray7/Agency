@@ -21,6 +21,16 @@
 		padding: 0.2em;
 		text-align: left;
 	}
+	.postPanelFullHeight
+	{
+		min-width: 680px;
+		background: #232323;
+		color: #000;
+		border: 2px solid #000;
+		border-radius: 4px;
+		padding: 0.2em;
+		text-align: left;
+	}
 	.postPicture
 	{
 		padding: 0.2em;
@@ -40,12 +50,23 @@
 		margin-top: 1px;
 		height: 234px;
 	}
-	.postInfo a
+	.postInfoFullHeight
+	{
+		padding: 0.5em;
+		background: #FFF;
+		border: 2px solid #000;
+		border-radius: 4px;
+		margin-right: -5px;
+		margin-left: 0px;
+		margin-top: 1px;
+		height: 234px;
+	}
+	.postInfo a, .postInfoFullHeight a
 	{
 		color: #1e1e1e;
 		font-weight: 900;
 	}
-	.postInfo a:hover
+	.postInfo a:hover, .postInfoFullHeight a:hover
 	{
 		cursor: pointer;
 		/*color: #adadad;*/

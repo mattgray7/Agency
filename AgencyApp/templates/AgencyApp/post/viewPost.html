@@ -210,145 +210,236 @@
 
 <div id="mainViewPanel" class="mainViewPanel">
 	{% if post %}
-		<div id="postPanel" class="postPanel">
-			<table style="width:99%;">
-				<tr>
-					<td style="width: 250px;">
-						<div id="postPicturePanel" class="postPicture hoverContainer">
-							<div id="postPictureBoundingBox" style="width:250px; height:250px; background: #000; border: 1px solid #FFF; border-radius:3px; vertical-align: middle; display: table-cell;">
-								<div id="postPicture">
-									{% if post.postPicture %}
-										<img src="{{ post.postPicture.url }}" style="width:250px;"/>
-									{% else %}
-										<img />
-									{% endif %}
-								</div>
-								{% if userIsAdmin %}
-									<div class="grayAlphaOverlay"></div>
-				  					<div class="whiteHoverButton"><a onclick="redirectToEditPost('{{projectID}}');" style="margin-top: 10px; margin-right: 6px;" > Edit </a></div>
-				  				{% endif %}
-							</div>
-						</div>
-					</td>
-					<td style="margin-top: 0px;">
-						<div id="postInfo" class="postInfo" colspan="2">
-							<div id='topRightPostButton' style='position:relative'>
-								<div style="position: absolute; top: 0; right: 0;">
-									{% if userIsAdmin %}
-										<button class="whiteButton blackHover" onclick="redirectToEditPost('{{projectID}}');" style="padding: 0.5em 0.5em 0.5em 0.5em; font-weight: 400; font-size: 0.8em;">Edit</button>
-									{% elif user.is_authenticated %}
-										<button class="whiteButton blackHover" onclick="updatePostFollow();" style="padding: 0.5em 0.5em 0.5em 0.5em; font-weight: 400; font-size: 0.8em;">
-											<div id="followButtonText">
-												{% if following %}
-													Following &#10004;
-												{% else %}
-													Follow
-												{% endif %}
-											</div>
-										</button>
-									{% endif %}
-								</div>
-							</div>
-							<h1 class="postInfoTitle" style="display: inline;">
-								<a onclick='redirectToPost("{{post.postID}}");'> {{ post.title }} </a>
-							</h1>
-							<h4 class="postInfoSubTitle">
-								{{ post.status }}
-							</h4>
-							<div class="postInfoContent">
-								{% if isProject %}
-									{% if post.directors %}
-										{% if post.directors|length == 1 %}
-											Director:
+		{% if isProject %}
+			<div id="postPanel" class="postPanel">
+				<table style="width:99%;">
+					<tr>
+						<td style="width: 250px;">
+							<div id="postPicturePanel" class="postPicture hoverContainer">
+								<div id="postPictureBoundingBox" style="width:250px; height:250px; background: #000; border: 1px solid #FFF; border-radius:3px; vertical-align: middle; display: table-cell;">
+									<div id="postPicture">
+										{% if post.postPicture %}
+											<img src="{{ post.postPicture.url }}" style="width:250px;"/>
 										{% else %}
-											Directors:
+											<img />
 										{% endif %}
-										{% for director in post.directors %}
-											<a onclick="redirectToUser('{{director}}');" class="userLink">
-												<script>
-													document.write(posterNameMap["{{director}}"]);
-													{% if not forloop.last %}
-														document.write(", ");
-													{% endif %}
-												</script>
-											</a>
-										{% endfor %}
-									{% endif %}
-									{% if post.writers %}
-										<br>
-										{% if post.writers|length == 1 %}
-											Writer:
-										{% else %}
-											Writers:
-										{% endif %}
-
-										{% for writer in post.writers %}
-											<a onclick="redirectToUser('{{writer}}');" class="userLink">
-												<script>
-													document.write(posterNameMap["{{writer}}"]);
-													{% if not forloop.last %}
-														document.write(", ");
-													{% endif %}
-												</script>
-											</a>
-										{% endfor %}
-									{% endif %}
-									{% if post.producers %}
-										<br>
-										{% if post.producers|length == 1 %}
-											Producer:
-										{% else %}
-											Producers:
-										{% endif %}
-
-										{% for producer in post.producers %}
-											<a onclick="redirectToUser('{{producer}}');" class="userLink">
-												<script>
-													document.write(posterNameMap["{{producer}}"]);
-													{% if not forloop.last %}
-														document.write(", ");
-													{% endif %}
-												</script>
-											</a>
-										{% endfor %}
-									{% endif %}
-									{% if post.actors %}
-										<br>
-										Starring:
-										{% for actor in post.actors %}
-											<a onclick="redirectToUser('{{actor}}');" class="userLink">
-												<script>
-													document.write(posterNameMap["{{actor}}"]);
-													{% if not forloop.last %}
-														document.write(", ");
-													{% endif %}
-												</script>
-											</a>
-										{% endfor %}
-									{% endif %}
-									<br>
-									<div id="postDescription" class="postDescription">
-										{{ post.description }}
 									</div>
-								<!--{% elif isCollaboration %}
-										Looking for a {{ post.collaboratorRole }} <br>
-										{{ post.title }} 
-									{% else %}
-										{% if isWork %}
-											(Looking for crew) {{ post.title }} <br>
-											Looking for a {{ post.profession }}
-										{% elif isCasting %}
-											Casting a role: {{ post.title }}
-											{% if post.paid %}
-												 - Paid&#10004;
-											{% else %}
-												 - Unpaid
-											{% endif %}
-										{% elif isEvent %}
-											Event {{ post.title }} 
-											<h5>Located at {{post.location}} on {{post.date}}</h5>
+									{% if userIsAdmin %}
+										<div class="grayAlphaOverlay"></div>
+					  					<div class="whiteHoverButton"><a onclick="redirectToEditPost('{{projectID}}');" style="margin-top: 10px; margin-right: 6px;" > Edit </a></div>
+					  				{% endif %}
+								</div>
+							</div>
+						</td>
+						<td style="margin-top: 0px;">
+							<div id="postInfo" class="postInfo" colspan="2">
+								<div id='topRightPostButton' style='position:relative'>
+									<div style="position: absolute; top: 0; right: 0;">
+										{% if userIsAdmin %}
+											<button class="whiteButton blackHover" onclick="redirectToEditPost('{{projectID}}');" style="padding: 0.5em 0.5em 0.5em 0.5em; font-weight: 400; font-size: 0.8em;">Edit</button>
+										{% elif user.is_authenticated %}
+											<button class="whiteButton blackHover" onclick="updatePostFollow();" style="padding: 0.5em 0.5em 0.5em 0.5em; font-weight: 400; font-size: 0.8em;">
+												<div id="followButtonText">
+													{% if following %}
+														Following &#10004;
+													{% else %}
+														Follow
+													{% endif %}
+												</div>
+											</button>
 										{% endif %}
-											{% if project and projectID and project.record.title %}
+									</div>
+								</div>
+								
+									<h1 class="postInfoTitle" style="display: inline;">
+										<a onclick='redirectToPost("{{post.postID}}");'> {{ post.title }} </a>
+									</h1>
+									<h4 class="postInfoSubTitle">
+										{{ post.status }}
+									</h4>
+									<div class="postInfoContent">
+										{% if post.directors %}
+											{% if post.directors|length == 1 %}
+												Director:
+											{% else %}
+												Directors:
+											{% endif %}
+											{% for director in post.directors %}
+												<a onclick="redirectToUser('{{director}}');" class="userLink">
+													<script>
+														document.write(posterNameMap["{{director}}"]);
+														{% if not forloop.last %}
+															document.write(", ");
+														{% endif %}
+													</script>
+												</a>
+											{% endfor %}
+										{% endif %}
+										{% if post.writers %}
+											<br>
+											{% if post.writers|length == 1 %}
+												Writer:
+											{% else %}
+												Writers:
+											{% endif %}
+
+											{% for writer in post.writers %}
+												<a onclick="redirectToUser('{{writer}}');" class="userLink">
+													<script>
+														document.write(posterNameMap["{{writer}}"]);
+														{% if not forloop.last %}
+															document.write(", ");
+														{% endif %}
+													</script>
+												</a>
+											{% endfor %}
+										{% endif %}
+										{% if post.producers %}
+											<br>
+											{% if post.producers|length == 1 %}
+												Producer:
+											{% else %}
+												Producers:
+											{% endif %}
+
+											{% for producer in post.producers %}
+												<a onclick="redirectToUser('{{producer}}');" class="userLink">
+													<script>
+														document.write(posterNameMap["{{producer}}"]);
+														{% if not forloop.last %}
+															document.write(", ");
+														{% endif %}
+													</script>
+												</a>
+											{% endfor %}
+										{% endif %}
+										{% if post.actors %}
+											<br>
+											Starring:
+											{% for actor in post.actors %}
+												<a onclick="redirectToUser('{{actor}}');" class="userLink">
+													<script>
+														document.write(posterNameMap["{{actor}}"]);
+														{% if not forloop.last %}
+															document.write(", ");
+														{% endif %}
+													</script>
+												</a>
+											{% endfor %}
+										{% endif %}
+										<br>
+										<div id="postDescription" class="postDescription">
+											{{ post.description }}
+										</div>
+									</div>
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td colspan="3" >
+							<table style="width:100%; margin-left: 2px; margin-right:-10px">
+								<tr style="text-align: center">
+									<td>
+										<div class="projectTabButtonInactive" id="rolesButton" onclick="selectProjectTab('roles')">
+											Roles
+											<div id="rolesBorderCover" class="profileTabBorderCover"></div>
+										</div>
+									</td>
+									<td>
+										<div class="projectTabButtonInactive" id="jobsButton" onclick="selectProjectTab('jobs')" style="margin: 0px -2px 0px 0px; width:95%;">
+											Jobs
+											<div id="jobsBorderCover" class="profileTabBorderCover"></div>
+										</div>
+									</td>
+									<td>
+										<div class="projectTabButtonInactive" id="eventsButton" onclick="selectProjectTab('events')" style="margin-right: -3px;">
+											Events
+											<div id="eventsBorderCover" class="profileTabBorderCover"></div>
+										</div>
+									</td>
+								</tr>
+							</table>
+						</td>
+					</tr>
+					<tr>
+						<td colspan="3">
+							<div id="projectContentPanel" class="projectContentPanel">
+								<div id="projectContentList" class="projectContentList">
+
+								</div>
+							</div>
+						</td>
+					</tr>
+				</table>
+				<script>
+					//Default display should be to show cast
+					selectProjectTab("roles")
+				</script>
+			</div>
+		{% else %}
+			{% if isCasting and castingRole %}
+				<div id="postPanel" class="postPanelFullHeight">
+					<table style="width:99%;">
+						<tr>
+							<td style="width: 250px;">
+								<div id="postPicturePanel" class="postPicture hoverContainer">
+									<div id="postPictureBoundingBox" style="width:250px; height:250px; background: #000; border: 1px solid #FFF; border-radius:3px; vertical-align: middle; display: table-cell;">
+										<div id="postPicture">
+											{% if post.postPicture %}
+												<img src="{{ post.postPicture.url }}" style="width:250px;"/>
+											{% else %}
+												<img />
+											{% endif %}
+										</div>
+										{% if userIsAdmin %}
+											<div class="grayAlphaOverlay"></div>
+						  					<div class="whiteHoverButton"><a onclick="redirectToEditPost('{{projectID}}');" style="margin-top: 10px; margin-right: 6px;" > Edit </a></div>
+						  				{% endif %}
+									</div>
+								</div>
+							</td>
+							<td style="margin-top: 0px;">
+								<div id="postInfo" class="postInfoFullHeight" colspan="2">
+									<div id='topRightPostButton' style='position:relative'>
+										<div style="position: absolute; top: 0; right: 0;">
+											{% if userIsAdmin %}
+												<button class="whiteButton blackHover" onclick="redirectToEditPost('{{projectID}}');" style="padding: 0.5em 0.5em 0.5em 0.5em; font-weight: 400; font-size: 0.8em;">Edit</button>
+											{% elif user.is_authenticated %}
+												<button class="whiteButton blackHover" onclick="updatePostFollow();" style="padding: 0.5em 0.5em 0.5em 0.5em; font-weight: 400; font-size: 0.8em;">
+													<div id="followButtonText">
+														{% if following %}
+															Following &#10004;
+														{% else %}
+															Follow
+														{% endif %}
+													</div>
+												</button>
+											{% endif %}
+										</div>
+									</div>
+									<h1 class="postInfoTitle" style="display: inline;">
+										<a onclick='redirectToPost("{{castingRole.postID}}");'> {{ castingRole.characterName }} </a>
+									</h1>
+									<h4 class="postInfoSubTitle">
+										{{ castingRole.status }}
+									</h4>
+									<div class="postInfoContent"></div>
+								</div>
+							</td>
+						</tr>
+					</table>
+				</div>
+			{% elif isCollaboration %}
+				Looking for a {{ post.collaboratorRole }} <br>
+				{{ post.title }} 
+			{% elif isWork %}
+				(Looking for crew) {{ post.title }} <br>
+				Looking for a {{ post.profession }}
+			{% elif isEvent %}
+				Event {{ post.title }} 
+				<h5>Located at {{post.location}} on {{post.date}}</h5>
+			{% endif %}
+											<!--{% if project and projectID and project.record.title %}
 													<form method='post' action="/post/view/{{ projectID }}/">
 															{% csrf_token %}
 															<input type="hidden" name="source" value="{{ next }}" />
@@ -362,56 +453,12 @@
 														<div id="possibleProjects"></div>
 														
 														<button onclick="showPossibleProjects();" id="addPostToProjectButton"> Add post to project </button><br>
-											{% endif %}
-									{% endif %}-->
-							</div>
-						</div>
-					</td>
-				</tr>
-				<tr>
-					<td colspan="3" >
-						<table style="width:100%; margin-left: 2px; margin-right:-10px">
-							<tr style="text-align: center">
-								<td>
-									<div class="projectTabButtonInactive" id="rolesButton" onclick="selectProjectTab('roles')">
-										Roles
-										<div id="rolesBorderCover" class="profileTabBorderCover"></div>
-									</div>
-								</td>
-								<td>
-									<div class="projectTabButtonInactive" id="jobsButton" onclick="selectProjectTab('jobs')" style="margin: 0px -2px 0px 0px; width:95%;">
-										Jobs
-										<div id="jobsBorderCover" class="profileTabBorderCover"></div>
-									</div>
-								</td>
-								<td>
-									<div class="projectTabButtonInactive" id="eventsButton" onclick="selectProjectTab('events')" style="margin-right: -3px;">
-										Events
-										<div id="eventsBorderCover" class="profileTabBorderCover"></div>
-									</div>
-								</td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-				<tr>
-					<td colspan="3">
-						<div id="projectContentPanel" class="projectContentPanel">
-							<div id="projectContentList" class="projectContentList">
-
-							</div>
-						</div>
-					</td>
-				</tr>
-			</table>
-			<script>
-				//Default display should be to show cast
-				selectProjectTab("roles")
-			</script>
-		</div>
+											{% endif %}-->
+		{% endif %}
+	{% else %}
+		No post found.
 	{% endif %}
 </div>
-
 
 
 {% if post %}
