@@ -255,6 +255,11 @@
 	  border-radius: 6px;
 	  color: #000;
 	}*/
+	.grayAlphaOverlay{
+	  display: block;
+	  background: rgba(0, 0, 0, .3);
+	  transition: background .25s ease;
+	}
 
 	.hoverContainer:hover .grayAlphaOverlay {
 	  display: block;
