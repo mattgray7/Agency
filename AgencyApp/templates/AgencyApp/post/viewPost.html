@@ -381,8 +381,8 @@
 				<div id="postPanel" class="postPanelFullHeight">
 					<table style="width:99%;">
 						<tr>
-							<td style="width: 250px;">
-								<div id="postPicturePanel" class="postPicture hoverContainer">
+							<td style="width: 250px; margin-top: 0px; height: 100%; position: relative; padding: 0.5em">
+								<div id="postPicturePanel" class="postPicture hoverContainer" style="top: 0; position:absolute; margin-top: -2px;">
 									<div id="postPictureBoundingBox" style="width:250px; height:250px; background: #000; border: 1px solid #FFF; border-radius:3px; vertical-align: middle; display: table-cell;">
 										<div id="postPicture">
 											{% if post.postPicture %}
@@ -448,12 +448,17 @@
 											Compensation: None<br>
 										{% endif %}
 										{% if castingRole.status == "Cast" and actor %}
-											Played by <a onclick='redirectToUser("{{actor.username}}");'>{{ actor.cleanName }}</a>
+											Played by <a onclick='redirectToUser("{{actor.username}}");'>{{ actor.cleanName }}</a><br>
+										{% endif %}
+										{% if castingRole.characterDescription %}
+											Description:<br>
 										{% endif %}
 									</h4>
 									<div class="postInfoContent">
 										{% if castingRole.characterDescription %}
-											{{castingRole.characterDescription}}
+											<div style="padding: 0em 1.5em 0em 1em; margin-top: -3px;">
+												{{castingRole.characterDescription}}
+											</div>
 										{% endif %}
 									</div>
 								</div>

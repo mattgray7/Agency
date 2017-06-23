@@ -25,6 +25,11 @@ os.system("cp /Users/MattGray/Projects/Agency/Agency/AgencyApp/static/AgencyApp/
 
 print "\nCreating new user network.\n"
 
+
+daisyBuchananDescription = """Daisy is The Great Gatsby's most enigmatic, and perhaps most disappointing, character. Although Fitzgerald does much to make her a character worthy of Gatsby's unlimited devotion, in the end she reveals herself for what she really is. Despite her beauty and charm, Daisy is merely a selfish, shallow, and in fact, hurtful, woman. Gatsby loves her (or at least the idea of her) with such vitality and determination that readers would like, in many senses, to see her be worthy of his devotion. Although Fitzgerald carefully builds Daisy's character with associations of light, purity, and innocence, when all is said and done, she is the opposite from what she presents herself to be.
+							  From Nick's first visit, Daisy is associated with otherworldliness. Nick calls on her at her house and initially finds her (and Jordan Baker, who is in many ways an unmarried version of Daisy) dressed all in white, sitting on an "enormous couch . . . buoyed up as though upon an anchored balloon . . . [her dress] rippling and fluttering as if [she] had just been blown back in after a short flight around the house." From this moment, Daisy becomes like an angel on earth. She is routinely linked with the color white (a white dress, white flowers, white car, and so on), always at the height of fashion and addressing people with only the most endearing terms. She appears pure in a world of cheats and liars. Given Gatsby's obsession with Daisy and the lengths to which he has gone to win her, she seems a worthy paramour.
+						   """
+
 #=================== Project 1
 # User 1
 project1User = User.objects.create_user(username="mattgray",
@@ -214,7 +219,7 @@ project1WorkPost8RoleId = createProjectRole(projectID=project1ProjectID,
 								 		    username="amybolt",
 								 		    title="Female lead",
 								 		    characterName="Daisy Buchanan",
-								 		    characterDescription="This chick is like so random its ridiculous. wow weird, i have run out of things to think of.",
+								 		    characterDescription=daisyBuchananDescription,
 								 		    shortCharacterDescription="Mid-20s brunette female lead",
 								 		    paid=True,
 								 		    status="Cast",
@@ -346,4 +351,3 @@ picResult = urllib.urlretrieve("/Users/MattGray/Projects/Agency/Agency/scripts/m
 collabPost.postPicture = File(open(picResult[0]))
 collabPost.postPicture.name = "/collaboration_{0}.jpg".format(collabPostID)
 collabPost.save()
-
