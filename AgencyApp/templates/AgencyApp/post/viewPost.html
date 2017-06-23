@@ -386,8 +386,8 @@
 									{% if post.postPicture or not actor and not actor.profilePicture %}
 									<li>
 										<div id="postPicturePanel" class="postPicture hoverContainer">
-											<div id="postPictureBoundingBox" style="width:250px; height:250px; background: #000; border: 1px solid #FFF; border-radius:3px; vertical-align: middle; display: table-cell;">
-												<div id="postPicture">
+											<div id="postPictureBoundingBox" style="width:250px; height:250px; background: #000; border: 1px solid #FFF; border-radius:3px; vertical-align: middle; display: table-cell; position: relative;">
+												<div id="postPicture" >
 													{% if post.postPicture %}
 														<img src="{{ post.postPicture.url }}" style="width:250px;"/>
 													{% elif not actor and not actor.profilePicture %}
@@ -396,8 +396,9 @@
 														<img />
 													{% endif %}
 												</div>
+												<div id="hiddenGrayOverlay" style="background: rgba(0,0,0,0); height:100%; width:100%; position: absolute; top:0;"></div>
 												{% if userIsAdmin %}
-													<div id="postPictureAlphaOverlay" class="grayAlphaOverlay"></div>
+													<div class="grayAlphaOverlay"></div>
 								  					<div class="whiteHoverButton"><a onclick="redirectToEditPost('{{projectID}}');" style="margin-top: 10px; margin-right: 6px;" > Edit </a></div>
 								  				{% endif %}
 											</div>
@@ -494,45 +495,45 @@
 					</table>
 					<script>
 						function toggleActorSpotlight(type){
-							/*console.log("hovering")
-							var postPictureOverlay = document.getElementById("postPicturePanel")
-							console.log(postPictureOverlay)
+							var postPictureOverlay = document.getElementById("hiddenGrayOverlay")
 							if(postPictureOverlay != null){
-								console.log("div is not null")
-								//postPictureOverlay.className = postPictureOverlay.className + " grayAlphaOverlay";
-								console.log(postPictureOverlay.className)
-							}*/
+								if(type == "display"){
+									postPictureOverlay.style.background = "rgba(0,0,0,0.5)"
+								}else{
+									postPictureOverlay.style.background = "rgba(0,0,0,0)"
+								}
+							}
 
 							var actorPictureDiv = document.getElementById("actorPictureBoundingBox")
 							if(actorPictureDiv != null){
 								console.log("not null")
 								if(type == "display"){
 									actorPictureDiv.style.boxShadow = "0 0 30px white";
-									pictureBoundingBox.style.background = "#FFF";
 								}else{
 									actorPictureDiv.style.boxShadow = "0 0 0px white";
-									pictureBoundingBox.style.background = "#000";
 								}
 							}
 						}
-						var castLabel = document.getElementById("castStatusLabel");
-						if(castLabel != null){
-							$("[id='castStatusLabel']").hover(function(){
-								toggleActorSpotlight("display");
-							},
-							function(){
-								toggleActorSpotlight("hide");
-							});
-						}
-						var actorLabel = document.getElementById("actorProfileLink")
-						if(actorLabel != null){
-							$("[id='actorProfileLink']").hover(function(){
-								toggleActorSpotlight("display");
-							},
-							function(){
-								toggleActorSpotlight("hide");
-							});
-						}
+						{% if actor and actor.profilePicture %}
+							var castLabel = document.getElementById("castStatusLabel");
+							if(castLabel != null){
+								$("[id='castStatusLabel']").hover(function(){
+									toggleActorSpotlight("display");
+								},
+								function(){
+									toggleActorSpotlight("hide");
+								});
+							}
+							var actorLabel = document.getElementById("actorProfileLink")
+							if(actorLabel != null){
+								$("[id='actorProfileLink']").hover(function(){
+									toggleActorSpotlight("display");
+								},
+								function(){
+									toggleActorSpotlight("hide");
+								});
+							}
+						{% endif %}
 					</script>
 				</div>
 			{% elif isCollaboration %}
