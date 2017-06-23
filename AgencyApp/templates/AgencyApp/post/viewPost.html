@@ -383,6 +383,7 @@
 						<tr>
 							<td style="width: 250px; margin-top: 0px; height: 100%; position: relative; padding: 0.5em">
 								<ul>
+									{% if post.postPicture or not actor and not actor.profilePicture %}
 									<li>
 										<div id="postPicturePanel" class="postPicture hoverContainer">
 											<div id="postPictureBoundingBox" style="width:250px; height:250px; background: #000; border: 1px solid #FFF; border-radius:3px; vertical-align: middle; display: table-cell;">
@@ -402,6 +403,7 @@
 											</div>
 										</div>
 									</li>
+									{% endif %}
 								{% if castingRole.status == "Cast" and actor  and actor.profilePicture %}
 									<li>
 										<div id="actorPicturePanel" class="postPicture">
@@ -455,7 +457,7 @@
 										</div>
 									{% else %}
 										<div style="position:relative; display: inline;">
-											<div class="grayButton" id="castStatusLabel" style="margin-top: 9px; margin-left: 6px; padding: 0.1em 0.3em 0.15em 0.3em; position: absolute; color: #000; background: #e5e5e5;">
+											<div class="grayButton" id="castStatusLabel" style="margin-top: 9px; margin-left: 6px; padding: 0.1em 0.3em 0.15em 0.3em; position: absolute; color: #000; background: #e5e5e5; cursor: pointer;">
 												Cast
 											</div>
 										</div>
@@ -473,7 +475,7 @@
 											Compensation: None<br>
 										{% endif %}
 										{% if castingRole.status == "Cast" and actor %}
-											Played by <a onclick='redirectToUser("{{actor.username}}");'>{{ actor.cleanName }}</a><br>
+											Played by <a id="actorProfileLink" onclick='redirectToUser("{{actor.username}}");'>{{ actor.cleanName }}</a><br>
 										{% endif %}
 										{% if castingRole.characterDescription %}
 											Description:<br>
@@ -491,20 +493,21 @@
 						</tr>
 					</table>
 					<script>
-						/*function toggleActorSpotlight(type){
-							console.log("hovering")
+						function toggleActorSpotlight(type){
+							/*console.log("hovering")
 							var postPictureOverlay = document.getElementById("postPicturePanel")
 							console.log(postPictureOverlay)
 							if(postPictureOverlay != null){
 								console.log("div is not null")
 								//postPictureOverlay.className = postPictureOverlay.className + " grayAlphaOverlay";
 								console.log(postPictureOverlay.className)
-							}
+							}*/
 
-							var actorPictureDiv = document.getElementById("actorPicturePanel")
+							var actorPictureDiv = document.getElementById("actorPictureBoundingBox")
 							if(actorPictureDiv != null){
+								console.log("not null")
 								if(type == "display"){
-									actorPictureDiv.style.boxShadow = "0 0 50px white";
+									actorPictureDiv.style.boxShadow = "0 0 30px white";
 									pictureBoundingBox.style.background = "#FFF";
 								}else{
 									actorPictureDiv.style.boxShadow = "0 0 0px white";
@@ -520,7 +523,16 @@
 							function(){
 								toggleActorSpotlight("hide");
 							});
-						}*/
+						}
+						var actorLabel = document.getElementById("actorProfileLink")
+						if(actorLabel != null){
+							$("[id='actorProfileLink']").hover(function(){
+								toggleActorSpotlight("display");
+							},
+							function(){
+								toggleActorSpotlight("hide");
+							});
+						}
 					</script>
 				</div>
 			{% elif isCollaboration %}
