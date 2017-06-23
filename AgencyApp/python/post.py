@@ -328,6 +328,16 @@ class GenericViewPostView(views.GenericFormView):
         self._post = None
         self._postType = None
         super(GenericViewPostView, self).__init__(*args, **kwargs)
+        self._isProjectAdmin = False
+
+    @property
+    def isProjectAdmin(self):
+        if self._isProjectAdmin is False:
+            projectAdmins = models.ProjectAdmin.objects.filter(projectID=self.projectID)
+            for admin in projectAdmins:
+                if admin.username == self.request.user.username:
+                    self._isProjectAdmin = True
+        return self._isProjectAdmin
 
     @property
     def postID(self):
@@ -414,6 +424,7 @@ class GenericViewPostView(views.GenericFormView):
         self._pageContext["isCollaboration"] = isCollaborationPost(self.postID)
         self._pageContext["isWork"] = isWorkPost(self.postID)
         self._pageContext["isCasting"] = isCastingPost(self.postID)
+        self._pageContext["userIsAdmin"] = self.isProjectAdmin
         if self.projectID:
             self._pageContext["projectID"] = self.projectID
         self._pageContext["project"] = self.project
