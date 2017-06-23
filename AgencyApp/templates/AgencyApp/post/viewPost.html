@@ -382,24 +382,43 @@
 					<table style="width:99%;">
 						<tr>
 							<td style="width: 250px; margin-top: 0px; height: 100%; position: relative; padding: 0.5em">
-								<div id="postPicturePanel" class="postPicture hoverContainer" style="top: 0; position:absolute; margin-top: -2px;">
-									<div id="postPictureBoundingBox" style="width:250px; height:250px; background: #000; border: 1px solid #FFF; border-radius:3px; vertical-align: middle; display: table-cell;">
-										<div id="postPicture">
-											{% if post.postPicture %}
-												<img src="{{ post.postPicture.url }}" style="width:250px;"/>
-											{% else %}
-												<img />
-											{% endif %}
+								<ul>
+									<li>
+										<div id="postPicturePanel" class="postPicture hoverContainer">
+											<div id="postPictureBoundingBox" style="width:250px; height:250px; background: #000; border: 1px solid #FFF; border-radius:3px; vertical-align: middle; display: table-cell;">
+												<div id="postPicture">
+													{% if post.postPicture %}
+														<img src="{{ post.postPicture.url }}" style="width:250px;"/>
+													{% else %}
+														<img />
+													{% endif %}
+												</div>
+												{% if userIsAdmin %}
+													<div class="grayAlphaOverlay"></div>
+								  					<div class="whiteHoverButton"><a onclick="redirectToEditPost('{{projectID}}');" style="margin-top: 10px; margin-right: 6px;" > Edit </a></div>
+								  				{% endif %}
+											</div>
 										</div>
-										{% if userIsAdmin %}
-											<div class="grayAlphaOverlay"></div>
-						  					<div class="whiteHoverButton"><a onclick="redirectToEditPost('{{projectID}}');" style="margin-top: 10px; margin-right: 6px;" > Edit </a></div>
-						  				{% endif %}
-									</div>
-								</div>
+									</li>
+								{% if castingRole.status == "Cast" and actor %}
+									<li>
+										<div id="actorPicturePanel" class="postPicture">
+											<div id="postActorPictureBoundingBox" style="width:250px; height:250px; background: #000; border: 1px solid #FFF; border-radius:3px; vertical-align: middle; display: table-cell;">
+												<div id="postPicture">
+													{% if actor.profilePicture %}
+														<img src="{{ actor.profilePicture.url }}" style="width:250px;"/>
+													{% else %}
+														<img />
+													{% endif %}
+												</div>
+											</div>
+										</div>
+									</li>
+								{% endif %}
+								</ul>
 							</td>
-							<td style="margin-top: 0px;">
-								<div id="postInfo" class="postInfoFullHeight" colspan="2">
+							<td style="margin-top: 0px; position:relative;">
+								<div id="postInfo" class="postInfoFullHeight" colspan="2" style="position: absolute; top: 0; margin-top:12px; margin-left: -10px;">
 									<div id='topRightPostButton' style='position:relative'>
 										<div style="position: absolute; top: 0; right: 0;">
 											{% if userIsAdmin %}
