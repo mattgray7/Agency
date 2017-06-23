@@ -77,6 +77,18 @@ class ViewCastingPostView(post.GenericViewPostView):
         super(ViewCastingPostView, self).__init__(*args, **kwargs)
         self._attributeListObject = None
         self._castingRole = None
+        self._actor = None
+        self._displayStatus = None  #current or past
+
+    @property
+    def displayStatus(self):
+        if self._displayStatus is None:
+            projectStatus = self.project.record and self.project.record.status or None
+            if projectStatus in ["Pre-production", "In production", "Post production", "Screening"]:
+                self._displayStatus = "current"
+            elif projectStatus in ["Completed"]:
+                self._displayStatus = "past"
+        return self._displayStatus
 
     @property
     def castingRole(self):
@@ -88,6 +100,16 @@ class ViewCastingPostView(post.GenericViewPostView):
         return self._castingRole
 
     @property
+    def actor(self):
+        if self._actor is None:
+            if self.post.record.status == "Cast" and self.castingRole:
+                try:
+                    self._actor = models.UserAccount.objects.get(username=self.castingRole.username)
+                except models.UserAccount.DoesNotExist:
+                    pass
+        return self._actor
+
+    @property
     def pageContext(self):
         self._pageContext = super(ViewCastingPostView, self).pageContext
         self._pageContext["possibleDestinations"] = {"edit": constants.EDIT_POST,
@@ -96,6 +118,8 @@ class ViewCastingPostView(post.GenericViewPostView):
                                                      "viewCasting": constants.VIEW_POST,
                                                      "viewWork": constants.VIEW_POST}
         self._pageContext["castingRole"] = self.castingRole
+        self._pageContext["actor"] = self.actor
+        self._pageContext["displayStatus"] = self.displayStatus
         if self.attributeListObject.attributes:
             self._pageContext["attributes"] = self.attributeListObject.attributes
             self._pageContext["descriptionEnabled"] = self.post.record.descriptionEnabled

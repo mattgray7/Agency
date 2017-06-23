@@ -421,7 +421,19 @@
 										<a onclick='redirectToPost("{{castingRole.postID}}");'> {{ castingRole.characterName }} </a>
 									</h1>
 									<h4 class="postInfoSubTitle">
-										{{ castingRole.status }}
+										{% if displayStatus == "current" %}
+											{% if castingRole.status == "Cast" and actor %}
+												Cast - {{ actor.cleanName }}
+											{% else %}
+												Open
+											{% endif %}
+										{% elif displayStatus == "past" %}
+											{% if castingRole.status == "Cast" and actor %}
+												Played by {{ actor.cleanName }}
+											{% else %}
+												Closed
+											{% endif %}
+										{% endif %}
 									</h4>
 									<div class="postInfoContent"></div>
 								</div>
