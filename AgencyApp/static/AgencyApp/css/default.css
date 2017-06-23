@@ -489,6 +489,36 @@
 		transition: background .20s ease;
 	}
 
+	.greenButton
+	{
+		display: inline-block;
+		padding: 1em 3em 1em 3em;
+		letter-spacing: 0.10em;
+		border: 2px solid #000;
+		border-radius: 6px;
+		text-decoration: none;
+		font-weight: 700;
+		font-size: 1em;
+		color: #000;
+		background: #f1ffef;
+		transition: background .20s ease;
+	}
+
+	.redButton
+	{
+		display: inline-block;
+		padding: 1em 3em 1em 3em;
+		letter-spacing: 0.10em;
+		border: 2px solid #000;
+		border-radius: 6px;
+		text-decoration: none;
+		font-weight: 700;
+		font-size: 1em;
+		color: #000;
+		background: #ffd6d1;
+		transition: background .20s ease;
+	}
+
 	.blackHover:hover
 	{
 		color: #FFF;

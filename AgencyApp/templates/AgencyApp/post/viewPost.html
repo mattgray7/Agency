@@ -420,19 +420,29 @@
 									<h1 class="postInfoTitle" style="display: inline;">
 										<a onclick='redirectToPost("{{castingRole.postID}}");'> {{ castingRole.characterName }} </a>
 									</h1>
-									<h4 class="postInfoSubTitle">
-										{% if displayStatus == "current" %}
-											{% if castingRole.status == "Cast" and actor %}
-												Cast - {{ actor.cleanName }}
+									{% if castingRole.status == "Open" %}
+										<div style="position:relative; display: inline;">
+											{% if displayStatus == "past" %}
+												<div class="redButton" style="margin-top: 10px; padding: 0.1em 0.3em 0.1em 0.3em; display:inline; position: absolute">
+													Closed
+												</div>
 											{% else %}
-												Open
+												<div class="greenButton" style="margin-top: 9px; margin-left: 6px; padding: 0.1em 0.3em 0.15em 0.3em; position: absolute;">
+													Open
+												</div>
 											{% endif %}
-										{% elif displayStatus == "past" %}
-											{% if castingRole.status == "Cast" and actor %}
-												Played by {{ actor.cleanName }}
-											{% else %}
-												Closed
-											{% endif %}
+										</div>
+									{% endif %}
+
+
+									<h4 class="postInfoSubTitle" style="display: inline; margin-top: -10px;">
+										{% if castingRole.status == "Cast" and actor %}
+											<br>
+											Played by <a onclick='redirectToUser("{{actor.username}}");'>{{ actor.cleanName }}</a>
+										{% endif %}
+										<br>
+										{% if project and project.record %}
+											Project: <a onclick='redirectToPost("{{ project.record.postID }}");' >{{ project.record.title }}</a>
 										{% endif %}
 									</h4>
 									<div class="postInfoContent"></div>
