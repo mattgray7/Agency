@@ -329,6 +329,17 @@ class GenericViewPostView(views.GenericFormView):
         self._postType = None
         super(GenericViewPostView, self).__init__(*args, **kwargs)
         self._isProjectAdmin = False
+        self._projectDisplayStatus = None
+
+    @property
+    def projectDisplayStatus(self):
+        if self._projectDisplayStatus is None:
+            projectStatus = self.project.record and self.project.record.status or None
+            if projectStatus in ["Pre-production", "In production", "Post production", "Screening"]:
+                self._projectDisplayStatus = "current"
+            elif projectStatus in ["Completed"]:
+                self._projectDisplayStatus = "past"
+        return self._projectDisplayStatus
 
     @property
     def isProjectAdmin(self):
@@ -425,6 +436,7 @@ class GenericViewPostView(views.GenericFormView):
         self._pageContext["isWork"] = isWorkPost(self.postID)
         self._pageContext["isCasting"] = isCastingPost(self.postID)
         self._pageContext["userIsAdmin"] = self.isProjectAdmin
+        self._pageContext["displayStatus"] = self.projectDisplayStatus
         if self.projectID:
             self._pageContext["projectID"] = self.projectID
         self._pageContext["project"] = self.project

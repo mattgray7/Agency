@@ -539,9 +539,102 @@
 			{% elif isCollaboration %}
 				Looking for a {{ post.collaboratorRole }} <br>
 				{{ post.title }} 
-			{% elif isWork %}
-				(Looking for crew) {{ post.title }} <br>
-				Looking for a {{ post.profession }}
+			{% elif isWork and job %}
+				<div id="postPanel" class="postPanelFullHeight">
+					<table style="width:99%;">
+						<tr>
+							<td style="width: 250px; margin-top: 0px; height: 100%; position: relative; padding: 0.5em">
+								<ul>
+									<li>
+										<div id="postPicturePanel" class="postPicture hoverContainer">
+											<div id="postPictureBoundingBox" style="width:250px; height:250px; background: #000; border: 1px solid #FFF; border-radius:3px; vertical-align: middle; display: table-cell; position: relative;">
+												<div id="postPicture" >
+													{% if post.postPicture %}
+														<img src="{{ post.postPicture.url }}" style="width:250px;"/>
+													{% else %}
+														<img src="{{ images.noPicture }}" style="width:250px;"/>
+													{% endif %}
+												</div>
+												{% if userIsAdmin %}
+													<div class="grayAlphaOverlay"></div>
+								  					<div class="whiteHoverButton"><a onclick="redirectToEditPost('{{projectID}}');" style="margin-top: 10px; margin-right: 6px;" > Edit </a></div>
+								  				{% endif %}
+											</div>
+										</div>
+									</li>
+								</ul>
+							</td>
+							<td style="margin-top: 0px; position:relative;">
+								<div id="postInfo" class="postInfoFullHeight" colspan="2" style="position: absolute; top: 0; margin-top:12px; margin-left: -10px;">
+									<div id='topRightPostButton' style='position:relative'>
+										<div style="position: absolute; top: 0; right: 0; padding: 0.5em">
+											{% if userIsAdmin %}
+												<button class="whiteButton blackHover" onclick="redirectToEditPost('{{projectID}}');" style="padding: 0.25em 0.5em 0.25em 0.5em; font-weight: 400; font-size: 1em;">Edit</button>
+											{% elif user.is_authenticated %}
+												<button class="whiteButton blackHover" onclick="updatePostFollow();" style="padding: 0.25em 0.5em 0.25em 0.5em; font-weight: 400; font-size: 1em;">
+													<div id="followButtonText">
+														{% if following %}
+															Following &#10004;
+														{% else %}
+															Follow
+														{% endif %}
+													</div>
+												</button>
+											{% endif %}
+										</div>
+									</div>
+									<h1 class="postInfoTitle" style="display: inline;">
+										<a onclick='redirectToPost("{{job.postID}}");'> {{ job.profession }} </a>
+									</h1>
+									{% if job.status == "Open" %}
+										<div style="position:relative; display: inline;">
+											{% if displayStatus == "past" %}
+												<div class="redButton" style="margin-top: 10px; padding: 0.1em 0.3em 0.1em 0.3em; display:inline; position: absolute">
+													Closed
+												</div>
+											{% else %}
+												<div class="greenButton" style="margin-top: 9px; margin-left: 6px; padding: 0.1em 0.3em 0.15em 0.3em; position: absolute;">
+													Available
+												</div>
+											{% endif %}
+										</div>
+									{% else %}
+										<div style="position:relative; display: inline;">
+											<div class="grayButton" id="castStatusLabel" style="margin-top: 9px; margin-left: 6px; padding: 0.1em 0.3em 0.15em 0.3em; position: absolute; color: #000; background: #e5e5e5; cursor: pointer;">
+												Filled
+											</div>
+										</div>
+									{% endif %}
+									<h4 class="postInfoSubTitle" style="">
+										{% if project and project.record %}
+											Project: <a onclick='redirectToPost("{{ project.record.postID }}");' >{{ project.record.title }}</a><br>
+										{% endif %}
+										{% if job.shortDescription %}
+											{{job.shortDescription}}<br>
+										{% endif %}
+										{% if post.paid %}
+											Compensation: Paid &#10004;<br>
+										{% else %}
+											Compensation: None<br>
+										{% endif %}
+										{% if job.status == "Filled" and worker %}
+											<a id="workerProfileLink" onclick='redirectToUser("{{worker.username}}");'>{{ worker.cleanName }}</a><br>
+										{% endif %}
+										{% if job.description %}
+											Description:<br>
+										{% endif %}
+									</h4>
+									<div class="postInfoContent">
+										{% if job.description %}
+											<div style="padding: 0em 1.5em 0em 1em; margin-top: -3px; min-width: 450px;">
+												{{job.description}}
+											</div>
+										{% endif %}
+									</div>
+								</div>
+							</td>
+						</tr>
+					</table>
 			{% elif isEvent %}
 				Event {{ post.title }} 
 				<h5>Located at {{post.location}} on {{post.date}}</h5>

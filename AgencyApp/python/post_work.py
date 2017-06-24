@@ -62,6 +62,37 @@ class CreateWorkPostView(post.GenericCreatePostView):
 class ViewWorkPostView(post.GenericViewPostView):
     def __init__(self, *args, **kwargs):
         super(ViewWorkPostView, self).__init__(*args, **kwargs)
+        self._job = None
+        self._worker = None
+
+    @property
+    def pageContext(self):
+        self._pageContext = super(ViewWorkPostView, self).pageContext
+        self._pageContext["possibleDestinations"] = {"editPost": constants.EDIT_POST,
+                                                     "viewPost": constants.VIEW_POST}
+        self._pageContext["job"] = self.job
+        self._pageContext["worker"] = self.worker
+        return self._pageContext
+
+
+    @property
+    def job(self):
+        if self._job is None:
+            try:
+                self._job = models.ProjectJob.objects.get(postID=self.postID)
+            except models.ProjectJob.DoesNotExist:
+                pass
+        return self._job
+
+    @property
+    def worker(self):
+        if self._worker is None:
+            if self.post.record.status == "Filled" and self.job:
+                try:
+                    self._worker = models.UserAccount.objects.get(username=self.job.username)
+                except models.UserAccount.DoesNotExist:
+                    pass
+        return self._worker
 
     @property
     def post(self):

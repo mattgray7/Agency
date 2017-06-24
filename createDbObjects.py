@@ -29,7 +29,7 @@ print "\nCreating new user network.\n"
 daisyBuchananDescription = """Daisy is The Great Gatsby's most enigmatic, and perhaps most disappointing, character. Although Fitzgerald does much to make her a character worthy of Gatsby's unlimited devotion, in the end she reveals herself for what she really is. Despite her beauty and charm, Daisy is merely a selfish, shallow, and in fact, hurtful, woman. Gatsby loves her (or at least the idea of her) with such vitality and determination that readers would like, in many senses, to see her be worthy of his devotion. Although Fitzgerald carefully builds Daisy's character with associations of light, purity, and innocence, when all is said and done, she is the opposite from what she presents herself to be.
 							  From Nick's first visit, Daisy is associated with otherworldliness. Nick calls on her at her house and initially finds her (and Jordan Baker, who is in many ways an unmarried version of Daisy) dressed all in white, sitting on an "enormous couch . . . buoyed up as though upon an anchored balloon . . . [her dress] rippling and fluttering as if [she] had just been blown back in after a short flight around the house." From this moment, Daisy becomes like an angel on earth. She is routinely linked with the color white (a white dress, white flowers, white car, and so on), always at the height of fashion and addressing people with only the most endearing terms. She appears pure in a world of cheats and liars. Given Gatsby's obsession with Daisy and the lengths to which he has gone to win her, she seems a worthy paramour.
 						   """
-
+directorDescription = """Our vision is to change the way the world views productivity. We want Function Point to be a place where everyone feels respected, where they are doing important work and where everyone contributes to the growth and direction of our company, our customers and our community. Function Point is looking for a hands on, curious technology leader who wants to keep their technical skills sharp and apply their passion and smarts to lead engineering and devops towards delivering customer and business value. As Director of Engineering, you will work closely with our Director of Products to drive the development of Function Points products and services. You will lead the continued growth of engineering and devops with an emphasis on championing a strong engineering culture, measuring and increasing delivery velocity, ensuring high quality, and achieving schedule predictability."""
 #=================== Project 1
 # User 1
 project1User = User.objects.create_user(username="mattgray",
@@ -161,7 +161,8 @@ def createProjectRole(projectID, username, status, title, characterName, paid, s
 project1WorkPost2JobId = createProjectJob(projectID=project1ProjectID,
 								 		  username="mattgray",
 								 		  title="Director Needed",
-								 		  shortDescription="Head of production",
+								 		  shortDescription="Need someone to oversee production and director this script.",
+								 		  description=directorDescription,
 								 		  paid=True,
 								 		  profession="Director",
 								 		  status="Filled")

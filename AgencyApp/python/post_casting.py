@@ -81,16 +81,6 @@ class ViewCastingPostView(post.GenericViewPostView):
         self._displayStatus = None  #current or past
 
     @property
-    def displayStatus(self):
-        if self._displayStatus is None:
-            projectStatus = self.project.record and self.project.record.status or None
-            if projectStatus in ["Pre-production", "In production", "Post production", "Screening"]:
-                self._displayStatus = "current"
-            elif projectStatus in ["Completed"]:
-                self._displayStatus = "past"
-        return self._displayStatus
-
-    @property
     def castingRole(self):
         if self._castingRole is None:
             try:
@@ -119,7 +109,6 @@ class ViewCastingPostView(post.GenericViewPostView):
                                                      "viewWork": constants.VIEW_POST}
         self._pageContext["castingRole"] = self.castingRole
         self._pageContext["actor"] = self.actor
-        self._pageContext["displayStatus"] = self.displayStatus
         if self.attributeListObject.attributes:
             self._pageContext["attributes"] = self.attributeListObject.attributes
             self._pageContext["descriptionEnabled"] = self.post.record.descriptionEnabled
