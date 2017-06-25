@@ -86,6 +86,7 @@
 
         // Should be redirectToViewPost
         function redirectToPost(postID){
+            // Stop onclick of parents from firing
             if (!e) var e = window.event;
             e.cancelBubble = true;
             if (e.stopPropagation) e.stopPropagation();
@@ -95,13 +96,18 @@
             form.submit();
         }
 
-        function redirectToEditPost(postID){
+        function redirectToEditPost(postID, project){
             if (!e) var e = window.event;
             e.cancelBubble = true;
             if (e.stopPropagation) e.stopPropagation();
             var extraInputs = []
-            extraInputs.push({key: "postID", value: postID});
-            var form = createPageRedirectForm("{{next}}", "{{next}}", "{{possibleDestinations.editPost}}", "{{currentPageURL}}", null, null);
+            if(project == true){
+                extraInputs.push({key: "projectID", value: postID});
+                extraInputs.push({key: "postID", value: postID});
+            }else{
+                extraInputs.push({key: "postID", value: postID});
+            }
+            var form = createPageRedirectForm("{{next}}", "{{next}}", "{{possibleDestinations.editPost}}", "{{currentPageURL}}", extraInputs, null);
             form.submit();
         }
 

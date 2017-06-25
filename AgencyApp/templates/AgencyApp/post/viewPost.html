@@ -226,7 +226,7 @@
 									</div>
 									{% if userIsAdmin %}
 										<div class="grayAlphaOverlay"></div>
-					  					<div class="whiteHoverButton"><a onclick="redirectToEditPost('{{projectID}}');" style="margin-top: 10px; margin-right: 6px;" > Edit </a></div>
+					  					<div class="whiteHoverButton"><a onclick="redirectToEditPost('{{projectID}}', true);" style="margin-top: 10px; margin-right: 6px;" > Edit </a></div>
 					  				{% endif %}
 								</div>
 							</div>
@@ -236,7 +236,7 @@
 								<div id='topRightPostButton' style='position:relative'>
 									<div style="position: absolute; top: 0; right: 0;">
 										{% if userIsAdmin %}
-											<button class="whiteButton blackHover" onclick="redirectToEditPost('{{projectID}}');" style="padding: 0.5em 0.5em 0.5em 0.5em; font-weight: 400; font-size: 0.8em;">Edit</button>
+											<button class="whiteButton blackHover" onclick="redirectToEditPost('{{projectID}}', true);" style="padding: 0.5em 0.5em 0.5em 0.5em; font-weight: 400; font-size: 0.8em;">Edit</button>
 										{% elif user.is_authenticated %}
 											<button class="whiteButton blackHover" onclick="updatePostFollow();" style="padding: 0.5em 0.5em 0.5em 0.5em; font-weight: 400; font-size: 0.8em;">
 												<div id="followButtonText">
@@ -506,7 +506,6 @@
 
 							var actorPictureDiv = document.getElementById("actorPictureBoundingBox")
 							if(actorPictureDiv != null){
-								console.log("not null")
 								if(type == "display"){
 									actorPictureDiv.style.boxShadow = "0 0 30px white";
 								}else{

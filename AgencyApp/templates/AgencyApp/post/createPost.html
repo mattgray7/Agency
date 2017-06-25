@@ -194,10 +194,11 @@
 		<input type="submit" value="Create" />
 	{% endif %}
 	</form>
-	<div id="cancelButton" class="button"><div id="cancelButtonLabel"></div></div>
+	<div id="cancelButton" class="button"><div id="cancelButtonLabel"></div>
+</div>
 
-	<script>
-		$(document).ready(function(){
+<script>
+		/*$(document).ready(function(){
 			// run a deconstructor to delete a post from the db if user navigates away from this page without canceling
 			toolbarDeconstructorFunctions.push(function(){
 				{% if not post.record.title %}
@@ -248,7 +249,7 @@
 					collaboratorRoleDiv.innerHTML = selectForm;
 				}
 			{% endif %}		
-		});
+		});*/
 
 		function submitForm(){
 			var form = document.getElementById("createForm")
@@ -263,6 +264,6 @@
 			}
 			return form.submit()
 			}
-		</script>
+	</script>
 
 {% endblock %}

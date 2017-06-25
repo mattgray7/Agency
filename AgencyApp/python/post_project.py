@@ -80,16 +80,6 @@ class ViewProjectPostView(post.GenericViewPostView):
         self._roles = None
         self._jobs = None
         self._events = None
-        self._isAdmin = False
-
-    @property
-    def isAdmin(self):
-        if self._isAdmin is False:
-            projectAdmins = models.ProjectAdmin.objects.filter(projectID=self.postID)
-            for admin in projectAdmins:
-                if admin.username == self.request.user.username:
-                    self._isAdmin = True
-        return self._isAdmin
 
     @property
     def post(self):
@@ -167,7 +157,6 @@ class ViewProjectPostView(post.GenericViewPostView):
         self._pageContext["roles"] = self.roles
         self._pageContext["jobs"] = self.jobs
         self._pageContext["events"] = self.events
-        self._pageContext["userIsAdmin"] = self.isAdmin
         return self._pageContext
 
 
