@@ -24,17 +24,44 @@
 		border: 2px solid #000;
 		border-radius: 4px;
 	}
+	.editPictureFilePanel
+	{
+		height: 80px;
+		width: 98.5%;
+		background: #FFF;
+		border: 2px solid black;
+		border-radius: 2px;
+		position: absolute;
+		bottom: 0;
+		margin-bottom: -1px;
+		margin-left: -2px;
+		padding: .15em;
+	}
+	.editPictureFilePanel h3
+	{
+		padding: 0.2em;
+	}
 	.editPictureHoverButton a
 	{
 		color: #FFF;
 		opacity: 0;
+		font-size: 1.3em;
+		font-weight: 600;
+		padding: 0.6em 1.5em 0.6em 1.5em;
+		border: 2px solid #FFF;
+		border-radius: 6px;
 		transition: opacity .25s ease;
-		transition: color .3s ease;
+
+	}
+	.editPictureHoverButton a:hover
+	{
+		color: #000;
+		border: 2px solid #000;
 	}
 	.hoverContainer:hover .editPictureHoverButton a{
 		opacity: 1;
 		transition: opacity .25s ease;
-		transition: color .3s ease;
+
 	}
 	.postPanel
 	{

@@ -29,7 +29,7 @@
 
 <div id="mainViewPanel" class="mainViewPanel">
 	<div id="postPanel" class="postPanel">
-				<table style="width:99%; height: 400px;">
+		<table style="width:99%; height: 400px;">
 					<tr>
 						<td style="min-width: 400px;">
 							<div id="postPicturePanel" class="postPicture hoverContainer" style="width: 100%; height: 100%">
@@ -42,54 +42,65 @@
 										{% endif %}
 									</div>
 									<div class="grayAlphaOverlay"></div>
-									<div style="text-align: center; position: absolute; top: 50%; min-height: 100%; width: 100%; display: block;">
-					  					<div class="editPictureHoverButton" style=""><a> Update </a></div>
+									<div id="editPictureFilePanel" class="editPictureFilePanel" style="display: none;">
+										<form method="post" id="editPictureForm" action="{{ currentPageURL }}" enctype="multipart/form-data" style="margin-left: 3px;">
+											{% csrf_token %} 
+											{% for field in form %}
+												{% if field.name == "postPicture" %}
+											    	<h3>New picture: {{ field }}</h3>
+											    {% endif %}
+											{% endfor %}
+										</form>
+											<table style="width: 100%; margin-left: -2px;">
+												<tr>
+													<td >
+														<div class="whiteButton blackHover" onclick="toggleEditPictureFilePanel('hide');" style="padding: 0.5em 0em 0.5em 0em; width: 99%; text-align: center;">Cancel</div>
+													</td>
+													<td>
+														<div class="whiteButton blackHover" style="padding: 0.5em 0em 0.5em 0em; width: 99%; text-align: center">Update</div>
+													</td>
+												</tr>
+											</table>
+									</div>
+									<div style="text-align: center; position: absolute; top: 47%; width: 100%; display: block;">
+					  					<div class="editPictureHoverButton" style="">
+											<a onclick="toggleEditPictureFilePanel('display');">Update </a>
+										</div>
 					  				</div>
 								</div>
 							</div>
 						</td>
 						<td style="min-width: 400px;">
-							<div style="width: 99%; height: 99%; background: #FFF; max-width:100%; max-height:100%; min-width: 100%; min-height: 100%; border: 1px solid #FFF; border-radius:3px;">
-
+							<div style="width: 99%; height: 98%; background: #FFF; max-width:100%; max-height:99%; min-width: 100%; min-height: 99%; border: 1px solid #FFF; border-radius:3px; margin-left: 10px;">
+								<form method="post" id="editContentForm" action="{{ currentPageURL }}" enctype="multipart/form-data">
+									{% csrf_token %} 
+									{% for field in form.visible_fields %}
+										{% if field.name != "postPicture"%}
+											<h3>{{field.label}}: {{ field }}</h3>
+										{% endif %}
+									{% endfor %}
+								</form>
 
 							</div>
 						</td>
 
 					</tr>
-				</table>
-	</div>
-	<!--<div id="createPanel" class="createPanel">
-		<table style="width: 100%;">
-			<tr>
-				<td>
-					<div id="editPostPicturePanel" class="createPostPanelElement" style="padding: 2px;">
-						<div id="postPictureBoundingBox" style="background: #000; width: 95%; height: 95%;">
-								
-								<div id="postPicture">
-									{% if post.postPicture %}
-										<img src="{{ post.postPicture.url }}" style="width:300px;"/>
-									{% else %}
-											<img src="{{ images.noPicture }}" style="width: 300px;"/>
-										{% endif %}
-									</div>
-									{% if userIsAdmin %}
-										<div class="grayAlphaOverlay"></div>
-					  					<div class="whiteHoverButton"><a onclick="redirectToEditPost('{{projectID}}', true);" style="margin-top: 10px; margin-right: 6px;" > Edit </a></div>
-					  				{% endif %}
-								</div>
-						</div>
-					</div>
-				</td>
-				<td style="margin-left: 20px;">
-					<div id="editPostContentPanel" class="createPostPanelElement">
-				</td>
-			</tr>
 		</table>
-	</div>-->
+	</div>
 </div>
-
-
-</div>
+<script>
+	function toggleEditPictureFilePanel(toggleType){
+		var form = document.getElementById
+		var pictureFilePanel = document.getElementById("editPictureFilePanel");
+		if(pictureFilePanel != null){
+			if(toggleType == "display"){
+				pictureFilePanel.style.display = "block";
+			}else{
+				pictureFilePanel.style.display = "none";
+			}
+		}
+	}
+</script>
 
 
 
