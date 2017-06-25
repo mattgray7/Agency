@@ -10,6 +10,20 @@
 		border-radius: 4px;
 		padding: .5em;
 	}
+
+	.createPanel
+	{
+		width: 100%;
+		height: 500px;
+	}
+	.createPostPanelElement
+	{
+		height: 450px;
+		width: 100%;
+		background: #FFF;
+		border: 2px solid #000;
+		border-radius: 4px;
+	}
 	.postPanel
 	{
 		min-width: 680px;
