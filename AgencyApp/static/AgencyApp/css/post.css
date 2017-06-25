@@ -41,7 +41,7 @@
 	{
 		padding: 0.2em;
 	}
-	.editPictureHoverButton a
+	.editPictureHoverButton 
 	{
 		color: #FFF;
 		opacity: 0;
@@ -53,7 +53,7 @@
 		transition: opacity .25s ease;
 
 	}
-	.editPictureHoverButton a:hover
+	.editPictureHoverButton:hover
 	{
 		color: #000;
 		border: 2px solid #000;

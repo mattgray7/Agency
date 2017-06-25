@@ -32,7 +32,7 @@
 		<table style="width:99%; height: 400px;">
 					<tr>
 						<td style="min-width: 400px;">
-							<div id="postPicturePanel" class="postPicture hoverContainer" style="width: 100%; height: 100%">
+							<div id="postPicturePanel" class="postPicture" style="width: 100%; height: 100%">
 								<div style="max-width:100%; max-height:100%; min-width: 100%; min-height: 100%; background: #000; border: 1px solid #FFF; border-radius:3px; position: relative; overflow: hidden;">
 									<div id="postPicture" style="padding: 3em 0em 0em 0em">
 										{% if post.postPicture %}
@@ -41,7 +41,7 @@
 											<img src="{{ images.noPicture }}" style="min-width: 100%; max-width:100%; max-height:100%;"/>
 										{% endif %}
 									</div>
-									<div class="grayAlphaOverlay"></div>
+									<div id="hiddenGrayOverlay" style="background: rgba(0,0,0,0); height:100%; width:100%; position: absolute; top:0;"></div>
 									<div id="editPictureFilePanel" class="editPictureFilePanel" style="position: absolute; bottom: -100px;">
 										<form method="post" id="editPictureForm" action="{{ currentPageURL }}" enctype="multipart/form-data" style="margin-left: 3px;">
 											{% csrf_token %} 
@@ -63,9 +63,11 @@
 											</table>
 									</div>
 									<div style="text-align: center; position: absolute; top: 47%; width: 100%; display: block;">
-					  					<div class="editPictureHoverButton" style="">
-											<a onclick="toggleEditPictureFilePanel('display');">Update </a>
+										<center>
+					  					<div id="updatePictureButton" class="editPictureHoverButton" onclick="toggleEditPictureFilePanel('display');" style="width: 20%;">
+											Update
 										</div>
+									</center>
 					  				</div>
 								</div>
 							</div>
@@ -89,15 +91,36 @@
 	</div>
 </div>
 <script>
+	var pictureOverlay = document.getElementById("hiddenGrayOverlay")
+	var pictureUpdateButton = document.getElementById("updatePictureButton")
+	var editPictureFilePanelShown = false;
+	if(pictureOverlay != null && updatePictureButton != null){
+		$("[id='postPicturePanel']").hover(function(){
+			if(!editPictureFilePanelShown){
+				updatePictureButton.style.opacity = 1;
+			}
+			pictureOverlay.style.background = "rgba(0,0,0,0.5)";
+		},
+		function(){
+			pictureOverlay.style.background = "rgba(0,0,0,0)";
+			updatePictureButton.style.opacity = 0;
+		})
+	}
+
+
 	function toggleEditPictureFilePanel(toggleType){
 		var form = document.getElementById
 		var pictureFilePanel = document.getElementById("editPictureFilePanel");
-		if(pictureFilePanel != null){
+		var pictureUpdateButton = document.getElementById("updatePictureButton")
+		if(pictureFilePanel != null && pictureUpdateButton != null){
 			if(toggleType == "display"){
 				console.log("displaying")
-				$('.editPictureFilePanel').animate({bottom: "0"}, 200); 
+				pictureUpdateButton.style.opacity = 0;
+				$('.editPictureFilePanel').animate({bottom: "0"}, 200);
+				editPictureFilePanelShown = true;
 			}else{
 				$('.editPictureFilePanel').animate({bottom: "-100"}, 200); 
+				editPictureFilePanelShown = false;
 			}
 		}
 	}
