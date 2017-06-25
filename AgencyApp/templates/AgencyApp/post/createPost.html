@@ -36,9 +36,9 @@
 								<div style="max-width:100%; max-height:100%; min-width: 100%; min-height: 100%; background: #000; border: 1px solid #FFF; border-radius:3px; position: relative; overflow: hidden;">
 									<div id="postPicture" style="padding: 3em 0em 0em 0em">
 										{% if post.postPicture %}
-											<img src="{{ post.postPicture.url }}" style="min-width: 100%; max-width:100%; max-height:100%;"/>
+											<img id="postPictureImg" src="{{ post.postPicture.url }}" style="min-width: 100%; max-width:100%; max-height:100%;"/>
 										{% else %}
-											<img src="{{ images.noPicture }}" style="min-width: 100%; max-width:100%; max-height:100%;"/>
+											<img id="postPictureImg" src="{{ images.noPicture }}" style="min-width: 100%; max-width:100%; max-height:100%;"/>
 										{% endif %}
 									</div>
 									<div id="hiddenGrayOverlay" style="background: rgba(0,0,0,0); height:100%; width:100%; position: absolute; top:0;"></div>
@@ -48,7 +48,12 @@
 											{% for field in form %}
 												{% if field.name == "postPicture" %}
 											    	<h3>New picture: {{ field }}</h3>
+											    {% else %}
+											    	<input type="hidden" name="{{field.name}}" value="{{field.value}}">
 											    {% endif %}
+											{% endfor %}
+											{% for field in form.hidden_fields %}
+												{{field}}
 											{% endfor %}
 										</form>
 											<table style="width: 100%; margin-left: -2px;">
@@ -57,7 +62,7 @@
 														<div class="whiteButton blackHover" onclick="toggleEditPictureFilePanel('hide');" style="padding: 0.5em 0em 0.5em 0em; width: 99%; text-align: center;">Cancel</div>
 													</td>
 													<td>
-														<div class="whiteButton blackHover" style="padding: 0.5em 0em 0.5em 0em; width: 99%; text-align: center">Update</div>
+														<div class="whiteButton blackHover" onclick="updatePicture('editPictureForm')" style="padding: 0.5em 0em 0.5em 0em; width: 99%; text-align: center">Update</div>
 													</td>
 												</tr>
 											</table>
@@ -107,6 +112,17 @@
 		})
 	}
 
+	$("#id_postPicture").change(function(){
+		previewPicture(this, "postPictureImg");
+	});
+
+	function updatePicture(formID){
+		var form = document.getElementById(formID);
+		if(form != null){
+			form.submit();
+		}
+	}
+
 
 	function toggleEditPictureFilePanel(toggleType){
 		var form = document.getElementById
@@ -114,12 +130,13 @@
 		var pictureUpdateButton = document.getElementById("updatePictureButton")
 		if(pictureFilePanel != null && pictureUpdateButton != null){
 			if(toggleType == "display"){
-				console.log("displaying")
 				pictureUpdateButton.style.opacity = 0;
 				$('.editPictureFilePanel').animate({bottom: "0"}, 200);
 				editPictureFilePanelShown = true;
 			}else{
-				$('.editPictureFilePanel').animate({bottom: "-100"}, 200); 
+
+				$('.editPictureFilePanel').animate({bottom: "-100"}, 200);
+				pictureUpdateButton.style.opacity = 1; 
 				editPictureFilePanelShown = false;
 			}
 		}
@@ -130,7 +147,7 @@
 
 
 
-	{% if errors %}
+	<!--{% if errors %}
 		<ul>
 			{% for error in errors %}
 				<li>{{ error }}</li>
@@ -366,6 +383,6 @@
 			}
 			return form.submit()
 			}
-	</script>
+	</script>-->
 
 {% endblock %}

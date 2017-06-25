@@ -85,6 +85,7 @@ class ViewProjectPostView(post.GenericViewPostView):
     def post(self):
         if self._post is None:
             if self.postID:
+                print "creating post"
                 self._post = ProjectPostInstance(request=self.request, postID=self.postID, postType=constants.PROJECT_POST)
         return self._post
 

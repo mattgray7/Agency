@@ -144,6 +144,7 @@ class GenericPostInstance(object):
         return True
 
     def formIsValid(self):
+        print "checking if form is valid"
         if self.request.POST:
             if self.checkBasicFormValues() and self.checkModelFormValues():
                 return self.saveBasicFormValues() and self.saveModelFormValues()
@@ -317,6 +318,7 @@ class GenericCreatePostView(views.PictureFormView):
         return self._formInitialValues
 
     def processForm(self):
+        print "processing form"
         return self.post.formIsValid()
 
 

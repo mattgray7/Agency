@@ -120,6 +120,19 @@
             var form = createPageRedirectForm("{{next}}", "{{next}}", "{{toolbarDestinations.profile}}", "{{currentPageURL}}", extraInputs, null);
             form.submit();
         }
+
+        function previewPicture(input, divName) {
+            console.log("Previewing")
+            console.log(divName)
+            console.log(document.getElementById(divName))
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    $("[id='" + divName + "']").attr('src', e.target.result);
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
     </script>
 
     <body>

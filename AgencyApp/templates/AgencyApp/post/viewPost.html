@@ -549,9 +549,9 @@
 											<div id="postPictureBoundingBox" style="width:250px; height:250px; background: #000; border: 1px solid #FFF; border-radius:3px; vertical-align: middle; display: table-cell; position: relative;">
 												<div id="postPicture" >
 													{% if post.postPicture %}
-														<img src="{{ post.postPicture.url }}" style="width:250px;"/>
+														<img id="postPicture" src="{{ post.postPicture.url }}" style="width:250px;"/>
 													{% else %}
-														<img src="{{ images.noPicture }}" style="width:250px;"/>
+														<img id="postPicture" src="{{ images.noPicture }}" style="width:250px;"/>
 													{% endif %}
 												</div>
 												{% if userIsAdmin %}
