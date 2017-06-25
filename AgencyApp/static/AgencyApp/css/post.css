@@ -24,6 +24,18 @@
 		border: 2px solid #000;
 		border-radius: 4px;
 	}
+	.editPictureHoverButton a
+	{
+		color: #FFF;
+		opacity: 0;
+		transition: opacity .25s ease;
+		transition: color .3s ease;
+	}
+	.hoverContainer:hover .editPictureHoverButton a{
+		opacity: 1;
+		transition: opacity .25s ease;
+		transition: color .3s ease;
+	}
 	.postPanel
 	{
 		min-width: 680px;
