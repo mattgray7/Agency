@@ -33,7 +33,7 @@
 					<tr>
 						<td style="min-width: 400px;">
 							<div id="postPicturePanel" class="postPicture hoverContainer" style="width: 100%; height: 100%">
-								<div style="max-width:100%; max-height:100%; min-width: 100%; min-height: 100%; background: #000; border: 1px solid #FFF; border-radius:3px; position: relative;">
+								<div style="max-width:100%; max-height:100%; min-width: 100%; min-height: 100%; background: #000; border: 1px solid #FFF; border-radius:3px; position: relative; overflow: hidden;">
 									<div id="postPicture" style="padding: 3em 0em 0em 0em">
 										{% if post.postPicture %}
 											<img src="{{ post.postPicture.url }}" style="min-width: 100%; max-width:100%; max-height:100%;"/>
@@ -42,7 +42,7 @@
 										{% endif %}
 									</div>
 									<div class="grayAlphaOverlay"></div>
-									<div id="editPictureFilePanel" class="editPictureFilePanel" style="display: none;">
+									<div id="editPictureFilePanel" class="editPictureFilePanel" style="position: absolute; bottom: -100px;">
 										<form method="post" id="editPictureForm" action="{{ currentPageURL }}" enctype="multipart/form-data" style="margin-left: 3px;">
 											{% csrf_token %} 
 											{% for field in form %}
@@ -94,9 +94,10 @@
 		var pictureFilePanel = document.getElementById("editPictureFilePanel");
 		if(pictureFilePanel != null){
 			if(toggleType == "display"){
-				pictureFilePanel.style.display = "block";
+				console.log("displaying")
+				$('.editPictureFilePanel').animate({bottom: "0"}, 200); 
 			}else{
-				pictureFilePanel.style.display = "none";
+				$('.editPictureFilePanel').animate({bottom: "-100"}, 200); 
 			}
 		}
 	}
