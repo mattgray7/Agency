@@ -42,14 +42,18 @@
 									<ul>
 										<script>
 											{% for field in form %}
+												var value = "{{field.value}}";
+												if(value === "None"){
+													value = "";
+												}
 												var lineString = '';
 												if("{{field.name}}" != "postPicture")
 												if(!('{{field}}'.includes("hidden"))){
 													lineString = "<li><label for='name'>{{field.label}}</label>";
 													if("{{field.name}}" === "description"){
-														lineString += "<textarea cols='100' rows ='20' name='description' form='editContentForm' style='height:100px;'> {{ field.value }}</textarea></li>"
+														lineString += "<textarea cols='100' rows ='20' name='description' form='editContentForm' style='height:100px;'>" + value + "</textarea></li>"
 													}else{
-														lineString += "<input type='text' name='{{field.name}}' maxlength='100' value='{{field.value}}'></li>";
+														lineString += "<input type='text' name='{{field.name}}' maxlength='100' value='" + value + "'></li>";
 													}
 												}else{
 													if("{{field.name}}" == "status"){
