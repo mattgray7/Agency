@@ -7,7 +7,7 @@
 }
 .form-style-7{
     max-width:400px;
-    margin:50px auto;
+    margin:0px auto;
     background:#fff;
     border-radius:6px;
     padding:20px;
@@ -29,7 +29,7 @@
     display: block;
     padding: 9px;
     border: 1.5px solid #DDDDDD;
-    margin-bottom: 30px;
+    margin-bottom: 20px;
     border-radius: 6px;
 }
 .form-style-7 li:last-child{
