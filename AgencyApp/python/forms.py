@@ -40,8 +40,8 @@ class GenericCreatePostForm(BaseForm):
     postPicturePath = forms.CharField(widget=forms.HiddenInput, required=False)
     postPicture = forms.ImageField(label="Picture", required=False)
     title = forms.CharField(label="Title", max_length=500, required=True)
-    description = forms.CharField(label="Description", required=True, max_length=5000)
     status = forms.CharField(widget=forms.HiddenInput, max_length=50, required=False)
+    description = forms.CharField(label="Description", required=True, max_length=5000)
 
 class CreateEventPostForm(GenericCreatePostForm):
     location = forms.CharField(label="Location", required=True, max_length=1000)

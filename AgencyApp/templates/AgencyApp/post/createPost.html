@@ -43,17 +43,17 @@
 										<script>
 											{% for field in form %}
 												var lineString = '';
+												if("{{field.name}}" != "postPicture")
 												if(!('{{field}}'.includes("hidden"))){
 													lineString = "<li><label for='name'>{{field.label}}</label>";
-													console.log("{{field.name}}")
-													if("{{field.name}}" == "description"){
-														lineString += "<textarea cols='100' rows ='20' name='bio' form='editBackgroundForm' style='height:100px;'> {{ field.value }}</textarea></li>"
+													if("{{field.name}}" === "description"){
+														lineString += "<textarea cols='100' rows ='20' name='description' form='editContentForm' style='height:100px;'> {{ field.value }}</textarea></li>"
 													}else{
 														lineString += "<input type='text' name='{{field.name}}' maxlength='100' value='{{field.value}}'></li>";
 													}
 												}else{
 													if("{{field.name}}" == "status"){
-														lineString += "<li><label for='name'>{{field.label}}</label><div id='statusSelectDiv'></div></li>";
+														lineString += '<li><label for="name">{{field.label}}</label><div id="statusSelectDiv"></div>{{field}}</li>';
 													}else{
 														lineString += '{{field}}';
 													}
@@ -62,7 +62,7 @@
 											{% endfor %}
 										</script>
 										<li style="position:relative; height:100px width:100%;">
-											<div id="continueButton" class="whiteButton blackHover" style="width:75%; height:28px" onclick="submitForm('editBackgroundForm')">
+											<div id="continueButton" class="whiteButton blackHover" style="width:75%; height:28px" onclick="submitForm('editContentForm')">
 												Continue<br><br>
 											</div>
 										</li>
@@ -172,6 +172,21 @@
 				pictureUpdateButton.style.opacity = 1; 
 				editPictureFilePanelShown = false;
 			}
+		}
+	}
+
+	function submitForm(formName){
+		if(formName == null){
+			formName = "editContentForm";
+		}
+		var statusDiv = document.getElementById("statusSelect");
+		if(statusDiv != null){
+			// Set the status from the select bar in the form
+			document.getElementById("id_status").value = statusDiv.value;
+		}
+		var form = document.getElementById(formName)
+		if(form != null){
+			return form.submit()
 		}
 	}
 </script>
