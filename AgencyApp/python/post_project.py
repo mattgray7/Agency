@@ -12,6 +12,9 @@ class ProjectPostInstance(post.GenericPostInstance):
 
     def checkModelFormValues(self):
         """TODO, only thing so far is status, which is optional, so return True"""
+        newAdmin = models.ProjectAdmin(username=self.request.user.username,
+                                       projectID=self.request.POST.get("projectID"))
+        newAdmin.save()
         return True
 
     def saveModelFormValues(self):
