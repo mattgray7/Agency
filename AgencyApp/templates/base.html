@@ -133,6 +133,36 @@
                 reader.readAsDataURL(input.files[0]);
             }
         }
+
+        function addStatusBar(statusDivName, statusSelectName, defaultStatus, formName){
+                if(defaultStatus.length == 0){
+                    defaultStatus = "Open";
+                }
+                if(formName == null){
+                    formName = "createForm"
+                }
+                var statusDiv = document.getElementById(statusDivName)
+                if(statusDiv != null){
+                    {% if statusOptions %}
+                        var statusOptions = {{ statusOptions|safe }};
+                        var selectForm = createSelectForm(formName, statusSelectName, statusOptions, defaultStatus);
+                        statusDiv.innerHTML = selectForm;
+                    {% endif %}
+                }
+        }
+
+        function createSelectForm(formName, selectName, options, selected){
+                var formString = "<select form='" + formName + "' name='" + selectName + "' id='" + selectName + "'>";
+                for(var i=0; i < options.length; i++){
+                    if(options[i] == selected){
+                        formString += "<option value='" + options[i] + "' selected='selected'>" + options[i] + "</option>"
+                    }else{
+                        formString += "<option value='" + options[i] + "'>" + options[i] + "</option>"
+                    }
+                }
+                formString += "</select>";
+                return formString
+        }
     </script>
 
     <body>
@@ -235,33 +265,6 @@
                         }
                     }
                 });
-            }
-
-            function addStatusBar(statusDivName, statusSelectName, defaultStatus){
-                if(defaultStatus.length == 0){
-                    defaultStatus = "Open";
-                }
-                var statusDiv = document.getElementById(statusDivName)
-                if(statusDiv != null){
-                    {% if statusOptions %}
-                        var statusOptions = {{ statusOptions|safe }};
-                        var selectForm = createSelectForm("createForm", statusSelectName, statusOptions, defaultStatus);
-                        statusDiv.innerHTML = selectForm;
-                    {% endif %}
-                }
-            }
-
-            function createSelectForm(formName, selectName, options, selected){
-                var formString = "<select form='" + formName + "' name='" + selectName + "' id='" + selectName + "'>";
-                for(var i=0; i < options.length; i++){
-                    if(options[i] == selected){
-                        formString += "<option value='" + options[i] + "' selected='selected'>" + options[i] + "</option>"
-                    }else{
-                        formString += "<option value='" + options[i] + "'>" + options[i] + "</option>"
-                    }
-                }
-                formString += "</select>";
-                return formString
             }
 
             function createFormInput(type, name, value, id){

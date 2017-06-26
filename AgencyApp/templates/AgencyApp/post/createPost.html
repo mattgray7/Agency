@@ -32,8 +32,49 @@
 		<table style="width:99%; height: 400px;">
 					<tr>
 						<td style="min-width: 400px;">
-							<div id="postPicturePanel" class="postPicture" style="width: 100%; height: 100%">
-								<div style="max-width:100%; max-height:100%; min-width: 100%; min-height: 100%; background: #000; border: 1px solid #FFF; border-radius:3px; position: relative; overflow: hidden;">
+							<div style="width: 99%; height: 98%; background: #FFF; max-width:100%; max-height:99%; min-width: 100%; min-height: 99%; border: 1px solid #FFF; border-radius:3px;">
+								<form class="form-style-7" id="editContentForm" method="post" action="{{ currentPageURL }}">
+									{% csrf_token %}
+									<!--{% if cancelDestination == possibleDestinations.profile %}
+										<div id="backToProfileButton" style="width:170px; margin: -10px 0px 0px -10px;"><a onclick="returnToProfile();" class="profileButton blackHover" style="float:left">Back to profile</a></div><br><br>
+									{% endif %}-->
+									<h1>Edit Project</h1>
+									<ul>
+										<script>
+											{% for field in form %}
+												var lineString = '';
+												if(!('{{field}}'.includes("hidden"))){
+													lineString = "<li><label for='name'>{{field.label}}</label>";
+													console.log("{{field.name}}")
+													if("{{field.name}}" == "description"){
+														lineString += "<textarea cols='100' rows ='20' name='bio' form='editBackgroundForm' style='height:100px;'> {{ field.value }}</textarea></li>"
+													}else{
+														lineString += "<input type='text' name='{{field.name}}' maxlength='100' value='{{field.value}}'></li>";
+													}
+												}else{
+													if("{{field.name}}" == "status"){
+														lineString += "<li><label for='name'>{{field.label}}</label><div id='statusSelectDiv'></div></li>";
+													}else{
+														lineString += '{{field}}';
+													}
+												}
+												document.write(lineString);
+											{% endfor %}
+										</script>
+										<li style="position:relative; height:100px width:100%;">
+											<div id="continueButton" class="whiteButton blackHover" style="width:75%; height:28px" onclick="submitForm('editBackgroundForm')">
+												Continue<br><br>
+											</div>
+										</li>
+									</ul>
+								</form>
+							</div>
+						</td>
+
+						<td style="min-width: 400px; position:relative">
+							<div style="position: absolute; top: 0; width: 100%; ">
+							<div id="postPicturePanel" class="postPicture" style="width: 100%; height: 400px;">
+								<div style="max-width:100%; max-height: 400px; min-width: 100%; min-height: 400px; background: #000; border: 1px solid #FFF; border-radius:3px; position: relative; overflow: hidden;">
 									<div id="postPicture" style="padding: 3em 0em 0em 0em">
 										{% if post.postPicture %}
 											<img id="postPictureImg" src="{{ post.postPicture.url }}" style="min-width: 100%; max-width:100%; max-height:100%;"/>
@@ -76,21 +117,8 @@
 					  				</div>
 								</div>
 							</div>
+						</div>
 						</td>
-						<td style="min-width: 400px;">
-							<div style="width: 99%; height: 98%; background: #FFF; max-width:100%; max-height:99%; min-width: 100%; min-height: 99%; border: 1px solid #FFF; border-radius:3px; margin-left: 10px;">
-								<form method="post" id="editContentForm" action="{{ currentPageURL }}" enctype="multipart/form-data">
-									{% csrf_token %} 
-									{% for field in form.visible_fields %}
-										{% if field.name != "postPicture"%}
-											<h3>{{field.label}}: {{ field }}</h3>
-										{% endif %}
-									{% endfor %}
-								</form>
-
-							</div>
-						</td>
-
 					</tr>
 		</table>
 	</div>
@@ -110,6 +138,11 @@
 			pictureOverlay.style.background = "rgba(0,0,0,0)";
 			updatePictureButton.style.opacity = 0;
 		})
+	}
+
+	var statusSelectDiv = document.getElementById("statusSelectDiv");
+	if(statusSelectDiv != null){
+		addStatusBar("statusSelectDiv", "statusSelect", "{{ post.status }}", "editContentForm")
 	}
 
 	$("#id_postPicture").change(function(){
