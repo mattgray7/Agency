@@ -35,10 +35,12 @@
 							<div style="width: 99%; max-height: 400px; background: #FFF; max-width:100%; min-width: 100%; border: 1px solid #FFF; border-radius:3px; overflow: hidden">
 								<form class="form-style-7" id="editContentForm" method="post" action="{{ currentPageURL }}" style="margin-top:-10px;">
 									{% csrf_token %}
-									<!--{% if cancelDestination == possibleDestinations.profile %}
-										<div id="backToProfileButton" style="width:170px; margin: -10px 0px 0px -10px;"><a onclick="returnToProfile();" class="profileButton blackHover" style="float:left">Back to profile</a></div><br><br>
-									{% endif %}-->
-									<h1>Edit Project</h1>
+									{% if cancelDestination == possibleDestinations.viewPost %}
+										<div style="position: relative; display:block; width:100%; height: 100%;">
+											<div id="backToProjectButton" style="width:170px; margin: 4px 0px 0px 0px;"><a onclick="redirectToPost('{{post.postID}}');" class="profileButton blackHover" style="position: absolute; top:0;">Back</a></div>
+										</div>
+									{% endif %}
+									<h1 style="">Edit Project</h1>
 									<ul>
 										<script>
 											{% for field in form %}
@@ -193,6 +195,7 @@
 			return form.submit()
 		}
 	}
+
 </script>
 
 

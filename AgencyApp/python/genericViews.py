@@ -312,7 +312,8 @@ class PictureFormView(GenericFormView):
 
     def checkFormValidity(self):
         formIsValid = False
-        if self.request.POST.get(constants.CANCEL) != "True":
+        if "True" not in [self.request.POST.get(constants.CANCEL),
+                          self.request.POST.get("redirect")]:
             if self.formSubmitted:
                 if self.formClass:
                     if self.form.is_valid():
