@@ -135,9 +135,9 @@
 							<table style="width:102%; margin-left: -4px; margin-right:-10px">
 								<tr style="text-align: center">
 									<td>
-										<div class="projectTabButtonInactive" id="charactersButton" onclick="selectProjectTab('roles')" style="width: 99%">
+										<div class="projectTabButtonInactive" id="rolesButton" onclick="selectProjectTab('roles')" style="width: 99%">
 											Roles
-											<div id="charactersBorderCover" class="profileTabBorderCover"></div>
+											<div id="rolesBorderCover" class="profileTabBorderCover"></div>
 										</div>
 									</td>
 									<td>
@@ -201,6 +201,159 @@
 		}
 	}
 
+	var projectTabs = ["roles", "jobs", "events"] 
+	function selectProjectTab(tabType){
+		for(var i=0; i < projectTabs.length; i++){
+			var buttonId = projectTabs[i] + "Button";
+			var borderCoverId = projectTabs[i] + "BorderCover";
+			var projectButtonDiv = document.getElementById(buttonId);
+			var projectButtonBorderCoverDiv = document.getElementById(borderCoverId)
+			if(projectButtonDiv != null && projectButtonBorderCoverDiv != null){
+				if(projectTabs[i] === tabType){
+					projectButtonDiv.className = "projectTabButtonActive";
+				} else {
+					projectButtonDiv.className = "projectTabButtonInactive";		
+				}
+			}
+		}
+		if(tabType === "roles"){
+			selectRoles();
+		}else if(tabType == "jobs"){
+			selectJobs();
+		}else if(tabType == "events"){
+			selectEvents();
+		}
+		var contentDiv = document.getElementById("projectContentList")
+		if(contentDiv != null){
+			contentDiv.scrollLeft = 0;
+		}
+	}
+
+	function selectRoles(){
+		var listDiv = document.getElementById("projectContentList");
+		var contentString = "";
+		if(listDiv != null){
+			{% if roles %}
+				contentString += "<table><tr>";
+				{% for roleObj in roles %}
+					{% if roleObj.role.status == "Cast" and roleObj.actor %}
+						var roleID = "{{roleObj.role.postID}}_ListElement";
+						contentString += "<td id='" + roleID + "' class='projectContentListElement grayBackground grayHover' onclick='redirectToPost(" + '"{{roleObj.role.postID}}");' + "'>";
+
+						// CAST label
+						contentString += "<div style='text-align: left;margin-top: -20px; margin-left: 5px; padding: 0em 0em 0.7em 0em; font-weight: 500;'><h3 style='display: inline;'>CAST</h3> - <a onclick='redirectToUser(" + '"{{roleObj.actor.username}}");' + "'>{{roleObj.actor.cleanName}}</a></div>"
+
+						// profilePic
+						contentString += "<div class='projectContentListElementPicturePanel'><div class='projectContentListElementPicture'>";
+						{% if roleObj.actor.profilePicture %}
+							contentString += '<img src="{{ roleObj.actor.profilePicture.url }}" style="max-width: 150px; max-height:150px;"/>'
+						{% else %}
+							contentString += '<img src="{{images.noProfilePicture}}" style="width: 150px; max-height: 150px;">';
+						{% endif %}
+						contentString += "</div></div><br>";
+						contentString += "<div class='projectContentListElementText'><h2>{{roleObj.role.characterName}}</h2><p>{{roleObj.role.shortCharacterDescription}}</p></div>"
+					{% elif roleObj.role.status == "Open" and roleObj.post %}
+						contentString += "<td class='projectContentListElement greenBackground darkGreenHover' onclick='redirectToPost(" + '"{{roleObj.role.postID}}");' + "'>"
+						contentString += "<div style='text-align: left;margin-top: -20px; margin-left: 5px; padding: 0em 0em 0.7em 0em; font-weight: 500;'><h3 style='display: inline;'>AVAILABLE</h3></div>";
+
+						// postPic
+						contentString += "<div class='projectContentListElementPicturePanel'><div class='projectContentListElementPicture'>";
+						{% if roleObj.post.postPicture %}
+							contentString += '<img src="{{ roleObj.post.postPicture.url }}" style="max-width: 150px; max-height:150px;"/>'
+						{% else %}
+							contentString += '<img src="{{images.noProfilePicture}}" style="width: 150px; max-height: 150px;">';
+						{% endif %}
+						contentString += "</div></div><br>";
+						contentString += "<div class='projectContentListElementText'><h2>{{roleObj.role.characterName}}</h2><p>{{roleObj.role.shortCharacterDescription}}</p></div>"
+
+					{% else %}
+						contentString += "{{roleObj.role.characterName}}, {{roleObj.role.status}}, {{roleObj.actor}}"
+					{% endif %}
+					contentString += "</td>";
+				{% endfor %}
+				contentString += "</tr></table>"
+			{% else %}
+				contentString += "No roles registered."
+			{% endif %}
+		}
+		listDiv.innerHTML = contentString
+	}
+
+	function selectJobs(){
+		var listDiv = document.getElementById("projectContentList");
+		var contentString = "";
+		if(listDiv != null){
+			{% if jobs %}
+				contentString += "<table><tr>";
+				{% for jobObj in jobs %}
+					{% if jobObj.job.status == "Filled" and jobObj.user %}
+						contentString += "<td class='projectContentListElement grayBackground grayHover' onclick='redirectToPost(" + '"{{jobObj.job.postID}}");' + "'>";
+
+						// CAST label
+						contentString += "<div style='text-align: left;margin-top: -20px; margin-left: 5px; padding: 0em 0em 0.7em 0em; font-weight: 500;'><h3 style='display: inline;'>FILLED</h3> - <a onclick='redirectToUser(" + '"{{jobObj.user.username}}");' + "'>{{jobObj.user.cleanName}}</a></div>"
+
+						// profilePic
+						contentString += "<div class='projectContentListElementPicturePanel'><div class='projectContentListElementPicture'>";
+						{% if jobObj.user.profilePicture %}
+							contentString += '<img src="{{ jobObj.user.profilePicture.url }}" style="max-width: 150px; max-height:150px;"/>'
+						{% else %}
+							contentString += '<img src="{{images.noProfilePicture}}" style="width: 150px; max-height: 150px;">';
+						{% endif %}
+						contentString += "</div></div><br>";
+						contentString += "<div class='projectContentListElementText'><h2>{{jobObj.job.profession}}</h2><p>{{jobObj.job.shortDescription}}</p></div>"
+					{% elif jobObj.job.status == "Hiring" and jobObj.post %}
+						contentString += "<td class='projectContentListElement greenBackground darkGreenHover' onclick='redirectToPost(" + '"{{jobObj.job.postID}}");' + "'>"
+						contentString += "<div style='text-align: left;margin-top: -20px; margin-left: 5px; padding: 0em 0em 0.7em 0em; font-weight: 500;'><h3 style='display: inline;'>AVAILABLE</h3></div>";
+
+						// postPic
+						contentString += "<div class='projectContentListElementPicturePanel'><div class='projectContentListElementPicture'>";
+						{% if jobObj.post.postPicture %}
+							contentString += '<img src="{{ jobObj.post.postPicture.url }}" style="max-width: 150px; max-height:150px;"/>'
+						{% else %}
+							contentString += '<img src="{{images.noProfilePicture}}" style="width: 150px; max-height: 150px;">';
+						{% endif %}
+						contentString += "</div></div><br>";
+						contentString += "<div class='projectContentListElementText'><h2>{{jobObj.job.profession}}</h2><p>{{jobObj.job.shortDescription}}</p></div>"
+
+					{% else %}
+						contentString += "{{jobObj.job.profession}}"
+					{% endif %}
+					contentString += "</td>";
+				{% endfor %}
+				contentString += "</tr></table>"
+			{% else %}
+				contentString += "No jobs registered."
+			{% endif %}
+		}
+		listDiv.innerHTML = contentString
+	}
+
+	function selectEvents(){
+		var listDiv = document.getElementById("projectContentList");
+		var contentString = "";
+		if(listDiv != null){
+			{% if events %}
+				contentString += "<table><tr>";
+				{% for eventObj in events %}
+					contentString += "<td class='projectContentListElement grayBackground grayHover' onclick='redirectToPost(" + '"{{eventObj.post.postID}}");' + "'>";
+					// eventPic
+					contentString += "<div class='projectContentListElementPicturePanel'><div class='projectContentListElementPicture'>";
+					{% if eventObj.post.postPicture %}
+						contentString += '<img src="{{ eventObj.post.postPicture.url }}" style="max-width: 150px; max-height:150px;"/>'
+					{% else %}
+						contentString += '<img src="{{images.noPicture}}" style="width: 150px; max-height: 150px;">';
+					{% endif %}
+					contentString += "</div></div><br>";
+					contentString += "<div class='projectContentListElementText'><h2>{{eventObj.post.title}}</h2><h3>{{eventObj.post.date}}<br>Location: {{eventObj.post.location}}</h3><p>{{eventObj.post.description}}</p></div>";
+					contentString += "</td>";
+				{% endfor %}
+				contentString += "</tr></table>"
+			{% else %}
+				contentString += "No events registered."
+			{% endif %}
+		}
+		listDiv.innerHTML = contentString
+	}
 
 	function toggleEditPictureFilePanel(toggleType){
 		var form = document.getElementById
