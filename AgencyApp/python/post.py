@@ -72,6 +72,7 @@ class CreatePostChoiceView(views.GenericFormView):
 class GenericPostInstance(object):
     def __init__(self, *args, **kwargs):
         self.request = kwargs.get("request")
+        self.formSubmitted = kwargs.get("formSubmitted", False)
         self._postID = kwargs.get("postID")
         self._postType = kwargs.get("postType")
         self._projectID = kwargs.get("projectID")
@@ -101,9 +102,10 @@ class GenericPostInstance(object):
             try:
                 self._record = self.database.objects.get(postID=self.postID)
             except self.database.DoesNotExist:
-                self._record = self.database(postID=self.postID,
-                                             poster=self.request.user.username)
-                self._record.save()
+                if self.formSubmitted:
+                    self._record = self.database(postID=self.postID,
+                                                 poster=self.request.user.username)
+                    self._record.save()
         return self._record
 
     @property
@@ -144,7 +146,6 @@ class GenericPostInstance(object):
         return True
 
     def formIsValid(self):
-        print "checking if form is valid"
         if self.request.POST:
             if self.checkBasicFormValues() and self.checkModelFormValues():
                 return self.saveBasicFormValues() and self.saveModelFormValues()
@@ -219,7 +220,7 @@ class GenericCreatePostView(views.PictureFormView):
 
     def cancelPage(self):
         super(GenericCreatePostView, self).cancelPage()
-        if self.request.POST.get(constants.CANCEL) == "True" and not self.post.record.title:
+        if self.request.POST.get(constants.CANCEL) == "True" and self.post.record and not self.post.record.title:
             self.post.database.objects.filter(postID=self.postID).delete()
 
     @property
@@ -279,7 +280,7 @@ class GenericCreatePostView(views.PictureFormView):
             self._cancelButtonExtraInputs = super(GenericCreatePostView, self).cancelButtonExtraInputs or {}
         self._cancelButtonExtraInputs["postID"] = self.postID
         self._cancelButtonExtraInputs["projectID"] = self.projectID
-        if self.projectID and not self.post.record.title:
+        if self.projectID and not self.post:
             # Cancel back to project if canceling a new post and the poroject exists
             self._cancelButtonExtraInputs["skipToProject"] = True
         return self._cancelButtonExtraInputs
@@ -318,7 +319,6 @@ class GenericCreatePostView(views.PictureFormView):
         return self._formInitialValues
 
     def processForm(self):
-        print "processing form"
         return self.post.formIsValid()
 
 
@@ -363,7 +363,7 @@ class GenericViewPostView(views.GenericFormView):
         if self._projectID is None:
             self._projectID = self.request.POST.get("projectID", helpers.getMessageFromKey(self.request, "projectID"))
             if self._projectID is None:
-                if self.post.record.projectID:
+                if self.post.record and self.post.record.projectID:
                     self._projectID = self.post.record.projectID
         return self._projectID
 

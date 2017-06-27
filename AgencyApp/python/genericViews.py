@@ -324,13 +324,16 @@ class PictureFormView(GenericFormView):
                             else:
                                 formIsValid = True
                     else:
-                        self.errorMemory = self.request.POST
+                        print "Form errors: {0}".format(self.form.errors)
+                        self.errorMemory = self.form.errors
                 else:
                     if self.processForm():
                         formIsValid = True
         else:
             self.cancelPage()
             formIsValid = True
+        if not formIsValid:
+            print "Failure checking form validity: {0}".format(self.errorMemory)
         return formIsValid
 
     def updatePicturePathAndModel(self):

@@ -37,7 +37,8 @@ class CreateWorkPostView(post.GenericCreatePostView):
     @property
     def post(self):
         if self._post is None:
-            self._post = WorkPostInstance(request=self.request, postID=self.postID, projectID=self.projectID, postType=constants.WORK_POST)
+            self._post = WorkPostInstance(request=self.request, postID=self.postID, projectID=self.projectID,
+                                          postType=constants.WORK_POST, formSubmitted=self.formSubmitted)
         return self._post
 
     @property
