@@ -160,10 +160,10 @@
 						<td colspan="3">
 							<div style="position: relative;">
 							<div id="projectContentPanel" class="projectContentPanel" style="margin-left: -1px; margin-right:-8px; overflow: scroll">
-								<div id="addNewPanel" style="position: absolute; top: 0; left: 0; margin-top: 2px;">
-									<div id='addRoleListElement' class='projectContentListElement grayBackground grayHover' onclick='expandListPanel(" + '"roles"' + ");' style='width:98.5%;'>Add new role</div>
+								<div id="addNewPanel" style="position: absolute; top: 0; left: 0; margin-top: 2px; margin-bottom: -10px;">
+									<div id='addRoleListElement' class='projectContentListElement grayBackground grayHover' onclick='expandListPanel("roles");' style="width: 100%; height: 352px;">Add new role</div>
 								</div>
-								<div id="projectContentList" class="projectContentList" style="margin-left: 205px;">
+								<div id="projectContentList" class="projectContentList" style="margin-left: 208px;">
 
 								</div>
 							</div>
@@ -361,14 +361,21 @@
 		listDiv.innerHTML = contentString
 	}
 
+	var expanded = false;
 	function expandListPanel(panelType){
 		if(panelType === "roles"){
-			var addRole = document.getElementById("addNewPanel")
-			if(addRole != null){
-				console.log("Setting stuff")
-				addRole.style.marginRight = "-500px";
-				addRole.style.width = "500%";
-				//$('.addRoleListElement').animate({width: "500%"}, 200);
+			var addRolePanel = document.getElementById("addNewPanel")
+			var rolesList = document.getElementById("projectContentList")
+			if(addRolePanel != null && rolesList != null){
+				if(expanded){
+					$('#addNewPanel').animate({marginLeft: '0px;', width:'24.6%'}, 400)  
+					$('#projectContentList').animate({marginLeft: "208px"}, 400);
+					expanded = false;
+				}else{
+					expanded = true;
+					$('#addNewPanel').animate({marginLeft: '0px;', width:'60%'}, 400)  
+					$('#projectContentList').animate({marginLeft: "502px"}, 400);
+				}
 			}
 		}
 	}
