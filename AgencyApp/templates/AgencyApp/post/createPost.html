@@ -29,11 +29,41 @@
 		});
 	}
 
+	var expanded = false;
+	function toggleExpandListPanel(toggleType, panelType){
+		var transitionSpeed = 350;
+		var addNewPanel = document.getElementById("addNewPanel")
+		var existingList = document.getElementById("projectContentList")
+		var addNewListElement = document.getElementById("addNewListElement")
+		if(addNewPanel != null && existingList != null && addNewListElement != null){
+			if(expanded && toggleType == "expand"){
+				$('#addNewPanel').animate({marginLeft: '0px;', width:'24.6%'}, transitionSpeed);
+				$('#projectContentList').animate({marginLeft: "208px"}, transitionSpeed);
+				addNewListElement.onclick = function(){
+					toggleExpandListPanel(panelType, "expand");
+				}
+				expanded = false;
+			}else{
+				$('#addNewPanel').animate({marginLeft: '0px;', width:'60%'}, transitionSpeed);
+				$('#projectContentList').animate({marginLeft: "502px"}, transitionSpeed);
+				addNewListElement.onclick = function(){
+					toggleExpandListPanel(panelType, "shrink");
+				}
+				expanded = true;
+			}
+		}
+	}
+
+
 	function createAddNewButton(tabType){
 		var buttonString = "";
 		var addNewPanel = document.getElementById("addNewPanel");
 		if(addNewPanel != null){
-			buttonString += "<div id='addRoleListElement' class='projectContentListElement grayBackground grayHover' onclick='expandListPanel(" + '"' + tabType + '"' + ");' style='width: 100%; height: 352px; border: none; border-radius: 0px;''>";
+			var expandType = "expand";
+			if(expanded){
+				expandType = "shrink";
+			}
+			buttonString += "<div id='addNewListElement' class='projectContentListElement grayBackground grayHover' onclick='toggleExpandListPanel(" + '"' + tabType + '", "' + expandType + '");' + "'  style='width: 100%; height: 352px; border: none; border-radius: 0px;'>";
 			var singularTabType = "";
 			if(activeTab === "roles"){
 				singularTabType = "role";
@@ -377,26 +407,6 @@
 			{% endif %}
 		}
 		listDiv.innerHTML = contentString
-	}
-
-	var expanded = false;
-	function expandListPanel(panelType){
-		var transitionSpeed = 350;
-		if(panelType === "roles"){
-			var addRolePanel = document.getElementById("addNewPanel")
-			var rolesList = document.getElementById("projectContentList")
-			if(addRolePanel != null && rolesList != null){
-				if(expanded){
-					$('#addNewPanel').animate({marginLeft: '0px;', width:'24.6%'}, transitionSpeed);
-					$('#projectContentList').animate({marginLeft: "208px"}, transitionSpeed);
-					expanded = false;
-				}else{
-					expanded = true;
-					$('#addNewPanel').animate({marginLeft: '0px;', width:'60%'}, transitionSpeed);
-					$('#projectContentList').animate({marginLeft: "502px"}, transitionSpeed);
-				}
-			}
-		}
 	}
 
 	function toggleEditPictureFilePanel(toggleType){
