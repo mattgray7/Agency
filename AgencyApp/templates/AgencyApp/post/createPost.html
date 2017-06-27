@@ -32,7 +32,7 @@
 		<table style="width:99%; height: 400px;">
 			<tr>
 						<td style="min-width: 400px;">
-							<div style="width: 99%; max-height: 400px; background: #FFF; max-width:100%; min-width: 100%; border: 1px solid #FFF; border-radius:3px; overflow: hidden; margin-left: 5px;">
+							<div style="width: 99%; max-height: 400px; background: #FFF; max-width:100%; min-width: 100%; border: 1px solid #FFF; border-radius:3px; overflow: hidden; margin-left: 0px;">
 								<form class="form-style-7" id="editContentForm" method="post" action="{{ currentPageURL }}" style="margin-top:-10px;">
 									{% csrf_token %}
 									{% if cancelDestination == possibleDestinations.viewPost %}
@@ -84,7 +84,7 @@
 						<td style="min-width: 400px; position:relative">
 							<div style="position: absolute; top: 0; width: 100%; margin-left: 10px;">
 							<div id="postPicturePanel" class="postPicture" style="width: 100%; height: 400px; ">
-								<div style="max-width:100%; max-height: 400px; min-width: 100%; min-height: 400px; background: #000; border: 1px solid #FFF; border-radius:3px; position: relative; overflow: hidden; margin-top: -2px; ">
+								<div style="max-width:100%; max-height: 400px; min-width: 100%; min-height: 400px; background: #000; border: 1px solid #FFF; border-radius:3px; position: relative; overflow: hidden; margin-top: -2px; margin-left: -7px;">
 									<div id="postPicture" style="padding: 3em 0em 0em 0em">
 										{% if post.postPicture %}
 											<img id="postPictureImg" src="{{ post.postPicture.url }}" style="min-width: 100%; max-width:100%; max-height:100%;"/>
@@ -132,7 +132,7 @@
 			</tr>
 			<tr>
 						<td colspan="3" >
-							<table style="width:102%; margin-left: 2px; margin-right:-10px">
+							<table style="width:102%; margin-left: -4px; margin-right:-10px">
 								<tr style="text-align: center">
 									<td>
 										<div class="projectTabButtonInactive" id="charactersButton" onclick="selectProjectTab('roles')" style="width: 99%">
@@ -154,6 +154,15 @@
 									</td>
 								</tr>
 							</table>
+						</td>
+			</tr>
+			<tr>
+						<td colspan="3">
+							<div id="projectContentPanel" class="projectContentPanel" style="margin-left: -1px; margin-right:-8px;">
+								<div id="projectContentList" class="projectContentList">
+
+								</div>
+							</div>
 						</td>
 			</tr>
 		</table>
