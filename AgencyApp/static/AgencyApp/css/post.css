@@ -152,6 +152,7 @@
 	.projectContentPanel
 	{
 		background: #FFF;
+		max-width: 830px;
 		border-radius: 2px;
 		border: 4px solid #FFF;
 		margin-right: -2px;
@@ -161,8 +162,6 @@
 	}
 	.projectContentList
 	{
-		overflow: scroll;
-		max-width: 800px;
 		width: 100%;
 	}
 	.projectContentListElement

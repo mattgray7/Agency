@@ -158,11 +158,16 @@
 			</tr>
 			<tr>
 						<td colspan="3">
-							<div id="projectContentPanel" class="projectContentPanel" style="margin-left: -1px; margin-right:-8px;">
-								<div id="projectContentList" class="projectContentList">
+							<div style="position: relative;">
+							<div id="projectContentPanel" class="projectContentPanel" style="margin-left: -1px; margin-right:-8px; overflow: scroll">
+								<div id="addNewPanel" style="position: absolute; top: 0; left: 0; margin-top: 2px;">
+									<div id='addRoleListElement' class='projectContentListElement grayBackground grayHover' onclick='expandListPanel(" + '"roles"' + ");' style='width:98.5%;'>Add new role</div>
+								</div>
+								<div id="projectContentList" class="projectContentList" style="margin-left: 205px;">
 
 								</div>
 							</div>
+						</div>
 						</td>
 			</tr>
 		</table>
@@ -235,6 +240,7 @@
 		if(listDiv != null){
 			{% if roles %}
 				contentString += "<table><tr>";
+				//contentString += "<td><div id='addRoleListElement' class='projectContentListElement grayBackground grayHover' onclick='expandListPanel(" + '"roles"' + ");' style='width:98.5%;'>Add new role</div></td>";
 				{% for roleObj in roles %}
 					{% if roleObj.role.status == "Cast" and roleObj.actor %}
 						var roleID = "{{roleObj.role.postID}}_ListElement";
@@ -353,6 +359,18 @@
 			{% endif %}
 		}
 		listDiv.innerHTML = contentString
+	}
+
+	function expandListPanel(panelType){
+		if(panelType === "roles"){
+			var addRole = document.getElementById("addNewPanel")
+			if(addRole != null){
+				console.log("Setting stuff")
+				addRole.style.marginRight = "-500px";
+				addRole.style.width = "500%";
+				//$('.addRoleListElement').animate({width: "500%"}, 200);
+			}
+		}
 	}
 
 	function toggleEditPictureFilePanel(toggleType){
