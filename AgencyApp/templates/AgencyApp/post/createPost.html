@@ -68,8 +68,12 @@
 											{% endfor %}
 										</script>
 										<li style="">
-											<div id="continueButton" class="whiteButton blackHover" style="height:20px; width:99%; padding: 0.8em 0em 1em 0em; font-size: 1.3em; margin-top: -5px;" onclick="submitForm('editContentForm')">
-												Update Project
+											<div id="continueButton" class="whiteButton blackHover" style="height:20px; width:99%; padding: 0.8em 0em 1em 0em; font-size: 1.3em; margin-top: -10px;" onclick="submitForm('editContentForm')">
+												{% if source == possibleDestinations.viewPost %}
+													Update Project
+												{% else %}
+													Create Project
+												{% endif %}
 											</div>
 										</li>
 									</ul>
