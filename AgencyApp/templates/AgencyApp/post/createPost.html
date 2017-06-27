@@ -2,6 +2,9 @@
 
 {% block content %}
 <script>
+	var projectTabs = ["roles", "jobs", "events"];
+	var activeTab = "roles";
+
 	$( document ).ready(function() {
 		$( ".datepicker" ).datepicker({
 			// TODO add hour to date
@@ -24,6 +27,24 @@
 				}
 			}
 		});
+	}
+
+	function createAddNewButton(tabType){
+		var buttonString = "";
+		var addNewPanel = document.getElementById("addNewPanel");
+		if(addNewPanel != null){
+			buttonString += "<div id='addRoleListElement' class='projectContentListElement grayBackground grayHover' onclick='expandListPanel(" + '"' + tabType + '"' + ");' style='width: 100%; height: 352px; border: none; border-radius: 0px;''>";
+			var singularTabType = "";
+			if(activeTab === "roles"){
+				singularTabType = "role";
+			}else if(activeTab === "jobs"){
+				singularTabType = "job";
+			}else if(activeTab === "events"){
+				singularTabType = "event";
+			}
+			buttonString += "Add new " + singularTabType + "</div>";
+		}
+		return buttonString
 	}
 </script>
 
@@ -161,9 +182,11 @@
 							<div style="position: relative;">
 							<div id="projectContentPanel" class="projectContentPanel" style="margin-left: -1px; margin-right:-8px; overflow: scroll">
 								<div id="addNewPanel" style="position: absolute; top: 0; left: 0; margin-top: 2px; margin-bottom: -10px; border: 2px solid #000; border-radius: 4px; width: 24.6%;">
-									<div id='addRoleListElement' class='projectContentListElement grayBackground grayHover' onclick='expandListPanel("roles");' style="width: 100%; height: 352px; border: none; border-radius: 0px;">Add new role</div>
+									<script>
+										document.write(createAddNewButton("roles"));
+									</script>
 								</div>
-								<div id="projectContentList" class="projectContentList" style="margin-left: 208px;">
+								<div id="projectContentList" class="projectContentList" style="margin-left: 208px; min-height: 360px;">
 
 								</div>
 							</div>
@@ -206,7 +229,6 @@
 		}
 	}
 
-	var projectTabs = ["roles", "jobs", "events"] 
 	function selectProjectTab(tabType){
 		for(var i=0; i < projectTabs.length; i++){
 			var buttonId = projectTabs[i] + "Button";
@@ -216,6 +238,8 @@
 			if(projectButtonDiv != null && projectButtonBorderCoverDiv != null){
 				if(projectTabs[i] === tabType){
 					projectButtonDiv.className = "projectTabButtonActive";
+					activeTab = tabType;
+					document.getElementById("addNewPanel").innerHTML = createAddNewButton(tabType);
 				} else {
 					projectButtonDiv.className = "projectTabButtonInactive";		
 				}
@@ -278,8 +302,6 @@
 					contentString += "</td>";
 				{% endfor %}
 				contentString += "</tr></table>"
-			{% else %}
-				contentString += "No roles registered."
 			{% endif %}
 		}
 		listDiv.innerHTML = contentString
@@ -327,8 +349,6 @@
 					contentString += "</td>";
 				{% endfor %}
 				contentString += "</tr></table>"
-			{% else %}
-				contentString += "No jobs registered."
 			{% endif %}
 		}
 		listDiv.innerHTML = contentString
@@ -354,8 +374,6 @@
 					contentString += "</td>";
 				{% endfor %}
 				contentString += "</tr></table>"
-			{% else %}
-				contentString += "No events registered."
 			{% endif %}
 		}
 		listDiv.innerHTML = contentString
@@ -413,6 +431,8 @@
 			return form.submit()
 		}
 	}
+
+	selectProjectTab("roles");
 
 </script>
 
