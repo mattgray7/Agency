@@ -47,14 +47,55 @@
 		return listEmpty;
 	}
 
-	function getNewElementForm(formType){
+	function getNewElementForm(formType, slideDirection){
+		if(slideDirection === null){
+			slideDirection = "horizontal";
+		}
+		var formString = "";
 		if(formType === "roles"){
-			return "roles"
+			formString += '<form class="form-style-7" id="' + formType + 'AdditionForm" method="post" action="{{ currentPageURL }}" style="width: 90%; background: none;">' + "{% csrf_token %}" + '<div style="position: relative; display:block; width:100%; height: 100%;"><div style="width:170px; margin: 4px 0px 0px 0px;"><a onclick="toggleExpandListPanel(' + "'shrink', '" + formType + "', '" + slideDirection + "');" + '" class="whiteButton blackHover" style="position: absolute; top:0; left: 0; padding: 0.5em 1em 0.5em 1em; margin-top: -15px; margin-left: -30px;">Back</a></div></div></form>';
+				/*<h1 style="">Edit Project</h1>
+									<ul>
+										<script>
+											{% for field in form %}
+												var value = "{{field.value}}";
+												if(value === "None"){
+													value = "";
+												}
+												var lineString = '';
+												if("{{field.name}}" != "postPicture")
+												if(!('{{field}}'.includes("hidden"))){
+													lineString = "<li><label for='name'>{{field.label}}</label>";
+													if("{{field.name}}" === "description"){
+														lineString += "<textarea cols='100' rows ='20' name='description' form='editContentForm' style='height:100px; font-size: 0.9em;'>" + value + "</textarea></li>"
+													}else{
+														lineString += "<input type='text' name='{{field.name}}' maxlength='100' value='" + value + "'></li>";
+													}
+												}else{
+													if("{{field.name}}" == "status"){
+														lineString += '<li><label for="name">{{field.label}}</label><div id="statusSelectDiv"></div>{{field}}</li>';
+													}else{
+														lineString += '{{field}}';
+													}
+												}
+												document.write(lineString);
+											{% endfor %}
+										<li style="">
+											<div id="continueButton" class="whiteButton blackHover" style="height:20px; width:99%; padding: 0.8em 0em 1em 0em; font-size: 1.3em; margin-top: -10px;" onclick="submitForm('editContentForm')">
+												{% if source == possibleDestinations.viewPost %}
+													Update Project
+												{% else %}
+													Create Project
+												{% endif %}
+											</div>
+										</li>
+									</ul>*/
 		}else if(formType === "jobs"){
 			return "jobs"
 		}else if(formType === "events"){
 			return "events"
 		}
+		return formString;
 	}
 
 	var expanded = false;
@@ -73,7 +114,9 @@
 		var existingList = document.getElementById("projectContentList")
 		var listPanel = document.getElementById("projectContentPanel")
 		var addNewListElement = document.getElementById("addNewListElement")
-		var onclickDiv = addNewPanel
+		var formParentDiv = addNewPanel
+		console.log("toggline")
+		console.log("toggleType: direction: " + toggleType + direction)
 		if(addNewPanel != null){
 			if(expanded && toggleType == "shrink"){
 				if(direction === "vertical"){
@@ -85,10 +128,13 @@
 					addNewPanel.innerHTML = "";
 				}else if(direction === "horizontal"){
 					$('#addNewPanel').animate({marginLeft: '0px', width:'24.6%'}, transitionSpeed);
-					onclickDiv = addNewListElement;
+					/*addNewListElement.onclick = function(){
+						toggleExpandListPanel(newToggleType, panelType, direction);
+					}*/
 					if(existingList != null){
 						$('#projectContentList').animate({marginLeft: "208px"}, transitionSpeed);
 					}
+					addNewPanel.innerHTML = createAddNewButton(panelType);
 				}
 				expanded = false;
 			}else{
@@ -97,21 +143,17 @@
 						$("#projectContentPanel").animate({marginTop: "-13px", height: "400px"}, transitionSpeed);
 					}
 					addNewPanel.style.border = "2px solid #000";
-					addNewPanel.innerHTML = getNewElementForm(panelType);
 					$('#addNewPanel').animate({marginTop: '-13px', height:'380px'}, transitionSpeed);
 				}else if(direction === "horizontal"){
 					$('#addNewPanel').animate({marginLeft: '0px', width:'99.4%'}, transitionSpeed);
-					onclickDiv = addNewListElement;
+					$('#addNewListElement').prop("onclick", null);
 					if(existingList != null){
 						$('#projectContentList').animate({marginLeft: "99.8%"}, transitionSpeed);
 					}
+					formParentDiv = addNewListElement;
 				}
+				formParentDiv.innerHTML = getNewElementForm(panelType, direction);
 				expanded = true;
-			}
-			if(onclickDiv != null){
-				onclickDiv.onclick = function(){
-					toggleExpandListPanel(newToggleType, panelType, direction);
-				}
 			}
 		}
 	}
