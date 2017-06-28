@@ -47,16 +47,33 @@
 		return listEmpty;
 	}
 
+	function getNewElementForm(formType){
+		if(formType === "roles"){
+			return "roles"
+		}else if(formType === "jobs"){
+			return "jobs"
+		}else if(formType === "events"){
+			return "events"
+		}
+	}
+
 	var expanded = false;
 	function toggleExpandListPanel(toggleType, panelType, direction){
 		if(direction == null){
 			direction = "horizontal";
+		}
+		var newToggleType = toggleType;
+		if(newToggleType === "expand"){
+			newToggleType = "shrink";
+		}else{
+			newToggleType = "expand";
 		}
 		var transitionSpeed = 350;
 		var addNewPanel = document.getElementById("addNewPanel")
 		var existingList = document.getElementById("projectContentList")
 		var listPanel = document.getElementById("projectContentPanel")
 		var addNewListElement = document.getElementById("addNewListElement")
+		var onclickDiv = addNewPanel
 		if(addNewPanel != null){
 			if(expanded && toggleType == "shrink"){
 				if(direction === "vertical"){
@@ -65,18 +82,12 @@
 					}
 					$('#addNewPanel').animate({marginTop: '-13px', height:'0%'}, transitionSpeed);
 					addNewPanel.style.border = "none";
-					addNewPanel.onclick = function(){
-						toggleExpandListPanel("expand", panelType, direction);
-					}
+					addNewPanel.innerHTML = "";
 				}else if(direction === "horizontal"){
 					$('#addNewPanel').animate({marginLeft: '0px', width:'24.6%'}, transitionSpeed);
+					onclickDiv = addNewListElement;
 					if(existingList != null){
 						$('#projectContentList').animate({marginLeft: "208px"}, transitionSpeed);
-					}
-				}
-				if(addNewListElement != null){
-					addNewListElement.onclick = function(){
-						toggleExpandListPanel("expand", panelType, direction);
 					}
 				}
 				expanded = false;
@@ -86,22 +97,21 @@
 						$("#projectContentPanel").animate({marginTop: "-13px", height: "400px"}, transitionSpeed);
 					}
 					addNewPanel.style.border = "2px solid #000";
-					addNewPanel.onclick = function(){
-						toggleExpandListPanel("shrink", panelType, direction);
-					}
+					addNewPanel.innerHTML = getNewElementForm(panelType);
 					$('#addNewPanel').animate({marginTop: '-13px', height:'380px'}, transitionSpeed);
 				}else if(direction === "horizontal"){
 					$('#addNewPanel').animate({marginLeft: '0px', width:'99.4%'}, transitionSpeed);
+					onclickDiv = addNewListElement;
 					if(existingList != null){
 						$('#projectContentList').animate({marginLeft: "99.8%"}, transitionSpeed);
 					}
 				}
-				if(addNewListElement != null){
-					addNewListElement.onclick = function(){
-						toggleExpandListPanel("shrink", panelType, direction);
-					}
-				}
 				expanded = true;
+			}
+			if(onclickDiv != null){
+				onclickDiv.onclick = function(){
+					toggleExpandListPanel(newToggleType, panelType, direction);
+				}
 			}
 		}
 	}
@@ -340,6 +350,8 @@
 						var projectContentPanel = document.getElementById("projectContentPanel");
 						if(projectContentPanel != null){
 							projectContentPanel.innerHTML = getEmptyListButton(tabType);
+							$("#projectContentPanel").animate({marginTop: "-13px", height: "70px"}, 300);
+							
 						}
 					}else{
 						document.getElementById("addNewPanel").innerHTML = createAddNewButton(tabType);
