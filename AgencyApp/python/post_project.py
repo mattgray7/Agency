@@ -2,6 +2,7 @@ import post
 import constants
 import models
 import helpers
+import forms
 
 
 class ProjectPostInstance(post.GenericPostInstance):
@@ -137,6 +138,7 @@ class CreateProjectPostView(post.GenericCreatePostView):
         self._pageContext["roles"] = self.post.roles
         self._pageContext["jobs"] = self.post.jobs
         self._pageContext["events"] = self.post.events
+        self._pageContext["forms"] = {"role": forms.CreateProjectRoleForm}
         return self._pageContext
 
 class ViewProjectPostView(post.GenericViewPostView):
