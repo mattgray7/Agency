@@ -152,7 +152,6 @@
 	.projectContentPanel
 	{
 		background: #FFF;
-		max-width: 830px;
 		border-radius: 2px;
 		border: 4px solid #FFF;
 		margin-right: -2px;
@@ -205,7 +204,7 @@
 	.projectTabButtonInactive
 	{
 		height: 20px;
-		width: 100%;
+		width: 99.8%;
 		min-width: 227px;
 		padding: 10px 0px 20px 0px;
 		display: inline-block;
@@ -222,7 +221,7 @@
 	}
 	.projectTabButtonActive
 	{
-		width: 100%;
+		width: 99.8%;
 		min-width: 227px;
 		padding: 10px 0px 20px 0px;
 		height: 20px;
