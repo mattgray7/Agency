@@ -42,6 +42,7 @@
 				addNewListElement.onclick = function(){
 					toggleExpandListPanel(panelType, "expand");
 				}
+				//addNewListElement.innerHTML = "Done"
 				expanded = false;
 			}else{
 				$('#addNewPanel').animate({marginLeft: '0px;', width:'60%'}, transitionSpeed);
@@ -56,6 +57,7 @@
 
 
 	function createAddNewButton(tabType){
+		console.log("creating button for " + tabType)
 		var buttonString = "";
 		var addNewPanel = document.getElementById("addNewPanel");
 		if(addNewPanel != null){
@@ -213,7 +215,14 @@
 							<div id="projectContentPanel" class="projectContentPanel" style="margin-left: -1px; margin-right:-8px; overflow: scroll">
 								<div id="addNewPanel" style="position: absolute; top: 0; left: 0; margin-top: 2px; margin-bottom: -10px; border: 2px solid #000; border-radius: 4px; width: 24.6%;">
 									<script>
-										document.write(createAddNewButton("roles"));
+										{% if roles %}
+										console.log("here")
+											document.write(createAddNewButton("roles"));
+										{% elif jobs %}
+											document.write(createAddNewButton("jobs"));
+										{% elif events}
+											document.write(createAddNewButton("events"));
+										{% endif %}
 									</script>
 								</div>
 								<div id="projectContentList" class="projectContentList" style="margin-left: 208px; min-height: 360px;">
@@ -259,7 +268,28 @@
 		}
 	}
 
+	function getEmptyListButton(listType){
+		var contentString = "<div style='width: 100%; height: 60px; text-align: center; position:relative' ><h3 style='position: absolute; left:20%; top: 30%; margin-left: 20px;'>No " + listType + " registered.</h3><div class='whiteButton blackHover' style='position: absolute; left: 50%; margin-top: 2px; width: 22%;'> Add </div></div>"
+		return contentString
+	}
+
 	function selectProjectTab(tabType){
+		var listEmpty = false;
+		if(tabType == "roles"){
+			{% if not roles %}
+				listEmpty = true;
+			{% endif %}
+		}else if(tabType == "jobs"){
+			{% if not jobs %}
+				listEmpty = true;
+			{% endif %}
+		}else if(tabType == "events"){
+			{% if not events %}
+				listEmpty = true;
+			{% endif %}
+		}
+
+
 		for(var i=0; i < projectTabs.length; i++){
 			var buttonId = projectTabs[i] + "Button";
 			var borderCoverId = projectTabs[i] + "BorderCover";
@@ -269,7 +299,11 @@
 				if(projectTabs[i] === tabType){
 					projectButtonDiv.className = "projectTabButtonActive";
 					activeTab = tabType;
-					document.getElementById("addNewPanel").innerHTML = createAddNewButton(tabType);
+					if(listEmpty){
+						document.getElementById("projectContentPanel").innerHTML = getEmptyListButton(tabType);
+					}else{
+						document.getElementById("addNewPanel").innerHTML = createAddNewButton(tabType);
+					}
 				} else {
 					projectButtonDiv.className = "projectTabButtonInactive";		
 				}
@@ -441,8 +475,8 @@
 			return form.submit()
 		}
 	}
-
-	selectProjectTab("roles");
+	selectProjectTab("roles")
+	
 
 </script>
 
