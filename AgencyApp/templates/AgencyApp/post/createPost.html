@@ -50,9 +50,8 @@
 	var expanded = false;
 	function toggleExpandListPanel(toggleType, panelType, direction){
 		if(direction == null){
-			direction = "horizontal"
+			direction = "horizontal";
 		}
-		console.log("tpggling")
 		var transitionSpeed = 350;
 		var addNewPanel = document.getElementById("addNewPanel")
 		var existingList = document.getElementById("projectContentList")
@@ -67,7 +66,6 @@
 					$('#addNewPanel').animate({marginTop: '-13px', height:'0%'}, transitionSpeed);
 					addNewPanel.style.border = "none";
 					addNewPanel.onclick = function(){
-						console.log("Just made small, set panel onclick to expand")
 						toggleExpandListPanel("expand", panelType, direction);
 					}
 				}else if(direction === "horizontal"){
@@ -83,16 +81,12 @@
 				}
 				expanded = false;
 			}else{
-				console.log("expanding")
 				if(direction === "vertical"){
-					console.log("direction is vertical")
 					if(listPanel != null){
 						$("#projectContentPanel").animate({marginTop: "-13px", height: "400px"}, transitionSpeed);
 					}
 					addNewPanel.style.border = "2px solid #000";
 					addNewPanel.onclick = function(){
-						console.log("Just made big, set panel onclick to shrink")
-
 						toggleExpandListPanel("shrink", panelType, direction);
 					}
 					$('#addNewPanel').animate({marginTop: '-13px', height:'380px'}, transitionSpeed);
@@ -114,7 +108,6 @@
 
 
 	function createAddNewButton(tabType){
-		console.log("creating button for " + tabType)
 		var buttonString = "";
 		var addNewPanel = document.getElementById("addNewPanel");
 		if(addNewPanel != null){
@@ -273,7 +266,6 @@
 								<div id="addNewPanel" style="position: absolute; top: 0; left: 0; margin-top: 2px; margin-bottom: -10px; border: 2px solid #000; border-radius: 4px; width: 24.6%;">
 									<script>
 										{% if roles %}
-										console.log("here")
 											document.write(createAddNewButton("roles"));
 										{% elif jobs %}
 											document.write(createAddNewButton("jobs"));
