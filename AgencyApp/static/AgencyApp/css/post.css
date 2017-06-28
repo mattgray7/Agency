@@ -149,6 +149,13 @@
 		padding: 0.2em 0.5em 0.2em 0.2em;
 		margin-top: 7px;
 	}
+	.addNewPanel
+	{
+		border: 2px solid #000;
+		border-radius: 4px;
+		background: #efefef;
+		transition: background 0.2s ease;
+	}
 	.projectContentPanel
 	{
 		background: #FFF;

@@ -29,26 +29,72 @@
 		});
 	}
 
+	function isElementListEmpty(listType){
+		var listEmpty = false;
+		if(listType == "roles"){
+			{% if not roles %}
+				listEmpty = true;
+			{% endif %}
+		}else if(listType == "jobs"){
+			{% if not jobs %}
+				listEmpty = true;
+			{% endif %}
+		}else if(listType == "events"){
+			{% if not events %}
+				listEmpty = true;
+			{% endif %}
+		}
+		return listEmpty;
+	}
+
 	var expanded = false;
-	function toggleExpandListPanel(toggleType, panelType){
+	function toggleExpandListPanel(toggleType, panelType, direction){
+		if(direction == null){
+			direction = "horizontal"
+		}
+		console.log("tpggling")
 		var transitionSpeed = 350;
 		var addNewPanel = document.getElementById("addNewPanel")
 		var existingList = document.getElementById("projectContentList")
+		var listPanel = document.getElementById("projectContentPanel")
 		var addNewListElement = document.getElementById("addNewListElement")
-		if(addNewPanel != null && existingList != null && addNewListElement != null){
-			if(expanded && toggleType == "expand"){
-				$('#addNewPanel').animate({marginLeft: '0px;', width:'24.6%'}, transitionSpeed);
-				$('#projectContentList').animate({marginLeft: "208px"}, transitionSpeed);
-				addNewListElement.onclick = function(){
-					toggleExpandListPanel(panelType, "expand");
+		if(addNewPanel != null){
+			if(expanded && toggleType == "shrink"){
+				if(direction === "vertical"){
+					if(listPanel != null){
+						$("#projectContentPanel").animate({marginTop: "-13px", height: "70px"}, transitionSpeed);
+					}
+					$('#addNewPanel').animate({marginTop: '0px', height:'0%'}, transitionSpeed);
+					addNewPanel.style.border = "none";
+				}else if(direction === "horizontal"){
+					$('#addNewPanel').animate({marginLeft: '0px', width:'24.6%'}, transitionSpeed);
+					if(existingList != null){
+						$('#projectContentList').animate({marginLeft: "208px"}, transitionSpeed);
+					}
 				}
-				//addNewListElement.innerHTML = "Done"
+				if(addNewListElement != null){
+					addNewListElement.onclick = function(){
+						toggleExpandListPanel(panelType, "expand", direction);
+					}
+				}
 				expanded = false;
 			}else{
-				$('#addNewPanel').animate({marginLeft: '0px;', width:'99.4%'}, transitionSpeed);
-				$('#projectContentList').animate({marginLeft: "99.8%"}, transitionSpeed);
-				addNewListElement.onclick = function(){
-					toggleExpandListPanel(panelType, "shrink");
+				if(direction === "vertical"){
+					if(listPanel != null){
+						$("#projectContentPanel").animate({marginTop: "-13px", height: "400px"}, transitionSpeed);
+					}
+					addNewPanel.style.border = "2px solid #000";
+					$('#addNewPanel').animate({marginTop: '-13px', height:'380px'}, transitionSpeed);
+				}else if(direction === "horizontal"){
+					$('#addNewPanel').animate({marginLeft: '0px', width:'99.4%'}, transitionSpeed);
+					if(existingList != null){
+						$('#projectContentList').animate({marginLeft: "99.8%"}, transitionSpeed);
+					}
+				}
+				if(addNewListElement != null){
+					addNewListElement.onclick = function(){
+						toggleExpandListPanel(panelType, "shrink", direction);
+					}
 				}
 				expanded = true;
 			}
@@ -212,7 +258,7 @@
 			<tr>
 						<td colspan="3">
 							<div style="position: relative;">
-							<div id="projectContentPanel" class="projectContentPanel" style="margin-left: -1px; margin-right:-8px; overflow: scroll">
+							<div id="projectContentPanel" class="projectContentPanel" style="margin-left: -1px; margin-right:-8px; overflow: scroll;; min-height: 70px;">
 								<div id="addNewPanel" style="position: absolute; top: 0; left: 0; margin-top: 2px; margin-bottom: -10px; border: 2px solid #000; border-radius: 4px; width: 24.6%;">
 									<script>
 										{% if roles %}
@@ -269,7 +315,7 @@
 	}
 
 	function getEmptyListButton(listType){
-		var contentString = "<div style='width: 100%; height: 60px; text-align: center; position:relative' ><h3 style='position: absolute; left:20%; top: 30%; margin-left: 20px;'>No " + listType + " registered.</h3><div class='whiteButton blackHover' onclick='addNewElement(" + '"' + listType + '");' + "' style='position: absolute; left: 50%; margin-top: 2px; width: 22%;'> Add </div></div>"
+		var contentString = "<div style='position: relative; margin-top: 20px;'><div id='addNewPanel' class='addNewPanel' style='height:0px; width: 99.5%; border: none; position: absolute; top:0; z-index: 2; margin-top: -13px;'></div><div style='width: 100%; height: 60px; text-align: center; position:absolute; top: 30%; left: -20%; background: #FFF;' ><h3 style='display: inline;'>No " + listType + " registered.</h3><div class='whiteButton blackHover' onclick='toggleExpandListPanel(" + '"expand", "' + listType + '", "vertical");' + "' style='position: absolute; left: 70%; margin-top: -12px; width: 22%;'> Add </div></div>"
 		return contentString
 	}
 
@@ -278,22 +324,6 @@
 	}
 
 	function selectProjectTab(tabType){
-		var listEmpty = false;
-		if(tabType == "roles"){
-			{% if not roles %}
-				listEmpty = true;
-			{% endif %}
-		}else if(tabType == "jobs"){
-			{% if not jobs %}
-				listEmpty = true;
-			{% endif %}
-		}else if(tabType == "events"){
-			{% if not events %}
-				listEmpty = true;
-			{% endif %}
-		}
-
-
 		for(var i=0; i < projectTabs.length; i++){
 			var buttonId = projectTabs[i] + "Button";
 			var borderCoverId = projectTabs[i] + "BorderCover";
@@ -303,8 +333,11 @@
 				if(projectTabs[i] === tabType){
 					projectButtonDiv.className = "projectTabButtonActive";
 					activeTab = tabType;
-					if(listEmpty){
-						document.getElementById("projectContentPanel").innerHTML = getEmptyListButton(tabType);
+					if(isElementListEmpty(tabType)){
+						var projectContentPanel = document.getElementById("projectContentPanel");
+						if(projectContentPanel != null){
+							projectContentPanel.innerHTML = getEmptyListButton(tabType);
+						}
 					}else{
 						document.getElementById("addNewPanel").innerHTML = createAddNewButton(tabType);
 					}
