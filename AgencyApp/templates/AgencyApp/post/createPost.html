@@ -64,8 +64,12 @@
 					if(listPanel != null){
 						$("#projectContentPanel").animate({marginTop: "-13px", height: "70px"}, transitionSpeed);
 					}
-					$('#addNewPanel').animate({marginTop: '0px', height:'0%'}, transitionSpeed);
+					$('#addNewPanel').animate({marginTop: '-13px', height:'0%'}, transitionSpeed);
 					addNewPanel.style.border = "none";
+					addNewPanel.onclick = function(){
+						console.log("Just made small, set panel onclick to expand")
+						toggleExpandListPanel("expand", panelType, direction);
+					}
 				}else if(direction === "horizontal"){
 					$('#addNewPanel').animate({marginLeft: '0px', width:'24.6%'}, transitionSpeed);
 					if(existingList != null){
@@ -74,16 +78,23 @@
 				}
 				if(addNewListElement != null){
 					addNewListElement.onclick = function(){
-						toggleExpandListPanel(panelType, "expand", direction);
+						toggleExpandListPanel("expand", panelType, direction);
 					}
 				}
 				expanded = false;
 			}else{
+				console.log("expanding")
 				if(direction === "vertical"){
+					console.log("direction is vertical")
 					if(listPanel != null){
 						$("#projectContentPanel").animate({marginTop: "-13px", height: "400px"}, transitionSpeed);
 					}
 					addNewPanel.style.border = "2px solid #000";
+					addNewPanel.onclick = function(){
+						console.log("Just made big, set panel onclick to shrink")
+
+						toggleExpandListPanel("shrink", panelType, direction);
+					}
 					$('#addNewPanel').animate({marginTop: '-13px', height:'380px'}, transitionSpeed);
 				}else if(direction === "horizontal"){
 					$('#addNewPanel').animate({marginLeft: '0px', width:'99.4%'}, transitionSpeed);
@@ -93,7 +104,7 @@
 				}
 				if(addNewListElement != null){
 					addNewListElement.onclick = function(){
-						toggleExpandListPanel(panelType, "shrink", direction);
+						toggleExpandListPanel("shrink", panelType, direction);
 					}
 				}
 				expanded = true;
@@ -111,7 +122,7 @@
 			if(expanded){
 				expandType = "shrink";
 			}
-			buttonString += "<div id='addNewListElement' class='projectContentListElement grayBackground grayHover' onclick='toggleExpandListPanel(" + '"' + tabType + '", "' + expandType + '");' + "'  style='width: 100%; height: 352px; border: none; border-radius: 0px;'>";
+			buttonString += "<div id='addNewListElement' class='projectContentListElement grayBackground grayHover' onclick='toggleExpandListPanel(" + '"' + expandType + '", "' + tabType + '");' + "'  style='width: 100%; height: 352px; border: none; border-radius: 0px;'>";
 			var singularTabType = "";
 			if(activeTab === "roles"){
 				singularTabType = "role";
