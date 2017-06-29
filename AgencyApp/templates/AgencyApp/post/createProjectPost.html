@@ -1,0 +1,834 @@
+{% extends "base.html" %}
+
+{% block content %}
+<script>
+	var projectTabs = ["roles", "jobs", "events"];
+	var activeTab = "roles";
+
+	$( document ).ready(function() {
+		$( ".datepicker" ).datepicker({
+			// TODO add hour to date
+			changeMonth: true,
+			changeYear: true,
+			yearRange: "2017:2019",
+			dateFormat: 'yy-mm-dd' 
+		});
+	});
+
+	function deletePostFromDB(postID, postType){
+		$.ajax({
+			url : "/ajax/deletePostFromDB/",
+			data : {"postID": postID, "postType": postType},
+			type : 'POST',
+			dataType: "json",
+			success : function(data) {
+				if(!data["success"]){
+					console.log("failure, " + data["errors"]);
+				}
+			}
+		});
+	}
+
+	function isElementListEmpty(listType){
+		var listEmpty = false;
+		if(listType == "roles"){
+			{% if not roles %}
+				listEmpty = true;
+			{% endif %}
+		}else if(listType == "jobs"){
+			{% if not jobs %}
+				listEmpty = true;
+			{% endif %}
+		}else if(listType == "events"){
+			{% if not events %}
+				listEmpty = true;
+			{% endif %}
+		}
+		return listEmpty;
+	}
+
+	function getNewElementForm(formType, slideDirection){
+		if(slideDirection === null){
+			slideDirection = "horizontal";
+		}
+		var formString = "";
+		if(formType === "roles"){
+			// header
+			formString += '<form class="form-style-7" id="addNewElementForm" method="post" action="{{ currentPageURL }}" style="width: 90%; background: none;">' + "{% csrf_token %}"
+			
+			// back button
+			formString += '<div style="position: relative; display:block; width:100%; height: 100%;"><div style="width:170px; margin: 4px 0px 0px 0px;"><a onclick="toggleExpandListPanel(' + "'shrink', '" + formType + "', '" + slideDirection + "');" + '" class="whiteButton blackHover" style="position: absolute; top:0; left: 0; padding: 0.5em 1em 0.5em 1em; margin-top: -15px; margin-left: -30px;">Back</a></div></div>';
+			
+			// title
+			formString += "<h1>Add new " + getSingularFromPlural(formType) + "</h1><ul>";
+
+			// form
+			{% if forms.role %}
+				{% for field in forms.role %}
+					var value = "{{field.value}}";
+					if(value === "None"){
+						value = "";
+					}
+					if(!('{{field}}'.includes("hidden"))){
+						if("{{field.name}}" !== "postPicture"){
+							formString += "<li><label for='name' style='background: #efefef;'>{{field.label}}</label>";
+							if("{{field.name}}" === "description"){
+								formString += "<textarea cols='100' rows ='20' name='description' form='addNewElementForm' style='height:100px; font-size: 0.9em;'>" + value + "</textarea></li>"
+							}else{
+								formString += "<div style='background: #efefef; border: 2px solid #FFF; border-radius: 4px;'>" + '{{field}}</div>'; 
+							}
+						}
+					}else{
+						if("{{field.name}}" == "status"){
+							formString += '<li><label for="name">{{field.label}}</label><div id="elementStatusSelectDiv"></div><input type="hidden" name="{{field.name}}" id="elementStatusInput" </li>';
+						}else{
+							formString += '{{field}}';
+						}
+					}
+				{% endfor %}
+				formString += "<li></li></ul></form>";		//Add empty row at end temporarily as it has diff css (until button gets put in)
+			{% endif %}
+		}else if(formType === "jobs"){
+			return "jobs"
+		}else if(formType === "events"){
+			return "events"
+		}
+		return formString;
+	}
+
+	var expanded = false;
+	function toggleExpandListPanel(toggleType, panelType, direction){
+		if(direction == null){
+			direction = "horizontal";
+		}
+		var newToggleType = toggleType;
+		if(newToggleType === "expand"){
+			newToggleType = "shrink";
+		}else{
+			newToggleType = "expand";
+		}
+		var transitionSpeed = 350;
+		var addNewPanel = document.getElementById("addNewPanel")
+		var existingList = document.getElementById("projectContentList")
+		var listPanel = document.getElementById("projectContentPanel")
+		var addNewListElement = document.getElementById("addNewListElement")
+		var formParentDiv = addNewPanel
+		if(addNewPanel != null){
+			if(expanded && toggleType == "shrink"){
+				if(direction === "vertical"){
+					if(listPanel != null){
+						$("#projectContentPanel").animate({marginTop: "-13px", height: "70px"}, transitionSpeed);
+					}
+					$('#addNewPanel').animate({marginTop: '-13px', height:'0%'}, transitionSpeed);
+					addNewPanel.style.border = "none";
+					addNewPanel.innerHTML = "";
+				}else if(direction === "horizontal"){
+					$('#addNewPanel').animate({marginLeft: '0px', width:'24.6%'}, transitionSpeed);
+					if(existingList != null){
+						$('#projectContentList').animate({marginLeft: "208px"}, transitionSpeed);
+					}
+					addNewPanel.innerHTML = createAddNewButton(panelType);
+				}
+				expanded = false;
+			}else{
+				if(direction === "vertical"){
+					if(listPanel != null){
+						$("#projectContentPanel").animate({marginTop: "-13px", height: "600px"}, transitionSpeed);
+					}
+					addNewPanel.style.border = "2px solid #000";
+					$('#addNewPanel').animate({marginTop: '-13px', height:'580px'}, transitionSpeed);
+				}else if(direction === "horizontal"){
+					$('#addNewPanel').animate({marginLeft: '0px', width:'99.4%'}, transitionSpeed);
+					$('#addNewListElement').prop("onclick", null);
+					if(existingList != null){
+						$('#projectContentList').animate({marginLeft: "99.8%"}, transitionSpeed);
+					}
+					formParentDiv = addNewListElement;
+				}
+				formParentDiv.innerHTML = getNewElementForm(panelType, direction);
+				addElementStatusSelect(panelType);
+				expanded = true;
+			}
+		}
+	}
+
+	function getSingularFromPlural(plural){
+		var singular= "";
+		if(plural.substring(plural.length-1, plural.length) == "s"){
+			return plural.substring(0, plural.length-1);
+		}
+		return plural
+	}
+
+	function createAddNewButton(tabType){
+		var buttonString = "";
+		var addNewPanel = document.getElementById("addNewPanel");
+		if(addNewPanel != null){
+			var expandType = "expand";
+			if(expanded){
+				expandType = "shrink";
+			}
+			buttonString += "<div id='addNewListElement' class='projectContentListElement grayBackground grayHover' onclick='toggleExpandListPanel(" + '"' + expandType + '", "' + tabType + '");' + "'  style='width: 100%; height: 352px; border: none; border-radius: 0px;'>";
+			
+			buttonString += "Add new " + getSingularFromPlural(tabType) + "</div>";
+		}
+		return buttonString
+	}
+</script>
+
+<div id="mainViewPanel" class="mainViewPanel">
+	<div id="postPanel" class="postPanel">
+		<table style="width:99%; height: 400px;">
+			<tr>
+						<td style="min-width: 400px;">
+							<div style="width: 99%; max-height: 400px; background: #FFF; max-width:100%; min-width: 100%; border: 1px solid #FFF; border-radius:3px; overflow: hidden; margin-left: 0px;">
+								<form class="form-style-7" id="editContentForm" method="post" action="{{ currentPageURL }}" style="margin-top:-10px; width: 90%">
+									{% csrf_token %}
+									{% if cancelDestination == possibleDestinations.viewPost %}
+										<div style="position: relative; display:block; width:100%; height: 100%;">
+											<div id="backToProjectButton" style="width:170px; margin: 4px 0px 0px 0px;"><a onclick="redirectToPost('{{post.postID}}');" class="profileButton blackHover" style="position: absolute; top:0;">Back</a></div>
+										</div>
+									{% endif %}
+									<h1 style="">Edit Project</h1>
+									<ul>
+										<script>
+											{% for field in form %}
+												var value = "{{field.value}}";
+												if(value === "None"){
+													value = "";
+												}
+												var lineString = '';
+												if("{{field.name}}" != "postPicture")
+												if(!('{{field}}'.includes("hidden"))){
+													lineString = "<li><label for='name'>{{field.label}}</label>";
+													if("{{field.name}}" === "description"){
+														lineString += "<textarea cols='100' rows ='20' name='description' form='editContentForm' style='height:100px; font-size: 0.9em;'>" + value + "</textarea></li>"
+													}else{
+														lineString += "<input type='text' name='{{field.name}}' maxlength='100' value='" + value + "'></li>";
+													}
+												}else{
+													if("{{field.name}}" == "status"){
+														lineString += '<li><label for="name">{{field.label}}</label><div id="statusSelectDiv"></div>{{field}}</li>';
+													}else{
+														lineString += '{{field}}';
+													}
+												}
+												document.write(lineString);
+											{% endfor %}
+										</script>
+										<li style="">
+											<div id="continueButton" class="whiteButton blackHover" style="height:20px; width:99%; padding: 0.8em 0em 1em 0em; font-size: 1.3em; margin-top: -10px;" onclick="submitForm('editContentForm')">
+												{% if source == possibleDestinations.viewPost %}
+													Update Project
+												{% else %}
+													Create Project
+												{% endif %}
+											</div>
+										</li>
+									</ul>
+								</form>
+							</div>
+						</td>
+
+						<td style="min-width: 400px; position:relative">
+							<div style="position: absolute; top: 0; width: 100%; margin-left: 10px;">
+							<div id="postPicturePanel" class="postPicture" style="width: 100%; height: 400px; ">
+								<div style="max-width:100%; max-height: 400px; min-width: 100%; min-height: 400px; background: #000; border: 1px solid #FFF; border-radius:3px; position: relative; overflow: hidden; margin-top: -2px; margin-left: -7px;">
+									<div id="postPicture" style="padding: 3em 0em 0em 0em">
+										{% if post.postPicture %}
+											<img id="postPictureImg" src="{{ post.postPicture.url }}" style="min-width: 100%; max-width:100%; max-height:100%;"/>
+										{% else %}
+											<img id="postPictureImg" src="{{ images.noPicture }}" style="min-width: 100%; max-width:100%; max-height:100%;"/>
+										{% endif %}
+									</div>
+									<div id="hiddenGrayOverlay" style="background: rgba(0,0,0,0); height:100%; width:100%; position: absolute; top:0;"></div>
+									<div id="editPictureFilePanel" class="editPictureFilePanel" style="position: absolute; bottom: -100px;">
+										<form method="post" id="editPictureForm" action="{{ currentPageURL }}" enctype="multipart/form-data" style="margin-left: 3px;">
+											{% csrf_token %} 
+											{% for field in form %}
+												{% if field.name == "postPicture" %}
+											    	<h3>New picture: {{ field }}</h3>
+											    {% else %}
+											    	<input type="hidden" name="{{field.name}}" value="{{field.value}}">
+											    {% endif %}
+											{% endfor %}
+											{% for field in form.hidden_fields %}
+												{{field}}
+											{% endfor %}
+										</form>
+											<table style="width: 100%; margin-left: -2px;">
+												<tr>
+													<td >
+														<div class="whiteButton blackHover" onclick="toggleEditPictureFilePanel('hide');" style="padding: 0.5em 0em 0.5em 0em; width: 99%; text-align: center;">Cancel</div>
+													</td>
+													<td>
+														<div class="whiteButton blackHover" onclick="updatePicture('editPictureForm')" style="padding: 0.5em 0em 0.5em 0em; width: 99%; text-align: center">Update</div>
+													</td>
+												</tr>
+											</table>
+									</div>
+									<div style="text-align: center; position: absolute; top: 47%; width: 100%; display: block; margin-top: -10px;">
+										<center>
+					  					<div id="updatePictureButton" class="editPictureHoverButton" onclick="toggleEditPictureFilePanel('display');" style="width: 20%;">
+											Update
+										</div>
+									</center>
+					  				</div>
+								</div>
+							</div>
+						</div>
+						</td>
+			</tr>
+			<tr>
+						<td colspan="3" >
+							<table style="width: 100%;">
+								<tr style="text-align: center">
+									<td>
+										<div class="projectTabButtonInactive" id="rolesButton" onclick="selectProjectTab('roles')" style="margin-left: -5px;">
+											Roles
+											<div id="rolesBorderCover" class="profileTabBorderCover"></div>
+										</div>
+									</td>
+									<td>
+										<div class="projectTabButtonInactive" id="jobsButton" onclick="selectProjectTab('jobs')" style="margin-left: 4px;">
+											Jobs
+											<div id="jobsBorderCover" class="profileTabBorderCover"></div>
+										</div>
+									</td>
+									<td>
+										<div class="projectTabButtonInactive" id="eventsButton" onclick="selectProjectTab('events')" style="margin-right: -22px;">
+											Events
+											<div id="eventsBorderCover" class="profileTabBorderCover"></div>
+										</div>
+									</td>
+								</tr>
+							</table>
+						</td>
+			</tr>
+			<tr>
+						<td colspan="3">
+							<div style="position: relative;">
+							<div id="projectContentPanel" class="projectContentPanel" style="margin-left: -1px; margin-right:-8px; overflow: scroll;; min-height: 70px;">
+								<div id="addNewPanel" style="position: absolute; top: 0; left: 0; margin-top: 2px; margin-bottom: -10px; border: 2px solid #000; border-radius: 4px; width: 24.6%;">
+									<script>
+										{% if roles %}
+											document.write(createAddNewButton("roles"));
+										{% elif jobs %}
+											document.write(createAddNewButton("jobs"));
+										{% elif events}
+											document.write(createAddNewButton("events"));
+										{% endif %}
+									</script>
+								</div>
+								<div id="projectContentList" class="projectContentList" style="margin-left: 208px; min-height: 360px;">
+
+								</div>
+							</div>
+						</div>
+						</td>
+			</tr>
+		</table>
+	</div>
+</div>
+<script>
+	var pictureOverlay = document.getElementById("hiddenGrayOverlay")
+	var pictureUpdateButton = document.getElementById("updatePictureButton")
+	var editPictureFilePanelShown = false;
+	if(pictureOverlay != null && updatePictureButton != null){
+		$("[id='postPicturePanel']").hover(function(){
+			if(!editPictureFilePanelShown){
+				updatePictureButton.style.opacity = 1;
+			}
+			pictureOverlay.style.background = "rgba(0,0,0,0.5)";
+		},
+		function(){
+			pictureOverlay.style.background = "rgba(0,0,0,0)";
+			updatePictureButton.style.opacity = 0;
+		})
+	}
+
+	$("#id_postPicture").change(function(){
+		previewPicture(this, "postPictureImg");
+	});
+
+	function updatePicture(formID){
+		var form = document.getElementById(formID);
+		if(form != null){
+			form.submit();
+		}
+	}
+
+	function getEmptyListButton(listType){
+		var contentString = "<div style='position: relative; margin-top: 20px;'><div id='addNewPanel' class='addNewPanel' style='height:0px; width: 99.5%; border: none; position: absolute; top:0; z-index: 2; margin-top: -13px;'></div><div style='width: 100%; height: 60px; text-align: center; position:absolute; top: 30%; left: -20%; background: #FFF;' ><h3 style='display: inline;'>No " + listType + " registered.</h3><div class='whiteButton blackHover' onclick='toggleExpandListPanel(" + '"expand", "' + listType + '", "vertical");' + "' style='position: absolute; left: 70%; margin-top: -12px; width: 22%;'> Add </div></div>"
+		return contentString
+	}
+
+	function selectProjectTab(tabType){
+		for(var i=0; i < projectTabs.length; i++){
+			var buttonId = projectTabs[i] + "Button";
+			var borderCoverId = projectTabs[i] + "BorderCover";
+			var projectButtonDiv = document.getElementById(buttonId);
+			var projectButtonBorderCoverDiv = document.getElementById(borderCoverId)
+			if(projectButtonDiv != null && projectButtonBorderCoverDiv != null){
+				if(projectTabs[i] === tabType){
+					projectButtonDiv.className = "projectTabButtonActive";
+					activeTab = tabType;
+					if(isElementListEmpty(tabType)){
+						var projectContentPanel = document.getElementById("projectContentPanel");
+						if(projectContentPanel != null){
+							projectContentPanel.innerHTML = getEmptyListButton(tabType);
+							$("#projectContentPanel").animate({marginTop: "-13px", height: "70px"}, 300);
+							
+						}
+					}else{
+						document.getElementById("addNewPanel").innerHTML = createAddNewButton(tabType);
+					}
+				} else {
+					projectButtonDiv.className = "projectTabButtonInactive";		
+				}
+			}
+		}
+		if(tabType === "roles"){
+			selectRoles();
+		}else if(tabType == "jobs"){
+			selectJobs();
+		}else if(tabType == "events"){
+			selectEvents();
+		}
+		var contentDiv = document.getElementById("projectContentList")
+		if(contentDiv != null){
+			contentDiv.scrollLeft = 0;
+		}
+	}
+
+	function selectRoles(){
+		var listDiv = document.getElementById("projectContentList");
+		var contentString = "";
+		if(listDiv != null){
+			{% if roles %}
+				contentString += "<table><tr>";
+				//contentString += "<td><div id='addRoleListElement' class='projectContentListElement grayBackground grayHover' onclick='expandListPanel(" + '"roles"' + ");' style='width:98.5%;'>Add new role</div></td>";
+				{% for roleObj in roles %}
+					{% if roleObj.role.status == "Cast" and roleObj.actor %}
+						var roleID = "{{roleObj.role.postID}}_ListElement";
+						contentString += "<td id='" + roleID + "' class='projectContentListElement grayBackground grayHover' onclick='redirectToPost(" + '"{{roleObj.role.postID}}");' + "'>";
+
+						// CAST label
+						contentString += "<div style='text-align: left;margin-top: -20px; margin-left: 5px; padding: 0em 0em 0.7em 0em; font-weight: 500;'><h3 style='display: inline;'>CAST</h3> - <a onclick='redirectToUser(" + '"{{roleObj.actor.username}}");' + "'>{{roleObj.actor.cleanName}}</a></div>"
+
+						// profilePic
+						contentString += "<div class='projectContentListElementPicturePanel'><div class='projectContentListElementPicture'>";
+						{% if roleObj.actor.profilePicture %}
+							contentString += '<img src="{{ roleObj.actor.profilePicture.url }}" style="max-width: 150px; max-height:150px;"/>'
+						{% else %}
+							contentString += '<img src="{{images.noProfilePicture}}" style="width: 150px; max-height: 150px;">';
+						{% endif %}
+						contentString += "</div></div><br>";
+						contentString += "<div class='projectContentListElementText'><h2>{{roleObj.role.characterName}}</h2><p>{{roleObj.role.shortCharacterDescription}}</p></div>"
+					{% elif roleObj.role.status == "Open" and roleObj.post %}
+						contentString += "<td class='projectContentListElement greenBackground darkGreenHover' onclick='redirectToPost(" + '"{{roleObj.role.postID}}");' + "'>"
+						contentString += "<div style='text-align: left;margin-top: -20px; margin-left: 5px; padding: 0em 0em 0.7em 0em; font-weight: 500;'><h3 style='display: inline;'>AVAILABLE</h3></div>";
+
+						// postPic
+						contentString += "<div class='projectContentListElementPicturePanel'><div class='projectContentListElementPicture'>";
+						{% if roleObj.post.postPicture %}
+							contentString += '<img src="{{ roleObj.post.postPicture.url }}" style="max-width: 150px; max-height:150px;"/>'
+						{% else %}
+							contentString += '<img src="{{images.noProfilePicture}}" style="width: 150px; max-height: 150px;">';
+						{% endif %}
+						contentString += "</div></div><br>";
+						contentString += "<div class='projectContentListElementText'><h2>{{roleObj.role.characterName}}</h2><p>{{roleObj.role.shortCharacterDescription}}</p></div>"
+
+					{% else %}
+						contentString += "{{roleObj.role.characterName}}, {{roleObj.role.status}}, {{roleObj.actor}}"
+					{% endif %}
+					contentString += "</td>";
+				{% endfor %}
+				contentString += "</tr></table>"
+			{% endif %}
+			listDiv.innerHTML = contentString
+		}
+	}
+
+	function selectJobs(){
+		var listDiv = document.getElementById("projectContentList");
+		var contentString = "";
+		if(listDiv != null){
+			{% if jobs %}
+				contentString += "<table><tr>";
+				{% for jobObj in jobs %}
+					{% if jobObj.job.status == "Filled" and jobObj.user %}
+						contentString += "<td class='projectContentListElement grayBackground grayHover' onclick='redirectToPost(" + '"{{jobObj.job.postID}}");' + "'>";
+
+						// CAST label
+						contentString += "<div style='text-align: left;margin-top: -20px; margin-left: 5px; padding: 0em 0em 0.7em 0em; font-weight: 500;'><h3 style='display: inline;'>FILLED</h3> - <a onclick='redirectToUser(" + '"{{jobObj.user.username}}");' + "'>{{jobObj.user.cleanName}}</a></div>"
+
+						// profilePic
+						contentString += "<div class='projectContentListElementPicturePanel'><div class='projectContentListElementPicture'>";
+						{% if jobObj.user.profilePicture %}
+							contentString += '<img src="{{ jobObj.user.profilePicture.url }}" style="max-width: 150px; max-height:150px;"/>'
+						{% else %}
+							contentString += '<img src="{{images.noProfilePicture}}" style="width: 150px; max-height: 150px;">';
+						{% endif %}
+						contentString += "</div></div><br>";
+						contentString += "<div class='projectContentListElementText'><h2>{{jobObj.job.profession}}</h2><p>{{jobObj.job.shortDescription}}</p></div>"
+					{% elif jobObj.job.status == "Hiring" and jobObj.post %}
+						contentString += "<td class='projectContentListElement greenBackground darkGreenHover' onclick='redirectToPost(" + '"{{jobObj.job.postID}}");' + "'>"
+						contentString += "<div style='text-align: left;margin-top: -20px; margin-left: 5px; padding: 0em 0em 0.7em 0em; font-weight: 500;'><h3 style='display: inline;'>AVAILABLE</h3></div>";
+
+						// postPic
+						contentString += "<div class='projectContentListElementPicturePanel'><div class='projectContentListElementPicture'>";
+						{% if jobObj.post.postPicture %}
+							contentString += '<img src="{{ jobObj.post.postPicture.url }}" style="max-width: 150px; max-height:150px;"/>'
+						{% else %}
+							contentString += '<img src="{{images.noProfilePicture}}" style="width: 150px; max-height: 150px;">';
+						{% endif %}
+						contentString += "</div></div><br>";
+						contentString += "<div class='projectContentListElementText'><h2>{{jobObj.job.profession}}</h2><p>{{jobObj.job.shortDescription}}</p></div>"
+
+					{% else %}
+						contentString += "{{jobObj.job.profession}}"
+					{% endif %}
+					contentString += "</td>";
+				{% endfor %}
+				contentString += "</tr></table>"
+			{% endif %}
+			listDiv.innerHTML = contentString
+		}
+	}
+
+	function selectEvents(){
+		var listDiv = document.getElementById("projectContentList");
+		var contentString = "";
+		if(listDiv != null){
+			{% if events %}
+				contentString += "<table><tr>";
+				{% for eventObj in events %}
+					contentString += "<td class='projectContentListElement grayBackground grayHover' onclick='redirectToPost(" + '"{{eventObj.post.postID}}");' + "'>";
+					// eventPic
+					contentString += "<div class='projectContentListElementPicturePanel'><div class='projectContentListElementPicture'>";
+					{% if eventObj.post.postPicture %}
+						contentString += '<img src="{{ eventObj.post.postPicture.url }}" style="max-width: 150px; max-height:150px;"/>'
+					{% else %}
+						contentString += '<img src="{{images.noPicture}}" style="width: 150px; max-height: 150px;">';
+					{% endif %}
+					contentString += "</div></div><br>";
+					contentString += "<div class='projectContentListElementText'><h2>{{eventObj.post.title}}</h2><h3>{{eventObj.post.date}}<br>Location: {{eventObj.post.location}}</h3><p>{{eventObj.post.description}}</p></div>";
+					contentString += "</td>";
+				{% endfor %}
+				contentString += "</tr></table>"
+			{% endif %}
+			listDiv.innerHTML = contentString
+		}
+	}
+
+	function toggleEditPictureFilePanel(toggleType){
+		var form = document.getElementById
+		var pictureFilePanel = document.getElementById("editPictureFilePanel");
+		var pictureUpdateButton = document.getElementById("updatePictureButton")
+		if(pictureFilePanel != null && pictureUpdateButton != null){
+			if(toggleType == "display"){
+				pictureUpdateButton.style.opacity = 0;
+				$('.editPictureFilePanel').animate({bottom: "0"}, 200);
+				editPictureFilePanelShown = true;
+			}else{
+
+				$('.editPictureFilePanel').animate({bottom: "-100"}, 200);
+				pictureUpdateButton.style.opacity = 1; 
+				editPictureFilePanelShown = false;
+			}
+		}
+	}
+
+	function submitForm(formName){
+		if(formName == null){
+			formName = "editContentForm";
+		}
+		var statusDiv = document.getElementById("statusSelect");
+		if(statusDiv != null){
+			// Set the status from the select bar in the form
+			document.getElementById("id_status").value = statusDiv.value;
+		}
+		var form = document.getElementById(formName)
+		if(form != null){
+			return form.submit()
+		}
+	}
+
+	selectProjectTab("roles")
+	var statusSelectDiv = document.getElementById("statusSelectDiv");
+	if(statusSelectDiv != null){
+		var options = null;
+		{% if statusOptions.projects %}
+			options = {{statusOptions.projects|safe}};
+		{% endif %}
+		addStatusBar("statusSelectDiv", "statusSelect", "{{ post.status }}", "editContentForm", options)
+	}
+
+	function addElementStatusSelect(elementType){
+		var elementStatusSelectDiv = document.getElementById("elementStatusSelectDiv");
+		if(elementStatusSelectDiv != null){
+			var options = null;
+			if(elementType == "roles"){
+				{% if statusOptions.roles %}
+					options = {{statusOptions.roles|safe}}
+				{% endif %}
+			}else if(elementType == "jobs"){
+				{% if statusOptions.jobs %}
+					options = {{statusOptions.jobs|safe}}
+				{% endif %}
+			}else if(elementType == "events"){
+				{% if statusOptions.events %}
+					options = {{statusOptions.events|safe}}
+				{% endif %}
+			}
+			addStatusBar("elementStatusSelectDiv", "elementStatusSelect", "Open", "addNewElementForm", options)
+		}
+	}
+	
+
+</script>
+
+
+
+
+
+	<!--{% if errors %}
+		<ul>
+			{% for error in errors %}
+				<li>{{ error }}</li>
+			{% endfor %}
+		</ul>
+	{% endif %}
+
+	<h3>
+		{% if isEvent %}
+			{% if post.title %}
+				Update event
+			{% else %}
+				Create event
+			{% endif %}
+		{% elif isProject %}
+			{% if post.title %}
+				Update project
+			{% else %}
+				Create project
+			{% endif %}
+		{% elif isCollaboration %}
+			{% if post.title %}
+				Update collaboration post
+			{% else %}
+				Create collaboration post
+			{% endif %}
+		{% elif isWork %}
+			{% if post.title %}
+				Update work post
+			{% else %}
+				Create work post
+			{% endif %}
+		{% elif isCasting %}
+			{% if post.title %}
+				Update casting post
+			{% else %}
+				Create casting post
+			{% endif %}
+		{% endif %}
+	</h3>
+
+	{% if post.postPicture %}
+		<div id="postPicture">
+			<img src="{{ post.postPicture.url }}" height="150px" width="120px"/>
+		</div>
+	{% endif %}
+
+	{% if post.title %}
+		<form method='post' action="/post/edit/{{post.postID}}/" name='createForm' id='createForm' enctype="multipart/form-data" onsubmit="return submitForm()">
+	{% else %}
+		{% if isEvent %}
+			<form method='post' action="/post/create/event/" name='createForm' id='createForm' enctype="multipart/form-data" onsubmit="return submitForm()">
+		{% elif isProject %}
+			<form method='post' action="/post/create/project/" name='createForm' id='createForm' enctype="multipart/form-data" onsubmit="return submitForm()">
+		{% elif isCollaboration %}
+			<form method='post' action="/post/create/collaboration/" name='createForm' id='createForm' enctype="multipart/form-data" onsubmit="return submitForm()">
+		{% elif isWork %}
+			<form method='post' action="/post/create/work/" name='createForm' id='createForm' enctype="multipart/form-data" onsubmit="return submitForm()">
+		{% elif isCasting %}
+			<form method='post' action="/post/create/casting/" name='createForm' id='createForm' enctype="multipart/form-data" onsubmit="return submitForm()">
+		{% endif %}
+	{% endif %}
+	{% csrf_token %}
+	{{ form.as_p }}
+	{% if not hideStatus %}
+		Status: <div id="statusDiv" style="display:inline"></div><br><br>
+	{% endif %}
+
+	{% if isCasting %}
+			<script>
+			function toggleActorDescriptions(){
+				// Create input list
+				var tagInputs = document.getElementsByTagName("input")
+				var selectInputs = document.getElementsByTagName("select");
+				var inputs = []
+				for(var i=0; i < tagInputs.length; i++){
+					inputs.push(tagInputs[i]);
+				}
+				for(var i=0; i < selectInputs.length; i++){
+					inputs.push(selectInputs[i]);
+				}
+
+				// toggle the enable
+				for(var i=0; i < inputs.length; i++){
+					var currentInput = inputs[i]
+					if(currentInput.id.substring(0, 10) == "attributes"){
+						if(currentInput.disabled){
+							currentInput.disabled = false;
+							document.getElementById("physicalAttributesEnabledDiv").innerHTML = "<input type='hidden' name='descriptionEnabled' value='True' />";
+							document.getElementById("physicalAttributesDivLabel").innerHTML = '<font color="black">Physical attributes</font>';
+						}else{
+							currentInput.disabled = true;
+							document.getElementById("physicalAttributesEnabledDiv").innerHTML = "<input type='hidden' name='descriptionEnabled' value='False' />";
+							document.getElementById("physicalAttributesDivLabel").innerHTML = '<font color="gray">Physical attributes</font>';
+						}
+					}
+				}
+			}
+			</script>
+			<br>
+			<h5 style="display:inline;"> You can specify the physical characteristics of the role, which we can use to notify actors with matching traits of your casting post. Your post will still be visible without physical criteria enabled.</h5>
+			<br>
+			Enable physical attributes
+			{% if descriptionEnabled %}
+				<input type="checkbox" onclick="toggleActorDescriptions();" value="Enable physical criteria" checked/>
+			{% else %}
+				<input type="checkbox" onclick="toggleActorDescriptions();" value="Enable physical criteria"/>
+			{% endif %}
+			<br><br>
+
+			<div id="physicalAttributesDiv">
+				<h4 style="display:inline;">
+					<div id="physicalAttributesDivLabel"><font color="gray">Physical attributes</font></div>
+				</h4>
+				<table>
+					<script>
+					var attributeDivIdList = [];
+					</script>
+					{% for attribute in attributes %}
+						<tr><td>
+							<script>
+							function changeAttributeBool(attributeName, newBoolValue){
+								var attributeInputDiv = document.getElementById(attributeName + "BoolDiv");
+								if(attributeInputDiv != null){
+									attributeInputDiv.innerHTML = "<input type='hidden' name='attributes.{{attribute.name}}' value='" + newBoolValue + "'>"
+								}
+							}
+							</script>
+							{{attribute.name}}: 
+							{% if attribute.value == True or attribute.value == "True" %}
+								<div id="{{attribute.name}}BoolDiv"></div>
+								<input type='checkbox' value='{{attribute.value}}' id="attributes.{{attribute.name}}" name='{{attribute.name}}' disabled='disabled' onclick='changeAttributeBool("{{attribute.name}}", "False");' checked>
+							{% elif attribute.value == False or attribute.value == "False" %}
+								<div id="{{attribute.name}}BoolDiv"></div>
+								<input type='checkbox' value='{{attribute.value}}' id="attributes.{{attribute.name}}" name='{{attribute.name}}' disabled='disabled' onclick='changeAttributeBool("{{attribute.name}}", "True");' >
+							{% else %}
+								{% if attribute.options %}
+									<div id="attributes.{{attribute.name}}Div"></div>
+								{% elif attribute.value and attribute.value != "None" %}
+									<input type='text' value='{{attribute.value}}' id="attributes.{{attribute.name}}" name="attributes.{{attribute.name}}" disabled='disabled'>
+								{% else %}
+									<input type='text' value='' id="attributes.{{attribute.name}}" name="attributes.{{attribute.name}}" disabled='disabled'>
+								{% endif %}
+							{% endif %}
+							</td></tr>
+					{% endfor %}
+
+				</table>
+				<div id="physicalAttributesEnabledDiv" style="display:inline";>
+					<input type='hidden' name='descriptionEnabled' value='{{ descriptionEnabled }}' />
+				</div>
+			</div>
+
+	{% elif isWork %}
+		<div id='professionListDiv'></div><br>
+	{% elif isCollaboration %}
+		<div id='collaboratorRoleDiv'></div><br>
+	{% endif %}
+
+	{% if post.title %}
+		<input type="submit" value="Update" />
+	{% else %}
+		<input type="submit" value="Create" />
+	{% endif %}
+	</form>
+	<div id="cancelButton" class="button"><div id="cancelButtonLabel"></div>
+</div>
+
+<script>
+		/*$(document).ready(function(){
+			// run a deconstructor to delete a post from the db if user navigates away from this page without canceling
+			toolbarDeconstructorFunctions.push(function(){
+				{% if not post.record.title %}
+					// New record, need to delete
+					deletePostFromDB("{{ post.postID }}", "{{ postType }}")
+				{% endif %}
+			})
+
+			// Handle select bars
+			{% if not hideStatus %}
+				addStatusBar("statusDiv", "statusSelect", "{{ post.status }}")
+			{% endif %}
+
+			{% if isWork %}
+				// Add profession select bar to work post
+				var professionDiv = document.getElementById("professionListDiv")
+				if(professionDiv != null){
+					var professionOptions = {{ professionList|safe }};
+					var selectForm = "Profession:" + createSelectForm("createForm", "professionSelect", professionOptions, "{{ chosenProfession }}");
+					professionDiv.innerHTML = selectForm;
+				}
+			{% elif isCasting %}
+				// Casting attributes select bar
+				{% for attribute in attributes %}
+					var attributeDiv = document.getElementById("attributes.{{attribute.name}}Div")
+					if(attributeDiv != null){
+						{% if attribute.options %}
+							var attributeOptions = {{ attribute.options|safe }}
+							var selectForm = createSelectForm("createForm", "attributes.{{attribute.name}}", attributeOptions, "{{attribute.value}}")
+							attributeDiv.innerHTML = selectForm;
+
+							var attributeSelectForm = document.getElementById("attributes.{{attribute.name}}");
+							if(attributeSelectForm != null){
+								attributeSelectForm.disabled = "disabled";
+							}
+						{% endif %}
+					}
+				{% endfor %}
+				{% if post.descriptionEnabled %}
+					toggleActorDescriptions();
+				{% endif %}
+			{% elif isCollaboration %}
+				// Add profession select bar to work post
+				var collaboratorRoleDiv = document.getElementById("collaboratorRoleDiv")
+				if(collaboratorRoleDiv != null){
+					var collaboratorRoleOptions = {{ collaboratorRoleOptions|safe }};
+					var selectForm = "Collaborator role:" + createSelectForm("createForm", "collaboratorRoleSelect", collaboratorRoleOptions, "{{ collaboratorRole }}");
+					collaboratorRoleDiv.innerHTML = selectForm;
+				}
+			{% endif %}		
+		});*/
+
+		function submitForm(){
+			var form = document.getElementById("createForm")
+			{% if isWork %}
+				document.getElementById("id_profession").value = document.getElementById("professionSelect").value;
+			{% elif isCollaboration %}
+				document.getElementById("id_collaboratorRoleSelect").value = document.getElementById("collaboratorSelect").value;
+			{% endif %}
+			var statusDiv = document.getElementById("statusSelect");
+			if(statusDiv != null){
+				document.getElementById("id_status").value = statusDiv.value;
+			}
+			return form.submit()
+			}
+	</script>-->
+
+{% endblock %}
