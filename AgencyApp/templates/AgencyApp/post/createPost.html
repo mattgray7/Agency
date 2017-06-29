@@ -8,8 +8,9 @@
 function getCastingFormDict(){
 	var postFields = []
 	{% if form %}
+		{% spaceless %}
 		{% for field in form %}
-			var postField = [] 
+			var postField = []
 			postField.push({key: "input", value: '{{field}}'});
 			postField.push({key: "name", value: '{{field.name}}'});
 			postField.push({key: "hidden", value: ('{{field}}'.includes('hidden'))});
@@ -20,7 +21,9 @@ function getCastingFormDict(){
 				value = "{{post.projectID}}";
 			{% elif field.name == "postPicture" %}
 				{% if post.postPicture and post.postPicture.url %}
-					postField.push({key: "pictureURL", value: "{{post.postPicture.url}}"});
+					value = "{{post.postPicture.url}}";
+				{% else %}
+					value = "{{images.noPicture}}";
 				{% endif %}
 			{% elif field.name == "status" %}
 				{% if statusOptions.roles %}
@@ -31,6 +34,7 @@ function getCastingFormDict(){
 			postField.push({key: "value", value: value});
 			postFields.push(postField);
 		{% endfor %}
+		{% endspaceless %}
 		var csrfField = []
 		csrfField.push({key: "input", value: "{% csrf_token %}"});
 		csrfField.push({key: "name", value: 'csrf_token'});
@@ -57,7 +61,7 @@ function getCastingFormDict(){
 
 </script>
 
-<div id="mainViewPanel" class="mainViewPanel" style="height: 500px; display:block">
+<div id="mainViewPanel" class="mainViewPanel" style="display:block">
 	{% if post %}
 		<div id="editPostPanel" class="editPostPanel">
 			{% if isCasting %}

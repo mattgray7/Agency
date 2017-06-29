@@ -13,6 +13,8 @@
 {
     border: 2px solid #000;
     text-align: right;
+    line-height: 26px;
+    padding: 0em 0.3em 0em 0em;
 }
 .editPostInputPanel
 {
