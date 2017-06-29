@@ -426,7 +426,7 @@ class GenericViewPostView(views.GenericFormView):
     def pageContext(self):
         self._pageContext["post"] = self.postID and self.post.record or None
         self._pageContext["possibleSources"] = {"profile": constants.PROFILE}
-        self._pageContext["possibleDestinations"] = {"edit": constants.EDIT_POST,
+        self._pageContext["possibleDestinations"] = {"editPost": constants.EDIT_POST,
                                                      "profile": constants.PROFILE,
                                                      "viewPost": constants.VIEW_POST,
                                                      "browse": {"events": constants.BROWSE_EVENTS,

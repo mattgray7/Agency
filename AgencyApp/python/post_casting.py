@@ -102,11 +102,6 @@ class ViewCastingPostView(post.GenericViewPostView):
     @property
     def pageContext(self):
         self._pageContext = super(ViewCastingPostView, self).pageContext
-        self._pageContext["possibleDestinations"] = {"edit": constants.EDIT_POST,
-                                                     "createCasting": constants.CREATE_CASTING_POST,
-                                                     "createWork": constants.CREATE_WORK_POST,
-                                                     "viewCasting": constants.VIEW_POST,
-                                                     "viewWork": constants.VIEW_POST}
         self._pageContext["castingRole"] = self.castingRole
         self._pageContext["actor"] = self.actor
         if self.attributeListObject.attributes:

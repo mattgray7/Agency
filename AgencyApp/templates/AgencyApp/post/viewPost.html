@@ -399,7 +399,10 @@
 												<div id="hiddenGrayOverlay" style="background: rgba(0,0,0,0); height:100%; width:100%; position: absolute; top:0;"></div>
 												{% if userIsAdmin %}
 													<div class="grayAlphaOverlay"></div>
-								  					<div class="whiteHoverButton"><a onclick="redirectToEditPost('{{projectID}}');" style="margin-top: 10px; margin-right: 6px;" > Edit </a></div>
+								  					<div class="whiteHoverButton"><a onclick="redirectToEditPost('{{post.postID}}');" style="margin-top: 10px; margin-right: 6px;" > Edit </a></div>
+								  					<script>
+								  						console.log("post id is {{post.postID}}")
+								  					</script>
 								  				{% endif %}
 											</div>
 										</div>
@@ -427,7 +430,7 @@
 									<div id='topRightPostButton' style='position:relative'>
 										<div style="position: absolute; top: 0; right: 0; padding: 0.5em">
 											{% if userIsAdmin %}
-												<button class="whiteButton blackHover" onclick="redirectToEditPost('{{projectID}}');" style="padding: 0.25em 0.5em 0.25em 0.5em; font-weight: 400; font-size: 1em;">Edit</button>
+												<button class="whiteButton blackHover" onclick="redirectToEditPost('{{post.postID}}');" style="padding: 0.25em 0.5em 0.25em 0.5em; font-weight: 400; font-size: 1em;">Edit</button>
 											{% elif user.is_authenticated %}
 												<button class="whiteButton blackHover" onclick="updatePostFollow();" style="padding: 0.25em 0.5em 0.25em 0.5em; font-weight: 400; font-size: 1em;">
 													<div id="followButtonText">
@@ -556,7 +559,7 @@
 												</div>
 												{% if userIsAdmin %}
 													<div class="grayAlphaOverlay"></div>
-								  					<div class="whiteHoverButton"><a onclick="redirectToEditPost('{{projectID}}');" style="margin-top: 10px; margin-right: 6px;" > Edit </a></div>
+								  					<div class="whiteHoverButton"><a onclick="redirectToEditPost('{{post.postID}}');" style="margin-top: 10px; margin-right: 6px;" > Edit </a></div>
 								  				{% endif %}
 											</div>
 										</div>
@@ -568,7 +571,7 @@
 									<div id='topRightPostButton' style='position:relative'>
 										<div style="position: absolute; top: 0; right: 0; padding: 0.5em">
 											{% if userIsAdmin %}
-												<button class="whiteButton blackHover" onclick="redirectToEditPost('{{projectID}}');" style="padding: 0.25em 0.5em 0.25em 0.5em; font-weight: 400; font-size: 1em;">Edit</button>
+												<button class="whiteButton blackHover" onclick="redirectToEditPost('{{post.postID}}');" style="padding: 0.25em 0.5em 0.25em 0.5em; font-weight: 400; font-size: 1em;">Edit</button>
 											{% elif user.is_authenticated %}
 												<button class="whiteButton blackHover" onclick="updatePostFollow();" style="padding: 0.25em 0.5em 0.25em 0.5em; font-weight: 400; font-size: 1em;">
 													<div id="followButtonText">
@@ -655,7 +658,7 @@
 												</div>
 												{% if userIsAdmin %}
 													<div class="grayAlphaOverlay"></div>
-								  					<div class="whiteHoverButton"><a onclick="redirectToEditPost('{{projectID}}');" style="margin-top: 10px; margin-right: 6px;" > Edit </a></div>
+								  					<div class="whiteHoverButton"><a onclick="redirectToEditPost('{{post.postID}}');" style="margin-top: 10px; margin-right: 6px;" > Edit </a></div>
 								  				{% endif %}
 											</div>
 										</div>
@@ -667,7 +670,7 @@
 									<div id='topRightPostButton' style='position:relative'>
 										<div style="position: absolute; top: 0; right: 0; padding: 0.5em">
 											{% if userIsAdmin %}
-												<button class="whiteButton blackHover" onclick="redirectToEditPost('{{projectID}}');" style="padding: 0.25em 0.5em 0.25em 0.5em; font-weight: 400; font-size: 1em;">Edit</button>
+												<button class="whiteButton blackHover" onclick="redirectToEditPost('{{post.postID}}');" style="padding: 0.25em 0.5em 0.25em 0.5em; font-weight: 400; font-size: 1em;">Edit</button>
 											{% elif user.is_authenticated %}
 												<button class="whiteButton blackHover" onclick="updatePostFollow();" style="padding: 0.25em 0.5em 0.25em 0.5em; font-weight: 400; font-size: 1em;">
 													<div id="followButtonText">
