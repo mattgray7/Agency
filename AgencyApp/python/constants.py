@@ -195,7 +195,7 @@ FORM_MAP = {HOME: forms.BaseForm,
 			CREATE_PROJECT_POST: forms.CreateProjectPostForm,
 			CREATE_COLLABORATION_POST: forms.CreateCollaborationPostForm,
 			CREATE_WORK_POST: forms.CreateWorkPostForm,
-			CREATE_CASTING_POST: forms.CreateCastingPostForm,
+			CREATE_CASTING_POST: forms.CreateProjectRoleForm,
 			EDIT_POST: None,
 			VIEW_POST: None
 			}

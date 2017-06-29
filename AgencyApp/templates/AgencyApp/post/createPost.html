@@ -32,6 +32,22 @@ function getCastingFormDict(){
 		csrfField.push({key: "name", value: 'csrf_token'});
 		postFields.push(csrfField);
 	{% endif %}
+
+	{% if attributes %}
+		{% for attribute in attributes %}
+			var postField = [];
+			postField.push({key: "name", value: '{{attribute.name}}'});
+			postField.push({key: "value", value: '{{attribute.value}}'});
+			postField.push({key: "label", value: '{{attribute.name}}'})
+			postField.push({key: "hidden", value: false});
+			{% if attribute.options %}
+				var attributeOptions = {{ attribute.options|safe }}
+				postField.push({key: "options", value: attributeOptions});
+			{% endif %}
+			postField.push({key: "input", value: "<input type='text' name='{{attribute.name}} value='{{attribute.value'>"})
+			postFields.push(postField);	
+		{% endfor %}
+	{% endif %}
 	return postFields;
 }
 

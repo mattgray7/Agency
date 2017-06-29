@@ -7,6 +7,7 @@ function addCreateCastingPost(formDict, formURL, formName){
 		var hidden = true;
 		var value = "";
 		var label = "";
+		var options = null;
 		for(var j=0; j < formDict[i].length; j++){
 			var formElement = formDict[i][j];
 			if(formElement["key"] == "name"){
@@ -19,6 +20,8 @@ function addCreateCastingPost(formDict, formURL, formName){
 				value = formElement["value"]
 			}else if(formElement["key"] == "label"){
 				label = formElement["value"]
+			}else if(formElement["key"] == "options"){
+				options = formElement["value"];
 			}
 		}
 		if(name === "postPicture"){
@@ -29,13 +32,20 @@ function addCreateCastingPost(formDict, formURL, formName){
 			if(name === "description"){
 				formString += "<textarea cols='100' rows ='20' name='description' form='" + formName + "' style='height:100px; font-size: 0.9em;'>" + value + "</textarea></li>"
 			}else{
-				formString += "<div style='background: #efefef; border: 2px solid #FFF; border-radius: 4px;'>" + input + '</div>'; 
+				formString += "<div style='background: #efefef; border: 2px solid #FFF; border-radius: 4px;'>"
+				if(options){
+					var selectForm = createSelectForm(formName, name + "SelectBar", options, value);
+					formString += selectForm;
+				}else{
+					formString += input;
+				}
+				formString += '</div>'; 
 			}
 			formString += "</li>";
 		}else{
 			formString += input;
 		}		
 	}
-	formString += "</ul></form>";
+	formString += "<li></li></ul></form>";
 	return formString;
 }
