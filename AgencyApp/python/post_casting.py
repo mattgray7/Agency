@@ -52,7 +52,6 @@ class CreateCastingPostView(post.GenericCreatePostView):
         self._pageContext = super(CreateCastingPostView, self).pageContext
         self._pageContext["attributes"] = self.attributeListObject.attributes
         self._pageContext["descriptionEnabled"] = self.post.record.descriptionEnabled
-        self._pageContext["statusOptions"] = constants.CASTING_STATUS_LIST
         self._pageContext["defaultStatus"] = "Open"
         return self._pageContext
 

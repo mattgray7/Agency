@@ -133,10 +133,6 @@ class CreateProjectPostView(post.GenericCreatePostView):
     @property
     def pageContext(self):
         self._pageContext = super(CreateProjectPostView, self).pageContext
-        self._pageContext['statusOptions'] = {"roles": constants.CASTING_STATUS_LIST,
-                                              "jobs": constants.WORK_STATUS_LIST,
-                                              "events": constants.EVENT_STATUS_LIST,
-                                              "projects": constants.PROJECT_STATUS_LIST}
         self._pageContext["defaultStatus"] = "In production"
         self._pageContext["roles"] = self.post.roles
         self._pageContext["jobs"] = self.post.jobs

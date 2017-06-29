@@ -247,6 +247,10 @@ class GenericCreatePostView(views.PictureFormView):
         self._pageContext["hideStatus"] = False
         self._pageContext["postType"] = self.post.postType
         self._pageContext["possibleDestinations"] = {"viewPost": constants.VIEW_POST}
+        self._pageContext['statusOptions'] = {"roles": constants.CASTING_STATUS_LIST,
+                                              "jobs": constants.WORK_STATUS_LIST,
+                                              "events": constants.EVENT_STATUS_LIST,
+                                              "projects": constants.PROJECT_STATUS_LIST}
         return self._pageContext
 
     @property
@@ -440,6 +444,10 @@ class GenericViewPostView(views.GenericFormView):
         self._pageContext["isCasting"] = isCastingPost(self.postID)
         self._pageContext["userIsAdmin"] = self.isProjectAdmin
         self._pageContext["displayStatus"] = self.projectDisplayStatus
+        self._pageContext['statusOptions'] = {"roles": constants.CASTING_STATUS_LIST,
+                                              "jobs": constants.WORK_STATUS_LIST,
+                                              "events": constants.EVENT_STATUS_LIST,
+                                              "projects": constants.PROJECT_STATUS_LIST}
         if self.projectID:
             self._pageContext["projectID"] = self.projectID
         self._pageContext["project"] = self.project
