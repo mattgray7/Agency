@@ -14,13 +14,14 @@ function getCastingFormDict(){
 			postField.push({key: "input", value: '{{field}}'});
 			postField.push({key: "name", value: '{{field.name}}'});
 			postField.push({key: "hidden", value: ('{{field}}'.includes('hidden'))});
+			postField.push({key: "label", value: '{{field.label}}'})
 
 			var value = '{{field.value}}';
 			{% if field.name == "projectID" %}
 				value = "{{post.projectID}}";
 			{% elif field.name == "postPicture" %}
 				{% if post.postPicture and post.postPicture.url %}
-					postField.push({key: "pictureURL", value: "{{post.postPicture.url}}"})
+					postField.push({key: "pictureURL", value: "{{post.postPicture.url}}"});
 				{% endif %}
 			{% endif %}
 			postField.push({key: "value", value: value});
@@ -40,9 +41,6 @@ function getCastingFormDict(){
 	{% if post %}
 		<div id="editPostPanel" class="editPostPanel">
 			{% if isCasting %}
-				{% if form %}
-					{{form.as_p}}
-				{% endif %}
 				<script>
 				//form context has newlines that mess up js
 				/*{% spaceless %}
@@ -50,9 +48,8 @@ function getCastingFormDict(){
 						var form = '{{form}}';
 					{% endif %}
 				{% endspaceless %}*/
-				addCreateCastingPost(getCastingFormDict());
+				document.write(addCreateCastingPost(getCastingFormDict(), "{{currentPageURL}}", "createCastingPostForm"));
 				</script>
-				{{post.title}}
 			{% endif %}
 		</div>
 	{% else %}
