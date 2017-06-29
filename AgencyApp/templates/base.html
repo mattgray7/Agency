@@ -135,7 +135,8 @@
             }
         }
 
-        function addStatusBar(statusDivName, statusSelectName, defaultStatus, formName){
+        function addStatusBar(statusDivName, statusSelectName, defaultStatus, formName, options){
+            console.log("options are " + options)
                 if(defaultStatus.length == 0){
                     defaultStatus = "Open";
                 }
@@ -144,11 +145,13 @@
                 }
                 var statusDiv = document.getElementById(statusDivName)
                 if(statusDiv != null){
-                    {% if statusOptions %}
-                        var statusOptions = {{ statusOptions|safe }};
-                        var selectForm = createSelectForm(formName, statusSelectName, statusOptions, defaultStatus);
-                        statusDiv.innerHTML = selectForm;
-                    {% endif %}
+                    if(options === null){
+                        {% if statusOptions %}
+                            options = {{ statusOptions|safe }};
+                        {% endif %}
+                    }
+                    var selectForm = createSelectForm(formName, statusSelectName, options, defaultStatus);
+                    statusDiv.innerHTML = selectForm;
                 }
         }
 
