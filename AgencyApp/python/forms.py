@@ -61,9 +61,9 @@ class CreateProjectRoleForm(GenericCreatePostForm):
     roleType = forms.CharField(widget=forms.HiddenInput, max_length=100)
     paid = forms.BooleanField(label="Paid", required=False)
     username = forms.CharField(widget=forms.HiddenInput, max_length=200, required=False)      # only filled if Cast
-    characterName = forms.CharField(label="Character name", widget=forms.TextInput(attrs={'placeholder': 'John Smith'}), max_length=200, required=True)
-    shortCharacterDescription = forms.CharField(label="Short description", max_length=200, required=True)
-    descriptionEnabled = forms.BooleanField(widget=forms.HiddenInput, required=False)
+    characterName = forms.CharField(label="Character name", widget=forms.TextInput(attrs={'placeholder': 'Ex: John Smith'}), max_length=200, required=True)
+    shortCharacterDescription = forms.CharField(label="Short description", widget=forms.TextInput(attrs={'placeholder': 'Ex: 40 year old athletic male'}), max_length=200, required=True)
+    #descriptionEnabled = forms.BooleanField(widget=forms.HiddenInput, required=False)
 
 
 

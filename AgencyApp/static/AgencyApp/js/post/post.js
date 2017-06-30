@@ -70,6 +70,7 @@ function addCreateCastingPost(formDict, formURL, formName){
 		}else if(!hidden){
 			if(extendedNumberOfRows > 1){
 				otherLabelsColumn += "<label for='name'>" + label + "</label><br><br><br>";
+				// TODO replace newlines in description as it will break js
 				otherInputsColumn += "<li><textarea rows='" + extendedNumberOfRows + "' name='" + name + "' form='" + formName + "' style='height:100px; font-size: 0.9em; width: 100%;'>" + value + "</textarea></li>";
 			}else{
 				otherLabelsColumn += "<label for='name'>" + label + "</label><br>";
