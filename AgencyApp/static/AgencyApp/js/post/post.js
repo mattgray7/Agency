@@ -17,12 +17,12 @@ function addCreateCastingPost(formDict, formURL, formName){
 	*/
 	formString += "<table style='width: 100%;'><tr>"
 	var pictureURL = null;
-	var mainInputs = ["title", "status", "shortCharacterDescription"]
-	var mainLabelsColumn = "<td class='editPostLabelPanel' style='width: 20%;";
-	var mainInputsColumn = "<td class='editPostInputPanel' style='width: 40%;'>";
-	var pictureColumn = "<td style='max-width: 300px; height: 300px; border: 2px solid #000'>";
-	var otherLabelsColumn = "<td class='editPostLabelPanel' style='width: 20%;";
-	var otherInputsColumn = "<td class='editPostInputPanel' colspan='2' style='width: 80%;'>";
+	var mainInputs = ["title", "characterName", "project", "status", "shortCharacterDescription"]
+	var mainLabelsColumn = "<td class='editPostLabelPanel' style='width: 20%; position:relative;'><div style='position: absolute; bottom:0; right: 0; margin-right: 5px; margin-bottom: -8px;'>";
+	var mainInputsColumn = "<td class='editPostInputPanel' style='width: 40%;'><ul>";
+	var pictureColumn = "<td style='max-width: 200px; height: 200px; border: 2px solid #000'>";
+	var otherLabelsColumn = "<td class='editPostLabelPanel' style='width: 20%; position:relative;'><div style='position: absolute; top:0; right: 0; margin-right: 5px;'>";
+	var otherInputsColumn = "<td class='editPostInputPanel' colspan='2' style='width: 80%;'><ul>";
 	for(var i=0; i < formDict.length; i++){
 		var name = "";
 		var input = "";
@@ -57,7 +57,7 @@ function addCreateCastingPost(formDict, formURL, formName){
 			console.log(options)
 			// top left column
 			mainLabelsColumn += "<label for='name'>" + label + "</label><br>";
-			mainInputsColumn += "<div style='border: 2px solid #FFF; border-radius: 4px;'>"
+			mainInputsColumn += "<li><div style='border: 2px solid #FFF; border-radius: 4px;'>"
 			if(options){
 				console.log(value)
 				var selectForm = createSelectForm(formName, name + "SelectBar", options, value);
@@ -65,17 +65,17 @@ function addCreateCastingPost(formDict, formURL, formName){
 			}else{
 				mainInputsColumn += input;
 			}
-			mainInputsColumn += '</div>'; 
+			mainInputsColumn += '</div></li>'; 
 		}else if(!hidden){
 			otherLabelsColumn += "<label for='name'>" + label + "</label><br>";
-			otherInputsColumn += "<div style='border: 2px solid #FFF; border-radius: 4px;'>"
+			otherInputsColumn += "<li><div style='border: 2px solid #FFF; border-radius: 4px;'>"
 			if(options){
 				var selectForm = createSelectForm(formName, name + "SelectBar", options, value);
 				otherInputsColumn += selectForm;
 			}else{
 				otherInputsColumn += input;
 			}
-			otherInputsColumn += '</div>'; 
+			otherInputsColumn += '</div></li>'; 
 		}else{
 			otherInputsColumn += input;
 		}
@@ -97,12 +97,13 @@ function addCreateCastingPost(formDict, formURL, formName){
 			inputsColumn += input;
 		}*/		
 	}
-	mainLabelsColumn += "</td>";
-	otherLabelsColumn += "</td>";
-	mainInputsColumn += "</td>";
-	otherInputsColumn += "</td>";
+	mainLabelsColumn += "</div></td>";
+	otherLabelsColumn += "</div></td>";
+	mainInputsColumn += "</ul></td>";
+	otherInputsColumn += "</ul></td>";
 	pictureColumn += "</td>";
 	formString += "<tr>" + mainLabelsColumn + mainInputsColumn + pictureColumn + "</tr>"
 	formString += "<tr>" + otherLabelsColumn + otherInputsColumn + "</tr></form>"
+	formString += "<tr><td colspan='3' style='width: 100%; position:relative; height: 65px;'><div class='whiteButton blackHover' style='width: 36%; position:absolute; left: 0; top: 0; margin-top: 6px;'> Cancel </div><div class='whiteButton blackHover' style='width: 36%; position:absolute; right: 0; top: 0; margin-top: 6px;'> Create Post</div></td></tr>";
 	return formString;
 }
