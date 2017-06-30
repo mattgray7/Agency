@@ -59,11 +59,10 @@ class CreateCollaborationPostForm(GenericCreatePostForm):
 
 class CreateProjectRoleForm(GenericCreatePostForm):
     roleType = forms.CharField(widget=forms.HiddenInput, max_length=100)
-    
+    paid = forms.BooleanField(label="Paid", required=False)
     username = forms.CharField(widget=forms.HiddenInput, max_length=200, required=False)      # only filled if Cast
     characterName = forms.CharField(label="Character name", widget=forms.TextInput(attrs={'placeholder': 'John Smith'}), max_length=200, required=True)
     shortCharacterDescription = forms.CharField(label="Short description", max_length=200, required=True)
-    characterDescription = forms.CharField(label="Full description", max_length=1000, required=True)
     descriptionEnabled = forms.BooleanField(widget=forms.HiddenInput, required=False)
 
 

@@ -19,7 +19,7 @@ function addCreateCastingPost(formDict, formURL, formName){
 	var pictureURL = null;
 	var mainInputs = ["title", "characterName", "project", "status", "shortCharacterDescription"]
 	var mainLabelsColumn = "<td class='editPostLabelPanel' style='width: 20%; position:relative;'><div style='position: absolute; bottom:0; right: 0; margin-right: 5px; margin-bottom: -8px;'>";
-	var mainInputsColumn = "<td class='editPostInputPanel' style='width: 40%;'><ul>";
+	var mainInputsColumn = "<td class='editPostInputPanel' style='width: 40%; position: relative;'><ul style='position: absolute; bottom: 0; width: 97%; margin-bottom: -8px;'><h1 style='font-size: 2.5em; padding: 0em 0em 0.2em 0em;'>Edit Role</h1>";
 	var pictureColumn = "<td style='max-width: 200px; height: 200px; border: 2px solid #000'>";
 	var otherLabelsColumn = "<td class='editPostLabelPanel' style='width: 20%; position:relative;'><div style='position: absolute; top:0; right: 0; margin-right: 5px;'>";
 	var otherInputsColumn = "<td class='editPostInputPanel' colspan='2' style='width: 80%;'><ul>";
@@ -104,6 +104,6 @@ function addCreateCastingPost(formDict, formURL, formName){
 	pictureColumn += "</td>";
 	formString += "<tr>" + mainLabelsColumn + mainInputsColumn + pictureColumn + "</tr>"
 	formString += "<tr>" + otherLabelsColumn + otherInputsColumn + "</tr></form>"
-	formString += "<tr><td colspan='3' style='width: 100%; position:relative; height: 65px;'><div class='whiteButton blackHover' style='width: 36%; position:absolute; left: 0; top: 0; margin-top: 6px;'> Cancel </div><div class='whiteButton blackHover' style='width: 36%; position:absolute; right: 0; top: 0; margin-top: 6px;'> Create Post</div></td></tr>";
+	formString += "<tr><td colspan='3' style='width: 100%; position:relative; height: 100px;'><div class='whiteButton blackHover' style='width: 36%; position:absolute; left: 0; bottom: 0; margin-bottom: 10px;'> Cancel </div><div class='whiteButton blackHover' style='width: 36%; position:absolute; right: 0; bottom: 0; margin-bottom: 10px'> Create Post</div></td></tr>";
 	return formString;
 }
