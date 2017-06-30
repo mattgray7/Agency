@@ -30,6 +30,7 @@ function addCreateCastingPost(formDict, formURL, formName){
 		var value = "";
 		var label = "";
 		var options = null;
+		var extendedNumberOfRows = 0;
 		for(var j=0; j < formDict[i].length; j++){
 			var formElement = formDict[i][j];
 			if(formElement["key"] == "name"){
@@ -44,6 +45,8 @@ function addCreateCastingPost(formDict, formURL, formName){
 				label = formElement["value"]
 			}else if(formElement["key"] == "options"){
 				options = formElement["value"];
+			}else if(formElement["key"] == "numRows"){
+				extendedNumberOfRows = formElement["value"]
 			}
 		}
 		if(name === "postPicture"){
@@ -53,8 +56,6 @@ function addCreateCastingPost(formDict, formURL, formName){
 		}
 
 		if(mainInputs.indexOf(name) > -1){
-			console.log(name)
-			console.log(options)
 			// top left column
 			mainLabelsColumn += "<label for='name'>" + label + "</label><br>";
 			mainInputsColumn += "<li><div style='border: 2px solid #FFF; border-radius: 4px;'>"
@@ -67,15 +68,20 @@ function addCreateCastingPost(formDict, formURL, formName){
 			}
 			mainInputsColumn += '</div></li>'; 
 		}else if(!hidden){
-			otherLabelsColumn += "<label for='name'>" + label + "</label><br>";
-			otherInputsColumn += "<li><div style='border: 2px solid #FFF; border-radius: 4px;'>"
-			if(options){
-				var selectForm = createSelectForm(formName, name + "SelectBar", options, value);
-				otherInputsColumn += selectForm;
+			if(extendedNumberOfRows > 1){
+				otherLabelsColumn += "<label for='name'>" + label + "</label><br><br><br>";
+				otherInputsColumn += "<li><textarea rows='" + extendedNumberOfRows + "' name='" + name + "' form='" + formName + "' style='height:100px; font-size: 0.9em; width: 100%;'>" + value + "</textarea></li>";
 			}else{
-				otherInputsColumn += input;
+				otherLabelsColumn += "<label for='name'>" + label + "</label><br>";
+				otherInputsColumn += "<li><div style='border: 2px solid #FFF; border-radius: 4px;'>"
+				if(options){
+					var selectForm = createSelectForm(formName, name + "SelectBar", options, value);
+					otherInputsColumn += selectForm;
+				}else{
+					otherInputsColumn += input;
+				}
+				otherInputsColumn += '</div></li>';
 			}
-			otherInputsColumn += '</div></li>'; 
 		}else{
 			otherInputsColumn += input;
 		}

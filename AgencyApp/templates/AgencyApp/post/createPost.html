@@ -30,6 +30,8 @@ function getCastingFormDict(){
 					var options = {{ statusOptions.roles|safe }}
 					postField.push({key: "options", value: options});
 				{% endif %}
+			{% elif field.name == "description" %}
+				postField.push({key: "numRows", value: "20"})
 			{% endif %}
 			postField.push({key: "value", value: value});
 			postFields.push(postField);
