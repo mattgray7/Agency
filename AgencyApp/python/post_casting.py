@@ -40,6 +40,27 @@ class CreateCastingPostView(post.GenericCreatePostView):
         kwargs["postType"] = constants.CASTING_POST
         super(CreateCastingPostView, self).__init__(*args, **kwargs)
         self._attributeListObject = None
+        self._castingRole = None
+        self._actor = None
+
+    @property
+    def castingRole(self):
+        if self._castingRole is None:
+            try:
+                self._castingRole = models.ProjectRole.objects.get(postID=self.postID)
+            except models.ProjectRole.DoesNotExist:
+                pass
+        return self._castingRole
+
+    @property
+    def actor(self):
+        if self._actor is None:
+            if self.post.record.status == "Cast" and self.castingRole:
+                try:
+                    self._actor = models.UserAccount.objects.get(username=self.castingRole.username)
+                except models.UserAccount.DoesNotExist:
+                    pass
+        return self._actor
 
     @property
     def attributeListObject(self):
@@ -66,6 +87,11 @@ class CreateCastingPostView(post.GenericCreatePostView):
         self._formInitialValues = super(CreateCastingPostView, self).formInitialValues
         if self.post.record:
             self._formInitialValues["paid"] = self.post.record.paid
+            self._formInitialValues["characterName"] = self.castingRole.characterName
+            self._formInitialValues["shortCharacterDescription"] = self.castingRole.shortCharacterDescription
+            if self.actor:
+                self._formInitialValues["username"] = self.actor.username
+
             self._formInitialValues["postID"] = self.post.record.postID
             self._formInitialValues["projectID"] = self.projectID
         return self._formInitialValues
