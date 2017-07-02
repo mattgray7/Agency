@@ -31,37 +31,27 @@ class ProjectPostInstance(post.GenericPostInstance):
             if projectRoles:
                 self._roles = []
                 for role in projectRoles:
-                    newRole = {"role": role}
+                    newRole = {"post": role}
                     if role.status == "Cast":
                         try:
-                            actor = models.UserAccount.objects.get(username=role.actorName)
+                            user = models.UserAccount.objects.get(username=role.actorName)
                         except models.UserAccount.DoesNotExist:
-                            actor = None
-                        newRole["actor"] = actor
-                    elif role.status == "Open":
-                        try:
-                            post = models.CastingPost.objects.get(postID=role.postID)
-                        except models.CastingPost.DoesNotExist:
-                            post = None
-                        newRole["post"] = post
+                            user = None
+                        newRole["actor"] = user
                     self._roles.append(newRole)
         return self._roles
 
     @property
     def jobs(self):
         if not self._jobs:
-            projectJobs = models.ProjectJob.objects.filter(projectID=self.postID)
+            projectJobs = models.WorkPost.objects.filter(projectID=self.postID)
             if projectJobs:
                 self._jobs = []
                 for job in projectJobs:
-                    try:
-                        post = models.WorkPost.objects.get(postID=job.postID)
-                    except models.WorkPost.DoesNotExist:
-                        post = None
-                    newJob = {"job": job, "post": post}
+                    newJob = {"post": job}
                     if job.status == "Filled":
                         try:
-                            user = models.UserAccount.objects.get(username=job.username)
+                            user = models.UserAccount.objects.get(username=job.workerName)
                         except models.UserAccount.DoesNotExist:
                             user = None
                         newJob["user"] = user

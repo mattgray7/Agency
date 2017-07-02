@@ -119,14 +119,9 @@ project7ProjectPost = createProject(poster="johnstongray",
 									picURL="/Users/MattGray/Projects/Agency/Agency/scripts/media/reelAdults.jpg")
 
 
-def createProjectJob(projectID, username, status, profession, title, paid, shortDescription=None, description=None, picURL=None):
-	jobID = helpers.createUniqueID(models.ProjectJob, "postID")
-
-	projectJob = models.ProjectJob(postID=jobID, projectID=projectID, status=status,
-								   username=username, profession=profession, shortDescription=shortDescription, description=description)
-	projectJob.save()
-
-	jobPost = models.WorkPost(postID=jobID, projectID=projectID, poster=username,
+def createProjectJob(projectID, username, status, profession, title, paid, shortDescription=None, description=None, picURL=None, poster="mattgray"):
+	jobID = helpers.createUniqueID(models.WorkPost, "postID")
+	jobPost = models.WorkPost(postID=jobID, projectID=projectID, poster=poster, workerName=username, shortDescription=shortDescription,
 							  title=title, description=description, paid=paid, profession=profession,
 							  status=status)
 	jobPost.save()
@@ -140,15 +135,10 @@ def createProjectJob(projectID, username, status, profession, title, paid, short
 
 def createProjectRole(projectID, username, status, title, characterName, paid, shortCharacterDescription=None, characterDescription=None, picURL=None):
 	roleID = helpers.createUniqueID(models.CastingPost, "postID")
-	rolePost = models.CastingPost(postID=roleID, projectID=projectID, status=status,
+	rolePost = models.CastingPost(postID=roleID, projectID=projectID, poster="mattgray", status=status,
 								   	 actorName=username, characterName=characterName, 
-								   	 description=characterDescription, shortCharacterDescription=shortCharacterDescription)
+								   	 description=characterDescription, shortCharacterDescription=shortCharacterDescription, paid=paid)
 	rolePost.save()
-	"""TODO should not have poster as username when I fix the post system"""
-	"""rolePost = models.CastingPost(postID=roleID, projectID=projectID, poster=username,
-								  title=title, description=characterDescription, paid=paid,
-								  status=status)
-	rolePost.save()"""
 	if picURL:
 		picResult = urllib.urlretrieve(picURL)
 		rolePost.postPicture = File(open(picResult[0]))

@@ -125,7 +125,7 @@ class ProfileView(views.GenericFormView):
                         existingProjects[project.postID] = {"project": project, "roles": [roleObj], "jobs": [],
                                                             "status": self._getProjectDisplayStatus(project), "creator": False}
 
-            for job in models.ProjectJob.objects.filter(username=self.profileUserAccount.username, status="Filled"):
+            for job in models.WorkPost.objects.filter(workerName=self.profileUserAccount.username, status="Filled"):
                 project = projectPost.getProjectObject(job.projectID)
                 if project:
                     jobObj = {"postID": job.postID, "profession": job.profession}

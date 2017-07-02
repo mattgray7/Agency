@@ -138,25 +138,25 @@ class ProjectPost(AbstractPost):
     @property
     def directors(self):
         if self._directors is None:
-            self._directors = [x.username for x in ProjectJob.objects.filter(projectID=self.projectID, profession="Director")]
+            self._directors = [x.workerName for x in WorkPost.objects.filter(projectID=self.projectID, profession="Director")]
         return self._directors
 
     @property
     def writers(self):
         if self._writers is None:
-            self._writers = [x.username for x in ProjectJob.objects.filter(projectID=self.projectID, profession__in=["Writer", "Screenwriter", "Story writer"])]
+            self._writers = [x.workerName for x in WorkPost.objects.filter(projectID=self.projectID, profession__in=["Writer", "Screenwriter", "Story writer"])]
         return self._writers
 
     @property
     def actors(self):
         if self._actors is None:
-            self._actors = [x.username for x in CastingPost.objects.filter(projectID=self.projectID, status="Cast")]
+            self._actors = [x.actorName for x in CastingPost.objects.filter(projectID=self.projectID, status="Cast")]
         return self._actors
 
     @property
     def producers(self):
         if self._producers is None:
-            self._producers = [x.username for x in ProjectJob.objects.filter(projectID=self.projectID, profession="Producer")]
+            self._producers = [x.workerName for x in WorkPost.objects.filter(projectID=self.projectID, profession="Producer")]
         return self._producers
 
     @property
@@ -177,33 +177,23 @@ class ProjectPost(AbstractPost):
     @property
     def openJobs(self):
         if self._openJobs is None:
-            self._openJobs = ProjectJob.objects.filter(projectID=self.postID, status="Hiring")
+            self._openJobs = WorkPost.objects.filter(projectID=self.postID, status="Hiring")
         return self._openJobs
 
     @property
     def totalJobs(self):
         if self._totalJobs is None:
-            self._totalJobs = ProjectJob.objects.filter(projectID=self.postID)
+            self._totalJobs = WorkPost.objects.filter(projectID=self.postID)
         return self._totalJobs
 
-class ProjectJob(models.Model):
+"""class ProjectJob(models.Model):
     postID = models.CharField(max_length=10)        # connected to the post for this job
     projectID = models.CharField(max_length=10, blank=True, null=True)
     status = models.CharField(max_length=50, default="Hiring", blank=True, null=True)        # Hiring or Filled
     username = models.CharField(max_length=200, blank=True, null=True)      # only filled if status is Filled
     profession = models.CharField(max_length=200)
     description = models.CharField(max_length=1000, blank=True, null=True)
-    shortDescription = models.CharField(max_length=200, blank=True, null=True)
-
-"""class CastingPost(models.Model):
-    postID = models.CharField(max_length=10)        # Same as casting post
-    projectID = models.CharField(max_length=10, blank=True, null=True)
-    roleType = models.CharField(max_length=100, default="Acting", blank=True, null=True)
-    status = models.CharField(max_length=50, default="Open", blank=True, null=True)     # Open or Cast
-    username = models.CharField(max_length=200, blank=True, null=True)      # only filled if Cast
-    characterName = models.CharField(max_length=200)
-    characterDescription = models.CharField(max_length=1000, blank=True, null=True)
-    shortCharacterDescription = models.CharField(max_length=200, blank=True, null=True)"""
+    shortDescription = models.CharField(max_length=200, blank=True, null=True)"""
 
 class ProjectAdmin(models.Model):
     projectID = models.CharField(max_length=10)
@@ -211,7 +201,9 @@ class ProjectAdmin(models.Model):
 
 class WorkPost(AbstractPost):
     profession = models.CharField(max_length=200)
+    workerName = models.CharField(max_length=200, blank=True, null=True)      # only filled if status is Filled (vs Hiring)
     paid = models.BooleanField(default=False)
+    shortDescription = models.CharField(max_length=200, blank=True, null=True)
 
 class CollaborationPost(AbstractPost):
     collaboratorRole = models.CharField(max_length=200)
