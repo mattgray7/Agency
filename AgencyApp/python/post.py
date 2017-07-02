@@ -180,6 +180,7 @@ class GenericCreatePostView(views.PictureFormView):
         super(GenericCreatePostView, self).__init__(*args, **kwargs)
         self._pictureModel = None
         self._pictureModelFieldName = "postPicture"
+        self._currentPageURL = None
 
     @property
     def projectID(self):
@@ -314,6 +315,12 @@ class GenericCreatePostView(views.PictureFormView):
         return self.post.record
 
     @property
+    def currentPageURL(self):
+        if self._currentPageURL is None:
+            self._currentPageURL = constants.URL_MAP.get(self.currentPage).format(self.postID)
+        return self._currentPageURL
+
+    @property
     def formInitialValues(self):
         self._formInitialValues["postID"] = self.postID
         self._formInitialValues["projectID"] = self.projectID
@@ -341,7 +348,7 @@ class GenericViewPostView(views.GenericFormView):
     @property
     def projectDisplayStatus(self):
         if self._projectDisplayStatus is None:
-            projectStatus = self.project.record and self.project.record.status or None
+            projectStatus = self.project and self.project.record and self.project.record.status or None
             if projectStatus in ["Pre-production", "In production", "Post production", "Screening"]:
                 self._projectDisplayStatus = "current"
             elif projectStatus in ["Completed"]:

@@ -11,7 +11,16 @@ function submitForm(formName){
 		// Set the status from the select bar in the form
 		document.getElementById("id_status").value = statusDiv.value;
 	}
+	{% if selectFields.names %}
+		{% for name in selectField.names %}
+			var selectDiv = document.getElementById('{{name}}SelectBar')
+			if(selectDiv != null){
+				document.getElementById('{{name}}SelectInput') = selectDiv.value;
+			}
+		{% endfor %}
+	{% endif %}
 	var form = document.getElementById(formName)
+	console.log(form)
 	if(form != null){
 		return form.submit()
 	}
@@ -101,6 +110,10 @@ function getCastingFormDict(){
 					previewPicture(this, "postPictureImg");
 				});
 			}
+
+			{% if errors %}
+				console.log('{{errors}}');
+			{% endif %}
 		</script>
 	{% else %}
 		No post found.

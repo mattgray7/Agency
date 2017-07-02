@@ -101,7 +101,7 @@ class CreateCastingPostView(post.GenericCreatePostView):
             if self.actor:
                 self._formInitialValues["actorName"] = self.actor.username
             self._formInitialValues["postID"] = self.post.record.postID
-            self._formInitialValues["projectID"] = self.projectID
+            self._formInitialValues["projectID"] = self.post.projectID
             for field in constants.ACTOR_ATTRIBUTE_DICT:
                 if field["name"] in self._formInitialValues and not self._formInitialValues[field["name"]]:
                     self._formInitialValues[field["name"]] = field["value"]

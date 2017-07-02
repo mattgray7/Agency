@@ -62,7 +62,7 @@ function addCreateCastingPost(formDict, formURL, formName){
 			if(options){
 				var selectForm = createSelectForm(formName, name + "SelectBar", options, value);
 				mainInputsColumn += selectForm;
-				mainInputsColumn += "<input type='hidden' name='" + name + "' id='" + name + "StatusInput' >";
+				mainInputsColumn += "<input type='hidden' name='" + name + "' id='" + name + "SelectInput' >";
 			}else{
 				mainInputsColumn += input;
 			}
@@ -78,7 +78,7 @@ function addCreateCastingPost(formDict, formURL, formName){
 				if(options){
 					var selectForm = createSelectForm(formName, name + "SelectBar", options, value);
 					otherInputsColumn += selectForm;
-					otherInputsColumn += "<input type='hidden' name='" + name + "' id='" + name + "StatusInput' >";
+					otherInputsColumn += "<input type='hidden' name='" + name + "' id='" + name + "SelectInput' >";
 				}else{
 					otherInputsColumn += input;
 				}
