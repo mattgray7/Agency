@@ -44,6 +44,16 @@ function getCastingFormDict(){
 				{% endif %}
 			{% elif field.name == "description" %}
 				postField.push({key: "numRows", value: "20"})
+			{% elif field.name in selectFields.names %}
+				{% if selectFields.options %}
+					var options = {{ selectFields.options|safe }}
+					postField.push({key: "options", value: options['{{field.name}}']});
+
+					{% if selectFields.defaults %}
+						var selectValues = {{selectFields.defaults|safe}}
+						value = selectValues['{{field.name}}'];
+					{% endif %}
+				{% endif %}
 			{% endif %}
 			postField.push({key: "value", value: value});
 			postFields.push(postField);
@@ -55,7 +65,7 @@ function getCastingFormDict(){
 		postFields.push(csrfField);
 	{% endif %}
 
-	{% if attributes %}
+	/*{% if attributes %}
 		{% for attribute in attributes %}
 			var postField = [];
 			postField.push({key: "name", value: '{{attribute.name}}'});
@@ -69,7 +79,7 @@ function getCastingFormDict(){
 			postField.push({key: "input", value: "<input type='text' name='{{attribute.name}} value='{{attribute.value'>"})
 			postFields.push(postField);	
 		{% endfor %}
-	{% endif %}
+	{% endif %}*/
 	return postFields;
 }
 

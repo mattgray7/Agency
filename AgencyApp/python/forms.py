@@ -65,7 +65,27 @@ class CreateProjectRoleForm(GenericCreatePostForm):
     shortCharacterDescription = forms.CharField(label="Short description", widget=forms.TextInput(attrs={'placeholder': 'Ex: 40 year old athletic male'}), max_length=200, required=True)
     #descriptionEnabled = forms.BooleanField(widget=forms.HiddenInput, required=False)
 
-
+class CreateCastingPostForm(BaseForm):
+    postID = forms.CharField(widget=forms.HiddenInput, required=False, max_length=10)
+    projectID = forms.CharField(widget=forms.HiddenInput, required=False, max_length=10)
+    poster = forms.CharField(widget=forms.HiddenInput, required=False, max_length=200)
+    postPicturePath = forms.CharField(widget=forms.HiddenInput, required=False)
+    postPicture = forms.ImageField(label="Picture", required=False)
+    title = forms.CharField(label="Title", max_length=500, required=True, widget=forms.TextInput(attrs={'placeholder': 'Ex: Looking for lead male'}))
+    status = forms.CharField(widget=forms.HiddenInput, max_length=50, required=False)
+    description = forms.CharField(label="Description", required=True, max_length=5000)
+    shortCharacterDescription = forms.CharField(label="Short Description", widget=forms.TextInput(attrs={'placeholder': 'Ex: 40 year old athletic male'}), max_length=200, required=True)
+    paid = forms.BooleanField(label="Paid", required=False)
+    actorName = forms.CharField(widget=forms.HiddenInput, max_length=200, required=False)      # only filled if Cast
+    characterName = forms.CharField(label="Character Name", widget=forms.TextInput(attrs={'placeholder': 'Ex: John Smith'}), max_length=200, required=True)
+    hairColor = forms.CharField(label="Hair Color", max_length=50, required=False)
+    eyeColor = forms.CharField(label="Eye Color", max_length=50, required=False)
+    complexion = forms.CharField(label="Complexion", max_length=50, required=False)
+    ageRange = forms.CharField(label="Age Range", max_length=50, required=False)
+    gender = forms.CharField(label="Identified Gender", max_length=50, required=False)
+    height = forms.CharField(label="Height", max_length=50, required=False)
+    weight = forms.CharField(label="Weight", max_length=50, required=False)
+    build = forms.CharField(label="Build", max_length=50, required=False)
 
 
 

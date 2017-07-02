@@ -39,7 +39,7 @@ class CreateCastingPostView(post.GenericCreatePostView):
     def __init__(self, *args, **kwargs):
         kwargs["postType"] = constants.CASTING_POST
         super(CreateCastingPostView, self).__init__(*args, **kwargs)
-        self._attributeListObject = None
+        self._selectFields = None
         self._castingRole = None
         self._actor = None
 
@@ -63,16 +63,25 @@ class CreateCastingPostView(post.GenericCreatePostView):
         return self._actor
 
     @property
-    def attributeListObject(self):
-        if self._attributeListObject is None:
-            self._attributeListObject = actorDescription.CastingPostAttributes(request=self.request, postID=self.postID, pageType=constants.CASTING_POST)
-        return self._attributeListObject
+    def selectFields(self):
+        if self._selectFields is None:
+            self._selectFields = {"names": [], "options": {}, "defaults": {}}
+            for field in constants.ACTOR_ATTRIBUTE_DICT:
+                name = field.get("name")
+                if name:
+                    self._selectFields["names"].append(name)
+                    if field.get("options"):
+                        self._selectFields["options"][name] = field.get("options")
+                    if self.formInitialValues.get(name):
+                        self._selectFields["defaults"][name] = self.formInitialValues.get(name)
+                    elif field.get("value"):
+                        self._selectFields["defaults"][name] = field["value"]
+        return self._selectFields
 
     @property
     def pageContext(self):
         self._pageContext = super(CreateCastingPostView, self).pageContext
-        self._pageContext["attributes"] = self.attributeListObject.attributes
-        self._pageContext["descriptionEnabled"] = self.post.record.descriptionEnabled
+        self._pageContext["selectFields"] = self.selectFields
         self._pageContext["defaultStatus"] = "Open"
         return self._pageContext
 
@@ -90,10 +99,13 @@ class CreateCastingPostView(post.GenericCreatePostView):
             self._formInitialValues["characterName"] = self.castingRole.characterName
             self._formInitialValues["shortCharacterDescription"] = self.castingRole.shortCharacterDescription
             if self.actor:
-                self._formInitialValues["username"] = self.actor.username
-
+                self._formInitialValues["actorName"] = self.actor.username
             self._formInitialValues["postID"] = self.post.record.postID
             self._formInitialValues["projectID"] = self.projectID
+            for field in constants.ACTOR_ATTRIBUTE_DICT:
+                if field["name"] in self._formInitialValues and not self._formInitialValues[field["name"]]:
+                    self._formInitialValues[field["name"]] = field["value"]
+                    print "set field {0} to {1}".format(field["name"], field["value"])
         return self._formInitialValues
 
 
