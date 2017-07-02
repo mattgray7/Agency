@@ -5,6 +5,18 @@
 <script type="text/javascript" src="{% static "/AgencyApp/js/post/post.js" %}"></script>
 
 <script>
+function submitForm(formName){
+	var statusDiv = document.getElementById("statusSelect");
+	if(statusDiv != null){
+		// Set the status from the select bar in the form
+		document.getElementById("id_status").value = statusDiv.value;
+	}
+	var form = document.getElementById(formName)
+	if(form != null){
+		return form.submit()
+	}
+}
+
 function getCastingFormDict(){
 	var postFields = []
 	{% if form %}

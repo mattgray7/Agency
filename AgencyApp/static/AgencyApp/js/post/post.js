@@ -62,6 +62,7 @@ function addCreateCastingPost(formDict, formURL, formName){
 			if(options){
 				var selectForm = createSelectForm(formName, name + "SelectBar", options, value);
 				mainInputsColumn += selectForm;
+				mainInputsColumn += "<input type='hidden' name='" + name + "' id='" + name + "StatusInput' >";
 			}else{
 				mainInputsColumn += input;
 			}
@@ -77,6 +78,7 @@ function addCreateCastingPost(formDict, formURL, formName){
 				if(options){
 					var selectForm = createSelectForm(formName, name + "SelectBar", options, value);
 					otherInputsColumn += selectForm;
+					otherInputsColumn += "<input type='hidden' name='" + name + "' id='" + name + "StatusInput' >";
 				}else{
 					otherInputsColumn += input;
 				}
@@ -110,6 +112,6 @@ function addCreateCastingPost(formDict, formURL, formName){
 	pictureColumn += "</td>";
 	formString += "<tr>" + mainLabelsColumn + mainInputsColumn + pictureColumn + "</tr>"
 	formString += "<tr>" + otherLabelsColumn + otherInputsColumn + "</tr></form>"
-	formString += "<tr><td colspan='3' style='width: 100%; position:relative; height: 100px;'><div class='whiteButton blackHover' style='width: 36%; position:absolute; left: 0; bottom: 0; margin-bottom: 10px;'> Cancel </div><div class='whiteButton blackHover' style='width: 36%; position:absolute; right: 0; bottom: 0; margin-bottom: 10px'> Create Post</div></td></tr>";
+	formString += "<tr><td colspan='3' style='width: 100%; position:relative; height: 100px;'><div class='whiteButton blackHover' style='width: 36%; position:absolute; left: 0; bottom: 0; margin-bottom: 10px;'> Cancel </div><div class='whiteButton blackHover' style='width: 36%; position:absolute; right: 0; bottom: 0; margin-bottom: 10px' onclick='submitForm(" + '"' + formName + '");' + "'> Create Post</div></td></tr>";
 	return formString;
 }
