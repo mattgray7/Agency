@@ -133,9 +133,9 @@ def createProjectJob(projectID, username, status, profession, title, paid, short
 		jobPost.save()
 	return jobID
 
-def createProjectRole(projectID, username, status, title, characterName, paid, shortCharacterDescription=None, characterDescription=None, picURL=None):
+def createProjectRole(projectID, username, status, title, characterName, paid, shortCharacterDescription=None, characterDescription=None, picURL=None, poster="mattgray"):
 	roleID = helpers.createUniqueID(models.CastingPost, "postID")
-	rolePost = models.CastingPost(title=title, postID=roleID, projectID=projectID, poster="mattgray", status=status,
+	rolePost = models.CastingPost(title=title, postID=roleID, projectID=projectID, poster=poster, status=status,
 								   	 actorName=username, characterName=characterName, 
 								   	 description=characterDescription, shortCharacterDescription=shortCharacterDescription, paid=paid)
 	rolePost.save()

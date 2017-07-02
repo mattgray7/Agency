@@ -14,7 +14,7 @@ imageStorage = FileSystemStorage(
 )
 
 def image_directory_path(instance, filename):
-    if hasattr(instance, "username"):
+    if hasattr(instance, "username") and instance.username:
         inputString = instance.username
     elif (isinstance(instance, EventPost) or 
           isinstance(instance, ProjectPost) or
@@ -23,6 +23,8 @@ def image_directory_path(instance, filename):
           isinstance(instance, CastingPost) and
           hasattr(instance, "poster")):
         inputString = instance.poster
+    else:
+        inputString = "mattgray"  # Temp for create db objects script
     return u'{0}/{1}'.format(inputString, filename)
 
 # Create your models here.

@@ -52,7 +52,6 @@ class CreateCastingPostView(post.GenericCreatePostView):
         kwargs["postType"] = constants.CASTING_POST
         super(CreateCastingPostView, self).__init__(*args, **kwargs)
         self._selectFields = None
-        self._castingRole = None
         self._actor = None
 
     @property
@@ -150,9 +149,9 @@ class ViewCastingPostView(post.GenericViewPostView):
             self._post = CastingPostInstance(request=self.request, postID=self.postID, postType=constants.CASTING_POST)
         return self._post
 
-    def createProjectChild(self):
+    """def createProjectChild(self):
         try:
             newRole = models.CastingPost.objects.get(postID=self.postID, projectID=self.projectID)
         except models.CastingPost.DoesNotExist:
             newRole = models.CastingPost(postID=self.postID, projectID=self.projectID, status="Open")
-            newRole.save()
+            newRole.save()"""

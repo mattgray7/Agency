@@ -1,5 +1,5 @@
 function addCreateCastingPost(formDict, formURL, formName){
-	var formString = "<form method='post' action='" + formURL + "' id='" + formName + "' class='form-style-1' style='width: 90%; background: none;'>";
+	var formString = "<form method='post' action='" + formURL + "' id='" + formName + "' class='form-style-1' style='width: 90%; background: none;' enctype='multipart/form-data'>";
 
 	//Add table
 	/*

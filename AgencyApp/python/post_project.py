@@ -16,12 +16,12 @@ class ProjectPostInstance(post.GenericPostInstance):
 
     def checkModelFormValues(self):
         """TODO, only thing so far is status, which is optional, so return True"""
-        newAdmin = models.ProjectAdmin(username=self.request.user.username,
-                                       projectID=self.request.POST.get("projectID"))
-        newAdmin.save()
         return True
 
     def saveModelFormValues(self):
+        newAdmin = models.ProjectAdmin(username=self.request.user.username,
+                                       projectID=self.request.POST.get("projectID"))
+        newAdmin.save()
         return True
 
     @property
@@ -34,9 +34,7 @@ class ProjectPostInstance(post.GenericPostInstance):
                     newRole = {"post": role}
                     if role.status == "Cast":
                         try:
-                            print "Looking for actor with name {0}".format(role.actorName)
                             user = models.UserAccount.objects.get(username=role.actorName)
-                            print "got actor {0}".format(user)
                         except models.UserAccount.DoesNotExist:
                             user = None
                         newRole["actor"] = user
