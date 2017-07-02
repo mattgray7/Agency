@@ -481,14 +481,14 @@
 										{% if castingRole.status == "Cast" and actor %}
 											Played by <a id="actorProfileLink" onclick='redirectToUser("{{actor.username}}");'>{{ actor.cleanName }}</a><br>
 										{% endif %}
-										{% if castingRole.characterDescription %}
+										{% if castingRole.description %}
 											Description:<br>
 										{% endif %}
 									</h4>
 									<div class="postInfoContent">
-										{% if castingRole.characterDescription %}
+										{% if castingRole.description %}
 											<div style="padding: 0em 1.5em 0em 1em; margin-top: -3px; min-width: 450px;">
-												{{castingRole.characterDescription}}
+												{{castingRole.description}}
 											</div>
 										{% endif %}
 									</div>

@@ -139,16 +139,16 @@ def createProjectJob(projectID, username, status, profession, title, paid, short
 	return jobID
 
 def createProjectRole(projectID, username, status, title, characterName, paid, shortCharacterDescription=None, characterDescription=None, picURL=None):
-	roleID = helpers.createUniqueID(models.ProjectRole, "postID")
-	projectRole = models.ProjectRole(postID=roleID, projectID=projectID, status=status,
-								   	 username=username, characterName=characterName, 
-								   	 characterDescription=characterDescription, shortCharacterDescription=shortCharacterDescription)
-	projectRole.save()
+	roleID = helpers.createUniqueID(models.CastingPost, "postID")
+	rolePost = models.CastingPost(postID=roleID, projectID=projectID, status=status,
+								   	 actorName=username, characterName=characterName, 
+								   	 description=characterDescription, shortCharacterDescription=shortCharacterDescription)
+	rolePost.save()
 	"""TODO should not have poster as username when I fix the post system"""
-	rolePost = models.CastingPost(postID=roleID, projectID=projectID, poster=username,
+	"""rolePost = models.CastingPost(postID=roleID, projectID=projectID, poster=username,
 								  title=title, description=characterDescription, paid=paid,
 								  status=status)
-	rolePost.save()
+	rolePost.save()"""
 	if picURL:
 		picResult = urllib.urlretrieve(picURL)
 		rolePost.postPicture = File(open(picResult[0]))

@@ -115,7 +115,7 @@ class ProfileView(views.GenericFormView):
         if not self._profileProjects:
             self._profileProjects = []
             existingProjects = {}
-            for role in models.ProjectRole.objects.filter(username=self.profileUserAccount.username, status="Cast"):
+            for role in models.CastingPost.objects.filter(actorName=self.profileUserAccount.username, status="Cast"):
                 project = projectPost.getProjectObject(role.projectID)
                 if project:
                     roleObj = {"postID": role.postID, "characterName": role.characterName}

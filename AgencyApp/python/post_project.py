@@ -27,14 +27,14 @@ class ProjectPostInstance(post.GenericPostInstance):
     @property
     def roles(self):
         if not self._roles:
-            projectRoles = models.ProjectRole.objects.filter(projectID=self.postID)
+            projectRoles = models.CastingPost.objects.filter(projectID=self.postID)
             if projectRoles:
                 self._roles = []
                 for role in projectRoles:
                     newRole = {"role": role}
                     if role.status == "Cast":
                         try:
-                            actor = models.UserAccount.objects.get(username=role.username)
+                            actor = models.UserAccount.objects.get(username=role.actorName)
                         except models.UserAccount.DoesNotExist:
                             actor = None
                         newRole["actor"] = actor

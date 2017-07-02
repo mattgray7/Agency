@@ -47,8 +47,8 @@ class CreateCastingPostView(post.GenericCreatePostView):
     def castingRole(self):
         if self._castingRole is None:
             try:
-                self._castingRole = models.ProjectRole.objects.get(postID=self.postID)
-            except models.ProjectRole.DoesNotExist:
+                self._castingRole = models.CastingPost.objects.get(postID=self.postID)
+            except models.Casting.DoesNotExist:
                 pass
         return self._castingRole
 
@@ -109,8 +109,8 @@ class ViewCastingPostView(post.GenericViewPostView):
     def castingRole(self):
         if self._castingRole is None:
             try:
-                self._castingRole = models.ProjectRole.objects.get(postID=self.postID)
-            except models.ProjectRole.DoesNotExist:
+                self._castingRole = models.CastingPost.objects.get(postID=self.postID)
+            except models.CastingPost.DoesNotExist:
                 pass
         return self._castingRole
 
@@ -149,7 +149,7 @@ class ViewCastingPostView(post.GenericViewPostView):
 
     def createProjectChild(self):
         try:
-            newRole = models.ProjectRole.objects.get(postID=self.postID, projectID=self.projectID)
-        except models.ProjectRole.DoesNotExist:
-            newRole = models.ProjectRole(postID=self.postID, projectID=self.projectID, status="Open")
+            newRole = models.CastingPost.objects.get(postID=self.postID, projectID=self.projectID)
+        except models.CastingPost.DoesNotExist:
+            newRole = models.CastingPost(postID=self.postID, projectID=self.projectID, status="Open")
             newRole.save()

@@ -150,7 +150,7 @@ class ProjectPost(AbstractPost):
     @property
     def actors(self):
         if self._actors is None:
-            self._actors = [x.username for x in ProjectRole.objects.filter(projectID=self.projectID, status="Cast")]
+            self._actors = [x.username for x in CastingPost.objects.filter(projectID=self.projectID, status="Cast")]
         return self._actors
 
     @property
@@ -163,14 +163,14 @@ class ProjectPost(AbstractPost):
     def openRoles(self):
         if self._openRoles is None:
             #self._openRoles = CastingPost.objects.filter(projectID=self.postID, status="Open")
-            self._openRoles = ProjectRole.objects.filter(projectID=self.postID, status="Open")
+            self._openRoles = CastingPost.objects.filter(projectID=self.postID, status="Open")
         return self._openRoles
 
     @property
     def totalRoles(self):
         if self._totalRoles is None:
             #self._totalRoles = CastingPost.objects.filter(projectID=self.postID)
-            self._totalRoles = ProjectRole.objects.filter(projectID=self.postID)
+            self._totalRoles = CastingPost.objects.filter(projectID=self.postID)
             print self._totalRoles
         return self._totalRoles
 
@@ -195,7 +195,7 @@ class ProjectJob(models.Model):
     description = models.CharField(max_length=1000, blank=True, null=True)
     shortDescription = models.CharField(max_length=200, blank=True, null=True)
 
-class ProjectRole(models.Model):
+"""class CastingPost(models.Model):
     postID = models.CharField(max_length=10)        # Same as casting post
     projectID = models.CharField(max_length=10, blank=True, null=True)
     roleType = models.CharField(max_length=100, default="Acting", blank=True, null=True)
@@ -203,7 +203,7 @@ class ProjectRole(models.Model):
     username = models.CharField(max_length=200, blank=True, null=True)      # only filled if Cast
     characterName = models.CharField(max_length=200)
     characterDescription = models.CharField(max_length=1000, blank=True, null=True)
-    shortCharacterDescription = models.CharField(max_length=200, blank=True, null=True)
+    shortCharacterDescription = models.CharField(max_length=200, blank=True, null=True)"""
 
 class ProjectAdmin(models.Model):
     projectID = models.CharField(max_length=10)
@@ -219,6 +219,19 @@ class CollaborationPost(AbstractPost):
 class CastingPost(AbstractPost):
     paid = models.BooleanField(default=False)
     descriptionEnabled = models.BooleanField(default=False)
+    username = models.CharField(max_length=200, blank=True, null=True)      # only filled if Cast
+    roleType = models.CharField(max_length=100, default="Acting", blank=True, null=True)
+    actorName = models.CharField(max_length=200, blank=True, null=True)
+    characterName = models.CharField(max_length=200)
+    shortCharacterDescription = models.CharField(max_length=200, blank=True, null=True)
+    hairColor = models.CharField(max_length=50, blank=True, null=True)
+    eyeColor = models.CharField(max_length=50, blank=True, null=True)
+    complexion = models.CharField(max_length=50, blank=True, null=True)
+    ageRange = models.CharField(max_length=50, blank=True, null=True)
+    gender = models.CharField(max_length=50, blank=True, null=True)
+    height = models.CharField(max_length=50, blank=True, null=True)
+    weight = models.CharField(max_length=50, blank=True, null=True)
+    build = models.CharField(max_length=50, blank=True, null=True)
 
 class Actor(models.Model):
     username = models.CharField(max_length=200)
