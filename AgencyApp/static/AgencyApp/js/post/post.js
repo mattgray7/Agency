@@ -20,7 +20,7 @@ function addCreateCastingPost(formDict, formURL, formName){
 	var mainInputs = ["title", "characterName", "project", "status", "shortCharacterDescription"]
 	var mainLabelsColumn = "<td class='editPostLabelPanel' style='width: 20%; position:relative;'><div style='position: absolute; bottom:0; right: 0; margin-right: 5px; margin-bottom: -8px;'>";
 	var mainInputsColumn = "<td class='editPostInputPanel' style='width: 40%; position: relative;'><ul style='position: absolute; bottom: 0; width: 97%; margin-bottom: -8px;'><h1 style='font-size: 2.5em; padding: 0em 0em 0.2em 0em;'>Edit Role</h1>";
-	var pictureColumn = "<td style='max-width: 200px; height: 200px; border: 2px solid #000'>";
+	var pictureColumn = "<td style='max-width: 200px; height: 200px; text-align: center;'>";
 	var otherLabelsColumn = "<td class='editPostLabelPanel' style='width: 20%; position:relative;'><div style='position: absolute; top:0; right: 0; margin-right: 5px;'>";
 	var otherInputsColumn = "<td class='editPostInputPanel' colspan='2' style='width: 80%;'><ul>";
 	for(var i=0; i < formDict.length; i++){
@@ -51,7 +51,7 @@ function addCreateCastingPost(formDict, formURL, formName){
 		}
 		if(name === "postPicture"){
 			//pictureColumn += '<div style="min-width: 300px; max-width: 300px;"><div id="postPicturePanel" class="postPicture" style="width: 100%; height: 300px; "><div style="max-width:100%; max-height: 400px; min-width: 100%; min-height: 300px; background: #000; border: 1px solid #FFF; border-radius:3px; position: relative; overflow: hidden; margin-top: -2px; margin-left: -7px;"><div id="postPicture" style="padding: 3em 0em 0em 0em"><img id="postPictureImg" src="' + value + '" style="min-width: 100%; max-width:100%; max-height:100%;"/></div></div></div></div>';
-			pictureColumn += '<div id="postPicturePanel" class="postPicture" style="width: 98%; height: 100%; background: #000;"><img id="postPictureImg" src="' + value + '" style="max-width:100%; max-height:100%;"/></div>'
+			pictureColumn += '<div id="postPicturePanel" class="postPicture" style="width: 80%; height: 93%; background: #000; margin: 0 auto;"><img id="postPictureImg" src="' + value + '" style="max-width:100%; max-height:100%;"/></div><div style="width: 50%; margin: 0 auto; overflow: hidden;">' + input + "</div>";
 			continue;
 		}
 
@@ -60,7 +60,6 @@ function addCreateCastingPost(formDict, formURL, formName){
 			mainLabelsColumn += "<label for='name'>" + label + "</label><br>";
 			mainInputsColumn += "<li><div style='border: 2px solid #FFF; border-radius: 4px;'>"
 			if(options){
-				console.log(value)
 				var selectForm = createSelectForm(formName, name + "SelectBar", options, value);
 				mainInputsColumn += selectForm;
 			}else{

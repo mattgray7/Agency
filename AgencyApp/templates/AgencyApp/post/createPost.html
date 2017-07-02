@@ -75,6 +75,9 @@ function getCastingFormDict(){
 			if(postFormDiv != null){
 				newForm = addCreateCastingPost(getCastingFormDict(), "{{currentPageURL}}", "createCastingPostForm");
 				postFormDiv.innerHTML = newForm;
+				$("#id_postPicture").change(function(){
+					previewPicture(this, "postPictureImg");
+				});
 			}
 		</script>
 	{% else %}
