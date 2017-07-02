@@ -87,12 +87,19 @@
 			{% if roles %}
 				contentString += "<table><tr>";
 				{% for roleObj in roles %}
-					{% if roleObj.post.status == "Cast" and roleObj.actor %}
+					console.log('{{roleObj.post.status}} and {{roleObj.actor}}')
+					{% if roleObj.post.status == "Cast" %}
 						var roleID = "{{roleObj.post.postID}}_ListElement";
 						contentString += "<td id='" + roleID + "' class='projectContentListElement grayBackground grayHover' onclick='redirectToPost(" + '"{{roleObj.post.postID}}");' + "'>";
 
 						// CAST label
-						contentString += "<div style='text-align: left;margin-top: -20px; margin-left: 5px; padding: 0em 0em 0.7em 0em; font-weight: 500;'><h3 style='display: inline;'>CAST</h3> - <a onclick='redirectToUser(" + '"{{roleObj.actor.username}}");' + "'>{{roleObj.actor.cleanName}}</a></div>"
+						contentString += "<div style='text-align: left;margin-top: -20px; margin-left: 5px; padding: 0em 0em 0.7em 0em; font-weight: 500;'><h3 style='display: inline;'>";
+						{% if roleObj.actor %}
+							contentString += "CAST</h3> - <a onclick='redirectToUser(" + '"{{roleObj.actor.username}}");' + "'>{{roleObj.actor.cleanName}}</a>";
+						{% else %}
+							contentString += "CAST";
+						{% endif %}
+						contentString += "</div>";
 
 						// profilePic
 						contentString += "<div class='projectContentListElementPicturePanel'><div class='projectContentListElementPicture'>";
@@ -377,7 +384,7 @@
 				</script>
 			</div>
 		{% else %}
-			{% if isCasting and castingRole %}
+			{% if isCasting and post %}
 				<div id="postPanel" class="postPanelFullHeight">
 					<table style="width:99%;">
 						<tr>
@@ -408,7 +415,7 @@
 										</div>
 									</li>
 									{% endif %}
-								{% if castingRole.status == "Cast" and actor  and actor.profilePicture %}
+								{% if cpost.status == "Cast" and actor  and actor.profilePicture %}
 									<li>
 										<div id="actorPicturePanel" class="postPicture">
 											<div id="actorPictureBoundingBox" style="width:250px; height:250px; background: #000; border: 1px solid #FFF; border-radius:3px; vertical-align: middle; display: table-cell;">
@@ -445,9 +452,9 @@
 										</div>
 									</div>
 									<h1 class="postInfoTitle" style="display: inline;">
-										<a onclick='redirectToPost("{{castingRole.postID}}");'> {{ castingRole.characterName }} </a>
+										<a onclick='redirectToPost("{{post.postID}}");'> {{ post.characterName }} </a>
 									</h1>
-									{% if castingRole.status == "Open" %}
+									{% if post.status == "Open" %}
 										<div style="position:relative; display: inline;">
 											{% if displayStatus == "past" %}
 												<div class="redButton" style="margin-top: 10px; padding: 0.1em 0.3em 0.1em 0.3em; display:inline; position: absolute">
@@ -470,25 +477,25 @@
 										{% if project and project.record %}
 											Project: <a onclick='redirectToPost("{{ project.record.postID }}");' >{{ project.record.title }}</a><br>
 										{% endif %}
-										{% if castingRole.shortCharacterDescription %}
-											{{castingRole.shortCharacterDescription}}<br>
+										{% if post.shortCharacterDescription %}
+											{{post.shortCharacterDescription}}<br>
 										{% endif %}
 										{% if post.paid %}
 											Compensation: Paid &#10004;<br>
 										{% else %}
 											Compensation: None<br>
 										{% endif %}
-										{% if castingRole.status == "Cast" and actor %}
+										{% if post.status == "Cast" and actor %}
 											Played by <a id="actorProfileLink" onclick='redirectToUser("{{actor.username}}");'>{{ actor.cleanName }}</a><br>
 										{% endif %}
-										{% if castingRole.description %}
+										{% if post.description %}
 											Description:<br>
 										{% endif %}
 									</h4>
 									<div class="postInfoContent">
-										{% if castingRole.description %}
+										{% if post.description %}
 											<div style="padding: 0em 1.5em 0em 1em; margin-top: -3px; min-width: 450px;">
-												{{castingRole.description}}
+												{{post.description}}
 											</div>
 										{% endif %}
 									</div>

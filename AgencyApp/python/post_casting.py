@@ -20,6 +20,18 @@ class CastingPostInstance(post.GenericPostInstance):
     def saveModelFormValues(self):
         if self.record:
             self.record.paid = self.request.POST.get("paid", False) and True  #get value will be 'true' instead of True
+            self.record.shortCharacterDescription = self.request.POST.get("shortCharacterDescription")
+            self.record.actorName = self.request.POST.get("actorName")
+            self.record.characterName = self.request.POST.get("characterName")
+            self.record.hairColor = self.request.POST.get("hairColor")
+            self.record.eyeColor = self.request.POST.get("eyeColor")
+            self.record.complexetion = self.request.POST.get("complexion")
+            self.record.ageRange = self.request.POST.get("ageRange")
+            self.record.gender = self.request.POST.get("gender")
+            self.record.height = self.request.POST.get("height")
+            self.record.weight = self.request.POST.get("weight")
+            self.record.build = self.request.POST.get("build")
+
             self.record.projectID = self.projectID
             self.record.save()
             return self.saveActorAttributes()
@@ -44,20 +56,14 @@ class CreateCastingPostView(post.GenericCreatePostView):
         self._actor = None
 
     @property
-    def castingRole(self):
-        if self._castingRole is None:
-            try:
-                self._castingRole = models.CastingPost.objects.get(postID=self.postID)
-            except models.Casting.DoesNotExist:
-                pass
-        return self._castingRole
-
-    @property
     def actor(self):
+        print "accessing actor"
         if self._actor is None:
-            if self.post.record.status == "Cast" and self.castingRole:
+            print "getting actor"
+            if self.post.record.status == "Cast":
                 try:
-                    self._actor = models.UserAccount.objects.get(username=self.castingRole.username)
+                    print "status is cast"
+                    self._actor = models.UserAccount.objects.get(username=self.post.record.actorName)
                 except models.UserAccount.DoesNotExist:
                     pass
         return self._actor
@@ -96,8 +102,8 @@ class CreateCastingPostView(post.GenericCreatePostView):
         self._formInitialValues = super(CreateCastingPostView, self).formInitialValues
         if self.post.record:
             self._formInitialValues["paid"] = self.post.record.paid
-            self._formInitialValues["characterName"] = self.castingRole.characterName
-            self._formInitialValues["shortCharacterDescription"] = self.castingRole.shortCharacterDescription
+            self._formInitialValues["characterName"] = self.post.record.characterName
+            self._formInitialValues["shortCharacterDescription"] = self.post.record.shortCharacterDescription
             if self.actor:
                 self._formInitialValues["actorName"] = self.actor.username
             self._formInitialValues["postID"] = self.post.record.postID
@@ -105,7 +111,6 @@ class CreateCastingPostView(post.GenericCreatePostView):
             for field in constants.ACTOR_ATTRIBUTE_DICT:
                 if field["name"] in self._formInitialValues and not self._formInitialValues[field["name"]]:
                     self._formInitialValues[field["name"]] = field["value"]
-                    print "set field {0} to {1}".format(field["name"], field["value"])
         return self._formInitialValues
 
 
@@ -113,25 +118,15 @@ class ViewCastingPostView(post.GenericViewPostView):
     def __init__(self, *args, **kwargs):
         super(ViewCastingPostView, self).__init__(*args, **kwargs)
         self._attributeListObject = None
-        self._castingRole = None
         self._actor = None
         self._displayStatus = None  #current or past
 
     @property
-    def castingRole(self):
-        if self._castingRole is None:
-            try:
-                self._castingRole = models.CastingPost.objects.get(postID=self.postID)
-            except models.CastingPost.DoesNotExist:
-                pass
-        return self._castingRole
-
-    @property
     def actor(self):
         if self._actor is None:
-            if self.post.record.status == "Cast" and self.castingRole:
+            if self.post.record.status == "Cast":
                 try:
-                    self._actor = models.UserAccount.objects.get(username=self.castingRole.username)
+                    self._actor = models.UserAccount.objects.get(username=self.post.record.actorName)
                 except models.UserAccount.DoesNotExist:
                     pass
         return self._actor
@@ -139,7 +134,6 @@ class ViewCastingPostView(post.GenericViewPostView):
     @property
     def pageContext(self):
         self._pageContext = super(ViewCastingPostView, self).pageContext
-        self._pageContext["castingRole"] = self.castingRole
         self._pageContext["actor"] = self.actor
         if self.attributeListObject.attributes:
             self._pageContext["attributes"] = self.attributeListObject.attributes

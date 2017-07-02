@@ -34,7 +34,9 @@ class ProjectPostInstance(post.GenericPostInstance):
                     newRole = {"post": role}
                     if role.status == "Cast":
                         try:
+                            print "Looking for actor with name {0}".format(role.actorName)
                             user = models.UserAccount.objects.get(username=role.actorName)
+                            print "got actor {0}".format(user)
                         except models.UserAccount.DoesNotExist:
                             user = None
                         newRole["actor"] = user

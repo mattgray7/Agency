@@ -6,10 +6,11 @@
 
 <script>
 function submitForm(formName){
-	var statusDiv = document.getElementById("statusSelect");
+	var statusDiv = document.getElementById("statusSelectBar");
 	if(statusDiv != null){
 		// Set the status from the select bar in the form
-		document.getElementById("id_status").value = statusDiv.value;
+		document.getElementById("statusSelectInput").value = statusDiv.value;
+		console.log("Set status input to " + statusDiv.value)
 	}
 	{% if selectFields.names %}
 		{% for name in selectField.names %}
