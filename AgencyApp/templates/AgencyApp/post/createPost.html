@@ -12,11 +12,16 @@ function submitForm(formName){
 		document.getElementById("statusSelectInput").value = statusDiv.value;
 		console.log("Set status input to " + statusDiv.value)
 	}
+	console.log("here0")
 	{% if selectFields.names %}
-		{% for name in selectField.names %}
+		console.log("here")
+		{% for name in selectFields.names %}
+			console.log("\n{{name}}")
 			var selectDiv = document.getElementById('{{name}}SelectBar')
+			console.log("looking at select div " + selectDiv)
 			if(selectDiv != null){
-				document.getElementById('{{name}}SelectInput') = selectDiv.value;
+				document.getElementById('{{name}}SelectInput').value = selectDiv.value;
+				console.log("Just set the value of " + document.getElementById('{{name}}SelectInput'))
 			}
 		{% endfor %}
 	{% endif %}
@@ -59,10 +64,10 @@ function getCastingFormDict(){
 					var options = {{ selectFields.options|safe }}
 					postField.push({key: "options", value: options['{{field.name}}']});
 
-					{% if selectFields.defaults %}
+					/*{% if selectFields.defaults %}
 						var selectValues = {{selectFields.defaults|safe}}
 						value = selectValues['{{field.name}}'];
-					{% endif %}
+					{% endif %}*/
 				{% endif %}
 			{% endif %}
 			postField.push({key: "value", value: value});

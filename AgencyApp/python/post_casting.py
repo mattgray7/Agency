@@ -25,7 +25,7 @@ class CastingPostInstance(post.GenericPostInstance):
             self.record.characterName = self.request.POST.get("characterName")
             self.record.hairColor = self.request.POST.get("hairColor")
             self.record.eyeColor = self.request.POST.get("eyeColor")
-            self.record.complexetion = self.request.POST.get("complexion")
+            self.record.complexion = self.request.POST.get("complexion")
             self.record.ageRange = self.request.POST.get("ageRange")
             self.record.gender = self.request.POST.get("gender")
             self.record.height = self.request.POST.get("height")
@@ -57,12 +57,9 @@ class CreateCastingPostView(post.GenericCreatePostView):
 
     @property
     def actor(self):
-        print "accessing actor"
         if self._actor is None:
-            print "getting actor"
             if self.post.record.status == "Cast":
                 try:
-                    print "status is cast"
                     self._actor = models.UserAccount.objects.get(username=self.post.record.actorName)
                 except models.UserAccount.DoesNotExist:
                     pass
@@ -73,15 +70,16 @@ class CreateCastingPostView(post.GenericCreatePostView):
         if self._selectFields is None:
             self._selectFields = {"names": [], "options": {}, "defaults": {}}
             for field in constants.ACTOR_ATTRIBUTE_DICT:
-                name = field.get("name")
-                if name:
-                    self._selectFields["names"].append(name)
-                    if field.get("options"):
-                        self._selectFields["options"][name] = field.get("options")
-                    if self.formInitialValues.get(name):
-                        self._selectFields["defaults"][name] = self.formInitialValues.get(name)
-                    elif field.get("value"):
-                        self._selectFields["defaults"][name] = field["value"]
+                if field.get("options"):
+                    name = field.get("name")
+                    if name:
+                        self._selectFields["names"].append(name)
+                        if field.get("options"):
+                            self._selectFields["options"][name] = field.get("options")
+                        if self.formInitialValues.get(name):
+                            self._selectFields["defaults"][name] = self.formInitialValues.get(name)
+                        elif field.get("value"):
+                            self._selectFields["defaults"][name] = field["value"]
         return self._selectFields
 
     @property
@@ -109,8 +107,7 @@ class CreateCastingPostView(post.GenericCreatePostView):
             self._formInitialValues["postID"] = self.post.record.postID
             self._formInitialValues["projectID"] = self.post.projectID
             for field in constants.ACTOR_ATTRIBUTE_DICT:
-                if field["name"] in self._formInitialValues and not self._formInitialValues[field["name"]]:
-                    self._formInitialValues[field["name"]] = field["value"]
+                self._formInitialValues[field["name"]] = getattr(self.post.record, field['name'])
         return self._formInitialValues
 
 
