@@ -325,6 +325,7 @@ class GenericCreatePostView(views.PictureFormView):
         self._formInitialValues["postID"] = self.postID
         self._formInitialValues["projectID"] = self.projectID
         self._formInitialValues["poster"] = self.username
+        self._formInitialValues["status"] = self.post.record.status
         if self.post.record:
             self._formInitialValues["title"] = self.post.record.title
             self._formInitialValues["description"] = self.post.record.description
