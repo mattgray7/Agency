@@ -64,6 +64,9 @@ class CreateCastingPostView(post.GenericCreatePostView):
                     pass
         return self._actor
 
+    def cancelPage(self):
+        pass
+
     @property
     def selectFields(self):
         if self._selectFields is None:
@@ -106,7 +109,7 @@ class CreateCastingPostView(post.GenericCreatePostView):
             self._formInitialValues["postID"] = self.post.record.postID
             self._formInitialValues["projectID"] = self.post.projectID
             for field in constants.ACTOR_ATTRIBUTE_DICT:
-                self._formInitialValues[field["name"]] = getattr(self.post.record, field['name'])
+                self._formInitialValues[field["name"]] = getattr(self.post.record, field['name']) or field['value']
         return self._formInitialValues
 
 
@@ -148,10 +151,3 @@ class ViewCastingPostView(post.GenericViewPostView):
             # Cant pass projectID as it will lead to infinite loop
             self._post = CastingPostInstance(request=self.request, postID=self.postID, postType=constants.CASTING_POST)
         return self._post
-
-    """def createProjectChild(self):
-        try:
-            newRole = models.CastingPost.objects.get(postID=self.postID, projectID=self.projectID)
-        except models.CastingPost.DoesNotExist:
-            newRole = models.CastingPost(postID=self.postID, projectID=self.projectID, status="Open")
-            newRole.save()"""

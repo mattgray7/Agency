@@ -31,6 +31,7 @@ function addCreateCastingPost(formDict, formURL, formName){
 		var label = "";
 		var options = null;
 		var extendedNumberOfRows = 0;
+		var cancelOnclick = "";
 		for(var j=0; j < formDict[i].length; j++){
 			var formElement = formDict[i][j];
 			if(formElement["key"] == "name"){
@@ -47,6 +48,8 @@ function addCreateCastingPost(formDict, formURL, formName){
 				options = formElement["value"];
 			}else if(formElement["key"] == "numRows"){
 				extendedNumberOfRows = formElement["value"]
+			}else if(formElement["key"] == "cancelButtonOnclick"){
+				cancelOnclick = formElement["value"]
 			}
 		}
 		if(name === "postPicture"){
@@ -112,6 +115,6 @@ function addCreateCastingPost(formDict, formURL, formName){
 	pictureColumn += "</td>";
 	formString += "<tr>" + mainLabelsColumn + mainInputsColumn + pictureColumn + "</tr>"
 	formString += "<tr>" + otherLabelsColumn + otherInputsColumn + "</tr></form>"
-	formString += "<tr><td colspan='3' style='width: 100%; position:relative; height: 100px;'><div class='whiteButton blackHover' style='width: 36%; position:absolute; left: 0; bottom: 0; margin-bottom: 10px;'> Cancel </div><div class='whiteButton blackHover' style='width: 36%; position:absolute; right: 0; bottom: 0; margin-bottom: 10px' onclick='submitForm(" + '"' + formName + '");' + "'> Create Post</div></td></tr>";
+	formString += "<tr><td colspan='3' style='width: 100%; position:relative; height: 100px;'><div class='whiteButton blackHover' style='width: 36%; position:absolute; left: 0; bottom: 0; margin-bottom: 10px;' onclick='" + cancelOnclick + "'> Cancel </div><div class='whiteButton blackHover' style='width: 36%; position:absolute; right: 0; bottom: 0; margin-bottom: 10px' onclick='submitForm(" + '"' + formName + '");' + "'> Create Post</div></td></tr>";
 	return formString;
 }
