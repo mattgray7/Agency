@@ -84,7 +84,6 @@ class CreateCastingPostForm(BaseForm):
     ageRange = forms.CharField(label="Age Range", max_length=50, required=False)
     gender = forms.CharField(label="Identified Gender", max_length=50, required=False)
     height = forms.CharField(label="Height", max_length=50, required=False)
-    weight = forms.CharField(label="Weight", max_length=50, required=False)
     build = forms.CharField(label="Build", max_length=50, required=False)
 
 

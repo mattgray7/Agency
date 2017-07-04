@@ -224,7 +224,6 @@ class CastingPost(AbstractPost):
     ageRange = models.CharField(max_length=50, blank=True, null=True)
     gender = models.CharField(max_length=50, blank=True, null=True)
     height = models.CharField(max_length=50, blank=True, null=True)
-    weight = models.CharField(max_length=50, blank=True, null=True)
     build = models.CharField(max_length=50, blank=True, null=True)
 
 class Actor(models.Model):
