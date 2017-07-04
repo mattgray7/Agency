@@ -89,6 +89,7 @@ class CreateCastingPostView(post.GenericCreatePostView):
         self._pageContext = super(CreateCastingPostView, self).pageContext
         self._pageContext["selectFields"] = self.selectFields
         self._pageContext["defaultStatus"] = "Open"
+        self._pageContext["isCasting"] = True
         return self._pageContext
 
     @property
@@ -111,12 +112,6 @@ class CreateCastingPostView(post.GenericCreatePostView):
             for field in constants.ACTOR_ATTRIBUTE_DICT:
                 self._formInitialValues[field["name"]] = getattr(self.post.record, field['name']) or field['value']
         return self._formInitialValues
-
-    @property
-    def pageContext(self):
-        self._pageContext = super(CreateCastingPostView, self).pageContext
-        self._pageContext["isCasting"] = True
-        return self._pageContext
 
 
 class ViewCastingPostView(post.GenericViewPostView):
