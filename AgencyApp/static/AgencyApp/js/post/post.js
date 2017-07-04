@@ -18,11 +18,11 @@ function addCreateCastingPost(formDict, formURL, formName, projectInfo){
 	formString += "<table style='width: 100%;'><tr>"
 	var pictureURL = null;
 	var mainInputs = ["title", "characterName", "project", "status", "shortCharacterDescription", "characterType"]
-	var mainLabelsColumn = "<td class='editPostLabelPanel' style='width: 20%; position:relative;'><div style='position: absolute; bottom:0; right: 0; margin-right: 5px; margin-bottom: -8px;'>";
-	var mainInputsColumn = "<td class='editPostInputPanel' style='width: 40%; position: relative;'><ul style='position: absolute; bottom: 0; width: 97%; margin-bottom: -8px;'><h1 style='font-size: 2.5em; padding: 0em 0em 0.2em 0em;'>Edit Role</h1>";
+	var mainLabelsColumn = "<td class='editPostLabelPanel' style='width: 20%; height: 280px; position:relative;'><div style='position: absolute; bottom:0; right: 0; margin-right: 5px;'><ul style='margin-bottom: -14px;'>";
+	var mainInputsColumn = "<td class='editPostInputPanel' style='width: 40%; height: 280px; position: relative;'><ul style='position: absolute; bottom: 0; width: 97%; margin-bottom: -8px;'><h1 style='font-size: 2.8em; padding: 0em 0em 0.3em 0em;'>Edit Role</h1>";
 	var pictureColumn = "<td style='max-width: 200px; height: 200px; text-align: center;'>";
-	var otherLabelsColumn = "<td class='editPostLabelPanel' style='width: 25%; position:relative;'><div style='position: absolute; top:0; right: 0; margin-right: 5px; width: 90%;'>";
-	var otherInputsColumn = "<td class='editPostInputPanel' colspan='2' style='width: 80%;'><ul>";
+	var otherLabelsColumn = "<td class='editPostLabelPanel' style='width: 25%; height: 600px; position:relative;'><div style='position: absolute; top:0; right: 0; margin-right: 5px; width: 90%; margin-top: 5px;'><ul>";
+	var otherInputsColumn = "<td class='editPostInputPanel' colspan='2' style='width: 80%;height: 600px;'><div style='margin-top: 12px;'><ul>";
 
 	var projectName = "";
 	for(var i=0; i < formDict.length; i++){
@@ -61,7 +61,7 @@ function addCreateCastingPost(formDict, formURL, formName, projectInfo){
 
 		if(mainInputs.indexOf(name) > -1){
 			// top left column
-			mainLabelsColumn += "<label for='name'>" + label + "</label><br>";
+			mainLabelsColumn += "<li><label for='name'>" + label + "</label></li>";
 			mainInputsColumn += "<li><div style='border: 2px solid #FFF; border-radius: 4px;'>"
 			if(options){
 				var selectForm = createSelectForm(formName, name + "SelectBar", options, value);
@@ -73,9 +73,10 @@ function addCreateCastingPost(formDict, formURL, formName, projectInfo){
 			mainInputsColumn += '</div></li>'; 
 		}else if(!hidden){
 			if(extendedNumberOfRows > 1){
-				otherLabelsColumn += "<label for='name'>" + label + "</label><br><br><br>";
+				// stupid hack I hate myself right now
+				otherLabelsColumn += "<li style='height:" + '' + extendedNumberOfRows*6.1 + 'px;' + "'><label for='name'>" + label + "</label></li>";
 				// TODO replace newlines in description as it will break js
-				otherInputsColumn += "<li><textarea rows='" + extendedNumberOfRows + "' name='" + name + "' form='" + formName + "' style='height:100px; font-size: 0.9em; width: 100%;'>" + value + "</textarea></li>";
+				otherInputsColumn += "<li><textarea rows='" + extendedNumberOfRows + "' name='" + name + "' form='" + formName + "' style='height:100px; font-size: 0.9em; width: 95%;'>" + value + "</textarea></li>";
 			}else{
 				otherLabelsColumn += "<label for='name'>" + label + "</label><br>";
 				otherInputsColumn += "<li><div style='border: 2px solid #FFF; border-radius: 4px;'>"
@@ -112,13 +113,13 @@ function addCreateCastingPost(formDict, formURL, formName, projectInfo){
 	mainInputsColumn += "</a></li>";
 
 
-	mainLabelsColumn += "<label for='name'>Project</label><br></div></td>";
-	otherLabelsColumn += "</div></td>";
+	mainLabelsColumn += "<li><label for='name'>Project</label></li></ul></div></td>";
+	otherLabelsColumn += "</ul></div></td>";
 	mainInputsColumn += "</ul></td>";
-	otherInputsColumn += "</ul></td>";
+	otherInputsColumn += "</ul></div></td>";
 	pictureColumn += "</td>";
 	formString += "<tr>" + mainLabelsColumn + mainInputsColumn + pictureColumn + "</tr>"
 	formString += "<tr>" + otherLabelsColumn + otherInputsColumn + "</tr></form>"
-	formString += "<tr><td colspan='3' style='width: 100%; position:relative; height: 100px;'><div class='whiteButton blackHover' style='width: 36%; position:absolute; left: 0; bottom: 0; margin-bottom: 10px; margin-left: 20px;' onclick='" + cancelOnclick + "'> Cancel </div><div class='whiteButton blackHover' style='width: 36%; position:absolute; right: 0; bottom: 0; margin-bottom: 10px;' onclick='submitForm(" + '"' + formName + '");' + "'> Create Post</div></td></tr>";
+	formString += "<tr><td colspan='3' style='width: 100%; position:relative; height: 70px;'><div class='whiteButton blackHover' style='width: 36%; position:absolute; left: 0; bottom: 0; margin-bottom: 10px; margin-left: 20px;' onclick='" + cancelOnclick + "'> Cancel </div><div class='whiteButton blackHover' style='width: 36%; position:absolute; right: 0; bottom: 0; margin-bottom: 10px;' onclick='submitForm(" + '"' + formName + '");' + "'> Create Post</div></td></tr>";
 	return formString;
 }

@@ -78,20 +78,20 @@ class CreateCastingPostForm(BaseForm):
     status = forms.CharField(widget=forms.HiddenInput, max_length=50, required=False)
     description = forms.CharField(label="Description", required=True, max_length=5000)
     paid = forms.BooleanField(label="Paid", required=False)
-    paidDescription = forms.CharField(label="Sepcify", max_length=100, required=False)
+    paidDescription = forms.CharField(label="Specify", max_length=100, required=False)
     actorName = forms.CharField(widget=forms.HiddenInput, max_length=200, required=False)      # only filled if Cast
     hairColor = forms.CharField(label="Hair Color", max_length=50, required=False)
     eyeColor = forms.CharField(label="Eye Color", max_length=50, required=False)
     complexion = forms.CharField(label="Complexion", max_length=50, required=False)
     ageRange = forms.CharField(label="Age Range", max_length=50, required=False)
     gender = forms.CharField(label="Identified Gender", max_length=50, required=False)
-    height = forms.CharField(label="Height", max_length=50, required=False)
     build = forms.CharField(label="Build", max_length=50, required=False)
+    height = forms.CharField(label="Height", max_length=50, required=False)
     skills = forms.CharField(label="Required Skills", max_length=300, required=False, widget=forms.TextInput(attrs={'placeholder': 'Ex: Stage combat, Singing, and Basketball'}))
     languages = forms.CharField(label="Required Languages ", max_length=300, required=False, widget=forms.TextInput(attrs={'placeholder': 'Excluding English'}))
     hoursPerWeek = forms.IntegerField(label="Hours Per Week", required=False)
-    startDate = forms.DateField(label="Start", required=False, widget=forms.DateInput(attrs={'class':'datepicker'}))
-    endDate = forms.DateField(label="End", required=False, widget=forms.DateInput(attrs={'class':'datepicker'}))
+    startDate = forms.DateField(label="Start Date", required=False, widget=forms.DateInput(attrs={'class':'datepicker'}))
+    endDate = forms.DateField(label="End Date", required=False, widget=forms.DateInput(attrs={'class':'datepicker'}))
 
 
 

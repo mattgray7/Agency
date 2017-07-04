@@ -24,6 +24,7 @@ class CastingPostInstance(post.GenericPostInstance):
             self.record.shortCharacterDescription = self.request.POST.get("shortCharacterDescription")
             self.record.actorName = self.request.POST.get("actorName")
             self.record.characterName = self.request.POST.get("characterName")
+            self.record.characterType = self.request.POST.get("characterType")
             self.record.hairColor = self.request.POST.get("hairColor")
             self.record.eyeColor = self.request.POST.get("eyeColor")
             self.record.complexion = self.request.POST.get("complexion")
