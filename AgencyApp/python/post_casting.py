@@ -81,7 +81,7 @@ class CreateCastingPostView(post.GenericCreatePostView):
                         if self.formInitialValues.get(name):
                             self._selectFields["defaults"][name] = self.formInitialValues.get(name)
                         elif field.get("value"):
-                            self._selectFields["defaults"][name] = field["value"]
+                            self._selectFields["defaults"][name] = "-"
         return self._selectFields
 
     @property
@@ -110,7 +110,7 @@ class CreateCastingPostView(post.GenericCreatePostView):
             self._formInitialValues["postID"] = self.post.record.postID
             self._formInitialValues["projectID"] = self.post.projectID
             for field in constants.ACTOR_ATTRIBUTE_DICT:
-                self._formInitialValues[field["name"]] = getattr(self.post.record, field['name']) or field['value']
+                self._formInitialValues[field["name"]] = getattr(self.post.record, field['name'])
         return self._formInitialValues
 
 

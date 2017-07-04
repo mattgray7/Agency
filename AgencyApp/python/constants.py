@@ -84,24 +84,17 @@ HIRE_TYPES = ["hireProject", "hirePermanent", "casting", "collaborating"]
 COLLABORATOR_OPTIONS = ["Director", "Director of photography", "Musical artist", "Screenwriter", "Story writer", "Other"]
 
 ACTOR_ATTRIBUTE_DICT = [{"name": "hairColor",
-						 "value": "black",
 						 "options": ["-", "Black", "Blonde", "Brown", "Grey", "Red", "White", "Other"]},
 						{"name": "eyeColor",
-						 "value": "Blue",
 						 "options": ["-", "Blue", "Brown", "Green", "Grey", "Other"]},
 						 {"name": "complexion",
-						 "value": "White",
 						 "options": ["-", "Dark", "Brown", "Olive", "Tanned", "Light"]},
 						{"name": "ageRange",
-						 "value": "20 - 25",
 						 "options": ["-", "0 - 6", "6 - 12", "12 - 16", "16 - 20", "20 - 25", "25 - 40", "40 - 55", "55 - 70", "70+"]},
 						 {"name": "gender",
-						 "value": "Male",
-						 "options": ["-", "Male", "Female", "Non-binary", "Other", "Prefer not to disclose"]},
-						{"name": "height",
-						 "value": None},
+						 "options": ["-", "Male", "Female", "Non-binary", "Other", "Prefer not to specify"]},
+						{"name": "height"},
 						 {"name": "build",
-						 "value": "Medium",
 						 "options": ["-", "Slim", "Medium", "Muscular", "Large"]},
 						 ]
 
