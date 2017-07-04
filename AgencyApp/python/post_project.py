@@ -147,6 +147,7 @@ class CreateProjectPostView(post.GenericCreatePostView):
         self._pageContext["events"] = self.post.events
         self._pageContext["forms"] = {"role": forms.CreateProjectRoleForm}
         self._pageContext["selectFields"] = {"roles": self.selectFields}
+        self._pageContext["isProject"] = True
         return self._pageContext
 
 class ViewProjectPostView(post.GenericViewPostView):

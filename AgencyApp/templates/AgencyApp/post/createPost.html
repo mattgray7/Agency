@@ -83,30 +83,26 @@
         }
 </script>
 <div id="mainViewPanel" class="mainViewPanel" style="display:block">
-	{% if post %}
-		<div id="editPostPanel" class="editPostPanel">
-			{% if isCasting %}
-				<div id="postForm"></div>					
-			{% endif %}
-		</div>
-		<script>
-			var postFormDiv = document.getElementById("postForm");
-			if(postFormDiv != null){
-				var projectInfo = [];
-				{% if project and project.title %}
-                    projectInfo.push({key: "title", value: '{{ project.title }}'});
-                    projectInfo.push({key: "projectID", value: '{{ project.postID }}'})
-                {% endif %}
-				newForm = addCreateCastingPost(getCastingFormDict(), "{{currentPageURL}}", "createCastingPostForm", projectInfo);
-				postFormDiv.innerHTML = newForm;
-				$("#id_postPicture").change(function(){
-					previewPicture(this, "postPictureImg");
-				});
-			}
-		</script>
-	{% else %}
-		No post found.
-	{% endif %}
+	<div id="editPostPanel" class="editPostPanel">
+		{% if isCasting %}
+			<div id="postForm"></div>
+		{% endif %}
+	</div>
+	<script>
+		var postFormDiv = document.getElementById("postForm");
+		if(postFormDiv != null){
+			var projectInfo = [];
+			{% if project and project.title %}
+                projectInfo.push({key: "title", value: '{{ project.title }}'});
+                projectInfo.push({key: "projectID", value: '{{ project.postID }}'})
+            {% endif %}
+			newForm = addCreateCastingPost(getCastingFormDict(), "{{currentPageURL}}", "createCastingPostForm", projectInfo);
+			postFormDiv.innerHTML = newForm;
+			$("#id_postPicture").change(function(){
+				previewPicture(this, "postPictureImg");
+			});
+		}
+	</script>
 </div>
 	<!--{% if errors %}
 		<ul>

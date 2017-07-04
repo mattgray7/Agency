@@ -30,6 +30,7 @@ class CreateCollaborationPostView(post.GenericCreatePostView):
     	self._pageContext = super(CreateCollaborationPostView, self).pageContext
     	self._pageContext["collaboratorRoleOptions"] = constants.COLLABORATOR_OPTIONS
     	self._pageContext["collaboratorRole"] = self.post.record.collaboratorRole
+        self._pageContext["isCollaboration"] = True
     	self._pageContext["hideStatus"] = True
     	return self._pageContext
 

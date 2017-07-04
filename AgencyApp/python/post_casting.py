@@ -112,6 +112,12 @@ class CreateCastingPostView(post.GenericCreatePostView):
                 self._formInitialValues[field["name"]] = getattr(self.post.record, field['name']) or field['value']
         return self._formInitialValues
 
+    @property
+    def pageContext(self):
+        self._pageContext = super(CreateCastingPostView, self).pageContext
+        self._pageContext["isCasting"] = True
+        return self._pageContext
+
 
 class ViewCastingPostView(post.GenericViewPostView):
     def __init__(self, *args, **kwargs):
