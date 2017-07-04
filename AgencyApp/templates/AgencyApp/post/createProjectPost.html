@@ -7,16 +7,6 @@
 	var projectTabs = ["roles", "jobs", "events"];
 	var activeTab = "roles";
 
-	$( document ).ready(function() {
-		$( ".datepicker" ).datepicker({
-			// TODO add hour to date
-			changeMonth: true,
-			changeYear: true,
-			yearRange: "2017:2019",
-			dateFormat: 'yy-mm-dd' 
-		});
-	});
-
 	function deletePostFromDB(postID, postType){
 		$.ajax({
 			url : "/ajax/deletePostFromDB/",

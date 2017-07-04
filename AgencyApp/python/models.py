@@ -212,6 +212,7 @@ class CollaborationPost(AbstractPost):
 
 class CastingPost(AbstractPost):
     paid = models.BooleanField(default=False)
+    paidAmount = models.CharField(max_length=200, blank=True, null=True)
     descriptionEnabled = models.BooleanField(default=False)
     username = models.CharField(max_length=200, blank=True, null=True)      # only filled if Cast
     roleType = models.CharField(max_length=100, default="Acting", blank=True, null=True)
@@ -225,6 +226,12 @@ class CastingPost(AbstractPost):
     gender = models.CharField(max_length=50, blank=True, null=True)
     height = models.CharField(max_length=50, blank=True, null=True)
     build = models.CharField(max_length=50, blank=True, null=True)
+    skills = models.CharField(max_length=300, blank=True, null=True)
+    languages = models.CharField(max_length=300, blank=True, null=True)
+    hoursPerWeek = models.IntegerField(blank=True, null=True)
+    startDate = models.DateField(default=None, blank=True, null=True)
+    endDate = models.DateField(default=None, blank=True, null=True)
+
 
 class Actor(models.Model):
     username = models.CharField(max_length=200)

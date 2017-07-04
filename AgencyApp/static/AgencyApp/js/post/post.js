@@ -1,5 +1,5 @@
 function addCreateCastingPost(formDict, formURL, formName, projectInfo){
-	var formString = "<form method='post' action='" + formURL + "' id='" + formName + "' class='form-style-1' style='width: 90%; background: none;' enctype='multipart/form-data'>";
+	var formString = "<form method='post' action='" + formURL + "' id='" + formName + "' class='form-style-1' style='width: 90%; background: none; margin-left: -10px;' enctype='multipart/form-data'>";
 
 	//Add table
 	/*
@@ -21,7 +21,7 @@ function addCreateCastingPost(formDict, formURL, formName, projectInfo){
 	var mainLabelsColumn = "<td class='editPostLabelPanel' style='width: 20%; position:relative;'><div style='position: absolute; bottom:0; right: 0; margin-right: 5px; margin-bottom: -8px;'>";
 	var mainInputsColumn = "<td class='editPostInputPanel' style='width: 40%; position: relative;'><ul style='position: absolute; bottom: 0; width: 97%; margin-bottom: -8px;'><h1 style='font-size: 2.5em; padding: 0em 0em 0.2em 0em;'>Edit Role</h1>";
 	var pictureColumn = "<td style='max-width: 200px; height: 200px; text-align: center;'>";
-	var otherLabelsColumn = "<td class='editPostLabelPanel' style='width: 20%; position:relative;'><div style='position: absolute; top:0; right: 0; margin-right: 5px;'>";
+	var otherLabelsColumn = "<td class='editPostLabelPanel' style='width: 25%; position:relative;'><div style='position: absolute; top:0; right: 0; margin-right: 5px; width: 90%;'>";
 	var otherInputsColumn = "<td class='editPostInputPanel' colspan='2' style='width: 80%;'><ul>";
 
 	var projectName = "";
@@ -119,6 +119,6 @@ function addCreateCastingPost(formDict, formURL, formName, projectInfo){
 	pictureColumn += "</td>";
 	formString += "<tr>" + mainLabelsColumn + mainInputsColumn + pictureColumn + "</tr>"
 	formString += "<tr>" + otherLabelsColumn + otherInputsColumn + "</tr></form>"
-	formString += "<tr><td colspan='3' style='width: 100%; position:relative; height: 100px;'><div class='whiteButton blackHover' style='width: 36%; position:absolute; left: 0; bottom: 0; margin-bottom: 10px;' onclick='" + cancelOnclick + "'> Cancel </div><div class='whiteButton blackHover' style='width: 36%; position:absolute; right: 0; bottom: 0; margin-bottom: 10px' onclick='submitForm(" + '"' + formName + '");' + "'> Create Post</div></td></tr>";
+	formString += "<tr><td colspan='3' style='width: 100%; position:relative; height: 100px;'><div class='whiteButton blackHover' style='width: 36%; position:absolute; left: 0; bottom: 0; margin-bottom: 10px; margin-left: 20px;' onclick='" + cancelOnclick + "'> Cancel </div><div class='whiteButton blackHover' style='width: 36%; position:absolute; right: 0; bottom: 0; margin-bottom: 10px;' onclick='submitForm(" + '"' + formName + '");' + "'> Create Post</div></td></tr>";
 	return formString;
 }

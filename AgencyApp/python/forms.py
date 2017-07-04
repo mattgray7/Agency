@@ -66,9 +66,9 @@ class CreateProjectRoleForm(GenericCreatePostForm):
     #descriptionEnabled = forms.BooleanField(widget=forms.HiddenInput, required=False)
 
 class CreateCastingPostForm(BaseForm):
-    postID = forms.CharField(widget=forms.HiddenInput, required=False, max_length=10)
+    postID = forms.CharField(widget=forms.HiddenInput, max_length=10)
     projectID = forms.CharField(widget=forms.HiddenInput, required=False, max_length=10)
-    poster = forms.CharField(widget=forms.HiddenInput, required=False, max_length=200)
+    poster = forms.CharField(widget=forms.HiddenInput, max_length=200)
     postPicturePath = forms.CharField(widget=forms.HiddenInput, required=False)
     postPicture = forms.ImageField(label="Picture", required=False)
     title = forms.CharField(label="Title", max_length=500, required=True, widget=forms.TextInput(attrs={'placeholder': 'Ex: Looking for lead male'}))
@@ -85,6 +85,11 @@ class CreateCastingPostForm(BaseForm):
     gender = forms.CharField(label="Identified Gender", max_length=50, required=False)
     height = forms.CharField(label="Height", max_length=50, required=False)
     build = forms.CharField(label="Build", max_length=50, required=False)
+    skills = forms.CharField(label="Required Skills", max_length=300, required=False)
+    languages = forms.CharField(label="Required Languages", max_length=300, required=False)
+    hoursPerWeek = forms.IntegerField(label="Hours Per Week", required=False, widget=forms.DateInput(attrs={'class':'datepicker'}))
+    startDate = forms.DateField(label="Start", required=False, widget=forms.DateInput(attrs={'class':'datepicker'}))
+    endDate = forms.DateField(label="End", required=False)
 
 
 
