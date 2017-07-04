@@ -13,7 +13,7 @@ function addCreateCastingPost(formDict, formURL, formName, projectInfo){
 			<td> left input labels
 			<td colspan=2> rest of content
 		</tr>
-	</tabl>
+	</table>
 	*/
 	formString += "<table style='width: 100%;'><tr>"
 	var pictureURL = null;
@@ -55,7 +55,6 @@ function addCreateCastingPost(formDict, formURL, formName, projectInfo){
 			}
 		}
 		if(name === "postPicture"){
-			//pictureColumn += '<div style="min-width: 300px; max-width: 300px;"><div id="postPicturePanel" class="postPicture" style="width: 100%; height: 300px; "><div style="max-width:100%; max-height: 400px; min-width: 100%; min-height: 300px; background: #000; border: 1px solid #FFF; border-radius:3px; position: relative; overflow: hidden; margin-top: -2px; margin-left: -7px;"><div id="postPicture" style="padding: 3em 0em 0em 0em"><img id="postPictureImg" src="' + value + '" style="min-width: 100%; max-width:100%; max-height:100%;"/></div></div></div></div>';
 			pictureColumn += '<div id="postPicturePanel" class="postPicture" style="width: 80%; height: 93%; background: #000; margin: 0 auto;"><img id="postPictureImg" src="' + value + '" style="max-width:100%; max-height:100%;"/></div><div style="width: 50%; margin: 0 auto; overflow: hidden;">' + input + "</div>";
 			continue;
 		}
@@ -91,30 +90,12 @@ function addCreateCastingPost(formDict, formURL, formName, projectInfo){
 			}
 		}else{
 			otherInputsColumn += input;
-		}
-
-		/*if(!hidden){
-			if(name === "description"){
-				inputsColumn += "<textarea cols='100' rows ='20' name='description' form='" + formName + "' style='height:100px; font-size: 0.9em;'>" + value + "</textarea></li>"
-			}else{
-				inputsColumn += "<div style='background: #efefef; border: 2px solid #FFF; border-radius: 4px;'>"
-				if(options){
-					var selectForm = createSelectForm(formName, name + "SelectBar", options, value);
-					inputsColumn += selectForm;
-				}else{
-					inputsColumn += input;
-				}
-				inputsColumn += '</div>'; 
-			}
-		}else{
-			inputsColumn += input;
-		}*/		
+		}	
 	}
 	
 	// Add project link
 	var projectTitle = null;
 	var projectID = null;
-	console.log(projectInfo)
 	for(var i=0; i < projectInfo.length; i++){
 		if(projectInfo[i]["key"] === "title"){
 			projectTitle = projectInfo[i]["value"];

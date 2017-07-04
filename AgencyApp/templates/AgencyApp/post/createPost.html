@@ -96,10 +96,7 @@
 				{% if project and project.title %}
                     projectInfo.push({key: "title", value: '{{ project.title }}'});
                     projectInfo.push({key: "projectID", value: '{{ project.postID }}'})
-                {% else %}
-                console.log('{{project}}')
                 {% endif %}
-                console.log(projectInfo)
 				newForm = addCreateCastingPost(getCastingFormDict(), "{{currentPageURL}}", "createCastingPostForm", projectInfo);
 				postFormDiv.innerHTML = newForm;
 				$("#id_postPicture").change(function(){
