@@ -212,7 +212,7 @@ class CollaborationPost(AbstractPost):
 
 class CastingPost(AbstractPost):
     paid = models.BooleanField(default=False)
-    paidAmount = models.CharField(max_length=200, blank=True, null=True)
+    paidDescription = models.CharField(max_length=200, blank=True, null=True)
     descriptionEnabled = models.BooleanField(default=False)
     username = models.CharField(max_length=200, blank=True, null=True)      # only filled if Cast
     roleType = models.CharField(max_length=100, default="Acting", blank=True, null=True)

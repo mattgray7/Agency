@@ -20,6 +20,7 @@ class CastingPostInstance(post.GenericPostInstance):
     def saveModelFormValues(self):
         if self.record:
             self.record.paid = self.request.POST.get("paid", False) and True  #get value will be 'true' instead of True
+            self.record.paidDescription = self.request.POST.get("paidDescription")
             self.record.shortCharacterDescription = self.request.POST.get("shortCharacterDescription")
             self.record.actorName = self.request.POST.get("actorName")
             self.record.characterName = self.request.POST.get("characterName")
@@ -31,6 +32,11 @@ class CastingPostInstance(post.GenericPostInstance):
             self.record.height = self.request.POST.get("height")
             self.record.weight = self.request.POST.get("weight")
             self.record.build = self.request.POST.get("build")
+            self.record.skills = self.request.POST.get("skills")
+            self.record.languages = self.request.POST.get("languages")
+            self.record.hoursPerWeek = self.request.POST.get("hoursPerWeek")
+            self.record.startDate = self.request.POST.get("startDate")
+            self.record.endDate = self.request.POST.get("endDate")
 
             self.record.projectID = self.projectID
             self.record.save()
@@ -103,6 +109,12 @@ class CreateCastingPostView(post.GenericCreatePostView):
         self._formInitialValues = super(CreateCastingPostView, self).formInitialValues
         if self.post.record:
             self._formInitialValues["paid"] = self.post.record.paid
+            self._formInitialValues["paidDescription"] = self.post.record.paidDescription
+            self._formInitialValues["skills"] = self.post.record.skills
+            self._formInitialValues["languages"] = self.post.record.languages
+            self._formInitialValues["hoursPerWeek"] = self.post.record.hoursPerWeek
+            self._formInitialValues["startDate"] = self.post.record.startDate
+            self._formInitialValues["endDate"] = self.post.record.endDate
             self._formInitialValues["characterName"] = self.post.record.characterName
             self._formInitialValues["shortCharacterDescription"] = self.post.record.shortCharacterDescription
             if self.actor:
