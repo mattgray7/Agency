@@ -17,7 +17,7 @@ function addCreateCastingPost(formDict, formURL, formName, projectInfo){
 	*/
 	formString += "<table style='width: 100%;'><tr>"
 	var pictureURL = null;
-	var mainInputs = ["title", "characterName", "project", "status", "shortCharacterDescription"]
+	var mainInputs = ["title", "characterName", "project", "status", "shortCharacterDescription", "characterType"]
 	var mainLabelsColumn = "<td class='editPostLabelPanel' style='width: 20%; position:relative;'><div style='position: absolute; bottom:0; right: 0; margin-right: 5px; margin-bottom: -8px;'>";
 	var mainInputsColumn = "<td class='editPostInputPanel' style='width: 40%; position: relative;'><ul style='position: absolute; bottom: 0; width: 97%; margin-bottom: -8px;'><h1 style='font-size: 2.5em; padding: 0em 0em 0.2em 0em;'>Edit Role</h1>";
 	var pictureColumn = "<td style='max-width: 200px; height: 200px; text-align: center;'>";

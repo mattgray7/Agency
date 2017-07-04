@@ -218,6 +218,7 @@ class CastingPost(AbstractPost):
     roleType = models.CharField(max_length=100, default="Acting", blank=True, null=True)
     actorName = models.CharField(max_length=200, blank=True, null=True)
     characterName = models.CharField(max_length=200)
+    characterType = models.CharField(max_length=100, default="Actor")
     shortCharacterDescription = models.CharField(max_length=200, blank=True, null=True)
     hairColor = models.CharField(max_length=50, blank=True, null=True)
     eyeColor = models.CharField(max_length=50, blank=True, null=True)

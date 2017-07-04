@@ -73,6 +73,7 @@ class CreateCastingPostForm(BaseForm):
     postPicture = forms.ImageField(label="Picture", required=False)
     title = forms.CharField(label="Title", max_length=500, required=True, widget=forms.TextInput(attrs={'placeholder': 'Ex: Looking for lead male'}))
     characterName = forms.CharField(label="Character Name", widget=forms.TextInput(attrs={'placeholder': 'Ex: John Smith'}), max_length=200, required=True)
+    characterType = forms.CharField(label="Character Type", max_length=100, required=True)
     shortCharacterDescription = forms.CharField(label="Short Description", widget=forms.TextInput(attrs={'placeholder': 'Ex: 40 year old athletic male'}), max_length=200, required=True)
     status = forms.CharField(widget=forms.HiddenInput, max_length=50, required=False)
     description = forms.CharField(label="Description", required=True, max_length=5000)
@@ -85,11 +86,11 @@ class CreateCastingPostForm(BaseForm):
     gender = forms.CharField(label="Identified Gender", max_length=50, required=False)
     height = forms.CharField(label="Height", max_length=50, required=False)
     build = forms.CharField(label="Build", max_length=50, required=False)
-    skills = forms.CharField(label="Required Skills", max_length=300, required=False)
-    languages = forms.CharField(label="Required Languages", max_length=300, required=False)
-    hoursPerWeek = forms.IntegerField(label="Hours Per Week", required=False, widget=forms.DateInput(attrs={'class':'datepicker'}))
+    skills = forms.CharField(label="Required Skills", max_length=300, required=False, widget=forms.TextInput(attrs={'placeholder': 'Ex: Stage combat, Singing, and Basketball'}))
+    languages = forms.CharField(label="Required Languages ", max_length=300, required=False, widget=forms.TextInput(attrs={'placeholder': 'Excluding English'}))
+    hoursPerWeek = forms.IntegerField(label="Hours Per Week", required=False)
     startDate = forms.DateField(label="Start", required=False, widget=forms.DateInput(attrs={'class':'datepicker'}))
-    endDate = forms.DateField(label="End", required=False)
+    endDate = forms.DateField(label="End", required=False, widget=forms.DateInput(attrs={'class':'datepicker'}))
 
 
 

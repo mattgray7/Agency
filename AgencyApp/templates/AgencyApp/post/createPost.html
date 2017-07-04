@@ -32,12 +32,12 @@
                 {% spaceless %}
                 {% for field in form %}
                     var postField = []
-                    postField.push({key: "input", value: '{{field}}'});
                     postField.push({key: "name", value: '{{field.name}}'});
                     postField.push({key: "hidden", value: ('{{field}}'.includes('hidden'))});
                     postField.push({key: "label", value: '{{field.label}}'})
 
                     var value = '{{field.value}}';
+                    var input = '{{field}}';
                     {% if field.name == "projectID" %}
                         value = "{{post.projectID}}";
                     {% elif field.name == "postPicture" %}
@@ -53,6 +53,8 @@
                         {% endif %}
                     {% elif field.name == "description" %}
                         postField.push({key: "numRows", value: "20"})
+                    {% elif field.name == "startDate" or field.name == "endDate" %}
+                    	input = input.replace('type="text"', 'type="date"')
                     {% elif field.name in selectFields.names %}
                         {% if selectFields.options %}
                             var options = {{ selectFields.options|safe }}
@@ -65,6 +67,7 @@
                         {% endif %}
                     {% endif %}
                     postField.push({key: "value", value: value});
+                    postField.push({key: "input", value: input});
                     postFields.push(postField);
                 {% endfor %}
                 {% endspaceless %}
