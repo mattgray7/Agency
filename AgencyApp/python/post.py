@@ -185,7 +185,10 @@ class GenericCreatePostView(views.PictureFormView):
     @property
     def projectID(self):
         if self._projectID is None:
-            self._projectID = self.request.POST.get("projectID", helpers.getMessageFromKey(self.request, "projectID"))
+            if self._post and self._post.record and self._post.record.projectID:
+                self._projectID = self.post.record.projectID
+            else:
+                self._projectID = self.request.POST.get("projectID", helpers.getMessageFromKey(self.request, "projectID"))
         return self._projectID
 
     @property
@@ -238,7 +241,7 @@ class GenericCreatePostView(views.PictureFormView):
     @property
     def pageContext(self):
         self._pageContext["post"] = self.post.record
-        self._pageContext["project"] = self.project
+        self._pageContext["project"] = self.project and self.project.record
         self._pageContext["projectID"] = self.projectID
         self._pageContext["isEvent"] = isEventPost(self.postID)
         self._pageContext["isProject"] = isProjectPost(self.postID)
@@ -325,10 +328,10 @@ class GenericCreatePostView(views.PictureFormView):
         self._formInitialValues["postID"] = self.postID
         self._formInitialValues["projectID"] = self.projectID
         self._formInitialValues["poster"] = self.username
-        self._formInitialValues["status"] = self.post.record.status
         if self.post.record:
             self._formInitialValues["title"] = self.post.record.title
             self._formInitialValues["description"] = self.post.record.description
+            self._formInitialValues["status"] = self.post.record.status
         return self._formInitialValues
 
     def processForm(self):

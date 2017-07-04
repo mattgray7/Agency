@@ -1,4 +1,4 @@
-function addCreateCastingPost(formDict, formURL, formName){
+function addCreateCastingPost(formDict, formURL, formName, projectInfo){
 	var formString = "<form method='post' action='" + formURL + "' id='" + formName + "' class='form-style-1' style='width: 90%; background: none;' enctype='multipart/form-data'>";
 
 	//Add table
@@ -23,6 +23,8 @@ function addCreateCastingPost(formDict, formURL, formName){
 	var pictureColumn = "<td style='max-width: 200px; height: 200px; text-align: center;'>";
 	var otherLabelsColumn = "<td class='editPostLabelPanel' style='width: 20%; position:relative;'><div style='position: absolute; top:0; right: 0; margin-right: 5px;'>";
 	var otherInputsColumn = "<td class='editPostInputPanel' colspan='2' style='width: 80%;'><ul>";
+
+	var projectName = "";
 	for(var i=0; i < formDict.length; i++){
 		var name = "";
 		var input = "";
@@ -108,7 +110,28 @@ function addCreateCastingPost(formDict, formURL, formName){
 			inputsColumn += input;
 		}*/		
 	}
-	mainLabelsColumn += "</div></td>";
+	
+	// Add project link
+	var projectTitle = null;
+	var projectID = null;
+	console.log(projectInfo)
+	for(var i=0; i < projectInfo.length; i++){
+		if(projectInfo[i]["key"] === "title"){
+			projectTitle = projectInfo[i]["value"];
+		}else if(projectInfo[i]["key"] === "projectID"){
+			projectID = projectInfo[i]["value"];
+		}
+	}
+	mainInputsColumn += "<li><a>"
+	if(projectTitle != null){
+		mainInputsColumn += projectTitle;
+	}else{
+		mainInputsColumn += "Not specified";
+	}
+	mainInputsColumn += "</a></li>";
+
+
+	mainLabelsColumn += "<label for='name'>Project</label><br></div></td>";
 	otherLabelsColumn += "</div></td>";
 	mainInputsColumn += "</ul></td>";
 	otherInputsColumn += "</ul></td>";
