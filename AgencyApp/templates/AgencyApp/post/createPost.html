@@ -42,7 +42,7 @@
                             postField.value = "{{images.noPicture}}";
                         {% endif %}
                     {% elif field.name == "paid" %}
-                    	postField.input += "<div style='width: 90%; display: inline; margin-left: 20px;'><div class='editPostLabelPanel' style='width: 10%; display: inline;'>Specify </div><input type='text' name='paidDescription' value='{{post.paidDescription}}' style='width: 50%; display: inline;'></div>";
+                    	postField.input += "<div style='width: 90%; display: inline; margin-left: 20px;'><div class='editPostLabelPanel' style='width: 10%; display: inline;'>Specify </div><input type='text' name='paidDescription' value='{{post.paidDescription}}' style='width: 40%; display: inline;'></div>";
                     {% elif field.name == "paidDescription" %}
                     	// Paid description will be on same line as paid
                     	save = false;
@@ -66,6 +66,13 @@
                     }
                 {% endfor %}
                 {% endspaceless %}
+                var projectField = {"name": "project"}
+                {% if project and project.title %}
+					projectField.title  = '{{project.title}}';
+					projectField.projectID = '{{project.postID}}';
+				{% endif %}
+				postFields["project"] = projectField
+
                 var csrfField = {"name": "csrf_token", "input": "{% csrf_token %}", "hidden": true};
                 postFields['csrf_token'] = csrfField;
 
@@ -84,12 +91,7 @@
 	<script>
 		var postFormDiv = document.getElementById("postForm");
 		if(postFormDiv != null){
-			var projectInfo = {};
-			{% if project and project.title %}
-				projectInfo.title  = '{{project.title}}';
-				projectInfo.projectID = '{{project.postID}}';
-            {% endif %}
-			newForm = addCreateCastingPost(getCastingFormDict(), "{{currentPageURL}}", "createCastingPostForm", projectInfo);
+			newForm = addCreateCastingPost(getCastingFormDict(), "{{currentPageURL}}", "createCastingPostForm");
 			postFormDiv.innerHTML = newForm;
 			$("#id_postPicture").change(function(){
 				previewPicture(this, "postPictureImg");

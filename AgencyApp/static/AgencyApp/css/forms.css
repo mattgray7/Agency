@@ -23,6 +23,12 @@
 {
     height: 100%;
 }
+.editPostSectionTitle
+{
+    color: #7c7b7b;
+    background: #FFF;
+    padding: 0.5em 0.2em 0em 0.2em;
+}
 .editPostLabelPanel
 {
     text-align: right;
