@@ -42,7 +42,7 @@
                             postField.value = "{{images.noPicture}}";
                         {% endif %}
                     {% elif field.name == "paid" %}
-                    	postField.input += "<div style='width: 90%; display: inline; margin-left: 20px;'><div class='editPostLabelPanel' style='width: 10%; display: inline;'>Specify </div><input type='text' name='paidDescription' value='{{post.paidDescription}}' style='width: 40%; display: inline;'></div>";
+                    	postField.input += "<div style='width: 90%; display: inline; margin-left: 20px;'><div class='editPostLabelPanel' style='width: 10%; display: inline; margin-bottom: -10px;'>Specify </div><input type='text' name='paidDescription' value='{{post.paidDescription}}' style='width: 59%; display: inline;'></div>";
                     {% elif field.name == "paidDescription" %}
                     	// Paid description will be on same line as paid
                     	save = false;

@@ -7,14 +7,13 @@ function addCreateCastingPost(formDict, formURL, formName){
 	var pictureColumn = '<td style="max-width: 200px; height: 200px; text-align: center;"><div id="postPicturePanel" class="postPicture" style="width: 80%; height: 93%; background: #000; margin: 0 auto;"><img id="postPictureImg" src="' + pictureField.value + '" style="max-width:100%; max-height:100%;"/></div><div style="width: 60%; margin: 0 auto; overflow: hidden;">' + pictureField.input + "</div></td>";
 
 	// Fill text content
-	var sectionMap = {"Details": ["title", "project", "characterType", "status"],
-					  "Production": ["paid", "hoursPerWeek", "startDate", "endDate"],
+	var sectionMap = {"Details": ["title", "project", "characterType", "status", "paid", "hoursPerWeek", "startDate", "endDate"],
 					  "The Role": ["characterName", "shortCharacterDescription", "description", "skills", "languages"],  
 					  "Physical": ["hairColor", "eyeColor", "complexion", "height", "build", "gender", "ageRange"]}
-	var mainLabelsColumn = "<td class='editPostLabelPanel' style='width: 20%; position:relative;'><div style=''><ul style='margin-bottom: -14px;'>";
-	var mainInputsColumn = "<td class='editPostInputPanel' style='width: 40%; position: relative;'><ul style=''><h1 style='font-size: 2.8em; padding: 0em 0em 0.3em 0em;'>Edit Role</h1>";
+	var mainLabelsColumn = "<td class='editPostLabelPanel' style='width: 20%; position:relative;'><div style='margin-top: 30px;'><ul style='margin-bottom: -14px;'>";
+	var mainInputsColumn = "<td class='editPostInputPanel' style='width: 40%; position: relative;'><ul style=''><h1 style='font-size: 2.8em; padding: 0em 0em 0.3em 0em; margin-top: 15px;'>Edit Role</h1><ul style='margin-top: -23px;'>";
 	var otherLabelsColumn = "<td class='editPostLabelPanel' style='width: 25%; height: 600px; position:relative;'><div style='position: absolute; top:0; right: 0; margin-right: 5px; width: 90%; margin-top: 5px;'><ul>";
-	var otherInputsColumn = "<td class='editPostInputPanel' colspan='2' style='width: 80%;height: 600px;'><div style='margin-top: 12px;'><ul>";
+	var otherInputsColumn = "<td class='editPostInputPanel' colspan='2' style='width: 80%;'><div style='margin-top: -6px;'><ul>";
 	for(sectionTitle in sectionMap){
 		var fieldList = sectionMap[sectionTitle];
 		var sectionInputTableElement = null;
@@ -31,8 +30,8 @@ function addCreateCastingPost(formDict, formURL, formName){
 		}
 		/*sectionLabelTableElement += "<br><div style='height: 20px'></div>"
 		sectionInputTableElement += "<div style='position: relative; height: 50px; margin-bottom: 0px;'><h2 class='editPostSectionTitle' style='position: absolute; z-index: 1;'> " + sectionTitle + "</h2><div style='position: absolute; z-index: 0; width: 145%; border: 1px solid #7c7b7b; height: 0px; bottom: 0; margin-bottom: 15px; margin-left: -45%;'></div></div>"*/
-		sectionLabelTableElement += "<br><div style='position: relative; height: 50px;'> <h2 class='" + sectionClass + "' style='position: absolute; z-index: 1; right: 0; margin-left: 80px;'> " + sectionTitle + "</h2><div style='position: absolute; z-index: 0; width: 250%; border: 1px solid #7c7b7b; height: 0px; bottom: 0; margin-bottom: 15px; margin-left: 20px;'></div></div>"
-		sectionInputTableElement += "<br>";
+		sectionLabelTableElement += "<div style='position: relative; height: 50px;'> <h2 class='" + sectionClass + "' style='position: absolute; z-index: 1; right: 0; margin-left: 80px;'> " + sectionTitle + "</h2><div style='position: absolute; z-index: 0; width: 250%; border: 1px solid #7c7b7b; height: 0px; bottom: 0; margin-bottom: 15px; margin-left: 20px;'></div></div>"
+		sectionInputTableElement += "<div style='height: 60px;'></div>";
 
 		for(i in fieldList){
 			var fieldName = sectionMap[sectionTitle][i];
@@ -53,7 +52,7 @@ function addCreateCastingPost(formDict, formURL, formName){
 			if(!field.hidden){
 				if(field.numRows > 1){
 					// stupid hack I hate myself right now
-					sectionLabelTableElement += "<li style='height:" + '' + field.numRows*6.1 + 'px;' + "'><label for='name'>" + field.label + "</label></li>";
+					sectionLabelTableElement += "<li style='height:" + '' + field.numRows*5.9 + 'px;' + "'><label for='name'>" + field.label + "</label></li>";
 					// TODO replace newlines in description as it will break js
 					sectionInputTableElement += "<li><textarea rows='" + field.numRows + "' name='" + field.name + "' form='" + formName + "' style='height:100px; font-size: 0.9em; width: 94.5%;'>" + field.value + "</textarea></li>";
 				}else{
@@ -76,8 +75,8 @@ function addCreateCastingPost(formDict, formURL, formName){
 			mainLabelsColumn = sectionLabelTableElement;
 			mainInputsColumn = sectionInputTableElement;
 		}else{
-			otherLabelsColumn = sectionLabelTableElement;
-			otherInputsColumn = sectionInputTableElement;
+			otherLabelsColumn = sectionLabelTableElement + "<div style='height: 20px'></div>";
+			otherInputsColumn = sectionInputTableElement + "<div style='height: 10px'></div>";
 		}
 
 	}
