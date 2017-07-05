@@ -55,7 +55,7 @@ function addCreateCastingPost(formDict, formURL, formName, projectInfo){
 			}
 		}
 		if(name === "postPicture"){
-			pictureColumn += '<div id="postPicturePanel" class="postPicture" style="width: 80%; height: 93%; background: #000; margin: 0 auto;"><img id="postPictureImg" src="' + value + '" style="max-width:100%; max-height:100%;"/></div><div style="width: 50%; margin: 0 auto; overflow: hidden;">' + input + "</div>";
+			pictureColumn += '<div id="postPicturePanel" class="postPicture" style="width: 80%; height: 93%; background: #000; margin: 0 auto;"><img id="postPictureImg" src="' + value + '" style="max-width:100%; max-height:100%;"/></div><div style="width: 60%; margin: 0 auto; overflow: hidden;">' + input + "</div>";
 			continue;
 		}
 
@@ -97,11 +97,13 @@ function addCreateCastingPost(formDict, formURL, formName, projectInfo){
 	// Add project link
 	var projectTitle = null;
 	var projectID = null;
-	for(var i=0; i < projectInfo.length; i++){
-		if(projectInfo[i]["key"] === "title"){
-			projectTitle = projectInfo[i]["value"];
-		}else if(projectInfo[i]["key"] === "projectID"){
-			projectID = projectInfo[i]["value"];
+	if(projectInfo != null){
+		for(var i=0; i < projectInfo.length; i++){
+			if(projectInfo[i]["key"] === "title"){
+				projectTitle = projectInfo[i]["value"];
+			}else if(projectInfo[i]["key"] === "projectID"){
+				projectID = projectInfo[i]["value"];
+			}
 		}
 	}
 	mainInputsColumn += "<li><a>"
