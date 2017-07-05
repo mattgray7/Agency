@@ -8,10 +8,10 @@ function addCreateCastingPost(formDict, formURL, formName){
 
 	// Fill text content
 	var sectionMap = {"Details": ["title", "project", "characterType", "status", "paid", "hoursPerWeek", "startDate", "endDate"],
-					  "The Role": ["characterName", "shortCharacterDescription", "description", "skills", "languages"],  
+					  "Character": ["characterName", "shortCharacterDescription", "description", "skills", "languages"],  
 					  "Physical": ["hairColor", "eyeColor", "complexion", "height", "build", "gender", "ageRange"]}
-	var mainLabelsColumn = "<td class='editPostLabelPanel' style='width: 20%; position:relative;'><div style='margin-top: 30px;'><ul style='margin-bottom: -14px;'>";
-	var mainInputsColumn = "<td class='editPostInputPanel' style='width: 40%; position: relative;'><ul style=''><h1 style='font-size: 2.8em; padding: 0em 0em 0.3em 0em; margin-top: 15px;'>Edit Role</h1><ul style='margin-top: -23px;'>";
+	var mainLabelsColumn = "<td class='editPostLabelPanel' style='width: 20%; position:relative; line-height: 38.2px;'><div style='margin-top: 30px;'><ul style='margin-bottom: -14px;'>";
+	var mainInputsColumn = "<td class='editPostInputPanel' style='width: 40%; position: relative; line-height: 39px;'><h1 style='font-size: 2.8em; padding: 0em 0em 0.3em 0em; margin-top: 15px;'>Edit Role</h1><ul style='margin-top: -20px;'>";
 	var otherLabelsColumn = "<td class='editPostLabelPanel' style='width: 25%; height: 600px; position:relative;'><div style='position: absolute; top:0; right: 0; margin-right: 5px; width: 90%; margin-top: 5px;'><ul>";
 	var otherInputsColumn = "<td class='editPostInputPanel' colspan='2' style='width: 80%;'><div style='margin-top: -6px;'><ul>";
 	for(sectionTitle in sectionMap){
@@ -49,7 +49,7 @@ function addCreateCastingPost(formDict, formURL, formName){
 				sectionInputTableElement += "</a></li>";
 				continue;
 			}
-			if(!field.hidden){
+			if(!field.hidden || field.name === "status"){
 				if(field.numRows > 1){
 					// stupid hack I hate myself right now
 					sectionLabelTableElement += "<li style='height:" + '' + field.numRows*5.9 + 'px;' + "'><label for='name'>" + field.label + "</label></li>";
