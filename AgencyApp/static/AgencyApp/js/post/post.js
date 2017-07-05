@@ -76,7 +76,7 @@ function addCreateCastingPost(formDict, formURL, formName, projectInfo){
 				// stupid hack I hate myself right now
 				otherLabelsColumn += "<li style='height:" + '' + extendedNumberOfRows*6.1 + 'px;' + "'><label for='name'>" + label + "</label></li>";
 				// TODO replace newlines in description as it will break js
-				otherInputsColumn += "<li><textarea rows='" + extendedNumberOfRows + "' name='" + name + "' form='" + formName + "' style='height:100px; font-size: 0.9em; width: 95%;'>" + value + "</textarea></li>";
+				otherInputsColumn += "<li><textarea rows='" + extendedNumberOfRows + "' name='" + name + "' form='" + formName + "' style='height:100px; font-size: 0.9em; width: 94.5%;'>" + value + "</textarea></li>";
 			}else{
 				otherLabelsColumn += "<label for='name'>" + label + "</label><br>";
 				otherInputsColumn += "<li><div style='border: 2px solid #FFF; border-radius: 4px;'>"

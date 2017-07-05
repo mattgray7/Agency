@@ -32,6 +32,7 @@
                 {% spaceless %}
                 {% for field in form %}
                     var postField = []
+                    var save = true;
                     postField.push({key: "name", value: '{{field.name}}'});
                     postField.push({key: "hidden", value: ('{{field}}'.includes('hidden'))});
                     postField.push({key: "label", value: '{{field.label}}'})
@@ -46,6 +47,11 @@
                         {% else %}
                             value = "{{images.noPicture}}";
                         {% endif %}
+                    {% elif field.name == "paid" %}
+                    	input += "<div style='width: 90%; display: inline; margin-left: 20px;'><div class='editPostLabelPanel' style='width: 10%; display: inline;'>Specify </div><input type='text' name='paidDescription' value='{{post.paidDescription}}' style='width: 76%; display: inline;'></div>";
+                    {% elif field.name == "paidDescription" %}
+                    	// Paid description will be on same line as paid
+                    	save = false;
                     {% elif field.name == "status" %}
                         {% if statusOptions.roles %}
                             var options = {{ statusOptions.roles|safe }}
@@ -68,7 +74,9 @@
                     {% endif %}
                     postField.push({key: "value", value: value});
                     postField.push({key: "input", value: input});
-                    postFields.push(postField);
+                    if(save){
+                    	postFields.push(postField);
+                    }
                 {% endfor %}
                 {% endspaceless %}
                 var csrfField = []
