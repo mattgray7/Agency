@@ -25,72 +25,48 @@ function addCreateCastingPost(formDict, formURL, formName, projectInfo){
 	var otherInputsColumn = "<td class='editPostInputPanel' colspan='2' style='width: 80%;height: 600px;'><div style='margin-top: 12px;'><ul>";
 
 	var projectName = "";
-	for(var i=0; i < formDict.length; i++){
-		var name = "";
-		var input = "";
-		var hidden = true;
-		var value = "";
-		var label = "";
-		var options = null;
-		var extendedNumberOfRows = 0;
-		var cancelOnclick = "";
-		for(var j=0; j < formDict[i].length; j++){
-			var formElement = formDict[i][j];
-			if(formElement["key"] == "name"){
-				name = formElement["value"];
-			}else if(formElement["key"] == "input"){
-				input = formElement["value"];
-			}else if(formElement["key"] == "hidden"){
-				hidden = formElement["value"];
-			}else if(formElement["key"] == "value"){	
-				value = formElement["value"]
-			}else if(formElement["key"] == "label"){
-				label = formElement["value"]
-			}else if(formElement["key"] == "options"){
-				options = formElement["value"];
-			}else if(formElement["key"] == "numRows"){
-				extendedNumberOfRows = formElement["value"]
-			}else if(formElement["key"] == "cancelButtonOnclick"){
-				cancelOnclick = formElement["value"]
-			}
-		}
-		if(name === "postPicture"){
-			pictureColumn += '<div id="postPicturePanel" class="postPicture" style="width: 80%; height: 93%; background: #000; margin: 0 auto;"><img id="postPictureImg" src="' + value + '" style="max-width:100%; max-height:100%;"/></div><div style="width: 60%; margin: 0 auto; overflow: hidden;">' + input + "</div>";
+
+	for(key in formDict){
+		var field = formDict[key];
+		if(field.name == "postPicture"){
+			pictureColumn += '<div id="postPicturePanel" class="postPicture" style="width: 80%; height: 93%; background: #000; margin: 0 auto;"><img id="postPictureImg" src="' + field.value + '" style="max-width:100%; max-height:100%;"/></div><div style="width: 60%; margin: 0 auto; overflow: hidden;">' + field.input + "</div>";
 			continue;
 		}
 
-		if(mainInputs.indexOf(name) > -1){
+		if(mainInputs.indexOf(field.name) > -1){
 			// top left column
-			mainLabelsColumn += "<li><label for='name'>" + label + "</label></li>";
+			mainLabelsColumn += "<li><label for='name'>" + field.label + "</label></li>";
 			mainInputsColumn += "<li><div style='border: 2px solid #FFF; border-radius: 4px;'>"
-			if(options){
-				var selectForm = createSelectForm(formName, name + "SelectBar", options, value);
+			if(field.options){
+				var selectForm = createSelectForm(formName, field.name + "SelectBar", field.options, field.value);
 				mainInputsColumn += selectForm;
-				mainInputsColumn += "<input type='hidden' name='" + name + "' id='" + name + "SelectInput' >";
+				mainInputsColumn += "<input type='hidden' name='" + field.name + "' id='" + field.name + "SelectInput' >";
 			}else{
-				mainInputsColumn += input;
+				mainInputsColumn += field.input;
 			}
 			mainInputsColumn += '</div></li>'; 
-		}else if(!hidden){
-			if(extendedNumberOfRows > 1){
+		}else if(!field.hidden){
+			if(field.numRows > 1){
 				// stupid hack I hate myself right now
-				otherLabelsColumn += "<li style='height:" + '' + extendedNumberOfRows*6.1 + 'px;' + "'><label for='name'>" + label + "</label></li>";
+				otherLabelsColumn += "<li style='height:" + '' + field.numRows*6.1 + 'px;' + "'><label for='name'>" + field.label + "</label></li>";
 				// TODO replace newlines in description as it will break js
-				otherInputsColumn += "<li><textarea rows='" + extendedNumberOfRows + "' name='" + name + "' form='" + formName + "' style='height:100px; font-size: 0.9em; width: 94.5%;'>" + value + "</textarea></li>";
+				otherInputsColumn += "<li><textarea rows='" + field.numRows + "' name='" + field.name + "' form='" + formName + "' style='height:100px; font-size: 0.9em; width: 94.5%;'>" + field.value + "</textarea></li>";
 			}else{
-				otherLabelsColumn += "<label for='name'>" + label + "</label><br>";
+				otherLabelsColumn += "<label for='name'>" + field.label + "</label><br>";
 				otherInputsColumn += "<li><div style='border: 2px solid #FFF; border-radius: 4px;'>"
-				if(options){
-					var selectForm = createSelectForm(formName, name + "SelectBar", options, value);
+				if(field.options){
+					var selectForm = createSelectForm(formName, field.name + "SelectBar", field.options, field.value);
 					otherInputsColumn += selectForm;
-					otherInputsColumn += "<input type='hidden' name='" + name + "' id='" + name + "SelectInput' >";
+					otherInputsColumn += "<input type='hidden' name='" + field.name + "' id='" + field.name + "SelectInput' >";
 				}else{
-					otherInputsColumn += input;
+					otherInputsColumn += field.input;
 				}
 				otherInputsColumn += '</div></li>';
 			}
 		}else{
-			otherInputsColumn += input;
+			if(field.input != null && field.input.length > 0){
+				otherInputsColumn += field.input;
+			}
 		}	
 	}
 	
@@ -122,6 +98,6 @@ function addCreateCastingPost(formDict, formURL, formName, projectInfo){
 	pictureColumn += "</td>";
 	formString += "<tr>" + mainLabelsColumn + mainInputsColumn + pictureColumn + "</tr>"
 	formString += "<tr>" + otherLabelsColumn + otherInputsColumn + "</tr></form>"
-	formString += "<tr><td colspan='3' style='width: 100%; position:relative; height: 70px;'><div class='whiteButton blackHover' style='width: 36%; position:absolute; left: 0; bottom: 0; margin-bottom: 10px; margin-left: 20px;' onclick='" + cancelOnclick + "'> Cancel </div><div class='whiteButton blackHover' style='width: 36%; position:absolute; right: 0; bottom: 0; margin-bottom: 10px;' onclick='submitForm(" + '"' + formName + '");' + "'> Create Post</div></td></tr>";
+	formString += "<tr><td colspan='3' style='width: 100%; position:relative; height: 70px;'><div class='whiteButton blackHover' style='width: 36%; position:absolute; left: 0; bottom: 0; margin-bottom: 10px; margin-left: 20px;' onclick='" + formDict["cancelButton"]["onclick"] + "'> Cancel </div><div class='whiteButton blackHover' style='width: 36%; position:absolute; right: 0; bottom: 0; margin-bottom: 10px;' onclick='submitForm(" + '"' + formName + '");' + "'> Create Post</div></td></tr>";
 	return formString;
 }
