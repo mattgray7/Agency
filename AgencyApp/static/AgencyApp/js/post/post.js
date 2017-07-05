@@ -106,7 +106,7 @@ function addCreateCastingPost(formDict, formURL, formName, projectInfo){
 			}
 		}
 	}
-	mainInputsColumn += "<li><a>"
+	mainInputsColumn += "<li style='margin-bottom: -5px;'><a  onclick='redirectToPost(" + '"' + projectID + '"' + ");'>"
 	if(projectTitle != null){
 		mainInputsColumn += projectTitle;
 	}else{

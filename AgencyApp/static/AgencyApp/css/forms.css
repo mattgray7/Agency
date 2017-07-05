@@ -9,6 +9,16 @@
     margin:0px auto;
     font-family: 'Didact Gothic', sans-serif;
 }
+.form-style-1 a
+{
+    color: #1e1e1e;
+    font-weight: 900;
+}
+.form-style-1 a:hover
+{
+    cursor: pointer;
+    color: #777777;
+}
 .editPostPanel
 {
     height: 100%;
