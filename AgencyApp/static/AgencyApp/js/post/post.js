@@ -24,8 +24,6 @@ function addCreateCastingPost(formDict, formURL, formName, projectInfo){
 	var otherLabelsColumn = "<td class='editPostLabelPanel' style='width: 25%; height: 600px; position:relative;'><div style='position: absolute; top:0; right: 0; margin-right: 5px; width: 90%; margin-top: 5px;'><ul>";
 	var otherInputsColumn = "<td class='editPostInputPanel' colspan='2' style='width: 80%;height: 600px;'><div style='margin-top: 12px;'><ul>";
 
-	var projectName = "";
-
 	for(key in formDict){
 		var field = formDict[key];
 		if(field.name == "postPicture"){
@@ -74,13 +72,8 @@ function addCreateCastingPost(formDict, formURL, formName, projectInfo){
 	var projectTitle = null;
 	var projectID = null;
 	if(projectInfo != null){
-		for(var i=0; i < projectInfo.length; i++){
-			if(projectInfo[i]["key"] === "title"){
-				projectTitle = projectInfo[i]["value"];
-			}else if(projectInfo[i]["key"] === "projectID"){
-				projectID = projectInfo[i]["value"];
-			}
-		}
+		projectTitle = projectInfo.title;
+		projectID = projectInfo.projectID;
 	}
 	mainInputsColumn += "<li style='margin-bottom: -5px;'><a  onclick='redirectToPost(" + '"' + projectID + '"' + ");'>"
 	if(projectTitle != null){

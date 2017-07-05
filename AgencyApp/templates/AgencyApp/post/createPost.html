@@ -84,10 +84,10 @@
 	<script>
 		var postFormDiv = document.getElementById("postForm");
 		if(postFormDiv != null){
-			var projectInfo = [];
+			var projectInfo = {};
 			{% if project and project.title %}
-                projectInfo.push({key: "title", value: '{{ project.title }}'});
-                projectInfo.push({key: "projectID", value: '{{ project.postID }}'})
+				projectInfo.title  = '{{project.title}}';
+				projectInfo.projectID = '{{project.postID}}';
             {% endif %}
 			newForm = addCreateCastingPost(getCastingFormDict(), "{{currentPageURL}}", "createCastingPostForm", projectInfo);
 			postFormDiv.innerHTML = newForm;
