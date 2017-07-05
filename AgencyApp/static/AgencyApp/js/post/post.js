@@ -19,15 +19,21 @@ function addCreateCastingPost(formDict, formURL, formName){
 		var fieldList = sectionMap[sectionTitle];
 		var sectionInputTableElement = null;
 		var sectionLabelTableElement = null;
+		var sectionClass = null;
 		if(sectionTitle === "Details" || sectionTitle === "Production"){
 			sectionLabelTableElement = mainLabelsColumn;
 			sectionInputTableElement = mainInputsColumn;
+			sectionClass = "editPostMainSectionTitle";
 		}else{
 			sectionLabelTableElement = otherLabelsColumn;
 			sectionInputTableElement = otherInputsColumn;
+			sectionClass = "editPostOtherSectionTitle";
 		}
-		sectionLabelTableElement += "<br><div style='height: 20px'></div>"
-		sectionInputTableElement += "<div style='position: relative; height: 50px; margin-bottom: 0px;'><h2 class='editPostSectionTitle' style='position: absolute; z-index: 1;'> " + sectionTitle + "</h2><div style='position: absolute; z-index: 0; width: 145%; border: 1px solid #7c7b7b; height: 0px; bottom: 0; margin-bottom: 15px; margin-left: -45%;'></div></div>"
+		/*sectionLabelTableElement += "<br><div style='height: 20px'></div>"
+		sectionInputTableElement += "<div style='position: relative; height: 50px; margin-bottom: 0px;'><h2 class='editPostSectionTitle' style='position: absolute; z-index: 1;'> " + sectionTitle + "</h2><div style='position: absolute; z-index: 0; width: 145%; border: 1px solid #7c7b7b; height: 0px; bottom: 0; margin-bottom: 15px; margin-left: -45%;'></div></div>"*/
+		sectionLabelTableElement += "<br><div style='position: relative; height: 50px;'> <h2 class='" + sectionClass + "' style='position: absolute; z-index: 1; right: 0; margin-left: 80px;'> " + sectionTitle + "</h2><div style='position: absolute; z-index: 0; width: 250%; border: 1px solid #7c7b7b; height: 0px; bottom: 0; margin-bottom: 15px; margin-left: 20px;'></div></div>"
+		sectionInputTableElement += "<br>";
+
 		for(i in fieldList){
 			var fieldName = sectionMap[sectionTitle][i];
 			var field = formDict[fieldName];
@@ -52,7 +58,7 @@ function addCreateCastingPost(formDict, formURL, formName){
 					sectionInputTableElement += "<li><textarea rows='" + field.numRows + "' name='" + field.name + "' form='" + formName + "' style='height:100px; font-size: 0.9em; width: 94.5%;'>" + field.value + "</textarea></li>";
 				}else{
 					sectionLabelTableElement += "<label for='name'>" + field.label + "</label><br>";
-					sectionInputTableElement += "<li><div style='border: 2px solid #FFF; border-radius: 4px;'>"
+					sectionInputTableElement += "<li>"
 					if(field.options){
 						var selectForm = createSelectForm(formName, field.name + "SelectBar", field.options, field.value);
 						sectionInputTableElement += selectForm;
@@ -60,7 +66,7 @@ function addCreateCastingPost(formDict, formURL, formName){
 					}else{
 						sectionInputTableElement += field.input;
 					}
-					sectionInputTableElement += '</div></li>';
+					sectionInputTableElement += '</li>';
 				}
 			}else if(field.input != null && field.input.length > 0){
 				sectionInputTableElement += field.input;

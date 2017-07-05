@@ -23,11 +23,19 @@
 {
     height: 100%;
 }
-.editPostSectionTitle
+.editPostMainSectionTitle,
+.editPostOtherSectionTitle
 {
-    color: #7c7b7b;
+    /*color: #7c7b7b;*/
+    color: rgba(0,0,0,0.9);
     background: #FFF;
-    padding: 0.5em 0.2em 0em 0.2em;
+    padding: 0.5em 0.3em 0em 0.3em;
+    font-size: 1.2em;
+    margin-right: -8px;
+}
+.editPostOtherSectionTitle
+{
+    min-width: 90px;
 }
 .editPostLabelPanel
 {
