@@ -53,13 +53,21 @@ function addCreateCastingPost(formDict, formURL, formName){
 				}else if(fieldName === "actorName"){
 					if(field.value != null && field.value.length > 0){
 						var actorDict = formDict["actor"]
-						if(actorDict != null){
-							sectionLabelTableElement += "<label for='name'>Actor</label><br><br><br><br>";
-							sectionInputTableElement += '<div id="actorPicturePanel" class="postPicture" style="width: 150px; height: 150px; background: #000;"><img id="actorPictureImg" src="' + actorDict.profilePictureURL + '" style="max-width:100%; max-height:100%;"/><div style="margin-left: 20px;">' + actorDict.cleanName + '</div></div>';
+						sectionLabelTableElement += "<div style='height: 165px;'></div>";
+						sectionInputTableElement+= "<div style='width: 100%; position: relative; height: 161px;' class='editCastMemberPanel'>"
+
+						// Add actor text panel
+						sectionInputTableElement += '<div style="position: absolute; left: 0;"><h2>';
+						if(actorDict.cleanName != null && actorDict.username != null){
+							sectionInputTableElement += actorDict.cleanName;
 						}else{
-							sectionLabelTableElement += "<label for='name'>Actor</label><br>";
 							sectionInputTableElement += "Add new cast member"
 						}
+						sectionInputTableElement += "</h2></div>"
+
+						// Add actor profile picture panel
+						sectionInputTableElement += '<div style="position: absolute; right: 0; margin-top: 2px; margin-right: 2px;"><div id="actorPicturePanel" class="postPicture" style="width: 150px; height: 150px; background: #000;"><img id="actorPictureImg" src="' + actorDict.profilePictureURL + '" style="max-width:100%; max-height:100%;"/></div></div>';
+						sectionInputTableElement += "</div>";
 					}
 					continue;
 				}

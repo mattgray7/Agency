@@ -85,13 +85,18 @@
 				postFields["project"] = projectField
 
 				// Add actor
+				var actorField = {"username": "{{actor.username}}", "cleanName": "{{actor.cleanName}}"}
 				{% if actor %}
-					var actorField = {"username": "{{actor.username}}", "cleanName": "{{actor.cleanName}}"}
+					actorField["username"] = "{{actor.username}}";
+					actorField["cleanName"] = "{{actor.cleanName}}";
 					{% if actor.profilePicture %}
 						actorField.profilePictureURL = '{{actor.profilePicture.url}}';
 					{% endif %}
-					postFields["actor"] = actorField;
+				{% else %}
+					actorField["username"] = null;
+					actorField.profilePictureURL = '{{images.noProfilePicture}}';
 				{% endif %}
+				postFields["actor"] = actorField;
 
 				// Add csrf token
                 var csrfField = {"name": "csrf_token", "input": "{% csrf_token %}", "hidden": true};

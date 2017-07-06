@@ -20,6 +20,12 @@
     cursor: pointer;
     color: #777777;
 }
+.editCastMemberPanel
+{
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    background: #f4f4f4;
+}
 .editPostPanel
 {
     height: 100%;
