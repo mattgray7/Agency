@@ -4,7 +4,7 @@ function addCreateCastingPost(formDict, formURL, formName){
 
 	// Fill post picture string
 	var pictureField = formDict["postPicture"];
-	var pictureColumn = '<td style="text-align: center; width: 30%;"><div id="postPicturePanel" class="postPicture" style="width: 292px; height: 292px; background: #000; margin-left: 20px; margin-top: 118px;"><img id="postPictureImg" src="' + pictureField.value + '" style="max-width:100%; max-height:100%;"/></div><div style="width: 60%; margin-left: 25%; overflow: hidden;">' + pictureField.input + "</div></td>";
+	var pictureColumn = '<td style="text-align: center; width: 30%;"><div id="postPicturePanel" class="postPicture" style="width: 270px; height: 292px; background: #000; margin-left: 10px; margin-top: 118px;"><img id="postPictureImg" src="' + pictureField.value + '" style="max-width:100%; max-height:100%;"/></div><div style="width: 60%; margin-left: 25%; overflow: hidden;">' + pictureField.input + "</div></td>";
 
 	// Fill text content
 	var sectionMap = {"Details": ["title", "project", "characterType", "status", "paid", "hoursPerWeek", "startDate", "endDate"],
@@ -54,7 +54,7 @@ function addCreateCastingPost(formDict, formURL, formName){
 					// stupid hack I hate myself right now
 					sectionLabelTableElement += "<li style='height:" + '' + field.numRows*5.9 + 'px;' + "'><label for='name'>" + field.label + "</label></li>";
 					// TODO replace newlines in description as it will break js
-					sectionInputTableElement += "<li><textarea rows='" + field.numRows + "' name='" + field.name + "' form='" + formName + "' style='height:100px; font-size: 0.9em; width: 94.5%;'>" + field.value + "</textarea></li>";
+					sectionInputTableElement += "<li><textarea rows='" + field.numRows + "' name='" + field.name + "' form='" + formName + "' style='height:100px; font-size: 0.9em; width: 97.7%;'>" + field.value + "</textarea></li>";
 				}else{
 					sectionLabelTableElement += "<label for='name'>" + field.label + "</label><br>";
 					sectionInputTableElement += "<li>"
