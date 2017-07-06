@@ -4,7 +4,7 @@ function addCreateCastingPost(formDict, formURL, formName){
 
 	// Fill post picture string
 	var pictureField = formDict["postPicture"];
-	var pictureColumn = '<td style="text-align: center; width: 30%;"><div id="postPicturePanel" class="postPicture" style="width: 270px; height: 292px; background: #000; margin-left: 10px; margin-top: 118px;"><img id="postPictureImg" src="' + pictureField.value + '" style="max-width:100%; max-height:100%;"/></div><div style="width: 60%; margin-left: 25%; overflow: hidden;">' + pictureField.input + "</div></td>";
+	var pictureColumn = '<td style="text-align: center; width: 30%;"><div id="postPicturePanel" class="postPicture" style="width: 270px; height: 298px; background: #000; margin-left: 10px; margin-top: 50px;"><img id="postPictureImg" src="' + pictureField.value + '" style="max-width:100%; max-height:100%;"/></div><div style="width: 60%; margin-left: 25%; overflow: hidden;">' + pictureField.input + "</div></td>";
 
 	// Fill text content
 	var sectionMap = {"Details": ["title", "project", "characterType", "status", "paid", "hoursPerWeek", "startDate", "endDate"],
@@ -12,8 +12,8 @@ function addCreateCastingPost(formDict, formURL, formName){
 					  "Performer": ["actorName"],
 					  "Physical": ["hairColor", "eyeColor", "complexion", "height", "build", "gender", "ageRange"],
 					  "hidden": ["csrf_token", "postID", "source", "next", "destination", "projectID", "poster"]}
-	var mainLabelsColumn = "<td class='editPostLabelPanel' style='width: 20%; position:relative; line-height: 38.2px;'><div style='margin-top: 30px;'><ul style='margin-bottom: -14px;'>";
-	var mainInputsColumn = "<td class='editPostInputPanel' style='width: 50%; position: relative; line-height: 39px;'><h1 style='font-size: 2.8em; padding: 0em 0em 0.3em 0em; margin-top: 15px;'>Edit Role</h1><ul style='margin-top: -20px;'>";
+	var mainLabelsColumn = "<td class='editPostLabelPanel' style='width: 20%; position:relative; line-height: 38.2px;'><ul style='margin-bottom: -14px; margin-top: -40px;'>";
+	var mainInputsColumn = "<td class='editPostInputPanel' style='width: 50%; position: relative; line-height: 39px;'><ul style='margin-top: -20px; '>";
 	var otherLabelsColumn = "<td class='editPostLabelPanel' style='width: 30%; min-width: 170px; height: 600px; position:relative;'><div style='position: absolute; top:0; right: 0; margin-right: 5px; width: 90%; margin-top: 5px;'><ul>";
 	var otherInputsColumn = "<td class='editPostInputPanel' colspan='2' style='width: 70%;'><div style='margin-top: -6px;'><ul>";
 	for(sectionTitle in sectionMap){
@@ -38,7 +38,6 @@ function addCreateCastingPost(formDict, formURL, formName){
 			for(i in fieldList){
 				var fieldName = sectionMap[sectionTitle][i];
 				var field = formDict[fieldName];
-				console.log(fieldName)
 
 				// Add project
 				if(fieldName === "project"){
@@ -109,13 +108,31 @@ function addCreateCastingPost(formDict, formURL, formName){
 		}
 
 	}
-
 	mainLabelsColumn += "</ul></div></td>";
 	otherLabelsColumn += "</ul></div></td>";
 	mainInputsColumn += "</ul></td>";
 	otherInputsColumn += "</ul></div></td>";
+
+	// Add title
+	formString += "<tr><td colspan='3' style='text-align: center;'><h1 style='font-size: 2.8em; margin-left: 30px; padding: 0em 0em 0.3em 0em; margin-top: 15px;'>";
+	if(formDict["newPost"]){
+		formString += "Add Role";
+	}else{
+		formString += "Edit Role";
+	}
+	formString += "</h1></td></tr>";
+
+	// Create the form
 	formString += "<tr>" + mainLabelsColumn + mainInputsColumn + pictureColumn + "</tr>"
 	formString += "<tr>" + otherLabelsColumn + otherInputsColumn + "</tr></form>"
-	formString += "<tr><td colspan='3' style='width: 100%; position:relative; height: 70px;'><div class='whiteButton blackHover' style='width: 36%; position:absolute; left: 0; bottom: 0; margin-bottom: 10px; margin-left: 20px;' onclick='" + formDict["cancelButton"]["onclick"] + "'> Cancel </div><div class='whiteButton blackHover' style='width: 36%; position:absolute; right: 0; bottom: 0; margin-bottom: 10px;' onclick='submitForm(" + '"' + formName + '");' + "'> Create Post</div></td></tr>";
+
+	// Add buttons
+	formString += "<tr><td colspan='3' style='width: 100%; position:relative; height: 70px;'><div class='whiteButton blackHover' style='width: 36%; position:absolute; left: 0; bottom: 0; margin-bottom: 10px; margin-left: 20px;' onclick='" + formDict["cancelButton"]["onclick"] + "'> Cancel </div><div class='whiteButton blackHover' style='width: 36%; position:absolute; right: 0; bottom: 0; margin-bottom: 10px;' onclick='submitForm(" + '"' + formName + '");' + "'>"
+	if(formDict["newPost"]){
+		formString += "Create Post";
+	}else{
+		formString += "Update Post"
+	}
+	formString += "</div></td></tr>";
 	return formString;
 }

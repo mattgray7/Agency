@@ -118,6 +118,11 @@
                 // Add cancel button with onclick
                 var cancelButton = {'name': 'cancelButton', 'onclick': 'toggleExpandListPanel("shrink", "roles", "vertical");', "hidden": true};
                 postFields['cancelButton'] = cancelButton;
+
+                postFields["newPost"] = true;
+                {% if post %}
+                	postFields["newPost"] = false;
+                {% endif %}
             {% endif %}
             return postFields;
         }
