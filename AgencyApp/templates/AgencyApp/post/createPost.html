@@ -10,7 +10,6 @@
             if(statusDiv != null){
                 // Set the status from the select bar in the form
                 document.getElementById("statusSelectInput").value = statusDiv.value;
-                console.log("Set status input to " + statusDiv.value)
             }
             {% if selectFields.names %}
                 {% for name in selectFields.names %}
@@ -60,6 +59,9 @@
                         {% endif %}
                     {% elif field.name == "description" %}
                         postField.numRows = 20;
+                    {% elif field.name == "poster" %}
+                        postField.value = "{{ request.user.username }}"
+                        postField.input = postField.input.replace('name="poster"', 'name="poster" value="' + postField.value + '"')
                     {% elif field.name == "startDate" or field.name == "endDate" %}
                     	postField.input = postField.input.replace('type="text"', 'type="date"')
                     {% elif field.name in selectFields.names %}

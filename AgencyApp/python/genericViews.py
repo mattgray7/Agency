@@ -324,10 +324,13 @@ class PictureFormView(GenericFormView):
                                     formIsValid = True
                             else:
                                 formIsValid = True
+                        else:
+                            print "Failure processing form"
                     else:
                         print "Form errors: {0}".format(self.form.errors)
                         self.errorMemory = self.form.errors
                 else:
+                    print "No form class"
                     if self.processForm():
                         formIsValid = True
         else:

@@ -9,7 +9,8 @@ function addCreateCastingPost(formDict, formURL, formName){
 	// Fill text content
 	var sectionMap = {"Details": ["title", "project", "characterType", "status", "paid", "hoursPerWeek", "startDate", "endDate"],
 					  "Character": ["characterName", "shortCharacterDescription", "description", "skills", "languages"],  
-					  "Physical": ["hairColor", "eyeColor", "complexion", "height", "build", "gender", "ageRange"]}
+					  "Physical": ["hairColor", "eyeColor", "complexion", "height", "build", "gender", "ageRange"],
+					  "hidden": ["csrf_token", "postID", "source", "next", "destination", "projectID", "poster"]}
 	var mainLabelsColumn = "<td class='editPostLabelPanel' style='width: 20%; position:relative; line-height: 38.2px;'><div style='margin-top: 30px;'><ul style='margin-bottom: -14px;'>";
 	var mainInputsColumn = "<td class='editPostInputPanel' style='width: 50%; position: relative; line-height: 39px;'><h1 style='font-size: 2.8em; padding: 0em 0em 0.3em 0em; margin-top: 15px;'>Edit Role</h1><ul style='margin-top: -20px;'>";
 	var otherLabelsColumn = "<td class='editPostLabelPanel' style='width: 30%; min-width: 170px; height: 600px; position:relative;'><div style='position: absolute; top:0; right: 0; margin-right: 5px; width: 90%; margin-top: 5px;'><ul>";
@@ -28,46 +29,52 @@ function addCreateCastingPost(formDict, formURL, formName){
 			sectionInputTableElement = otherInputsColumn;
 			sectionClass = "editPostOtherSectionTitle";
 		}
-		/*sectionLabelTableElement += "<br><div style='height: 20px'></div>"
-		sectionInputTableElement += "<div style='position: relative; height: 50px; margin-bottom: 0px;'><h2 class='editPostSectionTitle' style='position: absolute; z-index: 1;'> " + sectionTitle + "</h2><div style='position: absolute; z-index: 0; width: 145%; border: 1px solid #7c7b7b; height: 0px; bottom: 0; margin-bottom: 15px; margin-left: -45%;'></div></div>"*/
-		sectionLabelTableElement += "<div style='position: relative; height: 50px;'> <h2 class='" + sectionClass + "' style='position: absolute; z-index: 1; right: 0; margin-left: 80px;'> " + sectionTitle + "</h2><div style='position: absolute; z-index: 0; width: 250%; border: 1px solid #7c7b7b; height: 0px; bottom: 0; margin-bottom: 15px; margin-left: 20px;'></div></div>"
-		sectionInputTableElement += "<div style='height: 60px;'></div>";
+		if(sectionTitle != "hidden"){
+			sectionLabelTableElement += "<div style='position: relative; height: 50px;'> <h2 class='" + sectionClass + "' style='position: absolute; z-index: 1; right: 0; margin-left: 80px;'> " + sectionTitle + "</h2><div style='position: absolute; z-index: 0; width: 250%; border: 1px solid #7c7b7b; height: 0px; bottom: 0; margin-bottom: 15px; margin-left: 20px;'></div></div>"
+			sectionInputTableElement += "<div style='height: 60px;'></div>";
 
-		for(i in fieldList){
-			var fieldName = sectionMap[sectionTitle][i];
-			var field = formDict[fieldName];
+			for(i in fieldList){
+				var fieldName = sectionMap[sectionTitle][i];
+				var field = formDict[fieldName];
 
-			// Add project
-			if(fieldName === "project"){
-				sectionLabelTableElement += "<label for='name'>Project</label><br>";
-				sectionInputTableElement += "<li style='margin-bottom: -5px;'><a  onclick='redirectToPost(" + '"' + field.projectID + '"' + ");'>"
-				if(field.title != null){
-					sectionInputTableElement += field.title;
-				}else{
-					sectionInputTableElement += "Not specified";
-				}
-				sectionInputTableElement += "</a></li>";
-				continue;
-			}
-			if(!field.hidden || field.name === "status"){
-				if(field.numRows > 1){
-					// stupid hack I hate myself right now
-					sectionLabelTableElement += "<li style='height:" + '' + field.numRows*5.9 + 'px;' + "'><label for='name'>" + field.label + "</label></li>";
-					// TODO replace newlines in description as it will break js
-					sectionInputTableElement += "<li><textarea rows='" + field.numRows + "' name='" + field.name + "' form='" + formName + "' style='height:100px; font-size: 0.9em; width: 97.7%;'>" + field.value + "</textarea></li>";
-				}else{
-					sectionLabelTableElement += "<label for='name'>" + field.label + "</label><br>";
-					sectionInputTableElement += "<li>"
-					if(field.options){
-						var selectForm = createSelectForm(formName, field.name + "SelectBar", field.options, field.value);
-						sectionInputTableElement += selectForm;
-						sectionInputTableElement += "<input type='hidden' name='" + field.name + "' id='" + field.name + "SelectInput' >";
+				// Add project
+				if(fieldName === "project"){
+					sectionLabelTableElement += "<label for='name'>Project</label><br>";
+					sectionInputTableElement += "<li style='margin-bottom: -5px;'><a  onclick='redirectToPost(" + '"' + field.projectID + '"' + ");'>"
+					if(field.title != null){
+						sectionInputTableElement += field.title;
 					}else{
-						sectionInputTableElement += field.input;
+						sectionInputTableElement += "Not specified";
 					}
-					sectionInputTableElement += '</li>';
+					sectionInputTableElement += "</a></li>";
+					continue;
 				}
-			}else if(field.input != null && field.input.length > 0){
+				if(!field.hidden || field.name === "status"){
+					if(field.numRows > 1){
+						// stupid hack I hate myself right now
+						sectionLabelTableElement += "<li style='height:" + '' + field.numRows*5.9 + 'px;' + "'><label for='name'>" + field.label + "</label></li>";
+						// TODO replace newlines in description as it will break js
+						sectionInputTableElement += "<li><textarea rows='" + field.numRows + "' name='" + field.name + "' form='" + formName + "' style='height:100px; font-size: 0.9em; width: 97.7%;'>" + field.value + "</textarea></li>";
+					}else{
+						sectionLabelTableElement += "<label for='name'>" + field.label + "</label><br>";
+						sectionInputTableElement += "<li>"
+						if(field.options){
+							var selectForm = createSelectForm(formName, field.name + "SelectBar", field.options, field.value);
+							sectionInputTableElement += selectForm;
+							sectionInputTableElement += "<input type='hidden' name='" + field.name + "' id='" + field.name + "SelectInput' >";
+						}else{
+							sectionInputTableElement += field.input;
+						}
+						sectionInputTableElement += '</li>';
+					}
+				}else if(field.input != null && field.input.length > 0){
+					sectionInputTableElement += field.input;
+				}
+			}
+		}else{
+			for(i in fieldList){
+				var fieldName = sectionMap[sectionTitle][i];
+				var field = formDict[fieldName];
 				sectionInputTableElement += field.input;
 			}
 		}
@@ -80,22 +87,6 @@ function addCreateCastingPost(formDict, formURL, formName){
 		}
 
 	}
-	
-	/*// Add project link
-	var projectTitle = null;
-	var projectID = null;
-	if(projectInfo != null){
-		projectTitle = projectInfo.title;
-		projectID = projectInfo.projectID;
-	}
-	mainInputsColumn += "<li style='margin-bottom: -5px;'><a  onclick='redirectToPost(" + '"' + projectID + '"' + ");'>"
-	if(projectTitle != null){
-		mainInputsColumn += projectTitle;
-	}else{
-		mainInputsColumn += "Not specified";
-	}
-	mainInputsColumn += "</a></li>";*/
-
 
 	mainLabelsColumn += "</ul></div></td>";
 	otherLabelsColumn += "</ul></div></td>";
