@@ -64,9 +64,9 @@
                         postField.input = postField.input.replace('name="poster"', 'name="poster" value="' + postField.value + '"')
                     {% elif field.name == "startDate" or field.name == "endDate" %}
                     	postField.input = postField.input.replace('type="text"', 'type="date"')
-                    {% elif field.name in selectFields.names %}
-                        {% if selectFields.options %}
-                            var options = {{ selectFields.options|safe }}
+                    {% elif field.name in selectFields.roles.names %}
+                        {% if selectFields.roles.options %}
+                            var options = {{ selectFields.roles.options|safe }}
                             postField.options = options['{{field.name}}']
                         {% endif %}
                     {% endif %}

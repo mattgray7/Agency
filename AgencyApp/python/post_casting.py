@@ -58,7 +58,6 @@ class CreateCastingPostView(post.GenericCreatePostView):
     def __init__(self, *args, **kwargs):
         kwargs["postType"] = constants.CASTING_POST
         super(CreateCastingPostView, self).__init__(*args, **kwargs)
-        self._selectFields = None
         self._actor = None
 
     @property
@@ -75,26 +74,8 @@ class CreateCastingPostView(post.GenericCreatePostView):
         pass
 
     @property
-    def selectFields(self):
-        if self._selectFields is None:
-            self._selectFields = {"names": [], "options": {}, "defaults": {}}
-            for field in constants.ACTOR_ATTRIBUTE_DICT:
-                if field.get("options"):
-                    name = field.get("name")
-                    if name:
-                        self._selectFields["names"].append(name)
-                        if field.get("options"):
-                            self._selectFields["options"][name] = field.get("options")
-                        if self.formInitialValues.get(name):
-                            self._selectFields["defaults"][name] = self.formInitialValues.get(name)
-                        elif field.get("value"):
-                            self._selectFields["defaults"][name] = "-"
-        return self._selectFields
-
-    @property
     def pageContext(self):
         self._pageContext = super(CreateCastingPostView, self).pageContext
-        self._pageContext["selectFields"] = self.selectFields
         self._pageContext["defaultStatus"] = "Open"
         self._pageContext["isCasting"] = True
         self._pageContext["actor"] = self.actor

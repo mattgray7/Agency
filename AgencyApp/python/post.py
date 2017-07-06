@@ -181,6 +181,8 @@ class GenericCreatePostView(views.PictureFormView):
         self._pictureModel = None
         self._pictureModelFieldName = "postPicture"
         self._currentPageURL = None
+        self._roleSelectFields = None
+
 
     @property
     def projectID(self):
@@ -239,6 +241,23 @@ class GenericCreatePostView(views.PictureFormView):
         return self._formSubmitted
 
     @property
+    def roleSelectFields(self):
+        if self._roleSelectFields is None:
+            self._roleSelectFields = {"names": [], "options": {}, "defaults": {}}
+            for field in constants.ACTOR_ATTRIBUTE_DICT:
+                if field.get("options"):
+                    name = field.get("name")
+                    if name:
+                        self._roleSelectFields["names"].append(name)
+                        if field.get("options"):
+                            self._roleSelectFields["options"][name] = field.get("options")
+                        if self.formInitialValues.get(name):
+                            self._roleSelectFields["defaults"][name] = self.formInitialValues.get(name)
+                        elif field.get("value"):
+                            self._roleSelectFields["defaults"][name] = "-"
+        return self._roleSelectFields
+
+    @property
     def pageContext(self):
         self._pageContext["post"] = self.post.record
         self._pageContext["project"] = self.project and self.project.record
@@ -251,6 +270,7 @@ class GenericCreatePostView(views.PictureFormView):
         self._pageContext["hideStatus"] = False
         self._pageContext["postType"] = self.post.postType
         self._pageContext["possibleDestinations"] = {"viewPost": constants.VIEW_POST}
+        self._pageContext["selectFields"] = {"roles": self.roleSelectFields}
         self._pageContext['statusOptions'] = {"roles": constants.CASTING_STATUS_LIST,
                                               "jobs": constants.WORK_STATUS_LIST,
                                               "events": constants.EVENT_STATUS_LIST,

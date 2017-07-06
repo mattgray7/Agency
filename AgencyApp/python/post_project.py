@@ -74,7 +74,6 @@ class CreateProjectPostView(post.GenericCreatePostView):
     def __init__(self, *args, **kwargs):
         kwargs["postType"] = constants.PROJECT_POST
         super(CreateProjectPostView, self).__init__(*args, **kwargs)
-        self._selectFields = None
 
     @property
     def projectID(self):
@@ -122,23 +121,6 @@ class CreateProjectPostView(post.GenericCreatePostView):
         return self._formInitialValues
 
     @property
-    def selectFields(self):
-        if self._selectFields is None:
-            self._selectFields = {"names": [], "options": {}, "defaults": {}}
-            for field in constants.ACTOR_ATTRIBUTE_DICT:
-                if field.get("options"):
-                    name = field.get("name")
-                    if name:
-                        self._selectFields["names"].append(name)
-                        if field.get("options"):
-                            self._selectFields["options"][name] = field.get("options")
-                        if self.formInitialValues.get(name):
-                            self._selectFields["defaults"][name] = self.formInitialValues.get(name)
-                        elif field.get("value"):
-                            self._selectFields["defaults"][name] = field["value"]
-        return self._selectFields
-
-    @property
     def pageContext(self):
         self._pageContext = super(CreateProjectPostView, self).pageContext
         self._pageContext["defaultStatus"] = "In production"
@@ -146,7 +128,6 @@ class CreateProjectPostView(post.GenericCreatePostView):
         self._pageContext["jobs"] = self.post.jobs
         self._pageContext["events"] = self.post.events
         self._pageContext["forms"] = {"role": forms.CreateCastingPostForm}
-        self._pageContext["selectFields"] = {"roles": self.selectFields}
         self._pageContext["isProject"] = True
         return self._pageContext
 
