@@ -75,6 +75,8 @@
                     }
                 {% endfor %}
                 {% endspaceless %}
+
+                // Add project
                 var projectField = {"name": "project"}
                 {% if project and project.title %}
 					projectField.title  = '{{project.title}}';
@@ -82,9 +84,20 @@
 				{% endif %}
 				postFields["project"] = projectField
 
+				// Add actor
+				{% if actor %}
+					var actorField = {"username": "{{actor.username}}", "cleanName": "{{actor.cleanName}}"}
+					{% if actor.profilePicture %}
+						actorField.profilePictureURL = '{{actor.profilePicture.url}}';
+					{% endif %}
+					postFields["actor"] = actorField;
+				{% endif %}
+
+				// Add csrf token
                 var csrfField = {"name": "csrf_token", "input": "{% csrf_token %}", "hidden": true};
                 postFields['csrf_token'] = csrfField;
 
+                // Add cancel button with onclick
                 var cancelButton = {'name': 'cancelButton', 'onclick': 'redirectToPost("{{post.postID}}");', "hidden": true};
                 postFields['cancelButton'] = cancelButton;
             {% endif %}

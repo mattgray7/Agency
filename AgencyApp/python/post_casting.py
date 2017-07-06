@@ -64,7 +64,7 @@ class CreateCastingPostView(post.GenericCreatePostView):
     @property
     def actor(self):
         if self._actor is None:
-            if self.post.record.status == "Cast":
+            if self.post and self.post.record and self.post.record.status == "Cast":
                 try:
                     self._actor = models.UserAccount.objects.get(username=self.post.record.actorName)
                 except models.UserAccount.DoesNotExist:
@@ -97,6 +97,7 @@ class CreateCastingPostView(post.GenericCreatePostView):
         self._pageContext["selectFields"] = self.selectFields
         self._pageContext["defaultStatus"] = "Open"
         self._pageContext["isCasting"] = True
+        self._pageContext["actor"] = self.actor
         return self._pageContext
 
     @property

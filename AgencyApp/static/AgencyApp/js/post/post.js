@@ -8,7 +8,8 @@ function addCreateCastingPost(formDict, formURL, formName){
 
 	// Fill text content
 	var sectionMap = {"Details": ["title", "project", "characterType", "status", "paid", "hoursPerWeek", "startDate", "endDate"],
-					  "Character": ["characterName", "shortCharacterDescription", "description", "skills", "languages"],  
+					  "Character": ["characterName", "shortCharacterDescription", "description", "skills", "languages"],
+					  "Performer": ["actorName"],
 					  "Physical": ["hairColor", "eyeColor", "complexion", "height", "build", "gender", "ageRange"],
 					  "hidden": ["csrf_token", "postID", "source", "next", "destination", "projectID", "poster"]}
 	var mainLabelsColumn = "<td class='editPostLabelPanel' style='width: 20%; position:relative; line-height: 38.2px;'><div style='margin-top: 30px;'><ul style='margin-bottom: -14px;'>";
@@ -29,6 +30,7 @@ function addCreateCastingPost(formDict, formURL, formName){
 			sectionInputTableElement = otherInputsColumn;
 			sectionClass = "editPostOtherSectionTitle";
 		}
+
 		if(sectionTitle != "hidden"){
 			sectionLabelTableElement += "<div style='position: relative; height: 50px;'> <h2 class='" + sectionClass + "' style='position: absolute; z-index: 1; right: 0; margin-left: 80px;'> " + sectionTitle + "</h2><div style='position: absolute; z-index: 0; width: 250%; border: 1px solid #7c7b7b; height: 0px; bottom: 0; margin-bottom: 15px; margin-left: 20px;'></div></div>"
 			sectionInputTableElement += "<div style='height: 60px;'></div>";
@@ -47,6 +49,18 @@ function addCreateCastingPost(formDict, formURL, formName){
 						sectionInputTableElement += "Not specified";
 					}
 					sectionInputTableElement += "</a></li>";
+					continue;
+				}else if(fieldName === "actorName"){
+					if(field.value != null && field.value.length > 0){
+						var actorDict = formDict["actor"]
+						if(actorDict != null){
+							sectionLabelTableElement += "<label for='name'>Actor</label><br><br><br><br>";
+							sectionInputTableElement += '<div id="actorPicturePanel" class="postPicture" style="width: 150px; height: 150px; background: #000;"><img id="actorPictureImg" src="' + actorDict.profilePictureURL + '" style="max-width:100%; max-height:100%;"/><div style="margin-left: 20px;">' + actorDict.cleanName + '</div></div>';
+						}else{
+							sectionLabelTableElement += "<label for='name'>Actor</label><br>";
+							sectionInputTableElement += "Add new cast member"
+						}
+					}
 					continue;
 				}
 				if(!field.hidden || field.name === "status"){
