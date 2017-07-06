@@ -4,16 +4,16 @@ function addCreateCastingPost(formDict, formURL, formName){
 
 	// Fill post picture string
 	var pictureField = formDict["postPicture"];
-	var pictureColumn = '<td style="max-width: 200px; height: 200px; text-align: center;"><div id="postPicturePanel" class="postPicture" style="width: 80%; height: 93%; background: #000; margin: 0 auto;"><img id="postPictureImg" src="' + pictureField.value + '" style="max-width:100%; max-height:100%;"/></div><div style="width: 60%; margin: 0 auto; overflow: hidden;">' + pictureField.input + "</div></td>";
+	var pictureColumn = '<td style="text-align: center; width: 30%;"><div id="postPicturePanel" class="postPicture" style="width: 292px; height: 292px; background: #000; margin-left: 20px; margin-top: 118px;"><img id="postPictureImg" src="' + pictureField.value + '" style="max-width:100%; max-height:100%;"/></div><div style="width: 60%; margin-left: 25%; overflow: hidden;">' + pictureField.input + "</div></td>";
 
 	// Fill text content
 	var sectionMap = {"Details": ["title", "project", "characterType", "status", "paid", "hoursPerWeek", "startDate", "endDate"],
 					  "Character": ["characterName", "shortCharacterDescription", "description", "skills", "languages"],  
 					  "Physical": ["hairColor", "eyeColor", "complexion", "height", "build", "gender", "ageRange"]}
 	var mainLabelsColumn = "<td class='editPostLabelPanel' style='width: 20%; position:relative; line-height: 38.2px;'><div style='margin-top: 30px;'><ul style='margin-bottom: -14px;'>";
-	var mainInputsColumn = "<td class='editPostInputPanel' style='width: 40%; position: relative; line-height: 39px;'><h1 style='font-size: 2.8em; padding: 0em 0em 0.3em 0em; margin-top: 15px;'>Edit Role</h1><ul style='margin-top: -20px;'>";
-	var otherLabelsColumn = "<td class='editPostLabelPanel' style='width: 25%; height: 600px; position:relative;'><div style='position: absolute; top:0; right: 0; margin-right: 5px; width: 90%; margin-top: 5px;'><ul>";
-	var otherInputsColumn = "<td class='editPostInputPanel' colspan='2' style='width: 80%;'><div style='margin-top: -6px;'><ul>";
+	var mainInputsColumn = "<td class='editPostInputPanel' style='width: 50%; position: relative; line-height: 39px;'><h1 style='font-size: 2.8em; padding: 0em 0em 0.3em 0em; margin-top: 15px;'>Edit Role</h1><ul style='margin-top: -20px;'>";
+	var otherLabelsColumn = "<td class='editPostLabelPanel' style='width: 30%; min-width: 170px; height: 600px; position:relative;'><div style='position: absolute; top:0; right: 0; margin-right: 5px; width: 90%; margin-top: 5px;'><ul>";
+	var otherInputsColumn = "<td class='editPostInputPanel' colspan='2' style='width: 70%;'><div style='margin-top: -6px;'><ul>";
 	for(sectionTitle in sectionMap){
 		var fieldList = sectionMap[sectionTitle];
 		var sectionInputTableElement = null;
