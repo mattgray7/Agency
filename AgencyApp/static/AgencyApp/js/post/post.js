@@ -42,13 +42,11 @@ function addCreateCastingPost(formDict, formURL, formName){
 				// Add project
 				if(fieldName === "project"){
 					sectionLabelTableElement += "<label for='name'>Project</label><br>";
-					sectionInputTableElement += "<li style='margin-bottom: -5px;'><a  onclick='redirectToPost(" + '"' + field.projectID + '"' + ");'>"
 					if(field.title != null){
-						sectionInputTableElement += field.title;
+						sectionInputTableElement += "<li style='margin-top: 6px;'><a  onclick='redirectToPost(" + '"' + field.projectID + '"' + ");'>" + field.title + "</a></li>";
 					}else{
-						sectionInputTableElement += "Not specified";
+						sectionInputTableElement += "<li style='color: #1e1e1e; font-weight: 900; margin-top: 5px;'>Not specified</li>";
 					}
-					sectionInputTableElement += "</a></li>";
 					continue;
 				}else if(fieldName === "actorName"){
 					if(field.value != null && field.value.length > 0){
@@ -65,7 +63,7 @@ function addCreateCastingPost(formDict, formURL, formName){
 						}else{
 							sectionLabelTableElement += "<label for='name'>Search</label><br>";
 
-							sectionInputTableElement+= "<div style='width: 100%; position: relative; height: 161px;' class='editCastMemberPanel'>"
+							sectionInputTableElement+= "<div style='width: 100%; position: relative; height: 37px;' class='editCastMemberPanel'>"
 							sectionInputTableElement += '<div style="position: absolute; left: 0;"><input type="text" name="performerSearchText"></div>';
 						}
 						sectionInputTableElement += "</div>";
