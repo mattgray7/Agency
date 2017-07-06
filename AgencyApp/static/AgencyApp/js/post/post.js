@@ -1,5 +1,5 @@
 function addCreateCastingPost(formDict, formURL, formName){
-	var formString = "<form method='post' action='" + formURL + "' id='" + formName + "' class='form-style-1' style='width: 90%; background: none; margin-left: -10px;' enctype='multipart/form-data'>";
+	var formString = "<form method='post' action='" + formURL + "' id='" + formName + "' class='form-style-1' style='width: 90%; background: none; margin-left: 3.2%;' enctype='multipart/form-data'>";
 	formString += "<table style='width: 100%;'><tr>"
 
 	// Fill post picture string

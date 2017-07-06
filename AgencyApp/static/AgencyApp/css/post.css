@@ -162,6 +162,7 @@
 		border-radius: 4px;
 		/*background: #efefef;*/
 		background: #FFF;
+		text-align: center;
 		transition: background 0.4s ease;
 	}
 	.projectContentPanel
