@@ -160,7 +160,8 @@
 	{
 		border: 2px solid #000;
 		border-radius: 4px;
-		background: #efefef;
+		/*background: #efefef;*/
+		background: #FFF;
 		transition: background 0.4s ease;
 	}
 	.projectContentPanel

@@ -39,58 +39,88 @@
 		return listEmpty;
 	}
 
-	function getCastingFormDict(){
-            var postFields = []
+
+        function getCastingFormDict(){
+            var postFields = {}
             {% if forms.role %}
                 {% spaceless %}
                 {% for field in forms.role %}
-                    var postField = []
-                    postField.push({key: "input", value: '{{field}}'});
-                    postField.push({key: "name", value: '{{field.name}}'});
-                    postField.push({key: "hidden", value: ('{{field}}'.includes('hidden'))});
-                    postField.push({key: "label", value: '{{field.label}}'})
-
-                    var value = '{{field.value}}';
+                	var save = true;
+                	var postField = {"name": '{{field.name}}', "value": '{{field.value}}', "hidden": ('{{field}}'.includes('hidden')), "label": '{{field.label}}', 'input': '{{field}}'}
                     {% if field.name == "projectID" %}
-                        value = "{{post.projectID}}";
+                        postField.value = "{{post.projectID}}";
+                    {% elif field.name == "postPicture" %}
+                        {% if post.postPicture and post.postPicture.url %}
+                            postField.value = "{{post.postPicture.url}}";
+                        {% else %}
+                            postField.value = "{{images.noPicture}}";
+                        {% endif %}
+                    {% elif field.name == "paid" %}
+                    	var currentInput = postField.input;
+                    	var paidDescription = '{{post.paidDescription}}'
+                    	if(paidDescription === "None"){
+                    		paidDescription = ''
+                    	}
+                    	postField.input = "<div style='position: relative; margin-top: -5px;'>" + currentInput + "<div style='position: absolute; top: 0; right: 0; margin-top: 6px; width: 90%; text-align: right;'><div style='position: relative;'> <div style='position: absolute; left: 0;' class='editPostLabelPanel'>Specify </div><div style='position: absolute; right: 0; width: 74%; margin-right: 5px; margin-top: -3px;'><input type='text' name='paidDescription' value='" + paidDescription + "' style='display: inline; margin-top: -10px;'></div></div></div>"
+                    {% elif field.name == "paidDescription" %}
+                    	// Paid description will be on same line as paid
+                    	save = false;
                     {% elif field.name == "status" %}
                         {% if statusOptions.roles %}
                             var options = {{ statusOptions.roles|safe }}
-                            postField.push({key: "options", value: options});
+                            postField.options = options;
                         {% endif %}
-                    {% elif field.name == "postPicture" %}
-                    	value = "{{images.noPicture}}";
                     {% elif field.name == "description" %}
-                        postField.push({key: "numRows", value: "20"})
-                    {% elif field.name in selectFields.roles.names %}
+                        postField.numRows = 20;
+                    {% elif field.name == "poster" %}
+                        postField.value = "{{ request.user.username }}"
+                        postField.input = postField.input.replace('name="poster"', 'name="poster" value="' + postField.value + '"')
+                    {% elif field.name == "startDate" or field.name == "endDate" %}
+                    	postField.input = postField.input.replace('type="text"', 'type="date"')
+                    {% elif field.name in selectFields.names %}
                         {% if selectFields.options %}
                             var options = {{ selectFields.options|safe }}
-                            postField.push({key: "options", value: options['{{field.name}}']});
-
-                            /*{% if selectFields.defaults %}
-                                var selectValues = {{selectFields.defaults|safe}}
-                                value = selectValues['{{field.name}}'];
-                            {% endif %}*/
+                            postField.options = options['{{field.name}}']
                         {% endif %}
                     {% endif %}
-                    postField.push({key: "value", value: value});
-                    postFields.push(postField);
+                    if(save){
+                    	postFields['{{field.name}}'] = postField;
+                    }
                 {% endfor %}
                 {% endspaceless %}
-                var csrfField = []
-                csrfField.push({key: "input", value: "{% csrf_token %}"});
-                csrfField.push({key: "name", value: 'csrf_token'});
-                postFields.push(csrfField);
 
-                var cancelButton = [];
-                var cancelOnclick = 'redirectToPost("{{post.postID}}");';
-                console.log(cancelOnclick)
-                cancelButton.push({key: "cancelButtonOnclick", value: cancelOnclick});
-                postFields.push(cancelButton);
+                // Add project
+                var projectField = {"name": "project"}
+                {% if project and project.title %}
+					projectField.title  = '{{project.title}}';
+					projectField.projectID = '{{project.postID}}';
+				{% endif %}
+				postFields["project"] = projectField
+
+				// Add actor
+				var actorField = {"username": "{{actor.username}}", "cleanName": "{{actor.cleanName}}"}
+				{% if actor %}
+					actorField["username"] = "{{actor.username}}";
+					actorField["cleanName"] = "{{actor.cleanName}}";
+					{% if actor.profilePicture %}
+						actorField.profilePictureURL = '{{actor.profilePicture.url}}';
+					{% endif %}
+				{% else %}
+					actorField["username"] = null;
+					actorField.profilePictureURL = '{{images.noProfilePicture}}';
+				{% endif %}
+				postFields["actor"] = actorField;
+
+				// Add csrf token
+                var csrfField = {"name": "csrf_token", "input": "{% csrf_token %}", "hidden": true};
+                postFields['csrf_token'] = csrfField;
+
+                // Add cancel button with onclick
+                var cancelButton = {'name': 'cancelButton', 'onclick': 'toggleExpandListPanel("shrink", "roles", "vertical");', "hidden": true};
+                postFields['cancelButton'] = cancelButton;
             {% endif %}
             return postFields;
         }
-
 
 	function getNewElementForm(formType, slideDirection){
 		if(slideDirection === null){
@@ -99,41 +129,6 @@
 		var formString = "";
 		if(formType === "roles"){
 			formString += addCreateCastingPost(getCastingFormDict(), "{{currentPageURL}}", "createCastingPostForm");
-			// header
-			/*formString += '<form class="form-style-7" id="addNewElementForm" method="post" action="{{ currentPageURL }}" style="width: 90%; background: none;">' + "{% csrf_token %}"
-			
-			// back button
-			formString += '<div style="position: relative; display:block; width:100%; height: 100%;"><div style="width:170px; margin: 4px 0px 0px 0px;"><a onclick="toggleExpandListPanel(' + "'shrink', '" + formType + "', '" + slideDirection + "');" + '" class="whiteButton blackHover" style="position: absolute; top:0; left: 0; padding: 0.5em 1em 0.5em 1em; margin-top: -15px; margin-left: -30px;">Back</a></div></div>';
-			
-			// title
-			formString += "<h1>Add new " + getSingularFromPlural(formType) + "</h1><ul>";
-
-			// form
-			{% if forms.role %}
-				{% for field in forms.role %}
-					var value = "{{field.value}}";
-					if(value === "None"){
-						value = "";
-					}
-					if(!('{{field}}'.includes("hidden"))){
-						if("{{field.name}}" !== "postPicture"){
-							formString += "<li><label for='name' style='background: #efefef;'>{{field.label}}</label>";
-							if("{{field.name}}" === "description"){
-								formString += "<textarea cols='100' rows ='20' name='description' form='addNewElementForm' style='height:100px; font-size: 0.9em;'>" + value + "</textarea></li>"
-							}else{
-								formString += "<div style='background: #efefef; border: 2px solid #FFF; border-radius: 4px;'>" + '{{field}}</div>'; 
-							}
-						}
-					}else{
-						if("{{field.name}}" == "status"){
-							formString += '<li><label for="name">{{field.label}}</label><div id="elementStatusSelectDiv"></div><input type="hidden" name="{{field.name}}" id="elementStatusInput" </li>';
-						}else{
-							formString += '{{field}}';
-						}
-					}
-				{% endfor %}
-				formString += "<li></li></ul></form>";		//Add empty row at end temporarily as it has diff css (until button gets put in)
-			{% endif %}*/
 		}else if(formType === "jobs"){
 			return "jobs"
 		}else if(formType === "events"){
@@ -179,10 +174,10 @@
 			}else{
 				if(direction === "vertical"){
 					if(listPanel != null){
-						$("#projectContentPanel").animate({marginTop: "-13px", height: "600px"}, transitionSpeed);
+						$("#projectContentPanel").animate({marginTop: "-13px", height: "1400px"}, transitionSpeed);
 					}
 					addNewPanel.style.border = "2px solid #000";
-					$('#addNewPanel').animate({marginTop: '-13px', height:'580px'}, transitionSpeed);
+					$('#addNewPanel').animate({marginTop: '-13px', height:'1380px'}, transitionSpeed);
 				}else if(direction === "horizontal"){
 					$('#addNewPanel').animate({marginLeft: '0px', width:'99.4%'}, transitionSpeed);
 					$('#addNewListElement').prop("onclick", null);

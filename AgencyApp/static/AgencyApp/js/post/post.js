@@ -38,6 +38,7 @@ function addCreateCastingPost(formDict, formURL, formName){
 			for(i in fieldList){
 				var fieldName = sectionMap[sectionTitle][i];
 				var field = formDict[fieldName];
+				console.log(fieldName)
 
 				// Add project
 				if(fieldName === "project"){
