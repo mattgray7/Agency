@@ -322,6 +322,8 @@ class PictureFormView(GenericFormView):
                             if self.request.FILES.get(self.pictureModelFieldName):
                                 if self.updatePicturePathAndModel():
                                     formIsValid = True
+                                else:
+                                    print "Failure saving form image"
                             else:
                                 formIsValid = True
                         else:
@@ -333,7 +335,10 @@ class PictureFormView(GenericFormView):
                     print "No form class"
                     if self.processForm():
                         formIsValid = True
+            else:
+                print "Form not submitted"
         else:
+            print "Not processing form because cancel or redirect is True"
             self.cancelPage()
             formIsValid = True
         if not formIsValid:

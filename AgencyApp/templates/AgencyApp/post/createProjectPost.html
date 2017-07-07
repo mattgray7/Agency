@@ -39,6 +39,23 @@
 		return listEmpty;
 	}
 
+	function generateNewPostID(postType){
+		$.ajax({
+			url : "/ajax/getNewPostID/",
+			data : {"postType": postType},
+			type : 'POST',
+			success : function(data) {
+				newPostIDs[postType] = data["postID"]
+				console.log("Just created postID " + data["postID"] + " for post type " + postType)
+			}
+		});
+	}
+
+	function getNewPostID(postType){
+		var nextID = newPostIDs[postType]
+		generateNewPostID(postType)
+		return nextID;
+	}
 
         function getCastingFormDict(existingPosts){
             var postFields = {}
@@ -49,6 +66,9 @@
                 	var postField = {"name": '{{field.name}}', "value": '{{field.value}}', "hidden": ('{{field}}'.includes('hidden')), "label": '{{field.label}}', 'input': '{{field}}'}
                     {% if field.name == "projectID" %}
                         postField.value = "{{post.projectID}}";
+                    {% elif field.name == "postID" %}
+                    	postField.value = getNewPostID("casting")
+                    	console.log(postField.value)
                     {% elif field.name == "postPicture" %}
                         {% if post.postPicture and post.postPicture.url %}
                             postField.value = "{{post.postPicture.url}}";
@@ -137,7 +157,32 @@
         }
 
     function submitProjectSubForm(formName){
-    	console.log(formName)
+        // Submits the form while adding values of select bars with id '{{name}}SelectBar' to form input '{{name}}SelectInput'
+        var statusDiv = document.getElementById("statusSelectBar");
+        if(statusDiv != null){
+            // Set the status from the select bar in the form
+            document.getElementById("statusSelectInput").value = statusDiv.value;
+        }
+        {% if selectFields.roles.names %}
+            {% for name in selectFields.roles.names %}
+                var selectDiv = document.getElementById('{{name}}SelectBar')
+                if(selectDiv != null){
+                    document.getElementById('{{name}}SelectInput').value = selectDiv.value;
+                }
+            {% endfor %}
+        {% endif %}
+        var form = document.getElementById(formName)
+        if(form != null){
+            $.ajax({
+				url : "/ajax/createNewCastingPost/",
+				data : $("[id='" + formName + "']").serialize(),
+				type : 'POST',
+				dataType: "json",
+				success : function(data) {
+					console.log(data)
+				}
+			});
+        }
     }
 
 	function getNewElementForm(formType, slideDirection){
@@ -424,6 +469,11 @@
 		if(form != null){
 			form.submit();
 		}
+	}
+
+	var newPostIDs = {"casting": null, "work": null, "event": null}
+	for(postType in newPostIDs){
+		generateNewPostID(postType)
 	}
 
 	function getEmptyListButton(listType){
