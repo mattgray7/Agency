@@ -81,7 +81,7 @@ class CreateProjectPostView(post.GenericCreatePostView):
             self._projectID = self.request.POST.get("projectID", helpers.getMessageFromKey(self.request, "projectID"))
             if not self._projectID:
                 self._projectID = helpers.createUniqueID(destDatabase=models.ProjectPost,
-                                                        idKey="postID")
+                                                         idKey="postID")
         return self._projectID
 
     @property
@@ -148,7 +148,7 @@ class ViewProjectPostView(post.GenericViewPostView):
     @property
     def pageContext(self):
         self._pageContext = super(ViewProjectPostView, self).pageContext
-        self._pageContext["possibleDestinations"] = {"editPost": constants.CREATE_PROJECT_POST,
+        self._pageContext["possibleDestinations"] = {"editPost": constants.EDIT_POST,
                                                      "viewPost": constants.VIEW_POST,
                                                      "createCasting": constants.CREATE_CASTING_POST,
                                                      "createWork": constants.CREATE_WORK_POST,
