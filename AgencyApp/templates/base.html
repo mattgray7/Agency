@@ -133,9 +133,6 @@
         }
 
         function previewPicture(input, divName) {
-            console.log("Previewing")
-            console.log(divName)
-            console.log(document.getElementById(divName))
             if (input.files && input.files[0]) {
                 var reader = new FileReader();
                 reader.onload = function (e) {
@@ -146,7 +143,6 @@
         }
 
         function addStatusBar(statusDivName, statusSelectName, defaultStatus, formName, options){
-            console.log("options are " + options)
                 if(defaultStatus.length == 0){
                     defaultStatus = "Open";
                 }

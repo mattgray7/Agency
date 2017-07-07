@@ -114,7 +114,7 @@ function addCreateCastingPost(formDict, formURL, formName){
 	otherInputsColumn += "</ul></div></td>";
 
 	// Add title
-	formString += "<tr><td colspan='3' style='text-align: center;'><h1 style='font-size: 2.8em; margin-left: 30px; padding: 0em 0em 0.3em 0em; margin-top: 15px;'>";
+	formString += "<tr><td colspan='3' style='text-align: center;'><h1 style='font-size: 2.8em; margin-left: 65px; padding: 0em 0em 0.3em 0em; margin-top: 15px;'>";
 	if(formDict["newPost"]){
 		formString += "Add Role";
 	}else{
@@ -127,12 +127,12 @@ function addCreateCastingPost(formDict, formURL, formName){
 	formString += "<tr>" + otherLabelsColumn + otherInputsColumn + "</tr></form>"
 
 	// Add buttons
-	formString += "<tr><td colspan='3' style='width: 100%; position:relative; height: 70px;'><div class='whiteButton blackHover' style='width: 36%; position:absolute; left: 0; bottom: 0; margin-bottom: 10px; margin-left: 20px;' onclick='" + formDict["cancelButton"]["onclick"] + "'> Cancel </div><div class='whiteButton blackHover' style='width: 36%; position:absolute; right: 0; bottom: 0; margin-bottom: 10px;' onclick='submitForm(" + '"' + formName + '");' + "'>"
+	formString += "<tr><td colspan='3' style='width: 90%; position:relative; height: 70px;'><div style='margin-left: 100px;'><div class='whiteButton blackHover' style='position:absolute; left: 1%; top: 0; right: 50.5%;' onclick='" + formDict["cancelButton"]["onclick"] + "'> Cancel </div><div class='whiteButton blackHover' style='position:absolute; right: -1%; top: 0; left: 50.5%; ' onclick='submitForm(" + '"' + formName + '");' + "'>"
 	if(formDict["newPost"]){
 		formString += "Create Post";
 	}else{
 		formString += "Update Post"
 	}
-	formString += "</div></td></tr>";
+	formString += "</div></div></td></tr>";
 	return formString;
 }

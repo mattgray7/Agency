@@ -188,14 +188,14 @@
 			}else{
 				if(direction === "vertical"){
 					if(listPanel != null){
-						$("#projectContentPanel").animate({marginTop: "-13px", height: "1400px"}, transitionSpeed);
+						$("#projectContentPanel").animate({marginTop: "-13px", height: "1370px"}, transitionSpeed);
 					}
 					addNewPanel.style.border = "2px solid #000";
-					$('#addNewPanel').animate({marginTop: '-13px', height:'1380px'}, transitionSpeed);
+					$('#addNewPanel').animate({marginTop: '-13px', height:'1340px'}, transitionSpeed);
 				}else if(direction === "horizontal"){
-					$('#addNewPanel').animate({marginLeft: '0px', width:'99.4%', marginTop: "-13px", height: "1400px"}, transitionSpeed);
+					$('#addNewPanel').animate({marginLeft: '0px', width:'99.4%', marginTop: "-13px", height: "1370px"}, transitionSpeed);
 					if(listPanel != null){
-						$("#projectContentPanel").stop(true, true).delay(500).animate({marginTop: "-13px", height: "1400px"}, transitionSpeed);
+						$("#projectContentPanel").stop(true, true).delay(500).animate({marginTop: "-13px", height: "1370px"}, transitionSpeed);
 						$("#projectContentPanel").css("overflow", "hidden");
 					}
 					addNewPanel.style.border = "none";
