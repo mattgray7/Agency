@@ -40,7 +40,7 @@
 	}
 
 
-        function getCastingFormDict(){
+        function getCastingFormDict(existingPosts){
             var postFields = {}
             {% if forms.role %}
                 {% spaceless %}
@@ -116,7 +116,12 @@
                 postFields['csrf_token'] = csrfField;
 
                 // Add cancel button with onclick
-                var cancelButton = {'name': 'cancelButton', 'onclick': 'toggleExpandListPanel("shrink", "roles", "horizontal");', "hidden": true};
+                var cancelButton = {'name': 'cancelButton', 'onclick': 'toggleExpandListPanel("shrink", "roles", "vertical");', "hidden": true};
+                if(existingPosts){
+                	cancelButton["onclick"] = 'toggleExpandListPanel("shrink", "roles", "horizontal");';
+                }else{
+                	cancelButton["onclick"] = 'toggleExpandListPanel("shrink", "roles", "vertical");'
+                }
                 postFields['cancelButton'] = cancelButton;
 
                 postFields["newPost"] = true;
@@ -133,7 +138,7 @@
 		}
 		var formString = "";
 		if(formType === "roles"){
-			formString += addCreateCastingPost(getCastingFormDict(), "{{currentPageURL}}", "createCastingPostForm");
+			formString += addCreateCastingPost(getCastingFormDict(!isElementListEmpty(formType)), "{{currentPageURL}}", "createCastingPostForm");
 		}else if(formType === "jobs"){
 			return "jobs"
 		}else if(formType === "events"){
@@ -172,7 +177,7 @@
 					$('#addNewPanel').stop(true, true).delay(500).animate({marginLeft: '0px', width:'24.6%', border: '2px solid #000'}, transitionSpeed);
 					$('#addNewPanel').animate({marginTop: '-13px', height:'200px'}, transitionSpeed);
 					if(listPanel != null){
-						$("#projectContentPanel").animate({marginTop: "-13px", height: "200px"}, transitionSpeed);
+						$("#projectContentPanel").animate({marginTop: "-13px", height: "360px"}, transitionSpeed);
 					}
 					if(existingList != null){
 						$('#projectContentList').stop(true, true).delay(500).animate({marginLeft: "208px"}, transitionSpeed);
