@@ -106,6 +106,10 @@
                 var cancelButton = {'name': 'cancelButton', 'onclick': 'redirectToPost("{{post.postID}}");', "hidden": true};
                 postFields['cancelButton'] = cancelButton;
 
+                // Add create/update button with onclick
+                var createButton = {'name': 'createButton', 'onclickFunction': 'submitForm', "hidden": true};
+                postFields['createButton'] = createButton;
+
                 postFields["newPost"] = true;
                 {% if post %}
                 	postFields["newPost"] = false;
