@@ -116,7 +116,7 @@
                 postFields['csrf_token'] = csrfField;
 
                 // Add cancel button with onclick
-                var cancelButton = {'name': 'cancelButton', 'onclick': 'toggleExpandListPanel("shrink", "roles", "vertical");', "hidden": true};
+                var cancelButton = {'name': 'cancelButton', 'onclick': 'toggleExpandListPanel("shrink", "roles", "horizontal");', "hidden": true};
                 postFields['cancelButton'] = cancelButton;
 
                 postFields["newPost"] = true;
@@ -163,15 +163,19 @@
 			if(expanded && toggleType == "shrink"){
 				if(direction === "vertical"){
 					if(listPanel != null){
-						$("#projectContentPanel").animate({marginTop: "-13px", height: "70px"}, transitionSpeed);
+						$("#projectContentPanel").animate({marginTop: "-13px", height: "0%"}, transitionSpeed);
 					}
 					$('#addNewPanel').animate({marginTop: '-13px', height:'0%'}, transitionSpeed);
 					addNewPanel.style.border = "none";
 					addNewPanel.innerHTML = "";
 				}else if(direction === "horizontal"){
-					$('#addNewPanel').animate({marginLeft: '0px', width:'24.6%'}, transitionSpeed);
+					$('#addNewPanel').stop(true, true).delay(500).animate({marginLeft: '0px', width:'24.6%', border: '2px solid #000'}, transitionSpeed);
+					$('#addNewPanel').animate({marginTop: '-13px', height:'200px'}, transitionSpeed);
+					if(listPanel != null){
+						$("#projectContentPanel").animate({marginTop: "-13px", height: "200px"}, transitionSpeed);
+					}
 					if(existingList != null){
-						$('#projectContentList').animate({marginLeft: "208px"}, transitionSpeed);
+						$('#projectContentList').stop(true, true).delay(500).animate({marginLeft: "208px"}, transitionSpeed);
 					}
 					addNewPanel.innerHTML = createAddNewButton(panelType);
 				}
@@ -187,6 +191,7 @@
 					$('#addNewPanel').animate({marginLeft: '0px', width:'99.4%', marginTop: "-13px", height: "1400px"}, transitionSpeed);
 					if(listPanel != null){
 						$("#projectContentPanel").stop(true, true).delay(500).animate({marginTop: "-13px", height: "1400px"}, transitionSpeed);
+						$("#projectContentPanel").css("overflow", "hidden");
 					}
 					addNewPanel.style.border = "none";
 					$('#addNewListElement').prop("onclick", null);
@@ -358,7 +363,7 @@
 			<tr>
 						<td colspan="3">
 							<div style="position: relative;">
-							<div id="projectContentPanel" class="projectContentPanel" style="margin-left: -1px; margin-right:-8px; overflow: scroll;; min-height: 70px;">
+							<div id="projectContentPanel" class="projectContentPanel" style="margin-left: -1px; margin-right:-8px; overflow: scroll; min-height: 70px;">
 								<div id="addNewPanel" style="position: absolute; top: 0; left: 0; margin-top: 2px; margin-bottom: -10px; border: 2px solid #000; border-radius: 4px; width: 24.6%; text-align: center;">
 									<script>
 										{% if roles %}
