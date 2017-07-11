@@ -75,6 +75,6 @@ def getNewPostID(request):
     return JsonResponse(ret)
 
 def createNewCastingPost(request):
-    pnewPost = castingPost.CastingPostInstance(request=request, postID=self.postID, projectID=self.projectID, postType=constants.CREATE_CASTING_POST, formSubmitted=self.formSubmitted)
+    newPost = castingPost.CastingPostInstance(request=request, postID=request.POST.get("postID"), projectID=request.POST.get("projectID"), postType=constants.CREATE_CASTING_POST, formSubmitted=True)
     return JsonResponse({"hey": "there"})
 
