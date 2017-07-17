@@ -201,6 +201,10 @@ class ProjectAdmin(models.Model):
     projectID = models.CharField(max_length=10)
     username = models.CharField(max_length=10)
 
+class PostAdmin(models.Model):
+    postID = models.CharField(max_length=10)
+    username = models.CharField(max_length=10)
+
 class WorkPost(AbstractPost):
     profession = models.CharField(max_length=200)
     workerName = models.CharField(max_length=200, blank=True, null=True)      # only filled if status is Filled (vs Hiring)

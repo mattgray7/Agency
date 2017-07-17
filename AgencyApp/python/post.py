@@ -145,10 +145,19 @@ class GenericPostInstance(object):
         """To be overridden in child class"""
         return True
 
+    def createPostAdmin(self):
+        try:
+            currentAdmin = models.PostAdmin.objects.get(username=self.request.user.username, postID=self.postID)
+        except models.PostAdmin.DoesNotExist:
+            newAdmin = models.PostAdmin(username=self.request.user.username, postID=self.postID)
+            newAdmin.save()
+
     def formIsValid(self):
         if self.request.POST:
             if self.checkBasicFormValues() and self.checkModelFormValues():
-                return self.saveBasicFormValues() and self.saveModelFormValues()
+                if self.saveBasicFormValues() and self.saveModelFormValues():
+                    self.createPostAdmin()
+                    return True
         return False
 
     def _checkTitle(self, title):
@@ -367,6 +376,7 @@ class GenericViewPostView(views.GenericFormView):
         self._postType = None
         super(GenericViewPostView, self).__init__(*args, **kwargs)
         self._isProjectAdmin = False
+        self._isPostAdmin = False
         self._projectDisplayStatus = None
 
     @property
@@ -378,6 +388,15 @@ class GenericViewPostView(views.GenericFormView):
             elif projectStatus in ["Completed"]:
                 self._projectDisplayStatus = "past"
         return self._projectDisplayStatus
+
+    @property
+    def isPostAdmin(self):
+        if self._isPostAdmin is False:
+            postAdmins = models.PostAdmin.objects.filter(postID=self.postID)
+            for admin in postAdmins:
+                if admin.username == self.request.user.username:
+                    self._isPostAdmin = True
+        return self._isPostAdmin
 
     @property
     def isProjectAdmin(self):
@@ -473,7 +492,7 @@ class GenericViewPostView(views.GenericFormView):
         self._pageContext["isCollaboration"] = isCollaborationPost(self.postID)
         self._pageContext["isWork"] = isWorkPost(self.postID)
         self._pageContext["isCasting"] = isCastingPost(self.postID)
-        self._pageContext["userIsAdmin"] = self.isProjectAdmin
+        self._pageContext["userIsAdmin"] = self.isPostAdmin
         self._pageContext["displayStatus"] = self.projectDisplayStatus
         self._pageContext['statusOptions'] = {"roles": constants.CASTING_STATUS_LIST,
                                               "jobs": constants.WORK_STATUS_LIST,

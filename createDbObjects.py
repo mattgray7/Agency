@@ -69,6 +69,8 @@ def createProject(poster, title, description, status, picURL):
 def createProjectAdmin(projectID, username):
 	newAdmin = models.ProjectAdmin(projectID=projectID, username=username)
 	newAdmin.save()
+	newAdmin = models.PostAdmin(postID=projectID, username=username)
+	newAdmin.save()
 
 # Great Gatsby project
 project1ProjectPost = createProject(poster="mattgray",
@@ -77,17 +79,15 @@ project1ProjectPost = createProject(poster="mattgray",
 									status="In production",
 									picURL="/Users/MattGray/Projects/Agency/Agency/scripts/media/greatGatsby.jpg")
 project1ProjectID = project1ProjectPost.projectID
-
 project1Admin = createProjectAdmin(project1ProjectID, "mattgray")
 project1Admin2 = createProjectAdmin(project1ProjectID, "amybolt")
-project1Admin2 = createProjectAdmin(project1ProjectID, "adamcramer")
+project1Admin3 = createProjectAdmin(project1ProjectID, "adamcramer")
 
 project2ProjectPost = createProject(poster="mattgray",
 									title="The Kings of Summer",
 									description="Three kids build a house in the woods and run away from their families",
 									status="Completed",
 									picURL="/Users/MattGray/Projects/Agency/Agency/scripts/media/kingsOfSummer.jpg")
-
 project3ProjectPost = createProject(poster="mattgray",
 									title="Valerian",
 									description="A space opera from Luc Besson based on the legendary French comic books.",
@@ -126,6 +126,9 @@ def createProjectJob(projectID, username, status, profession, title, paid, short
 							  status=status)
 	jobPost.save()
 
+	admin = models.PostAdmin(postID=jobID, username=poster)
+	admin.save()
+
 	if picURL:
 		picResult = urllib.urlretrieve(picURL)
 		jobPost.postPicture = File(open(picResult[0]))
@@ -139,6 +142,9 @@ def createProjectRole(projectID, username, status, title, characterName, paid, s
 								   	 actorName=username, characterName=characterName, 
 								   	 description=characterDescription, shortCharacterDescription=shortCharacterDescription, paid=paid)
 	rolePost.save()
+
+	admin = models.PostAdmin(postID=roleID, username=poster)
+	admin.save()
 	if picURL:
 		picResult = urllib.urlretrieve(picURL)
 		rolePost.postPicture = File(open(picResult[0]))
