@@ -182,6 +182,9 @@
                 dataType: "json",
                 success : function(data) {
                     console.log(data)
+                    if(data["success"]){
+                        toggleExpandListPanel("shrink", activeTab, "horizontal")
+                    }
                 }
             });
         }
@@ -232,7 +235,7 @@
                     $('#addNewPanel').stop(true, true).delay(500).animate({marginLeft: '0px', width:'24.6%', border: '2px solid #000'}, transitionSpeed);
                     $('#addNewPanel').animate({marginTop: '-13px', height:'200px'}, transitionSpeed);
                     if(listPanel != null){
-                        $("#projectContentPanel").animate({marginTop: "-13px", height: "360px"}, transitionSpeed);
+                        $("#projectContentPanel").animate({marginTop: "-13px", height: "360px"}, transitionSpeed, function() {$("#projectContentPanel").css("overflow", "scroll");});
                     }
                     if(existingList != null){
                         $('#projectContentList').stop(true, true).delay(500).animate({marginLeft: "208px"}, transitionSpeed);
@@ -250,8 +253,8 @@
                 }else if(direction === "horizontal"){
                     $('#addNewPanel').animate({marginLeft: '0px', width:'99.4%', marginTop: "-13px", height: "1370px"}, transitionSpeed);
                     if(listPanel != null){
-                        $("#projectContentPanel").stop(true, true).delay(500).animate({marginTop: "-13px", height: "1370px"}, transitionSpeed);
-                        $("#projectContentPanel").css("overflow", "hidden");
+                        // Remove scroll when form is expanded
+                        $("#projectContentPanel").stop(true, true).delay(500).animate({marginTop: "-13px", height: "1370px"}, transitionSpeed, function() {$("#projectContentPanel").css("overflow", "hidden");});
                     }
                     addNewPanel.style.border = "none";
                     $('#addNewListElement').prop("onclick", null);
@@ -545,9 +548,9 @@
                         {% endif %}
                         contentString += "</div></div><br>";
                         contentString += "<div class='projectContentListElementText'><h2>{{roleObj.post.characterName}}</h2><p>{{roleObj.post.shortCharacterDescription}}</p></div>"
-                    {% elif roleObj.post.status == "Open" and roleObj.post %}
+                    {% elif roleObj.post %}
                         contentString += "<td class='projectContentListElement greenBackground darkGreenHover' onclick='redirectToPost(" + '"{{roleObj.post.postID}}");' + "'>"
-                        contentString += "<div style='text-align: left;margin-top: -20px; margin-left: 5px; padding: 0em 0em 0.7em 0em; font-weight: 500;'><h3 style='display: inline;'>AVAILABLE</h3></div>";
+                        contentString += "<div style='text-align: left;margin-top: -20px; margin-left: 5px; padding: 0em 0em 0.7em 0em; font-weight: 500;'><h3 style='display: inline;'>OPEN</h3></div>";
 
                         // postPic
                         contentString += "<div class='projectContentListElementPicturePanel'><div class='projectContentListElementPicture'>";
