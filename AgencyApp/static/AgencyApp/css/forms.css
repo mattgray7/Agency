@@ -19,6 +19,12 @@
     cursor: pointer;
     color: #777777;
 }
+.popupContentPanel
+{
+    border: 1px solid #000;
+    border-radius: 4px;
+}
+
 .editCastMemberPanel
 {
 

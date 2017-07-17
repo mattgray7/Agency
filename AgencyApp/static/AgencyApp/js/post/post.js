@@ -1,3 +1,9 @@
+function addSelectProjectForm(postID, username){
+
+}
+
+
+
 function addCreateCastingPost(formDict, formURL, formName){
 	var formString = "<form method='post' action='" + formURL + "' id='" + formName + "' class='form-style-1' style='width: 90%; background: none; margin-left: 3.2%;' enctype='multipart/form-data'>";
 	formString += "<table style='width: 100%;'><tr>"
@@ -45,7 +51,7 @@ function addCreateCastingPost(formDict, formURL, formName){
 					if(field.title != null){
 						sectionInputTableElement += "<li style='margin-top: 6px;'><a  onclick='redirectToPost(" + '"' + field.projectID + '"' + ");'>" + field.title + "</a></li>";
 					}else{
-						sectionInputTableElement += "<li style='color: #1e1e1e; font-weight: 900; margin-top: 5px;'>Not specified</li>";
+						sectionInputTableElement += "<li style='margin-top: 6px;'>None - <a onclick='" + field.addNewOnclick + "'>Add</a></li>";
 					}
 					continue;
 				}else if(fieldName === "actorName"){

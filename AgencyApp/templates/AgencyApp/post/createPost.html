@@ -93,6 +93,8 @@
                 {% if project and project.title %}
 					projectField.title  = '{{project.title}}';
 					projectField.projectID = '{{project.postID}}';
+				{% else %}
+					projectField.addNewOnclick = 'toggleSelectProjectPopup("show", "{{post.postID}}");';
 				{% endif %}
 				postFields["project"] = projectField
 
@@ -129,8 +131,32 @@
             {% endif %}
             return postFields;
         }
+
+    function toggleSelectProjectPopup(toggleType, postID){
+    	if(postID != null && postID.length > 0){
+    		var overlay = document.getElementById("hiddenGrayPopupOverlay");
+    		var contentBox = document.getElementById("selectProjectPanel");
+    		if(overlay && contentBox){
+    			if(toggleType === "show"){
+	    			overlay.style.height = "1500px";
+	    			overlay.style.width = "100%";
+	    			overlay.style.background = "rgba(0,0,0,0.5)"
+	    			contentBox.style.display = "block";
+	    		}else if(toggleType === "hide"){
+	    			overlay.style.background = "rgba(0,0,0,0)"
+	    			overlay.style.height = "0%"
+	    			overlay.style.width = "0%"
+	    			contentBox.style.display = "none";
+	    		}
+    		}
+    	}
+    }
 </script>
-<div id="mainViewPanel" class="mainViewPanel" style="display:block">
+<div id="mainViewPanel" class="mainViewPanel" style="display:block; display: relative">
+	<div id="hiddenGrayPopupOverlay" style="background: rgba(0,0,0,0); height:0%; width:0%; position: absolute; top:0; z-index: 3">
+		<div style="position: relative; height: 100%;"><div id="selectProjectPanel" class="popupContentPanel" style="width: 80%; height: 400px; background: #FFF; display: none; position: fixed; top: 10%; left: 10%;" onclick="toggleSelectProjectPopup('hide', 'asdasds');">
+		</div></div>
+	</div>
 	<div id="editPostPanel" class="editPostPanel">
 		{% if isCasting %}
 			<div id="postForm"></div>
@@ -144,6 +170,11 @@
 			$("#id_postPicture").change(function(){
 				previewPicture(this, "postPictureImg");
 			});
+
+			var selectProjectPanelDiv = document.getElementById("selectProjectPanel");
+			if(selectProjectPanelDiv != null){
+				newForm = addSelectProjectForm("{{post.postID}}", "{{request.user.username}}")
+			}
 		}
 	</script>
 </div>
