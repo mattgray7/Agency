@@ -11,8 +11,8 @@
                 // Set the status from the select bar in the form
                 document.getElementById("statusSelectInput").value = statusDiv.value;
             }
-            {% if selectFields.names %}
-                {% for name in selectFields.names %}
+            {% if selectFields.roles.names %}
+                {% for name in selectFields.roles.names %}
                     var selectDiv = document.getElementById('{{name}}SelectBar')
                     if(selectDiv != null){
                         document.getElementById('{{name}}SelectInput').value = selectDiv.value;
@@ -71,6 +71,10 @@
                         {% endif %}
                     {% endif %}
                     if(save){
+                        // If value was added but it's not in input, add it (TODO change value in input if it is already there)
+                        if(postField.input.indexOf("value=") < 0 && postField.value.length > 0 && postField.value != "None"){
+                            postField.input = postField.input.replace(">", " value='" + postField.value + "'>")
+                        }
                     	postFields['{{field.name}}'] = postField;
                     }
                 {% endfor %}
