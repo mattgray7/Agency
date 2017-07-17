@@ -30,8 +30,8 @@
             {% if form %}
                 {% spaceless %}
                 {% for field in form %}
-                	var save = true;
-                	var postField = {"name": '{{field.name}}', "value": '{{field.value}}', "hidden": ('{{field}}'.includes('hidden')), "label": '{{field.label}}', 'input': '{{field}}'}
+                    var save = true;
+                    var postField = {"name": '{{field.name}}', "value": '{{field.value}}', "hidden": ('{{field}}'.includes('hidden')), "label": '{{field.label}}', 'input': '{{field}}'}
                     {% if field.name == "projectID" %}
                         postField.value = "{{post.projectID}}";
                     {% elif field.name == "postPicture" %}
@@ -41,17 +41,17 @@
                             postField.value = "{{images.noPicture}}";
                         {% endif %}
                     {% elif field.name == "paid" %}
-                    	/*postField.input += "<div style='width: 90%; margin-left: 20px; display: inline; margin-top: -10px;'><div style='width: 10%; display: inline; line-height: 38.5px;' class='editPostLabelPanel'><div style='height: 5px;'></div>Specify </div><input type='text' name='paidDescription' value='{{post.paidDescription}}' style='width: 59%; display: inline;'></div>";*/
-                    	/*postField.input += "<div style='margin-left: 20px; display: inline; position: relative; height: 20px; min-width: 20px; margin-top: -30px;'><div style='position: absolute; left: 0; top: 0;'> Specify</div><div style='position:absolute; top: 0; right: 0'><input type='text' name='paidDescription' value='{{post.paidDescription}}' style='width: 59%;'></div></div>";*/
-                    	var currentInput = postField.input;
-                    	var paidDescription = '{{post.paidDescription}}'
-                    	if(paidDescription === "None"){
-                    		paidDescription = ''
-                    	}
-                    	postField.input = "<div style='position: relative; margin-top: -5px;'>" + currentInput + "<div style='position: absolute; top: 0; right: 0; margin-top: 6px; width: 90%; text-align: right;'><div style='position: relative;'> <div style='position: absolute; left: 0;' class='editPostLabelPanel'>Specify </div><div style='position: absolute; right: 0; width: 74%; margin-right: 5px; margin-top: -3px;'><input type='text' name='paidDescription' value='" + paidDescription + "' style='display: inline; margin-top: -10px;'></div></div></div>"
+                        /*postField.input += "<div style='width: 90%; margin-left: 20px; display: inline; margin-top: -10px;'><div style='width: 10%; display: inline; line-height: 38.5px;' class='editPostLabelPanel'><div style='height: 5px;'></div>Specify </div><input type='text' name='paidDescription' value='{{post.paidDescription}}' style='width: 59%; display: inline;'></div>";*/
+                        /*postField.input += "<div style='margin-left: 20px; display: inline; position: relative; height: 20px; min-width: 20px; margin-top: -30px;'><div style='position: absolute; left: 0; top: 0;'> Specify</div><div style='position:absolute; top: 0; right: 0'><input type='text' name='paidDescription' value='{{post.paidDescription}}' style='width: 59%;'></div></div>";*/
+                        var currentInput = postField.input;
+                        var paidDescription = '{{post.paidDescription}}'
+                        if(paidDescription === "None"){
+                            paidDescription = ''
+                        }
+                        postField.input = "<div style='position: relative; margin-top: -5px;'>" + currentInput + "<div style='position: absolute; top: 0; right: 0; margin-top: 6px; width: 90%; text-align: right;'><div style='position: relative;'> <div style='position: absolute; left: 0;' class='editPostLabelPanel'>Specify </div><div style='position: absolute; right: 0; width: 74%; margin-right: 5px; margin-top: -3px;'><input type='text' name='paidDescription' value='" + paidDescription + "' style='display: inline; margin-top: -10px;'></div></div></div>"
                     {% elif field.name == "paidDescription" %}
-                    	// Paid description will be on same line as paid
-                    	save = false;
+                        // Paid description will be on same line as paid
+                        save = false;
                     {% elif field.name == "status" %}
                         {% if statusOptions.roles %}
                             var options = {{ statusOptions.roles|safe }}
@@ -83,7 +83,7 @@
                         if(postField.input.indexOf("value=") < 0 && postField.value.length > 0 && postField.value != "None"){
                             postField.input = postField.input.replace(">", " value='" + postField.value + "'>")
                         }
-                    	postFields['{{field.name}}'] = postField;
+                        postFields['{{field.name}}'] = postField;
                     }
                 {% endfor %}
                 {% endspaceless %}
@@ -91,28 +91,28 @@
                 // Add project
                 var projectField = {"name": "project"}
                 {% if project and project.title %}
-					projectField.title  = '{{project.title}}';
-					projectField.projectID = '{{project.postID}}';
-				{% else %}
-					projectField.addNewOnclick = 'toggleSelectProjectPopup("show", "{{post.postID}}");';
-				{% endif %}
-				postFields["project"] = projectField
+                    projectField.title  = '{{project.title}}';
+                    projectField.projectID = '{{project.postID}}';
+                {% else %}
+                    projectField.addNewOnclick = 'toggleSelectProjectPopup("show", "{{post.postID}}");';
+                {% endif %}
+                postFields["project"] = projectField
 
-				// Add actor
-				var actorField = {"username": "{{actor.username}}", "cleanName": "{{actor.cleanName}}"}
-				{% if actor %}
-					actorField["username"] = "{{actor.username}}";
-					actorField["cleanName"] = "{{actor.cleanName}}";
-					{% if actor.profilePicture %}
-						actorField.profilePictureURL = '{{actor.profilePicture.url}}';
-					{% endif %}
-				{% else %}
-					actorField["username"] = null;
-					actorField.profilePictureURL = '{{images.noProfilePicture}}';
-				{% endif %}
-				postFields["actor"] = actorField;
+                // Add actor
+                var actorField = {"username": "{{actor.username}}", "cleanName": "{{actor.cleanName}}"}
+                {% if actor %}
+                    actorField["username"] = "{{actor.username}}";
+                    actorField["cleanName"] = "{{actor.cleanName}}";
+                    {% if actor.profilePicture %}
+                        actorField.profilePictureURL = '{{actor.profilePicture.url}}';
+                    {% endif %}
+                {% else %}
+                    actorField["username"] = null;
+                    actorField.profilePictureURL = '{{images.noProfilePicture}}';
+                {% endif %}
+                postFields["actor"] = actorField;
 
-				// Add csrf token
+                // Add csrf token
                 var csrfField = {"name": "csrf_token", "input": "{% csrf_token %}", "hidden": true};
                 postFields['csrf_token'] = csrfField;
 
@@ -126,294 +126,294 @@
 
                 postFields["newPost"] = true;
                 {% if post %}
-                	postFields["newPost"] = false;
+                    postFields["newPost"] = false;
                 {% endif %}
             {% endif %}
             return postFields;
         }
 
     function toggleSelectProjectPopup(toggleType, postID){
-    	if(postID != null && postID.length > 0){
-    		var overlay = document.getElementById("hiddenGrayPopupOverlay");
-    		var contentBox = document.getElementById("selectProjectPanel");
-    		if(overlay && contentBox){
-    			if(toggleType === "show"){
-	    			overlay.style.height = "1500px";
-	    			overlay.style.width = "100%";
-	    			overlay.style.background = "rgba(0,0,0,0.5)"
-	    			contentBox.style.display = "block";
-	    		}else if(toggleType === "hide"){
-	    			overlay.style.background = "rgba(0,0,0,0)"
-	    			overlay.style.height = "0%"
-	    			overlay.style.width = "0%"
-	    			contentBox.style.display = "none";
-	    		}
-    		}
-    	}
+        if(postID != null && postID.length > 0){
+            var overlay = document.getElementById("hiddenGrayPopupOverlay");
+            var contentBox = document.getElementById("selectProjectPanel");
+            if(overlay && contentBox){
+                if(toggleType === "show"){
+                    overlay.style.height = "1500px";
+                    overlay.style.width = "100%";
+                    overlay.style.background = "rgba(0,0,0,0.5)"
+                    contentBox.style.display = "block";
+                }else if(toggleType === "hide"){
+                    overlay.style.background = "rgba(0,0,0,0)"
+                    overlay.style.height = "0%"
+                    overlay.style.width = "0%"
+                    contentBox.style.display = "none";
+                }
+            }
+        }
     }
 </script>
 <div id="mainViewPanel" class="mainViewPanel" style="display:block; display: relative">
-	<div id="hiddenGrayPopupOverlay" style="background: rgba(0,0,0,0); height:0%; width:0%; position: absolute; top:0; z-index: 3">
-		<div style="position: relative; height: 100%;"><div id="selectProjectPanel" class="popupContentPanel" style="width: 80%; height: 400px; background: #FFF; display: none; position: fixed; top: 10%; left: 10%;" onclick="toggleSelectProjectPopup('hide', 'asdasds');">
-		</div></div>
-	</div>
-	<div id="editPostPanel" class="editPostPanel">
-		{% if isCasting %}
-			<div id="postForm"></div>
-		{% endif %}
-	</div>
-	<script>
-		var postFormDiv = document.getElementById("postForm");
-		if(postFormDiv != null){
-			newForm = addCreateCastingPost(getCastingFormDict(), "{{currentPageURL}}", "createCastingPostForm");
-			postFormDiv.innerHTML = newForm;
-			$("#id_postPicture").change(function(){
-				previewPicture(this, "postPictureImg");
-			});
+    <div id="hiddenGrayPopupOverlay" style="background: rgba(0,0,0,0); height:0%; width:0%; position: absolute; top:0; z-index: 3">
+        <div style="position: relative; height: 100%;"><div id="selectProjectPanel" class="popupContentPanel" style="width: 80%; height: 400px; background: #FFF; display: none; position: fixed; top: 10%; left: 10%;" onclick="toggleSelectProjectPopup('hide', 'asdasds');">
+        </div></div>
+    </div>
+    <div id="editPostPanel" class="editPostPanel">
+        {% if isCasting %}
+            <div id="postForm"></div>
+        {% endif %}
+    </div>
+    <script>
+        var postFormDiv = document.getElementById("postForm");
+        if(postFormDiv != null){
+            newForm = addCreateCastingPost(getCastingFormDict(), "{{currentPageURL}}", "createCastingPostForm");
+            postFormDiv.innerHTML = newForm;
+            $("#id_postPicture").change(function(){
+                previewPicture(this, "postPictureImg");
+            });
 
-			var selectProjectPanelDiv = document.getElementById("selectProjectPanel");
-			if(selectProjectPanelDiv != null){
-				newForm = addSelectProjectForm("{{post.postID}}", "{{request.user.username}}")
-			}
-		}
-	</script>
+            var selectProjectPanelDiv = document.getElementById("selectProjectPanel");
+            if(selectProjectPanelDiv != null){
+                newForm = addSelectProjectForm("{{post.postID}}", "{{request.user.username}}")
+            }
+        }
+    </script>
 </div>
-	<!--{% if errors %}
-		<ul>
-			{% for error in errors %}
-				<li>{{ error }}</li>
-			{% endfor %}
-		</ul>
-	{% endif %}
+    <!--{% if errors %}
+        <ul>
+            {% for error in errors %}
+                <li>{{ error }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
 
-	<h3>
-		{% if isEvent %}
-			{% if post.title %}
-				Update event
-			{% else %}
-				Create event
-			{% endif %}
-		{% elif isProject %}
-			{% if post.title %}
-				Update project
-			{% else %}
-				Create project
-			{% endif %}
-		{% elif isCollaboration %}
-			{% if post.title %}
-				Update collaboration post
-			{% else %}
-				Create collaboration post
-			{% endif %}
-		{% elif isWork %}
-			{% if post.title %}
-				Update work post
-			{% else %}
-				Create work post
-			{% endif %}
-		{% elif isCasting %}
-			{% if post.title %}
-				Update casting post
-			{% else %}
-				Create casting post
-			{% endif %}
-		{% endif %}
-	</h3>
+    <h3>
+        {% if isEvent %}
+            {% if post.title %}
+                Update event
+            {% else %}
+                Create event
+            {% endif %}
+        {% elif isProject %}
+            {% if post.title %}
+                Update project
+            {% else %}
+                Create project
+            {% endif %}
+        {% elif isCollaboration %}
+            {% if post.title %}
+                Update collaboration post
+            {% else %}
+                Create collaboration post
+            {% endif %}
+        {% elif isWork %}
+            {% if post.title %}
+                Update work post
+            {% else %}
+                Create work post
+            {% endif %}
+        {% elif isCasting %}
+            {% if post.title %}
+                Update casting post
+            {% else %}
+                Create casting post
+            {% endif %}
+        {% endif %}
+    </h3>
 
-	{% if post.postPicture %}
-		<div id="postPicture">
-			<img src="{{ post.postPicture.url }}" height="150px" width="120px"/>
-		</div>
-	{% endif %}
+    {% if post.postPicture %}
+        <div id="postPicture">
+            <img src="{{ post.postPicture.url }}" height="150px" width="120px"/>
+        </div>
+    {% endif %}
 
-	{% if post.title %}
-		<form method='post' action="/post/edit/{{post.postID}}/" name='createForm' id='createForm' enctype="multipart/form-data" onsubmit="return submitForm()">
-	{% else %}
-		{% if isEvent %}
-			<form method='post' action="/post/create/event/" name='createForm' id='createForm' enctype="multipart/form-data" onsubmit="return submitForm()">
-		{% elif isProject %}
-			<form method='post' action="/post/create/project/" name='createForm' id='createForm' enctype="multipart/form-data" onsubmit="return submitForm()">
-		{% elif isCollaboration %}
-			<form method='post' action="/post/create/collaboration/" name='createForm' id='createForm' enctype="multipart/form-data" onsubmit="return submitForm()">
-		{% elif isWork %}
-			<form method='post' action="/post/create/work/" name='createForm' id='createForm' enctype="multipart/form-data" onsubmit="return submitForm()">
-		{% elif isCasting %}
-			<form method='post' action="/post/create/casting/" name='createForm' id='createForm' enctype="multipart/form-data" onsubmit="return submitForm()">
-		{% endif %}
-	{% endif %}
-	{% csrf_token %}
-	{{ form.as_p }}
-	{% if not hideStatus %}
-		Status: <div id="statusDiv" style="display:inline"></div><br><br>
-	{% endif %}
+    {% if post.title %}
+        <form method='post' action="/post/edit/{{post.postID}}/" name='createForm' id='createForm' enctype="multipart/form-data" onsubmit="return submitForm()">
+    {% else %}
+        {% if isEvent %}
+            <form method='post' action="/post/create/event/" name='createForm' id='createForm' enctype="multipart/form-data" onsubmit="return submitForm()">
+        {% elif isProject %}
+            <form method='post' action="/post/create/project/" name='createForm' id='createForm' enctype="multipart/form-data" onsubmit="return submitForm()">
+        {% elif isCollaboration %}
+            <form method='post' action="/post/create/collaboration/" name='createForm' id='createForm' enctype="multipart/form-data" onsubmit="return submitForm()">
+        {% elif isWork %}
+            <form method='post' action="/post/create/work/" name='createForm' id='createForm' enctype="multipart/form-data" onsubmit="return submitForm()">
+        {% elif isCasting %}
+            <form method='post' action="/post/create/casting/" name='createForm' id='createForm' enctype="multipart/form-data" onsubmit="return submitForm()">
+        {% endif %}
+    {% endif %}
+    {% csrf_token %}
+    {{ form.as_p }}
+    {% if not hideStatus %}
+        Status: <div id="statusDiv" style="display:inline"></div><br><br>
+    {% endif %}
 
-	{% if isCasting %}
-			<script>
-			function toggleActorDescriptions(){
-				// Create input list
-				var tagInputs = document.getElementsByTagName("input")
-				var selectInputs = document.getElementsByTagName("select");
-				var inputs = []
-				for(var i=0; i < tagInputs.length; i++){
-					inputs.push(tagInputs[i]);
-				}
-				for(var i=0; i < selectInputs.length; i++){
-					inputs.push(selectInputs[i]);
-				}
+    {% if isCasting %}
+            <script>
+            function toggleActorDescriptions(){
+                // Create input list
+                var tagInputs = document.getElementsByTagName("input")
+                var selectInputs = document.getElementsByTagName("select");
+                var inputs = []
+                for(var i=0; i < tagInputs.length; i++){
+                    inputs.push(tagInputs[i]);
+                }
+                for(var i=0; i < selectInputs.length; i++){
+                    inputs.push(selectInputs[i]);
+                }
 
-				// toggle the enable
-				for(var i=0; i < inputs.length; i++){
-					var currentInput = inputs[i]
-					if(currentInput.id.substring(0, 10) == "attributes"){
-						if(currentInput.disabled){
-							currentInput.disabled = false;
-							document.getElementById("physicalAttributesEnabledDiv").innerHTML = "<input type='hidden' name='descriptionEnabled' value='True' />";
-							document.getElementById("physicalAttributesDivLabel").innerHTML = '<font color="black">Physical attributes</font>';
-						}else{
-							currentInput.disabled = true;
-							document.getElementById("physicalAttributesEnabledDiv").innerHTML = "<input type='hidden' name='descriptionEnabled' value='False' />";
-							document.getElementById("physicalAttributesDivLabel").innerHTML = '<font color="gray">Physical attributes</font>';
-						}
-					}
-				}
-			}
-			</script>
-			<br>
-			<h5 style="display:inline;"> You can specify the physical characteristics of the role, which we can use to notify actors with matching traits of your casting post. Your post will still be visible without physical criteria enabled.</h5>
-			<br>
-			Enable physical attributes
-			{% if descriptionEnabled %}
-				<input type="checkbox" onclick="toggleActorDescriptions();" value="Enable physical criteria" checked/>
-			{% else %}
-				<input type="checkbox" onclick="toggleActorDescriptions();" value="Enable physical criteria"/>
-			{% endif %}
-			<br><br>
+                // toggle the enable
+                for(var i=0; i < inputs.length; i++){
+                    var currentInput = inputs[i]
+                    if(currentInput.id.substring(0, 10) == "attributes"){
+                        if(currentInput.disabled){
+                            currentInput.disabled = false;
+                            document.getElementById("physicalAttributesEnabledDiv").innerHTML = "<input type='hidden' name='descriptionEnabled' value='True' />";
+                            document.getElementById("physicalAttributesDivLabel").innerHTML = '<font color="black">Physical attributes</font>';
+                        }else{
+                            currentInput.disabled = true;
+                            document.getElementById("physicalAttributesEnabledDiv").innerHTML = "<input type='hidden' name='descriptionEnabled' value='False' />";
+                            document.getElementById("physicalAttributesDivLabel").innerHTML = '<font color="gray">Physical attributes</font>';
+                        }
+                    }
+                }
+            }
+            </script>
+            <br>
+            <h5 style="display:inline;"> You can specify the physical characteristics of the role, which we can use to notify actors with matching traits of your casting post. Your post will still be visible without physical criteria enabled.</h5>
+            <br>
+            Enable physical attributes
+            {% if descriptionEnabled %}
+                <input type="checkbox" onclick="toggleActorDescriptions();" value="Enable physical criteria" checked/>
+            {% else %}
+                <input type="checkbox" onclick="toggleActorDescriptions();" value="Enable physical criteria"/>
+            {% endif %}
+            <br><br>
 
-			<div id="physicalAttributesDiv">
-				<h4 style="display:inline;">
-					<div id="physicalAttributesDivLabel"><font color="gray">Physical attributes</font></div>
-				</h4>
-				<table>
-					<script>
-					var attributeDivIdList = [];
-					</script>
-					{% for attribute in attributes %}
-						<tr><td>
-							<script>
-							function changeAttributeBool(attributeName, newBoolValue){
-								var attributeInputDiv = document.getElementById(attributeName + "BoolDiv");
-								if(attributeInputDiv != null){
-									attributeInputDiv.innerHTML = "<input type='hidden' name='attributes.{{attribute.name}}' value='" + newBoolValue + "'>"
-								}
-							}
-							</script>
-							{{attribute.name}}: 
-							{% if attribute.value == True or attribute.value == "True" %}
-								<div id="{{attribute.name}}BoolDiv"></div>
-								<input type='checkbox' value='{{attribute.value}}' id="attributes.{{attribute.name}}" name='{{attribute.name}}' disabled='disabled' onclick='changeAttributeBool("{{attribute.name}}", "False");' checked>
-							{% elif attribute.value == False or attribute.value == "False" %}
-								<div id="{{attribute.name}}BoolDiv"></div>
-								<input type='checkbox' value='{{attribute.value}}' id="attributes.{{attribute.name}}" name='{{attribute.name}}' disabled='disabled' onclick='changeAttributeBool("{{attribute.name}}", "True");' >
-							{% else %}
-								{% if attribute.options %}
-									<div id="attributes.{{attribute.name}}Div"></div>
-								{% elif attribute.value and attribute.value != "None" %}
-									<input type='text' value='{{attribute.value}}' id="attributes.{{attribute.name}}" name="attributes.{{attribute.name}}" disabled='disabled'>
-								{% else %}
-									<input type='text' value='' id="attributes.{{attribute.name}}" name="attributes.{{attribute.name}}" disabled='disabled'>
-								{% endif %}
-							{% endif %}
-							</td></tr>
-					{% endfor %}
+            <div id="physicalAttributesDiv">
+                <h4 style="display:inline;">
+                    <div id="physicalAttributesDivLabel"><font color="gray">Physical attributes</font></div>
+                </h4>
+                <table>
+                    <script>
+                    var attributeDivIdList = [];
+                    </script>
+                    {% for attribute in attributes %}
+                        <tr><td>
+                            <script>
+                            function changeAttributeBool(attributeName, newBoolValue){
+                                var attributeInputDiv = document.getElementById(attributeName + "BoolDiv");
+                                if(attributeInputDiv != null){
+                                    attributeInputDiv.innerHTML = "<input type='hidden' name='attributes.{{attribute.name}}' value='" + newBoolValue + "'>"
+                                }
+                            }
+                            </script>
+                            {{attribute.name}}: 
+                            {% if attribute.value == True or attribute.value == "True" %}
+                                <div id="{{attribute.name}}BoolDiv"></div>
+                                <input type='checkbox' value='{{attribute.value}}' id="attributes.{{attribute.name}}" name='{{attribute.name}}' disabled='disabled' onclick='changeAttributeBool("{{attribute.name}}", "False");' checked>
+                            {% elif attribute.value == False or attribute.value == "False" %}
+                                <div id="{{attribute.name}}BoolDiv"></div>
+                                <input type='checkbox' value='{{attribute.value}}' id="attributes.{{attribute.name}}" name='{{attribute.name}}' disabled='disabled' onclick='changeAttributeBool("{{attribute.name}}", "True");' >
+                            {% else %}
+                                {% if attribute.options %}
+                                    <div id="attributes.{{attribute.name}}Div"></div>
+                                {% elif attribute.value and attribute.value != "None" %}
+                                    <input type='text' value='{{attribute.value}}' id="attributes.{{attribute.name}}" name="attributes.{{attribute.name}}" disabled='disabled'>
+                                {% else %}
+                                    <input type='text' value='' id="attributes.{{attribute.name}}" name="attributes.{{attribute.name}}" disabled='disabled'>
+                                {% endif %}
+                            {% endif %}
+                            </td></tr>
+                    {% endfor %}
 
-				</table>
-				<div id="physicalAttributesEnabledDiv" style="display:inline";>
-					<input type='hidden' name='descriptionEnabled' value='{{ descriptionEnabled }}' />
-				</div>
-			</div>
+                </table>
+                <div id="physicalAttributesEnabledDiv" style="display:inline";>
+                    <input type='hidden' name='descriptionEnabled' value='{{ descriptionEnabled }}' />
+                </div>
+            </div>
 
-	{% elif isWork %}
-		<div id='professionListDiv'></div><br>
-	{% elif isCollaboration %}
-		<div id='collaboratorRoleDiv'></div><br>
-	{% endif %}
+    {% elif isWork %}
+        <div id='professionListDiv'></div><br>
+    {% elif isCollaboration %}
+        <div id='collaboratorRoleDiv'></div><br>
+    {% endif %}
 
-	{% if post.title %}
-		<input type="submit" value="Update" />
-	{% else %}
-		<input type="submit" value="Create" />
-	{% endif %}
-	</form>
-	<div id="cancelButton" class="button"><div id="cancelButtonLabel"></div>
+    {% if post.title %}
+        <input type="submit" value="Update" />
+    {% else %}
+        <input type="submit" value="Create" />
+    {% endif %}
+    </form>
+    <div id="cancelButton" class="button"><div id="cancelButtonLabel"></div>
 </div>
 
 <script>
-		/*$(document).ready(function(){
-			// run a deconstructor to delete a post from the db if user navigates away from this page without canceling
-			toolbarDeconstructorFunctions.push(function(){
-				{% if not post.record.title %}
-					// New record, need to delete
-					deletePostFromDB("{{ post.postID }}", "{{ postType }}")
-				{% endif %}
-			})
+        /*$(document).ready(function(){
+            // run a deconstructor to delete a post from the db if user navigates away from this page without canceling
+            toolbarDeconstructorFunctions.push(function(){
+                {% if not post.record.title %}
+                    // New record, need to delete
+                    deletePostFromDB("{{ post.postID }}", "{{ postType }}")
+                {% endif %}
+            })
 
-			// Handle select bars
-			{% if not hideStatus %}
-				addStatusBar("statusDiv", "statusSelect", "{{ post.status }}")
-			{% endif %}
+            // Handle select bars
+            {% if not hideStatus %}
+                addStatusBar("statusDiv", "statusSelect", "{{ post.status }}")
+            {% endif %}
 
-			{% if isWork %}
-				// Add profession select bar to work post
-				var professionDiv = document.getElementById("professionListDiv")
-				if(professionDiv != null){
-					var professionOptions = {{ professionList|safe }};
-					var selectForm = "Profession:" + createSelectForm("createForm", "professionSelect", professionOptions, "{{ chosenProfession }}");
-					professionDiv.innerHTML = selectForm;
-				}
-			{% elif isCasting %}
-				// Casting attributes select bar
-				{% for attribute in attributes %}
-					var attributeDiv = document.getElementById("attributes.{{attribute.name}}Div")
-					if(attributeDiv != null){
-						{% if attribute.options %}
-							var attributeOptions = {{ attribute.options|safe }}
-							var selectForm = createSelectForm("createForm", "attributes.{{attribute.name}}", attributeOptions, "{{attribute.value}}")
-							attributeDiv.innerHTML = selectForm;
+            {% if isWork %}
+                // Add profession select bar to work post
+                var professionDiv = document.getElementById("professionListDiv")
+                if(professionDiv != null){
+                    var professionOptions = {{ professionList|safe }};
+                    var selectForm = "Profession:" + createSelectForm("createForm", "professionSelect", professionOptions, "{{ chosenProfession }}");
+                    professionDiv.innerHTML = selectForm;
+                }
+            {% elif isCasting %}
+                // Casting attributes select bar
+                {% for attribute in attributes %}
+                    var attributeDiv = document.getElementById("attributes.{{attribute.name}}Div")
+                    if(attributeDiv != null){
+                        {% if attribute.options %}
+                            var attributeOptions = {{ attribute.options|safe }}
+                            var selectForm = createSelectForm("createForm", "attributes.{{attribute.name}}", attributeOptions, "{{attribute.value}}")
+                            attributeDiv.innerHTML = selectForm;
 
-							var attributeSelectForm = document.getElementById("attributes.{{attribute.name}}");
-							if(attributeSelectForm != null){
-								attributeSelectForm.disabled = "disabled";
-							}
-						{% endif %}
-					}
-				{% endfor %}
-				{% if post.descriptionEnabled %}
-					toggleActorDescriptions();
-				{% endif %}
-			{% elif isCollaboration %}
-				// Add profession select bar to work post
-				var collaboratorRoleDiv = document.getElementById("collaboratorRoleDiv")
-				if(collaboratorRoleDiv != null){
-					var collaboratorRoleOptions = {{ collaboratorRoleOptions|safe }};
-					var selectForm = "Collaborator role:" + createSelectForm("createForm", "collaboratorRoleSelect", collaboratorRoleOptions, "{{ collaboratorRole }}");
-					collaboratorRoleDiv.innerHTML = selectForm;
-				}
-			{% endif %}		
-		});*/
+                            var attributeSelectForm = document.getElementById("attributes.{{attribute.name}}");
+                            if(attributeSelectForm != null){
+                                attributeSelectForm.disabled = "disabled";
+                            }
+                        {% endif %}
+                    }
+                {% endfor %}
+                {% if post.descriptionEnabled %}
+                    toggleActorDescriptions();
+                {% endif %}
+            {% elif isCollaboration %}
+                // Add profession select bar to work post
+                var collaboratorRoleDiv = document.getElementById("collaboratorRoleDiv")
+                if(collaboratorRoleDiv != null){
+                    var collaboratorRoleOptions = {{ collaboratorRoleOptions|safe }};
+                    var selectForm = "Collaborator role:" + createSelectForm("createForm", "collaboratorRoleSelect", collaboratorRoleOptions, "{{ collaboratorRole }}");
+                    collaboratorRoleDiv.innerHTML = selectForm;
+                }
+            {% endif %}     
+        });*/
 
-		function submitForm(){
-			var form = document.getElementById("createForm")
-			{% if isWork %}
-				document.getElementById("id_profession").value = document.getElementById("professionSelect").value;
-			{% elif isCollaboration %}
-				document.getElementById("id_collaboratorRoleSelect").value = document.getElementById("collaboratorSelect").value;
-			{% endif %}
-			var statusDiv = document.getElementById("statusSelect");
-			if(statusDiv != null){
-				document.getElementById("id_status").value = statusDiv.value;
-			}
-			return form.submit()
-			}
-	</script>-->
+        function submitForm(){
+            var form = document.getElementById("createForm")
+            {% if isWork %}
+                document.getElementById("id_profession").value = document.getElementById("professionSelect").value;
+            {% elif isCollaboration %}
+                document.getElementById("id_collaboratorRoleSelect").value = document.getElementById("collaboratorSelect").value;
+            {% endif %}
+            var statusDiv = document.getElementById("statusSelect");
+            if(statusDiv != null){
+                document.getElementById("id_status").value = statusDiv.value;
+            }
+            return form.submit()
+            }
+    </script>-->
 
 {% endblock %}
