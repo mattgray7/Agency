@@ -72,11 +72,7 @@
                     {% elif field.name == "postID" %}
                         postField.value = getNewPostID("casting")
                     {% elif field.name == "postPicture" %}
-                        {% if post.postPicture and post.postPicture.url %}
-                            postField.value = "{{post.postPicture.url}}";
-                        {% else %}
-                            postField.value = "{{images.noPicture}}";
-                        {% endif %}
+                        postField.value = "{{images.noPicture}}";
                     {% elif field.name == "paid" %}
                         var currentInput = postField.input;
                         var paidDescription = '{{post.paidDescription}}'
