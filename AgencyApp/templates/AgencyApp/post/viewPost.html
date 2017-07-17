@@ -415,7 +415,7 @@
 										</div>
 									</li>
 									{% endif %}
-								{% if post.status == "Cast" and actor  and actor.profilePicture %}
+								{% if post.status == "Cast" and actor and actor.profilePicture %}
 									<li>
 										<div id="actorPicturePanel" class="postPicture">
 											<div id="actorPictureBoundingBox" style="width:250px; height:250px; background: #000; border: 1px solid #FFF; border-radius:3px; vertical-align: middle; display: table-cell;">
@@ -454,7 +454,7 @@
 									<h1 class="postInfoTitle" style="display: inline;">
 										<a onclick='redirectToPost("{{post.postID}}");'> {{ post.characterName }} </a>
 									</h1>
-									{% if post.status == "Open" %}
+									{% if post.status != "Cast" %}
 										<div style="position:relative; display: inline;">
 											{% if displayStatus == "past" %}
 												<div class="redButton" style="margin-top: 10px; padding: 0.1em 0.3em 0.1em 0.3em; display:inline; position: absolute">
@@ -462,7 +462,7 @@
 												</div>
 											{% else %}
 												<div class="greenButton" style="margin-top: 9px; margin-left: 6px; padding: 0.1em 0.3em 0.15em 0.3em; position: absolute;">
-													Open
+													{{post.status}}
 												</div>
 											{% endif %}
 										</div>
