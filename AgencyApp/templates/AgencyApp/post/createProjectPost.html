@@ -117,9 +117,9 @@
 
                 // Add project
                 var projectField = {"name": "project"}
-                {% if project and project.title %}
-                    projectField.title  = '{{project.title}}';
-                    projectField.projectID = '{{project.postID}}';
+                {% if post and post.title %}
+                    projectField.title  = '{{post.title}}';
+                    projectField.projectID = '{{post.postID}}';
                 {% endif %}
                 postFields["project"] = projectField
 
@@ -155,9 +155,6 @@
                 postFields['createButton'] = createButton;
 
                 postFields["newPost"] = true;
-                {% if post %}
-                    postFields["newPost"] = false;
-                {% endif %}
             {% endif %}
             return postFields;
         }
