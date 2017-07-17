@@ -59,11 +59,19 @@
                         {% endif %}
                     {% elif field.name == "description" %}
                         postField.numRows = 20;
+                        {% if not field.value %}
+                            postField.value = "";
+                        {% endif %}
                     {% elif field.name == "poster" %}
                         postField.value = "{{ request.user.username }}"
                         postField.input = postField.input.replace('name="poster"', 'name="poster" value="' + postField.value + '"')
                     {% elif field.name == "startDate" or field.name == "endDate" %}
-                    	postField.input = postField.input.replace('type="text"', 'type="date"')
+                        postField.input = postField.input.replace('type="text"', 'type="date"')
+                        {% if field.name == "startDate" %}
+                            postField.value = currentDateString
+                        {% else %}
+                            postField.value = tomorrowDateString;
+                        {% endif %}
                     {% elif field.name in selectFields.roles.names %}
                         {% if selectFields.roles.options %}
                             var options = {{ selectFields.roles.options|safe }}

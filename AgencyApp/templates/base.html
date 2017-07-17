@@ -21,6 +21,12 @@
         // Maps usernames to display friendly names (mainly capitalize)
         var posterNameMap = {{ posterNameMap|safe }};
 
+        // Defaults to be used in multiple forms
+        var currentDate = new Date();
+        var currentDateString = currentDate.toISOString().slice(0,10);
+        var tomorrowDate = new Date(currentDate.getTime() + 24 * 60 * 60 * 1000);
+        var tomorrowDateString = tomorrowDate.toISOString().slice(0,10);
+
         // using jQuery
         function getCookie(name) {
             var cookieValue = null;

@@ -6,10 +6,6 @@
 <script>
     var projectTabs = ["roles", "jobs", "events"];
     var activeTab = "roles";
-    var currentDate = new Date();
-    var currentDateString = currentDate.toISOString().slice(0,10);
-    var tomorrowDate = new Date(currentDate.getTime() + 24 * 60 * 60 * 1000);
-    var tomorrowDateString = tomorrowDate.toISOString().slice(0,10);
 
     function deletePostFromDB(postID, postType){
         $.ajax({
@@ -243,7 +239,9 @@
                     $('#addNewPanel').stop(true, true).delay(500).animate({marginLeft: '0px', width:'24.6%', border: '2px solid #000'}, transitionSpeed);
                     $('#addNewPanel').animate({marginTop: '-13px', height:'200px'}, transitionSpeed);
                     if(listPanel != null){
-                        $("#projectContentPanel").animate({marginTop: "-13px", height: "360px"}, transitionSpeed, function() {$("#projectContentPanel").css("overflow", "scroll");});
+                        $("#projectContentPanel").animate({marginTop: "-13px", height: "360px"}, transitionSpeed, function() {
+                                $("#projectContentPanel").css("overflow", "scroll");
+                            });
                     }
                     if(existingList != null){
                         $('#projectContentList').stop(true, true).delay(500).animate({marginLeft: "208px"}, transitionSpeed);

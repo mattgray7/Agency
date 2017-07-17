@@ -7,7 +7,7 @@ function addCreateCastingPost(formDict, formURL, formName){
 	var pictureColumn = '<td style="text-align: center; width: 30%;"><div id="postPicturePanel" class="postPicture" style="width: 270px; height: 298px; background: #000; margin-left: 10px; margin-top: 50px;"><img id="postPictureImg" src="' + pictureField.value + '" style="max-width:100%; max-height:100%;"/></div><div style="width: 60%; margin-left: 25%; overflow: hidden;">' + pictureField.input + "</div></td>";
 
 	// Fill text content
-	var sectionMap = {"Details": ["title", "project", "characterType", "status", "paid", "hoursPerWeek", "startDate", "endDate"],
+	var sectionMap = {"Details": ["title", "project", "characterType", "status", "startDate", "endDate", "hoursPerWeek", "paid"],
 					  "Character": ["characterName", "shortCharacterDescription", "description", "skills", "languages"],
 					  "Performer": ["actorName"],
 					  "Physical": ["hairColor", "eyeColor", "complexion", "height", "build", "gender", "ageRange"],
