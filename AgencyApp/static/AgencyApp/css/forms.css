@@ -19,10 +19,16 @@
     cursor: pointer;
     color: #777777;
 }
+.hiddenGrayPopupOverlay
+{
+    transition: background .50s ease;
+}
 .popupContentPanel
 {
     border: 1px solid #000;
     border-radius: 4px;
+    background: rgba(255, 255, 255, 0)
+    transition: background 1s ease;
 }
 
 .editCastMemberPanel
