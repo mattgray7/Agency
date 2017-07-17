@@ -233,7 +233,7 @@ class CastingPost(AbstractPost):
     build = models.CharField(max_length=50, blank=True, null=True)
     skills = models.CharField(max_length=300, blank=True, null=True)
     languages = models.CharField(max_length=300, blank=True, null=True)
-    hoursPerWeek = models.IntegerField(blank=True, null=True)
+    hoursPerWeek = models.TextField(max_length=50, blank=True, null=True)
     startDate = models.DateField(default=None, blank=True, null=True)
     endDate = models.DateField(default=None, blank=True, null=True)
 
