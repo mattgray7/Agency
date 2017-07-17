@@ -110,7 +110,7 @@
 						{% endif %}
 						contentString += "</div></div><br>";
 						contentString += "<div class='projectContentListElementText'><h2>{{roleObj.post.characterName}}</h2><p>{{roleObj.post.shortCharacterDescription}}</p></div>"
-					{% elif roleObj.post.status == "Open" and roleObj.post %}
+					{% elif roleObj.post %}
 						contentString += "<td class='projectContentListElement greenBackground darkGreenHover' onclick='redirectToPost(" + '"{{roleObj.post.postID}}");' + "'>"
 						contentString += "<div style='text-align: left;margin-top: -20px; margin-left: 5px; padding: 0em 0em 0.7em 0em; font-weight: 500;'><h3 style='display: inline;'>AVAILABLE</h3></div>";
 
@@ -125,6 +125,7 @@
 						contentString += "<div class='projectContentListElementText'><h2>{{roleObj.post.characterName}}</h2><p>{{roleObj.post.shortCharacterDescription}}</p></div>"
 
 					{% else %}
+						console.log("No post found for role object.")
 						contentString += "{{roleObj.post.characterName}}, {{roleObj.post.status}}, {{roleObj.actor}}"
 					{% endif %}
 					contentString += "</td>";
