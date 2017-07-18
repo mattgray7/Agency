@@ -777,7 +777,7 @@
 					onChanged: debugQtyAreas,
 					width: 200,
 					allowSelect: false,
-					aspectRatio: 0.8,
+					aspectRatio: 0.9,
 					areas: [
 						{
 							x: 20,
@@ -786,7 +786,15 @@
 							height: 200,
 						}
 					]
-				});
+			});
+			$(document).ready(function(){
+				var elems = document.getElementsByClassName("select-areas-resize-handler")
+				for(var i=0; i < elems.length; i++){
+					var elem = elems[i];
+					elem.style.display = "block";
+					elem.style.zIndex = "1";
+				}
+			})
 		</script>
 
 	{% endif %}
