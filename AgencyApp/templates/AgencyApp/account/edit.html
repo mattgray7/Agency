@@ -678,8 +678,8 @@
 		</div>
 	{% elif next == possibleDestinations.picture %}
 		{% load static %}
-		<!--<link href="{% static "/AgencyApp/css/image.css" %}" rel="stylesheet" type="text/css" media="all" />
-		<link href="{% static "/AgencyApp/js/image/resources/jquery.selectareas.css" %}" media="screen" rel="stylesheet" type="text/css" />-->
+		<link href="{% static "/AgencyApp/css/image.css" %}" rel="stylesheet" type="text/css" media="all" />
+		<link href="{% static "/AgencyApp/js/image/resources/jquery.selectareas.css" %}" media="screen" rel="stylesheet" type="text/css" />
 		<script src="{% static "/AgencyApp/js/image/jquery.selectareas.js" %}"></script>
 
 		<script>
@@ -777,13 +777,13 @@
 					onChanged: debugQtyAreas,
 					width: 200,
 					allowSelect: false,
-					allowResize: true,
+					aspectRatio: 0.8,
 					areas: [
 						{
-							x: 10,
-							y: 20,
-							width: 60,
-							height: 100,
+							x: 20,
+							y: 0,
+							width: 160,
+							height: 200,
 						}
 					]
 				});
