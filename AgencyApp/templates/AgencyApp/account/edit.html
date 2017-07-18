@@ -769,6 +769,13 @@
                         $('#profilePicture').attr('src', e.target.result);
                         newPicture = new Image()
                         newPicture.src = e.target.result;
+
+                        var elems = document.getElementsByClassName("select-areas-background-area")
+                        for(var i=0; i < elems.length; i++){
+                            var elem = elems[i];
+                            // Numbers taken from original select-area-background-area on load (will change when picture box is at right size)
+                            elem.style.background = 'url("' + e.target.result + '") 0px 2px / 200px 175px no-repeat rgb(255, 255, 255)';
+                        }
                     }
                     reader.readAsDataURL(input.files[0]);
                 }
