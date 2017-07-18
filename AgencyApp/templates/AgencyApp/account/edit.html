@@ -677,6 +677,11 @@
 			</form>
 		</div>
 	{% elif next == possibleDestinations.picture %}
+		{% load static %}
+		<!--<link href="{% static "/AgencyApp/css/image.css" %}" rel="stylesheet" type="text/css" media="all" />
+		<link href="{% static "/AgencyApp/js/image/resources/jquery.selectareas.css" %}" media="screen" rel="stylesheet" type="text/css" />-->
+		<script src="{% static "/AgencyApp/js/image/jquery.selectareas.js" %}"></script>
+
 		<script>
 		function skipProfilePicture(){
 			var extraInputs = []
@@ -715,7 +720,13 @@
 					{% if userAccount and userAccount.profilePicture %}
 						<center>
 							<div id="profilePictureDiv" class="profilePictureDiv">
-								<img id="profilePicture" src="{{ userAccount.profilePicture.url }}" style="width:100%"/>
+								<div class="imageCrop">
+									<div class="wrapper">
+										<div class="image-decorator">
+											<img id="profilePicture" src="{{ userAccount.profilePicture.url }}" style="left: 0; background: #ededed"/>
+										</div>
+									</div>
+								</div>
 							</div>
 						</center>
 					{% endif %}
@@ -756,6 +767,26 @@
 			$("#id_profilePicture").change(function(){
 			    previewProfilePicture(this);
 			});
+
+			function debugQtyAreas (event, id, areas) {
+				console.log(areas.length + " areas", arguments);
+			};
+
+			$("#profilePicture").selectAreas({
+					minSize: [10, 10],
+					onChanged: debugQtyAreas,
+					width: 200,
+					allowSelect: false,
+					allowResize: true,
+					areas: [
+						{
+							x: 10,
+							y: 20,
+							width: 60,
+							height: 100,
+						}
+					]
+				});
 		</script>
 
 	{% endif %}
