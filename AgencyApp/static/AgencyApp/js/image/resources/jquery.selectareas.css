@@ -14,6 +14,7 @@
 .select-areas-outline {
 	background: #fff url('outline.gif');
 	overflow: hidden;
+	max-height: 300px;
 }
 
 .select-areas-resize-handler {
@@ -21,6 +22,11 @@
 	border: 1px #fff solid;
 	height: 8px;
 	width: 8px;
+	overflow: hidden;
+}
+
+.select-areas-background-area {
+	max-height: 300px;
 	overflow: hidden;
 }
 

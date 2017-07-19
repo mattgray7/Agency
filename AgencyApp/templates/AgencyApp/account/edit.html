@@ -826,29 +826,36 @@
 
             var displayedPicture = {};
             function loadImage(imageURL){
+                //Load the image into html and display the crop select area
                 var imageString = "";
                 var newArea = {};
                 var aspectRatio = 0.9;
+                var pictureDimension = 290;
 
                 var profilePicture = document.getElementById("profilePictureImage")
                 if(profilePicture != null){
                     if(newPictureHeight != null && newPictureWidth != null){
                         // Set highest dimension (h or w) to 300px
                         if(newPictureHeight > newPictureWidth){
-                            imageString = '<img id="profilePicture" src="' + imageURL + '" style="left: 0; background: #ededed; max-width: 300px; max-height: 300px;"/>'
+                            imageString = '<img id="profilePicture" src="' + imageURL + '" style="left: 0; background: #ededed; max-width: 290px; max-height: 290px;"/>'
                             // height is bigger, so set display height to max (300)
-                            displayedPicture.height = 300;
-                            displayedPicture.width = (300 / newPictureHeight) * newPictureWidth
+                            displayedPicture.height = pictureDimension;
+                            displayedPicture.width = (pictureDimension / newPictureHeight) * newPictureWidth
 
                             //if pic height is bigger, area should have width of pic (with space above and below)
                             newArea.width = displayedPicture.width;
+
+                            // Special case causing errors for square photos
                             newArea.height = newArea.width / aspectRatio;
+                            if(newArea.height > pictureDimension){
+                                newArea.height = pictureDimension
+                            }
                         }else{
-                            imageString = '<img id="profilePicture" src="' + imageURL + '" style="left: 0; background: #ededed; max-height: 300px; max-width: 300px;"/>'
+                            imageString = '<img id="profilePicture" src="' + imageURL + '" style="left: 0; background: #ededed; max-height: 290px; max-width: 290px;"/>'
 
                             //width is bigger, so set display width to max (300)
-                            displayedPicture.width = 300;
-                            displayedPicture.height = (300 / newPictureWidth) * newPictureHeight
+                            displayedPicture.width = pictureDimension;
+                            displayedPicture.height = (pictureDimension / newPictureWidth) * newPictureHeight
                             
                             //if pic width is bigger, area should have height of pic (with space on the sides)
                             newArea.height = displayedPicture.height;
@@ -858,17 +865,9 @@
                     profilePicture.innerHTML = imageString;
                 }
 
-                var selectAreaWidth = 0;
-                if(newPicture != null){
-                    if(newPictureWidth >= newPictureHeight){
-                        selectAreaWidth = newPictureWidth;
-                    }
-                }
-
                 $("#profilePicture").selectAreas({
                     minSize: [10, 10],
                     onLoaded: selectMainArea,
-                    width: selectAreaWidth,
                     allowSelect: false,
                     aspectRatio: aspectRatio,
                     areas: [
