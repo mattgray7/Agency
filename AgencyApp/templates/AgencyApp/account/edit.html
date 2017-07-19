@@ -709,16 +709,15 @@
         }
 
         function removeProfilePicture(){
-            console.log("removing profile picture")
             $.ajax({
-                    url : "/ajax/deleteProfilePicture/",
-                    data : {},
-                    type : 'POST',
-                    dataType: "json",
-                    success : function(data) {
-                        returnToProfile();
-                    }
-                });
+                url : "/ajax/deleteProfilePicture/",
+                data : {},
+                type : 'POST',
+                dataType: "json",
+                success : function(data) {
+                    returnToProfile();
+                }
+            });
         }
         </script>
 
@@ -776,8 +775,6 @@
         <script>
             var areas;
             var cropArea;
-            var pictureWidth = 300;
-            
             function previewProfilePicture(input) {
                 if (input.files && input.files[0]) {
                     var reader = new FileReader();
@@ -794,13 +791,6 @@
                             loadImage(e.target.result)
                             return true;
                         }
-
-                        /*var elems = document.getElementsByClassName("select-areas-background-area")
-                        for(var i=0; i < elems.length; i++){
-                            var elem = elems[i];
-                            // Numbers taken from original select-area-background-area on load (will change when picture box is at right size)
-                            elem.style.background = 'url("' + e.target.result + '") 0px 2px / 300px 300px no-repeat rgb(255, 255, 255)';
-                        }*/
                     }
                     reader.readAsDataURL(input.files[0]);
                 }
@@ -815,6 +805,7 @@
             }
 
             function selectMainArea(){
+                // By default, the select area isn't selected, so show the resize buttons
                 updateCropArea();
                 var elems = document.getElementsByClassName("select-areas-resize-handler")
                 for(var i=0; i < elems.length; i++){
