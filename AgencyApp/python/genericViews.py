@@ -321,13 +321,10 @@ class PictureFormView(GenericFormView):
                     if self.form.is_valid():
                         self.errorMemory = self.formData
                         if self.processForm():
-                            if self.request.FILES.get(self.pictureModelFieldName):
                                 if self.updatePicturePathAndModel():
                                     formIsValid = True
                                 else:
                                     print "Failure saving form image"
-                            else:
-                                formIsValid = True
                         else:
                             print "Failure processing form"
                     else:

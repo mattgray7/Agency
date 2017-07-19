@@ -761,6 +761,10 @@
             var areas;
             var cropArea;
             var newPicture;
+            {% if userAccount.profilePicture and userAccount.profilePicture.url %}
+                newPicture = new Image();
+                newPicture.src = '{{userAccount.profilePicture.url}}';
+            {% endif %}
             var crop_max_width = 200;
             var crop_max_height = 200;
             function previewProfilePicture(input) {
@@ -785,6 +789,7 @@
             function submitPictureFormWithCrop(formName){
                 var form = document.getElementById(formName)
                 if(form != null){
+                    updateCropArea();
                     var canvas = document.getElementById('croppedPictureCanvas');
                     var context = canvas.getContext('2d');
                     
@@ -815,6 +820,13 @@
                 
                 }
                 return form.submit();
+            }
+
+            function updateCropArea(){
+                areas = $('#profilePicture').selectAreas('areas');
+                if(areas.length > 0){
+                    cropArea = areas[0];
+                }
             }
 
             $("#id_profilePicture").change(function(){
@@ -849,10 +861,7 @@
                     elem.style.display = "block";
                     elem.style.zIndex = "1";
                 }
-                areas = $('#profilePicture').selectAreas('areas');
-                if(areas.length > 0){
-                    cropArea = areas[0];
-                }
+                updateCropArea();
             })
         </script>
 
