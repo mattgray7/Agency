@@ -683,9 +683,21 @@
         <script src="{% static "/AgencyApp/js/image/jquery.selectareas.js" %}"></script>
 
         <script>
+        // Create the js Image object with existing profile picture
         var newPicture;
+        var newPictureHeight;
+        var newPictureWidth;
         {% if userAccount.profilePicture and userAccount.profilePicture.url %}
             newPicture = new Image();
+            newPicture.onload = function(){
+                // Need to set width variables once the image is loaded into the js object
+                newPictureHeight = this.height;
+                newPictureWidth = this.width;
+
+                // Once the js object is loaded, we can load the image into the page
+                loadImage()
+                return true;
+            }
             newPicture.src = '{{userAccount.profilePicture.url}}';
         {% endif %}
 
@@ -712,7 +724,7 @@
 
         <center>
             {% if userAccount and userAccount.profilePicture %}
-                <div id="profilePicturePanel" class="editProfilePicturePanel" style="width: 400px; height: 100%;">
+                <div id="profilePicturePanel" class="editProfilePicturePanel" style="width: 400px; height: 600px;">
                     <div id="backToProfileButton" style="width:170px; padding: 0em 0em 0em 0em; margin: -10px;"><a onclick="returnToProfile();" class="profileButton blackHover" style="float:left">Back to profile</a>
                     </div><br><br>
                     <h1> Edit Profile Picture </h1>
@@ -728,17 +740,7 @@
                                 <div class="imageCrop">
                                     <div class="wrapper">
                                         <div class="image-decorator">
-                                            <script>
-                                                if(newPicture != null){
-                                                    if(newPicture.width > newPicture.height){
-                                                        document.write('<img id="profilePicture" src="{{ userAccount.profilePicture.url }}" style="left: 0; background: #ededed; width: 300px;"/>')
-                                                    }else{
-                                                        document.write('<img id="profilePicture" src="{{ userAccount.profilePicture.url }}" style="left: 0; background: #ededed; height: 300px;"/>')
-                                                    }
-                                                    console.log("(" + newPicture.width + "," + newPicture.height + ")");
-                                                }
-                                            </script>
-                                            <!--<img id="profilePicture" src="{{ userAccount.profilePicture.url }}" style="left: 0; background: #ededed"/>-->
+                                            <div id="profilePictureImage"></div>
                                         </div>
                                     </div>
                                 </div>
@@ -766,7 +768,6 @@
                             <div id="cropInfoInputs"></div>
                         </form>
                          <div id="croppedPicture">
-                                <canvas id="croppedPictureCanvas" width="180" height="200" style=""></canvas>
                          </div>
                 </div>
             </div>
@@ -789,35 +790,88 @@
                         for(var i=0; i < elems.length; i++){
                             var elem = elems[i];
                             // Numbers taken from original select-area-background-area on load (will change when picture box is at right size)
-                            elem.style.background = 'url("' + e.target.result + '") 0px 2px / 200px 175px no-repeat rgb(255, 255, 255)';
+                            elem.style.background = 'url("' + e.target.result + '") 0px 2px / 300px 300px no-repeat rgb(255, 255, 255)';
                         }
                     }
                     reader.readAsDataURL(input.files[0]);
                 }
             }
 
+            function updateCropArea(){
+                // Updates the crop values taken from whatever the user set the crop window to
+                areas = $('#profilePicture').selectAreas('areas');
+                if(areas.length > 0){
+                    cropArea = areas[0];
+                }
+            }
+
+            function selectMainArea(){
+                updateCropArea();
+                var elems = document.getElementsByClassName("select-areas-resize-handler")
+                for(var i=0; i < elems.length; i++){
+                    console.log("here")
+                    var elem = elems[i];
+                    elem.style.display = "block";
+                    elem.style.zIndex = "1";
+                }
+            }
+
+            var displayedPicture = {};
+            function loadImage(){
+                var profilePicture = document.getElementById("profilePictureImage")
+                var imageString = "";
+                if(profilePicture != null){
+                    if(newPictureHeight != null && newPictureWidth != null){
+                        // Set highest dimension (h or w) to 300px
+                        if(newPictureHeight > newPictureWidth){
+                            imageString = '<img id="profilePicture" src="{{ userAccount.profilePicture.url }}" style="left: 0; background: #ededed; max-width: 300px; max-height: 300px;"/>'
+                            displayedPicture.width = 300;
+                            displayedPicture.height = (300 / newPictureWidth) * newPictureHeight
+                        }else{
+                            imageString = '<img id="profilePicture" src="{{ userAccount.profilePicture.url }}" style="left: 0; background: #ededed; max-height: 300px; max-width: 300px;"/>'
+                            displayedPicture.height = 300;
+                            displayedPicture.width = (300 / newPictureHeight) * newPictureWidth
+                        }
+                    }
+                    profilePicture.innerHTML = imageString;
+                }
+
+                var selectAreaWidth = 0;
+                if(newPicture != null){
+                    if(newPictureWidth >= newPictureHeight){
+                        selectAreaWidth = newPictureWidth;
+                    }
+                }
+
+                $("#profilePicture").selectAreas({
+                    minSize: [10, 10],
+                    onLoaded: selectMainArea,
+                    width: selectAreaWidth,
+                    allowSelect: false,
+                    aspectRatio: 0.9,
+                    areas: [
+                        {
+                            x: 0,
+                            y: 0,
+                            width: 180,
+                            height: 200,
+                        }
+                    ]
+                });
+            }
+
             function submitPictureFormWithCrop(formName){
                 var form = document.getElementById(formName)
                 if(form != null){
                     updateCropArea();
-                    var canvas = document.getElementById('croppedPictureCanvas');
-                    var context = canvas.getContext('2d');
-                    
-                    var scaleFactorWidth = 180 / cropArea.width;
-                    var scaleFactorHeight = pictureWidth / cropArea.height;
-                    console.log("scaleFactorWidth: " + scaleFactorWidth + ", height: " + scaleFactorHeight)
+                    var scaleFactorWidth = newPictureWidth / displayedPicture.width;
+                    var scaleFactorHeight = newPictureHeight / displayedPicture.height;
 
                     // draw cropped image
                     var sourceX = cropArea.x * scaleFactorWidth;
                     var sourceY = cropArea.y * scaleFactorHeight;
                     var sourceWidth = cropArea.width * scaleFactorWidth;
                     var sourceHeight = cropArea.height * scaleFactorHeight;
-                    /*var destWidth = 180;
-                    var destHeight = 200;
-                    var destX = canvas.width / 2 - destWidth / 2;
-                    var destY = canvas.height / 2 - destHeight / 2;
-                    context.drawImage(newPicture, sourceX, sourceY, sourceWidth, sourceHeight, destX, destY, destWidth, destHeight);*/
-
                     var cropInfoDiv = document.getElementById("cropInfoInputs")
                     if(cropInfoDiv != null){
                         cropInfoDiv.innerHTML += "<input type='hidden' name='crop_x' value='" + sourceX + "'>";
@@ -826,86 +880,13 @@
                         cropInfoDiv.innerHTML += "<input type='hidden' name='crop_height' value='" + sourceHeight + "'>";
                         console.log(cropInfoDiv.innerHTML)
                     }
-
-                
                 }
                 return form.submit();
             }
 
-            function updateCropArea(){
-                areas = $('#profilePicture').selectAreas('areas');
-                if(areas.length > 0){
-                    cropArea = areas[0];
-                }
-            }
-
-            /*function updateSelectArea(){
-                var selectAreaWidth = 0;
-                if(newPicture != null){
-                    if(newPicture.width >= newPicture.height){
-                        selectAreaWidth = newPicture.width;
-                    }
-                }
-
-                $("#profilePicture").selectAreas({
-                    minSize: [10, 10],
-                    onChanged: debugQtyAreas,
-                    width: selectAreaWidth,
-                    allowSelect: false,
-                    aspectRatio: 0.9,
-                    areas: [
-                        {
-                            x: 0,
-                            y: 0,
-                            width: 180,
-                            height: 200,
-                        }
-                    ]
-                });
-            }*/
-
             $("#id_profilePicture").change(function(){
                 previewProfilePicture(this);
             });
-
-            function debugQtyAreas (event, id, areas) {
-                console.log(areas.length + " areas", arguments);
-            };
-
-                            var selectAreaWidth = 0;
-                if(newPicture != null){
-                    if(newPicture.width >= newPicture.height){
-                        selectAreaWidth = newPicture.width;
-                    }
-                }
-
-                $("#profilePicture").selectAreas({
-                    minSize: [10, 10],
-                    onChanged: debugQtyAreas,
-                    width: selectAreaWidth,
-                    allowSelect: false,
-                    aspectRatio: 0.9,
-                    areas: [
-                        {
-                            x: 0,
-                            y: 0,
-                            width: 180,
-                            height: 200,
-                        }
-                    ]
-                });
-            
-            //var selectAreas = $('#profilePicture').selectAreas('areas');
-            /*console.log(selectAreas)*/
-            $(document).ready(function(){
-                var elems = document.getElementsByClassName("select-areas-resize-handler")
-                for(var i=0; i < elems.length; i++){
-                    var elem = elems[i];
-                    elem.style.display = "block";
-                    elem.style.zIndex = "1";
-                }
-                updateCropArea();
-            })
         </script>
 
     {% endif %}
