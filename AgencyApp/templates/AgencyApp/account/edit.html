@@ -695,7 +695,7 @@
                 newPictureWidth = this.width;
 
                 // Once the js object is loaded, we can load the image into the page
-                loadImage()
+                loadImage("{{userAccount.profilePicture.url}}")
                 return true;
             }
             newPicture.src = '{{userAccount.profilePicture.url}}';
@@ -782,16 +782,25 @@
                 if (input.files && input.files[0]) {
                     var reader = new FileReader();
                     reader.onload = function (e) {
-                        $('#profilePicture').attr('src', e.target.result);
+                        //$('#profilePicture').attr('src', e.target.result);
                         newPicture = new Image()
                         newPicture.src = e.target.result;
+                        newPicture.onload = function(){
+                            // Need to set width variables once the image is loaded into the js object
+                            newPictureHeight = this.height;
+                            newPictureWidth = this.width;
 
-                        var elems = document.getElementsByClassName("select-areas-background-area")
+                            // Once the js object is loaded, we can load the image into the page
+                            loadImage(e.target.result)
+                            return true;
+                        }
+
+                        /*var elems = document.getElementsByClassName("select-areas-background-area")
                         for(var i=0; i < elems.length; i++){
                             var elem = elems[i];
                             // Numbers taken from original select-area-background-area on load (will change when picture box is at right size)
                             elem.style.background = 'url("' + e.target.result + '") 0px 2px / 300px 300px no-repeat rgb(255, 255, 255)';
-                        }
+                        }*/
                     }
                     reader.readAsDataURL(input.files[0]);
                 }
@@ -809,7 +818,6 @@
                 updateCropArea();
                 var elems = document.getElementsByClassName("select-areas-resize-handler")
                 for(var i=0; i < elems.length; i++){
-                    console.log("here")
                     var elem = elems[i];
                     elem.style.display = "block";
                     elem.style.zIndex = "1";
@@ -817,20 +825,34 @@
             }
 
             var displayedPicture = {};
-            function loadImage(){
-                var profilePicture = document.getElementById("profilePictureImage")
+            function loadImage(imageURL){
                 var imageString = "";
+                var newArea = {};
+                var aspectRatio = 0.9;
+
+                var profilePicture = document.getElementById("profilePictureImage")
                 if(profilePicture != null){
                     if(newPictureHeight != null && newPictureWidth != null){
                         // Set highest dimension (h or w) to 300px
                         if(newPictureHeight > newPictureWidth){
-                            imageString = '<img id="profilePicture" src="{{ userAccount.profilePicture.url }}" style="left: 0; background: #ededed; max-width: 300px; max-height: 300px;"/>'
-                            displayedPicture.width = 300;
-                            displayedPicture.height = (300 / newPictureWidth) * newPictureHeight
-                        }else{
-                            imageString = '<img id="profilePicture" src="{{ userAccount.profilePicture.url }}" style="left: 0; background: #ededed; max-height: 300px; max-width: 300px;"/>'
+                            imageString = '<img id="profilePicture" src="' + imageURL + '" style="left: 0; background: #ededed; max-width: 300px; max-height: 300px;"/>'
+                            // height is bigger, so set display height to max (300)
                             displayedPicture.height = 300;
                             displayedPicture.width = (300 / newPictureHeight) * newPictureWidth
+
+                            //if pic height is bigger, area should have width of pic (with space above and below)
+                            newArea.width = displayedPicture.width;
+                            newArea.height = newArea.width / aspectRatio;
+                        }else{
+                            imageString = '<img id="profilePicture" src="' + imageURL + '" style="left: 0; background: #ededed; max-height: 300px; max-width: 300px;"/>'
+
+                            //width is bigger, so set display width to max (300)
+                            displayedPicture.width = 300;
+                            displayedPicture.height = (300 / newPictureWidth) * newPictureHeight
+                            
+                            //if pic width is bigger, area should have height of pic (with space on the sides)
+                            newArea.height = displayedPicture.height;
+                            newArea.width = newArea.height * 0.9;
                         }
                     }
                     profilePicture.innerHTML = imageString;
@@ -848,13 +870,13 @@
                     onLoaded: selectMainArea,
                     width: selectAreaWidth,
                     allowSelect: false,
-                    aspectRatio: 0.9,
+                    aspectRatio: aspectRatio,
                     areas: [
                         {
                             x: 0,
                             y: 0,
-                            width: 270,
-                            height: 300,
+                            width: newArea.width,
+                            height: newArea.height,
                         }
                     ]
                 });
@@ -878,7 +900,6 @@
                         cropInfoDiv.innerHTML += "<input type='hidden' name='crop_y' value='" + sourceY + "'>";
                         cropInfoDiv.innerHTML += "<input type='hidden' name='crop_width' value='" + sourceWidth + "'>";
                         cropInfoDiv.innerHTML += "<input type='hidden' name='crop_height' value='" + sourceHeight + "'>";
-                        console.log(cropInfoDiv.innerHTML)
                     }
                 }
                 return form.submit();
