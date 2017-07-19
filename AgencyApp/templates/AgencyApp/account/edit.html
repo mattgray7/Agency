@@ -748,6 +748,7 @@
                             <div id="continueButton" class="whiteButton blackHover" style="width:24.1%; height:28px" onclick="submitPictureFormWithCrop('editPictureForm')">
                                 Update
                             </div>
+                            <div id="cropInfoInputs"></div>
                         </form>
                          <div id="croppedPicture">
                                 <canvas id="croppedPictureCanvas" width="180" height="200" style=""></canvas>
@@ -787,23 +788,33 @@
                     var canvas = document.getElementById('croppedPictureCanvas');
                     var context = canvas.getContext('2d');
                     
-                    //var scaleFactorWidth = newPicture.width / cropArea.width;
+                    var scaleFactorWidth = 180 / cropArea.width;
+                    var scaleFactorHeight = 200 / cropArea.height;
+                    console.log("scaleFactorWidth: " + scaleFactorWidth + ", height: " + scaleFactorHeight)
 
                     // draw cropped image
-                    var sourceX = cropArea.x;
-                    var sourceY = cropArea.y;
-                    var sourceWidth = cropArea.width;
-                    var sourceHeight = cropArea.height;
-                    var destWidth = 180;
+                    var sourceX = cropArea.x * scaleFactorWidth;
+                    var sourceY = cropArea.y * scaleFactorHeight;
+                    var sourceWidth = cropArea.width * scaleFactorWidth;
+                    var sourceHeight = cropArea.height * scaleFactorHeight;
+                    /*var destWidth = 180;
                     var destHeight = 200;
                     var destX = canvas.width / 2 - destWidth / 2;
                     var destY = canvas.height / 2 - destHeight / 2;
-                    context.drawImage(newPicture, sourceX, sourceY, sourceWidth, sourceHeight, destX, destY, destWidth, destHeight);
-                    console.log(cropArea)
-                    //$('#profilePicture').attr('src', e.target.result);
+                    context.drawImage(newPicture, sourceX, sourceY, sourceWidth, sourceHeight, destX, destY, destWidth, destHeight);*/
+
+                    var cropInfoDiv = document.getElementById("cropInfoInputs")
+                    if(cropInfoDiv != null){
+                        cropInfoDiv.innerHTML += "<input type='hidden' name='crop_x' value='" + sourceX + "'>";
+                        cropInfoDiv.innerHTML += "<input type='hidden' name='crop_y' value='" + sourceY + "'>";
+                        cropInfoDiv.innerHTML += "<input type='hidden' name='crop_width' value='" + sourceWidth + "'>";
+                        cropInfoDiv.innerHTML += "<input type='hidden' name='crop_height' value='" + sourceHeight + "'>";
+                        console.log(cropInfoDiv.innerHTML)
+                    }
+
                 
                 }
-                //return form.submit();
+                return form.submit();
             }
 
             $("#id_profilePicture").change(function(){

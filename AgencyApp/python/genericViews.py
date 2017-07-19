@@ -11,6 +11,7 @@ import models
 
 import os
 import simplejson as json
+from PIL import Image
 
 
 class GenericView(object):
@@ -274,6 +275,7 @@ class PictureFormView(GenericFormView):
         self._pictureModel = None
         self._pictureModelPictureField = None
         self._pictureModelFieldName = None
+        self._cropInfo = {}
         self._filename = None
 
     @property
@@ -345,11 +347,28 @@ class PictureFormView(GenericFormView):
             print "Failure checking form validity: {0}".format(self.errorMemory)
         return formIsValid
 
+    @property
+    def cropInfo(self):
+        if not self._cropInfo:
+            self._cropInfo = {"x": self.request.POST.get("crop_x"),
+                              "y": self.request.POST.get("crop_y"),
+                              "width": self.request.POST.get("crop_width"),
+                              "height": self.request.POST.get("crop_height")}
+        return self._cropInfo
+
     def updatePicturePathAndModel(self):
         if self.pictureModel:
             # Save the InMemoryUploadedFile instance in the file field of the model
             self._pictureModelPictureField = self.request.FILES.get(self.pictureModelFieldName)
             self.pictureModel.save()
+
+            if self.cropInfo:
+                image = Image.open(self.pictureModelPictureField.path)
+                x = float(self.cropInfo.get("x"))
+                y = float(self.cropInfo.get("y"))
+                croppedImage = image.crop((x, y, float(self.cropInfo["width"]) + x, float(self.cropInfo["height"]) + y))
+                #resizedImage = croppedImage.resize((200, 200), Image.ANTIALIAS)
+                croppedImage.save(self.pictureModelPictureField.path)
 
             # Rename picture file
             if self.pictureModelPictureField:
