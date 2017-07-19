@@ -364,7 +364,7 @@ class PictureFormView(GenericFormView):
                 x = float(self.cropInfo.get("x"))
                 y = float(self.cropInfo.get("y"))
                 croppedImage = image.crop((x, y, float(self.cropInfo["width"]) + x, float(self.cropInfo["height"]) + y))
-                #resizedImage = croppedImage.resize((200, 200), Image.ANTIALIAS)
+                croppedImage = croppedImage.resize((300, 270), Image.ANTIALIAS)
                 croppedImage.save(self.pictureModelPictureField.path)
 
             # Rename picture file
