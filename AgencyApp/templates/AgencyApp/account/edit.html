@@ -683,11 +683,7 @@
         <script src="{% static "/AgencyApp/js/image/jquery.selectareas.js" %}"></script>
 
         <script>
-        // Create the js Image object with existing profile picture
-        var newPicture;
-        var newPictureHeight;
-        var newPictureWidth;
-        {% if userAccount.profilePicture and userAccount.profilePicture.url %}
+        function setNewPictureObject(imageURL){
             newPicture = new Image();
             newPicture.onload = function(){
                 // Need to set width variables once the image is loaded into the js object
@@ -695,11 +691,11 @@
                 newPictureWidth = this.width;
 
                 // Once the js object is loaded, we can load the image into the page
-                loadImage("{{userAccount.profilePicture.url}}")
+                loadImage(imageURL)
                 return true;
             }
-            newPicture.src = '{{userAccount.profilePicture.url}}';
-        {% endif %}
+            newPicture.src = imageURL;
+        }
 
         function skipProfilePicture(){
             var extraInputs = []
@@ -855,7 +851,6 @@
                     }
                     profilePicture.innerHTML = imageString;
                 }
-
                 $("#profilePicture").selectAreas({
                     minSize: [10, 10],
                     onLoaded: selectMainArea,
@@ -895,8 +890,30 @@
                 return form.submit();
             }
 
+            // Create the js Image object with existing profile picture
+            var newPicture;
+            var newPictureHeight;
+            var newPictureWidth;
+            {% if userAccount.profilePicture and userAccount.profilePicture.url %}
+                setNewPictureObject("{{userAccount.profilePicture.url}}")
+            {% endif %}
+
             $("#id_profilePicture").change(function(){
-                previewProfilePicture(this);
+                if(this.value != null && this.value.length > 0){
+                    previewProfilePicture(this);
+                }else{
+                    var fallbackPictureURL = "";
+                    {% if userAccount.profilePicture and userAccount.profilePicture.url %}
+                        fallbackPictureURL = "{{userAccount.profilePicture.url}}";
+                    {% else %}
+                        fallbackPictureIRL = "{{images.noProfilePicture}}";
+                    {% endif %}
+                    if(fallbackPictureURL.length > 0){
+                        setNewPictureObject(fallbackPictureURL)
+                        loadImage(fallbackPictureURL)
+                        selectMainArea()
+                    }
+                }
             });
         </script>
 
