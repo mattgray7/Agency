@@ -359,17 +359,17 @@ class PictureFormView(GenericFormView):
             self._pictureModelPictureField = self.request.FILES.get(self.pictureModelFieldName)
             self.pictureModel.save()
 
-            if self.cropInfo:
-                image = Image.open(self.pictureModelPictureField.path)
-                x = float(self.cropInfo.get("x"))
-                y = float(self.cropInfo.get("y"))
-                croppedImage = image.crop((x, y, float(self.cropInfo["width"]) + x, float(self.cropInfo["height"]) + y))
-                croppedImage.save(self.pictureModelPictureField.path)
-                croppedImage = croppedImage.resize((810, 900), Image.ANTIALIAS)
-                croppedImage.save(self.pictureModelPictureField.path)
-
-            # Rename picture file
             if self.pictureModelPictureField:
+                if self.cropInfo:
+                    image = Image.open(self.pictureModelPictureField.path)
+                    x = float(self.cropInfo.get("x"))
+                    y = float(self.cropInfo.get("y"))
+                    croppedImage = image.crop((x, y, float(self.cropInfo["width"]) + x, float(self.cropInfo["height"]) + y))
+                    croppedImage.save(self.pictureModelPictureField.path)
+                    croppedImage = croppedImage.resize((810, 900), Image.ANTIALIAS)
+                    croppedImage.save(self.pictureModelPictureField.path)
+
+                # Rename picture file
                 newPath = os.path.join(os.path.dirname(self.pictureModelPictureField.path), self.filename)
                 os.rename(self.pictureModelPictureField.path, newPath)
                 self._pictureModelPictureField.name = os.path.join(self.request.user.username, self.filename)

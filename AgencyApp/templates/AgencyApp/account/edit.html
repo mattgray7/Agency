@@ -718,31 +718,32 @@
         </script>
 
         <center>
-            {% if userAccount and userAccount.profilePicture %}
-                <div id="profilePicturePanel" class="editProfilePicturePanel" style="width: 400px; height: 600px;">
-                    <div id="backToProfileButton" style="width:170px; padding: 0em 0em 0em 0em; margin: -10px;"><a onclick="returnToProfile();" class="profileButton blackHover" style="float:left">Back to profile</a>
-                    </div><br><br>
+            <div id="profilePicturePanel" class="editProfilePicturePanel" style="width: 400px; height: 600px;">
+                <div id="backToProfileButton" style="width:170px; padding: 0em 0em 0em 0em; margin: -10px;"><a onclick="returnToProfile();" class="profileButton blackHover" style="float:left">Back to profile</a></div>
+                <br><br>
+                {% if userAccount and userAccount.profilePicture %}
                     <h1> Edit Profile Picture </h1>
-            {% else %}
-                <div id="profilePicturePanel" class="newProfilePicturePanel">
+                {% else %}
                     <h1> Add Profile Picture </h1>
-            {% endif %}
-                    <br>
+                {% endif %}
+                <br>
                 
-                    {% if userAccount and userAccount.profilePicture %}
-                        <center>
-                            <div id="profilePictureDiv" class="profilePictureDiv" style='width: 300px; '>
-                                <div class="imageCrop">
-                                    <div class="wrapper">
-                                        <div class="image-decorator">
-                                            <div id="profilePictureImage"></div>
-                                        </div>
+                <center>
+                    <div id="profilePictureDiv" class="profilePictureDiv" style='width: 300px; '>
+                        {% if userAccount and userAccount.profilePicture %}
+                            <div class="imageCrop">
+                                <div class="wrapper">
+                                    <div class="image-decorator">
+                                         <div id="profilePictureImage"></div>
                                     </div>
                                 </div>
                             </div>
-                        </center>
-                    {% endif %}
-                    <br>
+                        {% else %}
+                            <div id="profilePictureImage"></div>
+                        {% endif %}
+                    </div>
+                </center>
+                <br>
 
                         <form method="post" id="editPictureForm" action="{{ currentPageURL }}" enctype="multipart/form-data" style="text-slign: center;">
                             {% csrf_token %} 
@@ -771,6 +772,7 @@
         <script>
             var areas;
             var cropArea;
+            var noProfilePicture = ("{{userAccount.profilePicture}}".length === 0);
             function previewProfilePicture(input) {
                 if (input.files && input.files[0]) {
                     var reader = new FileReader();
@@ -849,22 +851,32 @@
                             newArea.width = newArea.height * 0.9;
                         }
                     }
+
+                    /*if(noProfilePicture){
+                        imageString = '<div style="margin-top: 5px;" id="noProfilePictureOffsetDiv">' + imageString + "</div>";
+                    }*/
                     profilePicture.innerHTML = imageString;
                 }
-                $("#profilePicture").selectAreas({
-                    minSize: [10, 10],
-                    onLoaded: selectMainArea,
-                    allowSelect: false,
-                    aspectRatio: aspectRatio,
-                    areas: [
-                        {
-                            x: 0,
-                            y: 0,
-                            width: newArea.width,
-                            height: newArea.height,
-                        }
-                    ]
-                });
+                if(!noProfilePicture){
+                    /*picOffset = document.getElementById("noProfilePictureOffsetDiv")
+                    if(picOffset != null){
+                        picOffset.style.marginTop = "none";
+                    }*/
+                    $("#profilePicture").selectAreas({
+                        minSize: [10, 10],
+                        onLoaded: selectMainArea,
+                        allowSelect: false,
+                        aspectRatio: aspectRatio,
+                        areas: [
+                            {
+                                x: 0,
+                                y: 0,
+                                width: newArea.width,
+                                height: newArea.height,
+                            }
+                        ]
+                    });
+                }
             }
 
             function submitPictureFormWithCrop(formName){
@@ -875,16 +887,18 @@
                     var scaleFactorHeight = newPictureHeight / displayedPicture.height;
 
                     // draw cropped image
-                    var sourceX = cropArea.x * scaleFactorWidth;
-                    var sourceY = cropArea.y * scaleFactorHeight;
-                    var sourceWidth = cropArea.width * scaleFactorWidth;
-                    var sourceHeight = cropArea.height * scaleFactorHeight;
-                    var cropInfoDiv = document.getElementById("cropInfoInputs")
-                    if(cropInfoDiv != null){
-                        cropInfoDiv.innerHTML += "<input type='hidden' name='crop_x' value='" + sourceX + "'>";
-                        cropInfoDiv.innerHTML += "<input type='hidden' name='crop_y' value='" + sourceY + "'>";
-                        cropInfoDiv.innerHTML += "<input type='hidden' name='crop_width' value='" + sourceWidth + "'>";
-                        cropInfoDiv.innerHTML += "<input type='hidden' name='crop_height' value='" + sourceHeight + "'>";
+                    if(cropArea != null){
+                        var sourceX = cropArea.x * scaleFactorWidth;
+                        var sourceY = cropArea.y * scaleFactorHeight;
+                        var sourceWidth = cropArea.width * scaleFactorWidth;
+                        var sourceHeight = cropArea.height * scaleFactorHeight;
+                        var cropInfoDiv = document.getElementById("cropInfoInputs")
+                        if(cropInfoDiv != null){
+                            cropInfoDiv.innerHTML += "<input type='hidden' name='crop_x' value='" + sourceX + "'>";
+                            cropInfoDiv.innerHTML += "<input type='hidden' name='crop_y' value='" + sourceY + "'>";
+                            cropInfoDiv.innerHTML += "<input type='hidden' name='crop_width' value='" + sourceWidth + "'>";
+                            cropInfoDiv.innerHTML += "<input type='hidden' name='crop_height' value='" + sourceHeight + "'>";
+                        }
                     }
                 }
                 return form.submit();
@@ -896,17 +910,21 @@
             var newPictureWidth;
             {% if userAccount.profilePicture and userAccount.profilePicture.url %}
                 setNewPictureObject("{{userAccount.profilePicture.url}}")
+            {% else %}
+                setNewPictureObject("{{images.noProfilePicture}}")
             {% endif %}
 
             $("#id_profilePicture").change(function(){
                 if(this.value != null && this.value.length > 0){
+                    noProfilePicture = false;
                     previewProfilePicture(this);
                 }else{
                     var fallbackPictureURL = "";
                     {% if userAccount.profilePicture and userAccount.profilePicture.url %}
                         fallbackPictureURL = "{{userAccount.profilePicture.url}}";
                     {% else %}
-                        fallbackPictureIRL = "{{images.noProfilePicture}}";
+                        fallbackPictureURL = "{{images.noProfilePicture}}";
+                        noProfilePicture = true;
                     {% endif %}
                     if(fallbackPictureURL.length > 0){
                         setNewPictureObject(fallbackPictureURL)
