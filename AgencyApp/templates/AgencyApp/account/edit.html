@@ -715,6 +715,16 @@
                 }
             });
         }
+
+        function createPictureContainer(includeCropHandler){
+            pictureHTML = "";
+            if(includeCropHandler){
+               pictureHTML += '<div class="imageCrop"><div class="wrapper"><div class="image-decorator"><div id="profilePictureImage"></div></div></div> </div>'
+            }else{
+                pictureHTML += '<div style="margin-top: 5px;"><div id="profilePictureImage"></div></div>'
+            }
+            return pictureHTML
+        }
         </script>
 
         <center>
@@ -729,43 +739,30 @@
                 <br>
                 
                 <center>
-                    <div id="profilePictureDiv" class="profilePictureDiv" style='width: 300px; '>
-                        {% if userAccount and userAccount.profilePicture %}
-                            <div class="imageCrop">
-                                <div class="wrapper">
-                                    <div class="image-decorator">
-                                         <div id="profilePictureImage"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        {% else %}
-                            <div id="profilePictureImage"></div>
-                        {% endif %}
+                    <div id="profilePictureDiv" class="profilePictureDiv" style='width: 300px;'>
+                        <!-- Image div created in loadImage() -->
                     </div>
                 </center>
                 <br>
 
-                        <form method="post" id="editPictureForm" action="{{ currentPageURL }}" enctype="multipart/form-data" style="text-slign: center;">
-                            {% csrf_token %} 
-                            {{ form.as_p }}
+                <form method="post" id="editPictureForm" action="{{ currentPageURL }}" enctype="multipart/form-data" style="text-slign: center;">
+                    {% csrf_token %} 
+                    {{ form.as_p }}
 
-                            {% if userAccount and userAccount.profilePicture %}
-                                <div id="removeButton" class="whiteButton blackHover" style="width:24.1%; height:28px;" onclick="removeProfilePicture();">
-                                    Remove
-                                </div>
-                            {% else %}
-                                <div id="skipButton" class="whiteButton blackHover" style="width:24.1%; height:28px;" onclick="skipProfilePicture();">
-                                    Skip
-                                </div>
-                            {% endif %}
-                            <div id="continueButton" class="whiteButton blackHover" style="width:24.1%; height:28px" onclick="submitPictureFormWithCrop('editPictureForm')">
-                                Update
-                            </div>
-                            <div id="cropInfoInputs"></div>
-                        </form>
-                         <div id="croppedPicture">
-                         </div>
-                </div>
+                    {% if userAccount and userAccount.profilePicture %}
+                        <div id="removeButton" class="whiteButton blackHover" style="width:24.1%; height:28px;" onclick="removeProfilePicture();">
+                            Remove
+                        </div>
+                    {% else %}
+                        <div id="skipButton" class="whiteButton blackHover" style="width:24.1%; height:28px;" onclick="skipProfilePicture();">
+                            Skip
+                        </div>
+                    {% endif %}
+                    <div id="continueButton" class="whiteButton blackHover" style="width:24.1%; height:28px" onclick="submitPictureFormWithCrop('editPictureForm')">
+                        Update
+                    </div>
+                    <div id="cropInfoInputs"></div>
+                </form>
             </div>
         </center>
 
@@ -821,6 +818,22 @@
                 var aspectRatio = 0.9;
                 var pictureDimension = 290;
 
+                // Create the profile picture container (different if existing pic or not)
+                var profilePictureParentContainer = document.getElementById("profilePictureDiv");
+                var profilePictureContainer = null;
+                if(profilePictureParentContainer != null){
+                    if(noProfilePicture){
+                        // If there is an existing picture, create pic container with crop window
+                        profilePictureContainer = createPictureContainer(false, profilePictureContainer)
+                    }else{
+                        // Otherwise, create pic container with offset for noProfPic image
+                        profilePictureContainer = createPictureContainer(true, profilePictureContainer)
+                    }
+                    // Write the new picture container
+                    profilePictureParentContainer.innerHTML = profilePictureContainer;
+                }
+
+                // Should have been created by the container
                 var profilePicture = document.getElementById("profilePictureImage")
                 if(profilePicture != null){
                     if(newPictureHeight != null && newPictureWidth != null){
@@ -850,18 +863,10 @@
                             newArea.height = displayedPicture.height;
                             newArea.width = newArea.height * 0.9;
                         }
+                        profilePicture.innerHTML = imageString;
                     }
-
-                    /*if(noProfilePicture){
-                        imageString = '<div style="margin-top: 5px;" id="noProfilePictureOffsetDiv">' + imageString + "</div>";
-                    }*/
-                    profilePicture.innerHTML = imageString;
                 }
                 if(!noProfilePicture){
-                    /*picOffset = document.getElementById("noProfilePictureOffsetDiv")
-                    if(picOffset != null){
-                        picOffset.style.marginTop = "none";
-                    }*/
                     $("#profilePicture").selectAreas({
                         minSize: [10, 10],
                         onLoaded: selectMainArea,
