@@ -36,9 +36,8 @@
 }
 
 .imageCrop div.wrapper {
-	margin : 25px auto 25px auto;
+	margin : 5px 0px -10px 0px;
 	width : 300px;
-	height: 300px;
 }
 
 .imageCrop div.image-decorator {
