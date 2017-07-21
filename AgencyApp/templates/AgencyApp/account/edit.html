@@ -702,6 +702,38 @@
                 }
             });
         }
+
+        function loadPictureCropTool(){
+            var pictureID = "profilePicture";
+            setDoesPictureExist("{{userAccount.profilePicture}}")
+            setPictureID(pictureID);
+
+            {% if userAccount.profilePicture and userAccount.profilePicture.url %}
+                setNewPictureObject("{{userAccount.profilePicture.url}}")
+            {% else %}
+                setNewPictureObject("{{images.noProfilePicture}}")
+            {% endif %}
+
+            $("#id_profilePicture").change(function(){
+                if(this.value != null && this.value.length > 0){
+                    pictureExists = true;
+                    previewPicture(this);
+                }else{
+                    var fallbackPictureURL = "";
+                    {% if userAccount.profilePicture and userAccount.profilePicture.url %}
+                        fallbackPictureURL = "{{userAccount.profilePicture.url}}";
+                    {% else %}
+                        fallbackPictureURL = "{{images.noProfilePicture}}";
+                        pictureExists = false;
+                    {% endif %}
+                    if(fallbackPictureURL.length > 0){
+                        setNewPictureObject(fallbackPictureURL)
+                        loadImage(fallbackPictureURL)
+                        selectMainArea()
+                    }
+                }
+            });
+        }
         </script>
 
         <center>
@@ -744,40 +776,7 @@
         </center>
 
         <script>
-
-
-            
-
-            // Create the js Image object with existing profile picture
-            //var newPicture;
-            setDoesPictureExist("{{userAccount.profilePicture}}")
-            setPictureID("profilePicture");
-
-            {% if userAccount.profilePicture and userAccount.profilePicture.url %}
-                setNewPictureObject("{{userAccount.profilePicture.url}}")
-            {% else %}
-                setNewPictureObject("{{images.noProfilePicture}}")
-            {% endif %}
-
-            $("#id_profilePicture").change(function(){
-                if(this.value != null && this.value.length > 0){
-                    pictureExists = true;
-                    previewPicture(this);
-                }else{
-                    var fallbackPictureURL = "";
-                    {% if userAccount.profilePicture and userAccount.profilePicture.url %}
-                        fallbackPictureURL = "{{userAccount.profilePicture.url}}";
-                    {% else %}
-                        fallbackPictureURL = "{{images.noProfilePicture}}";
-                        pictureExists = false;
-                    {% endif %}
-                    if(fallbackPictureURL.length > 0){
-                        setNewPictureObject(fallbackPictureURL)
-                        loadImage(fallbackPictureURL)
-                        selectMainArea()
-                    }
-                }
-            });
+            loadPictureCropTool();
         </script>
 
     {% endif %}
