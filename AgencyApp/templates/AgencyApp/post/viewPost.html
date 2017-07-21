@@ -106,7 +106,7 @@
 						{% if roleObj.actor.profilePicture %}
 							contentString += '<img src="{{ roleObj.actor.profilePicture.url }}" style="max-width: 150px; max-height:150px;"/>'
 						{% else %}
-							contentString += '<img src="{{images.noProfilePicture}}" style="width: 150px; max-height: 150px;">';
+							contentString += '<img src="{{images.noProfilePicture}}" style="max-height: 150px;">';
 						{% endif %}
 						contentString += "</div></div><br>";
 						contentString += "<div class='projectContentListElementText'><h2>{{roleObj.post.characterName}}</h2><p>{{roleObj.post.shortCharacterDescription}}</p></div>"
