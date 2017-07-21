@@ -224,7 +224,7 @@
 					<tr>
 						<td style="width: 250px;">
 							<div id="postPicturePanel" class="postPicture hoverContainer">
-								<div id="postPictureBoundingBox" style="width:250px; height:250px; background: #000; border: 1px solid #FFF; border-radius:3px; vertical-align: middle; display: table-cell;">
+								<div id="postPictureBoundingBox" style="width:250px; height:278px; background: #000; border: 1px solid #FFF; border-radius:3px;">
 									<div id="postPicture">
 										{% if post.postPicture %}
 											<img src="{{ post.postPicture.url }}" style="width:250px;"/>
@@ -240,7 +240,7 @@
 							</div>
 						</td>
 						<td style="margin-top: 0px;">
-							<div id="postInfo" class="postInfo" colspan="2">
+							<div id="postInfo" class="postInfo" colspan="2" style="height: 263px;">
 								<div id='topRightPostButton' style='position:relative'>
 									<div style="position: absolute; top: 0; right: 0;">
 										{% if userIsAdmin %}
