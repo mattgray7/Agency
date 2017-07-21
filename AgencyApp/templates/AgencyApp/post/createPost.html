@@ -202,6 +202,14 @@
 
     }
 
+    function submitPictureForm(formName){
+        var form = document.getElementById(formName)
+        if(form != null){
+            form = addCropToPictureForm(formName, "cropInfoInputs")
+            console.log(form)
+        }
+    }
+
 
 </script>
 <div id="mainViewPanel" class="mainViewPanel" style="display:block; display: relative">
@@ -224,7 +232,7 @@
                     </div>
                 </center>
 
-                <form method="post" id="editPostPictureForm" action="updatePostPicture()" enctype="multipart/form-data">
+                <form method="post" id="editPostPictureForm" enctype="multipart/form-data">
                     {% csrf_token %} 
                     <div style='text-align: center; margin-left: 30px;'><input type='file' name='postPicture' id='editPostPictureImage'></div><br>
 
@@ -237,7 +245,7 @@
                             Skip
                         </div>
                     {% endif %}
-                    <div id="continueButton" class="whiteButton blackHover" style="width: 70px; height:28px" onclick="submitPictureFormWithCrop('editPictureForm')">
+                    <div id="continueButton" class="whiteButton blackHover" style="width: 70px; height:28px" onclick="submitPictureForm('editPostPictureForm')">
                         Update
                     </div>
                     <div id="cropInfoInputs"></div>

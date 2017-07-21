@@ -154,7 +154,7 @@ function loadImage(imageURL){
         }
     }
 
-function submitPictureFormWithCrop(formName){
+function addCropToPictureForm(formName, cropInputDivID){
     var form = document.getElementById(formName)
     if(form != null){
         updateCropArea();
@@ -167,7 +167,8 @@ function submitPictureFormWithCrop(formName){
             var sourceY = cropArea.y * scaleFactorHeight;
             var sourceWidth = cropArea.width * scaleFactorWidth;
             var sourceHeight = cropArea.height * scaleFactorHeight;
-            var cropInfoDiv = document.getElementById("cropInfoInputs")
+            var cropInfoDiv = document.getElementById(cropInputDivID)
+            cropInfoDiv.innerHTML = "";
             if(cropInfoDiv != null){
                 cropInfoDiv.innerHTML += "<input type='hidden' name='crop_x' value='" + sourceX + "'>";
                 cropInfoDiv.innerHTML += "<input type='hidden' name='crop_y' value='" + sourceY + "'>";
@@ -176,5 +177,10 @@ function submitPictureFormWithCrop(formName){
             }
         }
     }
+    return form;
+}
+
+function submitPictureFormWithCrop(formName){
+    var form = addCropToPictureForm(formName, "cropInfoInputs")
     return form.submit();
 }
