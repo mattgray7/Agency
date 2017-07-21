@@ -208,7 +208,7 @@
     <div id="hiddenGrayPopupOverlay" class="hiddenGrayPopupOverlay" style="background: rgba(0,0,0,0); height:0%; width:0%; position: absolute; top:0; z-index: 3">
         <div style="position: relative; height: 100%;"><div id="selectProjectPanel" class="popupContentPanel" style="width: 80%; height: 400px; display: none; position: fixed; top: 10%; left: 10%;" onclick="toggleSelectProjectPopup('hide', 'asdasds');"></div></div>
         <div style="position: relative; height: 100%;">
-            <div id="editPicturePanel" class="popupContentPanel" style="width: 400px; height: 500px; display: none; position: fixed; top: 5%; left: 25%;">
+            <div id="editPicturePanel" class="popupContentPanel" style="width: 400px; height: 540px; display: none; position: fixed; top: 2%; left: 25%;">
                 <center>
                 <div id="backToProfileButton" style="width:170px; padding: 0em 0em 0em 0em; float: left; margin-top: 5px; margin-left: 5px;"><a onclick="toggleEditPicturePopup('hide');" class="profileButton blackHover" style="float:left">X</a></div>
                 <br><br>
@@ -223,22 +223,21 @@
                     <div id="editPostPictureDiv" class="editPostPictureDiv" style='width: 300px;'>
                     </div>
                 </center>
-                <br>
 
                 <form method="post" id="editPostPictureForm" action="updatePostPicture()" enctype="multipart/form-data">
                     {% csrf_token %} 
-                    <input type='file' name='postPicture' id='editPostPictureImage'>
+                    <div style='text-align: center; margin-left: 30px;'><input type='file' name='postPicture' id='editPostPictureImage'></div><br>
 
                     {% if post and post.postPicture and post.postPicture.url %}
-                        <div id="removeButton" class="whiteButton blackHover" style="width:24.1%; height:28px;" onclick="removeProfilePicture();">
+                        <div id="removeButton" class="whiteButton blackHover" style="width:70px; height:28px;" onclick="removeProfilePicture();">
                             Remove
                         </div>
                     {% else %}
-                        <div id="skipButton" class="whiteButton blackHover" style="width:24.1%; height:28px;" onclick="skipProfilePicture();">
+                        <div id="skipButton" class="whiteButton blackHover" style="width:70px; height:28px;" onclick="skipProfilePicture();">
                             Skip
                         </div>
                     {% endif %}
-                    <div id="continueButton" class="whiteButton blackHover" style="width:24.1%; height:28px" onclick="submitPictureFormWithCrop('editPictureForm')">
+                    <div id="continueButton" class="whiteButton blackHover" style="width: 70px; height:28px" onclick="submitPictureFormWithCrop('editPictureForm')">
                         Update
                     </div>
                     <div id="cropInfoInputs"></div>
