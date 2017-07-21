@@ -2,6 +2,10 @@
 
 {% block content %}
 {% load static %}
+<link href="{% static "/AgencyApp/css/image.css" %}" rel="stylesheet" type="text/css" media="all" />
+<link href="{% static "/AgencyApp/js/image/resources/jquery.selectareas.css" %}" media="screen" rel="stylesheet" type="text/css" />
+<script src="{% static "/AgencyApp/js/image/jquery.selectareas.js" %}"></script>
+<script type="text/javascript" src="{% static "/AgencyApp/js/image/image.js" %}"></script>
 <script type="text/javascript" src="{% static "/AgencyApp/js/post/post.js" %}"></script>
 <script>
         // Submits the form while adding values of select bars with id '{{name}}SelectBar' to form input '{{name}}SelectInput'
@@ -40,9 +44,8 @@
                         {% else %}
                             postField.value = "{{images.noPicture}}";
                         {% endif %}
+                        postField.editOnclick = "toggleEditPicturePopup('show')";
                     {% elif field.name == "paid" %}
-                        /*postField.input += "<div style='width: 90%; margin-left: 20px; display: inline; margin-top: -10px;'><div style='width: 10%; display: inline; line-height: 38.5px;' class='editPostLabelPanel'><div style='height: 5px;'></div>Specify </div><input type='text' name='paidDescription' value='{{post.paidDescription}}' style='width: 59%; display: inline;'></div>";*/
-                        /*postField.input += "<div style='margin-left: 20px; display: inline; position: relative; height: 20px; min-width: 20px; margin-top: -30px;'><div style='position: absolute; left: 0; top: 0;'> Specify</div><div style='position:absolute; top: 0; right: 0'><input type='text' name='paidDescription' value='{{post.paidDescription}}' style='width: 59%;'></div></div>";*/
                         var currentInput = postField.input;
                         var paidDescription = '{{post.paidDescription}}'
                         if(paidDescription === "None"){
@@ -94,7 +97,7 @@
                     projectField.title  = '{{project.title}}';
                     projectField.projectID = '{{project.postID}}';
                 {% else %}
-                    projectField.addNewOnclick = 'toggleSelectProjectPopup("show", "{{post.postID}}");';
+                    projectField.addNewOnclick = 'toggleSelectProjectPopup("show");';
                 {% endif %}
                 postFields["project"] = projectField
 
@@ -132,33 +135,119 @@
             return postFields;
         }
 
-    function toggleSelectProjectPopup(toggleType, postID){
-        if(postID != null && postID.length > 0){
-            var overlay = document.getElementById("hiddenGrayPopupOverlay");
-            var contentBox = document.getElementById("selectProjectPanel");
-            if(overlay && contentBox){
-                if(toggleType === "show"){
-                    overlay.style.height = "1500px";
-                    overlay.style.width = "100%";
-                    overlay.style.background = "rgba(0,0,0,0.5)"
-                    contentBox.style.display = "block";
-                    contentBox.style.background = "rgba(255,255,255,1)"
-                }else if(toggleType === "hide"){
-                    overlay.style.background = "rgba(0,0,0,0)"
-                    overlay.style.height = "0%"
-                    overlay.style.width = "0%"
-                    contentBox.style.display = "none";
-                    contentBox.style.background = "rgba(255,255,255,0)"
-                }
+    function togglePopup(toggleType, contentDivID){
+        console.log("toggling")
+        var overlay = document.getElementById("hiddenGrayPopupOverlay");
+        var contentBox = document.getElementById(contentDivID);
+        if(overlay && contentBox){
+            if(toggleType === "show"){
+                overlay.style.height = "1500px";
+                overlay.style.width = "118%";
+                overlay.style.background = "rgba(0,0,0,0.5)"
+                contentBox.style.display = "block";
+                contentBox.style.background = "rgba(255,255,255,1)"
+            }else if(toggleType === "hide"){
+                overlay.style.background = "rgba(0,0,0,0)"
+                overlay.style.height = "0%"
+                overlay.style.width = "0%"
+                contentBox.style.display = "none";
+                contentBox.style.background = "rgba(255,255,255,0)"
             }
         }
     }
+
+    function addEditImageContent(containerID){
+        setPictureID("editPostPicture")
+        var pictureID = "editPostPicture";
+        var pictureURL = "";
+        setDoesPictureExist("{{post.postPicture}}")
+        setPictureID(pictureID);
+
+        {% if post and post.postPicture and post.postPicture.url %}
+            pictureURL = "{{post.postPicture.url}}"
+        {% else %}
+            pictureURL = "{{images.noPicture}}"
+        {% endif %}
+        setNewPictureObject(pictureURL)
+
+        $("#editPostPictureImage").change(function(){
+            if(this.value != null && this.value.length > 0){
+                pictureExists = true;
+                previewPicture(this);
+            }else{
+                var fallbackPictureURL = "";
+               {% if not post or not post.postPicture or not post.postPicture.url %}
+                    pictureExists = false;
+                {% endif %}
+                if(pictureURL.length > 0){
+                    setNewPictureObject(pictureURL)
+                    loadImage(pictureURL)
+                    selectMainArea()
+                }
+            }
+        });
+
+    }
+
+    function toggleSelectProjectPopup(toggleType){
+        togglePopup(toggleType, "selectProjectPanel");
+    }
+
+    function toggleEditPicturePopup(toggleType){
+        togglePopup(toggleType, "editPicturePanel")
+        addEditImageContent("editPicturePanel");
+    }
+
+    function updatePostPicture(){
+
+    }
+
+
 </script>
 <div id="mainViewPanel" class="mainViewPanel" style="display:block; display: relative">
     <div id="hiddenGrayPopupOverlay" class="hiddenGrayPopupOverlay" style="background: rgba(0,0,0,0); height:0%; width:0%; position: absolute; top:0; z-index: 3">
-        <div style="position: relative; height: 100%;"><div id="selectProjectPanel" class="popupContentPanel" style="width: 80%; height: 400px; display: none; position: fixed; top: 10%; left: 10%;" onclick="toggleSelectProjectPopup('hide', 'asdasds');">
-        </div></div>
+        <div style="position: relative; height: 100%;"><div id="selectProjectPanel" class="popupContentPanel" style="width: 80%; height: 400px; display: none; position: fixed; top: 10%; left: 10%;" onclick="toggleSelectProjectPopup('hide', 'asdasds');"></div></div>
+        <div style="position: relative; height: 100%;">
+            <div id="editPicturePanel" class="popupContentPanel" style="width: 400px; height: 500px; display: none; position: fixed; top: 5%; left: 25%;">
+                <center>
+                <div id="backToProfileButton" style="width:170px; padding: 0em 0em 0em 0em; float: left; margin-top: 5px; margin-left: 5px;"><a onclick="toggleEditPicturePopup('hide');" class="profileButton blackHover" style="float:left">X</a></div>
+                <br><br>
+                {% if post.postPicture and post.postPicture.url %}
+                    <h1> Edit Picture </h1>
+                {% else %}
+                    <h1> Add Picture </h1>
+                {% endif %}
+                <br>
+                
+                <center>
+                    <div id="editPostPictureDiv" class="editPostPictureDiv" style='width: 300px;'>
+                    </div>
+                </center>
+                <br>
+
+                <form method="post" id="editPostPictureForm" action="updatePostPicture()" enctype="multipart/form-data">
+                    {% csrf_token %} 
+                    <input type='file' name='postPicture' id='editPostPictureImage'>
+
+                    {% if post and post.postPicture and post.postPicture.url %}
+                        <div id="removeButton" class="whiteButton blackHover" style="width:24.1%; height:28px;" onclick="removeProfilePicture();">
+                            Remove
+                        </div>
+                    {% else %}
+                        <div id="skipButton" class="whiteButton blackHover" style="width:24.1%; height:28px;" onclick="skipProfilePicture();">
+                            Skip
+                        </div>
+                    {% endif %}
+                    <div id="continueButton" class="whiteButton blackHover" style="width:24.1%; height:28px" onclick="submitPictureFormWithCrop('editPictureForm')">
+                        Update
+                    </div>
+                    <div id="cropInfoInputs"></div>
+                </form>
+            </div>
+            </center>
+        </div>
     </div>
+
     <div id="editPostPanel" class="editPostPanel">
         {% if isCasting %}
             <div id="postForm"></div>
@@ -169,9 +258,6 @@
         if(postFormDiv != null){
             newForm = addCreateCastingPost(getCastingFormDict(), "{{currentPageURL}}", "createCastingPostForm");
             postFormDiv.innerHTML = newForm;
-            $("#id_postPicture").change(function(){
-                previewPicture(this, "postPictureImg");
-            });
 
             var selectProjectPanelDiv = document.getElementById("selectProjectPanel");
             if(selectProjectPanelDiv != null){
