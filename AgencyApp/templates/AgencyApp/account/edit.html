@@ -751,6 +751,7 @@
             // Create the js Image object with existing profile picture
             //var newPicture;
             setDoesPictureExist("{{userAccount.profilePicture}}")
+            setPictureID("profilePicture");
 
             {% if userAccount.profilePicture and userAccount.profilePicture.url %}
                 setNewPictureObject("{{userAccount.profilePicture.url}}")
@@ -761,7 +762,7 @@
             $("#id_profilePicture").change(function(){
                 if(this.value != null && this.value.length > 0){
                     pictureExists = true;
-                    previewProfilePicture(this);
+                    previewPicture(this);
                 }else{
                     var fallbackPictureURL = "";
                     {% if userAccount.profilePicture and userAccount.profilePicture.url %}

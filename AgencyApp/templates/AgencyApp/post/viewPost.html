@@ -119,7 +119,7 @@
 						{% if roleObj.post.postPicture %}
 							contentString += '<img src="{{ roleObj.post.postPicture.url }}" style="max-width: 150px; max-height:150px;"/>'
 						{% else %}
-							contentString += '<img src="{{images.noProfilePicture}}" style="width: 150px; max-height: 150px;">';
+							contentString += '<img src="{{images.noProfilePicture}}" style="max-height: 150px;">';
 						{% endif %}
 						contentString += "</div></div><br>";
 						contentString += "<div class='projectContentListElementText'><h2>{{roleObj.post.characterName}}</h2><p>{{roleObj.post.shortCharacterDescription}}</p></div>"
@@ -156,7 +156,7 @@
 						{% if jobObj.user.profilePicture %}
 							contentString += '<img src="{{ jobObj.user.profilePicture.url }}" style="max-width: 150px; max-height:150px;"/>'
 						{% else %}
-							contentString += '<img src="{{images.noProfilePicture}}" style="width: 150px; max-height: 150px;">';
+							contentString += '<img src="{{images.noProfilePicture}}" style="max-height: 150px;">';
 						{% endif %}
 						contentString += "</div></div><br>";
 						contentString += "<div class='projectContentListElementText'><h2>{{jobObj.post.profession}}</h2><p>{{jobObj.post.shortDescription}}</p></div>"
@@ -169,7 +169,7 @@
 						{% if jobObj.post.postPicture %}
 							contentString += '<img src="{{ jobObj.post.postPicture.url }}" style="max-width: 150px; max-height:150px;"/>'
 						{% else %}
-							contentString += '<img src="{{images.noProfilePicture}}" style="width: 150px; max-height: 150px;">';
+							contentString += '<img src="{{images.noProfilePicture}}" style="max-height: 150px;">';
 						{% endif %}
 						contentString += "</div></div><br>";
 						contentString += "<div class='projectContentListElementText'><h2>{{jobObj.post.profession}}</h2><p>{{jobObj.post.shortDescription}}</p></div>"
