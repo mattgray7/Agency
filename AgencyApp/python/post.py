@@ -555,6 +555,20 @@ def isFollowingPost(postID, username):
 def _postIDExistsInDb(postID, database):
     return len(database.objects.filter(postID=postID)) > 0
 
+def getPostDatabase(postID):
+    database = None
+    if isEventPost(postID):
+        database = models.EventPost
+    elif isProjectPost(postID):
+        database = models.ProjectPost
+    elif isCollaborationPost(postID):
+        database = models.CollaborationPost
+    elif isWorkPost(postID):
+        database = models.WorkPost
+    elif isCastingPost(postID):
+        database = models.CastingPost
+    return database
+
 def isEventPost(postID):
     return _postIDExistsInDb(postID, models.EventPost)
 

@@ -37,6 +37,7 @@ urlpatterns = [
     url(r'^ajax/deleteProfilePicture/$', ajax.deleteProfilePicture, name='deleteProfilePicture'),  #TODO find a way to secure this link
     url(r'^ajax/getNewPostID/$', ajax.getNewPostID, name='getNewPostID'),  #TODO find a way to secure this link
     url(r'^ajax/createNewCastingPost/$', ajax.createNewCastingPost, name='createNewCastingPost'),  #TODO find a way to secure this link
+    url(r'^ajax/updatePostPicture/$', ajax.updatePostPicture, name='updatePostPicture'),  #TODO find a way to secure this link
 
 
 

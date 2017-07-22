@@ -198,15 +198,25 @@
         addEditImageContent("editPicturePanel");
     }
 
-    function updatePostPicture(){
-
-    }
-
     function submitPictureForm(formName){
-        var form = document.getElementById(formName)
+        var form = addCropToPictureForm(formName, "cropInfoInputs")
+        var formData = new FormData(form)
         if(form != null){
-            form = addCropToPictureForm(formName, "cropInfoInputs")
-            console.log(form)
+            $.ajax({
+                url : "/ajax/updatePostPicture/",
+                data : formData,
+                type : 'POST',
+                dataType: "json",
+                cache: false,
+                contentType: false,
+                processData: false,
+                success : function(data) {
+                    console.log(data)
+                    if(data["success"]){
+                        console.log("Adding picture is a success")
+                    }
+                }
+            });
         }
     }
 
@@ -235,6 +245,8 @@
                 <form method="post" id="editPostPictureForm" enctype="multipart/form-data">
                     {% csrf_token %} 
                     <div style='text-align: center; margin-left: 30px;'><input type='file' name='postPicture' id='editPostPictureImage'></div><br>
+                    <input type='hidden' name='postID' value='{{post.postID}}'>
+                    <input type='hidden' name='postType' value='{{postType}}'>
 
                     {% if post and post.postPicture and post.postPicture.url %}
                         <div id="removeButton" class="whiteButton blackHover" style="width:70px; height:28px;" onclick="removeProfilePicture();">

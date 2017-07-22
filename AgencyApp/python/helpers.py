@@ -5,6 +5,8 @@ import constants
 import random, string
 import models
 import json
+import os
+from PIL import Image
 
 def redirect(request, currentPage, destinationPage):
     """Returns an HttpResonseRedirect of the desired URL can be resolved (see getDestinationURL for 
@@ -155,6 +157,29 @@ def createUniqueID(destDatabase, idKey):
             tempIDValid = True
             return tempID
 
+
+def savePostPictureInDatabase(request, pictureFieldName, databaseInstance, cropInfo, filename):
+    if databaseInstance:
+        databaseInstance.postPicture = request.FILES.get(pictureFieldName)
+        databaseInstance.save()
+
+        if databaseInstance.postPicture:
+            if cropInfo:
+                image = Image.open(databaseInstance.postPicture.path)
+                x = float(cropInfo.get("x"))
+                y = float(cropInfo.get("y"))
+                croppedImage = image.crop((x, y, float(cropInfo["width"]) + x, float(cropInfo["height"]) + y))
+                croppedImage.save(databaseInstance.postPicture.path)
+                croppedImage = croppedImage.resize((810, 900), Image.ANTIALIAS)
+                croppedImage.save(databaseInstance.postPicture.path)
+
+                # Rename picture file
+                newPath = os.path.join(os.path.dirname(databaseInstance.postPicture.path), filename)
+                os.rename(databaseInstance.postPicture.path, newPath)
+                databaseInstance.postPicture.name = os.path.join(request.user.username, filename)
+                databaseInstance.save()
+            return True
+    return False
 
 def getMessageFromKey(request, key):
     """Returns the value of a key included in a message object.

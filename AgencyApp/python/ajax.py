@@ -79,3 +79,25 @@ def createNewCastingPost(request):
     createSuccess = newPost.formIsValid()
     return JsonResponse({"success": createSuccess})
 
+def updatePostPicture(request):
+    print request.POST
+    print request.FILES
+    postID = request.POST.get("postID")
+    database = post.getPostDatabase(postID)
+    print "postType is {0}".format(request.POST.get("postType"))
+    success = False
+    if postID and database:
+        try:
+            postInstance = database.objects.get(postID=postID)
+        except databse.DoesNotExist:
+            pass
+        else:
+            cropInfo = {"x": request.POST.get("crop_x"),
+                        "y": request.POST.get("crop_y"),
+                        "width": request.POST.get("crop_width"),
+                        "height": request.POST.get("crop_height")}
+            success = helpers.savePostPictureInDatabase(request, "postPicture", postInstance, cropInfo, constants.MEDIA_FILE_NAME_MAP.get(request.POST.get("postType"), "tempfile"))
+    return JsonResponse({"success": False})
+
+
+
