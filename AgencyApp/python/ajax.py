@@ -60,6 +60,23 @@ def deleteProfilePicture(request):
                 os.remove(picturePath)
     return JsonResponse({"success": True})
 
+def deletePostPicture(request):
+    success = False
+    postID = request.POST.get("postID")
+    if postID:
+        database = post.getPostDatabase(postID)
+        if database:
+            try:
+                postInstance = database.objects.get(postID=postID)
+            except database.DoesNotExist:
+                pass
+            else:
+                postInstance.postPicture = None
+                postInstance.save()
+                success = True
+    return JsonResponse({"success": success})
+
+
 def getNewPostID(request):
     postType = request.POST.get("postType")
     ret = {}

@@ -199,6 +199,29 @@
         }
     }
 
+    function removePicture(){
+        $.ajax({
+            url : "/ajax/deletePostPicture/",
+            data : {"postID": "{{post.postID}}"},
+            type : 'POST',
+            dataType: "json",
+            success : function(data) {
+                if(data["success"]){
+                    var removeButton = document.getElementById("removeButton")
+                    if(removeButton != null){
+                        removeButton.innerHTML = "<img id='loadingGif' src='{{images.loading.mid}}' style='position: absolute; height: 60px; width: 60px; margin-top: -15px;'>"
+                    }
+                    setTimeout(function(){
+                        var postPicture = document.getElementById("postPictureImg")
+                        postPicture.src = "{{images.noPicture}}";
+                        toggleEditPicturePopup("hide")
+                    }, 
+                    1000)
+                }
+            }
+        });
+    }
+
     function submitPictureForm(formName){
         var updateButton = document.getElementById("updatePictureButton")
         updateButton.innerHTML = "<img id='loadingGif' src='{{images.loading.mid}}' style='position: absolute; height: 60px; width: 60px; margin-top: -15px;'>"
@@ -260,7 +283,7 @@
                         <tr>
                             {% if post and post.postPicture and post.postPicture.url %}
                                 <td>
-                                    <div id="removeButton" class="whiteButton blackHover" style="width:70px; height:28px; display:block;" onclick="removeProfilePicture();">
+                                    <div id="removeButton" class="whiteButton blackHover" style="width:70px; height:28px; display:block;" onclick="removePicture();">
                                         Remove
                                     </div>
                                 </td>
