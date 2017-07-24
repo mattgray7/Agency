@@ -80,11 +80,9 @@ def createNewCastingPost(request):
     return JsonResponse({"success": createSuccess})
 
 def updatePostPicture(request):
-    print request.POST
-    print request.FILES
     postID = request.POST.get("postID")
     database = post.getPostDatabase(postID)
-    print "postType is {0}".format(request.POST.get("postType"))
+    filename = constants.MEDIA_FILE_NAME_MAP.get(request.POST.get("postType"), "tempfile_{0}").format(postID)
     success = False
     if postID and database:
         try:
@@ -96,8 +94,8 @@ def updatePostPicture(request):
                         "y": request.POST.get("crop_y"),
                         "width": request.POST.get("crop_width"),
                         "height": request.POST.get("crop_height")}
-            success = helpers.savePostPictureInDatabase(request, "postPicture", postInstance, cropInfo, constants.MEDIA_FILE_NAME_MAP.get(request.POST.get("postType"), "tempfile"))
-    return JsonResponse({"success": False})
+            success = helpers.savePostPictureInDatabase(request, "postPicture", postInstance, cropInfo, filename)
+    return JsonResponse({"success": success})
 
 
 

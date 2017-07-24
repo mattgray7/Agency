@@ -161,8 +161,10 @@ def createUniqueID(destDatabase, idKey):
 
 def savePostPictureInDatabase(request, pictureFieldName, databaseInstance, cropInfo, filename):
     if databaseInstance:
-        databaseInstance.postPicture = request.FILES.get(pictureFieldName)
-        databaseInstance.save()
+        newPic = request.FILES.get(pictureFieldName)
+        if newPic:
+            databaseInstance.postPicture = request.FILES.get(pictureFieldName)
+            databaseInstance.save()
 
         if databaseInstance.postPicture:
             if cropInfo:
