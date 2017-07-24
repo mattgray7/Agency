@@ -49,9 +49,13 @@ function togglePictureLoadingGif(toggleType){
     var overlay = document.getElementById("loadingPictureGrayOverlay")
     if(overlay != null && loadingGif != null){
         if(toggleType === "show"){
-            overlay.style.height = "290px";
-            overlay.style.width = "261px";
+            overlay.style.height = displayedPicture.height + "px";
+            overlay.style.width = displayedPicture.width + "px";
             overlay.style.background = "rgba(0,0,0,0.7)"
+
+            // Reset top margin of loading gif as height of displayed picture may have changed
+            var gifHeight = loadingGif.style.height.substring(0, loadingGif.style.height.length-2);
+            loadingGif.style.marginTop = (displayedPicture.height - gifHeight)/2 + "px";
             loadingGif.style.display = "block";
         }else{
             overlay.style.background = "rgba(0,0,0,0)"
