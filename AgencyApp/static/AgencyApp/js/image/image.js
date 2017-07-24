@@ -8,13 +8,12 @@ var pictureExists = false;
 var pictureID = "";
 var defaultImageURL = "";
 var imageLoaded = false;
-var canDisplayImage = false
 
 function checkIfPictureCanBeLoaded(){
-    // imageLoaded set in previewEditPicture, canDisplayImage set in selectMainAreas
-    if(imageLoaded && canDisplayImage){
-        togglePictureLoadingGif("hide");
+    // imageLoaded set in previewEditPicture
+    if(imageLoaded){
         loadImage(newPicture.src)
+        togglePictureLoadingGif("hide")
     }
 }
 
@@ -35,7 +34,6 @@ function previewEditPicture(input) {
                 // Need to set width variables once the image is loaded into the js object
                 newPictureHeight = this.height;
                 newPictureWidth = this.width;
-
                 // Image is loaded and ready to be displayed
                 imageLoaded = true;
             }
@@ -191,6 +189,7 @@ function loadImage(imageURL){
             pictureContainer.innerHTML = imageString;
         }
     }
+
     if(pictureExists){
         $("[id='" + pictureID + "']").selectAreas({
             minSize: [10, 10],
