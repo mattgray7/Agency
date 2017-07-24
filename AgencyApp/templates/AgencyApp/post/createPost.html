@@ -211,12 +211,7 @@
                     if(removeButton != null){
                         removeButton.innerHTML = "<img id='loadingGif' src='{{images.loading.mid}}' style='position: absolute; height: 60px; width: 60px; margin-top: -15px;'>"
                     }
-                    setTimeout(function(){
-                        var postPicture = document.getElementById("postPictureImg")
-                        postPicture.src = "{{images.noPicture}}";
-                        toggleEditPicturePopup("hide")
-                    }, 
-                    1000)
+                    window.location.reload(false);
                 }
             }
         });
