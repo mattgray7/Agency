@@ -439,6 +439,18 @@
 		background: #FFF;
 	}
 
+	.noBorderButton
+	{
+		font-weight: 300;
+		font-size: 1.5em;
+		color: #848484;
+		cursor: pointer;
+	}
+
+	.noBorderButton:hover{
+		color: #000;
+	}
+
 	.blackButton
 	{
 		display: inline-block;
