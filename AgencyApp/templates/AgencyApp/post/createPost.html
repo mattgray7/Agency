@@ -51,7 +51,7 @@
                         if(paidDescription === "None"){
                             paidDescription = ''
                         }
-                        postField.input = "<div style='position: relative; margin-top: -5px;'>" + currentInput + "<div style='position: absolute; top: 0; right: 0; margin-top: 6px; width: 90%; text-align: right;'><div style='position: relative;'> <div style='position: absolute; left: 0;' class='editPostLabelPanel'>Specify </div><div style='position: absolute; right: 0; width: 74%; margin-right: 5px; margin-top: -3px;'><input type='text' name='paidDescription' value='" + paidDescription + "' style='display: inline; margin-top: -10px;'></div></div></div>"
+                        postField.input = "<div style='position: relative; margin-top: -5px;'>" + currentInput + "<div style='position: absolute; top: 0; right: 0; margin-top: 6px; width: 90%; min-width: 180px; text-align: right;'><div style='position: relative;'> <div style='position: absolute; left: 0;' class='editPostLabelPanel'>Specify </div><div style='position: absolute; left: 0; right: 0; margin-right: 3px; margin-left: 68px; margin-top: -3px;'><input type='text' name='paidDescription' value='" + paidDescription + "' style='display: inline; margin-top: -10px;'></div></div></div>"
                     {% elif field.name == "paidDescription" %}
                         // Paid description will be on same line as paid
                         save = false;
