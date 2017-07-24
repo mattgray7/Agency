@@ -7,25 +7,37 @@ var cropArea;
 var pictureExists = false;
 var pictureID = "";
 var defaultImageURL = "";
+var imageLoaded = false;
+var canDisplayImage = false
+
+function checkIfPictureCanBeLoaded(){
+    // imageLoaded set in previewPictre, canDisplayImage set in selectMainAreas
+    if(imageLoaded && canDisplayImage){
+        togglePictureLoadingGif("hide");
+        loadImage(newPicture.src)
+    }
+}
 
 function previewPicture(input) {
     if (input.files && input.files[0]) {
+        // Add the loading gif
         togglePictureLoadingGif("show")
+
+        // In min 1 second, check if the image can be loaded (need min 1s so that gif doesn't load for a split second)
+        setTimeout(function(){checkIfPictureCanBeLoaded()}, 1000);
+
         var reader = new FileReader();
         reader.onload = function (e) {
             newPicture = new Image()
-            newPicture.src = e.target.result;
+            // Let the gif start before loading the image, as it lags the gif
+            setTimeout(function(){newPicture.src = e.target.result}, 500);
             newPicture.onload = function(){
                 // Need to set width variables once the image is loaded into the js object
                 newPictureHeight = this.height;
                 newPictureWidth = this.width;
 
-                setTimeout(function(){
-                    // Once the js object is loaded, we can load the image into the page
-                    loadImage(e.target.result)
-
-                    togglePictureLoadingGif("hide")
-                }, 1000)
+                // Image is loaded and ready to be displayed
+                imageLoaded = true;
             }
         }
         reader.readAsDataURL(input.files[0]);
@@ -39,7 +51,7 @@ function togglePictureLoadingGif(toggleType){
         if(toggleType === "show"){
             overlay.style.height = "290px";
             overlay.style.width = "261px";
-            overlay.style.background = "rgba(0,0,0,0.5)"
+            overlay.style.background = "rgba(0,0,0,0.7)"
             loadingGif.style.display = "block";
         }else{
             overlay.style.background = "rgba(0,0,0,0)"
@@ -96,6 +108,9 @@ function selectMainArea(){
         elem.style.display = "block";
         elem.style.zIndex = "1";
     }
+
+    // Since this is fn is called after crop is loaded, image is now finally ready to display
+    canDisplayImage = true;
 }
 
 function createPictureContainer(includeCropHandler){
