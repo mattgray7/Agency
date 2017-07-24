@@ -173,7 +173,7 @@
         $("#editPostPictureImage").change(function(){
             if(this.value != null && this.value.length > 0){
                 pictureExists = true;
-                previewPicture(this);
+                previewEditPicture(this);
             }else{
                 var fallbackPictureURL = "";
                {% if not post or not post.postPicture or not post.postPicture.url %}
@@ -215,6 +215,7 @@
                 success : function(data) {
                     if(data["success"]){
                         toggleEditPicturePopup("hide")
+                        window.location.reload(false);
                     }
                 }
             });

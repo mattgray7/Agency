@@ -719,7 +719,7 @@
             $("#id_profilePicture").change(function(){
                 if(this.value != null && this.value.length > 0){
                     pictureExists = true;
-                    previewPicture(this);
+                    previewEditPicture(this);
                 }else{
                    {% if not userAccount or not userAccount.profilePicture or not userAccount.profilePicture.url %}
                         pictureExists = false;

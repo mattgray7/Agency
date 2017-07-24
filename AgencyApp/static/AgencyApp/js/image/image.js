@@ -11,14 +11,14 @@ var imageLoaded = false;
 var canDisplayImage = false
 
 function checkIfPictureCanBeLoaded(){
-    // imageLoaded set in previewPictre, canDisplayImage set in selectMainAreas
+    // imageLoaded set in previewEditPicture, canDisplayImage set in selectMainAreas
     if(imageLoaded && canDisplayImage){
         togglePictureLoadingGif("hide");
         loadImage(newPicture.src)
     }
 }
 
-function previewPicture(input) {
+function previewEditPicture(input) {
     if (input.files && input.files[0]) {
         // Add the loading gif
         togglePictureLoadingGif("show")
