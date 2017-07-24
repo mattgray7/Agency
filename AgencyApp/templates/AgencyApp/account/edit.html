@@ -705,30 +705,28 @@
 
         function loadPictureCropTool(){
             var pictureID = "profilePicture";
+            var pictureURL = "";
             setDoesPictureExist("{{userAccount.profilePicture}}")
             setPictureID(pictureID);
 
             {% if userAccount.profilePicture and userAccount.profilePicture.url %}
-                setNewPictureObject("{{userAccount.profilePicture.url}}")
+                pictureURL = "{{userAccount.profilePicture.url}}"
             {% else %}
-                setNewPictureObject("{{images.noProfilePicture}}")
+                pictureURL = "{{images.noProfilePicture}}"
             {% endif %}
+            setNewPictureObject(pictureURL)
 
             $("#id_profilePicture").change(function(){
                 if(this.value != null && this.value.length > 0){
                     pictureExists = true;
                     previewPicture(this);
                 }else{
-                    var fallbackPictureURL = "";
-                    {% if userAccount.profilePicture and userAccount.profilePicture.url %}
-                        fallbackPictureURL = "{{userAccount.profilePicture.url}}";
-                    {% else %}
-                        fallbackPictureURL = "{{images.noProfilePicture}}";
+                   {% if not userAccount or not userAccount.profilePicture or not userAccount.profilePicture.url %}
                         pictureExists = false;
                     {% endif %}
-                    if(fallbackPictureURL.length > 0){
-                        setNewPictureObject(fallbackPictureURL)
-                        loadImage(fallbackPictureURL)
+                    if(pictureURL.length > 0){
+                        setNewPictureObject(pictureURL)
+                        loadImage(pictureURL)
                         selectMainArea()
                     }
                 }
