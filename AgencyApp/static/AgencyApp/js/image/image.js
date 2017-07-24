@@ -56,6 +56,15 @@ function togglePictureLoadingGif(toggleType){
             // Reset top margin of loading gif as height of displayed picture may have changed
             var gifHeight = loadingGif.style.height.substring(0, loadingGif.style.height.length-2);
             loadingGif.style.marginTop = (displayedPicture.height - gifHeight)/2 + "px";
+
+            // Reset left margin of overlay, as it could change if new pic has diff dimensions
+            if(displayedPicture.height > displayedPicture.width){
+                var newLeftMargin =((290 - displayedPicture.width)/2 + 6) +"px";
+                overlay.style.marginLeft = newLeftMargin;
+            }else{
+                // 6px accounts for the wrapper border width
+                overlay.style.marginLeft = "6px";
+            }
             loadingGif.style.display = "block";
         }else{
             overlay.style.background = "rgba(0,0,0,0)"
