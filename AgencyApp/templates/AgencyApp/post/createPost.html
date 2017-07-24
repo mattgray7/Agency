@@ -201,6 +201,9 @@
     }
 
     function submitPictureForm(formName){
+        var updateButton = document.getElementById("updatePictureButton")
+        updateButton.innerHTML = "<img id='loadingGif' src='{{images.loadingGif}}' style='position: absolute; height: 60px; width: 60px; margin-top: -15px;'>"
+
         var form = addCropToPictureForm(formName, "cropInfoInputs")
         var formData = new FormData(form)
         if(form != null){
@@ -254,18 +257,28 @@
                     <input type='hidden' name='postID' value='{{post.postID}}'>
                     <input type='hidden' name='postType' value='{{postType}}'>
 
-                    {% if post and post.postPicture and post.postPicture.url %}
-                        <div id="removeButton" class="whiteButton blackHover" style="width:70px; height:28px;" onclick="removeProfilePicture();">
-                            Remove
-                        </div>
-                    {% else %}
-                        <div id="skipButton" class="whiteButton blackHover" style="width:70px; height:28px;" onclick="skipProfilePicture();">
-                            Skip
-                        </div>
-                    {% endif %}
-                    <div id="continueButton" class="whiteButton blackHover" style="width: 70px; height:28px" onclick="submitPictureForm('editPostPictureForm')">
-                        Update
-                    </div>
+                    <table>
+                        <tr>
+                            {% if post and post.postPicture and post.postPicture.url %}
+                                <td>
+                                    <div id="removeButton" class="whiteButton blackHover" style="width:70px; height:28px; display:block;" onclick="removeProfilePicture();">
+                                        Remove
+                                    </div>
+                                </td>
+                            {% else %}
+                                <td>
+                                    <div id="skipButton" class="whiteButton blackHover" style="width:70px; height:28px; display: block;" onclick="skipProfilePicture();">
+                                        Skip
+                                    </div>
+                                </td>
+                            {% endif %}
+                            <td>
+                                <div id="updatePictureButton" class="whiteButton blackHover" style="width: 70px; height:28px; position: relative; display: block;" onclick="submitPictureForm('editPostPictureForm')">
+                                    Update
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
                     <div id="cropInfoInputs"></div>
                 </form>
             </div>
