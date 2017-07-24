@@ -8,7 +8,6 @@ var pictureExists = false;
 var pictureID = "";
 var defaultImageURL = "";
 var imageLoaded = false;
-var cropHandlerExists = false;
 
 function checkIfPictureCanBeLoaded(){
     // imageLoaded set in previewEditPicture
@@ -51,11 +50,6 @@ function togglePictureLoadingGif(toggleType){
             overlay.style.height = displayedPicture.height + "px";
             overlay.style.width = displayedPicture.width + "px";
             overlay.style.background = "rgba(0,0,0,0.7)"
-            if(!cropHandlerExists){
-                overlay.style.marginTop = "0px";
-            }else{
-                overlay.style.marginTop = "6px"
-            }
 
             // Reset top margin of loading gif as height of displayed picture may have changed
             var gifHeight = loadingGif.style.height.substring(0, loadingGif.style.height.length-2);
@@ -134,10 +128,8 @@ function createPictureContainer(includeCropHandler){
     pictureHTML = "";
     if(includeCropHandler){
         pictureHTML += '<div class="imageCrop"><div class="wrapper"><div class="image-decorator"><div id="' + pictureID + 'Image"></div></div></div> </div>'
-        cropHandlerExists = true;
     }else{
-        pictureHTML += '<div style="margin-top: 5px;"><div id="' + pictureID + 'Image"></div></div>'
-        cropHandlerExists = false;
+        pictureHTML += '<div style="margin-top: 5px;"><div class="no-picture-image-decorator"><div id="' + pictureID + 'Image"></div></div></div>'
     }
     return pictureHTML
 }
