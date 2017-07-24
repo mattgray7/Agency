@@ -15,7 +15,7 @@ import post_collaboration as collaborationPost
 
 NO_PICTURE_PATH = "/media/default/noPicture.jpg"
 NO_PROFILE_PICTURE_PATH = "/media/default/noProfilePicture.jpg"
-LOADING_GIF = "/media/default/loading4.gif"
+LOADING_GIF = "/media/default/loading.gif"
 
 # Source page enums:
 HOME = "HOME"

@@ -136,7 +136,6 @@
         }
 
     function togglePopup(toggleType, contentDivID){
-        console.log("toggling")
         var overlay = document.getElementById("hiddenGrayPopupOverlay");
         var contentBox = document.getElementById(contentDivID);
         if(overlay && contentBox){
@@ -161,7 +160,7 @@
         var pictureURL = "";
         setDoesPictureExist("{{post.postPicture}}")
         setPictureID(pictureID);
-        setDefaultImageURL("{{images.loadingGif}}")
+        setDefaultImageURL("{{images.loading.light}}")
 
         {% if post and post.postPicture and post.postPicture.url %}
             pictureURL = "{{post.postPicture.url}}"
@@ -202,7 +201,7 @@
 
     function submitPictureForm(formName){
         var updateButton = document.getElementById("updatePictureButton")
-        updateButton.innerHTML = "<img id='loadingGif' src='{{images.loadingGif}}' style='position: absolute; height: 60px; width: 60px; margin-top: -15px;'>"
+        updateButton.innerHTML = "<img id='loadingGif' src='{{images.loading.mid}}' style='position: absolute; height: 60px; width: 60px; margin-top: -15px;'>"
 
         var form = addCropToPictureForm(formName, "cropInfoInputs")
         var formData = new FormData(form)
@@ -245,7 +244,7 @@
                 <center>
                     <div style='position: relative; width: 300px;'>
                         <div id="loadingPictureGrayOverlay" class="hiddenGrayPopupOverlay" style="background: rgba(0,0,0,0); height:0%; width:0%; position: absolute; margin-top: 6px; margin-left: 6px;top:0; z-index: 3">
-                            <img id='loadingGif' src='{{images.loadingGif}}' style='height: 70px; width: 70px; display: none; margin-top: 50%; margin-left: 5%;'></div>
+                            <img id='loadingGif' src='{{images.loading.light}}' style='height: 70px; width: 70px; display: none; margin-top: 50%; margin-left: 5%;'></div>
                     </div>
                     <div id="editPostPictureDiv" class="editPostPictureDiv" style='width: 300px;'>
                     </div>

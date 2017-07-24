@@ -122,7 +122,10 @@ def getBaseContext(request):
                 "cancel": constants.CANCEL,
                 "images": {"noProfilePicture": constants.NO_PROFILE_PICTURE_PATH,
                            "noPicture": constants.NO_PICTURE_PATH,
-                           "loadingGif": constants.LOADING_GIF}
+                           "loadingGif": constants.LOADING_GIF,
+                           "loading": {"light": constants.LOADING_GIF.replace("loading.gif", "loading_light.gif"),
+                                       "mid": constants.LOADING_GIF.replace("loading.gif", "loading_mid.gif"),
+                                       "dark": constants.LOADING_GIF.replace("loading.gif", "loading_dark.gif")}}
                 }
     returnDict["posterNameMap"] = {}
     for account in models.UserAccount.objects.all():
