@@ -115,11 +115,11 @@
 		margin: -30px 0px 0px 0px;
 		/*width:300px;
 		height:300px;*/
-		background: #000;
+		/*background: #000;*/
 		vertical-align: middle;
 		display: table-cell;
-		border: 1px solid #000;
-		border-radius: 6px;
+		/*border: 1px solid #000;
+		border-radius: 6px;*/
 	}
 
 	#editPictureForm p

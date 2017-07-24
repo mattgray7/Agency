@@ -57,7 +57,7 @@ function togglePictureLoadingGif(toggleType){
 
             // Reset left margin of overlay, as it could change if new pic has diff dimensions
             if(displayedPicture.height > displayedPicture.width){
-                var newLeftMargin =((290 - displayedPicture.width)/2 + 6) +"px";
+                var newLeftMargin =((290 - displayedPicture.width)/2 + 5) +"px";
                 overlay.style.marginLeft = newLeftMargin;
             }else{
                 // 6px accounts for the wrapper border width
