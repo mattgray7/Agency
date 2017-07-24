@@ -157,11 +157,11 @@
     }
 
     function addEditImageContent(containerID){
-        setPictureID("editPostPicture")
         var pictureID = "editPostPicture";
         var pictureURL = "";
         setDoesPictureExist("{{post.postPicture}}")
         setPictureID(pictureID);
+        setDefaultImageURL("{{images.loadingGif}}")
 
         {% if post and post.postPicture and post.postPicture.url %}
             pictureURL = "{{post.postPicture.url}}"
@@ -195,7 +195,9 @@
 
     function toggleEditPicturePopup(toggleType){
         togglePopup(toggleType, "editPicturePanel")
-        addEditImageContent("editPicturePanel");
+        if(toggleType === "show"){
+            addEditImageContent("editPicturePanel");
+        }
     }
 
     function submitPictureForm(formName){
@@ -211,9 +213,8 @@
                 contentType: false,
                 processData: false,
                 success : function(data) {
-                    console.log(data)
                     if(data["success"]){
-                        console.log("Adding picture is a success")
+                        toggleEditPicturePopup("hide")
                     }
                 }
             });
@@ -238,6 +239,10 @@
                 <br>
                 
                 <center>
+                    <div style='position: relative; width: 300px;'>
+                        <div id="loadingPictureGrayOverlay" class="hiddenGrayPopupOverlay" style="background: rgba(0,0,0,0); height:0%; width:0%; position: absolute; margin-left: 20px; margin-top: 6px; top:0; z-index: 3">
+                            <img id='loadingGif' src='{{images.loadingGif}}' style='height: 40px; width: 40px; display: none; margin-top: 50%; margin-left: 5%;'></div>
+                    </div>
                     <div id="editPostPictureDiv" class="editPostPictureDiv" style='width: 300px;'>
                     </div>
                 </center>

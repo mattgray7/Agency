@@ -6,9 +6,11 @@ var areas;
 var cropArea;
 var pictureExists = false;
 var pictureID = "";
+var defaultImageURL = "";
 
 function previewPicture(input) {
     if (input.files && input.files[0]) {
+        togglePictureLoadingGif("show")
         var reader = new FileReader();
         reader.onload = function (e) {
             newPicture = new Image()
@@ -18,13 +20,38 @@ function previewPicture(input) {
                 newPictureHeight = this.height;
                 newPictureWidth = this.width;
 
-                // Once the js object is loaded, we can load the image into the page
-                loadImage(e.target.result)
-                return true;
+                setTimeout(function(){
+                    // Once the js object is loaded, we can load the image into the page
+                    loadImage(e.target.result)
+
+                    togglePictureLoadingGif("hide")
+                }, 1000)
             }
         }
         reader.readAsDataURL(input.files[0]);
     }
+}
+
+function togglePictureLoadingGif(toggleType){
+    var loadingGif = document.getElementById("loadingGif")
+    var overlay = document.getElementById("loadingPictureGrayOverlay")
+    if(overlay != null && loadingGif != null){
+        if(toggleType === "show"){
+            overlay.style.height = "290px";
+            overlay.style.width = "261px";
+            overlay.style.background = "rgba(0,0,0,0.5)"
+            loadingGif.style.display = "block";
+        }else{
+            overlay.style.background = "rgba(0,0,0,0)"
+            overlay.style.height = "0%"
+            overlay.style.width = "0%"
+            loadingGif.style.display = "none";
+        }
+    }
+}
+
+function setDefaultImageURL(imageURL){
+    defaultImageURL = imageURL
 }
 
 function setDoesPictureExist(picture){
