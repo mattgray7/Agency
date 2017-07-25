@@ -59,7 +59,6 @@ class CreateCastingPostView(post.GenericCreatePostView):
         kwargs["postType"] = constants.CASTING_POST
         super(CreateCastingPostView, self).__init__(*args, **kwargs)
         self._actor = None
-        print self.request.POST.get("startDate")
 
     @property
     def actor(self):

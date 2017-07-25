@@ -135,6 +135,112 @@
             return postFields;
         }
 
+        function getWorkFormDict(){
+            var postFields = {}
+            {% if form %}
+                {% spaceless %}
+                {% for field in form %}
+                    var save = true;
+                    var postField = {"name": '{{field.name}}', "value": '{{field.value}}', "hidden": ('{{field}}'.includes('hidden')), "label": '{{field.label}}', 'input': '{{field}}'}
+                    {% if field.name == "projectID" %}
+                        postField.value = "{{post.projectID}}";
+                    {% elif field.name == "postPicture" %}
+                        {% if post.postPicture and post.postPicture.url %}
+                            postField.value = "{{post.postPicture.url}}";
+                        {% else %}
+                            postField.value = "{{images.noPicture}}";
+                        {% endif %}
+                        postField.editOnclick = "toggleEditPicturePopup('show')";
+                    {% elif field.name == "paid" %}
+                        var currentInput = postField.input;
+                        var paidDescription = '{{post.paidDescription}}'
+                        if(paidDescription === "None"){
+                            paidDescription = ''
+                        }
+                        postField.input = "<div style='position: relative; margin-top: -5px;'>" + currentInput + "<div style='position: absolute; top: 0; right: 0; margin-top: 6px; width: 90%; min-width: 180px; text-align: right;'><div style='position: relative;'> <div style='position: absolute; left: 0;' class='editPostLabelPanel'>Specify </div><div style='position: absolute; left: 0; right: 0; margin-right: 3px; margin-left: 68px; margin-top: -3px;'><input type='text' name='paidDescription' value='" + paidDescription + "' style='display: inline; margin-top: -10px;'></div></div></div>"
+                    {% elif field.name == "paidDescription" %}
+                        // Paid description will be on same line as paid
+                        save = false;
+                    {% elif field.name == "status" %}
+                        {% if statusOptions.roles %}
+                            var options = {{ statusOptions.roles|safe }}
+                            postField.options = options;
+                        {% endif %}
+                    {% elif field.name == "description" %}
+                        postField.numRows = 20;
+                        {% if not field.value %}
+                            postField.value = "";
+                        {% endif %}
+                    {% elif field.name == "poster" %}
+                        postField.value = "{{ request.user.username }}"
+                        postField.input = postField.input.replace('name="poster"', 'name="poster" value="' + postField.value + '"')
+                    {% elif field.name == "startDate" or field.name == "endDate" %}
+                        postField.input = postField.input.replace('type="text"', 'type="date"')
+                        {% if field.name == "startDate" %}
+                            postField.value = currentDateString
+                        {% else %}
+                            postField.value = tomorrowDateString;
+                        {% endif %}
+                    {% elif field.name in selectFields.roles.names %}
+                        {% if selectFields.roles.options %}
+                            var options = {{ selectFields.roles.options|safe }}
+                            postField.options = options['{{field.name}}']
+                        {% endif %}
+                    {% endif %}
+                    if(save){
+                        // If value was added but it's not in input, add it (TODO change value in input if it is already there)
+                        if(postField.input.indexOf("value=") < 0 && postField.value.length > 0 && postField.value != "None"){
+                            postField.input = postField.input.replace(">", " value='" + postField.value + "'>")
+                        }
+                        postFields['{{field.name}}'] = postField;
+                    }
+                {% endfor %}
+                {% endspaceless %}
+
+                // Add project
+                var projectField = {"name": "project"}
+                {% if project and project.title %}
+                    projectField.title  = '{{project.title}}';
+                    projectField.projectID = '{{project.postID}}';
+                {% else %}
+                    projectField.addNewOnclick = 'toggleSelectProjectPopup("show");';
+                {% endif %}
+                postFields["project"] = projectField
+
+                // Add actor
+                var actorField = {"username": "{{actor.username}}", "cleanName": "{{actor.cleanName}}"}
+                {% if actor %}
+                    actorField["username"] = "{{actor.username}}";
+                    actorField["cleanName"] = "{{actor.cleanName}}";
+                    {% if actor.profilePicture %}
+                        actorField.profilePictureURL = '{{actor.profilePicture.url}}';
+                    {% endif %}
+                {% else %}
+                    actorField["username"] = null;
+                    actorField.profilePictureURL = '{{images.noProfilePicture}}';
+                {% endif %}
+                postFields["actor"] = actorField;
+
+                // Add csrf token
+                var csrfField = {"name": "csrf_token", "input": "{% csrf_token %}", "hidden": true};
+                postFields['csrf_token'] = csrfField;
+
+                // Add cancel button with onclick
+                var cancelButton = {'name': 'cancelButton', 'onclick': 'redirectToPost("{{post.postID}}");', "hidden": true};
+                postFields['cancelButton'] = cancelButton;
+
+                // Add create/update button with onclick
+                var createButton = {'name': 'createButton', 'onclickFunction': 'submitForm', "hidden": true};
+                postFields['createButton'] = createButton;
+
+                postFields["newPost"] = true;
+                {% if post %}
+                    postFields["newPost"] = false;
+                {% endif %}
+            {% endif %}
+            return postFields;
+        }
+
     function togglePopup(toggleType, contentDivID){
         var overlay = document.getElementById("hiddenGrayPopupOverlay");
         var contentBox = document.getElementById(contentDivID);
@@ -331,14 +437,17 @@
     </div>
 
     <div id="editPostPanel" class="editPostPanel">
-        {% if isCasting %}
-            <div id="postForm"></div>
-        {% endif %}
+        <div id="postForm"></div>
     </div>
     <script>
         var postFormDiv = document.getElementById("postForm");
         if(postFormDiv != null){
-            newForm = addCreateCastingPost(getCastingFormDict(), "{{currentPageURL}}", "createCastingPostForm");
+            var newForm;
+            {% if isCasting %}
+                newForm = addCreateCastingPost(getCastingFormDict(), "{{currentPageURL}}", "createCastingPostForm");
+            {% elif isWork %}
+                newForm = addCreateWorkPost(getWorkFormDict(), "{{currentPageURL}}", "createWorkPostForm");
+            {% endif %}
             postFormDiv.innerHTML = newForm;
 
             var selectProjectPanelDiv = document.getElementById("selectProjectPanel");
