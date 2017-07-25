@@ -27,8 +27,12 @@
         var tomorrowDate = new Date(currentDate.getTime() + 24 * 60 * 60 * 1000);
         var tomorrowDateString = tomorrowDate.toISOString().slice(0,10);
 
-        var loadingGif = new Image();
-        loadingGif.src = "{{images.loadingGif}}"
+        // Load all the loading gifs so that they are stored in cache
+        {% for key, value in images.loading.items %}
+            var loadingGif = new Image();
+            loadingGif.src = "{{value}}";
+            console.log("{{value}}")
+        {% endfor %}
 
         // using jQuery
         function getCookie(name) {
