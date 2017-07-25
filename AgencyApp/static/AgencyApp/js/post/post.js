@@ -27,7 +27,7 @@ function addCreateWorkPost(formDict, formURL, formName){
 		var sectionInputTableElement = null;
 		var sectionLabelTableElement = null;
 		var sectionClass = null;
-		if(sectionTitle === "Details" || sectionTitle === "The Job"){
+		if(sectionTitle === "Details"){
 			sectionLabelTableElement = mainLabelsColumn;
 			sectionInputTableElement = mainInputsColumn;
 			sectionClass = "editPostMainSectionTitle";
@@ -105,7 +105,7 @@ function addCreateWorkPost(formDict, formURL, formName){
 				sectionInputTableElement += field.input;
 			}
 		}
-		if(sectionTitle === "Details" || sectionTitle === "The Job"){
+		if(sectionTitle === "Details"){
 			mainLabelsColumn = sectionLabelTableElement;
 			mainInputsColumn = sectionInputTableElement;
 		}else{

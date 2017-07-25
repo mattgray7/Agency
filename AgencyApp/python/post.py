@@ -270,7 +270,10 @@ class GenericCreatePostView(views.PictureFormView):
     @property
     def jobSelectFields(self):
         if self._jobSelectFields is None:
-            self._jobSelectFields = {"names": ["profession"], "options": {"profession": constants.PROFESSIONS}, "defaults": {"profession": "-"}}
+            professionList = []
+            for section in constants.PROFESSIONS:
+                professionList += constants.PROFESSIONS[section]
+            self._jobSelectFields = {"names": ["profession"], "options": {"profession": sorted(professionList)}, "defaults": {"profession": "-"}}
         return self._jobSelectFields
 
     @property

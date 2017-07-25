@@ -22,7 +22,7 @@ class WorkPostInstance(post.GenericPostInstance):
 
     def saveModelFormValues(self):
         if self.record:
-            self.record.profession = self.request.POST.get("professionSelect")
+            self.record.profession = self.request.POST.get("profession")
             self.record.projectID = self.request.POST.get("projectID")
             self.record.paid = self.request.POST.get("paid", False) and True  #get value will be 'true' instead of True
             self.record.paidDescription = self.request.POST.get("paidDescription")
@@ -114,8 +114,8 @@ class ViewWorkPostView(post.GenericViewPostView):
     def job(self):
         if self._job is None:
             try:
-                self._job = models.ProjectJob.objects.get(postID=self.postID)
-            except models.ProjectJob.DoesNotExist:
+                self._job = models.WorkPost.objects.get(postID=self.postID)
+            except models.ProjectWorkPost.DoesNotExist:
                 pass
         return self._job
 
@@ -136,10 +136,10 @@ class ViewWorkPostView(post.GenericViewPostView):
                 self._post = WorkPostInstance(request=self.request, postID=self.postID, postType=constants.WORK_POST)
         return self._post
 
-    def createProjectChild(self):
+    """def createProjectChild(self):
         try:
             newJob = models.ProjectJob.objects.get(postID=self.postID, projectID=self.projectID)
         except models.ProjectJob.DoesNotExist:
             newJob = models.ProjectJob(postID=self.postID, projectID=self.projectID, status="Hiring")
-            newJob.save()
+            newJob.save()"""
 

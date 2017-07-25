@@ -23,6 +23,14 @@
                     }
                 {% endfor %}
             {% endif %}
+            {% if selectFields.jobs.names %}
+                {% for name in selectFields.jobs.names %}
+                    var selectDiv = document.getElementById('{{name}}SelectBar')                    
+                    if(selectDiv != null){
+                        document.getElementById('{{name}}SelectInput').value = selectDiv.value;
+                    }
+                {% endfor %}
+            {% endif %}
             var form = document.getElementById(formName)
             if(form != null){
                 return form.submit()
@@ -181,9 +189,9 @@
                         {% else %}
                             postField.value = tomorrowDateString;
                         {% endif %}
-                    {% elif field.name in selectFields.roles.names %}
-                        {% if selectFields.roles.options %}
-                            var options = {{ selectFields.roles.options|safe }}
+                    {% elif field.name in selectFields.jobs.names %}
+                        {% if selectFields.jobs.options %}
+                            var options = {{ selectFields.jobs.options|safe }}
                             postField.options = options['{{field.name}}']
                         {% endif %}
                     {% endif %}
