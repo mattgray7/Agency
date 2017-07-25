@@ -179,12 +179,12 @@ def savePostPictureInDatabase(request, pictureFieldName, databaseInstance, cropI
                 croppedImage = croppedImage.resize((810, 900), Image.ANTIALIAS)
                 croppedImage.save(databaseInstance.postPicture.path)
 
-                # Rename picture file
-                newPath = os.path.join(os.path.dirname(databaseInstance.postPicture.path), filename)
-                os.rename(databaseInstance.postPicture.path, newPath)
-                databaseInstance.postPicture.name = os.path.join(request.user.username, filename)
-                databaseInstance.save()
-            return True
+            # Rename picture file
+            newPath = os.path.join(os.path.dirname(databaseInstance.postPicture.path), filename)
+            os.rename(databaseInstance.postPicture.path, newPath)
+            databaseInstance.postPicture.name = os.path.join(request.user.username, filename)
+            databaseInstance.save()
+        return True
     return False
 
 def getMessageFromKey(request, key):

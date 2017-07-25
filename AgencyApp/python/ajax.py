@@ -121,11 +121,11 @@ def saveTempPostPicture(request):
         try:
             tempPostPicture = models.TempPostPicture.objects.get(tempID=tempID)
         except models.TempPostPicture.DoesNotExist:
-            # Save the picture
-            tempPostPicture = models.TempPostPicture(tempID=tempID, postPicture=request.FILES.get("postPicture"))
+            # Create the db instance
+            tempPostPicture = models.TempPostPicture(tempID=tempID, username=request.user.username)
             tempPostPicture.save()
 
-            # Add the crop to the picture and re-save
+            # Save the picture with the crop
             cropInfo = {"x": request.POST.get("crop_x"),
                         "y": request.POST.get("crop_y"),
                         "width": request.POST.get("crop_width"),

@@ -24,6 +24,7 @@ def image_directory_path(instance, filename):
           hasattr(instance, "poster")):
         inputString = instance.poster
     else:
+        print "WARNING: Using 'mattgray' as username directory to store image {0}".format(filename)
         inputString = "mattgray"  # Temp for create db objects script
     return u'{0}/{1}'.format(inputString, filename)
 
@@ -114,6 +115,8 @@ class Interest(models.Model):
 class TempPostPicture(models.Model):
     tempID = models.CharField(max_length=10)
     postPicture = models.ImageField(default=None, upload_to=image_directory_path, storage=imageStorage, blank=True, null=True)
+    username = models.CharField(max_length=200)
+
 
 class AbstractPost(models.Model):
     postID = models.CharField(max_length=10)
