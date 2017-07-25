@@ -277,6 +277,14 @@ class PictureFormView(GenericFormView):
         self._pictureModelFieldName = None
         self._cropInfo = {}
         self._filename = None
+        self._sourcePicture = None
+
+
+    @property
+    def sourcePicture(self):
+        if self._sourcePicture is None:
+            self_sourcePicture = self.request.FILES.get(self.pictureModelFieldName)
+        return self._sourcePicture
 
     @property
     def filename(self):
@@ -321,10 +329,10 @@ class PictureFormView(GenericFormView):
                     if self.form.is_valid():
                         self.errorMemory = self.formData
                         if self.processForm():
-                                if self.updatePicturePathAndModel():
-                                    formIsValid = True
-                                else:
-                                    print "Failure saving form image"
+                            if self.updatePicturePathAndModel():
+                                formIsValid = True
+                            else:
+                                print "Failure saving form image"
                         else:
                             print "Failure processing form"
                     else:
@@ -351,19 +359,29 @@ class PictureFormView(GenericFormView):
                               "y": self.request.POST.get("crop_y"),
                               "width": self.request.POST.get("crop_width"),
                               "height": self.request.POST.get("crop_height")}
+            if None in self._cropInfo.values():
+                self._cropInfo = {}
         return self._cropInfo
 
     def updatePicturePathAndModel(self):
         if self.pictureModel:
             # No file but cropInfo means crop existing pic
             # No cropInfo and no file means save None
-            if self.request.FILES.get(self.pictureModelFieldName) or (not self.request.FILES.get(self.pictureModelFieldName) and not self.cropInfo):
+            if self.sourcePicture or (not self.request.FILES.get(self.pictureModelFieldName) and not self.cropInfo):
                 # Save the InMemoryUploadedFile instance in the file field of the model
-                self._pictureModelPictureField = self.request.FILES.get(self.pictureModelFieldName)
+                print "saving picture model picture field"
+                print self.sourcePicture
+                self._pictureModelPictureField = self.sourcePicture
                 self.pictureModel.save()
 
+                if not self.pictureModelPictureField:
+                    print "trying backup"
+                    self.pictureModel.__dict__[self.pictureModelFieldName] = self.sourcePicture
+
             if self.pictureModelPictureField:
+                print "in pic model field"
                 if self.cropInfo:
+                    print self.cropInfo
                     image = Image.open(self.pictureModelPictureField.path)
                     x = float(self.cropInfo.get("x"))
                     y = float(self.cropInfo.get("y"))

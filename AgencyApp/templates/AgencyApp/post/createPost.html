@@ -233,9 +233,42 @@
                 contentType: false,
                 processData: false,
                 success : function(data) {
+                    /*
+
+                    Current status: Need a way to add image from edit image panel into base form if post doesn't exist (aka can't use the ajax function)
+                    Idea: if it fails, take the inputs of the edit image panel and add them into the base form
+
+                    */
                     if(data["success"]){
-                        toggleEditPicturePopup("hide")
                         window.location.reload(false);
+                    }else{
+                        //Addition failed, fallback to adding image to base form
+                        console.log("attempting to save temp picture")
+                        $.ajax({
+                            url : "/ajax/saveTempPostPicture/",
+                            data : formData,
+                            type : 'POST',
+                            dataType: "json",
+                            cache: false,
+                            contentType: false,
+                            processData: false,
+                            success : function(data) {
+                                if(data["success"]){
+                                    console.log("temp picture id is " + data["tempID"])
+                                    toggleEditPicturePopup("hide")
+                                    var baseFormPictureInput = document.getElementById("mainPostPictureInput")
+                                    baseFormPictureInput.innerHTML += "<input type='hidden' name='tempPostPictureID' value='" + data["tempID"] + "'>"
+                                    console.log(baseFormPictureInput.innerHTML)
+                                }
+                            }
+                        });
+
+                        /*var $inputs = $("[id='" + formName + "'] :input");
+                        console.log(formData.get("postPicture"))
+                        postPictureInput.innerHTML = postPictureInput.innerHTML.replace("id_postPicture", "id_postPicture_old")
+
+                        postPictureInput.innerHTML += "<input type='file' name='id_postPicture' value='" + formData.get("postPicture").name + "'>";
+                        console.log(postPictureInput.outerHTML)*/
                     }
                 }
             });

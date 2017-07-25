@@ -111,6 +111,10 @@ class Interest(models.Model):
     def __str__(self):
         return self.professionName
 
+class TempPostPicture(models.Model):
+    tempID = models.CharField(max_length=10)
+    postPicture = models.ImageField(default=None, upload_to=image_directory_path, storage=imageStorage, blank=True, null=True)
+
 class AbstractPost(models.Model):
     postID = models.CharField(max_length=10)
     projectID = models.CharField(max_length=10, blank=True, null=True)

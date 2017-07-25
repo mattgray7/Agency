@@ -104,7 +104,7 @@ def updatePostPicture(request):
     if postID and database:
         try:
             postInstance = database.objects.get(postID=postID)
-        except databse.DoesNotExist:
+        except database.DoesNotExist:
             pass
         else:
             cropInfo = {"x": request.POST.get("crop_x"),
@@ -113,6 +113,25 @@ def updatePostPicture(request):
                         "height": request.POST.get("crop_height")}
             success = helpers.savePostPictureInDatabase(request, "postPicture", postInstance, cropInfo, filename)
     return JsonResponse({"success": success})
+
+def saveTempPostPicture(request):
+    tempID = helpers.createUniqueID(models.TempPostPicture, "tempID")
+    success = False
+    if tempID:
+        try:
+            tempPostPicture = models.TempPostPicture.objects.get(tempID=tempID)
+        except models.TempPostPicture.DoesNotExist:
+            # Save the picture
+            tempPostPicture = models.TempPostPicture(tempID=tempID, postPicture=request.FILES.get("postPicture"))
+            tempPostPicture.save()
+
+            # Add the crop to the picture and re-save
+            cropInfo = {"x": request.POST.get("crop_x"),
+                        "y": request.POST.get("crop_y"),
+                        "width": request.POST.get("crop_width"),
+                        "height": request.POST.get("crop_height")}
+            success = helpers.savePostPictureInDatabase(request, "postPicture", tempPostPicture, cropInfo, "tempPostPicture_{0}.jpg".format(tempID))
+    return JsonResponse({"success": success, "tempID": tempID})
 
 
 
