@@ -33,6 +33,17 @@ class CreateWorkPostView(post.GenericCreatePostView):
     def __init__(self, *args, **kwargs):
         kwargs["postType"] = constants.WORK_POST
         super(CreateWorkPostView, self).__init__(*args, **kwargs)
+        self._worker = None
+
+    @property
+    def worker(self):
+        if self._worker is None:
+            if self.post and self.post.record and self.post.record.status == "Filled":
+                try:
+                    self._worker = models.UserAccount.objects.get(username=self.post.record.workerName)
+                except models.UserAccount.DoesNotExist:
+                    pass
+        return self._worker
 
     @property
     def post(self):
@@ -46,6 +57,7 @@ class CreateWorkPostView(post.GenericCreatePostView):
         self._pageContext = super(CreateWorkPostView, self).pageContext
         self._pageContext["professionList"] = json.dumps(constants.PROFESSIONS)
         self._pageContext["statusOptions"] = constants.WORK_STATUS_LIST
+        self._pageContext["worker"] = self.worker
         self._pageContext["isWork"] = True
         return self._pageContext
 

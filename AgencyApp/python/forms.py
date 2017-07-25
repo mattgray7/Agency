@@ -50,20 +50,31 @@ class CreateEventPostForm(GenericCreatePostForm):
 class CreateProjectPostForm(GenericCreatePostForm):
     pass
 
-class CreateWorkPostForm(GenericCreatePostForm):
-    profession = forms.CharField( max_length=200, required=True)
-    paid = forms.BooleanField(label="Paid", required=False)
-
 class CreateCollaborationPostForm(GenericCreatePostForm):
     collaboratorRole = forms.CharField(widget=forms.HiddenInput, max_length=200, required=True)
 
-class CreateProjectRoleForm(GenericCreatePostForm):
-    roleType = forms.CharField(widget=forms.HiddenInput, max_length=100)
+class CreateWorkPostForm(GenericCreatePostForm):
+    profession = forms.CharField( max_length=200, required=True)
     paid = forms.BooleanField(label="Paid", required=False)
-    username = forms.CharField(widget=forms.HiddenInput, max_length=200, required=False)      # only filled if Cast
-    characterName = forms.CharField(label="Character name", widget=forms.TextInput(attrs={'placeholder': 'Ex: John Smith'}), max_length=200, required=True)
-    shortCharacterDescription = forms.CharField(label="Short description", widget=forms.TextInput(attrs={'placeholder': 'Ex: 40 year old athletic male'}), max_length=200, required=True)
-    #descriptionEnabled = forms.BooleanField(widget=forms.HiddenInput, required=False)
+    postID = forms.CharField(widget=forms.HiddenInput, max_length=10)
+    projectID = forms.CharField(widget=forms.HiddenInput, required=False, max_length=10)
+    poster = forms.CharField(widget=forms.HiddenInput, max_length=200)
+    postPicturePath = forms.CharField(widget=forms.HiddenInput, required=False)
+    postPicture = forms.ImageField(label="Picture", required=False)
+    title = forms.CharField(label="Post Title*", max_length=500, required=True, widget=forms.TextInput(attrs={'placeholder': 'Looking for lead male'}))
+    status = forms.CharField(label="Role Status*", widget=forms.HiddenInput, max_length=50, required=False)
+    shortDescription = forms.CharField(label="Short Description*", widget=forms.TextInput(attrs={'placeholder': '40 year old athletic male'}), max_length=200, required=True)
+    description = forms.CharField(label="Description*", required=True, max_length=5000)
+    paid = forms.BooleanField(label="Paid", required=False)
+    paidDescription = forms.CharField(label="Specify", max_length=100, required=False)
+    workerName = forms.CharField(widget=forms.HiddenInput, max_length=200, required=False)      # only filled if Cast
+    skills = forms.CharField(label="Required Skills", max_length=300, required=False, widget=forms.TextInput(attrs={'placeholder': 'Stage combat, Singing, and Basketball'}))
+    startDate = forms.DateField(label="Start Date*", required=False, widget=forms.DateInput(attrs={'class':'datepicker'}))
+    endDate = forms.DateField(label="End Date*", required=False, widget=forms.DateInput(attrs={'class':'datepicker'}))
+    hoursPerWeek = forms.CharField(label="Hours Per Week", max_length=50, required=False, widget=forms.TextInput(attrs={'placeholder': 'TBD'}))
+    location = forms.CharField(label="Location", max_length=300, widget=forms.TextInput(attrs={'placeholder': 'UBC Campus'}))
+    workerNeedsEquipment = forms.BooleanField(label="Must Provide Equipment", required=False)
+    equipmentDescription = forms.CharField(label="Equipment List", required=True, max_length=300)
 
 class CreateCastingPostForm(BaseForm):
     postID = forms.CharField(widget=forms.HiddenInput, max_length=10)

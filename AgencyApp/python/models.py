@@ -212,14 +212,22 @@ class PostAdmin(models.Model):
     postID = models.CharField(max_length=10)
     username = models.CharField(max_length=10)
 
-class WorkPost(AbstractPost):
-    profession = models.CharField(max_length=200)
-    workerName = models.CharField(max_length=200, blank=True, null=True)      # only filled if status is Filled (vs Hiring)
-    paid = models.BooleanField(default=False)
-    shortDescription = models.CharField(max_length=200, blank=True, null=True)
-
 class CollaborationPost(AbstractPost):
     collaboratorRole = models.CharField(max_length=200)
+
+class WorkPost(AbstractPost):
+    profession = models.CharField(max_length=200)
+    username = models.CharField(max_length=200, blank=True, null=True)      # only filled if status is Filled (vs Hiring)
+    paid = models.BooleanField(default=False)
+    paidDescription = models.CharField(max_length=200, blank=True, null=True)
+    shortDescription = models.CharField(max_length=200, blank=True, null=True)
+    skills = models.CharField(max_length=300, blank=True, null=True)
+    location = models.CharField(max_length=300, blank=True, null=True)
+    startDate = models.DateField(default=None, blank=True, null=True)
+    endDate = models.DateField(default=None, blank=True, null=True)
+    hoursPerWeek = models.TextField(max_length=50, blank=True, null=True, default="TBD")
+    workerNeedsEquipment = models.BooleanField(default=True)
+    equipmentDescription = models.CharField(max_length=500, blank=True, null=True)
 
 class CastingPost(AbstractPost):
     paid = models.BooleanField(default=False)
