@@ -12,12 +12,11 @@ function addCreateWorkPost(formDict, formURL, formName){
 	//var pictureColumn = '<td style="text-align: center; width: 30%;"><div id="postPicturePanel" class="postPicture" style="width: 270px; height: 298px; background: #000; margin-left: 10px; margin-top: 50px;"><img id="postPictureImg" src="' + pictureField.value + '" style="max-width:100%; max-height:100%;"/></div><div style="width: 60%; margin-left: 25%; overflow: hidden;">' + pictureField.input + "</div></td>";
 	var pictureColumn = '<td style="text-align: center; width: 30%;"><div id="postPicturePanel" class="postPicture" style="width: 270px; height: 298px; background: #000; margin-left: 10px; margin-top: 50px;"><img id="postPictureImg" src="' + pictureField.value + '" style="max-width:100%; max-height:100%;"/></div><div style="width: 60%; margin-left: 25%; overflow: hidden;"><a onclick="' + pictureField.editOnclick + '">Edit</a></div><div id="mainPostPictureInput" style="display: none;">' + pictureField.input + '</div></td>';
 
-
 	// Fill text content
-	var sectionMap = {"Details": ["title", "project", "characterType", "status", "startDate", "endDate", "hoursPerWeek", "paid"],
-					  "Character": ["characterName", "shortCharacterDescription", "description", "skills", "languages"],
-					  "Performer": ["actorName"],
-					  "Physical": ["hairColor", "eyeColor", "complexion", "height", "build", "gender", "ageRange"],
+	var sectionMap = {"Details": ["title", "project", "profession", "status", "startDate", "endDate", "hoursPerWeek", "paid"],
+					  "The Job": ["shortDescription", "description", "location", "skills"],
+					  "Worker": ["workerName"],
+					  "Equipment": ["workerNeedsEquipment", "equipmentList"],
 					  "hidden": ["csrf_token", "postID", "source", "next", "destination", "projectID", "poster"]}
 	var mainLabelsColumn = "<td class='editPostLabelPanel' style='width: 20%; position:relative; line-height: 38.2px;'><ul style='margin-bottom: -14px; margin-top: -40px;'>";
 	var mainInputsColumn = "<td class='editPostInputPanel' style='width: 50%; position: relative; line-height: 39px;'><ul style='margin-top: -20px; '>";
@@ -45,8 +44,6 @@ function addCreateWorkPost(formDict, formURL, formName){
 			for(i in fieldList){
 				var fieldName = sectionMap[sectionTitle][i];
 				var field = formDict[fieldName];
-				if(field != null){
-					
 
 				// Add project
 				if(fieldName === "project"){
@@ -57,18 +54,18 @@ function addCreateWorkPost(formDict, formURL, formName){
 						sectionInputTableElement += "<li style='margin-top: 6px;'>None - <a onclick='" + field.addNewOnclick + "'>Add</a></li>";
 					}
 					continue;
-				}else if(fieldName === "actorName"){
+				}else if(fieldName === "workerName"){
 					if(field.value != null && field.value.length > 0){
-						var actorDict = formDict["actor"]
+						var workerDict = formDict["worker"]
 
 						// Add actor text panel
-						if(actorDict.cleanName != null && actorDict.username != null){
+						if(workerDict.cleanName != null && workerDict.username != null){
 							sectionLabelTableElement += "<div style='height: 165px;'></div>";
 							
 							sectionInputTableElement+= "<div style='width: 100%; position: relative; height: 161px;' class='editCastMemberPanel'>"
-							sectionInputTableElement += '<div style="position: absolute; left: 0;"><h2>' + actorDict.cleanName + "</h2></div>";
+							sectionInputTableElement += '<div style="position: absolute; left: 0;"><h2>' + workerDict.cleanName + "</h2></div>";
 							// Add actor profile picture panel
-							sectionInputTableElement += '<div style="position: absolute; right: 0; margin-top: 2px; margin-right: 2px;"><div id="actorPicturePanel" class="postPicture" style="width: 100px; height: 100px; background: #000;"><img id="actorPictureImg" src="' + actorDict.profilePictureURL + '" style="max-width:100%; max-height:100%;"/></div></div>';
+							sectionInputTableElement += '<div style="position: absolute; right: 0; margin-top: 2px; margin-right: 2px;"><div id="actorPicturePanel" class="postPicture" style="width: 100px; height: 100px; background: #000;"><img id="actorPictureImg" src="' + workerDict.profilePictureURL + '" style="max-width:100%; max-height:100%;"/></div></div>';
 						}else{
 							sectionLabelTableElement += "<label for='name'>Search</label><br>";
 
@@ -101,7 +98,6 @@ function addCreateWorkPost(formDict, formURL, formName){
 					sectionInputTableElement += field.input;
 				}
 			}
-			}
 		}else{
 			for(i in fieldList){
 				var fieldName = sectionMap[sectionTitle][i];
@@ -109,7 +105,7 @@ function addCreateWorkPost(formDict, formURL, formName){
 				sectionInputTableElement += field.input;
 			}
 		}
-		if(sectionTitle === "Details" || sectionTitle === "Production"){
+		if(sectionTitle === "Details" || sectionTitle === "The Job"){
 			mainLabelsColumn = sectionLabelTableElement;
 			mainInputsColumn = sectionInputTableElement;
 		}else{
@@ -126,9 +122,9 @@ function addCreateWorkPost(formDict, formURL, formName){
 	// Add title
 	formString += "<tr><td colspan='3' style='text-align: center;'><h1 style='font-size: 2.8em; margin-left: 65px; padding: 0em 0em 0.3em 0em; margin-top: 15px;'>";
 	if(formDict["newPost"]){
-		formString += "Add Role";
+		formString += "Add Job Post";
 	}else{
-		formString += "Edit Role";
+		formString += "Edit Job Post";
 	}
 	formString += "</h1></td></tr>";
 
