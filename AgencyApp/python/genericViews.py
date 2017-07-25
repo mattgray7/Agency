@@ -283,7 +283,7 @@ class PictureFormView(GenericFormView):
     @property
     def sourcePicture(self):
         if self._sourcePicture is None:
-            self_sourcePicture = self.request.FILES.get(self.pictureModelFieldName)
+            self._sourcePicture = self.request.FILES.get(self.pictureModelFieldName)
         return self._sourcePicture
 
     @property
