@@ -258,7 +258,11 @@
                                     toggleEditPicturePopup("hide")
                                     var baseFormPictureInput = document.getElementById("mainPostPictureInput")
                                     baseFormPictureInput.innerHTML += "<input type='hidden' name='tempPostPictureID' value='" + data["tempID"] + "'>"
-                                    console.log(baseFormPictureInput.innerHTML)
+
+                                    var baseFormPicture = document.getElementById("postPictureImg")
+                                    if(baseFormPicture != null && data["pictureURL"].length > 0){
+                                        baseFormPicture.src = data["pictureURL"]
+                                    }
                                 }
                             }
                         });

@@ -131,7 +131,7 @@ def saveTempPostPicture(request):
                         "width": request.POST.get("crop_width"),
                         "height": request.POST.get("crop_height")}
             success = helpers.savePostPictureInDatabase(request, "postPicture", tempPostPicture, cropInfo, "tempPostPicture_{0}.jpg".format(tempID))
-    return JsonResponse({"success": success, "tempID": tempID})
+    return JsonResponse({"success": success, "tempID": tempID, "pictureURL": tempPostPicture.postPicture.url})
 
 
 
