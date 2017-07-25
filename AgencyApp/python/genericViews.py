@@ -359,6 +359,8 @@ class PictureFormView(GenericFormView):
                               "y": self.request.POST.get("crop_y"),
                               "width": self.request.POST.get("crop_width"),
                               "height": self.request.POST.get("crop_height")}
+
+            # Need all 4 values to crop, so if missing any, don't perform the crop
             if None in self._cropInfo.values():
                 self._cropInfo = {}
         return self._cropInfo
@@ -367,21 +369,17 @@ class PictureFormView(GenericFormView):
         if self.pictureModel:
             # No file but cropInfo means crop existing pic
             # No cropInfo and no file means save None
-            if self.sourcePicture or (not self.request.FILES.get(self.pictureModelFieldName) and not self.cropInfo):
+            if self.sourcePicture or (not self.sourcePicture and not self.cropInfo):
                 # Save the InMemoryUploadedFile instance in the file field of the model
-                print "saving picture model picture field"
-                print self.sourcePicture
                 self._pictureModelPictureField = self.sourcePicture
                 self.pictureModel.save()
 
+                # Fall back if source picture does not come from request
                 if not self.pictureModelPictureField:
-                    print "trying backup"
                     self.pictureModel.__dict__[self.pictureModelFieldName] = self.sourcePicture
 
             if self.pictureModelPictureField:
-                print "in pic model field"
                 if self.cropInfo:
-                    print self.cropInfo
                     image = Image.open(self.pictureModelPictureField.path)
                     x = float(self.cropInfo.get("x"))
                     y = float(self.cropInfo.get("y"))

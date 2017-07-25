@@ -363,7 +363,10 @@ class GenericCreatePostView(views.PictureFormView):
             self._formInitialValues["status"] = self.post.record.status
         return self._formInitialValues
 
-    def saveTempPostPicture(self, tempID):
+    def updateSourcePicture(self, tempID):
+        """ Updates the sourcePicture property of the PictureFormView class to use the temp picture 
+        instead of the picture from request.FILES
+        """
         try:
             tempPicture = models.TempPostPicture.objects.get(tempID=tempID)
         except models.TempPostPicture.DoesNotExist:
@@ -371,26 +374,15 @@ class GenericCreatePostView(views.PictureFormView):
         else:
             if tempPicture.postPicture:
                 self._sourcePicture = tempPicture.postPicture
-                print  "source picture set to {0}".format(self.sourcePicture)
-                """database = getPostDatabase(self.postID)
-                try:
-                    newPost = database.objects.get(postID=self.postID)
-                except database.DoesNotExist:
-                    print "No post exists yet"
-                    pass
-                else:
-                    newPost.postPicture = tempPicture.postPicture
-                    newPost.save()
-                    print "Just saved new post with temp picture"""
-
+                return True
+        return False
 
     def processForm(self):
+        # If a temp picture ID exists in the request, update the source picture for the form to use the temp pic
         tempPostPictureID = self.request.POST.get("tempPostPictureID")
         if tempPostPictureID:
-            self.saveTempPostPicture(tempPostPictureID)
-            print "Just saved temp post poic"
-        success = self.post.formIsValid()
-        return success
+            self.updateSourcePicture(tempPostPictureID)
+        return self.post.formIsValid()
 
 
 class GenericViewPostView(views.GenericFormView):
