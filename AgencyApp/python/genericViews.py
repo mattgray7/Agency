@@ -394,4 +394,7 @@ class PictureFormView(GenericFormView):
                 self._pictureModelPictureField.name = os.path.join(self.request.user.username, self.filename)
                 self.pictureModel.save()
                 return True
+            elif not self.sourcePicture:
+                # Should still be a success when no picture is added
+                return True
         return False
