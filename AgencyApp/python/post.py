@@ -191,6 +191,7 @@ class GenericCreatePostView(views.PictureFormView):
         self._pictureModelFieldName = "postPicture"
         self._currentPageURL = None
         self._roleSelectFields = None
+        self._jobSelectFields = None
 
 
     @property
@@ -267,6 +268,12 @@ class GenericCreatePostView(views.PictureFormView):
         return self._roleSelectFields
 
     @property
+    def jobSelectFields(self):
+        if self._jobSelectFields is None:
+            self._jobSelectFields = {"names": ["profession"], "options": {"profession": constants.PROFESSIONS}, "defaults": {"profession": "-"}}
+        return self._jobSelectFields
+
+    @property
     def pageContext(self):
         self._pageContext["post"] = self.post.record
         self._pageContext["project"] = self.project and self.project.record
@@ -279,7 +286,8 @@ class GenericCreatePostView(views.PictureFormView):
         self._pageContext["hideStatus"] = False
         self._pageContext["postType"] = self.post.postType
         self._pageContext["possibleDestinations"] = {"viewPost": constants.VIEW_POST}
-        self._pageContext["selectFields"] = {"roles": self.roleSelectFields}
+        self._pageContext["selectFields"] = {"roles": self.roleSelectFields,
+                                             "jobs": self.jobSelectFields}
         self._pageContext['statusOptions'] = {"roles": constants.CASTING_STATUS_LIST,
                                               "jobs": constants.WORK_STATUS_LIST,
                                               "events": constants.EVENT_STATUS_LIST,

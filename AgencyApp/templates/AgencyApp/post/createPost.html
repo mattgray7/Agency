@@ -162,8 +162,8 @@
                         // Paid description will be on same line as paid
                         save = false;
                     {% elif field.name == "status" %}
-                        {% if statusOptions.roles %}
-                            var options = {{ statusOptions.roles|safe }}
+                        {% if statusOptions.jobs %}
+                            var options = {{ statusOptions.jobs|safe }}
                             postField.options = options;
                         {% endif %}
                     {% elif field.name == "description" %}
@@ -208,18 +208,18 @@
                 postFields["project"] = projectField
 
                 // Add actor
-                var actorField = {"username": "{{actor.username}}", "cleanName": "{{actor.cleanName}}"}
-                {% if actor %}
-                    actorField["username"] = "{{actor.username}}";
-                    actorField["cleanName"] = "{{actor.cleanName}}";
-                    {% if actor.profilePicture %}
-                        actorField.profilePictureURL = '{{actor.profilePicture.url}}';
+                var workerField = {"username": "{{worker.username}}", "cleanName": "{{worker.cleanName}}"}
+                {% if worker %}
+                    workerField["username"] = "{{worker.username}}";
+                    workerField["cleanName"] = "{{worker.cleanName}}";
+                    {% if worker.profilePicture %}
+                        workerField.profilePictureURL = '{{worker.profilePicture.url}}';
                     {% endif %}
                 {% else %}
-                    actorField["username"] = null;
-                    actorField.profilePictureURL = '{{images.noProfilePicture}}';
+                    workerField["username"] = null;
+                    workerField.profilePictureURL = '{{images.noProfilePicture}}';
                 {% endif %}
-                postFields["actor"] = actorField;
+                postFields["worker"] = workerField;
 
                 // Add csrf token
                 var csrfField = {"name": "csrf_token", "input": "{% csrf_token %}", "hidden": true};

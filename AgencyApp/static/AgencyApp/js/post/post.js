@@ -10,24 +10,24 @@ function addCreateWorkPost(formDict, formURL, formName){
 	// Fill post picture string
 	var pictureField = formDict["postPicture"];
 	//var pictureColumn = '<td style="text-align: center; width: 30%;"><div id="postPicturePanel" class="postPicture" style="width: 270px; height: 298px; background: #000; margin-left: 10px; margin-top: 50px;"><img id="postPictureImg" src="' + pictureField.value + '" style="max-width:100%; max-height:100%;"/></div><div style="width: 60%; margin-left: 25%; overflow: hidden;">' + pictureField.input + "</div></td>";
-	var pictureColumn = '<td style="text-align: center; width: 30%;"><div id="postPicturePanel" class="postPicture" style="width: 270px; height: 298px; background: #000; margin-left: 10px; margin-top: 50px;"><img id="postPictureImg" src="' + pictureField.value + '" style="max-width:100%; max-height:100%;"/></div><div style="width: 60%; margin-left: 25%; overflow: hidden;"><a onclick="' + pictureField.editOnclick + '">Edit</a></div><div id="mainPostPictureInput" style="display: none;">' + pictureField.input + '</div></td>';
+	var pictureColumn = '<td style="text-align: center; width: 30%; min-width: 270px; position: relative;"><div style="position:absolute; width: 270px; top: 0;"><div id="postPicturePanel" class="postPicture" style="width: 270px; height: 298px; background: #000; margin-left: 10px; margin-top: 47px;"><img id="postPictureImg" src="' + pictureField.value + '" style="max-width:100%; max-height:100%;"/></div><div style="width: 60%; margin-left: 25%; overflow: hidden;"><a onclick="' + pictureField.editOnclick + '">Edit</a></div><div id="mainPostPictureInput" style="display: none;">' + pictureField.input + '</div></div></td>';
 
 	// Fill text content
 	var sectionMap = {"Details": ["title", "project", "profession", "status", "startDate", "endDate", "hoursPerWeek", "paid"],
 					  "The Job": ["shortDescription", "description", "location", "skills"],
 					  "Worker": ["workerName"],
-					  "Equipment": ["workerNeedsEquipment", "equipmentList"],
+					  "Equipment": ["workerNeedsEquipment", "equipmentDescription"],
 					  "hidden": ["csrf_token", "postID", "source", "next", "destination", "projectID", "poster"]}
 	var mainLabelsColumn = "<td class='editPostLabelPanel' style='width: 20%; position:relative; line-height: 38.2px;'><ul style='margin-bottom: -14px; margin-top: -40px;'>";
 	var mainInputsColumn = "<td class='editPostInputPanel' style='width: 50%; position: relative; line-height: 39px;'><ul style='margin-top: -20px; '>";
-	var otherLabelsColumn = "<td class='editPostLabelPanel' style='width: 30%; min-width: 170px; height: 600px; position:relative;'><ul style='margin-top: 5px;'>";
+	var otherLabelsColumn = "<td class='editPostLabelPanel' style='width: 30%; min-width: 170px; position:relative;'><ul style='margin-top: 5px;'>";
 	var otherInputsColumn = "<td class='editPostInputPanel' colspan='2' style='width: 70%;'><div style='margin-top: -6px;'><ul>";
 	for(sectionTitle in sectionMap){
 		var fieldList = sectionMap[sectionTitle];
 		var sectionInputTableElement = null;
 		var sectionLabelTableElement = null;
 		var sectionClass = null;
-		if(sectionTitle === "Details" || sectionTitle === "Production"){
+		if(sectionTitle === "Details" || sectionTitle === "The Job"){
 			sectionLabelTableElement = mainLabelsColumn;
 			sectionInputTableElement = mainInputsColumn;
 			sectionClass = "editPostMainSectionTitle";

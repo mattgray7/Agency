@@ -62,7 +62,7 @@ class CreateWorkPostForm(GenericCreatePostForm):
     postPicturePath = forms.CharField(widget=forms.HiddenInput, required=False)
     postPicture = forms.ImageField(label="Picture", required=False)
     title = forms.CharField(label="Post Title*", max_length=500, required=True, widget=forms.TextInput(attrs={'placeholder': 'Looking for lead male'}))
-    status = forms.CharField(label="Role Status*", widget=forms.HiddenInput, max_length=50, required=False)
+    status = forms.CharField(label="Job Status*", widget=forms.HiddenInput, max_length=50, required=False)
     shortDescription = forms.CharField(label="Short Description*", widget=forms.TextInput(attrs={'placeholder': '40 year old athletic male'}), max_length=200, required=True)
     description = forms.CharField(label="Description*", required=True, max_length=5000)
     paid = forms.BooleanField(label="Paid", required=False)
