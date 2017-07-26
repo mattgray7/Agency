@@ -217,7 +217,7 @@ class CollaborationPost(AbstractPost):
 
 class WorkPost(AbstractPost):
     profession = models.CharField(max_length=200)
-    username = models.CharField(max_length=200, blank=True, null=True)      # only filled if status is Filled (vs Hiring)
+    workerName = models.CharField(max_length=200, blank=True, null=True)      # only filled if status is Filled (vs Hiring)
     paid = models.BooleanField(default=False)
     paidDescription = models.CharField(max_length=200, blank=True, null=True)
     shortDescription = models.CharField(max_length=200, blank=True, null=True)
@@ -233,7 +233,6 @@ class CastingPost(AbstractPost):
     paid = models.BooleanField(default=False)
     paidDescription = models.CharField(max_length=200, blank=True, null=True)
     descriptionEnabled = models.BooleanField(default=False)
-    username = models.CharField(max_length=200, blank=True, null=True)      # only filled if Cast
     roleType = models.CharField(max_length=100, default="Acting", blank=True, null=True)
     actorName = models.CharField(max_length=200, blank=True, null=True)
     characterName = models.CharField(max_length=200)
