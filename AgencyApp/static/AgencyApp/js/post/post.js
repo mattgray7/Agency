@@ -2,6 +2,26 @@ function addSelectProjectForm(postID, username){
 
 }
 
+   function togglePopup(toggleType, overlayDivID, contentDivID){
+        var overlay = document.getElementById(overlayDivID);
+        var contentBox = document.getElementById(contentDivID);
+        if(overlay && contentBox){
+            if(toggleType === "show"){
+                overlay.style.height = "1500px";
+                overlay.style.width = "118%";
+                overlay.style.background = "rgba(0,0,0,0.5)"
+                contentBox.style.display = "block";
+                contentBox.style.background = "rgba(255,255,255,1)"
+            }else if(toggleType === "hide"){
+                overlay.style.background = "rgba(0,0,0,0)"
+                overlay.style.height = "0%"
+                overlay.style.width = "0%"
+                contentBox.style.display = "none";
+                contentBox.style.background = "rgba(255,255,255,0)"
+            }
+        }
+}
+
 function getErrorPanel(errors){
 	var panelString = "<div class='errorPanel'><div style='text-align: left; margin-top: 5px; margin-left: 5px;'><h3 style='margin-bottom: 5px;'>One or more errors occurred:</h3><div><ul>"
 	for(var errorType in errors){
@@ -176,7 +196,7 @@ function addCreateCastingPost(formDict, formURL, formName){
 	// Fill post picture string
 	var pictureField = formDict["postPicture"];
 	//var pictureColumn = '<td style="text-align: center; width: 30%;"><div id="postPicturePanel" class="postPicture" style="width: 270px; height: 298px; background: #000; margin-left: 10px; margin-top: 50px;"><img id="postPictureImg" src="' + pictureField.value + '" style="max-width:100%; max-height:100%;"/></div><div style="width: 60%; margin-left: 25%; overflow: hidden;">' + pictureField.input + "</div></td>";
-	var pictureColumn = '<td style="text-align: center; width: 30%;"><div id="postPicturePanel" class="postPicture" style="width: 270px; height: 298px; background: #000; margin-left: 10px; margin-top: 50px;"><img id="postPictureImg" src="' + pictureField.value + '" style="max-width:100%; max-height:100%;"/></div><div style="width: 60%; margin-left: 25%; overflow: hidden;"><a onclick="' + pictureField.editOnclick + '">Edit</a></div><div id="mainPostPictureInput" style="display: none;">' + pictureField.input + '</div></td>';
+	var pictureColumn = '<td style="text-align: center; width: 30%;"><div id="postPicturePanel" class="postPicture" style="width: 270px; height: 298px; background: #000; margin-left: 10px; margin-top: 50px;"><img id="postPictureImg" src="' + pictureField.value + '" style="max-width:100%; max-height:100%;"/></div><div style="width: 60%; margin-left: 22%; overflow: hidden;"><a onclick="' + pictureField.editOnclick + '">Edit</a></div><div id="mainPostPictureInput" style="display: none;">' + pictureField.input + '</div></td>';
 
 
 	// Fill text content
