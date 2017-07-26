@@ -39,6 +39,7 @@
 
         function createValueDictFromForm(){
             var postFields = {};
+            var errors = [];
             {% if form %}
                 {% spaceless %}
                 {% for field in form %}
@@ -104,9 +105,27 @@
                         }
                         postFields['{{field.name}}'] = postField;
                     }
+
+                    // Add field errors
+                    {% if field.errors %}
+                        {% for error in field.errors %}
+                            var errorString = '{{error}}';
+                            var fieldDisplayName = postField.label.toLowerCase().replace("*", "");
+
+                            if(errorString.indexOf(postField.name) < 0){
+                                // Add field to error string
+                                errorString = errorString.substring(0, errorString.length - 1)
+                                errorString += ": " + fieldDisplayName;
+                            }else{
+                                errorString = errorString.replace(postField.name, fieldDisplayName);
+                            }
+                            errors.push(errorString);
+                        {% endfor %}
+                    {% endif %}
                 {% endfor %}
                 {% endspaceless %}
             {% endif %}
+
             // Add project
             var projectField = {"name": "project"}
             {% if project and project.title %}
@@ -134,10 +153,10 @@
                 postFields["newPost"] = false;
             {% endif %}
 
-            {% if errors %}
-                postFields["errors"] = '{{errors}}';
+            if(errors.length > 0){
+                postFields["errors"] = errors;
                 console.log(postFields["errors"])
-            {% endif %}
+            }
 
             return postFields;
         }

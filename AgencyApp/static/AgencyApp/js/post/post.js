@@ -148,6 +148,11 @@ function addCreateCastingPost(formDict, formURL, formName){
 	var formString = "<form method='post' action='" + formURL + "' id='" + formName + "' class='form-style-1' style='width: 90%; background: none; margin-left: 3.2%;' enctype='multipart/form-data'>";
 	formString += "<table style='width: 100%;'><tr>"
 
+	if(formDict["errors"]){
+		console.log("There are errors")
+		formString += "<td>" + formDict["errors"] + "</td></tr><tr>";
+	}
+
 	// Fill post picture string
 	var pictureField = formDict["postPicture"];
 	//var pictureColumn = '<td style="text-align: center; width: 30%;"><div id="postPicturePanel" class="postPicture" style="width: 270px; height: 298px; background: #000; margin-left: 10px; margin-top: 50px;"><img id="postPictureImg" src="' + pictureField.value + '" style="max-width:100%; max-height:100%;"/></div><div style="width: 60%; margin-left: 25%; overflow: hidden;">' + pictureField.input + "</div></td>";
