@@ -237,11 +237,15 @@
         setPictureID(pictureID);
         setDefaultImageURL("{{images.loading.light}}")
 
-        {% if post and post.postPicture and post.postPicture.url %}
-            pictureURL = "{{post.postPicture.url}}"
-        {% else %}
-            pictureURL = "{{images.noPicture}}"
-        {% endif %}
+        if(!newPicture){
+            {% if post and post.postPicture and post.postPicture.url %}
+                pictureURL = "{{post.postPicture.url}}"
+            {% else %}
+                pictureURL = "{{images.noPicture}}"
+            {% endif %}
+        }else{
+            pictureURL = newPicture.src;
+        }
         setNewPictureObject(pictureURL)
 
         $("#editPostPictureImage").change(function(){
@@ -304,6 +308,7 @@
 
     function submitPictureForm(formName){
         var updateButton = document.getElementById("updatePictureButton")
+        var updateButtonHTML = updateButton.innerHTML;
         updateButton.innerHTML = "<img id='loadingGif' src='{{images.loading.mid}}' style='position: absolute; height: 60px; width: 60px; margin-top: -15px;'>"
 
         var form = addCropToPictureForm(formName, "cropInfoInputs")
@@ -334,6 +339,7 @@
                                 if(data["success"]){
                                     // Add the temp picture to the base form (input and display)
                                     addPopupPictureToBaseForm(data["tempID"], data["pictureURL"])
+                                    updateButton.innerHTML = updateButtonHTML;
                                     toggleEditPicturePopup("hide")
                                 }
                             }
