@@ -212,6 +212,7 @@
     function addEditImageContent(containerID){
         var pictureID = "editPostPicture";
         var pictureURL = "";
+        setButtonLoadingGifURL("{{images.loading.mid}}")
         setDoesPictureExist("{{post.postPicture}}")
         setPictureID(pictureID);
         setDefaultImageURL("{{images.loading.light}}")
@@ -246,33 +247,6 @@
 
     }
 
-    function toggleSelectProjectPopup(toggleType){
-        togglePopup(toggleType, "hiddenGrayPopupOverlay", "selectProjectPanel");
-    }
-
-    function toggleEditPicturePopup(toggleType){
-        togglePopup(toggleType, "hiddenGrayPopupOverlay", "editPicturePanel")
-        if(toggleType === "show"){
-            addEditImageContent("editPicturePanel");
-        }
-    }
-
-    function addPopupPictureToBaseForm(tempPictureID, tempPictureURL){
-        var baseFormPictureInput = document.getElementById("mainPostPictureInput")
-        baseFormPictureInput.innerHTML = "<input type='hidden' name='tempPostPictureID' value='" + tempPictureID + "'>"
-
-        return setBaseFormPicture(tempPictureURL);
-    }
-
-    function setBaseFormPicture(pictureURL){
-        var baseFormPicture = document.getElementById("postPictureImg")
-        if(baseFormPicture != null && pictureURL.length > 0){
-            baseFormPicture.src = pictureURL
-            return true;
-        }
-        return false;
-    }
-
     function removePicture(){
         $.ajax({
             url : "/ajax/deletePostPicture/",
@@ -290,37 +264,9 @@
             }
         });
     }
-
-    function submitPictureForm(formName){
-        var updateButton = document.getElementById("updatePictureButton")
-        var updateButtonHTML = updateButton.innerHTML;
-        updateButton.innerHTML = "<img id='loadingGif' src='{{images.loading.mid}}' style='position: absolute; height: 60px; width: 60px; margin-top: -15px;'>"
-
-        var form = addCropToPictureForm(formName, "cropInfoInputs")
-        var formData = new FormData(form)
-        if(form != null){
-            $.ajax({
-                url : "/ajax/saveTempPostPicture/",
-                data : formData,
-                type : 'POST',
-                dataType: "json",
-                cache: false,
-                contentType: false,
-                processData: false,
-                success : function(data) {
-                    if(data["success"]){
-                        // Add the temp picture to the base form (input and display)]
-                        addPopupPictureToBaseForm(data["tempID"], data["pictureURL"])
-                        updateButton.innerHTML = updateButtonHTML;
-                        toggleEditPicturePopup("hide")
-                    }
-                }
-            });
-        }
-    }
-
-
 </script>
+
+
 <div id="mainViewPanel" class="mainViewPanel" style="display:block; display: relative">
     <div id="hiddenGrayPopupOverlay" class="hiddenGrayPopupOverlay" style="background: rgba(0,0,0,0); height:0%; width:0%; position: absolute; top:0; z-index: 3">
         <div style="position: relative; height: 100%;"><div id="selectProjectPanel" class="popupContentPanel" style="width: 80%; height: 400px; display: none; position: fixed; top: 10%; left: 10%;" onclick="toggleSelectProjectPopup('hide', 'asdasds');"></div></div>

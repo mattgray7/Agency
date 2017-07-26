@@ -63,6 +63,7 @@
     function addEditImageContent(containerID){
         var pictureID = "editPostPicture";
         var pictureURL = "";
+        setButtonLoadingGifURL("{{images.loading.mid}}");
         setDoesPictureExist("")
         setPictureID(pictureID);
         setDefaultImageURL("{{images.loading.light}}")
@@ -97,16 +98,6 @@
 
     }
 
-    function toggleSelectProjectPopup(toggleType){
-        togglePopup(toggleType, "hiddenGrayPopupOverlay", "selectProjectPanel");
-    }
-
-    function toggleEditPicturePopup(toggleType){
-        togglePopup(toggleType, "hiddenGrayPopupOverlay", "editPicturePanel")
-        if(toggleType === "show"){
-            addEditImageContent("editPicturePanel");
-        }
-    }
 
         function getCastingFormDict(existingPosts){
             var postFields = {}
@@ -163,6 +154,7 @@
             {% endif %}
             return postFields;
         }
+
         function createPostField(existingPosts, name, value, label, input){
             var save = true;
             var postField = {"name": name, "value": value, "hidden": (input.includes('hidden')), "label": label, 'input': input}
