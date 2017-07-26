@@ -61,56 +61,9 @@
             {% if forms.role %}
                 {% spaceless %}
                 {% for field in forms.role %}
-                    var save = true;
-                    var postField = {"name": '{{field.name}}', "value": '{{field.value}}', "hidden": ('{{field}}'.includes('hidden')), "label": '{{field.label}}', 'input': '{{field}}'}
-                    {% if field.name == "projectID" %}
-                        postField.value = "{{post.projectID}}";
-                    {% elif field.name == "postID" %}
-                        postField.value = getNewPostID("casting")
-                    {% elif field.name == "postPicture" %}
-                        postField.value = "{{images.noPicture}}";
-                    {% elif field.name == "paid" %}
-                        var currentInput = postField.input;
-                        var paidDescription = '{{post.paidDescription}}'
-                        if(paidDescription === "None"){
-                            paidDescription = ''
-                        }
-                        postField.input = "<div style='position: relative; margin-top: -5px;'>" + currentInput + "<div style='position: absolute; top: 0; right: 0; margin-top: 6px; width: 90%; text-align: right;'><div style='position: relative;'> <div style='position: absolute; left: 0;' class='editPostLabelPanel'>Specify </div><div style='position: absolute; right: 0; width: 74%; margin-right: 5px; margin-top: -3px;'><input type='text' name='paidDescription' value='" + paidDescription + "' style='display: inline; margin-top: -10px;'></div></div></div>"
-                    {% elif field.name == "paidDescription" %}
-                        // Paid description will be on same line as paid
-                        save = false;
-                    {% elif field.name == "status" %}
-                        {% if statusOptions.roles %}
-                            var options = {{ statusOptions.roles|safe }}
-                            postField.options = options;
-                        {% endif %}
-                    {% elif field.name == "description" %}
-                        postField.numRows = 20;
-                        {% if not field.value %}
-                            postField.value = "";
-                        {% endif %}
-                    {% elif field.name == "poster" %}
-                        postField.value = "{{ request.user.username }}"
-                        postField.input = postField.input.replace('name="poster"', 'name="poster" value="' + postField.value + '"')
-                    {% elif field.name == "startDate" or field.name == "endDate" %}
-                        postField.input = postField.input.replace('type="text"', 'type="date"')
-                        {% if field.name == "startDate" %}
-                            postField.value = currentDateString
-                        {% else %}
-                            postField.value = tomorrowDateString;
-                        {% endif %}
-                    {% elif field.name in selectFields.roles.names %}
-                        {% if selectFields.roles.options %}
-                            var options = {{ selectFields.roles.options|safe }}
-                            postField.options = options['{{field.name}}']
-                        {% endif %}
-                    {% endif %}
-                    if(save){
-                        // If value was added but it's not in input, add it (TODO change value in input if it is already there)
-                        if(postField.input.indexOf("value=") < 0 && postField.value.length > 0 && postField.value != "None"){
-                            postField.input = postField.input.replace(">", " value='" + postField.value + "'>")
-                        }
-                        postFields['{{field.name}}'] = postField;
+                    var postField = createPostField(existingPosts, '{{field.name}}', '{{field.value}}', '{{field.label}}', '{{field}}')
+                    if(postField != null){
+                        postFields[postField.name] = postField;
                     }
                 {% endfor %}
                 {% endspaceless %}
@@ -158,6 +111,136 @@
             {% endif %}
             return postFields;
         }
+        function createPostField(existingPosts, name, value, label, input){
+            var save = true;
+            var postField = {"name": name, "value": value, "hidden": (input.includes('hidden')), "label": label, 'input': input}
+
+            var statusOptions;
+            {% if statusOptions %}
+                statusOptions = {{ statusOptions|safe }}
+            {% endif %}
+
+            var selectFields;
+            {% if selectFields %};
+                selectFields = {{ selectFields|safe }};
+            {% endif %}
+
+
+            if(postField.name == "projectID"){
+                postField.value = "{{post.projectID}}";
+            }else if(postField.name == "postID"){
+                postField.value = getNewPostID("casting");
+            }else if(postField.name == "postPicture"){
+                postField.value = "{{images.noPicture}}";
+                console.log()
+                //postField.editOnclick = "toggleEditPicturePopup('show')";
+            }else if(postField.name == "paid"){
+                var currentInput = postField.input;
+                var paidDescription = '{{post.paidDescription}}'
+                if(paidDescription === "None"){
+                    paidDescription = ''
+                }
+                postField.input = "<div style='position: relative; margin-top: -5px;'>" + currentInput + "<div style='position: absolute; top: 0; right: 0; margin-top: 6px; width: 90%; min-width: 180px; text-align: right;'><div style='position: relative;'> <div style='position: absolute; left: 0;' class='editPostLabelPanel'>Specify </div><div style='position: absolute; left: 0; right: 0; margin-right: 3px; margin-left: 68px; margin-top: -3px;'><input type='text' name='paidDescription' value='" + paidDescription + "' style='display: inline; margin-top: -10px;'></div></div></div>"
+            }else if(postField.name == "paidDescription"){
+                // Paid description will be on same line as paid
+                save = false;
+            }else if(postField.name == "status"){
+                var options = [];
+                if("roles" in statusOptions && activeTab == "roles"){
+                    options = {{ statusOptions.roles|safe }}
+                }else if("jobs" in statusOptions && activeTab == "jobs"){
+                    options = {{ statusOptions.jobs|safe }}
+                }
+                postField.options = options;
+            }else if(postField.name == "description"){
+                postField.numRows = 20;
+                {% if not postField.value %}
+                    postField.value = "";
+                {% endif %}
+                {% if activeTab == "roles" %}
+                    postField["placeholder"] = "John is a charismatic father of 2 who loves his dogs."
+                {% elif activeTab == "jobs" %}
+                    postField["placeholder"] = 'The hiree must be able to handle all camera operations for all set days. They will be compensated at an hourly rate, with potential for reshoots after primary production.';
+                {% endif %}
+            }else if(postField.name == "poster"){
+                postField.value = "{{ request.user.username }}"
+                postField.input = postField.input.replace('name="poster"', 'name="poster" value="' + postField.value + '"')
+            }else if(postField.name == "startDate" || postField.name == "endDate"){
+                postField.input = postField.input.replace('type="text"', 'type="date"')
+                {% if postField.name == "startDate" %}
+                    postField.value = currentDateString
+                {% else %}
+                    postField.value = tomorrowDateString;
+                {% endif %}
+            }
+
+            if(selectFields != null){
+                var roleSelectFields = {{ selectFields.roles.names|safe }};
+                var jobSelectFields = {{ selectFields.jobs.names|safe }}
+                if(roleSelectFields.indexOf(name) >= 0 && activeTab == "roles"){
+                    {% if selectFields.roles.options %}
+                        var options = {{ selectFields.roles.options|safe }}
+                        postField.options = options[postField.name]
+                    {% endif %}
+                }else if(jobSelectFields.indexOf(name) >= 0 && activeTab == "jobs"){
+                    {% if selectFields.jobs.options %}
+                        var options = {{ selectFields.jobs.options|safe }}
+                        postField.options = options[postField.name]
+                    {% endif %}
+                }
+            }
+            if(save){
+                // If value was added but it's not in input, add it (TODO change value in input if it is already there)
+                if(postField.input.indexOf("value=") < 0 && postField.value.length > 0 && postField.value != "None"){
+                    postField.input = postField.input.replace(">", " value='" + postField.value + "'>")
+                }
+                return postField;
+            }
+        return null;
+    }
+
+                    /*// Add field errors
+                    {% if field.errors %}
+                        {% for error in field.errors %}
+                            var errorString = '{{error}}';
+                            var fieldDisplayName = postField.label.replace("*", "");
+
+                            // Want to group all fields with the same error
+                            if(errorString ===  "This field is required."){
+                                errors["required"].push(fieldDisplayName);
+                            }
+                        {% endfor %}
+                    {% endif %}*/
+
+            
+
+            /*if(errors["required"].length > 0){
+                postFields["errors"] = errors;
+                console.log(postFields["errors"])
+            }
+
+            return postFields;
+        }
+
+        function getCastingFormDict(){
+            var postFields = createValueDictFromForm()
+
+            // Add actor
+            var actorField = {"username": "{{actor.username}}", "cleanName": "{{actor.cleanName}}"}
+            {% if actor %}
+                actorField["username"] = "{{actor.username}}";
+                actorField["cleanName"] = "{{actor.cleanName}}";
+                {% if actor.profilePicture %}
+                    actorField.profilePictureURL = '{{actor.profilePicture.url}}';
+                {% endif %}
+            {% else %}
+                actorField["username"] = null;
+                actorField.profilePictureURL = '{{images.noProfilePicture}}';
+            {% endif %}
+            postFields["actor"] = actorField;
+
+            return postFields;
+        }*/
 
     function submitProjectSubForm(formName){
         // Submits the form while adding values of select bars with id '{{name}}SelectBar' to form input '{{name}}SelectInput'

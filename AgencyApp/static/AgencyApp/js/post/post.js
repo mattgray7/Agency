@@ -211,6 +211,9 @@ function addCreateCastingPost(formDict, formURL, formName){
 			for(i in fieldList){
 				var fieldName = sectionMap[sectionTitle][i];
 				var field = formDict[fieldName];
+				if(!field){
+					continue;
+				}
 
 				// Add project
 				if(fieldName === "project"){
@@ -269,6 +272,9 @@ function addCreateCastingPost(formDict, formURL, formName){
 			for(i in fieldList){
 				var fieldName = sectionMap[sectionTitle][i];
 				var field = formDict[fieldName];
+				if(!field){
+					continue;
+				}
 				sectionInputTableElement += field.input;
 			}
 		}
