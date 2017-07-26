@@ -2,6 +2,26 @@ function addSelectProjectForm(postID, username){
 
 }
 
+function getErrorPanel(errors){
+	var panelString = "<div class='errorPanel'><div style='text-align: left; margin-top: 5px; margin-left: 5px;'><h3 style='margin-bottom: 5px;'>One or more errors occurred:</h3><div><ul>"
+	for(var errorType in errors){
+		fieldNames = errors[errorType]
+		var errorString = "";
+
+		// TODO other error types that could popup
+		if(errorType == "required"){
+			errorString += "<li> The following fields are required: ";
+			for(var i=0; i < fieldNames.length; i++){
+				errorString += fieldNames[i] + ", ";
+			}
+			// Remove trailing ', '
+			errorString = errorString.substring(0, errorString.length-2) + "</li>";
+			panelString += errorString;
+		}
+	}
+	panelString += "</ul></div></div>";
+	return panelString;
+}
 
 function addCreateWorkPost(formDict, formURL, formName){
 	var formString = "<form method='post' action='" + formURL + "' id='" + formName + "' class='form-style-1' style='width: 90%; background: none; margin-left: 3.2%;' enctype='multipart/form-data'>";
@@ -130,23 +150,7 @@ function addCreateWorkPost(formDict, formURL, formName){
 
 	// Add error panel
 	if(formDict["errors"]){
-		formString += "<tr><td colspan='3'><div class='errorPanel'><div style='text-align: left; margin-top: 5px; margin-left: 5px;'><h3 style='margin-bottom: 5px;'>One or more errors occurred:</h3><div><ul>"
-		for(var errorType in formDict["errors"]){
-			fieldNames = formDict["errors"][errorType]
-			var errorString = "";
-
-			// TODO other error types that could popup
-			if(errorType == "required"){
-				errorString += "<li> The following fields are required: ";
-				for(var i=0; i < fieldNames.length; i++){
-					errorString += fieldNames[i] + ", ";
-				}
-				// Remove trailing ', '
-				errorString = errorString.substring(0, errorString.length-2) + "</li>";
-				formString += errorString;
-			}
-		}
-		formString += "</ul></div></div></td></tr>";
+		formString += "<tr><td colspan='3'>" + getErrorPanel(formDict["errors"]) + "</td></tr>";
 	}
 
 	// Create the form
@@ -293,23 +297,7 @@ function addCreateCastingPost(formDict, formURL, formName){
 
 	// Add error panel
 	if(formDict["errors"]){
-		formString += "<tr><td colspan='3'><div class='errorPanel'><div style='text-align: left; margin-top: 5px; margin-left: 5px;'><h3 style='margin-bottom: 5px;'>One or more errors occurred:</h3><div><ul>"
-		for(var errorType in formDict["errors"]){
-			fieldNames = formDict["errors"][errorType]
-			var errorString = "";
-
-			// TODO other error types that could popup
-			if(errorType == "required"){
-				errorString += "<li> The following fields are required: ";
-				for(var i=0; i < fieldNames.length; i++){
-					errorString += fieldNames[i] + ", ";
-				}
-				// Remove trailing ', '
-				errorString = errorString.substring(0, errorString.length-2) + "</li>";
-				formString += errorString;
-			}
-		}
-		formString += "</ul></div></div></td></tr>";
+		formString += "<tr><td colspan='3'>" + getErrorPanel(formDict["errors"]) + "</td></tr>";
 	}
 
 	// Create the form
