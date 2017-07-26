@@ -128,6 +128,27 @@ function addCreateWorkPost(formDict, formURL, formName){
 	}
 	formString += "</h1></td></tr>";
 
+	// Add error panel
+	if(formDict["errors"]){
+		formString += "<tr><td colspan='3'><div class='errorPanel'><div style='text-align: left; margin-top: 5px; margin-left: 5px;'><h3 style='margin-bottom: 5px;'>One or more errors occurred:</h3><div><ul>"
+		for(var errorType in formDict["errors"]){
+			fieldNames = formDict["errors"][errorType]
+			var errorString = "";
+
+			// TODO other error types that could popup
+			if(errorType == "required"){
+				errorString += "<li> The following fields are required: ";
+				for(var i=0; i < fieldNames.length; i++){
+					errorString += fieldNames[i] + ", ";
+				}
+				// Remove trailing ', '
+				errorString = errorString.substring(0, errorString.length-2) + "</li>";
+				formString += errorString;
+			}
+		}
+		formString += "</ul></div></div></td></tr>";
+	}
+
 	// Create the form
 	formString += "<tr>" + mainLabelsColumn + mainInputsColumn + pictureColumn + "</tr>"
 	formString += "<tr>" + otherLabelsColumn + otherInputsColumn + "</tr></form>"
@@ -147,11 +168,6 @@ function addCreateWorkPost(formDict, formURL, formName){
 function addCreateCastingPost(formDict, formURL, formName){
 	var formString = "<form method='post' action='" + formURL + "' id='" + formName + "' class='form-style-1' style='width: 90%; background: none; margin-left: 3.2%;' enctype='multipart/form-data'>";
 	formString += "<table style='width: 100%;'><tr>"
-
-	if(formDict["errors"]){
-		console.log("There are errors")
-		formString += "<td>" + formDict["errors"] + "</td></tr><tr>";
-	}
 
 	// Fill post picture string
 	var pictureField = formDict["postPicture"];
@@ -274,6 +290,27 @@ function addCreateCastingPost(formDict, formURL, formName){
 		formString += "Edit Role";
 	}
 	formString += "</h1></td></tr>";
+
+	// Add error panel
+	if(formDict["errors"]){
+		formString += "<tr><td colspan='3'><div class='errorPanel'><div style='text-align: left; margin-top: 5px; margin-left: 5px;'><h3 style='margin-bottom: 5px;'>One or more errors occurred:</h3><div><ul>"
+		for(var errorType in formDict["errors"]){
+			fieldNames = formDict["errors"][errorType]
+			var errorString = "";
+
+			// TODO other error types that could popup
+			if(errorType == "required"){
+				errorString += "<li> The following fields are required: ";
+				for(var i=0; i < fieldNames.length; i++){
+					errorString += fieldNames[i] + ", ";
+				}
+				// Remove trailing ', '
+				errorString = errorString.substring(0, errorString.length-2) + "</li>";
+				formString += errorString;
+			}
+		}
+		formString += "</ul></div></div></td></tr>";
+	}
 
 	// Create the form
 	formString += "<tr>" + mainLabelsColumn + mainInputsColumn + pictureColumn + "</tr>"
