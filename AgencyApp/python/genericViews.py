@@ -97,7 +97,7 @@ class GenericView(object):
     @property
     def pageErrors(self):
         "TODO"
-        return self._pageErrors
+        return self.errorMemory
 
     @property
     def sourcePage(self):
@@ -169,7 +169,7 @@ class GenericView(object):
         # !!!!!!!!!! Don't delete
         self.pageContext
         # !!!!!!!!!!
-        if self._pageErrors:
+        if self.pageErrors:
             self._pageContext["errors"] = self.pageErrors
         print "source :{0}, current: {1}, dest: {2}".format(self.sourcePage, self.currentPage, self.destinationPage)
         return render(self.request, self.currentPageHtml, self.pageContext)
@@ -259,7 +259,7 @@ class GenericFormView(GenericView):
         self.formInitialValues
         # !!!!!!!!!!
         self._pageContext["form"] = self.form
-        if self._pageErrors:
+        if self.pageErrors:
             self._pageContext["errors"] = self.pageErrors
         print "source :{0}, current: {1}, dest: {2}".format(self.sourcePage, self.currentPage, self.destinationPage)
         return render(self.request, self.currentPageHtml, self.pageContext)
