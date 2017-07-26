@@ -77,6 +77,11 @@
                         {% if not field.value %}
                             postField.value = "";
                         {% endif %}
+                        {% if isCasting %}
+                            postField["placeholder"] = "John is a charismatic father of 2 who loves his dogs."
+                        {% elif isWork %}
+                            postField["placeholder"] = 'The hiree must be able to handle all camera operations for all set days. They will be compensated at an hourly rate, with potential for reshoots after primary production.';
+                        {% endif %}
                     {% elif field.name == "poster" %}
                         postField.value = "{{ request.user.username }}"
                         postField.input = postField.input.replace('name="poster"', 'name="poster" value="' + postField.value + '"')
@@ -173,6 +178,7 @@
                 actorField.profilePictureURL = '{{images.noProfilePicture}}';
             {% endif %}
             postFields["actor"] = actorField;
+
             return postFields;
         }
 
@@ -192,6 +198,15 @@
                 workerField.profilePictureURL = '{{images.noProfilePicture}}';
             {% endif %}
             postFields["worker"] = workerField;
+
+            var equipmentField = postFields["equipmentDescription"]
+            if(equipmentField){
+                equipmentField.numRows = 20;
+                equipmentField["placeholder"] = 'Camera, Tripod, Shade, All necessary lighting equipment';
+                {% if not equipmentField.value %}
+                    equipmentField.value = "";
+                {% endif %}
+            }
             return postFields;
         }
 

@@ -64,7 +64,7 @@ class CreateWorkPostForm(GenericCreatePostForm):
     title = forms.CharField(label="Post Title*", max_length=500, required=True, widget=forms.TextInput(attrs={'placeholder': 'Looking for Camera Operator'}))
     status = forms.CharField(label="Job Status*", widget=forms.HiddenInput, max_length=50, required=False)
     shortDescription = forms.CharField(label="Short Description*", widget=forms.TextInput(attrs={'placeholder': 'Basic single camera work on tv show'}), max_length=200, required=True)
-    description = forms.CharField(label="Description*", required=True, max_length=5000)
+    description = forms.CharField(label="Description*", widget=forms.TextInput(attrs={'placeholder': 'The hiree must be able to handle all camera operations for all set days. They will be compensated at an hourly rate, with potential for reshoots after primary production.'}), required=True, max_length=5000)
     paid = forms.BooleanField(label="Paid", required=False)
     paidDescription = forms.CharField(label="Specify", max_length=100, required=False)
     workerName = forms.CharField(widget=forms.HiddenInput, max_length=200, required=False)      # only filled if Cast
@@ -74,7 +74,7 @@ class CreateWorkPostForm(GenericCreatePostForm):
     hoursPerWeek = forms.CharField(label="Hours Per Week", max_length=50, required=False, widget=forms.TextInput(attrs={'placeholder': 'TBD'}))
     location = forms.CharField(label="Location", max_length=300, required=False, widget=forms.TextInput(attrs={'placeholder': 'UBC Campus'}))
     workerNeedsEquipment = forms.BooleanField(label="Must Provide Equipment", required=False)
-    equipmentDescription = forms.CharField(label="Equipment List", required=False, max_length=300)
+    equipmentDescription = forms.CharField(label="Equipment List", widget=forms.TextInput(attrs={'placeholder': 'Camera, Tripod, Shade, All necessary lighting equipment'}), required=False, max_length=300)
 
 class CreateCastingPostForm(BaseForm):
     postID = forms.CharField(widget=forms.HiddenInput, max_length=10)
@@ -87,7 +87,7 @@ class CreateCastingPostForm(BaseForm):
     characterType = forms.CharField(label="Role Type*", max_length=100, required=True)
     status = forms.CharField(label="Role Status*", widget=forms.HiddenInput, max_length=50, required=False)
     shortCharacterDescription = forms.CharField(label="Short Description*", widget=forms.TextInput(attrs={'placeholder': '40 year old athletic male'}), max_length=200, required=True)
-    description = forms.CharField(label="Description*", required=True, max_length=5000)
+    description = forms.CharField(label="Description*", widget=forms.TextInput(attrs={'placeholder': 'John is a charismatic father of 2 who loves his dogs.'}), required=True, max_length=5000)
     paid = forms.BooleanField(label="Paid", required=False)
     paidDescription = forms.CharField(label="Specify", max_length=100, required=False)
     actorName = forms.CharField(widget=forms.HiddenInput, max_length=200, required=False)      # only filled if Cast
