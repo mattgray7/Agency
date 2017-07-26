@@ -281,11 +281,6 @@ class GenericCreatePostView(views.PictureFormView):
         self._pageContext["post"] = self.post.record
         self._pageContext["project"] = self.project and self.project.record
         self._pageContext["projectID"] = self.projectID
-        """self._pageContext["isEvent"] = isEventPost(self.postID)
-        self._pageContext["isProject"] = isProjectPost(self.postID)
-        self._pageContext["isCollaboration"] = isCollaborationPost(self.postID)
-        self._pageContext["isWork"] = isWorkPost(self.postID)
-        self._pageContext["isCasting"] = isCastingPost(self.postID)"""
         self._pageContext["hideStatus"] = False
         self._pageContext["postType"] = self.post.postType
         self._pageContext["possibleDestinations"] = {"viewPost": constants.VIEW_POST}
@@ -381,6 +376,7 @@ class GenericCreatePostView(views.PictureFormView):
         try:
             tempPicture = models.TempPostPicture.objects.get(tempID=tempID)
         except models.TempPostPicture.DoesNotExist:
+            print "No temp picture found with ID {0}".format(tempID)
             pass
         else:
             if tempPicture.postPicture:

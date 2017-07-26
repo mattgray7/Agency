@@ -156,7 +156,6 @@
 
             if(errors["required"].length > 0){
                 postFields["errors"] = errors;
-                console.log(postFields["errors"])
             }
 
             return postFields;
@@ -260,12 +259,18 @@
 
     function addPopupPictureToBaseForm(tempPictureID, tempPictureURL){
         var baseFormPictureInput = document.getElementById("mainPostPictureInput")
-        baseFormPictureInput.innerHTML += "<input type='hidden' name='tempPostPictureID' value='" + tempPictureID + "'>"
+        baseFormPictureInput.innerHTML = "<input type='hidden' name='tempPostPictureID' value='" + tempPictureID + "'>"
 
+        return setBaseFormPicture(tempPictureURL);
+    }
+
+    function setBaseFormPicture(pictureURL){
         var baseFormPicture = document.getElementById("postPictureImg")
-        if(baseFormPicture != null && tempPictureURL.length > 0){
-            baseFormPicture.src = tempPictureURL
+        if(baseFormPicture != null && pictureURL.length > 0){
+            baseFormPicture.src = pictureURL
+            return true;
         }
+        return false;
     }
 
     function removePicture(){
@@ -295,7 +300,7 @@
         var formData = new FormData(form)
         if(form != null){
             $.ajax({
-                url : "/ajax/updatePostPicture/",
+                url : "/ajax/saveTempPostPicture/",
                 data : formData,
                 type : 'POST',
                 dataType: "json",
@@ -304,26 +309,10 @@
                 processData: false,
                 success : function(data) {
                     if(data["success"]){
-                        window.location.reload(false);
-                    }else{
-                        //Addition failed, fallback to adding image to base form
-                        $.ajax({
-                            url : "/ajax/saveTempPostPicture/",
-                            data : formData,
-                            type : 'POST',
-                            dataType: "json",
-                            cache: false,
-                            contentType: false,
-                            processData: false,
-                            success : function(data) {
-                                if(data["success"]){
-                                    // Add the temp picture to the base form (input and display)
-                                    addPopupPictureToBaseForm(data["tempID"], data["pictureURL"])
-                                    updateButton.innerHTML = updateButtonHTML;
-                                    toggleEditPicturePopup("hide")
-                                }
-                            }
-                        });
+                        // Add the temp picture to the base form (input and display)]
+                        addPopupPictureToBaseForm(data["tempID"], data["pictureURL"])
+                        updateButton.innerHTML = updateButtonHTML;
+                        toggleEditPicturePopup("hide")
                     }
                 }
             });

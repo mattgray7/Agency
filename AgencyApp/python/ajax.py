@@ -112,7 +112,7 @@ def updatePostPicture(request):
                         "width": request.POST.get("crop_width"),
                         "height": request.POST.get("crop_height")}
             success = helpers.savePostPictureInDatabase(request, "postPicture", postInstance, cropInfo, filename)
-    return JsonResponse({"success": success})
+    return JsonResponse({"success": success, "pictureURL": postInstance.postPicture.url})
 
 def saveTempPostPicture(request):
     tempID = helpers.createUniqueID(models.TempPostPicture, "tempID")
