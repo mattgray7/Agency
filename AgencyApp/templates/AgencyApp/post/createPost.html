@@ -107,6 +107,37 @@
                 {% endfor %}
                 {% endspaceless %}
             {% endif %}
+            // Add project
+            var projectField = {"name": "project"}
+            {% if project and project.title %}
+                projectField.title  = '{{project.title}}';
+                projectField.projectID = '{{project.postID}}';
+            {% else %}
+                projectField.addNewOnclick = 'toggleSelectProjectPopup("show");';
+            {% endif %}
+            postFields["project"] = projectField
+
+            // Add csrf token
+            var csrfField = {"name": "csrf_token", "input": "{% csrf_token %}", "hidden": true};
+            postFields['csrf_token'] = csrfField;
+
+            // Add cancel button with onclick
+            var cancelButton = {'name': 'cancelButton', 'onclick': 'redirectToPost("{{post.postID}}");', "hidden": true};
+            postFields['cancelButton'] = cancelButton;
+
+            // Add create/update button with onclick
+            var createButton = {'name': 'createButton', 'onclickFunction': 'submitForm', "hidden": true};
+            postFields['createButton'] = createButton;
+
+            postFields["newPost"] = true;
+            {% if post %}
+                postFields["newPost"] = false;
+            {% endif %}
+
+            {% if errors %}
+                postFields["errors"] = '{{errors}}';
+                console.log(postFields["errors"])
+            {% endif %}
 
             return postFields;
         }
@@ -114,22 +145,19 @@
         function getCastingFormDict(){
             var postFields = createValueDictFromForm()
 
-                // Add actor
-                var actorField = {"username": "{{actor.username}}", "cleanName": "{{actor.cleanName}}"}
-                {% if actor %}
-                    actorField["username"] = "{{actor.username}}";
-                    actorField["cleanName"] = "{{actor.cleanName}}";
-                    {% if actor.profilePicture %}
-                        actorField.profilePictureURL = '{{actor.profilePicture.url}}';
-                    {% endif %}
-                {% else %}
-                    actorField["username"] = null;
-                    actorField.profilePictureURL = '{{images.noProfilePicture}}';
+            // Add actor
+            var actorField = {"username": "{{actor.username}}", "cleanName": "{{actor.cleanName}}"}
+            {% if actor %}
+                actorField["username"] = "{{actor.username}}";
+                actorField["cleanName"] = "{{actor.cleanName}}";
+                {% if actor.profilePicture %}
+                    actorField.profilePictureURL = '{{actor.profilePicture.url}}';
                 {% endif %}
-                postFields["actor"] = actorField;
-
-                // Add remaining field common to all post types (csrf, cancelButton, createButton, etc)
-                postFields = addCommonPostFields(postFields);
+            {% else %}
+                actorField["username"] = null;
+                actorField.profilePictureURL = '{{images.noProfilePicture}}';
+            {% endif %}
+            postFields["actor"] = actorField;
             return postFields;
         }
 
@@ -149,47 +177,8 @@
                 workerField.profilePictureURL = '{{images.noProfilePicture}}';
             {% endif %}
             postFields["worker"] = workerField;
-
-            // Add remaining fields common to all post types
-            postFields = addCommonPostFields(postFields);
             return postFields;
         }
-
-    function addCommonPostFields(postFields){
-        // Add project
-        var projectField = {"name": "project"}
-        {% if project and project.title %}
-            projectField.title  = '{{project.title}}';
-            projectField.projectID = '{{project.postID}}';
-        {% else %}
-            projectField.addNewOnclick = 'toggleSelectProjectPopup("show");';
-        {% endif %}
-        postFields["project"] = projectField
-
-        // Add csrf token
-        var csrfField = {"name": "csrf_token", "input": "{% csrf_token %}", "hidden": true};
-        postFields['csrf_token'] = csrfField;
-
-        // Add cancel button with onclick
-        var cancelButton = {'name': 'cancelButton', 'onclick': 'redirectToPost("{{post.postID}}");', "hidden": true};
-        postFields['cancelButton'] = cancelButton;
-
-        // Add create/update button with onclick
-        var createButton = {'name': 'createButton', 'onclickFunction': 'submitForm', "hidden": true};
-        postFields['createButton'] = createButton;
-
-        postFields["newPost"] = true;
-        {% if post %}
-            postFields["newPost"] = false;
-        {% endif %}
-
-        {% if errors %}
-            postFields["errors"] = '{{errors}}';
-            console.log(postFields["errors"])
-        {% endif %}
-
-        return postFields
-    }
 
     function togglePopup(toggleType, contentDivID){
         var overlay = document.getElementById("hiddenGrayPopupOverlay");
