@@ -10,6 +10,8 @@
 <script>
     var projectTabs = ["roles", "jobs", "events"];
     var activeTab = "roles";
+    var projectPicture;
+    var projectSubFormPicture;
 
     function deletePostFromDB(postID, postType){
         $.ajax({
@@ -60,47 +62,76 @@
         return nextID;
     }
 
+    function getPictureURL(isProject){
+        // Returns the URL to display in edit picture popup window. If one has been uploaded already, that one will be chosen, otherwise the existing picture will be chosen, otherwise the noPicture default is chosen
+        var pictureURL = "";
+        if(newPicture != null){
+            // A picture has been uploaded
+            if(isProject && projectPicture != null){
+                pictureURL = projectPicture.src;
+            }else if(projectSubFormPicture != null){
+                pictureURL = projectSubFormPicture.src;
+            }
+        }else if(isProject){
+            // No picture uploaded, but loading for project
+            {% if post and post.postPicture and post.postPicture.url %}
+                pictureURL = "{{post.postPicture.url}}"
+            {% endif %}
+        }
+        if(pictureURL.length === 0){
+            pictureURL = "{{images.noPicture}}";
+        }
+        return pictureURL;
+    }
+
+    function updatePictureObjects(pictureURL, addCrop, isProject){
+        // Set the picture object and whichever picture object was just updated
+        setNewPictureObject(pictureURL, addCrop)
+        if(isProject){
+            projectPicture = newPicture;
+        }else{
+            projectSubFormPicture = newPicture;
+        }
+    }
+
     function addEditImageContent(containerID, isProject){
         var pictureID = "editPostPicture";
         setPictureID(pictureID);
         setButtonLoadingGifURL("{{images.loading.mid}}");
         setDefaultImageURL("{{images.loading.light}}")
 
+        // Set the onclick to include isProject
         var updatePictureButton = document.getElementById("updatePictureButton");
         if(updatePictureButton != null){
-            updatePictureButton.onclick = function(){submitPictureForm('editPostPictureForm', isProject)};
-            console.log("onclick isproject is " + isProject)
+            updatePictureButton.onclick = function(){
+                submitPictureForm('editPostPictureForm', isProject)
+            };
         }
 
-        var pictureURL = "";
-        if(isProject){
-            {% if post and post.postPicture and post.postPicture.url %}
-                pictureURL = "{{post.postPicture.url}}"
-                setDoesPictureExist("{{post.postPicture}}")
-            {% endif %}
-        }
-        if(pictureURL.length === 0){
-            pictureURL = "{{images.noPicture}}";
-            setDoesPictureExist("")
-        }
+        // Set the pictureURL to display
         var addCrop = true;
+        var pictureURL = getPictureURL(isProject);
+        setDoesPictureExist(pictureURL)
         if(pictureURL === "{{post.postPicture.url}}"){
             addCrop = false;
         }
-        setNewPictureObject(pictureURL, addCrop)
+
+        // Set newPicture to pictureURL and update projectPicture/projectSubFormPicture
+        updatePictureObjects(pictureURL, addCrop, isProject);
 
         imageInputDivID = pictureID + "Image";
         $("[id='" + imageInputDivID + "']").change(function(){
             if(this.value != null && this.value.length > 0){
                 pictureExists = true;
                 previewEditPicture(this);
+                updatePictureObjects(pictureURL, addCrop, isProject);
             }else{
                 var fallbackPictureURL = "";
                {% if not post or not post.postPicture or not post.postPicture.url %}
                     pictureExists = false;
                 {% endif %}
                 if(pictureURL.length > 0){
-                    setNewPictureObject(pictureURL, addCrop)
+                    updatePictureObjects(pictureURL, addCrop, isProject);
                     loadImage(pictureURL, addCrop)
                     selectMainArea()
                 }
