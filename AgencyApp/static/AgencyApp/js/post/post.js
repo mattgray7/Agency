@@ -187,7 +187,7 @@ function addCreateCastingPost(formDict, formURL, formName){
                         // stupid hack I hate myself right now
                         sectionLabelTableElement += "<li style='height:" + '' + field.numRows*5.9 + 'px;' + "'><label for='name'>" + field.label + "</label></li>";
                         // TODO replace newlines in description as it will break js
-                        sectionInputTableElement += "<li><textarea rows='" + field.numRows + "' name='" + field.name + "' form='" + formName + "' style='height:100px; width: 97.7%;' placeholder='" + field.placeholder + "'>" + field.value + "</textarea></li>";
+                        sectionInputTableElement += "<li><textarea rows='" + field.numRows + "' name='" + field.name + "' form='" + formName + "' style='height:100px; width: 97.7%; resize: none;' placeholder='" + field.placeholder + "'>" + field.value + "</textarea></li>";
                     }else{
                         sectionLabelTableElement += "<label for='name'>" + field.label + "</label><br>";
                         sectionInputTableElement += "<li>"
@@ -336,7 +336,7 @@ function addCreateWorkPost(formDict, formURL, formName){
                         // stupid hack I hate myself right now
                         sectionLabelTableElement += "<li style='height:" + '' + field.numRows*5.9 + 'px;' + "'><label for='name'>" + field.label + "</label></li>";
                         // TODO replace newlines in description as it will break js
-                        sectionInputTableElement += "<li><textarea rows='" + field.numRows + "' name='" + field.name + "' form='" + formName + "' style='height:100px; width: 97.7%;' placeholder='" + field.placeholder + "'>" + field.value + "</textarea></li>";
+                        sectionInputTableElement += "<li><textarea rows='" + field.numRows + "' name='" + field.name + "' form='" + formName + "' style='height:100px; width: 97.7%; resize: none;' placeholder='" + field.placeholder + "'>" + field.value + "</textarea></li>";
                     }else{
                         sectionLabelTableElement += "<label for='name'>" + field.label + "</label><br>";
                         sectionInputTableElement += "<li>"
@@ -448,7 +448,7 @@ function addCreateProjectPost(formDict, formURL, formName){
                         // stupid hack I hate myself right now
                         sectionLabelTableElement += "<li style='height:" + '' + field.numRows*5.9 + 'px;' + "'><label for='name'>" + field.label + "</label></li>";
                         // TODO replace newlines in description as it will break js
-                        sectionInputTableElement += "<li><textarea rows='" + field.numRows + "' name='" + field.name + "' form='" + formName + "' style='height:100px; width: 97.7%;' placeholder='" + field.placeholder + "'>" + field.value + "</textarea></li>";
+                        sectionInputTableElement += "<li><textarea rows='" + field.numRows + "' name='" + field.name + "' form='" + formName + "' style='height:100px; width: 97.7%; resize: none;' placeholder='" + field.placeholder + "'>" + field.value + "</textarea></li>";
                     }else{
                         sectionLabelTableElement += "<label for='name'>" + field.label + "</label><br>";
                         sectionInputTableElement += "<li>"
