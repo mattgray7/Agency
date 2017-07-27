@@ -413,7 +413,7 @@ function addCreateProjectPost(formDict, formURL, formName){
     var pictureColumn = '<td style="text-align: center; width: 30%; min-width: 270px; position: relative;"><div style="position:absolute; width: 270px; top: 0;"><div id="postPicturePanel" class="postPicture" style="width: 270px; height: 298px; background: #000; margin-left: 10px; margin-top: 47px;"><img id="postPictureImg" src="' + pictureField.value + '" style="max-width:100%; max-height:100%;"/></div><div style="width: 60%; margin-left: 25%; overflow: hidden;"><a onclick="' + pictureField.editOnclick + '">Edit</a></div><div id="mainPostPictureInput" style="display: none;">' + pictureField.input + '</div></div></td>';
 
     // Fill text content
-    var sectionMap = {"Details": ["title", "projectType", "status", "length", "location", "union"],
+    var sectionMap = {"Details": ["title", "projectType", "status", "location", "union", "length"],
                       "The Project": ["shortDescription", "description"],
                       "hidden": ["csrf_token", "postID", "source", "next", "destination", "projectID", "poster"]}
     var mainLabelsColumn = "<td class='editPostLabelPanel' style='width: 20%; position:relative; line-height: 38.2px;'><ul style='margin-bottom: -14px; margin-top: -40px;'>";
@@ -444,19 +444,15 @@ function addCreateProjectPost(formDict, formURL, formName){
                 var field = formDict[fieldName];
 
                 if(!field.hidden || field.name === "status"){
-                    console.log("DOING " + field.name)
                     if(field.numRows > 1){
                         // stupid hack I hate myself right now
                         sectionLabelTableElement += "<li style='height:" + '' + field.numRows*5.9 + 'px;' + "'><label for='name'>" + field.label + "</label></li>";
                         // TODO replace newlines in description as it will break js
                         sectionInputTableElement += "<li><textarea rows='" + field.numRows + "' name='" + field.name + "' form='" + formName + "' style='height:100px; width: 97.7%;' placeholder='" + field.placeholder + "'>" + field.value + "</textarea></li>";
                     }else{
-                        console.log("here")
                         sectionLabelTableElement += "<label for='name'>" + field.label + "</label><br>";
                         sectionInputTableElement += "<li>"
-                        console.log(field.options)
                         if(field.options){
-                            console.log("There are options:" + field.options)
                             var selectForm = createSelectForm(formName, field.name + "SelectBar", field.options, field.value);
                             sectionInputTableElement += selectForm;
                             sectionInputTableElement += "<input type='hidden' name='" + field.name + "' id='" + field.name + "SelectInput' >";
@@ -504,8 +500,13 @@ function addCreateProjectPost(formDict, formURL, formName){
         formString += "<tr><td colspan='3'>" + getErrorPanel(formDict["errors"]) + "</td></tr>";
     }
 
-    // Create the form
+    // Add main inputs & picture
     formString += "<tr>" + mainLabelsColumn + mainInputsColumn + pictureColumn + "</tr>"
+
+    // Add spacing below main inputs to make up for picture being longer than detail list
+    formString += "<tr><td style='height: 50px;'></td></tr>";
+
+    // Other inputs
     formString += "<tr>" + otherLabelsColumn + otherInputsColumn + "</tr></form>"
 
     // Add buttons
