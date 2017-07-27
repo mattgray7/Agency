@@ -94,12 +94,51 @@ def getNewPostID(request):
 def createNewCastingPost(request):
     newPost = castingPost.CastingPostInstance(request=request, postID=request.POST.get("postID"), projectID=request.POST.get("projectID"), postType=constants.CREATE_CASTING_POST, formSubmitted=True)
     createSuccess = newPost.formIsValid()
-    return JsonResponse({"success": createSuccess})
+    pictureSuccess = False
+    if createSuccess:
+        tempPostPictureID = request.POST.get("tempPostPictureID")
+        if tempPostPictureID:
+            try:
+                tempPicture = models.TempPostPicture.objects.get(tempID=tempPostPictureID)
+            except models.TempPostPicture:
+                pass
+            else:
+                postData = _getPostPictureRequestData(request)
+                postID = request.POST.get("postID")
+                database = post.getPostDatabase(postID)
+                if postID and database and tempPicture and tempPicture.postPicture:
+                    try:
+                        postInstance = database.objects.get(postID=postID)
+                    except database.DoesNotExist:
+                        pass
+                    else:
+                        postInstance.postPicture = tempPicture.postPicture
+                        postInstance.save()
+                        pictureSuccess = helpers.savePostPictureInDatabase(request, "postPicture", postInstance, postData.get("cropInfo", {}), postData.get("filename"))
+    return JsonResponse({"success": pictureSuccess})
+
+def _getPostPictureRequestData(request):
+    data = {}
+    postID = request.POST.get("postID")
+    if postID:
+        data = {"postID": postID,
+                "database": post.getPostDatabase(postID),
+                "filename": constants.MEDIA_FILE_NAME_MAP.get(request.POST.get("postType"), "tempfile_{0}").format(postID),
+                "cropInfo": {"x": request.POST.get("crop_x"),
+                             "y": request.POST.get("crop_y"),
+                             "width": request.POST.get("crop_width"),
+                             "height": request.POST.get("crop_height")
+                             }
+                }
+        if None in data["cropInfo"].values():
+            data["cropInfo"] = {}
+    return data
+
 
 def updatePostPicture(request):
-    postID = request.POST.get("postID")
-    database = post.getPostDatabase(postID)
-    filename = constants.MEDIA_FILE_NAME_MAP.get(request.POST.get("postType"), "tempfile_{0}").format(postID)
+    postData = _getPostPictureRequestData(request)
+    postID = postData.get("postID")
+    database = postData.get("database")
     success = False
     if postID and database:
         try:
@@ -107,11 +146,7 @@ def updatePostPicture(request):
         except database.DoesNotExist:
             pass
         else:
-            cropInfo = {"x": request.POST.get("crop_x"),
-                        "y": request.POST.get("crop_y"),
-                        "width": request.POST.get("crop_width"),
-                        "height": request.POST.get("crop_height")}
-            success = helpers.savePostPictureInDatabase(request, "postPicture", postInstance, cropInfo, filename)
+            success = helpers.savePostPictureInDatabase(request, "postPicture", postInstance, postData.get("cropInfo"), postData.get("filename"))
     return JsonResponse({"success": success, "pictureURL": postInstance.postPicture.url})
 
 def saveTempPostPicture(request):
