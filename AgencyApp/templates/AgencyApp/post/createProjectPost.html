@@ -415,9 +415,14 @@
             if(expanded){
                 expandType = "shrink";
             }
+            // Add container
             buttonString += "<div id='addNewListElement' class='projectContentListElement' onclick='toggleExpandListPanel(" + '"' + expandType + '", "' + tabType + '");' + "'  style='width: 100%; height: 352px; border: none; border-radius: 0px;'>";
             
-            buttonString += "Add new " + getSingularFromPlural(tabType) + "</div>";
+            // Add plus sign
+            buttonString += "<div style='position:relative; height: 100%; width: 100%; text-align: center'><div style='position:absolute; top: 30%; width: 100%'><img src='{{images.plus}}' style='height: 100px; width: 100px'><br><h3>Add New</h3></div></div>";
+
+            // Close container
+            buttonString += "</div>";
         }
         return buttonString
     }
@@ -733,7 +738,7 @@
                         {% if roleObj.actor.profilePicture %}
                             contentString += '<img src="{{ roleObj.actor.profilePicture.url }}" style="max-width: 150px; max-height:150px;"/>'
                         {% else %}
-                            contentString += '<img src="{{images.noProfilePicture}}" style="width: 150px; max-height: 150px;">';
+                            contentString += '<img src="{{images.noProfilePicture}}" style="max-width: 150px; max-height: 150px;">';
                         {% endif %}
                         contentString += "</div></div><br>";
                         contentString += "<div class='projectContentListElementText'><h2>{{roleObj.post.characterName}}</h2><p>{{roleObj.post.shortCharacterDescription}}</p></div>"
