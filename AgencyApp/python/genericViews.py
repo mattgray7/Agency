@@ -367,9 +367,7 @@ class PictureFormView(GenericFormView):
 
     def updatePicturePathAndModel(self):
         if self.pictureModel:
-            # No file but cropInfo means crop existing pic
-            # No cropInfo and no file means save None
-            if self.sourcePicture or (not self.sourcePicture and not self.cropInfo):
+            if self.sourcePicture:
                 # Save the InMemoryUploadedFile instance in the file field of the model
                 self.pictureModel.__dict__[self.pictureModelFieldName] = self.sourcePicture
                 self.pictureModel.save()
