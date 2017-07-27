@@ -127,7 +127,8 @@ class CreateProjectPostView(post.GenericCreatePostView):
         self._pageContext["roles"] = self.post.roles
         self._pageContext["jobs"] = self.post.jobs
         self._pageContext["events"] = self.post.events
-        self._pageContext["forms"] = {"role": forms.CreateCastingPostForm}
+        self._pageContext["forms"] = {"role": forms.CreateCastingPostForm,
+                                      "project": forms.CreateProjectPostForm}
         self._pageContext["isProject"] = True
         return self._pageContext
 

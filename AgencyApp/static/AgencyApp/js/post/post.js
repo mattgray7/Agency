@@ -403,3 +403,121 @@ function addCreateWorkPost(formDict, formURL, formName){
     return formString;
 }
 
+function addCreateProjectPost(formDict, formURL, formName){
+    var formString = "<form method='post' action='" + formURL + "' id='" + formName + "' class='form-style-1' style='width: 90%; background: none; margin-left: 3.2%;' enctype='multipart/form-data'>";
+    formString += "<table style='width: 100%;'><tr>"
+
+    // Fill post picture string
+    var pictureField = formDict["postPicture"];
+    //var pictureColumn = '<td style="text-align: center; width: 30%;"><div id="postPicturePanel" class="postPicture" style="width: 270px; height: 298px; background: #000; margin-left: 10px; margin-top: 50px;"><img id="postPictureImg" src="' + pictureField.value + '" style="max-width:100%; max-height:100%;"/></div><div style="width: 60%; margin-left: 25%; overflow: hidden;">' + pictureField.input + "</div></td>";
+    var pictureColumn = '<td style="text-align: center; width: 30%; min-width: 270px; position: relative;"><div style="position:absolute; width: 270px; top: 0;"><div id="postPicturePanel" class="postPicture" style="width: 270px; height: 298px; background: #000; margin-left: 10px; margin-top: 47px;"><img id="postPictureImg" src="' + pictureField.value + '" style="max-width:100%; max-height:100%;"/></div><div style="width: 60%; margin-left: 25%; overflow: hidden;"><a onclick="' + pictureField.editOnclick + '">Edit</a></div><div id="mainPostPictureInput" style="display: none;">' + pictureField.input + '</div></div></td>';
+
+    // Fill text content
+    var sectionMap = {"Details": ["title", "projectType", "status", "length", "location", "union"],
+                      "The Project": ["shortDescription", "description"],
+                      "hidden": ["csrf_token", "postID", "source", "next", "destination", "projectID", "poster"]}
+    var mainLabelsColumn = "<td class='editPostLabelPanel' style='width: 20%; position:relative; line-height: 38.2px;'><ul style='margin-bottom: -14px; margin-top: -40px;'>";
+    var mainInputsColumn = "<td class='editPostInputPanel' style='width: 50%; position: relative; line-height: 39px;'><ul style='margin-top: -20px; '>";
+    var otherLabelsColumn = "<td class='editPostLabelPanel' style='width: 30%; min-width: 170px; position:relative;'><ul style='margin-top: 5px;'>";
+    var otherInputsColumn = "<td class='editPostInputPanel' colspan='2' style='width: 70%;'><div style='margin-top: -6px;'><ul>";
+    for(sectionTitle in sectionMap){
+        var fieldList = sectionMap[sectionTitle];
+        var sectionInputTableElement = null;
+        var sectionLabelTableElement = null;
+        var sectionClass = null;
+        if(sectionTitle === "Details"){
+            sectionLabelTableElement = mainLabelsColumn;
+            sectionInputTableElement = mainInputsColumn;
+            sectionClass = "editPostMainSectionTitle";
+        }else{
+            sectionLabelTableElement = otherLabelsColumn;
+            sectionInputTableElement = otherInputsColumn;
+            sectionClass = "editPostOtherSectionTitle";
+        }
+
+        if(sectionTitle != "hidden"){
+            sectionLabelTableElement += "<div style='position: relative; height: 50px; width: 100%;'> <h2 class='" + sectionClass + "' style='position: absolute; z-index: 1; right: 0; margin-left: 80px;'> " + sectionTitle + "</h2><div style='position: absolute; z-index: 0; min-width: 720px; width: 389%; border: 1px solid #7c7b7b; height: 0px; bottom: 0; margin-bottom: 15px; margin-left: 0px;'></div></div>"
+            sectionInputTableElement += "<div style='height: 60px;'></div>";
+
+            for(i in fieldList){
+                var fieldName = sectionMap[sectionTitle][i];
+                var field = formDict[fieldName];
+
+                if(!field.hidden || field.name === "status"){
+                    console.log("DOING " + field.name)
+                    if(field.numRows > 1){
+                        // stupid hack I hate myself right now
+                        sectionLabelTableElement += "<li style='height:" + '' + field.numRows*5.9 + 'px;' + "'><label for='name'>" + field.label + "</label></li>";
+                        // TODO replace newlines in description as it will break js
+                        sectionInputTableElement += "<li><textarea rows='" + field.numRows + "' name='" + field.name + "' form='" + formName + "' style='height:100px; width: 97.7%;' placeholder='" + field.placeholder + "'>" + field.value + "</textarea></li>";
+                    }else{
+                        console.log("here")
+                        sectionLabelTableElement += "<label for='name'>" + field.label + "</label><br>";
+                        sectionInputTableElement += "<li>"
+                        console.log(field.options)
+                        if(field.options){
+                            console.log("There are options:" + field.options)
+                            var selectForm = createSelectForm(formName, field.name + "SelectBar", field.options, field.value);
+                            sectionInputTableElement += selectForm;
+                            sectionInputTableElement += "<input type='hidden' name='" + field.name + "' id='" + field.name + "SelectInput' >";
+                        }else{
+                            sectionInputTableElement += field.input;
+                        }
+                        sectionInputTableElement += '</li>';
+                    }
+                }else if(field.input != null && field.input.length > 0){
+                    sectionInputTableElement += field.input;
+                }
+            }
+        }else{
+            for(i in fieldList){
+                var fieldName = sectionMap[sectionTitle][i];
+                var field = formDict[fieldName];
+                sectionInputTableElement += field.input;
+            }
+        }
+        if(sectionTitle === "Details"){
+            mainLabelsColumn = sectionLabelTableElement;
+            mainInputsColumn = sectionInputTableElement;
+        }else{
+            otherLabelsColumn = sectionLabelTableElement + "<div style='height: 20px'></div>";
+            otherInputsColumn = sectionInputTableElement + "<div style='height: 10px'></div>";
+        }
+
+    }
+    mainLabelsColumn += "</ul></div></td>";
+    otherLabelsColumn += "</ul></div></td>";
+    mainInputsColumn += "</ul></td>";
+    otherInputsColumn += "</ul></div></td>";
+
+    // Add title
+    formString += "<tr><td colspan='3' style='text-align: center;'><h1 style='font-size: 2.8em; margin-left: 65px; padding: 0em 0em 0.3em 0em; margin-top: 15px;'>";
+    if(formDict["newPost"]){
+        formString += "Add Project";
+    }else{
+        formString += "Edit Project";
+    }
+    formString += "</h1></td></tr>";
+
+    // Add error panel
+    if(formDict["errors"]){
+        formString += "<tr><td colspan='3'>" + getErrorPanel(formDict["errors"]) + "</td></tr>";
+    }
+
+    // Create the form
+    formString += "<tr>" + mainLabelsColumn + mainInputsColumn + pictureColumn + "</tr>"
+    formString += "<tr>" + otherLabelsColumn + otherInputsColumn + "</tr></form>"
+
+    // Add buttons
+    formString += "<tr><td colspan='3' style='width: 90%; position:relative; height: 70px;'><div style='margin-left: 100px;'><div class='whiteButton blackHover' style='position:absolute; left: 1%; top: 0; right: 50.5%;' onclick='" + formDict["cancelButton"]["onclick"] + "'> Cancel </div><div class='whiteButton blackHover' style='position:absolute; right: -1%; top: 0; left: 50.5%; ' onclick='" + formDict["createButton"].onclickFunction + "(" + '"' + formName + '");' + "'>"
+    if(formDict["newPost"]){
+        formString += "Create";
+    }else{
+        formString += "Update"
+    }
+    formString += "</div></div></td></tr>";
+    return formString;
+}
+
+
+

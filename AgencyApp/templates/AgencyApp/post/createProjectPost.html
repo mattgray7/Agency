@@ -98,13 +98,56 @@
 
     }
 
+    function getProjectFormDict(){
+        var postFields = {}
+        {% if forms.project %}
+            {% spaceless %}
+            {% for field in forms.project %}
+                var postField = createPostField('project', '{{field.name}}', '{{field.value}}', '{{field.label}}', '{{field}}')
+                if(postField != null){
+                    postFields[postField.name] = postField;
+                }
+            {% endfor %}
+            {% endspaceless %}
+
+                /*// Add project
+                var projectField = {"name": "project"}
+                {% if post and post.title %}
+                    projectField.title  = '{{post.title}}';
+                    projectField.projectID = '{{post.postID}}';
+                {% endif %}
+                postFields["project"] = projectField*/
+
+
+                // Add csrf token
+                var csrfField = {"name": "csrf_token", "input": "{% csrf_token %}", "hidden": true};
+                postFields['csrf_token'] = csrfField;
+
+                // Add cancel button with onclick
+                var cancelButton = {'name': 'cancelButton', 'onclick': 'console.log("canceling");', "hidden": true};
+                /*if(existingPosts){
+                    cancelButton["onclick"] = 'toggleExpandListPanel("shrink", "roles", "horizontal");';
+                }else{
+                    cancelButton["onclick"] = 'toggleExpandListPanel("shrink", "roles", "vertical");'
+                }*/
+                postFields['cancelButton'] = cancelButton;
+
+                // Add create/update button with onclick
+                var createButton = {'name': 'createButton', 'onclickFunction': 'submitProjectForm', "hidden": true};
+                postFields['createButton'] = createButton;
+
+                postFields["newPost"] = true;
+        {% endif %}
+        return postFields;
+    }
+
 
         function getCastingFormDict(existingPosts){
             var postFields = {}
             {% if forms.role %}
                 {% spaceless %}
                 {% for field in forms.role %}
-                    var postField = createPostField(existingPosts, '{{field.name}}', '{{field.value}}', '{{field.label}}', '{{field}}')
+                    var postField = createPostField('casting', '{{field.name}}', '{{field.value}}', '{{field.label}}', '{{field}}')
                     if(postField != null){
                         postFields[postField.name] = postField;
                     }
@@ -155,7 +198,7 @@
             return postFields;
         }
 
-        function createPostField(existingPosts, name, value, label, input){
+        function createPostField(postType, name, value, label, input){
             var save = true;
             var postField = {"name": name, "value": value, "hidden": (input.includes('hidden')), "label": label, 'input': input}
 
@@ -173,7 +216,11 @@
             if(postField.name == "projectID"){
                 postField.value = "{{post.projectID}}";
             }else if(postField.name == "postID"){
-                postField.value = getNewPostID("casting");
+                if(postType != 'project'){
+                    postField.value = getNewPostID(postType);
+                }else{
+                    postField.value = '{{post.postID}}';
+                }
             }else if(postField.name == "postPicture"){
                 postField.value = "{{images.noPicture}}";
                 postField.editOnclick = "toggleEditPicturePopup('show')";
@@ -184,15 +231,17 @@
                     paidDescription = ''
                 }
                 postField.input = "<div style='position: relative; margin-top: -5px;'>" + currentInput + "<div style='position: absolute; top: 0; right: 0; margin-top: 6px; width: 90%; min-width: 180px; text-align: right;'><div style='position: relative;'> <div style='position: absolute; left: 0;' class='editPostLabelPanel'>Specify </div><div style='position: absolute; left: 0; right: 0; margin-right: 3px; margin-left: 68px; margin-top: -3px;'><input type='text' name='paidDescription' value='" + paidDescription + "' style='display: inline; margin-top: -10px;'></div></div></div>"
-            }else if(postField.name == "paidDescription"){
+            }else if(postField.name === "paidDescription"){
                 // Paid description will be on same line as paid
                 save = false;
-            }else if(postField.name == "status"){
+            }else if(postField.name === "status"){
                 var options = [];
-                if("roles" in statusOptions && activeTab == "roles"){
+                if("roles" in statusOptions && postType == "roles"){
                     options = {{ statusOptions.roles|safe }}
-                }else if("jobs" in statusOptions && activeTab == "jobs"){
+                }else if("jobs" in statusOptions && postType == "jobs"){
                     options = {{ statusOptions.jobs|safe }}
+                }else{
+                    options = {{ statusOptions.projects|safe }}
                 }
                 postField.options = options;
             }else if(postField.name == "description"){
@@ -200,11 +249,14 @@
                 {% if not postField.value %}
                     postField.value = "";
                 {% endif %}
-                {% if activeTab == "roles" %}
+                if(activeTab === "roles"){
                     postField["placeholder"] = "John is a charismatic father of 2 who loves his dogs."
-                {% elif activeTab == "jobs" %}
+                }else if(activeTab === "jobs"){
                     postField["placeholder"] = 'The hiree must be able to handle all camera operations for all set days. They will be compensated at an hourly rate, with potential for reshoots after primary production.';
-                {% endif %}
+                }else{
+                    //project
+                    postField["placeholder"] = "The Great Gatsby is a tale of love and loss. We will be shooting it over the next 3 weeks to create a short ode to the F Scott Fitzgerald classic."
+                }
             }else if(postField.name == "poster"){
                 postField.value = "{{ request.user.username }}"
                 postField.input = postField.input.replace('name="poster"', 'name="poster" value="' + postField.value + '"')
@@ -215,9 +267,7 @@
                 {% else %}
                     postField.value = tomorrowDateString;
                 {% endif %}
-            }
-
-            if(selectFields != null){
+            }else if(selectFields != null){
                 var roleSelectFields = {{ selectFields.roles.names|safe }};
                 var jobSelectFields = {{ selectFields.jobs.names|safe }}
                 if(roleSelectFields.indexOf(name) >= 0 && activeTab == "roles"){
@@ -228,6 +278,13 @@
                 }else if(jobSelectFields.indexOf(name) >= 0 && activeTab == "jobs"){
                     {% if selectFields.jobs.options %}
                         var options = {{ selectFields.jobs.options|safe }}
+                        postField.options = options[postField.name]
+                    {% endif %}
+                }else{
+                    //project
+                    var projectSelectFields = {{ selectFields.projects.names|safe }};
+                    {% if selectFields.projects.options %}
+                        var options = {{ selectFields.projects.options|safe }}
                         postField.options = options[postField.name]
                     {% endif %}
                 }
@@ -484,7 +541,7 @@
 
 
 
-    <div id="postPanel" class="postPanel">
+    <!--<div id="postPanel" class="postPanel">
         <table style="width:99%; height: 400px;">
             <tr>
                         <td style="min-width: 400px;">
@@ -588,9 +645,25 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>-->
+                        </div>
                         </td>
-            </tr>
+            </tr>-->
+    <div id="editPostPanel" class="editPostPanel">
+        <div id="postForm"></div>
+    </div>
+    <script>
+        var postFormDiv = document.getElementById("postForm");
+        if(postFormDiv != null){
+            var newForm = addCreateProjectPost(getProjectFormDict(), "{{currentPageURL}}", "createProjectPostForm");
+            postFormDiv.innerHTML = newForm;
+
+            var selectProjectPanelDiv = document.getElementById("selectProjectPanel");
+            if(selectProjectPanelDiv != null){
+                newForm = addSelectProjectForm("{{post.postID}}", "{{request.user.username}}")
+            }
+        }
+    </script>
+    <table style="width:99%; height: 400px;">
             <tr>
                         <td colspan="3" >
                             <table style="width: 100%;">

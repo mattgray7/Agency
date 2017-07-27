@@ -133,6 +133,12 @@ class EventPost(AbstractPost):
     date = models.DateField(default=None, blank=True, null=True)
 
 class ProjectPost(AbstractPost):
+    projectType = models.CharField(max_length=200, blank=True, null=True)
+    length = models.CharField(max_length=200, blank=True, null=True)      # only filled if status is Filled (vs Hiring)
+    union = models.BooleanField(default=False, blank=True, null=True)
+    location = models.CharField(max_length=200, blank=True, null=True)
+    shortDescription = models.CharField(max_length=200, blank=True, null=True)
+
     def __init__(self, *args, **kwargs):
         super(ProjectPost, self).__init__(*args, **kwargs)
         self._openRoles = None
@@ -194,15 +200,6 @@ class ProjectPost(AbstractPost):
         if self._totalJobs is None:
             self._totalJobs = WorkPost.objects.filter(projectID=self.postID)
         return self._totalJobs
-
-"""class ProjectJob(models.Model):
-    postID = models.CharField(max_length=10)        # connected to the post for this job
-    projectID = models.CharField(max_length=10, blank=True, null=True)
-    status = models.CharField(max_length=50, default="Hiring", blank=True, null=True)        # Hiring or Filled
-    username = models.CharField(max_length=200, blank=True, null=True)      # only filled if status is Filled
-    profession = models.CharField(max_length=200)
-    description = models.CharField(max_length=1000, blank=True, null=True)
-    shortDescription = models.CharField(max_length=200, blank=True, null=True)"""
 
 class ProjectAdmin(models.Model):
     projectID = models.CharField(max_length=10)

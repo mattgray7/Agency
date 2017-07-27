@@ -48,13 +48,17 @@ class CreateEventPostForm(GenericCreatePostForm):
     date = forms.DateField(widget=forms.DateInput(attrs={'class':'datepicker'}))
 
 class CreateProjectPostForm(GenericCreatePostForm):
-    pass
+    projectType = forms.CharField(label="Project Type", max_length=200)
+    length = forms.CharField(label="Project Length", max_length=200, required=False)      # only filled if status is Filled (vs Hiring)
+    union = forms.BooleanField(label="Union Affiliated", required=False)
+    location = forms.CharField(label="Location*", max_length=200)
+    shortDescription = forms.CharField(label="Short Description*", max_length=200)
 
 class CreateCollaborationPostForm(GenericCreatePostForm):
     collaboratorRole = forms.CharField(widget=forms.HiddenInput, max_length=200, required=True)
 
 class CreateWorkPostForm(GenericCreatePostForm):
-    profession = forms.CharField( max_length=200, required=True)
+    profession = forms.CharField(max_length=200, required=True)
     paid = forms.BooleanField(label="Paid", required=False)
     postID = forms.CharField(widget=forms.HiddenInput, max_length=10)
     projectID = forms.CharField(widget=forms.HiddenInput, required=False, max_length=10)
