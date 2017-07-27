@@ -127,10 +127,14 @@ function selectMainArea(){
     canDisplayImage = true;
 }
 
-function createPictureContainer(includeCropHandler){
+function createPictureContainer(includeCropHandler, addCrop){
     pictureHTML = "";
     if(includeCropHandler){
-        pictureHTML += '<div class="imageCrop"><div class="wrapper"><div class="image-decorator"><div id="' + pictureID + 'Image"></div></div></div> </div>'
+        pictureHTML += '<div class="imageCrop"><div class="wrapper"><div class="image-decorator"'
+        if(!addCrop){
+            pictureHTML += " style='padding: 5px 5px 0px 5px;'";
+        }
+        pictureHTML += '><div id="' + pictureID + 'Image"></div></div></div> </div>'
     }else{
         pictureHTML += '<div style="margin-top: 5px;"><div class="no-picture-image-decorator"><div id="' + pictureID + 'Image"></div></div></div>'
     }
@@ -155,10 +159,10 @@ function loadImage(imageURL, addCrop){
     if(pictureParentContainer != null){
         if(!pictureExists){
             // If there is an existing picture, create pic container with crop window
-            pictureContainerString = createPictureContainer(false)
+            pictureContainerString = createPictureContainer(false, addCrop)
         }else{
             // Otherwise, create pic container with offset for default image
-            pictureContainerString = createPictureContainer(true)
+            pictureContainerString = createPictureContainer(true, addCrop)
         }
         // Write the new picture container
         pictureParentContainer.innerHTML = pictureContainerString;

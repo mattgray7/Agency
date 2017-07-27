@@ -84,10 +84,9 @@
             setDoesPictureExist("")
         }
         var addCrop = true;
-        // Not yet
-        /*if(pictureURL === "{{post.postPicture.url}}"){
+        if(pictureURL === "{{post.postPicture.url}}"){
             addCrop = false;
-        }*/
+        }
         setNewPictureObject(pictureURL, addCrop)
 
         imageInputDivID = pictureID + "Image";
