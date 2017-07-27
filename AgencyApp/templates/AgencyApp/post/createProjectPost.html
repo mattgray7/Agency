@@ -246,9 +246,9 @@
                 postField.options = options;
             }else if(postField.name == "description"){
                 postField.numRows = 20;
-                {% if not postField.value %}
+                if(postField.value.length <= 0){
                     postField.value = "";
-                {% endif %}
+                }
                 if(activeTab === "roles"){
                     postField["placeholder"] = "John is a charismatic father of 2 who loves his dogs."
                 }else if(activeTab === "jobs"){
