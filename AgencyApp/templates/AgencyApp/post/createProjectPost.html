@@ -200,7 +200,10 @@
 
         function createPostField(postType, name, value, label, input){
             var save = true;
-            var postField = {"name": name, "value": value, "hidden": (input.includes('hidden')), "label": label, 'input': input}
+            var postField = {"name": name, "value": value, "hidden": false, "label": label, 'input': input}
+            if(input.indexOf('hidden') >= 0){
+                postField.hidden = true;
+            }
 
             var statusOptions;
             {% if statusOptions %}

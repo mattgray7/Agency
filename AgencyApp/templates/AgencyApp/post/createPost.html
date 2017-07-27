@@ -44,7 +44,10 @@
                 {% spaceless %}
                 {% for field in form %}
                     var save = true;
-                    var postField = {"name": '{{field.name}}', "value": '{{field.value}}', "hidden": ('{{field}}'.includes('hidden')), "label": '{{field.label}}', 'input': '{{field}}'}
+                    var postField = {"name": '{{field.name}}', "value": '{{field.value}}', "hidden": false, "label": '{{field.label}}', 'input': '{{field}}'}
+                    if('{{field}}'.indexOf('hidden') >= 0){
+                        postField.hidden = true;
+                    }
                     {% if field.name == "projectID" %}
                         postField.value = "{{post.projectID}}";
                     {% elif field.name == "postPicture" %}

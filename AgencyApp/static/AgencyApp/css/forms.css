@@ -27,7 +27,7 @@
 {
     border: 1px solid #000;
     border-radius: 4px;
-    background: rgba(255, 255, 255, 0)
+    background: rgba(255, 255, 255, 0);
     transition: background 1s ease;
 }
 
