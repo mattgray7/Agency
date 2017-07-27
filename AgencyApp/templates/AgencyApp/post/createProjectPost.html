@@ -65,28 +65,28 @@
     function getPictureURL(isProject){
         // Returns the URL to display in edit picture popup window. If one has been uploaded already, that one will be chosen, otherwise the existing picture will be chosen, otherwise the noPicture default is chosen
         var pictureURL = "";
-        if(newPicture != null){
-            // A picture has been uploaded
-            if(isProject && projectPicture != null){
-                pictureURL = projectPicture.src;
-            }else if(projectSubFormPicture != null){
-                pictureURL = projectSubFormPicture.src;
+        if(isProject){
+            if(projectPicture != null){
+                pictureURL = projectPicture.src
+            }else{
+                {% if post and post.postPicture and post.postPicture.url %}
+                    pictureURL = '{{post.postPicture.url}}';
+                {% endif %}
             }
-        }else if(isProject){
-            // No picture uploaded, but loading for project
-            {% if post and post.postPicture and post.postPicture.url %}
-                pictureURL = "{{post.postPicture.url}}"
-            {% endif %}
+        }else{
+            if(projectSubFormPicture != null){
+                pictureURL = projectSubFormPicture.src
+            }
         }
+        setDoesPictureExist(pictureURL)
         if(pictureURL.length === 0){
             pictureURL = "{{images.noPicture}}";
         }
         return pictureURL;
     }
 
-    function updatePictureObjects(pictureURL, addCrop, isProject){
+    function updatePictureObjects(isProject){
         // Set the picture object and whichever picture object was just updated
-        setNewPictureObject(pictureURL, addCrop)
         if(isProject){
             projectPicture = newPicture;
         }else{
@@ -111,27 +111,33 @@
         // Set the pictureURL to display
         var addCrop = true;
         var pictureURL = getPictureURL(isProject);
-        setDoesPictureExist(pictureURL)
-        if(pictureURL === "{{post.postPicture.url}}"){
+        console.log("pictureURL is " + pictureURL)
+        console.log("picture exists: " + pictureExists);
+        if(pictureURL === "{{post.postPicture.url}}" || pictureURL === "{{images.noPicture}}"){
             addCrop = false;
         }
 
         // Set newPicture to pictureURL and update projectPicture/projectSubFormPicture
-        updatePictureObjects(pictureURL, addCrop, isProject);
+        setNewPictureObject(pictureURL, addCrop)
+        updatePictureObjects(isProject);
 
         imageInputDivID = pictureID + "Image";
         $("[id='" + imageInputDivID + "']").change(function(){
             if(this.value != null && this.value.length > 0){
                 pictureExists = true;
-                previewEditPicture(this);
-                updatePictureObjects(pictureURL, addCrop, isProject);
+                previewEditPicture(this, function(){
+                    updatePictureObjects(isProject)
+                });
+                //updatePictureObjects(pictureURL, addCrop, isProject);
             }else{
                 var fallbackPictureURL = "";
                {% if not post or not post.postPicture or not post.postPicture.url %}
                     pictureExists = false;
                 {% endif %}
                 if(pictureURL.length > 0){
-                    updatePictureObjects(pictureURL, addCrop, isProject);
+                    console.log("FALLING BACK")
+                    setNewPictureObject(pictureURL, addCrop)
+                    updatePictureObjects(isProject);
                     loadImage(pictureURL, addCrop)
                     selectMainArea()
                 }

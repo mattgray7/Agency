@@ -17,7 +17,7 @@ function checkIfPictureCanBeLoaded(){
     }
 }
 
-function previewEditPicture(input) {
+function previewEditPicture(input, onload) {
     if (input.files && input.files[0]) {
         // Add the loading gif
         togglePictureLoadingGif("show")
@@ -36,6 +36,10 @@ function previewEditPicture(input) {
                 newPictureWidth = this.width;
                 // Image is loaded and ready to be displayed
                 imageLoaded = true;
+                if(onload != null){
+                    console.log("About to call onload " + onload)
+                    onload()
+                }
             }
         }
         reader.readAsDataURL(input.files[0]);
@@ -81,6 +85,8 @@ function setDoesPictureExist(picture){
     // Can't set using Django variables in separate file, so need a setter function
     if(picture.length > 0){
         pictureExists = true;
+    }else{
+        pictureExists = false;
     }
 }
 
