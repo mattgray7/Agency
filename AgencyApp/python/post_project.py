@@ -26,7 +26,7 @@ class ProjectPostInstance(post.GenericPostInstance):
         if self.record:
             self.record.location = self.request.POST.get("location")
             self.record.length = self.request.POST.get("length")
-            self.record.union = self.reqeust.POST.get("union", False) and True
+            self.record.union = self.request.POST.get("union", False) and True
             self.record.projectType = self.request.POST.get("projectType")
             self.record.shortDescription = self.request.POST.get("shortDescription")
             self.record.save()

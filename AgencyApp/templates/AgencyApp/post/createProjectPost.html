@@ -320,27 +320,31 @@
             }
 
             return postFields;
+        }*/
+
+    function submitProjectForm(formName){
+        // Set the status from the select bar in the form
+        var statusDiv = document.getElementById("statusSelectBar");
+        if(statusDiv != null){
+            document.getElementById("statusSelectInput").value = statusDiv.value;
         }
 
-        function getCastingFormDict(){
-            var postFields = createValueDictFromForm()
+        // Set values of all other select fields
+        {% if selectFields.projects.names %}
+            {% for name in selectFields.projects.names %}
+                var selectDiv = document.getElementById('{{name}}SelectBar')
+                if(selectDiv != null){
+                    document.getElementById('{{name}}SelectInput').value = selectDiv.value;
+                }
+            {% endfor %}
+        {% endif %}
 
-            // Add actor
-            var actorField = {"username": "{{actor.username}}", "cleanName": "{{actor.cleanName}}"}
-            {% if actor %}
-                actorField["username"] = "{{actor.username}}";
-                actorField["cleanName"] = "{{actor.cleanName}}";
-                {% if actor.profilePicture %}
-                    actorField.profilePictureURL = '{{actor.profilePicture.url}}';
-                {% endif %}
-            {% else %}
-                actorField["username"] = null;
-                actorField.profilePictureURL = '{{images.noProfilePicture}}';
-            {% endif %}
-            postFields["actor"] = actorField;
-
-            return postFields;
-        }*/
+        // Submit the form
+        var form = document.getElementById(formName)
+        if(form != null){
+            return form.submit();
+        }
+    }
 
     function submitProjectSubForm(formName){
         // Submits the form while adding values of select bars with id '{{name}}SelectBar' to form input '{{name}}SelectInput'
