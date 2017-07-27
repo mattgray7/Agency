@@ -128,6 +128,7 @@ class CreateProjectPostView(post.GenericCreatePostView):
             self._formInitialValues["status"] = self.post.record.status
             self._formInitialValues["location"] = self.post.record.location
             self._formInitialValues["length"] = self.post.record.length
+            self._formInitialValues["union"] = self.post.record.union
             self._formInitialValues["projectType"] = self.post.record.projectType
             self._formInitialValues["shortDescription"] = self.post.record.shortDescription
         return self._formInitialValues

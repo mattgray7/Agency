@@ -222,8 +222,16 @@
                     postField.value = '{{post.postID}}';
                 }
             }else if(postField.name == "postPicture"){
-                postField.value = "{{images.noPicture}}";
-                postField.editOnclick = "toggleEditPicturePopup('show')";
+                if(postType === "project"){
+                    {% if post.postPicture %}
+                        postField.value = "{{post.postPicture.url}}";
+                    {% else %}
+                        postField.value = "{{images.noPicture}}";
+                    {% endif %}
+                }else{
+                    postField.value = "{{images.noPicture}}";
+                }
+                postField.editOnclick = "toggleEditPicturePopup('show', true)";
             }else if(postField.name == "paid"){
                 var currentInput = postField.input;
                 var paidDescription = '{{post.paidDescription}}'
