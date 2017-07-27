@@ -60,26 +60,38 @@
         return nextID;
     }
 
-    function addEditImageContent(containerID){
+    function addEditImageContent(containerID, isProject){
         var pictureID = "editPostPicture";
-        var pictureURL = "";
-        setButtonLoadingGifURL("{{images.loading.mid}}");
-        setDoesPictureExist("")
         setPictureID(pictureID);
+        setButtonLoadingGifURL("{{images.loading.mid}}");
         setDefaultImageURL("{{images.loading.light}}")
 
-        /*if(!newPicture){
+        var updatePictureButton = document.getElementById("updatePictureButton");
+        if(updatePictureButton != null){
+            updatePictureButton.onclick = function(){submitPictureForm('editPostPictureForm', isProject)};
+            console.log("onclick isproject is " + isProject)
+        }
+
+        var pictureURL = "";
+        if(isProject){
             {% if post and post.postPicture and post.postPicture.url %}
                 pictureURL = "{{post.postPicture.url}}"
-            {% else %}
-                pictureURL = "{{images.noPicture}}"
+                setDoesPictureExist("{{post.postPicture}}")
             {% endif %}
-        }else{
-            pictureURL = newPicture.src;
+        }
+        if(pictureURL.length === 0){
+            pictureURL = "{{images.noPicture}}";
+            setDoesPictureExist("")
+        }
+        var addCrop = true;
+        // Not yet
+        /*if(pictureURL === "{{post.postPicture.url}}"){
+            addCrop = false;
         }*/
-        setNewPictureObject("{{images.noPicture}}")
+        setNewPictureObject(pictureURL, addCrop)
 
-        $("#editPostPictureImage").change(function(){
+        imageInputDivID = pictureID + "Image";
+        $("[id='" + imageInputDivID + "']").change(function(){
             if(this.value != null && this.value.length > 0){
                 pictureExists = true;
                 previewEditPicture(this);
@@ -89,8 +101,8 @@
                     pictureExists = false;
                 {% endif %}
                 if(pictureURL.length > 0){
-                    setNewPictureObject(pictureURL)
-                    loadImage(pictureURL)
+                    setNewPictureObject(pictureURL, addCrop)
+                    loadImage(pictureURL, addCrop)
                     selectMainArea()
                 }
             }
@@ -225,7 +237,9 @@
                     postField.value = '{{post.postID}}';
                 }
             }else if(postField.name == "postPicture"){
+                var isProject = false;
                 if(postType === "project"){
+                    isProject = true;
                     {% if post.postPicture %}
                         postField.value = "{{post.postPicture.url}}";
                     {% else %}
@@ -234,7 +248,7 @@
                 }else{
                     postField.value = "{{images.noPicture}}";
                 }
-                postField.editOnclick = "toggleEditPicturePopup('show', true)";
+                postField.editOnclick = "toggleEditPicturePopup('show', " + isProject + ")";
             }else if(postField.name == "paid"){
                 var currentInput = postField.input;
                 var paidDescription = '{{post.paidDescription}}'
@@ -541,7 +555,7 @@
                                 </td>
                             {% endif %}
                             <td>
-                                <div id="updatePictureButton" class="whiteButton blackHover" style="width: 70px; height:28px; position: relative; display: block;" onclick="submitPictureForm('editPostPictureForm')">
+                                <div id="updatePictureButton" class="whiteButton blackHover" style="width: 70px; height:28px; position: relative; display: block;">
                                     <div style="margin-left: 5px; margin-top: 2px;">Update</div>
                                 </div>
                             </td>
@@ -664,18 +678,13 @@
                         </td>
             </tr>-->
     <div id="editPostPanel" class="editPostPanel">
-        <div id="postForm"></div>
+        <div id="projectForm"></div>
     </div>
     <script>
-        var postFormDiv = document.getElementById("postForm");
-        if(postFormDiv != null){
+        var projectFormDiv = document.getElementById("projectForm");
+        if(projectFormDiv != null){
             var newForm = addCreateProjectPost(getProjectFormDict(), "{{currentPageURL}}", "createProjectPostForm");
-            postFormDiv.innerHTML = newForm;
-
-            var selectProjectPanelDiv = document.getElementById("selectProjectPanel");
-            if(selectProjectPanelDiv != null){
-                newForm = addSelectProjectForm("{{post.postID}}", "{{request.user.username}}")
-            }
+            projectFormDiv.innerHTML = newForm;
         }
     </script>
     <table style="width:99%; height: 400px;">

@@ -25,7 +25,7 @@
                 }
             }else if(formType === "hire"){
                 for(var i=0; i < chosenHireTypes.length; i++){
-                    extraInputs.push({key: "hireType." + chosenHireTypes[i], vlaue: true})
+                    extraInputs.push({key: "hireType." + chosenHireTypes[i], value: true})
                 }
             }
             var form = createPageRedirectForm("{{next}}", "{{next}}", "{{destination}}", "{{currentPageURL}}", extraInputs, null);

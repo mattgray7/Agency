@@ -88,7 +88,10 @@ function setPictureID(newPicID){
     pictureID = newPicID;
 }
 
-function setNewPictureObject(imageURL){
+function setNewPictureObject(imageURL, addCrop){
+    if(addCrop == null){
+        addCrop = true;
+    }
     newPicture = new Image();
     newPicture.onload = function(){
         // Need to set width variables once the image is loaded into the js object
@@ -96,7 +99,7 @@ function setNewPictureObject(imageURL){
         newPictureWidth = this.width;
 
         // Once the js object is loaded, we can load the image into the page
-        loadImage(imageURL)
+        loadImage(imageURL, addCrop)
         return true;
         }
     newPicture.src = imageURL;
@@ -134,12 +137,17 @@ function createPictureContainer(includeCropHandler){
     return pictureHTML
 }
 
-function loadImage(imageURL){
+function loadImage(imageURL, addCrop){
     //Load the image into html and display the crop select area
     var imageString = "";
     var newArea = {};
     var aspectRatio = 0.9;
     var pictureDimension = 290;
+    console.log(addCrop)
+    if(addCrop == null){
+        addCrop = true;
+    }
+    console.log(addCrop)
 
     // Create the picture container (different if existing pic or not)
     var pictureParentContainer = document.getElementById(pictureID + "Div");
@@ -190,7 +198,7 @@ function loadImage(imageURL){
         }
     }
 
-    if(pictureExists){
+    if(pictureExists && addCrop){
         $("[id='" + pictureID + "']").selectAreas({
             minSize: [10, 10],
             onLoaded: selectMainArea,

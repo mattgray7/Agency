@@ -60,18 +60,24 @@ function toggleEditPicturePopup(toggleType, postIsProject){
     }
     togglePopup(toggleType, "hiddenGrayPopupOverlay", "editPicturePanel")
     if(toggleType === "show"){
-        addEditImageContent("editPicturePanel");
+        addEditImageContent("editPicturePanel", postIsProject);
     }
 }
 
-function addPopupPictureToBaseForm(tempPictureID, tempPictureURL){
+function addPopupPictureToBaseForm(tempPictureID, tempPictureURL, isProject){
     var baseFormPictureInput = document.getElementById("mainPostPictureInput")
+    if(isProject){
+        baseFormPictureInput = document.getElementById("mainProjectPictureInput")
+    }
     baseFormPictureInput.innerHTML = "<input type='hidden' name='tempPostPictureID' value='" + tempPictureID + "'>"
-    return setBaseFormPicture(tempPictureURL);
+    return setBaseFormPicture(tempPictureURL, isProject);
 }
 
-function setBaseFormPicture(pictureURL){
+function setBaseFormPicture(pictureURL, isProject){
     var baseFormPicture = document.getElementById("postPictureImg")
+    if(isProject){
+        baseFormPicture = document.getElementById("projectPictureImg")
+    }
     if(baseFormPicture != null && pictureURL.length > 0){
         baseFormPicture.src = pictureURL
         return true;
@@ -79,7 +85,7 @@ function setBaseFormPicture(pictureURL){
     return false;
 }
 
-function submitPictureForm(formName){
+function submitPictureForm(formName, isProject){
         var updateButton = document.getElementById("updatePictureButton")
         var updateButtonHTML = updateButton.innerHTML;
         updateButton.innerHTML = "<img id='loadingGif' src='" + buttonLoadingGifURL + "' style='position: absolute; height: 60px; width: 60px; margin-top: -15px;'>"
@@ -98,7 +104,7 @@ function submitPictureForm(formName){
                 success : function(data) {
                     if(data["success"]){
                         // Add the temp picture to the base form (input and display)]
-                        addPopupPictureToBaseForm(data["tempID"], data["pictureURL"])
+                        addPopupPictureToBaseForm(data["tempID"], data["pictureURL"], isProject)
                         updateButton.innerHTML = updateButtonHTML;
                         toggleEditPicturePopup("hide")
                     }
@@ -413,7 +419,7 @@ function addCreateProjectPost(formDict, formURL, formName){
     // Fill post picture string
     var pictureField = formDict["postPicture"];
     //var pictureColumn = '<td style="text-align: center; width: 30%;"><div id="postPicturePanel" class="postPicture" style="width: 270px; height: 298px; background: #000; margin-left: 10px; margin-top: 50px;"><img id="postPictureImg" src="' + pictureField.value + '" style="max-width:100%; max-height:100%;"/></div><div style="width: 60%; margin-left: 25%; overflow: hidden;">' + pictureField.input + "</div></td>";
-    var pictureColumn = '<td style="text-align: center; width: 30%; min-width: 270px; position: relative;"><div style="position:absolute; width: 270px; top: 0;"><div id="postPicturePanel" class="postPicture" style="width: 270px; height: 298px; background: #000; margin-left: 10px; margin-top: 47px;"><img id="postPictureImg" src="' + pictureField.value + '" style="max-width:100%; max-height:100%;"/></div><div style="width: 60%; margin-left: 25%; overflow: hidden;"><a onclick="' + pictureField.editOnclick + '">Edit</a></div><div id="mainPostPictureInput" style="display: none;">' + pictureField.input + '</div></div></td>';
+    var pictureColumn = '<td style="text-align: center; width: 30%; min-width: 270px; position: relative;"><div style="position:absolute; width: 270px; top: 0;"><div id="projectPicturePanel" class="postPicture" style="width: 270px; height: 298px; background: #000; margin-left: 10px; margin-top: 47px;"><img id="projectPictureImg" src="' + pictureField.value + '" style="max-width:100%; max-height:100%;"/></div><div style="width: 60%; margin-left: 25%; overflow: hidden;"><a onclick="' + pictureField.editOnclick + '">Edit</a></div><div id="mainProjectPictureInput" style="display: none;">' + pictureField.input + '</div></div></td>';
 
     // Fill text content
     var sectionMap = {"Details": ["title", "projectType", "status", "location", "union", "length"],
