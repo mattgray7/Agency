@@ -22,6 +22,14 @@ class ProjectPostInstance(post.GenericPostInstance):
         newAdmin = models.ProjectAdmin(username=self.request.user.username,
                                        projectID=self.request.POST.get("projectID"))
         newAdmin.save()
+
+        if self.record:
+            self.record.location = self.request.POST.get("location")
+            self.record.length = self.request.POST.get("length")
+            self.record.union = self.reqeust.POST.get("union", False) and True
+            self.record.projectType = self.request.POST.get("projectType")
+            self.record.shortDescription = self.request.POST.get("shortDescription")
+            self.record.save()
         return True
 
     @property
@@ -118,6 +126,10 @@ class CreateProjectPostView(post.GenericCreatePostView):
         self._formInitialValues = super(CreateProjectPostView, self).formInitialValues
         if self.post.record:
             self._formInitialValues["status"] = self.post.record.status
+            self._formInitialValues["location"] = self.post.record.location
+            self._formInitialValues["length"] = self.post.record.length
+            self._formInitialValues["projectType"] = self.post.record.projectType
+            self._formInitialValues["shortDescription"] = self.post.record.shortDescription
         return self._formInitialValues
 
     @property
@@ -128,7 +140,7 @@ class CreateProjectPostView(post.GenericCreatePostView):
         self._pageContext["jobs"] = self.post.jobs
         self._pageContext["events"] = self.post.events
         self._pageContext["forms"] = {"role": forms.CreateCastingPostForm,
-                                      "project": forms.CreateProjectPostForm}
+                                      "project": self.form}
         self._pageContext["isProject"] = True
         return self._pageContext
 
