@@ -422,7 +422,17 @@
                         toggleExpandListPanel("shrink", activeTab, "horizontal")
                     }else{
                         if (data["errors"]){
-                            console.log("there are errors")
+                            errorRow = document.getElementById("formErrorRow");
+                            if(errorRow != null){
+                                errorRow.innerHTML = "<td colspan='3'>" + getErrorPanel(data["errors"]) + "</td>";
+                            }
+
+                            // Change height of container to handle error panel TODO: add errorRow.height to container
+                            addNewPanel = document.getElementById("addNewPanel");
+                            addNewPanel.style.height = "1500px";
+
+                            projectContentPanel = document.getElementById("projectContentPanel")
+                            projectContentPanel.style.height = "1500px";
                         }
                     }
                 }

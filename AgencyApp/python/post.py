@@ -182,7 +182,7 @@ class GenericPostInstance(object):
     @property
     def formErrors(self):
         if not self._formErrors:
-            self._formErrors = [];
+            self._formErrors = {}
 
             # Dirty hack to get current page from post type
             currentPage = "CREATE_{0}".format(self.postType)
@@ -199,7 +199,7 @@ class GenericPostInstance(object):
                             errorDict[errorMessage] = [field.label.replace("*", "")]
 
                 # Add more error messages here when they occur and should be stopped
-                self._formErrors.append("The following fields are required: {0}".format(", ".join(errorDict["This field is required."])))
+                self._formErrors["required"] =  errorDict["This field is required."]
         return self._formErrors
 
     @property

@@ -247,9 +247,11 @@ function addCreateCastingPost(formDict, formURL, formName){
     formString += "</h1></td></tr>";
 
     // Add error panel
+    formString += "<tr id='formErrorRow'>";
     if(formDict["errors"]){
-        formString += "<tr><td colspan='3'>" + getErrorPanel(formDict["errors"]) + "</td></tr>";
+        formString += "<td colspan='3'>" + getErrorPanel(formDict["errors"]) + "</td>";
     }
+    formString += "</tr>";
 
     // Create the form
     formString += "<tr>" + mainLabelsColumn + mainInputsColumn + pictureColumn + "</tr>"
