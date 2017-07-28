@@ -173,7 +173,7 @@
                 postFields['csrf_token'] = csrfField;
 
                 // Add cancel button with onclick
-                var cancelButton = {'name': 'cancelButton', 'onclick': 'console.log("canceling");', "hidden": true};
+                var cancelButton = {'name': 'cancelButton', 'onclick': 'redirectToPost("{{post.postID}}");', "hidden": true};
                 /*if(existingPosts){
                     cancelButton["onclick"] = 'toggleExpandListPanel("shrink", "roles", "horizontal");';
                 }else{
