@@ -149,13 +149,28 @@
 
     function getProjectFormDict(){
         var postFields = {}
+        var errors = {"required": []};
+
         {% if forms.project %}
             {% spaceless %}
             {% for field in forms.project %}
-                var postField = createPostField('project', '{{field.name}}', '{{field.value}}', '{{field.label}}', '{{field}}')
+                var postField = createPostField('project', '{{field.name}}', '{{field.value}}', '{{field.label}}', '{{field}}', '{{field.errors}}')
                 if(postField != null){
                     postFields[postField.name] = postField;
                 }
+
+                // Add any form errors to the error dict
+                {% if field.errors %}
+                    {% for error in field.errors %}
+                        var errorString = '{{error}}';
+                        var fieldDisplayName = postField.label.replace("*", "");
+
+                        // Want to group all fields with the same error
+                        if(errorString ===  "This field is required."){
+                            errors["required"].push(fieldDisplayName);
+                        }
+                    {% endfor %}
+                {% endif %}
             {% endfor %}
             {% endspaceless %}
 
@@ -170,6 +185,10 @@
             // Add create/update button with onclick
             var createButton = {'name': 'createButton', 'onclickFunction': 'submitProjectForm', "hidden": true};
             postFields['createButton'] = createButton;
+
+            if(errors["required"].length > 0){
+                postFields["errors"] = errors;
+            }
 
             postFields["newPost"] = true;
         {% endif %}
@@ -417,7 +436,6 @@
                 type : 'POST',
                 dataType: "json",
                 success : function(data) {
-                    console.log(data)
                     if(data["success"]){
                         toggleExpandListPanel("shrink", activeTab, "horizontal")
                     }else{
