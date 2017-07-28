@@ -159,33 +159,19 @@
             {% endfor %}
             {% endspaceless %}
 
-                /*// Add project
-                var projectField = {"name": "project"}
-                {% if post and post.title %}
-                    projectField.title  = '{{post.title}}';
-                    projectField.projectID = '{{post.postID}}';
-                {% endif %}
-                postFields["project"] = projectField*/
+            // Add csrf token
+            var csrfField = {"name": "csrf_token", "input": "{% csrf_token %}", "hidden": true};
+            postFields['csrf_token'] = csrfField;
 
+            // Add cancel button with onclick
+            var cancelButton = {'name': 'cancelButton', 'onclick': 'redirectToPost("{{post.postID}}");', "hidden": true};
+            postFields['cancelButton'] = cancelButton;
 
-                // Add csrf token
-                var csrfField = {"name": "csrf_token", "input": "{% csrf_token %}", "hidden": true};
-                postFields['csrf_token'] = csrfField;
+            // Add create/update button with onclick
+            var createButton = {'name': 'createButton', 'onclickFunction': 'submitProjectForm', "hidden": true};
+            postFields['createButton'] = createButton;
 
-                // Add cancel button with onclick
-                var cancelButton = {'name': 'cancelButton', 'onclick': 'redirectToPost("{{post.postID}}");', "hidden": true};
-                /*if(existingPosts){
-                    cancelButton["onclick"] = 'toggleExpandListPanel("shrink", "roles", "horizontal");';
-                }else{
-                    cancelButton["onclick"] = 'toggleExpandListPanel("shrink", "roles", "vertical");'
-                }*/
-                postFields['cancelButton'] = cancelButton;
-
-                // Add create/update button with onclick
-                var createButton = {'name': 'createButton', 'onclickFunction': 'submitProjectForm', "hidden": true};
-                postFields['createButton'] = createButton;
-
-                postFields["newPost"] = true;
+            postFields["newPost"] = true;
         {% endif %}
         return postFields;
     }
@@ -434,6 +420,10 @@
                     console.log(data)
                     if(data["success"]){
                         toggleExpandListPanel("shrink", activeTab, "horizontal")
+                    }else{
+                        if (data["errors"]){
+                            console.log("there are errors")
+                        }
                     }
                 }
             });

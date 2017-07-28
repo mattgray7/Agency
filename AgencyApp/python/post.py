@@ -78,7 +78,8 @@ class GenericPostInstance(object):
         self._projectID = kwargs.get("projectID")
         self._record = None
         self._database = None
-        self.errors = []
+        self._formErrors = None
+        self._errors = []
 
     @property
     def postID(self):
@@ -162,21 +163,49 @@ class GenericPostInstance(object):
 
     def _checkTitle(self, title):
         if len(title) < 1:
-            self.errors.append("Title must be at least 30 characters long.")
+            self._errors.append("Title must be at least 30 characters long.")
             return False
         return True
 
     def _checkPoster(self, poster):
         if poster != self.request.user.username:
-            self.errors.append("You must be logged in to create an post.")
+            self._errors.append("You must be logged in to create an post.")
             return False
         return True
 
     def _checkDescription(self, description):
         if len(description) < 1:  #TODO switch min length
-            self.errors.append("Post description must be at least 75 characters long.")
+            self._errors.append("Post description must be at least 75 characters long.")
             return False
         return True
+
+    @property
+    def formErrors(self):
+        if not self._formErrors:
+            self._formErrors = [];
+
+            # Dirty hack to get current page from post type
+            currentPage = "CREATE_{0}".format(self.postType)
+            formClass = constants.FORM_MAP.get(currentPage)
+            form = formClass(self.request.POST)
+            if not form.is_valid():
+                errorDict = {}
+                for field in form:
+                    if field.errors:
+                        errorMessage = str(field.errors).replace('<ul class="errorlist"><li>', '').replace('</li></ul>', '')
+                        if errorMessage in errorDict:
+                            errorDict[errorMessage].append(field.label.replace("*", ""))
+                        else:
+                            errorDict[errorMessage] = [field.label.replace("*", "")]
+
+                # Add more error messages here when they occur and should be stopped
+                self._formErrors.append("The following fields are required: {0}".format(", ".join(errorDict["This field is required."])))
+        return self._formErrors
+
+    @property
+    def errors(self):
+        return self._errors
+
 
 
 class GenericCreatePostView(views.PictureFormView):
