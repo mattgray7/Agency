@@ -37,7 +37,6 @@ function previewEditPicture(input, onload) {
                 // Image is loaded and ready to be displayed
                 imageLoaded = true;
                 if(onload != null){
-                    console.log("About to call onload " + onload)
                     onload()
                 }
             }
@@ -153,11 +152,9 @@ function loadImage(imageURL, addCrop){
     var newArea = {};
     var aspectRatio = 0.9;
     var pictureDimension = 290;
-    console.log(addCrop)
     if(addCrop == null){
         addCrop = true;
     }
-    console.log(addCrop)
 
     // Create the picture container (different if existing pic or not)
     var pictureParentContainer = document.getElementById(pictureID + "Div");

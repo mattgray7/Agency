@@ -111,8 +111,6 @@
         // Set the pictureURL to display
         var addCrop = true;
         var pictureURL = getPictureURL(isProject);
-        console.log("pictureURL is " + pictureURL)
-        console.log("picture exists: " + pictureExists);
         if(pictureURL === "{{post.postPicture.url}}" || pictureURL === "{{images.noPicture}}"){
             addCrop = false;
         }
@@ -122,20 +120,24 @@
         updatePictureObjects(isProject);
 
         imageInputDivID = pictureID + "Image";
+
+        // Reset picture input value and remove previous change callbacks
+        $("[id='" + imageInputDivID + "']").val("");
+        $("[id='" + imageInputDivID + "']").off('change');
+
+        // Add new callback for this window
         $("[id='" + imageInputDivID + "']").change(function(){
             if(this.value != null && this.value.length > 0){
                 pictureExists = true;
                 previewEditPicture(this, function(){
                     updatePictureObjects(isProject)
                 });
-                //updatePictureObjects(pictureURL, addCrop, isProject);
             }else{
                 var fallbackPictureURL = "";
                {% if not post or not post.postPicture or not post.postPicture.url %}
                     pictureExists = false;
                 {% endif %}
                 if(pictureURL.length > 0){
-                    console.log("FALLING BACK")
                     setNewPictureObject(pictureURL, addCrop)
                     updatePictureObjects(isProject);
                     loadImage(pictureURL, addCrop)
@@ -143,7 +145,6 @@
                 }
             }
         });
-
     }
 
     function getProjectFormDict(){
