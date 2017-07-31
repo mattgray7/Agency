@@ -531,5 +531,8 @@ function addCreateProjectPost(formDict, formURL, formName){
     return formString;
 }
 
+function createBrowseTable(){
+    console.log("here")
+}
 
 

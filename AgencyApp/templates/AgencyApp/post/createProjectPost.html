@@ -695,8 +695,48 @@
         return contentString
     }
 
+    function getBrowseRolesDict(){
+        var roleDict = {"Open": [], "Cast": [], "Opening soon": []};
+        {% if roles %}
+            {% for role in roles %}
+                var newRole = {"actor": {}, "post": {}};
+                {% if role.actor %}
+                    newRole["actor"] = {"username": '{{role.actor.username}}', "cleanName": '{{role.actor.cleanName}}'}
+                    {% if role.actor.profilePicture and role.actor.profilePicture.url %}
+                        newRole["actor"]["profilePicture"] = '{{role.actor.profilePicture.url}}';
+                    {% else %}
+                        newRole["actor"]["profilePicture"] = '{{images.noProfilePicture}}';
+                    {% endif %}
+                {% endif %}
+
+                {% if role.post %}
+                    newRole["post"] = {"postID": {'value': '{{role.post.postID}}', 'hidden': true},
+                                       "characterName": {'value': '{{role.post.characterName}}', 'hidden': false},
+                                       "title": {'value': '{{role.post.title}}', 'hidden': false},
+                                       "startDate": {'value': '{{role.post.startDate}}', 'hidden': false},
+                                       "endDate": {'value': '{{role.post.endDate}}', 'hidden': false},
+                                       "hoursPerWeek": {'value': '{{role.post.hoursPerWeek}}', 'hidden': false},
+                                       "gender": {'value': '{{role.post.gender}}', 'hidden': false},
+                                       "status": {'value': '{{role.post.status}}', 'hidden': true}
+                                   };
+                    {% if role.post.postPicture and role.post.postPicture.url %}
+                        newRole["post"]["postPicture"] = '{{erole.post.postPicture.url}}';
+                    {% else %}
+                        newRole["post"]["postPicture"] = '{{images.noPicture}}';
+                    {% endif %}
+
+                if('{{role.post.status}}' in roleDict){
+                    roleDict['{{role.post.status}}'].push(newRole);
+                };
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+        console.log(roleDict)
+        return roleDict;
+    }
+
     function selectProjectTab(tabType){
-        for(var i=0; i < projectTabs.length; i++){
+        /*for(var i=0; i < projectTabs.length; i++){
             var buttonId = projectTabs[i] + "Button";
             var borderCoverId = projectTabs[i] + "BorderCover";
             var projectButtonDiv = document.getElementById(buttonId);
@@ -719,18 +759,19 @@
                     projectButtonDiv.className = "projectTabButtonInactive";        
                 }
             }
-        }
+        }*/
         if(tabType === "roles"){
-            selectRoles();
+            var roleEntries = getBrowseRolesDict();
         }else if(tabType == "jobs"){
             selectJobs();
         }else if(tabType == "events"){
             selectEvents();
         }
-        var contentDiv = document.getElementById("projectContentList")
+        var table = createBrowseTable(tabType, roleEntries)
+        /*var contentDiv = document.getElementById("projectContentList")
         if(contentDiv != null){
             contentDiv.scrollLeft = 0;
-        }
+        }*/
     }
 
     function selectRoles(){
