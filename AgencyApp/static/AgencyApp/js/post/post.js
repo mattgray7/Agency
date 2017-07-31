@@ -531,8 +531,42 @@ function addCreateProjectPost(formDict, formURL, formName){
     return formString;
 }
 
-function createBrowseTable(){
-    console.log("here")
+function createBrowseTable(tableType, tableEntries, sectionOrder){
+    var tableString = "<div id='browseTableContainer'><table>"
+
+    // Format data in section order
+    var data = [];
+    if(sectionOrder != null){
+        for(var i=0; i < sectionOrder.length; i++){
+            var section = sectionOrder[i];
+            if(tableEntries[section] != null){
+                for(var j=0; j < tableEntries[section].length; j++){
+                    data.push(tableEntries[section][j])
+                }
+            }
+        }
+    }else{
+        console.log("Error: no section order passed to create browse table")
+    }
+
+    var colCount = 0;
+    for(var i=0; i < data.length; i++){
+        if(colCount === 0){
+            tableString += "<tr>"
+        }
+        tableString += "<td>";
+
+        tableString += "</td>";
+
+        colCount += 1;
+        if(colCount === 3){
+            tableString += "</tr>";
+            colCount = 0;
+        }
+
+
+    }
+
 }
 
 

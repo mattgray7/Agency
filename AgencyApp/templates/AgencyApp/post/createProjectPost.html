@@ -696,7 +696,7 @@
     }
 
     function getBrowseRolesDict(){
-        var roleDict = {"Open": [], "Cast": [], "Opening soon": []};
+        var roleDict = {"Open": [], "Cast": [], "Opening Soon": []};
         {% if roles %}
             {% for role in roles %}
                 var newRole = {"actor": {}, "post": {}};
@@ -720,7 +720,7 @@
                                        "status": {'value': '{{role.post.status}}', 'hidden': true}
                                    };
                     {% if role.post.postPicture and role.post.postPicture.url %}
-                        newRole["post"]["postPicture"] = '{{erole.post.postPicture.url}}';
+                        newRole["post"]["postPicture"] = '{{role.post.postPicture.url}}';
                     {% else %}
                         newRole["post"]["postPicture"] = '{{images.noPicture}}';
                     {% endif %}
@@ -760,14 +760,17 @@
                 }
             }
         }*/
+        var entries;
+        var sectionOrder;
         if(tabType === "roles"){
-            var roleEntries = getBrowseRolesDict();
+            entries = getBrowseRolesDict();
+            sectionOrder = ["Open", "Opening Soon", "Cast"];
         }else if(tabType == "jobs"){
             selectJobs();
         }else if(tabType == "events"){
             selectEvents();
         }
-        var table = createBrowseTable(tabType, roleEntries)
+        var table = createBrowseTable(tabType, entries, sectionOrder)
         /*var contentDiv = document.getElementById("projectContentList")
         if(contentDiv != null){
             contentDiv.scrollLeft = 0;
