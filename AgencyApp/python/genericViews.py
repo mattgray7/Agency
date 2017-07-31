@@ -372,7 +372,11 @@ class PictureFormView(GenericFormView):
                 self.pictureModel.__dict__[self.pictureModelFieldName] = self.sourcePicture
                 self.pictureModel.save()
 
-            if self.pictureModelPictureField:
+                if not self.pictureModelPictureField or not hasattr(self._pictureModelPictureField, "path"):
+                    self._pictureModelPictureField = self.sourcePicture
+                    self.pictureModel.save()
+
+            if self.pictureModelPictureField and hasattr(self._pictureModelPictureField, "path"):
                 if self.cropInfo:
                     image = Image.open(self.pictureModelPictureField.path)
                     x = float(self.cropInfo.get("x"))
