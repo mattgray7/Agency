@@ -543,7 +543,7 @@ function createBrowseTableElement(elementDict){
         // add status bar
         elementString += "<td colspan=2>"
         var status = elementDict["post"]["status"]["value"]
-        elementString += "<div style='margin-left: -5px; margin-right: -5px; margin-top: -5px; height: 30px;";
+        elementString += "<div style='position: relative; margin-left: -5px; margin-right: -5px; margin-top: -5px; height: 30px;";
         if(status === "Open" || status === "Hiring"){
             // green
             elementString += "background: rgba(7, 196, 23, 0.2);";
@@ -554,7 +554,7 @@ function createBrowseTableElement(elementDict){
             // red
             elementString += "rgba(214, 0, 0, 0.2);"
         }
-        elementString += "'>" + status + "</div>"
+        elementString += "'><div style='position: absolute; right: 5px; margin-top: 2px; font-size: 1.2em;'>" + status + "</div></div>"
         elementString += "</td></tr><tr>"
 
         // add picture column
