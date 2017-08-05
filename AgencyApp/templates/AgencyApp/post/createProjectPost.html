@@ -770,7 +770,7 @@
         }else if(tabType == "events"){
             selectEvents();
         }
-        var table = createBrowseTable(tabType, entries, sectionOrder)
+        var table = createBrowseTable(tabType, entries, sectionOrder, true)
         var contentDiv = document.getElementById("projectContentList")
         if(contentDiv != null){
             contentDiv.innerHTML = table;

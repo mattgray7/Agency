@@ -531,11 +531,14 @@ function addCreateProjectPost(formDict, formURL, formName){
     return formString;
 }
 
-function createBrowseTable(tableType, tableEntries, sectionOrder){
+function createBrowseTable(tableType, tableEntries, sectionOrder, displayAddNewPanel){
     var tableString = "<div id='browseTableContainer'><table>"
 
     // Format data in section order
     var data = [];
+    if(displayAddNewPanel){
+        data.push({"addNewPanel": true});
+    }
     if(sectionOrder != null){
         for(var i=0; i < sectionOrder.length; i++){
             var section = sectionOrder[i];
@@ -549,7 +552,6 @@ function createBrowseTable(tableType, tableEntries, sectionOrder){
         console.log("Error: no section order passed to create browse table")
     }
 
-    console.log("Data is " + data)
     var colCount = 0;
     for(var i=0; i < data.length; i++){
         if(colCount === 0){
@@ -558,8 +560,14 @@ function createBrowseTable(tableType, tableEntries, sectionOrder){
         tableString += "<td>";
 
         //========= Add panel code here =========
+        tableString += "<div style='width: 200px; height: 150px; background: #AAA'>";
+        if("addNewPanel" in data[i]){
+            tableString += "Add new";
 
-        tableString += "<div style='width: 200px; height: 150px; background: #AAA'>" + data[i]["post"]["postID"]["value"] + "</div>"
+        }else{
+            tableString += data[i]["post"]["postID"]["value"];
+        }
+        tableString += "</div>";
 
         //=======================================
 
