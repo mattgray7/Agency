@@ -536,7 +536,34 @@ function createBrowseTableElement(elementDict){
     if("addNewPanel" in elementDict){
         elementString += "Add new";
     }else{
-        elementString += elementDict["post"]["postID"]["value"];
+        //elementString += elementDict["post"]["postID"]["value"];
+
+        elementString += "<table style='width: 100%;'><tr>";
+
+        // add status bar
+        elementString += "<td colspan=2>"
+        var status = elementDict["post"]["status"]["value"]
+        elementString += "<div style='margin-left: -5px; margin-right: -5px; margin-top: -5px; height: 30px;";
+        if(status === "Open" || status === "Hiring"){
+            // green
+            elementString += "background: rgba(7, 196, 23, 0.2);";
+        }else if(status === "Cast" || status === "Filled"){
+            // grey
+            elementString += "background: #d1d1d1;";
+        }else{
+            // red
+            elementString += "rgba(214, 0, 0, 0.2);"
+        }
+        elementString += "'>" + status + "</div>"
+        elementString += "</td></tr><tr>"
+
+        // add picture column
+        elementString += "<td style='width: 50%;'><img src='" + elementDict["post"]["postPicture"] + "' style='height: 170px;'></td>"
+
+        // add element data
+        elementString += "<td style='width: 50%;'><div style='width: 100%'>hi</div></td>"
+
+        elementString += "</tr></table>"
     }
     elementString += "</div>";
     return elementString;
