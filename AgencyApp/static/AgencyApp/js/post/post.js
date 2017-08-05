@@ -558,13 +558,21 @@ function createBrowseTableElement(elementDict){
         elementString += "<td style='width: 50%; '><img src='" + elementDict["post"]["postPicture"]["value"] + "' style='height: 180px; margin-left: -20px; margin-top: -5px; border: 1px solid #000;'></td>";
 
         // add element data
-        elementString += "<td style='width: 50%;'><div style='width: 100%'>";
-
+        elementString += "<td style='width: 50%;'><div style='width: 100%; text-align: right;'><div style='position: relative; height: 180px;'><ul style='position: absolute; top: 0; right: 0; height: 180px;'>";
         for(var field in elementDict["post"]){
-            console.log(elementDict["post"][field])
+            var value = elementDict["post"][field]["value"];
+            if(!elementDict["post"][field]["hidden"] && field != "postPicture"){
+                elementString += "<li>"
+                if(field === "characterName"){
+                    elementString += "<h2>" + value + "</h2>";
+                }else{
+                    elementString += "<div style='font-size: 0.8em'>" + value + "</div>";
+                }
+                elementString += "</li>";
+            }
         }
+        elementString += "</ul></div></div></td>";
 
-        elementString += "</div></td>";
 
         elementString += "</tr></table>"
     }

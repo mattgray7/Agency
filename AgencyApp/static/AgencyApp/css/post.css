@@ -195,7 +195,7 @@
 	}
 	.projectContentListElement:hover
 	{
-		cursor: pointer;
+		/*cursor: pointer;*/
 	}
 	.projectContentListElement a
 	{
