@@ -531,8 +531,19 @@ function addCreateProjectPost(formDict, formURL, formName){
     return formString;
 }
 
+function createBrowseTableElement(elementDict){
+    var elementString = "<div class='projectContentListElement'>";
+    if("addNewPanel" in elementDict){
+        elementString += "Add new";
+    }else{
+        elementString += elementDict["post"]["postID"]["value"];
+    }
+    elementString += "</div>";
+    return elementString;
+}
+
 function createBrowseTable(tableType, tableEntries, sectionOrder, displayAddNewPanel){
-    var tableString = "<div id='browseTableContainer'><table>"
+    var tableString = "<div id='browseTableContainer'><table style='width: 100%;'>"
 
     // Format data in section order
     var data = [];
@@ -557,21 +568,7 @@ function createBrowseTable(tableType, tableEntries, sectionOrder, displayAddNewP
         if(colCount === 0){
             tableString += "<tr>"
         }
-        tableString += "<td>";
-
-        //========= Add panel code here =========
-        tableString += "<div style='width: 200px; height: 150px; background: #AAA'>";
-        if("addNewPanel" in data[i]){
-            tableString += "Add new";
-
-        }else{
-            tableString += data[i]["post"]["postID"]["value"];
-        }
-        tableString += "</div>";
-
-        //=======================================
-
-        tableString += "</td>";
+        tableString += "<td style='width: 32%;'>" + createBrowseTableElement(data[i]) + "</td>";
 
         colCount += 1;
         if(colCount === 3){
