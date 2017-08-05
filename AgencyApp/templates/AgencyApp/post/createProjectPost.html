@@ -761,15 +761,17 @@
         }*/
         var entries;
         var sectionOrder;
+        var titleFieldName;
         if(tabType === "roles"){
             entries = getBrowseRolesDict();
             sectionOrder = ["Open", "Opening Soon", "Cast"];
+            titleFieldName = "characterName";
         }else if(tabType == "jobs"){
             selectJobs();
         }else if(tabType == "events"){
             selectEvents();
         }
-        var table = createBrowseTable(tabType, entries, sectionOrder, true)
+        var table = createBrowseTable(tabType, entries, sectionOrder, true, titleFieldName)
         var contentDiv = document.getElementById("projectContentList")
         if(contentDiv != null){
             contentDiv.innerHTML = table;

@@ -531,7 +531,7 @@ function addCreateProjectPost(formDict, formURL, formName){
     return formString;
 }
 
-function createBrowseTableElement(elementDict){
+function createBrowseTableElement(elementDict, titleFieldName){
     var elementString = "<div class='projectContentListElement'>";
     if("addNewPanel" in elementDict){
         elementString += "Add new";
@@ -541,7 +541,7 @@ function createBrowseTableElement(elementDict){
         // add status bar
         elementString += "<td colspan=2>"
         var status = elementDict["post"]["status"]["value"]
-        elementString += "<div style='position: relative; margin-left: -5px; margin-right: -5px; margin-top: -5px; height: 30px; border: 1px solid #000;";
+        elementString += "<div style='position: relative; margin-left: -5px; margin-right: -5px; margin-top: -5px; height: 35px; border: 1px solid #000;";
         if(status === "Open" || status === "Hiring"){
             // green
             elementString += "background: rgba(7, 196, 23, 0.2);";
@@ -552,7 +552,7 @@ function createBrowseTableElement(elementDict){
             // red
             elementString += "rgba(214, 0, 0, 0.2);"
         }
-        elementString += "'><div style='position: absolute; right: 5px; margin-top: 2px; font-size: 1.2em;'>" + status + "</div></div></td></tr><tr>";
+        elementString += "'><div style='position: absolute; left: 0; margin-top: 0px; margin-left: 5px;'><h2><a onclick='redirectToPost(" + '"' + elementDict["post"]["postID"]["value"] + '");' + "'>" + elementDict["post"][titleFieldName]["value"] + "</a></h2></div><div style='position: absolute; right: 5px; margin-top: 7px;'>" + status + "</div></div></td></tr><tr>";
 
         // add picture column
         elementString += "<td style='width: 50%; '><img src='" + elementDict["post"]["postPicture"]["value"] + "' style='height: 180px; margin-left: -20px; margin-top: -5px; border: 1px solid #000;'></td>";
@@ -561,10 +561,10 @@ function createBrowseTableElement(elementDict){
         elementString += "<td style='width: 50%;'><div style='width: 100%; text-align: right;'><div style='position: relative; height: 180px;'><ul style='position: absolute; top: 0; right: 0; height: 180px;'>";
         for(var field in elementDict["post"]){
             var value = elementDict["post"][field]["value"];
-            if(!elementDict["post"][field]["hidden"] && field != "postPicture"){
+            if(!elementDict["post"][field]["hidden"] && field != "postPicture" && field != titleFieldName){
                 elementString += "<li>"
                 if(field === "characterName"){
-                    elementString += "<h2>" + value + "</h2>";
+                    elementString += "<h2><a onclick='redirectToPost(" + '"' + elementDict["post"]["postID"]["value"] + '");' + "'>" + value + "</a></h2>";
                 }else{
                     elementString += "<div style='font-size: 0.8em'>" + value + "</div>";
                 }
@@ -580,7 +580,7 @@ function createBrowseTableElement(elementDict){
     return elementString;
 }
 
-function createBrowseTable(tableType, tableEntries, sectionOrder, displayAddNewPanel){
+function createBrowseTable(tableType, tableEntries, sectionOrder, displayAddNewPanel, titleFieldName){
     var tableString = "<div id='browseTableContainer'><table style='width: 100%;'>"
 
     // Format data in section order
@@ -606,7 +606,7 @@ function createBrowseTable(tableType, tableEntries, sectionOrder, displayAddNewP
         if(colCount === 0){
             tableString += "<tr>"
         }
-        tableString += "<td style='width: 32%;'>" + createBrowseTableElement(data[i]) + "</td>";
+        tableString += "<td style='width: 32%;'>" + createBrowseTableElement(data[i], titleFieldName) + "</td>";
 
         colCount += 1;
         if(colCount === 3){
