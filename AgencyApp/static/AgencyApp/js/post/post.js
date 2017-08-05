@@ -558,7 +558,7 @@ function createBrowseTableElement(elementDict){
         elementString += "</td></tr><tr>"
 
         // add picture column
-        elementString += "<td style='width: 50%;'><img src='" + elementDict["post"]["postPicture"] + "' style='height: 170px;'></td>"
+        elementString += "<td style='width: 50%; '><img src='" + elementDict["post"]["postPicture"] + "' style='height: 180px; margin-left: -20px; margin-top: -5px;'></td>"
 
         // add element data
         elementString += "<td style='width: 50%;'><div style='width: 100%'>hi</div></td>"
