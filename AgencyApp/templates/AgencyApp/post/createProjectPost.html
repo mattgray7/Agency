@@ -712,16 +712,29 @@
                 {% if role.post %}
                     newRole["post"] = {"postID": {'value': '{{role.post.postID}}', 'hidden': true},
                                        "characterName": {'value': '{{role.post.characterName}}', 'hidden': false},
-                                       "title": {'value': '{{role.post.title}}', 'hidden': false},
                                        "startDate": {'value': 'Start: {{role.post.startDate}}', 'hidden': false},
                                        "endDate": {'value': 'End: {{role.post.endDate}}', 'hidden': false},
                                        "hoursPerWeek": {'value': 'Hours/week: {{role.post.hoursPerWeek}}', 'hidden': false},
+                                       "paid": {'value': '{{role.post.paid}}', "hidden": false},
+                                       "title": {'value': '{{role.post.title}}', 'hidden': false},
+
                                        "gender": {'value': '{{role.post.gender}}', 'hidden': true},
                                        "status": {'value': '{{role.post.status}}', 'hidden': true},
                                        "postPicture": {"value": '{{images.noPicture}}', "hidden": false},
                                    };
                     {% if role.post.postPicture and role.post.postPicture.url %}
                         newRole["post"]["postPicture"]["value"] = '{{role.post.postPicture.url}}';
+                    {% endif %}
+
+                    {% if role.post.paid and role.post.paidDescription %}
+                        newRole["post"]["paid"]["value"] = "Paid &#10004 - {{role.post.paidDescription}}";
+                    {% elif role.post.paid %}
+                        newRole["post"]["paid"]["value"] = "Paid &#10004";
+                    {% elif role.post.paidDescription %}
+                        newRole["post"]["paid"]["value"] = "Unpaid - {{role.post.paidDescription}}";
+                    {% else %}
+                        newRole["post"]["paid"]["value"] = "Unpaid";
+                        console.log("{{role.post.paid}}")
                     {% endif %}
 
                 if('{{role.post.status}}' in roleDict){

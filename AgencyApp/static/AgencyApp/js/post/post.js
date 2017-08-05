@@ -566,7 +566,7 @@ function createBrowseTableElement(elementDict, titleFieldName){
                 if(field === "characterName"){
                     elementString += "<h2><a onclick='redirectToPost(" + '"' + elementDict["post"]["postID"]["value"] + '");' + "'>" + value + "</a></h2>";
                 }else{
-                    elementString += "<div style='font-size: 0.8em'>" + value + "</div>";
+                    elementString += "<div style='font-size: 0.9em'>" + value + "</div>";
                 }
                 elementString += "</li>";
             }
