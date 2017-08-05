@@ -717,12 +717,11 @@
                                        "endDate": {'value': '{{role.post.endDate}}', 'hidden': false},
                                        "hoursPerWeek": {'value': '{{role.post.hoursPerWeek}}', 'hidden': false},
                                        "gender": {'value': '{{role.post.gender}}', 'hidden': false},
-                                       "status": {'value': '{{role.post.status}}', 'hidden': true}
+                                       "status": {'value': '{{role.post.status}}', 'hidden': true},
+                                       "postPicture": {"value": '{{images.noPicture}}', "hidden": false},
                                    };
                     {% if role.post.postPicture and role.post.postPicture.url %}
-                        newRole["post"]["postPicture"] = '{{role.post.postPicture.url}}';
-                    {% else %}
-                        newRole["post"]["postPicture"] = '{{images.noPicture}}';
+                        newRole["post"]["postPicture"]["value"] = '{{role.post.postPicture.url}}';
                     {% endif %}
 
                 if('{{role.post.status}}' in roleDict){

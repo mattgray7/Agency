@@ -536,14 +536,12 @@ function createBrowseTableElement(elementDict){
     if("addNewPanel" in elementDict){
         elementString += "Add new";
     }else{
-        //elementString += elementDict["post"]["postID"]["value"];
-
         elementString += "<table style='width: 100%;'><tr>";
 
         // add status bar
         elementString += "<td colspan=2>"
         var status = elementDict["post"]["status"]["value"]
-        elementString += "<div style='position: relative; margin-left: -5px; margin-right: -5px; margin-top: -5px; height: 30px;";
+        elementString += "<div style='position: relative; margin-left: -5px; margin-right: -5px; margin-top: -5px; height: 30px; border: 1px solid #000;";
         if(status === "Open" || status === "Hiring"){
             // green
             elementString += "background: rgba(7, 196, 23, 0.2);";
@@ -554,14 +552,19 @@ function createBrowseTableElement(elementDict){
             // red
             elementString += "rgba(214, 0, 0, 0.2);"
         }
-        elementString += "'><div style='position: absolute; right: 5px; margin-top: 2px; font-size: 1.2em;'>" + status + "</div></div>"
-        elementString += "</td></tr><tr>"
+        elementString += "'><div style='position: absolute; right: 5px; margin-top: 2px; font-size: 1.2em;'>" + status + "</div></div></td></tr><tr>";
 
         // add picture column
-        elementString += "<td style='width: 50%; '><img src='" + elementDict["post"]["postPicture"] + "' style='height: 180px; margin-left: -20px; margin-top: -5px;'></td>"
+        elementString += "<td style='width: 50%; '><img src='" + elementDict["post"]["postPicture"]["value"] + "' style='height: 180px; margin-left: -20px; margin-top: -5px; border: 1px solid #000;'></td>";
 
         // add element data
-        elementString += "<td style='width: 50%;'><div style='width: 100%'>hi</div></td>"
+        elementString += "<td style='width: 50%;'><div style='width: 100%'>";
+
+        for(var field in elementDict["post"]){
+            console.log(elementDict["post"][field])
+        }
+
+        elementString += "</div></td>";
 
         elementString += "</tr></table>"
     }
