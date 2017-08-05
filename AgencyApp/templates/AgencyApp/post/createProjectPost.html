@@ -771,10 +771,10 @@
             selectEvents();
         }
         var table = createBrowseTable(tabType, entries, sectionOrder)
-        /*var contentDiv = document.getElementById("projectContentList")
+        var contentDiv = document.getElementById("projectContentList")
         if(contentDiv != null){
-            contentDiv.scrollLeft = 0;
-        }*/
+            contentDiv.innerHTML = table;
+        }
     }
 
     function selectRoles(){
