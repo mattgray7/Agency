@@ -464,9 +464,9 @@ function addCreateProjectPost(formDict, formURL, formName){
                         sectionLabelTableElement += "<label for='name'>" + field.label + "</label><br>";
                         sectionInputTableElement += "<li>"
                         if(field.options){
-                            var selectForm = createSelectForm(formName, field.name + "SelectBar", field.options, field.value);
+                            var selectForm = createSelectForm(formName, field.name + "SelectBarProject", field.options, field.value);
                             sectionInputTableElement += selectForm;
-                            sectionInputTableElement += "<input type='hidden' name='" + field.name + "' id='" + field.name + "SelectInput' >";
+                            sectionInputTableElement += "<input type='hidden' name='" + field.name + "' id='" + field.name + "SelectInputProject' >";
                         }else{
                             sectionInputTableElement += field.input;
                         }
@@ -531,14 +531,6 @@ function addCreateProjectPost(formDict, formURL, formName){
     return formString;
 }
 
-function insertAddNewForm(formType, addNewDivName){
-    addNewDiv = document.getElementById(addNewDivName);
-    if(addNewDiv != null){
-        addNewDiv.innerHTML = getNewElementForm(formType, "vertical");
-        addElementStatusSelect(panelType);
-    }
-}
-
 function createBrowseTableElement(elementDict, titleFieldName){
     var elementString = "<div class='projectContentListElement'>";
     if("addNewPanel" in elementDict){
@@ -550,7 +542,7 @@ function createBrowseTableElement(elementDict, titleFieldName){
         elementString += "<td colspan=2>"
         var status = elementDict["post"]["status"]["value"]
         elementString += "<div style='position: relative; margin-left: -5px; margin-right: -5px; margin-top: -5px; height: 35px; border: 1px solid #000;";
-        if(status === "Open" || status === "Hiring"){
+        if(status === "Open" || status === "Hiring" || status === "Opening soon"){
             // green
             elementString += "background: rgba(7, 196, 23, 0.2);";
         }else if(status === "Cast" || status === "Filled"){

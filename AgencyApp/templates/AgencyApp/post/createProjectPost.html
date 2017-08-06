@@ -298,9 +298,9 @@
                 save = false;
             }else if(postField.name === "status"){
                 var options = [];
-                if("roles" in statusOptions && postType == "roles"){
+                if("roles" in statusOptions && postType == "casting"){
                     options = {{ statusOptions.roles|safe }}
-                }else if("jobs" in statusOptions && postType == "jobs"){
+                }else if("jobs" in statusOptions && postType == "work"){
                     options = {{ statusOptions.jobs|safe }}
                 }else{
                     options = {{ statusOptions.projects|safe }}
@@ -386,17 +386,17 @@
 
     function submitProjectForm(formName){
         // Set the status from the select bar in the form
-        var statusDiv = document.getElementById("statusSelectBar");
+        var statusDiv = document.getElementById("statusSelectBarProject");
         if(statusDiv != null){
-            document.getElementById("statusSelectInput").value = statusDiv.value;
+            document.getElementById("statusSelectInputProject").value = statusDiv.value;
         }
 
         // Set values of all other select fields
         {% if selectFields.projects.names %}
             {% for name in selectFields.projects.names %}
-                var selectDiv = document.getElementById('{{name}}SelectBar')
+                var selectDiv = document.getElementById('{{name}}SelectBarProject')
                 if(selectDiv != null){
-                    document.getElementById('{{name}}SelectInput').value = selectDiv.value;
+                    document.getElementById('{{name}}SelectInputProject').value = selectDiv.value;
                 }
             {% endfor %}
         {% endif %}
@@ -413,6 +413,7 @@
         var statusDiv = document.getElementById("statusSelectBar");
         if(statusDiv != null){
             // Set the status from the select bar in the form
+            console.log("Setting status to " + statusDiv.value)
             document.getElementById("statusSelectInput").value = statusDiv.value;
         }
         {% if selectFields.roles.names %}
@@ -432,20 +433,15 @@
                 dataType: "json",
                 success : function(data) {
                     if(data["success"]){
-                        toggleExpandListPanel("shrink", activeTab, "horizontal")
+                        toggleExpandNewForm("shrink", activeTab)
                     }else{
-                        if (data["errors"]){
+                        if(data["errors"]){
                             errorRow = document.getElementById("formErrorRow");
                             if(errorRow != null){
                                 errorRow.innerHTML = "<td colspan='3'>" + getErrorPanel(data["errors"]) + "</td>";
                             }
-
-                            // Change height of container to handle error panel TODO: add errorRow.height to container
-                            addNewPanel = document.getElementById("addNewPanel");
-                            addNewPanel.style.height = "1500px";
-
-                            projectContentPanel = document.getElementById("projectContentPanel")
-                            projectContentPanel.style.height = "1500px";
+                            newFormDiv = document.getElementById("insertNewFormDiv")
+                            newFormDiv.style.height = "1470px";
                         }
                     }
                 }
@@ -507,75 +503,7 @@
         }
     }
 
-    /*var expanded = false;
-    function toggleExpandListPanel(toggleType, panelType, direction){
-        if(direction == null){
-            direction = "horizontal";
-        }
-        var newToggleType = toggleType;
-        if(newToggleType === "expand"){
-            newToggleType = "shrink";
-        }else{
-            newToggleType = "expand";
-        }
-        var transitionSpeed = 350;
-        var addNewPanel = document.getElementById("addNewPanel")
-        var existingList = document.getElementById("projectContentList")
-        var listPanel = document.getElementById("projectContentPanel")
-        var addNewListElement = document.getElementById("addNewListElement")
-        var formParentDiv = addNewPanel
-        if(addNewPanel != null){
-            if(expanded && toggleType == "shrink"){
-                if(direction === "vertical"){
-                    if(listPanel != null){
-                        $("#projectContentPanel").animate({marginTop: "-13px", height: "0%"}, transitionSpeed);
-                    }
-                    $('#addNewPanel').animate({marginTop: '-13px', height:'0%'}, transitionSpeed);
-                    addNewPanel.style.border = "none";
-                    addNewPanel.innerHTML = "";
-                }else if(direction === "horizontal"){
-                    $('#addNewPanel').stop(true, true).delay(500).animate({marginLeft: '0px', width:'24.6%', border: '2px solid #000'}, transitionSpeed);
-                    $('#addNewPanel').animate({marginTop: '-13px', height:'200px'}, transitionSpeed);
-                    if(listPanel != null){
-                        $("#projectContentPanel").animate({marginTop: "-13px", height: "360px"}, transitionSpeed, function() {
-                                $("#projectContentPanel").css("overflow", "scroll");
-                            });
-                    }
-                    if(existingList != null){
-                        $('#projectContentList').stop(true, true).delay(500).animate({marginLeft: "208px"}, transitionSpeed);
-                    }
-                    addNewPanel.innerHTML = createAddNewButton(panelType);
-                }
-                expanded = false;
-            }else{
-                if(direction === "vertical"){
-                    if(listPanel != null){
-                        $("#projectContentPanel").animate({marginTop: "-13px", height: "1370px"}, transitionSpeed);
-                    }
-                    addNewPanel.style.border = "2px solid #000";
-                    $('#addNewPanel').animate({marginTop: '-13px', height:'1340px'}, transitionSpeed);
-                }else if(direction === "horizontal"){
-                    $('#addNewPanel').animate({marginLeft: '0px', width:'99.4%', marginTop: "-13px", height: "1370px"}, transitionSpeed);
-                    if(listPanel != null){
-                        // Remove scroll when form is expanded
-                        $("#projectContentPanel").stop(true, true).delay(500).animate({marginTop: "-13px", height: "1370px"}, transitionSpeed, function() {$("#projectContentPanel").css("overflow", "hidden");});
-                    }
-                    addNewPanel.style.border = "none";
-                    $('#addNewListElement').prop("onclick", null);
-                    if(existingList != null){
-                        $('#projectContentList').animate({marginLeft: "99.8%"}, transitionSpeed);
-                    }
-                    formParentDiv = addNewListElement;
-                }
-                formParentDiv.innerHTML = getNewElementForm(panelType, direction);
-                addElementStatusSelect(panelType);
-                expanded = true;
-            }
-        }
-    }*/
-
     function getSingularFromPlural(plural){
-        var singular= "";
         if(plural.substring(plural.length-1, plural.length) == "s"){
             return plural.substring(0, plural.length-1);
         }
