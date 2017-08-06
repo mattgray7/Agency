@@ -308,7 +308,7 @@
                 postField.options = options;
             }else if(postField.name == "description"){
                 postField.numRows = 20;
-                if(postField.value.length <= 0){
+                if(postField.value.length <= 0 || postField.value === "None"){
                     postField.value = "";
                 }
                 if(activeTab === "roles"){
