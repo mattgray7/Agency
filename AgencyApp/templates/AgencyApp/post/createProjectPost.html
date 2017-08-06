@@ -787,7 +787,7 @@
     }
 
     function selectProjectTab(tabType){
-        /*for(var i=0; i < projectTabs.length; i++){
+        for(var i=0; i < projectTabs.length; i++){
             var buttonId = projectTabs[i] + "Button";
             var borderCoverId = projectTabs[i] + "BorderCover";
             var projectButtonDiv = document.getElementById(buttonId);
@@ -796,7 +796,7 @@
                 if(projectTabs[i] === tabType){
                     projectButtonDiv.className = "projectTabButtonActive";
                     activeTab = tabType;
-                    if(isElementListEmpty(tabType)){
+                    /*if(isElementListEmpty(tabType)){
                         var projectContentPanel = document.getElementById("projectContentPanel");
                         if(projectContentPanel != null){
                             projectContentPanel.innerHTML = getEmptyListButton(tabType);
@@ -805,12 +805,12 @@
                         }
                     }else{
                         document.getElementById("addNewPanel").innerHTML = createAddNewButton(tabType);
-                    }
+                    }*/
                 } else {
                     projectButtonDiv.className = "projectTabButtonInactive";        
                 }
             }
-        }*/
+        }
         var entries;
         var sectionOrder;
         var titleFieldName;

@@ -268,7 +268,7 @@
 		font-size: 1em;
 		color: #000;
 		cursor: pointer;
-		background: #FFF;
+		background: #ededed;
 		transition: background .20s ease;
 	}
 	.projectTabButtonInactive:hover
