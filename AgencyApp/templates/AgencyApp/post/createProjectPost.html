@@ -235,12 +235,7 @@
                 postFields['csrf_token'] = csrfField;
 
                 // Add cancel button with onclick
-                var cancelButton = {'name': 'cancelButton', 'onclick': 'toggleExpandListPanel("shrink", "roles", "vertical");', "hidden": true};
-                if(existingPosts){
-                    cancelButton["onclick"] = 'toggleExpandListPanel("shrink", "roles", "horizontal");';
-                }else{
-                    cancelButton["onclick"] = 'toggleExpandListPanel("shrink", "roles", "vertical");'
-                }
+                var cancelButton = {'name': 'cancelButton', 'onclick': 'toggleExpandNewForm("shrink", "roles");', "hidden": true};
                 postFields['cancelButton'] = cancelButton;
 
                 // Add create/update button with onclick
@@ -472,7 +467,7 @@
 
     var expanded = false;
     var roleFormHeight = "1375px";
-    function toggleExpandNewForm(toggleType, panelType, newFormDivName){
+    function toggleExpandNewForm(toggleType, panelType){
         var newToggleType = toggleType;
         if(newToggleType === "expand"){
             newToggleType = "shrink";
@@ -481,7 +476,7 @@
         }
         var transitionSpeed = 350;
 
-        var newFormDiv = document.getElementById(newFormDivName)
+        var newFormDiv = document.getElementById("insertNewFormDiv")
         var browsePostsDiv = document.getElementById("projectContentList")
         var filterBarDiv = document.getElementById("projectContentListHeader")
         if(newFormDiv == null || browsePostsDiv == null){
@@ -490,7 +485,7 @@
 
         if(toggleType === "expand"){
             newFormDiv.style.visibility = "visible";
-            $("[id='" + newFormDivName + "']").animate({marginTop: "0px", height: roleFormHeight}, transitionSpeed);
+            $("#insertNewFormDiv").animate({marginTop: "0px", height: roleFormHeight}, transitionSpeed);
 
             //newFormDiv.style.border = "2px solid #000";
             // Optional: animate filter bar to shrink as opposed to just making invisible
@@ -501,7 +496,14 @@
             addElementStatusSelect(panelType);
             expanded = true;
         }else{
+            $("#insertNewFormDiv").animate({marginTop: "0px", height: "0px"}, transitionSpeed, function(){newFormDiv.style.visibility = "hidden"});
 
+            //newFormDiv.style.border = "2px solid #000";
+            // Optional: animate filter bar to shrink as opposed to just making invisible
+            $("#projectContentListHeader").animate({marginTop: "0px", height: "40px"}, transitionSpeed, function(){filterBarDiv.style.visibility = "visible"});
+            browsePostsDiv.style.marginTop = "0px";
+            newFormDiv.innerHTML = createAddNewButton(panelType);
+            expanded = false;
         }
     }
 
@@ -582,21 +584,13 @@
 
     function createAddNewButton(tabType){
         var buttonString = "";
-        var addNewPanel = document.getElementById("addNewPanel");
-        if(addNewPanel != null){
-            var expandType = "expand";
-            if(expanded){
-                expandType = "shrink";
-            }
-            // Add container
-            buttonString += "<div id='addNewListElement' class='projectContentListElement' onclick='toggleExpandListPanel(" + '"' + expandType + '", "' + tabType + '");' + "'  style='width: 100%; height: 352px; border: none; border-radius: 0px;'>";
-            
-            // Add plus sign
-            buttonString += "<div style='position:relative; height: 100%; width: 100%; text-align: center'><div style='position:absolute; top: 30%; width: 100%'><img src='{{images.plus}}' style='height: 100px; width: 100px'><br><h3>Add New</h3></div></div>";
-
-            // Close container
-            buttonString += "</div>";
+        var expandType = "expand";
+        if(expanded){
+            expandType = "shrink";
         }
+
+        buttonString += "<div class='addNewPostButton' onclick='toggleExpandNewForm(" + '"' + expandType + '", "' + tabType + '");' + "' style='position: relative; margin-top: 4px; margin-left: 4px;'> <div style='margin-top: -15px; position: absolute; top: 55%; margin-left: 7px;'><h3 style='font-weight: 300;'>Add</h3></div> <img src='{{images.plus}}' style='height: 23px; width: 23px; position:absolute; right: 6%; top: 12%;'></div>";
+        
         return buttonString
     }
 </script>
@@ -708,7 +702,15 @@
                                 </div>-->
                                 <div style='height:5px;'></div>
                                 <div id="projectContentListHeader" style="width: 99%; height: 40px; margin-left: 3px; background: rgba(0,0,0,0.1); border: 1px solid rgba(0,0,0,0.2); border-radius: 3px;">
-                                    <div style="height: 30px; width: 60px; background: #FFF;" onclick="toggleExpandNewForm('expand', 'roles', 'insertNewFormDiv');">ADD</div>
+                                    <script>
+                                        {% if roles %}
+                                            document.write(createAddNewButton("roles"));
+                                        {% elif jobs %}
+                                            document.write(createAddNewButton("jobs"));
+                                        {% elif events}
+                                            document.write(createAddNewButton("events"));
+                                        {% endif %}
+                                    </script>
                                 </div>
                                 <div style='height:5px;'></div>
                                 <div id='insertNewFormDiv' style="border: 2px solid rgba(0,0,0,0.3); border-radius: 4px; visibility: hidden; background: #FFF;"></div>
