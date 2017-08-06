@@ -542,9 +542,12 @@ function createBrowseTableElement(elementDict, titleFieldName){
         elementString += "<td colspan=2>"
         var status = elementDict["post"]["status"]["value"]
         elementString += "<div style='position: relative; margin-left: -5px; margin-right: -5px; margin-top: -5px; height: 35px; border: 1px solid #000;";
-        if(status === "Open" || status === "Hiring" || status === "Opening soon"){
+        if(status === "Open" || status === "Hiring"){
             // green
             elementString += "background: rgba(7, 196, 23, 0.2);";
+        }else if(status === "Opening soon"){
+            // darker green
+            elementString += "background: #87bf9a";
         }else if(status === "Cast" || status === "Filled"){
             // grey
             elementString += "background: #d1d1d1;";
