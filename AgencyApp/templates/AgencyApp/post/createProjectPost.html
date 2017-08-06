@@ -662,7 +662,7 @@
             <tr>
                         <td colspan="3">
                             <div style="position: relative;">
-                            <div id="projectContentPanel" class="projectContentPanel" style="margin-left: -1px; margin-right:-8px; min-height: 70px;">
+                            <div id="projectContentPanel" class="projectContentPanel" style="margin-left: -1px; margin-right:-8px; min-height: 70px; ">
                                 <!--<div id="addNewPanel" style="position: absolute; top: 0; left: 0; margin-top: 2px; margin-bottom: -10px; border: 2px solid #000; border-radius: 4px; width: 24.6%; text-align: center;">
                                     <script>
                                         {% if roles %}
@@ -674,6 +674,12 @@
                                         {% endif %}
                                     </script>
                                 </div>-->
+                                <div style='height:5px;'></div>
+                                <div id="projectContentListHeader" style="width: 99%; height: 40px; margin-left: 3px; background: rgba(0,0,0,0.1); border: 1px solid rgba(0,0,0,0.2); border-radius: 3px;">
+                                    <div style="height: 30px; width: 60px; background: #FFF;" onclick="insertAddNewForm('roles', 'insertNewFormDiv');">ADD</div>
+                                    <div id='insertNewFormDiv'></div>
+                                </div>
+                                <div style='height:5px;'></div>
                                 <div id="projectContentList" style=" width: 100%; margin-left: 0px; min-height: 360px;">
 
                                 </div>
@@ -743,7 +749,6 @@
                 {% endif %}
             {% endfor %}
         {% endif %}
-        console.log(roleDict)
         return roleDict;
     }
 

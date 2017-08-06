@@ -531,6 +531,14 @@ function addCreateProjectPost(formDict, formURL, formName){
     return formString;
 }
 
+function insertAddNewForm(formType, addNewDivName){
+    addNewDiv = document.getElementById(addNewDivName);
+    if(addNewDiv != null){
+        addNewDiv.innerHTML = getNewElementForm(formType, "vertical");
+        addElementStatusSelect(panelType);
+    }
+}
+
 function createBrowseTableElement(elementDict, titleFieldName){
     var elementString = "<div class='projectContentListElement'>";
     if("addNewPanel" in elementDict){
@@ -558,7 +566,7 @@ function createBrowseTableElement(elementDict, titleFieldName){
         elementString += "<td style='width: 50%; '><img src='" + elementDict["post"]["postPicture"]["value"] + "' style='height: 180px; margin-left: -20px; margin-top: -5px; border: 1px solid #000;'></td>";
 
         // add element data
-        elementString += "<td style='width: 50%;'><div style='width: 100%; text-align: right;'><div style='position: relative; height: 180px;'><ul style='position: absolute; top: 0; right: 0; height: 180px;'>";
+        elementString += "<td style='width: 50%;'><div style='width: 100%; text-align: left; margin-left: -10px;'><div style='position: relative; height: 180px;'><ul style='position: absolute; top: 0; right: 0; height: 180px; width: 100%;'>";
         for(var field in elementDict["post"]){
             var value = elementDict["post"][field]["value"];
             if(!elementDict["post"][field]["hidden"] && field != "postPicture" && field != titleFieldName){
@@ -585,9 +593,9 @@ function createBrowseTable(tableType, tableEntries, sectionOrder, displayAddNewP
 
     // Format data in section order
     var data = [];
-    if(displayAddNewPanel){
+    /*if(displayAddNewPanel){
         data.push({"addNewPanel": true});
-    }
+    }*/
     if(sectionOrder != null){
         for(var i=0; i < sectionOrder.length; i++){
             var section = sectionOrder[i];
