@@ -664,7 +664,7 @@
     }
 
     function getBrowseRolesDict(){
-        var roleDict = {"Open": [], "Cast": [], "Opening Soon": []};
+        var roleDict = {"Open": [], "Cast": [], "Opening soon": []};
         {% if roles %}
             {% for role in roles %}
                 var newRole = {"actor": {}, "post": {}};
@@ -744,7 +744,7 @@
         var titleFieldName;
         if(tabType === "roles"){
             entries = getBrowseRolesDict();
-            sectionOrder = ["Open", "Opening Soon", "Cast"];
+            sectionOrder = ["Open", "Opening soon", "Cast"];
             titleFieldName = "characterName";
         }else if(tabType == "jobs"){
             selectJobs();
