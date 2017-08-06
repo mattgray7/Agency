@@ -458,10 +458,7 @@
         }
     }
 
-    function getNewElementForm(formType, slideDirection){
-        if(slideDirection === null){
-            slideDirection = "horizontal";
-        }
+    function getNewElementForm(formType){
         var formString = "";
         if(formType === "roles"){
             formString += addCreateCastingPost(getCastingFormDict(!isElementListEmpty(formType)), "{{currentPageURL}}", "createCastingPostForm");
@@ -474,6 +471,31 @@
     }
 
     var expanded = false;
+    function toggleExpandNewForm(toggleType, panelType, newFormDivName){
+        var newToggleType = toggleType;
+        if(newToggleType === "expand"){
+            newToggleType = "shrink";
+        }else{
+            newToggleType = "expand";
+        }
+        var transitionSpeed = 350;
+
+        var newFormDiv = document.getElementById(newFormDivName)
+        var browsePostsDiv = document.getElementById("projectContentList")
+        if(newFormDiv == null || browsePostsDiv == null){
+            return;
+        }
+
+        if(toggleType === "expand"){
+            $("[id='" + newFormDivName + "']").animate({marginTop: "0px", height: "1370px"}, transitionSpeed);
+            //newFormDiv.style.border = "2px solid #000";
+            newFormDiv.innerHTML = getNewElementForm(panelType);
+            addElementStatusSelect(panelType);
+            expanded = true;
+        }
+    }
+
+    /*var expanded = false;
     function toggleExpandListPanel(toggleType, panelType, direction){
         if(direction == null){
             direction = "horizontal";
@@ -538,7 +560,7 @@
                 expanded = true;
             }
         }
-    }
+    }*/
 
     function getSingularFromPlural(plural){
         var singular= "";
@@ -676,10 +698,10 @@
                                 </div>-->
                                 <div style='height:5px;'></div>
                                 <div id="projectContentListHeader" style="width: 99%; height: 40px; margin-left: 3px; background: rgba(0,0,0,0.1); border: 1px solid rgba(0,0,0,0.2); border-radius: 3px;">
-                                    <div style="height: 30px; width: 60px; background: #FFF;" onclick="insertAddNewForm('roles', 'insertNewFormDiv');">ADD</div>
-                                    <div id='insertNewFormDiv'></div>
+                                    <div style="height: 30px; width: 60px; background: #FFF;" onclick="toggleExpandNewForm('expand', 'roles', 'insertNewFormDiv');">ADD</div>
                                 </div>
                                 <div style='height:5px;'></div>
+                                <div id='insertNewFormDiv'></div>
                                 <div id="projectContentList" style=" width: 100%; margin-left: 0px; min-height: 360px;">
 
                                 </div>
