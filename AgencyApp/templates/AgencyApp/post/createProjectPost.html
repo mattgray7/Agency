@@ -434,6 +434,7 @@
                 success : function(data) {
                     if(data["success"]){
                         toggleExpandNewForm("shrink", activeTab)
+                        addNewPostToExistingList(form);
                     }else{
                         if(data["errors"]){
                             errorRow = document.getElementById("formErrorRow");
@@ -447,6 +448,46 @@
                 }
             });
         }
+    }
+
+    function createSingleRoleDict(dataForm){
+        var newPost = {"actor": {}, "post": {"postID": {'value': dataForm.postID.value, 'hidden': true},
+                                             "characterName": {'value': dataForm.characterName.value, 'hidden': false},
+                                             "startDate": {'value': 'Start: ' + dataForm.startDate.value, 'hidden': false},
+                                             "endDate": {'value': 'End: ' + dataForm.endDate.value, 'hidden': false},
+                                             "hoursPerWeek": {'value': 'Hours/week: ' + dataForm.hoursPerWeek.value, 'hidden': false},
+                                             "paid": {'value': dataForm.paid.value , "hidden": false},
+                                             "title": {'value': dataForm.title.value, 'hidden': false},
+                                             "gender": {'value': dataForm.gender.value, 'hidden': true},
+                                             "status": {'value': dataForm.status.value, 'hidden': true},
+                                             "postPicture": {"value": '{{images.noPicture}}', "hidden": false},
+                                       }};
+        /*{% if role.post.postPicture and role.post.postPicture.url %}
+            newRole["post"]["postPicture"]["value"] = '{{role.post.postPicture.url}}';
+        {% endif %}
+
+                {% if role.post.paid and role.post.paidDescription %}
+                    newRole["post"]["paid"]["value"] = "Paid &#10004 - {{role.post.paidDescription}}";
+                {% elif role.post.paid %}
+                    newRole["post"]["paid"]["value"] = "Paid &#10004";
+                {% elif role.post.paidDescription %}
+                    newRole["post"]["paid"]["value"] = "Unpaid - {{role.post.paidDescription}}";
+                {% else %}
+                    newRole["post"]["paid"]["value"] = "Unpaid";
+                {% endif %}
+        */
+        console.log(newPost)
+        return newPost;
+    }
+
+    function addNewPostToExistingList(postForm){
+        if(roleEntries == null){
+            roleEntries = getBrowseRolesDict();
+        }
+        newPost = createSingleRoleDict(postForm);
+        roleEntries[newPost.post.status.value].push(newPost);
+        console.log(roleEntries)
+        selectProjectTab("roles")
     }
 
     function getNewElementForm(formType){
@@ -663,57 +704,64 @@
         return contentString
     }
 
+    var roleEntries;
     function getBrowseRolesDict(){
-        var roleDict = {"Open": [], "Cast": [], "Opening soon": []};
-        {% if roles %}
-            {% for role in roles %}
-                var newRole = {"actor": {}, "post": {}};
-                {% if role.actor %}
-                    newRole["actor"] = {"username": '{{role.actor.username}}', "cleanName": '{{role.actor.cleanName}}'}
-                    {% if role.actor.profilePicture and role.actor.profilePicture.url %}
-                        newRole["actor"]["profilePicture"] = '{{role.actor.profilePicture.url}}';
-                    {% else %}
-                        newRole["actor"]["profilePicture"] = '{{images.noProfilePicture}}';
-                    {% endif %}
-                {% endif %}
-
-                {% if role.post %}
-                    newRole["post"] = {"postID": {'value': '{{role.post.postID}}', 'hidden': true},
-                                       "characterName": {'value': '{{role.post.characterName}}', 'hidden': false},
-                                       "startDate": {'value': 'Start: {{role.post.startDate}}', 'hidden': false},
-                                       "endDate": {'value': 'End: {{role.post.endDate}}', 'hidden': false},
-                                       "hoursPerWeek": {'value': 'Hours/week: {{role.post.hoursPerWeek}}', 'hidden': false},
-                                       "paid": {'value': '{{role.post.paid}}', "hidden": false},
-                                       "title": {'value': '{{role.post.title}}', 'hidden': false},
-
-                                       "gender": {'value': '{{role.post.gender}}', 'hidden': true},
-                                       "status": {'value': '{{role.post.status}}', 'hidden': true},
-                                       "postPicture": {"value": '{{images.noPicture}}', "hidden": false},
-                                   };
-                    {% if role.post.postPicture and role.post.postPicture.url %}
-                        newRole["post"]["postPicture"]["value"] = '{{role.post.postPicture.url}}';
+        if(roleEntries == null){
+            var roleDict = {"Open": [], "Cast": [], "Opening soon": []};
+            {% if roles %}
+                {% for role in roles %}
+                    var newRole = {"actor": {}, "post": {}};
+                    {% if role.actor %}
+                        newRole["actor"] = {"username": '{{role.actor.username}}', "cleanName": '{{role.actor.cleanName}}'}
+                        {% if role.actor.profilePicture and role.actor.profilePicture.url %}
+                            newRole["actor"]["profilePicture"] = '{{role.actor.profilePicture.url}}';
+                        {% else %}
+                            newRole["actor"]["profilePicture"] = '{{images.noProfilePicture}}';
+                        {% endif %}
                     {% endif %}
 
-                    {% if role.post.paid and role.post.paidDescription %}
-                        newRole["post"]["paid"]["value"] = "Paid &#10004 - {{role.post.paidDescription}}";
-                    {% elif role.post.paid %}
-                        newRole["post"]["paid"]["value"] = "Paid &#10004";
-                    {% elif role.post.paidDescription %}
-                        newRole["post"]["paid"]["value"] = "Unpaid - {{role.post.paidDescription}}";
-                    {% else %}
-                        newRole["post"]["paid"]["value"] = "Unpaid";
-                        console.log("{{role.post.paid}}")
-                    {% endif %}
+                    {% if role.post %}
+                        newRole["post"] = {"postID": {'value': '{{role.post.postID}}', 'hidden': true},
+                                           "characterName": {'value': '{{role.post.characterName}}', 'hidden': false},
+                                           "startDate": {'value': 'Start: {{role.post.startDate}}', 'hidden': false},
+                                           "endDate": {'value': 'End: {{role.post.endDate}}', 'hidden': false},
+                                           "hoursPerWeek": {'value': 'Hours/week: {{role.post.hoursPerWeek}}', 'hidden': false},
+                                           "paid": {'value': '{{role.post.paid}}', "hidden": false},
+                                           "title": {'value': '{{role.post.title}}', 'hidden': false},
 
-                if('{{role.post.status}}' in roleDict){
-                    roleDict['{{role.post.status}}'].push(newRole);
-                };
-                {% endif %}
-            {% endfor %}
-        {% endif %}
-        return roleDict;
+                                           "gender": {'value': '{{role.post.gender}}', 'hidden': true},
+                                           "status": {'value': '{{role.post.status}}', 'hidden': true},
+                                           "postPicture": {"value": '{{images.noPicture}}', "hidden": false},
+                                       };
+                        {% if role.post.postPicture and role.post.postPicture.url %}
+                            newRole["post"]["postPicture"]["value"] = '{{role.post.postPicture.url}}';
+                        {% endif %}
+
+                        {% if role.post.paid and role.post.paidDescription %}
+                            newRole["post"]["paid"]["value"] = "Paid &#10004 - {{role.post.paidDescription}}";
+                        {% elif role.post.paid %}
+                            newRole["post"]["paid"]["value"] = "Paid &#10004";
+                        {% elif role.post.paidDescription %}
+                            newRole["post"]["paid"]["value"] = "Unpaid - {{role.post.paidDescription}}";
+                        {% else %}
+                            newRole["post"]["paid"]["value"] = "Unpaid";
+                            console.log("{{role.post.paid}}")
+                        {% endif %}
+
+                    if('{{role.post.status}}' in roleDict){
+                        roleDict['{{role.post.status}}'].push(newRole);
+                    };
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+            roleEntries = roleDict;
+        }
+        return roleEntries;
     }
 
+    
+    var jobEntries;
+    var eventEntries;
     function selectProjectTab(tabType){
         for(var i=0; i < projectTabs.length; i++){
             var buttonId = projectTabs[i] + "Button";
