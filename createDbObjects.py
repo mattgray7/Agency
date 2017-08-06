@@ -118,12 +118,15 @@ project7ProjectPost = createProject(poster="johnstongray",
 									status="Completed",
 									picURL="/Users/MattGray/Projects/Agency/Agency/scripts/media/reelAdults.jpg")
 
+import datetime
+today = datetime.datetime.now()
+tomorrow = today + datetime.timedelta(days=1)
 
-def createProjectJob(projectID, username, status, profession, title, paid, shortDescription=None, description=None, picURL=None, poster="mattgray"):
+def createProjectJob(projectID, status, profession, title, paid, username=None, shortDescription=None, description=None, picURL=None, poster="mattgray", startDate=None, endDate=None):
 	jobID = helpers.createUniqueID(models.WorkPost, "postID")
 	jobPost = models.WorkPost(postID=jobID, projectID=projectID, poster=poster, workerName=username, shortDescription=shortDescription,
 							  title=title, description=description, paid=paid, profession=profession,
-							  status=status)
+							  status=status, startDate=startDate or today, endDate=endDate or tomorrow)
 	jobPost.save()
 
 	admin = models.PostAdmin(postID=jobID, username=poster)
@@ -136,11 +139,12 @@ def createProjectJob(projectID, username, status, profession, title, paid, short
 		jobPost.save()
 	return jobID
 
-def createProjectRole(projectID, username, status, title, characterName, paid, shortCharacterDescription=None, characterDescription=None, picURL=None, poster="mattgray"):
+def createProjectRole(projectID, status, title, characterName, paid, username=None, gender=None, shortCharacterDescription=None, characterDescription=None, picURL=None, poster="mattgray", startDate=None, endDate=None):
 	roleID = helpers.createUniqueID(models.CastingPost, "postID")
 	rolePost = models.CastingPost(title=title, postID=roleID, projectID=projectID, poster=poster, status=status,
-								   	 actorName=username, characterName=characterName, 
-								   	 description=characterDescription, shortCharacterDescription=shortCharacterDescription, paid=paid)
+								  actorName=username, characterName=characterName, gender=gender,
+								  description=characterDescription, shortCharacterDescription=shortCharacterDescription,
+								  paid=paid, startDate=startDate or today, endDate=endDate or tomorrow)
 	rolePost.save()
 
 	admin = models.PostAdmin(postID=roleID, username=poster)
@@ -220,15 +224,33 @@ project1WorkPost8RoleId = createProjectRole(projectID=project1ProjectID,
 								 		    status="Cast",
 								 		    picURL="/Users/MattGray/Projects/Agency/Agency/scripts/media/daisyBuchanan.png")
 
+project1WorkPost9RoleId = createProjectRole(projectID=project1ProjectID,
+								 		    title="Child lead - female",
+								 		    characterName="Lizzy",
+								 		    characterDescription=daisyBuchananDescription,
+								 		    shortCharacterDescription="8-12 caucasian girl",
+								 		    paid=True,
+								 		    gender="Female",
+								 		    status="Open")
+
+project1WorkPost10RoleId = createProjectRole(projectID=project1ProjectID,
+								 		     title="Child lead - male",
+								 		     characterName="Kevin",
+								 		     gender="Male",
+								 		     characterDescription="Dammit Kevin.",
+								 		     shortCharacterDescription="13-15 stupid looking boy",
+								 		     paid=True,
+								 		     status="Open")
+								 		    
 project1RoleId2 = createProjectRole(projectID=project1ProjectID,
-								 	username="mattgray",
+									poster="mattgray",
 								 	title="Looking for young 20-something male to play a random guy",
 								 	characterName="Clark",
 								 	characterDescription="Looks like he comes from a wealthy family",
 								 	paid=True,
 								 	status="Open")
 project1RoleId2 = createProjectRole(projectID=project1ProjectID,
-								 	username="mattgray",
+								 	poster="mattgray",
 								 	title="Looking for young 20-something female to play a random guy's gf",
 								 	characterName="Mona Lisa Saperstein",
 								 	characterDescription = "She is the worst. It is unbelievable how bad she is. She is the brother of jean rakphio saperstein, so actress must look related.",
