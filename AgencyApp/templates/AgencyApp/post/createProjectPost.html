@@ -471,6 +471,7 @@
     }
 
     var expanded = false;
+    var roleFormHeight = "1375px";
     function toggleExpandNewForm(toggleType, panelType, newFormDivName){
         var newToggleType = toggleType;
         if(newToggleType === "expand"){
@@ -482,16 +483,25 @@
 
         var newFormDiv = document.getElementById(newFormDivName)
         var browsePostsDiv = document.getElementById("projectContentList")
+        var filterBarDiv = document.getElementById("projectContentListHeader")
         if(newFormDiv == null || browsePostsDiv == null){
             return;
         }
 
         if(toggleType === "expand"){
-            $("[id='" + newFormDivName + "']").animate({marginTop: "0px", height: "1370px"}, transitionSpeed);
+            newFormDiv.style.visibility = "visible";
+            $("[id='" + newFormDivName + "']").animate({marginTop: "0px", height: roleFormHeight}, transitionSpeed);
+
             //newFormDiv.style.border = "2px solid #000";
+            // Optional: animate filter bar to shrink as opposed to just making invisible
+            $("#projectContentListHeader").animate({marginTop: "0px", height: "0px"}, transitionSpeed);
+            filterBarDiv.style.visibility = "hidden";
+            browsePostsDiv.style.marginTop = "20px";
             newFormDiv.innerHTML = getNewElementForm(panelType);
             addElementStatusSelect(panelType);
             expanded = true;
+        }else{
+
         }
     }
 
@@ -701,7 +711,7 @@
                                     <div style="height: 30px; width: 60px; background: #FFF;" onclick="toggleExpandNewForm('expand', 'roles', 'insertNewFormDiv');">ADD</div>
                                 </div>
                                 <div style='height:5px;'></div>
-                                <div id='insertNewFormDiv'></div>
+                                <div id='insertNewFormDiv' style="border: 2px solid rgba(0,0,0,0.3); border-radius: 4px; visibility: hidden; background: #FFF;"></div>
                                 <div id="projectContentList" style=" width: 100%; margin-left: 0px; min-height: 360px;">
 
                                 </div>
