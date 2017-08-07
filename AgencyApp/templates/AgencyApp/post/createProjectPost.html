@@ -413,7 +413,6 @@
         var statusDiv = document.getElementById("statusSelectBar");
         if(statusDiv != null){
             // Set the status from the select bar in the form
-            console.log("Setting status to " + statusDiv.value)
             document.getElementById("statusSelectInput").value = statusDiv.value;
         }
         {% if selectFields.roles.names %}
@@ -434,7 +433,7 @@
                 success : function(data) {
                     if(data["success"]){
                         toggleExpandNewForm("shrink", activeTab)
-                        addNewPostToExistingList(form);
+                        addNewPostToExistingList(form, data["pictureURL"]);
                     }else{
                         if(data["errors"]){
                             errorRow = document.getElementById("formErrorRow");
@@ -450,7 +449,7 @@
         }
     }
 
-    function createSingleRoleDict(dataForm){
+    function createSingleRoleDict(dataForm, imageURL){
         var newPost = {"actor": {}, "post": {"postID": {'value': dataForm.postID.value, 'hidden': true},
                                              "characterName": {'value': dataForm.characterName.value, 'hidden': false},
                                              "startDate": {'value': 'Start: ' + dataForm.startDate.value, 'hidden': false},
@@ -462,11 +461,11 @@
                                              "status": {'value': dataForm.status.value, 'hidden': true},
                                              "postPicture": {"value": '{{images.noPicture}}', "hidden": false},
                                        }};
-        /*{% if role.post.postPicture and role.post.postPicture.url %}
-            newRole["post"]["postPicture"]["value"] = '{{role.post.postPicture.url}}';
-        {% endif %}
+        if(imageURL != null && imageURL.length > 0){
+            newPost["post"]["postPicture"]["value"] = imageURL;
+        }
 
-                {% if role.post.paid and role.post.paidDescription %}
+               /*{% if role.post.paid and role.post.paidDescription %}
                     newRole["post"]["paid"]["value"] = "Paid &#10004 - {{role.post.paidDescription}}";
                 {% elif role.post.paid %}
                     newRole["post"]["paid"]["value"] = "Paid &#10004";
@@ -476,17 +475,17 @@
                     newRole["post"]["paid"]["value"] = "Unpaid";
                 {% endif %}
         */
-        console.log(newPost)
         return newPost;
     }
 
-    function addNewPostToExistingList(postForm){
+    function addNewPostToExistingList(postForm, imageURL){
         if(roleEntries == null){
             roleEntries = getBrowseRolesDict();
         }
-        newPost = createSingleRoleDict(postForm);
+        newPost = createSingleRoleDict(postForm, imageURL);
         roleEntries[newPost.post.status.value].push(newPost);
-        console.log(roleEntries)
+
+        // Creates the browse table with the new roleEntries
         selectProjectTab("roles")
     }
 
@@ -745,7 +744,6 @@
                             newRole["post"]["paid"]["value"] = "Unpaid - {{role.post.paidDescription}}";
                         {% else %}
                             newRole["post"]["paid"]["value"] = "Unpaid";
-                            console.log("{{role.post.paid}}")
                         {% endif %}
 
                     if('{{role.post.status}}' in roleDict){

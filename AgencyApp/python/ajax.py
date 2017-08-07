@@ -117,7 +117,7 @@ def createNewCastingPost(request):
                         pictureSuccess = helpers.savePostPictureInDatabase(request, "postPicture", postInstance, postData.get("cropInfo", {}), postData.get("filename"))
         else:
             pictureSuccess = True
-    return JsonResponse({"success": createSuccess and pictureSuccess, "errors": newPost.formErrors})
+    return JsonResponse({"success": createSuccess and pictureSuccess, "errors": newPost.formErrors, "pictureURL": postInstance.postPicture.url})
 
 def _getPostPictureRequestData(request):
     data = {}
