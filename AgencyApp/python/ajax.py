@@ -95,6 +95,7 @@ def createNewCastingPost(request):
     newPost = castingPost.CastingPostInstance(request=request, postID=request.POST.get("postID"), projectID=request.POST.get("projectID"), postType=constants.CREATE_CASTING_POST, formSubmitted=True)
     createSuccess = newPost.formIsValid()
     pictureSuccess = False
+    postInstance = None
     if createSuccess:
         tempPostPictureID = request.POST.get("tempPostPictureID")
         if tempPostPictureID:
@@ -117,7 +118,8 @@ def createNewCastingPost(request):
                         pictureSuccess = helpers.savePostPictureInDatabase(request, "postPicture", postInstance, postData.get("cropInfo", {}), postData.get("filename"))
         else:
             pictureSuccess = True
-    return JsonResponse({"success": createSuccess and pictureSuccess, "errors": newPost.formErrors, "pictureURL": postInstance.postPicture.url})
+    return JsonResponse({"success": createSuccess and pictureSuccess, "errors": newPost.formErrors,
+                         "pictureURL": postInstance and postInstance.postPicture and postInstance.postPicture.url or ""})
 
 def _getPostPictureRequestData(request):
     data = {}

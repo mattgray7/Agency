@@ -461,20 +461,22 @@
                                              "status": {'value': dataForm.status.value, 'hidden': true},
                                              "postPicture": {"value": '{{images.noPicture}}', "hidden": false},
                                        }};
+
+        // Explicitly set the image url of the new post
         if(imageURL != null && imageURL.length > 0){
             newPost["post"]["postPicture"]["value"] = imageURL;
         }
 
-               /*{% if role.post.paid and role.post.paidDescription %}
-                    newRole["post"]["paid"]["value"] = "Paid &#10004 - {{role.post.paidDescription}}";
-                {% elif role.post.paid %}
-                    newRole["post"]["paid"]["value"] = "Paid &#10004";
-                {% elif role.post.paidDescription %}
-                    newRole["post"]["paid"]["value"] = "Unpaid - {{role.post.paidDescription}}";
-                {% else %}
-                    newRole["post"]["paid"]["value"] = "Unpaid";
-                {% endif %}
-        */
+        // Add compensation info
+        if(dataForm.paid.value && dataForm.paidDescription.value){
+            newPost["post"]["paid"]["value"] = "Paid &#10004 - " + dataForm.paidDescription.value;
+        }else if(dataForm.paid.value){
+            newPost["post"]["paid"]["value"] = "Paid &#10004";
+        }else if(dataForm.paidDescription.value){
+            newPost["post"]["paid"]["value"] = "Unpaid - " + dataForm.paidDescription.value;
+        }else{
+            newPost["post"]["paid"]["value"] = "Unpaid";
+        }
         return newPost;
     }
 
