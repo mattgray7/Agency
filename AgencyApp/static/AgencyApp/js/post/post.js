@@ -531,7 +531,7 @@ function addCreateProjectPost(formDict, formURL, formName){
     return formString;
 }
 
-function createBrowseTableElement(elementDict, titleFieldName){
+function createBrowseTableElement(elementDict, titleFieldName, elementType){
     var elementString = "<div class='projectContentListElement'>";
     if("addNewPanel" in elementDict){
         elementString += "Add new";
@@ -574,7 +574,12 @@ function createBrowseTableElement(elementDict, titleFieldName){
                 elementString += "</li>";
             }
         }
-        elementString += "</ul></div></div></td>";
+        elementString += "</ul>";
+
+        // add edit button
+        elementString += "<div class='addNewPostButton' style='position:absolute; right: 0; bottom: 13%; margin-right: -10px; text-align: center; width: 35px; height: 25px;' onclick='toggleExpandExistingForm(" + '"expand", "' + elementType + '");' + "'><div style='font-size: 0.9em; font-weight: 500; margin-top: 1px;padding: 2px;'>Edit</div></div>";
+
+        elementString += "</div></div></td>";
 
 
         elementString += "</tr></table>"
@@ -609,7 +614,7 @@ function createBrowseTable(tableType, tableEntries, sectionOrder, displayAddNewP
         if(colCount === 0){
             tableString += "<tr>"
         }
-        tableString += "<td style='width: 32%;'>" + createBrowseTableElement(data[i], titleFieldName) + "</td>";
+        tableString += "<td style='width: 32%;'>" + createBrowseTableElement(data[i], titleFieldName, tableType) + "</td>";
 
         colCount += 1;
         if(colCount === 3){
