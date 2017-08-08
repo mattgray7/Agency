@@ -801,6 +801,11 @@
         if(contentDiv != null){
             contentDiv.innerHTML = table;
         }
+        $(window).resize(function () {
+            resizeBrowseTable(function(){
+                selectProjectTab(tabType);
+            });
+        });
     }
 
     function selectRoles(){

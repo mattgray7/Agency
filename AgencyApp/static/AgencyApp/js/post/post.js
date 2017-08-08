@@ -588,6 +588,7 @@ function createBrowseTableElement(elementDict, titleFieldName, elementType){
     return elementString;
 }
 
+var tableColCount = 3;
 function createBrowseTable(tableType, tableEntries, sectionOrder, displayAddNewPanel, titleFieldName){
     var tableString = "<div id='browseTableContainer'><table style='width: 100%;'>"
 
@@ -609,6 +610,7 @@ function createBrowseTable(tableType, tableEntries, sectionOrder, displayAddNewP
         console.log("Error: no section order passed to create browse table")
     }
 
+    var desiredColCount = getBrowseTableNumColumnsFromWindowSize()
     var colCount = 0;
     for(var i=0; i < data.length; i++){
         if(colCount === 0){
@@ -617,12 +619,26 @@ function createBrowseTable(tableType, tableEntries, sectionOrder, displayAddNewP
         tableString += "<td style='width: 32%;'>" + createBrowseTableElement(data[i], titleFieldName, tableType) + "</td>";
 
         colCount += 1;
-        if(colCount === 3){
+        if(colCount === tableColCount){
             tableString += "</tr>";
             colCount = 0;
         }
     }
     return tableString;
+}
+
+function resizeBrowseTable(changeCallback){
+    numColumns = getBrowseTableNumColumnsFromWindowSize();
+    if(tableColCount != numColumns){
+        tableColCount = numColumns
+        changeCallback();
+    }
+}
+
+var elementWidth = 300;
+function getBrowseTableNumColumnsFromWindowSize(){
+    numColumns = Math.floor($(window).width() / elementWidth);
+    return numColumns
 }
 
 
