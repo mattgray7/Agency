@@ -505,15 +505,8 @@
 
     var expanded = false;
     var roleFormHeight = "1375px";
+    var transitionSpeed = 350;
     function toggleExpandNewForm(toggleType, panelType){
-        var newToggleType = toggleType;
-        if(newToggleType === "expand"){
-            newToggleType = "shrink";
-        }else{
-            newToggleType = "expand";
-        }
-        var transitionSpeed = 350;
-
         var newFormDiv = document.getElementById("insertNewFormDiv")
         var browsePostsDiv = document.getElementById("projectContentList")
         var filterBarDiv = document.getElementById("projectContentListHeader")
@@ -543,6 +536,10 @@
             newFormDiv.innerHTML = createAddNewButton(panelType);
             expanded = false;
         }
+    }
+
+    function toggleExpandExistingForm(toggleType, panelType, postID){
+        console.log("toggling existing form")
     }
 
     function getSingularFromPlural(plural){
