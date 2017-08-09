@@ -561,7 +561,7 @@ function createBrowseTableElement(elementDict, titleFieldName, elementType){
         elementString += "<td style='width: 50%; '><img src='" + elementDict["post"]["postPicture"]["value"] + "' style='height: 180px; margin-left: -20px; margin-top: -5px; border: 1px solid #000;'></td>";
 
         // add element data
-        elementString += "<td style='width: 50%;'><div style='width: 100%; text-align: left; margin-left: -10px;'><div style='position: relative; height: 180px;'><ul style='position: absolute; top: 0; right: 0; height: 180px; width: 100%;'>";
+        elementString += "<td style='width: 50%;'><div style='width: 100%; text-align: left;'><div style='position: relative; height: 180px;'><ul style='position: absolute; top: 0; right: 0; height: 180px; width: 100%;'>";
         for(var field in elementDict["post"]){
             var value = elementDict["post"][field]["value"];
             if(!elementDict["post"][field]["hidden"] && field != "postPicture" && field != titleFieldName){
@@ -577,7 +577,7 @@ function createBrowseTableElement(elementDict, titleFieldName, elementType){
         elementString += "</ul>";
 
         // add edit button
-        elementString += "<div class='addNewPostButton' style='position:absolute; right: 0; bottom: 13%; margin-right: -10px; text-align: center; width: 35px; height: 25px;' onclick='toggleExpandExistingForm(" + '"expand", "' + elementType + '", "' + elementDict["post"]["postID"]["value"] + '");' + "'><div style='font-size: 0.9em; font-weight: 500; margin-top: 1px;padding: 2px;'>Edit</div></div>";
+        elementString += "<div class='addNewPostButton' style='position:absolute; right: 0; bottom: 13%; text-align: center; width: 35px; height: 25px;' onclick='toggleExpandExistingForm(" + '"expand", "' + elementType + '", "' + elementDict["post"]["postID"]["value"] + '");' + "'><div style='font-size: 0.9em; font-weight: 500; margin-top: 1px;padding: 2px;'>Edit</div></div>";
 
         elementString += "</div></div></td>";
 
@@ -632,13 +632,41 @@ function resizeBrowseTable(changeCallback){
     numColumns = getBrowseTableNumColumnsFromWindowSize()
     if(tableColCount != numColumns){
         tableColCount = numColumns
+        mainViewPanel = document.getElementById("mainViewPanel")
+        if(mainViewPanel != null){
+            mainViewPanel.style.width = getMainPanelWidthFromNumColumns(tableColCount)
+            console.log(mainViewPanel.style.width)
+        }
+        if(tableColCount === 1){
+            document.getElementById("jobsButton").style.marginLeft = "2px";
+        }else{
+            document.getElementById("jobsButton").style.marginLeft = "0px";
+        }
+        document.getElementById("browseTableContainer").style.width = tableColCount * browseElementWidth + "px";
         changeCallback();
     }
 }
 
+function getMainPanelWidthFromNumColumns(numColumns){
+    var base = numColumns * browseElementWidth;
+    if(numColumns === 2){
+        base += 28;
+    }else if(numColumns === 3){
+        base += 37;
+    }else if(numColumns === 4){
+        base += 45; 
+    }else if(numColumns === 5){
+        base += 52;
+    }else{
+        base += 60;
+    }
+    base += "px";
+    return base;
+}
+
 var browseElementWidth = 300;
 function getBrowseTableNumColumnsFromWindowSize(){
-    numColumns = Math.max(Math.round($(window).width() / browseElementWidth), 1);
+    numColumns = Math.max(Math.round($(window).width() / browseElementWidth), 2);
     return numColumns
 }
 
