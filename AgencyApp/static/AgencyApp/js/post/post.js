@@ -447,7 +447,7 @@ function addCreateProjectPost(formDict, formURL, formName){
         }
 
         if(sectionTitle != "hidden"){
-            sectionLabelTableElement += "<div style='position: relative; height: 50px; width: 100%;'> <h2 class='" + sectionClass + "' style='position: absolute; z-index: 1; right: 0; margin-left: 80px;'> " + sectionTitle + "</h2>" + getFormDividerLine(formName) + "</div>"
+            sectionLabelTableElement += "<div style='position: relative; height: 50px; width: 100%;'> <h2 class='" + sectionClass + "' style='position: absolute; z-index: 1; right: 0; margin-left: 80px;'> " + sectionTitle + "</h2>" + getFormDividerLine() + "</div>"
             sectionInputTableElement += "<div style='height: 60px;'></div>";
 
             for(i in fieldList){
@@ -532,11 +532,19 @@ function addCreateProjectPost(formDict, formURL, formName){
 }
 
 function getPostPicturePanel(panelName, pictureURL, editOnclick, hiddenPictureInput, hiddenPictureInputName){
-    return '<div id="' + panelName + '" class="postPictureContainer" style="background: #000; margin-left: 10px; margin-top: 47px; height: 280px;"><img id="projectPictureImg" src="' + pictureURL + '" style="max-width:100%; max-height:100%;"/></div><div class="formEditPictureButtonContainer" style=""><a onclick="' + editOnclick + '">Edit</a></div><div id="' + hiddenPictureInputName + '" style="display: none;">' + hiddenPictureInput + '</div>';
+    var container = document.getElementById("editPostPanel")
+    var height = "280px";
+    if(container != null){
+        console.log(container.offsetWidth)
+        if(container.offsetWidth <= 628){
+            height = "200px";
+        }
+    }
+    return '<div id="' + panelName + '" class="postPictureContainer" style="background: #000; margin-left: 10px; margin-top: 47px; height: ' + height + ';"><img id="projectPictureImg" src="' + pictureURL + '" style="max-width:100%; max-height:100%;"/></div><div class="formEditPictureButtonContainer" style=""><a onclick="' + editOnclick + '">Edit</a></div><div id="' + hiddenPictureInputName + '" style="display: none;">' + hiddenPictureInput + '</div>';
 }
 
 var formDividerLineScale = 0.93;
-function getFormDividerLine(formName){
+function getFormDividerLine(){
     var container = document.getElementById("editPostPanel")
     var width = "380%";
     if(container != null){
@@ -642,6 +650,33 @@ function createBrowseTable(tableType, tableEntries, sectionOrder, displayAddNewP
     return tableString;
 }
 
+function resizePicture(resizeType){
+    //Reduce picture size
+    var container = {"width": "270px", "height": "298px"}
+    var columnMinWidth = "270px";
+    if(resizeType === "shrink"){
+        container = {"width": "203px", "height": "226px"};
+        columnMinWidth = "200px"
+    }
+    var pictureContainers = document.getElementsByClassName("postPictureContainer")
+    for(var i=0; i < pictureContainers.length; i++){
+        pictureContainers[i].style.width = container.width;
+        pictureContainers[i].style.height = container.height;
+    }
+
+    //Reduce picture column width to make text fields larger
+    var pictureColumns = document.getElementsByClassName("formPicturePanelColumn")
+    for(var i=0; i < pictureColumns.length; i++){
+        pictureColumns[i].style.minWidth = columnMinWidth;
+    }
+
+    // Move edit picture button to be recentred
+    var editButtons = document.getElementsByClassName("formEditPictureButtonContainer");
+    for(var i=0; i< editButtons.length; i++){
+        editButtons[i].style.width = container.width;
+    }
+}
+
 function resizeBrowseTable(changeCallback){
     numColumns = getBrowseTableNumColumnsFromWindowSize()
     if(tableColCount != numColumns){
@@ -669,35 +704,10 @@ function resizeBrowseTable(changeCallback){
             formLines[i].style.width = newLineWidth;
         }
 
-        //Reduce picture size
-        var pictureWidth = 270;
-        var pictureContainers = document.getElementsByClassName("postPictureContainer")
-        for(var i=0; i < pictureContainers.length; i++){
-            if(tableColCount === 2){
-                pictureWidth = 203;
-                pictureContainers[i].style.width = "203px";
-                pictureContainers[i].style.height = "226px";
-            }else{
-                pictureWidth = 270;
-                pictureContainers[i].style.width = "270px";
-                pictureContainers[i].style.height = "298px";
-            }
-        }
-
-        //Reduce picture column width to make text fields larger
-        var pictureColumns = document.getElementsByClassName("formPicturePanelColumn")
-        for(var i=0; i < pictureColumns.length; i++){
-            if(tableColCount === 2){
-                pictureColumns[i].style.minWidth = "200px";
-            }else{
-                pictureColumns[i].style.minWidth = "270px";
-            }
-        }
-
-        // Move edit picture button to be recentred
-        var editButtons = document.getElementsByClassName("formEditPictureButtonContainer");
-        for(var i=0; i< editButtons.length; i++){
-            editButtons[i].style.width = pictureWidth + "px";
+        if(tableColCount === 2){
+            resizePicture("shrink");
+        }else{
+            resizePicture("expand");
         }
 
         changeCallback();
