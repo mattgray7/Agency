@@ -531,11 +531,12 @@ function addCreateProjectPost(formDict, formURL, formName){
     return formString;
 }
 
+var formDividerLineScale = 0.93;
 function getFormDividerLine(formName){
     var container = document.getElementById("editPostPanel")
     var width = "380%";
     if(container != null){
-        width = container.offsetWidth * 0.93 + "px";
+        width = container.offsetWidth * formDividerLineScale + "px";
     }
     return "<div class='formLabelDividingLine' style='position: absolute; width:" + width + "; border: 1px solid #7c7b7b; height: 0px; bottom: 0; margin-bottom: 15px; margin-left: 0px;'></div>"
 }
@@ -657,7 +658,7 @@ function resizeBrowseTable(changeCallback){
         var newLineWidth = newPanelSizeInfo["formLineWidth"];
         var formContainer = document.getElementById("editPostPanel")
         if(formContainer != null){
-            newLineWidth = formContainer.offsetWidth * 0.93 + "px";
+            newLineWidth = formContainer.offsetWidth * formDividerLineScale + "px";
         }
         var formLines = document.getElementsByClassName("formLabelDividingLine");
         for(var i=0; i < formLines.length; i++){
