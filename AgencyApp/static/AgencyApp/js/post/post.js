@@ -420,8 +420,7 @@ function addCreateProjectPost(formDict, formURL, formName){
 
     // Fill post picture string
     var pictureField = formDict["postPicture"];
-    var pictureColumn = '<td id="projectPicturePanelColumn" class="formPicturePanelColumn" style="position: relative;"><div style="position:absolute; width: 270px; top: 0;">' + getPostPicturePanel("projectPicturePanel", pictureField.value, pictureField.editOnclick, pictureField.input, "mainProjectPictureInput") + '</div></td>';
-    /*var pictureColumn = '<td style="text-align: center; width: 30%; min-width: 270px; position: relative;"><div style="position:absolute; width: 270px; top: 0;"><div id="projectPicturePanel" class="postPicture" style="background: #000; margin-left: 10px; margin-top: 47px;"><img id="projectPictureImg" src="' + pictureField.value + '" style="max-width:100%; max-height:100%;"/></div><div style="width: 60%; margin-left: 25%; overflow: hidden;"><a onclick="' + pictureField.editOnclick + '">Edit</a></div><div id="mainProjectPictureInput" style="display: none;">' + pictureField.input + '</div></div></td>';*/
+    var pictureColumn = getPostPicturePanel("projectPicturePanel", pictureField.value, pictureField.editOnclick, pictureField.input, "mainProjectPictureInput");
 
     // Fill text content
     var sectionMap = {"Details": ["title", "projectType", "status", "location", "union", "length"],
@@ -533,14 +532,14 @@ function addCreateProjectPost(formDict, formURL, formName){
 
 function getPostPicturePanel(panelName, pictureURL, editOnclick, hiddenPictureInput, hiddenPictureInputName){
     var container = document.getElementById("editPostPanel")
-    var height = "280px";
+    var pictureSizeInfo = resizePicture("expand");
     if(container != null){
-        console.log(container.offsetWidth)
         if(container.offsetWidth <= 628){
-            height = "200px";
+            pictureSizeInfo = resizePicture("shrink")
         }
     }
-    return '<div id="' + panelName + '" class="postPictureContainer" style="background: #000; margin-left: 10px; margin-top: 47px; height: ' + height + ';"><img id="projectPictureImg" src="' + pictureURL + '" style="max-width:100%; max-height:100%;"/></div><div class="formEditPictureButtonContainer" style=""><a onclick="' + editOnclick + '">Edit</a></div><div id="' + hiddenPictureInputName + '" style="display: none;">' + hiddenPictureInput + '</div>';
+    console.log(pictureSizeInfo)
+    return '<td class="formPicturePanelColumn" style="position: relative; min-width: ' + pictureSizeInfo.columnMinWidth + ';"><div style="position:absolute; width: ' + pictureSizeInfo.container.width + '; top: 0;"><div id="' + panelName + '" class="postPictureContainer" style="background: #000; margin-left: 10px; margin-top: 47px; height: ' + pictureSizeInfo.container.height + '; width: ' + pictureSizeInfo.container.width + ';"><img id="projectPictureImg" src="' + pictureURL + '" style="max-width:100%; max-height:100%;"/></div><div class="formEditPictureButtonContainer" style="width: ' + pictureSizeInfo.container.width + ';"><a onclick="' + editOnclick + '">Edit</a></div><div id="' + hiddenPictureInputName + '" style="display: none;">' + hiddenPictureInput + '</div></div></td>';
 }
 
 var formDividerLineScale = 0.93;
@@ -675,6 +674,7 @@ function resizePicture(resizeType){
     for(var i=0; i< editButtons.length; i++){
         editButtons[i].style.width = container.width;
     }
+    return {"container": container, "columnMinWidth": columnMinWidth}
 }
 
 function resizeBrowseTable(changeCallback){
