@@ -694,8 +694,10 @@ document.write(getPanelInfoFromNumColumns(tableColCount)["mainViewPanelWidth"] +
                                             document.write(createAddNewButton("roles"));
                                         {% elif jobs %}
                                             document.write(createAddNewButton("jobs"));
-                                        {% elif events}
+                                        {% elif events %}
                                             document.write(createAddNewButton("events"));
+                                        {% else %}
+                                            document.write(createAddNewButton("roles"));
                                         {% endif %}
                                     </script>
                                 </div>
