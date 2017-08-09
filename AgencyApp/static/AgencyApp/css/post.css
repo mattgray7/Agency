@@ -73,6 +73,15 @@
 	.formLabelDividingLine{
 		z-index: 0;
 	}
+	.formPicturePanelColumn{
+		text-align: center;
+		width: 30%;
+		min-width: 270px;
+	}
+	.formEditPictureButtonContainer{
+		text-align: center;
+		margin-left: 13px;
+	}
 	.editPostPanel
 	{
 		width: 100%;
@@ -100,6 +109,10 @@
 		border-radius: 4px;
 		padding: 0.2em;
 		text-align: left;
+	}
+	.postPictureContainer{
+		padding: 0.2em;
+		border-radius: 3px;
 	}
 	.postPicture
 	{

@@ -420,8 +420,8 @@ function addCreateProjectPost(formDict, formURL, formName){
 
     // Fill post picture string
     var pictureField = formDict["postPicture"];
-    //var pictureColumn = '<td style="text-align: center; width: 30%;"><div id="postPicturePanel" class="postPicture" style="width: 270px; height: 298px; background: #000; margin-left: 10px; margin-top: 50px;"><img id="postPictureImg" src="' + pictureField.value + '" style="max-width:100%; max-height:100%;"/></div><div style="width: 60%; margin-left: 25%; overflow: hidden;">' + pictureField.input + "</div></td>";
-    var pictureColumn = '<td style="text-align: center; width: 30%; min-width: 270px; position: relative;"><div style="position:absolute; width: 270px; top: 0;"><div id="projectPicturePanel" class="postPicture" style="width: 270px; height: 298px; background: #000; margin-left: 10px; margin-top: 47px;"><img id="projectPictureImg" src="' + pictureField.value + '" style="max-width:100%; max-height:100%;"/></div><div style="width: 60%; margin-left: 25%; overflow: hidden;"><a onclick="' + pictureField.editOnclick + '">Edit</a></div><div id="mainProjectPictureInput" style="display: none;">' + pictureField.input + '</div></div></td>';
+    var pictureColumn = '<td id="projectPicturePanelColumn" class="formPicturePanelColumn" style="position: relative;"><div style="position:absolute; width: 270px; top: 0;">' + getPostPicturePanel("projectPicturePanel", pictureField.value, pictureField.editOnclick, pictureField.input, "mainProjectPictureInput") + '</div></td>';
+    /*var pictureColumn = '<td style="text-align: center; width: 30%; min-width: 270px; position: relative;"><div style="position:absolute; width: 270px; top: 0;"><div id="projectPicturePanel" class="postPicture" style="background: #000; margin-left: 10px; margin-top: 47px;"><img id="projectPictureImg" src="' + pictureField.value + '" style="max-width:100%; max-height:100%;"/></div><div style="width: 60%; margin-left: 25%; overflow: hidden;"><a onclick="' + pictureField.editOnclick + '">Edit</a></div><div id="mainProjectPictureInput" style="display: none;">' + pictureField.input + '</div></div></td>';*/
 
     // Fill text content
     var sectionMap = {"Details": ["title", "projectType", "status", "location", "union", "length"],
@@ -529,6 +529,10 @@ function addCreateProjectPost(formDict, formURL, formName){
     }
     formString += "</div></div></td></tr>";
     return formString;
+}
+
+function getPostPicturePanel(panelName, pictureURL, editOnclick, hiddenPictureInput, hiddenPictureInputName){
+    return '<div id="' + panelName + '" class="postPictureContainer" style="background: #000; margin-left: 10px; margin-top: 47px; height: 280px;"><img id="projectPictureImg" src="' + pictureURL + '" style="max-width:100%; max-height:100%;"/></div><div class="formEditPictureButtonContainer" style=""><a onclick="' + editOnclick + '">Edit</a></div><div id="' + hiddenPictureInputName + '" style="display: none;">' + hiddenPictureInput + '</div>';
 }
 
 var formDividerLineScale = 0.93;
@@ -664,6 +668,38 @@ function resizeBrowseTable(changeCallback){
         for(var i=0; i < formLines.length; i++){
             formLines[i].style.width = newLineWidth;
         }
+
+        //Reduce picture size
+        var pictureWidth = 270;
+        var pictureContainers = document.getElementsByClassName("postPictureContainer")
+        for(var i=0; i < pictureContainers.length; i++){
+            if(tableColCount === 2){
+                pictureWidth = 203;
+                pictureContainers[i].style.width = "203px";
+                pictureContainers[i].style.height = "226px";
+            }else{
+                pictureWidth = 270;
+                pictureContainers[i].style.width = "270px";
+                pictureContainers[i].style.height = "298px";
+            }
+        }
+
+        //Reduce picture column width to make text fields larger
+        var pictureColumns = document.getElementsByClassName("formPicturePanelColumn")
+        for(var i=0; i < pictureColumns.length; i++){
+            if(tableColCount === 2){
+                pictureColumns[i].style.minWidth = "200px";
+            }else{
+                pictureColumns[i].style.minWidth = "270px";
+            }
+        }
+
+        // Move edit picture button to be recentred
+        var editButtons = document.getElementsByClassName("formEditPictureButtonContainer");
+        for(var i=0; i< editButtons.length; i++){
+            editButtons[i].style.width = pictureWidth + "px";
+        }
+
         changeCallback();
     }
 }
