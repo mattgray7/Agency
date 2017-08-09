@@ -150,7 +150,7 @@ function addCreateCastingPost(formDict, formURL, formName){
         }
 
         if(sectionTitle != "hidden"){
-            sectionLabelTableElement += "<div style='position: relative; height: 50px; width: 100%;'> <h2 class='" + sectionClass + "' style='position: absolute; z-index: 1; right: 0; margin-left: 80px;'> " + sectionTitle + "</h2><div style='position: absolute; z-index: 0; min-width: 720px; width: 389%; border: 1px solid #7c7b7b; height: 0px; bottom: 0; margin-bottom: 15px; margin-left: 0px;'></div></div>"
+            sectionLabelTableElement += "<div style='position: relative; height: 50px; width: 100%;'> <h2 class='" + sectionClass + "' style='position: absolute; z-index: 1; right: 0; margin-left: 80px;'> " + sectionTitle + "</h2><div class='formLabelDividingLine' style='position: absolute; width: 389%; border: 1px solid #7c7b7b; height: 0px; bottom: 0; margin-bottom: 15px; margin-left: 0px;'></div></div>"
             sectionInputTableElement += "<div style='height: 60px;'></div>";
 
             for(i in fieldList){
@@ -304,7 +304,7 @@ function addCreateWorkPost(formDict, formURL, formName){
         }
 
         if(sectionTitle != "hidden"){
-            sectionLabelTableElement += "<div style='position: relative; height: 50px; width: 100%;'> <h2 class='" + sectionClass + "' style='position: absolute; z-index: 1; right: 0; margin-left: 80px;'> " + sectionTitle + "</h2><div style='position: absolute; z-index: 0; min-width: 720px; width: 389%; border: 1px solid #7c7b7b; height: 0px; bottom: 0; margin-bottom: 15px; margin-left: 0px;'></div></div>"
+            sectionLabelTableElement += "<div style='position: relative; height: 50px; width: 100%;'> <h2 class='" + sectionClass + "' style='position: absolute; z-index: 1; right: 0; margin-left: 80px;'> " + sectionTitle + "</h2><div class='formLabelDividingLine' style='position: absolute; width: 360%; border: 1px solid #7c7b7b; height: 0px; bottom: 0; margin-bottom: 15px; margin-left: 0px;'></div></div>"
             sectionInputTableElement += "<div style='height: 60px;'></div>";
 
             for(i in fieldList){
@@ -447,7 +447,7 @@ function addCreateProjectPost(formDict, formURL, formName){
         }
 
         if(sectionTitle != "hidden"){
-            sectionLabelTableElement += "<div style='position: relative; height: 50px; width: 100%;'> <h2 class='" + sectionClass + "' style='position: absolute; z-index: 1; right: 0; margin-left: 80px;'> " + sectionTitle + "</h2><div style='position: absolute; z-index: 0; min-width: 720px; width: 389%; border: 1px solid #7c7b7b; height: 0px; bottom: 0; margin-bottom: 15px; margin-left: 0px;'></div></div>"
+            sectionLabelTableElement += "<div style='position: relative; height: 50px; width: 100%;'> <h2 class='" + sectionClass + "' style='position: absolute; z-index: 1; right: 0; margin-left: 80px;'> " + sectionTitle + "</h2><div class='formLabelDividingLine' style='position: absolute; z-index: 0; width: 389%; border: 1px solid #7c7b7b; height: 0px; bottom: 0; margin-bottom: 15px; margin-left: 0px;'></div></div>"
             sectionInputTableElement += "<div style='height: 60px;'></div>";
 
             for(i in fieldList){
@@ -633,9 +633,9 @@ function resizeBrowseTable(changeCallback){
     if(tableColCount != numColumns){
         tableColCount = numColumns
         mainViewPanel = document.getElementById("mainViewPanel")
+        var newPanelSizeInfo = getPanelInfoFromNumColumns(tableColCount)
         if(mainViewPanel != null){
-            mainViewPanel.style.width = getMainPanelWidthFromNumColumns(tableColCount)
-            console.log(mainViewPanel.style.width)
+            mainViewPanel.style.width = newPanelSizeInfo["mainViewPanelWidth"]
         }
         if(tableColCount === 1){
             document.getElementById("jobsButton").style.marginLeft = "2px";
@@ -643,25 +643,38 @@ function resizeBrowseTable(changeCallback){
             document.getElementById("jobsButton").style.marginLeft = "0px";
         }
         document.getElementById("browseTableContainer").style.width = tableColCount * browseElementWidth + "px";
+
+        var formLines = document.getElementsByClassName("formLabelDividingLine");
+        for(var i=0; i < formLines.length; i++){
+            formLines[i].style.width = newPanelSizeInfo["formLineWidth"];
+        }
         changeCallback();
     }
 }
 
-function getMainPanelWidthFromNumColumns(numColumns){
+function getPanelInfoFromNumColumns(numColumns){
     var base = numColumns * browseElementWidth;
+    var formLineWidth;
     if(numColumns === 2){
         base += 28;
+        formLineWidth = "340%";
     }else if(numColumns === 3){
         base += 37;
+        formLineWidth = "380%";
     }else if(numColumns === 4){
         base += 45; 
+        formLineWidth = "360%";
     }else if(numColumns === 5){
         base += 52;
+        formLineWidth = "360%";
     }else{
         base += 60;
+        formLineWidth = "360%";
     }
     base += "px";
-    return base;
+
+
+    return {"mainViewPanelWidth": base, "formLineWidth": formLineWidth}
 }
 
 var browseElementWidth = 300;
