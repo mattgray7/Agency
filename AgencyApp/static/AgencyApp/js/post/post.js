@@ -617,7 +617,7 @@ function createBrowseTable(tableType, tableEntries, sectionOrder, displayAddNewP
         if(colCount === 0){
             tableString += "<tr>"
         }
-        tableString += "<td style='width: 310px;'>" + createBrowseTableElement(data[i], titleFieldName, tableType) + "</td>";
+        tableString += "<td style='width: 300px;'>" + createBrowseTableElement(data[i], titleFieldName, tableType) + "</td>";
 
         colCount += 1;
         if(colCount === tableColCount){
