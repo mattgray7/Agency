@@ -803,6 +803,7 @@
         }
         $(window).resize(function () {
             resizeBrowseTable(function(){
+                document.getElementById("browseTable").style.width = tableColCount * 300 + "px";
                 selectProjectTab(tabType);
             });
         });
