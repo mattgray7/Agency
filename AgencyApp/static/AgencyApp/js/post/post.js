@@ -447,7 +447,7 @@ function addCreateProjectPost(formDict, formURL, formName){
         }
 
         if(sectionTitle != "hidden"){
-            sectionLabelTableElement += "<div style='position: relative; height: 50px; width: 100%;'> <h2 class='" + sectionClass + "' style='position: absolute; z-index: 1; right: 0; margin-left: 80px;'> " + sectionTitle + "</h2><div class='formLabelDividingLine' style='position: absolute; z-index: 0; width: 389%; border: 1px solid #7c7b7b; height: 0px; bottom: 0; margin-bottom: 15px; margin-left: 0px;'></div></div>"
+            sectionLabelTableElement += "<div style='position: relative; height: 50px; width: 100%;'> <h2 class='" + sectionClass + "' style='position: absolute; z-index: 1; right: 0; margin-left: 80px;'> " + sectionTitle + "</h2>" + getFormDividerLine(formName) + "</div>"
             sectionInputTableElement += "<div style='height: 60px;'></div>";
 
             for(i in fieldList){
@@ -529,6 +529,15 @@ function addCreateProjectPost(formDict, formURL, formName){
     }
     formString += "</div></div></td></tr>";
     return formString;
+}
+
+function getFormDividerLine(formName){
+    var container = document.getElementById("editPostPanel")
+    var width = "380%";
+    if(container != null){
+        width = container.offsetWidth * 0.93 + "px";
+    }
+    return "<div class='formLabelDividingLine' style='position: absolute; width:" + width + "; border: 1px solid #7c7b7b; height: 0px; bottom: 0; margin-bottom: 15px; margin-left: 0px;'></div>"
 }
 
 function createBrowseTableElement(elementDict, titleFieldName, elementType){
@@ -644,9 +653,15 @@ function resizeBrowseTable(changeCallback){
         }
         document.getElementById("browseTableContainer").style.width = tableColCount * browseElementWidth + "px";
 
+        // Change width of form divider lines
+        var newLineWidth = newPanelSizeInfo["formLineWidth"];
+        var formContainer = document.getElementById("editPostPanel")
+        if(formContainer != null){
+            newLineWidth = formContainer.offsetWidth * 0.93 + "px";
+        }
         var formLines = document.getElementsByClassName("formLabelDividingLine");
         for(var i=0; i < formLines.length; i++){
-            formLines[i].style.width = newPanelSizeInfo["formLineWidth"];
+            formLines[i].style.width = newLineWidth;
         }
         changeCallback();
     }
@@ -672,7 +687,6 @@ function getPanelInfoFromNumColumns(numColumns){
         formLineWidth = "360%";
     }
     base += "px";
-
 
     return {"mainViewPanelWidth": base, "formLineWidth": formLineWidth}
 }
