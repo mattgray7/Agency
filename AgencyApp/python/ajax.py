@@ -172,5 +172,12 @@ def saveTempPostPicture(request):
             success = helpers.savePostPictureInDatabase(request, "postPicture", tempPostPicture, cropInfo, "tempPostPicture_{0}.jpg".format(tempID))
     return JsonResponse({"success": success, "tempID": tempID, "pictureURL": tempPostPicture.postPicture.url})
 
+def getPostData(request):
+    postID = request.POST.get("postID")
+    if(postID):
+        post = post.getPost(postID)
+
+        # TODO format data in dict (instead of 'CastingPost object')
+        return JsonResponse({"success": True})
 
 

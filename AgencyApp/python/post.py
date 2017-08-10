@@ -617,6 +617,16 @@ def isFollowingPost(postID, username):
 def _postIDExistsInDb(postID, database):
     return len(database.objects.filter(postID=postID)) > 0
 
+def getPost(postID):
+    database = getPostDatabase(postID)
+    post = None;
+    if database:
+        try:
+            post = database.objects.get(postID=postID)
+        except database.DoesNotExist:
+            pass
+    return post
+
 def getPostDatabase(postID):
     database = None
     if isEventPost(postID):

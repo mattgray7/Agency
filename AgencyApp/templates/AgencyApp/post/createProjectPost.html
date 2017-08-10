@@ -195,12 +195,33 @@
         return postFields;
     }
 
+    function getExistingPostFormData(postID){
+        $.ajax({
+            url : "/ajax/getPostData/",
+            data : {"postID": postID},
+            type : 'POST',
+            dataType: "json",
+            success : function(data) {
+                if(data["success"]){
+                    return data
+                }
+            }
+        });
+    }
 
-        function getCastingFormDict(existingPosts){
+
+        function getCastingFormDict(existingPosts, postID){
             var postFields = {}
             {% if forms.role %}
+                var postData;
+                if(postID != null && postID.length > 0){
+                    postData = getExistingPostFormData(postID)
+                    console.log(postData)
+                }
+
                 {% spaceless %}
                 {% for field in forms.role %}
+                    //TODO use postData for field value
                     var postField = createPostField('casting', '{{field.name}}', '{{field.value}}', '{{field.label}}', '{{field}}')
                     if(postField != null){
                         postFields[postField.name] = postField;
