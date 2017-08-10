@@ -560,7 +560,29 @@
     }
 
     function toggleExpandExistingForm(toggleType, panelType, postID){
-        console.log("toggling existing form")
+        var postRow = $('[id=browseTablePost_' + postID + ']').closest('tr');
+        var rowDiv = document.getElementById(postRow[0].id);
+        if(rowDiv != null){
+            if(toggleType === "expand"){
+                var newRow = document.createElement('tr');
+                var newCol = document.createElement('td');
+                newCol.colSpan = tableColCount;
+                newCol.className = "browseTableForm";
+                newCol.id = "insertExistingFormDiv";
+                newCol.style.height = "0px";
+                newCol.style.overflow = "hidden";
+                newRow.append(newCol)
+
+                /*var newDiv = document.createElement('div');
+                newDiv.id = "insertExistingFormDiv";
+                newDiv.className = "browseTableForm";*/
+                rowDiv.parentNode.insertBefore(newRow, rowDiv.nextSibling);
+                document.getElementById("insertExistingFormDiv").innerHTML = getNewElementForm(panelType);
+                $("#insertExistingFormDiv").animate({marginTop: "0px", height: roleFormHeight}, transitionSpeed);
+                //document.getElementById("insertExistingFormDiv").innerHTML = getNewElementForm(panelType);
+                //addElementStatusSelect(panelType)
+            }
+        }
     }
 
     function getSingularFromPlural(plural){

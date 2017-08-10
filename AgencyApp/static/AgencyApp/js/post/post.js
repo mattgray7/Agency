@@ -551,11 +551,11 @@ function getFormDividerLine(){
 }
 
 function createBrowseTableElement(elementDict, titleFieldName, elementType){
-    var elementString = "<div class='projectContentListElement'>";
+    var elementString = "<div id='browseTablePost_" + elementDict["post"]["postID"]["value"] + "' class='projectContentListElement'>";
     if("addNewPanel" in elementDict){
         elementString += "Add new";
     }else{
-        elementString += "<table style='width: 100%;'><tr>";
+        elementString += "<table style='width: 100%;'><tr id='hi'>";
 
         // add status bar
         elementString += "<td colspan=2>"
@@ -632,9 +632,10 @@ function createBrowseTable(tableType, tableEntries, sectionOrder, displayAddNewP
 
     var desiredColCount = getBrowseTableNumColumnsFromWindowSize()
     var colCount = 0;
+    var rowCount = 0;
     for(var i=0; i < data.length; i++){
         if(colCount === 0){
-            tableString += "<tr>"
+            tableString += "<tr id='browseTableRow_" + rowCount + "'>";
         }
         tableString += "<td style='width: 300px;'>" + createBrowseTableElement(data[i], titleFieldName, tableType) + "</td>";
 
@@ -642,6 +643,7 @@ function createBrowseTable(tableType, tableEntries, sectionOrder, displayAddNewP
         if(colCount === tableColCount){
             tableString += "</tr>";
             colCount = 0;
+            rowCount += 1;
         }
     }
     return tableString;

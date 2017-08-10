@@ -82,6 +82,11 @@
 		text-align: center;
 		margin-left: 13px;
 	}
+	.browseTableForm{
+		background: #FFF;
+		border: 2px solid #000;
+		border-radius: 3px;
+	}
 	.editPostPanel
 	{
 		width: 100%;
