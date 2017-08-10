@@ -120,7 +120,7 @@ function addCreateCastingPost(formDict, formURL, formName){
 
     // Fill post picture string
     var pictureField = formDict["postPicture"];
-    var pictureColumn = getPostPicturePanel("postPicturePanel", pictureField.value, pictureField.editOnclick, pictureField.input, "mainPostPictureInput");
+    var pictureColumn = getPostPicturePanel("postPicturePanel", pictureField.value, pictureField.editOnclick, "postPictureImg", pictureField.input, "mainPostPictureInput");
 
 
     // Fill text content
@@ -274,7 +274,7 @@ function addCreateWorkPost(formDict, formURL, formName){
 
     // Fill post picture string
     var pictureField = formDict["postPicture"];
-    var pictureColumn = getPostPicturePanel("postPicturePanel", pictureField.value, pictureField.editOnclick, pictureField.input, "mainPostPictureInput");
+    var pictureColumn = getPostPicturePanel("postPicturePanel", pictureField.value, pictureField.editOnclick, "postPictureImg", pictureField.input, "mainPostPictureInput");
 
     // Fill text content
     var sectionMap = {"Details": ["title", "project", "profession", "status", "startDate", "endDate", "hoursPerWeek", "paid"],
@@ -418,7 +418,7 @@ function addCreateProjectPost(formDict, formURL, formName){
 
     // Fill post picture string
     var pictureField = formDict["postPicture"];
-    var pictureColumn = getPostPicturePanel("projectPicturePanel", pictureField.value, pictureField.editOnclick, pictureField.input, "mainProjectPictureInput");
+    var pictureColumn = getPostPicturePanel("projectPicturePanel", pictureField.value, pictureField.editOnclick, "projectPictureImg", pictureField.input, "mainProjectPictureInput");
 
     // Fill text content
     var sectionMap = {"Details": ["title", "projectType", "status", "location", "union", "length"],
@@ -528,7 +528,7 @@ function addCreateProjectPost(formDict, formURL, formName){
     return formString;
 }
 
-function getPostPicturePanel(panelName, pictureURL, editOnclick, hiddenPictureInput, hiddenPictureInputName){
+function getPostPicturePanel(panelName, pictureURL, editOnclick, pictureName, hiddenPictureInput, hiddenPictureInputName){
     var container = document.getElementById("editPostPanel")
     var pictureSizeInfo = resizePicture("expand");
     if(container != null){
@@ -537,7 +537,7 @@ function getPostPicturePanel(panelName, pictureURL, editOnclick, hiddenPictureIn
         }
     }
     console.log(pictureSizeInfo)
-    return '<td class="formPicturePanelColumn" style="position: relative; min-width: ' + pictureSizeInfo.columnMinWidth + ';"><div style="position:absolute; width: ' + pictureSizeInfo.container.width + '; top: 0;"><div id="' + panelName + '" class="postPictureContainer" style="background: #000; margin-left: 10px; margin-top: 47px; height: ' + pictureSizeInfo.container.height + '; width: ' + pictureSizeInfo.container.width + ';"><img id="projectPictureImg" src="' + pictureURL + '" style="max-width:100%; max-height:100%;"/></div><div class="formEditPictureButtonContainer" style="width: ' + pictureSizeInfo.container.width + ';"><a onclick="' + editOnclick + '">Edit</a></div><div id="' + hiddenPictureInputName + '" style="display: none;">' + hiddenPictureInput + '</div></div></td>';
+    return '<td class="formPicturePanelColumn" style="position: relative; min-width: ' + pictureSizeInfo.columnMinWidth + ';"><div style="position:absolute; width: ' + pictureSizeInfo.container.width + '; top: 0;"><div id="' + panelName + '" class="postPictureContainer" style="background: #000; margin-left: 10px; margin-top: 47px; height: ' + pictureSizeInfo.container.height + '; width: ' + pictureSizeInfo.container.width + ';"><img id="' + pictureName + '" src="' + pictureURL + '" style="max-width:100%; max-height:100%;"/></div><div class="formEditPictureButtonContainer" style="width: ' + pictureSizeInfo.container.width + ';"><a onclick="' + editOnclick + '">Edit</a></div><div id="' + hiddenPictureInputName + '" style="display: none;">' + hiddenPictureInput + '</div></div></td>';
 }
 
 var formDividerLineScale = 0.93;
