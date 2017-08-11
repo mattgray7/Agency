@@ -454,7 +454,7 @@
                 success : function(data) {
                     if(data["success"]){
                         toggleExpandNewForm("shrink", activeTab)
-                        addNewPostToExistingList(form, data["pictureURL"]);
+                        addNewPostToExistingList(form, data["pictureURL"], edit);
                     }else{
                         if(data["errors"]){
                             errorRow = document.getElementById("formErrorRow");
@@ -501,12 +501,37 @@
         return newPost;
     }
 
-    function addNewPostToExistingList(postForm, imageURL){
+    function addNewPostToExistingList(postForm, imageURL, edit){
         if(roleEntries == null){
             roleEntries = getBrowseRolesDict();
         }
-        newPost = createSingleRoleDict(postForm, imageURL);
-        roleEntries[newPost.post.status.value].push(newPost);
+        var newPost = createSingleRoleDict(postForm, imageURL);
+        if(edit){
+            // Need to edit existing roleEntries list and find the post with the matching postID
+            // Must iterate through all status', as we don't know the previous status if there was a status change
+            for(status in roleEntries){
+                if(roleEntries[status] != null){
+                    for(var i=0; i < roleEntries[status].length; i++){
+                        var existingPost = roleEntries[status][i]
+                        if(postForm.postID.value === existingPost["post"]["postID"]["value"]){
+                            // This is the matching post
+                            if(status != newPost.post.status.value){
+                                // A status change has occurred, so remove post from old status list and add to new status list
+                                roleEntries[status].splice(i, 1)
+                                roleEntries[newPost.post.status.value].push(newPost)
+                            }else{
+                                // No status change, just update the current post with the new data
+                                roleEntries[newPost.post.status.value][i] = newPost;
+                            }
+                            break;
+                        }
+                    }
+                }
+            }
+        }else{
+            // Adding new element, so don't need to modify existing lists, just add new post
+            roleEntries[newPost.post.status.value].push(newPost);
+        }
 
         // Creates the browse table with the new roleEntries
         selectProjectTab("roles")
