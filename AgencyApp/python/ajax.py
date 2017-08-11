@@ -97,7 +97,7 @@ def createNewCastingPost(request):
     pictureSuccess = False
     postInstance = None
     if createSuccess:
-        tempPostPictureID = request.POST.get("tempPostPictureID")
+        """tempPostPictureID = request.POST.get("tempPostPictureID")
         if tempPostPictureID:
             try:
                 tempPicture = models.TempPostPicture.objects.get(tempID=tempPostPictureID)
@@ -116,14 +116,41 @@ def createNewCastingPost(request):
                         postInstance.postPicture = tempPicture.postPicture
                         postInstance.save()
                         pictureSuccess = helpers.savePostPictureInDatabase(request, "postPicture", postInstance, postData.get("cropInfo", {}), postData.get("filename"))
-        else:
-            pictureSuccess = True
+        """
+        newPicData = _uploadTempPictureToPostDatabase(request)
+        postInstance = newPicData.get("post")
+        pictureSuccess = newPicData.get("success")
+    else:
+        pictureSuccess = True
     return JsonResponse({"success": createSuccess and pictureSuccess, "errors": newPost.formErrors,
                          "pictureURL": postInstance and postInstance.postPicture and postInstance.postPicture.url or ""})
 
+def _uploadTempPictureToPostDatabase(request):
+    success = False
+    postInstance = None
+    tempPostPictureID = request.POST.get("tempPostPictureID")
+    if tempPostPictureID:
+        try:
+            tempPicture = models.TempPostPicture.objects.get(tempID=tempPostPictureID)
+        except models.TempPostPicture:
+            pass
+        else:
+            postData = _getPostPictureRequestData(request)
+            postID = request.POST.get("postID")
+            database = post.getPostDatabase(postID)
+            if postID and database and tempPicture and tempPicture.postPicture:
+                postInstance = post.getPost(postID)
+                if postInstance:
+                    postInstance.postPicture = tempPicture.postPicture
+                    postInstance.save()
+                    success = helpers.savePostPictureInDatabase(request, "postPicture", postInstance, postData.get("cropInfo", {}), postData.get("filename"))
+    return {"success": success, "post": postInstance}
+
 def editExistingPost(request):
+    print request.FILES
     postID = request.POST.get("postID")
     success = False
+    piactureURL = None
     if postID:
         postObj = post.getPost(postID)
         if postObj:
@@ -141,7 +168,12 @@ def editExistingPost(request):
                             postObj.__dict__[key] = newValue
             postObj.save()
             success = True
-    return JsonResponse({"success": success})
+            
+            newPicData = _uploadTempPictureToPostDatabase(request)
+            postInstance = newPicData.get("post")
+            pictureSuccess = newPicData.get("success")
+            pictureURL = postInstance and postInstance.postPicture and postInstance.postPicture.url
+    return JsonResponse({"success": success, "pictureURL": pictureURL})
 
 
 def _getPostPictureRequestData(request):
@@ -167,6 +199,7 @@ def updatePostPicture(request):
     postID = postData.get("postID")
     database = postData.get("database")
     success = False
+    postInstance = None
     if postID and database:
         try:
             postInstance = database.objects.get(postID=postID)
@@ -174,7 +207,7 @@ def updatePostPicture(request):
             pass
         else:
             success = helpers.savePostPictureInDatabase(request, "postPicture", postInstance, postData.get("cropInfo"), postData.get("filename"))
-    return JsonResponse({"success": success, "pictureURL": postInstance.postPicture.url})
+    return JsonResponse({"success": success, "pictureURL": postInstance and postInstance.postPicture and postInstance.postPicture.url})
 
 def saveTempPostPicture(request):
     tempID = helpers.createUniqueID(models.TempPostPicture, "tempID")
