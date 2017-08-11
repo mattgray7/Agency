@@ -896,7 +896,7 @@ document.write(getPanelInfoFromNumColumns(tableColCount)["mainViewPanelWidth"] +
         });
     }
 
-    function selectRoles(){
+    /*function selectRoles(){
         var listDiv = document.getElementById("projectContentList");
         var contentString = "";
         if(listDiv != null){
@@ -1014,24 +1014,6 @@ document.write(getPanelInfoFromNumColumns(tableColCount)["mainViewPanelWidth"] +
                 contentString += "</tr></table>"
             {% endif %}
             listDiv.innerHTML = contentString
-        }
-    }
-
-    /*function toggleEditPictureFilePanel(toggleType){
-        var form = document.getElementById
-        var pictureFilePanel = document.getElementById("editPictureFilePanel");
-        var pictureUpdateButton = document.getElementById("updatePictureButton")
-        if(pictureFilePanel != null && pictureUpdateButton != null){
-            if(toggleType == "display"){
-                pictureUpdateButton.style.opacity = 0;
-                $('.editPictureFilePanel').animate({bottom: "0"}, 200);
-                editPictureFilePanelShown = true;
-            }else{
-
-                $('.editPictureFilePanel').animate({bottom: "-100"}, 200);
-                pictureUpdateButton.style.opacity = 1; 
-                editPictureFilePanelShown = false;
-            }
         }
     }*/
 
