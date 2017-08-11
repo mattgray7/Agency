@@ -173,11 +173,19 @@ def saveTempPostPicture(request):
     return JsonResponse({"success": success, "tempID": tempID, "pictureURL": tempPostPicture.postPicture.url})
 
 def getPostData(request):
+    """Return a key:value dict of a single post, postID should be passed in request"""
     postID = request.POST.get("postID")
+    success = False
+    dataDict = {}
     if(postID):
         postObj = post.getPost(postID)
+        if postObj:
+            for key in postObj.__dict__:
+                # Skip hidden attributes
+                if not key.startswith("_"):
+                    dataDict[key] = postObj.__dict__[key]
+            success = True
 
-        # TODO format data in dict (instead of 'CastingPost object')
-        return JsonResponse({"success": True})
+    return JsonResponse({"success": success, "postData": dataDict})
 
 

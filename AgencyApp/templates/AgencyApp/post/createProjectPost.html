@@ -205,26 +205,36 @@
                 dataType: "json",
                 success : function(data) {
                     if(data["success"]){
-                        var test = getCastingFormDict(false)
-                        loadSuccessCallback(test);
+                        var castingDict = getCastingFormDict(false, data["postData"])
+                        loadSuccessCallback(castingDict);
                     }
                 }
             });
         }
     }
 
-        function getCastingFormDict(newPost){
+        function getCastingFormDict(newPost, existingPostData){
             var postFields = {}
             {% if forms.role %}
                 {% spaceless %}
                 {% for field in forms.role %}
-                    //TODO use postData for field value
-                    var postField = createPostField('casting', '{{field.name}}', '{{field.value}}', '{{field.label}}', '{{field}}')
+                    // Either get value from context for new posts, or existingPostData for existing posts
+                    var existingValue = '{{field.value}}'
+                    if(existingPostData != null){
+                        if(existingPostData['{{field.name}}'] != null && existingPostData['{{field.name}}'].length > 0){
+                            existingValue = existingPostData['{{field.name}}'];
+                        }
+                    }
+
+                    // Create the postField for this field and add it to the dict, indexed by field name
+                    var postField = createPostField('casting', '{{field.name}}', existingValue, '{{field.label}}', '{{field}}')
                     if(postField != null){
                         postFields[postField.name] = postField;
                     }
                 {% endfor %}
                 {% endspaceless %}
+
+                // Add other required fields (csrf_token, onCancel, etc)
                 postFields = modifyCastingPostFields(postFields, newPost);
             {% endif %}
             return postFields;
@@ -271,7 +281,7 @@
         }
 
         function addCommonPostFields(postFields, newPost){
-            
+
         }
 
         function createPostField(postType, name, value, label, input){
