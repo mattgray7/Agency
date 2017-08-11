@@ -453,8 +453,12 @@
                 dataType: "json",
                 success : function(data) {
                     if(data["success"]){
-                        toggleExpandNewForm("shrink", activeTab)
                         addNewPostToExistingList(form, data["pictureURL"], edit);
+                        if(edit){
+                            toggleExpandExistingForm("shrink", data["pictureURL"], edit, function(){selectProjectTab('roles')})
+                        }else{
+                            toggleExpandNewForm("shrink", activeTab, function(){selectProjectTab('roles')})
+                        }
                     }else{
                         if(data["errors"]){
                             errorRow = document.getElementById("formErrorRow");
@@ -532,9 +536,6 @@
             // Adding new element, so don't need to modify existing lists, just add new post
             roleEntries[newPost.post.status.value].push(newPost);
         }
-
-        // Creates the browse table with the new roleEntries
-        selectProjectTab("roles")
     }
 
     function getNewElementForm(formType){
@@ -568,7 +569,7 @@
     var expanded = false;
     var roleFormHeight = "1375px";
     var transitionSpeed = 350;
-    function toggleExpandNewForm(toggleType, panelType){
+    function toggleExpandNewForm(toggleType, panelType, shrinkAnimationFinishCallback){
         var newFormDiv = document.getElementById("insertNewFormDiv")
         var browsePostsDiv = document.getElementById("projectContentList")
         var filterBarDiv = document.getElementById("projectContentListHeader")
@@ -593,16 +594,21 @@
 
             //newFormDiv.style.border = "2px solid #000";
             // Optional: animate filter bar to shrink as opposed to just making invisible
-            $("#projectContentListHeader").animate({marginTop: "0px", height: "40px"}, transitionSpeed, function(){filterBarDiv.style.visibility = "visible"});
+            $("#projectContentListHeader").animate({marginTop: "0px", height: "40px"}, transitionSpeed, function(){
+                filterBarDiv.style.visibility = "visible";
+                if(shrinkAnimationFinishCallback != null){
+                    shrinkAnimationFinishCallback();
+                }
+            });
             browsePostsDiv.style.marginTop = "0px";
             newFormDiv.innerHTML = createAddNewButton(panelType);
             expanded = false;
         }
     }
 
-    function toggleExpandExistingForm(toggleType, panelType, postID){
-        var postRow = $('[id=browseTablePost_' + postID + ']').closest('tr');
+    function toggleExpandExistingForm(toggleType, panelType, postID, shrinkAnimationFinishCallback){
         if(toggleType === "expand"){
+            var postRow = $('[id=browseTablePost_' + postID + ']').closest('tr');
             var rowDiv = document.getElementById(postRow[0].id);
             if(rowDiv != null){
                 // Create new row
@@ -628,7 +634,12 @@
                 $("#insertExistingFormDiv").animate({marginTop: "0px", height: roleFormHeight}, transitionSpeed + 200);
             }
         }else{
-            $("#insertExistingFormDiv").animate({marginTop: "0px", height: "0px"}, transitionSpeed + 200, function(){$("#insertExistingFormDivContainerRow").remove()});
+            $("#insertExistingFormDiv").animate({marginTop: "0px", height: "0px"}, transitionSpeed + 200, function(){
+                    $("#insertExistingFormDivContainerRow").remove()
+                    if(shrinkAnimationFinishCallback != null){
+                        shrinkAnimationFinishCallback();
+                    }
+                });
         }
     }
 
