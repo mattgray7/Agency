@@ -175,7 +175,7 @@ def saveTempPostPicture(request):
 def getPostData(request):
     postID = request.POST.get("postID")
     if(postID):
-        post = post.getPost(postID)
+        postObj = post.getPost(postID)
 
         # TODO format data in dict (instead of 'CastingPost object')
         return JsonResponse({"success": True})

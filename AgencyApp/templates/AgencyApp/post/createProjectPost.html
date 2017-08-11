@@ -195,30 +195,27 @@
         return postFields;
     }
 
-    function getExistingPostFormData(postID){
-        $.ajax({
-            url : "/ajax/getPostData/",
-            data : {"postID": postID},
-            type : 'POST',
-            dataType: "json",
-            success : function(data) {
-                if(data["success"]){
-                    return data
+    function getExistingCastingFormDict(postID, loadSuccessCallback){
+        var postData;
+        if(postID != null && postID.length > 0){
+            $.ajax({
+                url : "/ajax/getPostData/",
+                data : {"postID": postID},
+                type : 'POST',
+                dataType: "json",
+                success : function(data) {
+                    if(data["success"]){
+                        var test = getCastingFormDict(false)
+                        loadSuccessCallback(test);
+                    }
                 }
-            }
-        });
+            });
+        }
     }
 
-
-        function getCastingFormDict(existingPosts, postID){
+        function getCastingFormDict(newPost){
             var postFields = {}
             {% if forms.role %}
-                var postData;
-                if(postID != null && postID.length > 0){
-                    postData = getExistingPostFormData(postID)
-                    console.log(postData)
-                }
-
                 {% spaceless %}
                 {% for field in forms.role %}
                     //TODO use postData for field value
@@ -228,44 +225,53 @@
                     }
                 {% endfor %}
                 {% endspaceless %}
-
-                // Add project
-                var projectField = {"name": "project"}
-                {% if post and post.title %}
-                    projectField.title  = '{{post.title}}';
-                    projectField.projectID = '{{post.postID}}';
-                {% endif %}
-                postFields["project"] = projectField
-
-                // Add actor
-                var actorField = {"username": "{{actor.username}}", "cleanName": "{{actor.cleanName}}"}
-                {% if actor %}
-                    actorField["username"] = "{{actor.username}}";
-                    actorField["cleanName"] = "{{actor.cleanName}}";
-                    {% if actor.profilePicture %}
-                        actorField.profilePictureURL = '{{actor.profilePicture.url}}';
-                    {% endif %}
-                {% else %}
-                    actorField["username"] = null;
-                    actorField.profilePictureURL = '{{images.noProfilePicture}}';
-                {% endif %}
-                postFields["actor"] = actorField;
-
-                // Add csrf token
-                var csrfField = {"name": "csrf_token", "input": "{% csrf_token %}", "hidden": true};
-                postFields['csrf_token'] = csrfField;
-
-                // Add cancel button with onclick
-                var cancelButton = {'name': 'cancelButton', 'onclick': 'toggleExpandNewForm("shrink", "roles");', "hidden": true};
-                postFields['cancelButton'] = cancelButton;
-
-                // Add create/update button with onclick
-                var createButton = {'name': 'createButton', 'onclickFunction': 'submitProjectSubForm', "hidden": true};
-                postFields['createButton'] = createButton;
-
-                postFields["newPost"] = true;
+                postFields = modifyCastingPostFields(postFields, newPost);
             {% endif %}
             return postFields;
+        }
+
+        // Adds the necessary casting post fields to the postFields dict
+        function modifyCastingPostFields(postFields, newPost){
+            // Add project
+            var projectField = {"name": "project"}
+            {% if post and post.title %}
+                projectField.title  = '{{post.title}}';
+                projectField.projectID = '{{post.postID}}';
+            {% endif %}
+            postFields["project"] = projectField
+
+            // Add actor
+            var actorField = {"username": "{{actor.username}}", "cleanName": "{{actor.cleanName}}"}
+            {% if actor %}
+                actorField["username"] = "{{actor.username}}";
+                actorField["cleanName"] = "{{actor.cleanName}}";
+                {% if actor.profilePicture %}
+                    actorField.profilePictureURL = '{{actor.profilePicture.url}}';
+                {% endif %}
+            {% else %}
+                actorField["username"] = null;
+                actorField.profilePictureURL = '{{images.noProfilePicture}}';
+            {% endif %}
+            postFields["actor"] = actorField;
+
+            // Add csrf token
+            var csrfField = {"name": "csrf_token", "input": "{% csrf_token %}", "hidden": true};
+            postFields['csrf_token'] = csrfField;
+
+            // Add cancel button with onclick
+            var cancelButton = {'name': 'cancelButton', 'onclick': 'toggleExpandNewForm("shrink", "roles");', "hidden": true};
+            postFields['cancelButton'] = cancelButton;
+
+            // Add create/update button with onclick
+            var createButton = {'name': 'createButton', 'onclickFunction': 'submitProjectSubForm', "hidden": true};
+            postFields['createButton'] = createButton;
+
+            postFields["newPost"] = newPost;
+            return postFields;
+        }
+
+        function addCommonPostFields(postFields, newPost){
+            
         }
 
         function createPostField(postType, name, value, label, input){
@@ -382,29 +388,6 @@
         return null;
     }
 
-                    /*// Add field errors
-                    {% if field.errors %}
-                        {% for error in field.errors %}
-                            var errorString = '{{error}}';
-                            var fieldDisplayName = postField.label.replace("*", "");
-
-                            // Want to group all fields with the same error
-                            if(errorString ===  "This field is required."){
-                                errors["required"].push(fieldDisplayName);
-                            }
-                        {% endfor %}
-                    {% endif %}*/
-
-            
-
-            /*if(errors["required"].length > 0){
-                postFields["errors"] = errors;
-                console.log(postFields["errors"])
-            }
-
-            return postFields;
-        }*/
-
     function submitProjectForm(formName){
         // Set the status from the select bar in the form
         var statusDiv = document.getElementById("statusSelectBarProject");
@@ -515,7 +498,23 @@
     function getNewElementForm(formType){
         var formString = "";
         if(formType === "roles"){
-            formString += addCreateCastingPost(getCastingFormDict(!isElementListEmpty(formType)), "{{currentPageURL}}", "createCastingPostForm");
+            formString += addCreateCastingPost(getCastingFormDict(true), "{{currentPageURL}}", "createCastingPostForm");
+        }else if(formType === "jobs"){
+            return "jobs"
+        }else if(formType === "events"){
+            return "events"
+        }
+        return formString;
+    }
+
+    function setExistingElementForm(formType, postID, elementContentDiv){
+        var formString = "";
+        if(formType === "roles"){
+            var castingFormDict = getExistingCastingFormDict(postID, function(postFields){
+                console.log("got postFields " + postFields)
+                var newFormString = addCreateCastingPost(postFields, "{{currentPageURL}}", "createCastingPostForm");
+                elementContentDiv.innerHTML = newFormString;
+            })
         }else if(formType === "jobs"){
             return "jobs"
         }else if(formType === "events"){
@@ -571,7 +570,7 @@
                 newCol.colSpan = tableColCount;
                 newFormDiv.className = "browseTableForm"
                 newFormDiv.id = "insertExistingFormDiv"
-                newFormDiv.innerHTML = getNewElementForm(panelType)
+                setExistingElementForm(panelType, postID, newFormDiv)
                 newFormDiv.style.height = "0px";
 
                 newCol.appendChild(newFormDiv)
