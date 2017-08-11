@@ -103,7 +103,6 @@ def createNewCastingPost(request):
             pictureSuccess = newPicData.get("success")
         else:
             pictureSuccess = True
-        print newPicData
     else:
         pictureSuccess = True
     return JsonResponse({"success": createSuccess and pictureSuccess, "errors": newPost.formErrors,
@@ -224,6 +223,8 @@ def getPostData(request):
                 # Skip hidden attributes
                 if not key.startswith("_"):
                     dataDict[key] = postObj.__dict__[key]
+
+            dataDict["postPicture"] = postObj and postObj.postPicture and postObj.postPicture.url
             success = True
 
     return JsonResponse({"success": success, "postData": dataDict})

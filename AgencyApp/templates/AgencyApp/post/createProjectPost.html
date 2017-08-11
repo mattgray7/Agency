@@ -74,7 +74,9 @@
                 {% endif %}
             }
         }else{
+            console.log("here1")
             if(projectSubFormPicture != null){
+                console.log("here2")
                 pictureURL = projectSubFormPicture.src
             }
         }
@@ -94,7 +96,7 @@
         }
     }
 
-    function addEditImageContent(containerID, isProject){
+    function addEditImageContent(containerID, isProject, pictureURL){
         var pictureID = "editPostPicture";
         setPictureID(pictureID);
         setButtonLoadingGifURL("{{images.loading.mid}}");
@@ -110,7 +112,9 @@
 
         // Set the pictureURL to display
         var addCrop = true;
-        var pictureURL = getPictureURL(isProject);
+        if(pictureURL == null){
+            pictureURL = getPictureURL(isProject);
+        }
         if(pictureURL === "{{post.postPicture.url}}" || pictureURL === "{{images.noPicture}}"){
             addCrop = false;
         }
@@ -221,7 +225,6 @@
                     // Either get value from context for new posts, or existingPostData for existing posts
                     var existingValue = '{{field.value}}';
                     if(existingPostData != null){
-                        console.log("changing")
                         if(existingPostData['{{field.name}}'] != null && existingPostData['{{field.name}}'].length > 0 && existingPostData['{{field.name'] != "None"){
                             existingValue = existingPostData['{{field.name}}'];
                         }
@@ -325,10 +328,10 @@
                     {% else %}
                         postField.value = "{{images.noPicture}}";
                     {% endif %}
-                }else{
+                }else if(value == null || value.length === 0){
                     postField.value = "{{images.noPicture}}";
                 }
-                postField.editOnclick = "toggleEditPicturePopup('show', " + isProject + ")";
+                postField.editOnclick = "toggleEditPicturePopup('show', " + isProject + ", '" + postField.value + "')";
             }else if(postField.name == "paid"){
                 var currentInput = postField.input;
                 var paidDescription = '{{post.paidDescription}}'
@@ -457,6 +460,7 @@
                 dataType: "json",
                 success : function(data) {
                     if(data["success"]){
+                        console.log("PIc ture url is " + data["pictureURL"])
                         addNewPostToExistingList(form, data["pictureURL"], edit);
                         if(edit){
                             toggleExpandExistingForm("shrink", data["pictureURL"], edit, function(){selectProjectTab('roles')})

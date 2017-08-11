@@ -54,13 +54,13 @@ function toggleSelectProjectPopup(toggleType){
     togglePopup(toggleType, "hiddenGrayPopupOverlay", "selectProjectPanel");
 }
 
-function toggleEditPicturePopup(toggleType, postIsProject){
+function toggleEditPicturePopup(toggleType, postIsProject, pictureURL){
     if(postIsProject == null){
         postIsProject = false;
     }
     togglePopup(toggleType, "hiddenGrayPopupOverlay", "editPicturePanel")
     if(toggleType === "show"){
-        addEditImageContent("editPicturePanel", postIsProject);
+        addEditImageContent("editPicturePanel", postIsProject, pictureURL);
     }
 }
 
