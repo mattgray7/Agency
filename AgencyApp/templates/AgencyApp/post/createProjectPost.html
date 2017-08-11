@@ -219,11 +219,15 @@
                 {% spaceless %}
                 {% for field in forms.role %}
                     // Either get value from context for new posts, or existingPostData for existing posts
-                    var existingValue = '{{field.value}}'
+                    var existingValue = '{{field.value}}';
                     if(existingPostData != null){
-                        if(existingPostData['{{field.name}}'] != null && existingPostData['{{field.name}}'].length > 0){
+                        console.log("changing")
+                        if(existingPostData['{{field.name}}'] != null && existingPostData['{{field.name}}'].length > 0 && existingPostData['{{field.name'] != "None"){
                             existingValue = existingPostData['{{field.name}}'];
                         }
+                    }
+                    if(existingValue === "None"){
+                        existingValue = "";
                     }
 
                     // Create the postField for this field and add it to the dict, indexed by field name
@@ -306,7 +310,7 @@
 
             if(postField.name == "projectID"){
                 postField.value = "{{post.projectID}}";
-            }else if(postField.name == "postID" && value == null){
+            }else if(postField.name == "postID" && (value == null || value.length === 0)){
                 if(postType != 'project'){
                     postField.value = getNewPostID(postType);
                 }else{
@@ -541,7 +545,7 @@
     function getNewElementForm(formType){
         var formString = "";
         if(formType === "roles"){
-            formString += addCreateCastingPost(getCastingFormDict(true), "{{currentPageURL}}", "createCastingPostForm");
+            formString += addCreateCastingPost(getCastingFormDict(true, null), "{{currentPageURL}}", "createCastingPostForm");
         }else if(formType === "jobs"){
             return "jobs"
         }else if(formType === "events"){
