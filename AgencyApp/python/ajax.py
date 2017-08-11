@@ -121,6 +121,29 @@ def createNewCastingPost(request):
     return JsonResponse({"success": createSuccess and pictureSuccess, "errors": newPost.formErrors,
                          "pictureURL": postInstance and postInstance.postPicture and postInstance.postPicture.url or ""})
 
+def editExistingPost(request):
+    postID = request.POST.get("postID")
+    success = False
+    if postID:
+        postObj = post.getPost(postID)
+        if postObj:
+            for key in postObj.__dict__:
+                if not key.startswith("_"):
+                    newValue = request.POST.get(key, None)
+                    oldValue = postObj.__dict__[key]
+                    if not newValue:
+                        if oldValue in ["True", "False"]:
+                            newValue = False
+                            oldValue = bool(oldValue)
+                    else:
+                        if newValue != oldValue:
+                            print "key {0} has diff values: old={1}, new={2}".format(key, oldValue, newValue)
+                            postObj.__dict__[key] = newValue
+            postObj.save()
+            success = True
+    return JsonResponse({"success": success})
+
+
 def _getPostPictureRequestData(request):
     data = {}
     postID = request.POST.get("postID")

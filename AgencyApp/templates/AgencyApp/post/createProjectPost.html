@@ -286,10 +286,6 @@
             return postFields;
         }
 
-        function addCommonPostFields(postFields, newPost){
-
-        }
-
         function createPostField(postType, name, value, label, input){
             var save = true;
             var postField = {"name": name, "value": value, "hidden": false, "label": label, 'input': input}
@@ -310,7 +306,7 @@
 
             if(postField.name == "projectID"){
                 postField.value = "{{post.projectID}}";
-            }else if(postField.name == "postID"){
+            }else if(postField.name == "postID" && value == null){
                 if(postType != 'project'){
                     postField.value = getNewPostID(postType);
                 }else{
@@ -428,7 +424,7 @@
         }
     }
 
-    function submitProjectSubForm(formName){
+    function submitProjectSubForm(formName, edit){
         // Submits the form while adding values of select bars with id '{{name}}SelectBar' to form input '{{name}}SelectInput'
         var statusDiv = document.getElementById("statusSelectBar");
         if(statusDiv != null){
@@ -443,10 +439,15 @@
                 }
             {% endfor %}
         {% endif %}
+        var ajaxURL = "/ajax/createNewCastingPost/";
+        if(edit){
+            ajaxURL = "/ajax/editExistingPost/";
+        }
+
         var form = document.getElementById(formName)
         if(form != null){
             $.ajax({
-                url : "/ajax/createNewCastingPost/",
+                url : ajaxURL,
                 data : $("[id='" + formName + "']").serialize(),
                 type : 'POST',
                 dataType: "json",
