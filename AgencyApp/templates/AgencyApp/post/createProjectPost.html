@@ -269,7 +269,13 @@
             postFields['csrf_token'] = csrfField;
 
             // Add cancel button with onclick
-            var cancelButton = {'name': 'cancelButton', 'onclick': 'toggleExpandNewForm("shrink", "roles");', "hidden": true};
+            var editOnclick;
+            if(newPost){
+                editOnclick = 'toggleExpandNewForm("shrink", "roles");'
+            }else{
+                editOnclick = 'toggleExpandExistingForm("shrink", "roles");'
+            }
+            var cancelButton = {'name': 'cancelButton', 'onclick': editOnclick, "hidden": true};
             postFields['cancelButton'] = cancelButton;
 
             // Add create/update button with onclick
@@ -570,24 +576,33 @@
 
     function toggleExpandExistingForm(toggleType, panelType, postID){
         var postRow = $('[id=browseTablePost_' + postID + ']').closest('tr');
-        var rowDiv = document.getElementById(postRow[0].id);
-        if(rowDiv != null){
-            if(toggleType === "expand"){
+        if(toggleType === "expand"){
+            var rowDiv = document.getElementById(postRow[0].id);
+            if(rowDiv != null){
+                // Create new row
                 var newRow = document.createElement('tr');
+                newRow.id = "insertExistingFormDivContainerRow"
+
+                // Create new col with ful colspan
                 var newCol = document.createElement('td');
-                var newFormDiv = document.createElement('div');
-
                 newCol.colSpan = tableColCount;
-                newFormDiv.className = "browseTableForm"
-                newFormDiv.id = "insertExistingFormDiv"
-                setExistingElementForm(panelType, postID, newFormDiv)
-                newFormDiv.style.height = "0px";
 
+                // Create new form div to put in column
+                var newFormDiv = document.createElement('div');
+                newFormDiv.className = "browseTableForm";
+                newFormDiv.id = "insertExistingFormDiv";
+                newFormDiv.style.overflow = "hidden";
+                newFormDiv.style.height = "0px";
+                setExistingElementForm(panelType, postID, newFormDiv)
+
+                // Add the div to col, col to row, and row after the parent row
                 newCol.appendChild(newFormDiv)
                 newRow.appendChild(newCol)
                 rowDiv.parentNode.insertBefore(newRow, rowDiv.nextSibling);
                 $("#insertExistingFormDiv").animate({marginTop: "0px", height: roleFormHeight}, transitionSpeed + 200);
             }
+        }else{
+            $("#insertExistingFormDiv").animate({marginTop: "0px", height: "0px"}, transitionSpeed + 200, function(){$("#insertExistingFormDivContainerRow").remove()});
         }
     }
 
