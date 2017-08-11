@@ -121,10 +121,12 @@ def _uploadTempPictureToPostDatabase(request):
             else:
                 postData = _getPostPictureRequestData(request)
                 if tempPicture and tempPicture.postPicture and postData:
+                    print tempPicture
+                    print tempPicture.postPicture
                     postInstance.postPicture = tempPicture.postPicture
                     postInstance.save()
                     success = helpers.savePostPictureInDatabase(request, "postPicture", postInstance, postData.get("cropInfo", {}), postData.get("filename"))
-    return {"success": success, "post": postInstance}
+    return {"success": success, "post": postInstance, "tempPictureURL": tempPicture and tempPicture.postPicture and tempPicture.postPicture.url}
 
 def editExistingPost(request):
     postID = request.POST.get("postID")
@@ -155,7 +157,15 @@ def editExistingPost(request):
                 pictureSuccess = newPicData.get("success")
             else:
                 pictureSuccess = True
-            pictureURL = postInstance and postInstance.postPicture and postInstance.postPicture.url
+            tempPictureURL = newPicData.get("tempPictureURL")
+            if tempPictureURL:
+                print "HERE doing temp"
+                pictureURL = tempPictureURL
+            else:
+                print "doing post instance"
+                pictureURL = postInstance and postInstance.postPicture and postInstance.postPicture.url
+
+    print "pictureURL IS {0}".format(pictureURL)
     return JsonResponse({"success": editSuccess and pictureSuccess, "pictureURL": pictureURL})
 
 
@@ -163,9 +173,15 @@ def _getPostPictureRequestData(request):
     data = {}
     postID = request.POST.get("postID")
     if postID:
+        postType = request.POST.get("postType")
+        if not postType:
+            postObj = post.getPost(postID)
+            if postObj:
+                postType = postObj.postType
+
         data = {"postID": postID,
                 "database": post.getPostDatabase(postID),
-                "filename": constants.MEDIA_FILE_NAME_MAP.get(request.POST.get("postType"), "tempfile_{0}").format(postID),
+                "filename": constants.MEDIA_FILE_NAME_MAP.get(postType, "tempfile_{0}").format(postID),
                 "cropInfo": {"x": request.POST.get("crop_x"),
                              "y": request.POST.get("crop_y"),
                              "width": request.POST.get("crop_width"),

@@ -73,6 +73,7 @@ function addPopupPictureToBaseForm(tempPictureID, tempPictureURL, isProject){
     return setBaseFormPicture(tempPictureURL, isProject);
 }
 
+var currentBaseFormPicture;
 function setBaseFormPicture(pictureURL, isProject){
     var baseFormPicture = document.getElementById("postPictureImg")
     if(isProject){
@@ -80,6 +81,7 @@ function setBaseFormPicture(pictureURL, isProject){
     }
     if(baseFormPicture != null && pictureURL.length > 0){
         baseFormPicture.src = pictureURL
+        currentBaseFormPicture = pictureURL
         return true;
     }
     return false;
@@ -128,7 +130,7 @@ function addCreateCastingPost(formDict, formURL, formName){
                       "Character": ["characterName", "shortCharacterDescription", "description", "skills", "languages"],
                       "Performer": ["actorName"],
                       "Physical": ["hairColor", "eyeColor", "complexion", "height", "build", "gender", "ageRange"],
-                      "hidden": ["csrf_token", "postID", "source", "next", "destination", "projectID", "poster"]}
+                      "hidden": ["csrf_token", "postID", "source", "next", "destination", "projectID", "poster", "postType"]}
     var mainLabelsColumn = "<td class='editPostLabelPanel' style='width: 20%; position:relative; line-height: 38.2px;'><ul style='margin-bottom: -14px; margin-top: -40px;'>";
     var mainInputsColumn = "<td class='editPostInputPanel' style='width: 50%; position: relative; line-height: 39px;'><ul style='margin-top: -20px; '>";
     var otherLabelsColumn = "<td class='editPostLabelPanel' style='width: 30%; min-width: 170px; height: 600px; position:relative;'><ul style='margin-top: 5px;'>";

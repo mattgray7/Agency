@@ -4,6 +4,7 @@ import json
 from django.db import models
 from django.core.files.storage import FileSystemStorage
 import helpers
+import constants
 
 from django.conf import settings
 imageStorage = FileSystemStorage(
@@ -226,6 +227,10 @@ class WorkPost(AbstractPost):
     workerNeedsEquipment = models.BooleanField(default=True)
     equipmentDescription = models.CharField(max_length=500, blank=True, null=True)
 
+    @property
+    def postType(self):
+        return constants.WORK_POST
+
 class CastingPost(AbstractPost):
     paid = models.BooleanField(default=False)
     paidDescription = models.CharField(max_length=200, blank=True, null=True)
@@ -247,6 +252,10 @@ class CastingPost(AbstractPost):
     startDate = models.DateField(default=None, blank=True, null=True)
     endDate = models.DateField(default=None, blank=True, null=True)
     hoursPerWeek = models.TextField(max_length=50, blank=True, null=True, default="TBD")
+
+    @property
+    def postType(self):
+        return constants.CASTING_POST
 
 class Actor(models.Model):
     username = models.CharField(max_length=200)

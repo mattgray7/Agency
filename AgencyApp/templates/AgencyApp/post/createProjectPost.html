@@ -460,8 +460,8 @@
                 dataType: "json",
                 success : function(data) {
                     if(data["success"]){
-                        console.log("PIc ture url is " + data["pictureURL"])
-                        addNewPostToExistingList(form, data["pictureURL"], edit);
+                        console.log("PIc ture url is " + currentBaseFormPicture)
+                        addNewPostToExistingList(form, currentBaseFormPicture, edit);
                         if(edit){
                             toggleExpandExistingForm("shrink", data["pictureURL"], edit, function(){selectProjectTab('roles')})
                         }else{
