@@ -110,6 +110,7 @@ def createNewCastingPost(request):
 
 def _uploadTempPictureToPostDatabase(request):
     success = False
+    tempPicture = None
     postInstance = post.getPost(request.POST.get("postID"));
     if postInstance:
         tempPostPictureID = request.POST.get("tempPostPictureID")
@@ -163,7 +164,7 @@ def editExistingPost(request):
                 pictureURL = tempPictureURL
             else:
                 print "doing post instance"
-                pictureURL = postInstance and postInstance.postPicture and postInstance.postPicture.url
+                pictureURL = postInstance and postInstance.postPicture and str(postInstance.postPicture.url) or None
 
     print "pictureURL IS {0}".format(pictureURL)
     return JsonResponse({"success": editSuccess and pictureSuccess, "pictureURL": pictureURL})
@@ -239,8 +240,11 @@ def getPostData(request):
                 # Skip hidden attributes
                 if not key.startswith("_"):
                     dataDict[key] = postObj.__dict__[key]
-
-            dataDict["postPicture"] = postObj and postObj.postPicture and postObj.postPicture.url
+                    print "{0}: {1}".format(key, dataDict[key])
+            if postObj.postPicture:
+                print postObj.postPicture
+                dataDict["postPicture"] = postObj.postPicture and str(postObj.postPicture.url)
+            print dataDict
             success = True
 
     return JsonResponse({"success": success, "postData": dataDict})
