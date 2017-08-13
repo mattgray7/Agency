@@ -107,7 +107,7 @@ def createNewCastingPost(request):
         pictureSuccess = True
     return JsonResponse({"success": createSuccess and pictureSuccess, "errors": newPost.formErrors,
                          "pictureURL": postInstance and postInstance.postPicture and postInstance.postPicture.url or "",
-                         "postID": postID})
+                         "postID": request.POST.get("postID")})
 
 def _uploadTempPictureToPostDatabase(request):
     success = False
