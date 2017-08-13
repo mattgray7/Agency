@@ -74,9 +74,7 @@
                 {% endif %}
             }
         }else{
-            console.log("here1")
             if(projectSubFormPicture != null){
-                console.log("here2")
                 pictureURL = projectSubFormPicture.src
             }
         }
@@ -117,6 +115,13 @@
         }
         if(pictureURL === "{{post.postPicture.url}}" || pictureURL === "{{images.noPicture}}"){
             addCrop = false;
+        }else{
+            // Don't add crop for newly added photos
+            for(var postID in newPostPictureURLs){
+                if(pictureURL === newPostPictureURLs[postID]){
+                    addCrop = false;
+                }
+            }
         }
 
         // Set newPicture to pictureURL and update projectPicture/projectSubFormPicture
