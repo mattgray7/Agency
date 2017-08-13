@@ -66,10 +66,17 @@ function toggleEditPicturePopup(toggleType, postIsProject, pictureURL){
 
 function addPopupPictureToBaseForm(tempPictureID, tempPictureURL, isProject){
     var baseFormPictureInput = document.getElementById("mainPostPictureInput")
+    var editPicture = document.getElementById("postPicturePanelEditButton")
     if(isProject){
         baseFormPictureInput = document.getElementById("mainProjectPictureInput")
+        editPicture = document.getElementById("projectPicturePanelEditButton")
     }
     baseFormPictureInput.innerHTML = "<input type='hidden' name='tempPostPictureID' value='" + tempPictureID + "'>"
+
+    // Update onclick of edit picture button to load tempPicture
+    editPicture.onclick = function(){
+        toggleEditPicturePopup("show", isProject, tempPictureURL)
+    }
     return setBaseFormPicture(tempPictureURL, isProject);
 }
 
@@ -538,7 +545,7 @@ function getPostPicturePanel(panelName, pictureURL, editOnclick, pictureName, hi
             pictureSizeInfo = resizePicture("shrink")
         }
     }
-    return '<td class="formPicturePanelColumn" style="position: relative; min-width: ' + pictureSizeInfo.columnMinWidth + ';"><div style="position:absolute; width: ' + pictureSizeInfo.container.width + '; top: 0;"><div id="' + panelName + '" class="postPictureContainer" style="background: #000; margin-left: 10px; margin-top: 47px; height: ' + pictureSizeInfo.container.height + '; width: ' + pictureSizeInfo.container.width + ';"><img id="' + pictureName + '" src="' + pictureURL + '" style="max-width:100%; max-height:100%;"/></div><div class="formEditPictureButtonContainer" style="width: ' + pictureSizeInfo.container.width + ';"><a onclick="' + editOnclick + '">Edit</a></div><div id="' + hiddenPictureInputName + '" style="display: none;">' + hiddenPictureInput + '</div></div></td>';
+    return '<td class="formPicturePanelColumn" style="position: relative; min-width: ' + pictureSizeInfo.columnMinWidth + ';"><div style="position:absolute; width: ' + pictureSizeInfo.container.width + '; top: 0;"><div id="' + panelName + '" class="postPictureContainer" style="background: #000; margin-left: 10px; margin-top: 47px; height: ' + pictureSizeInfo.container.height + '; width: ' + pictureSizeInfo.container.width + ';"><img id="' + pictureName + '" src="' + pictureURL + '" style="max-width:100%; max-height:100%;"/></div><div class="formEditPictureButtonContainer" style="width: ' + pictureSizeInfo.container.width + ';"><a id="' + panelName + 'EditButton" onclick="' + editOnclick + '">Edit</a></div><div id="' + hiddenPictureInputName + '" style="display: none;">' + hiddenPictureInput + '</div></div></td>';
 }
 
 var formDividerLineScale = 0.93;
