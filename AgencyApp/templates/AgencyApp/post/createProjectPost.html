@@ -212,7 +212,7 @@
                         // If a new picture has been added and page has not been refreshed, need to set picURl to temp value (browser won't update image at same path)
                         var newPictureURL = newPostPictureURLs[postID];
                         if(newPictureURL != null){
-                            data["postPicture"] = newPictureURL
+                            data["postData"]["postPicture"] = newPictureURL
                         }
                         var castingDict = getCastingFormDict(false, data["postData"])
                         loadSuccessCallback(castingDict);
