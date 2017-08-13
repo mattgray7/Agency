@@ -598,7 +598,7 @@ function createBrowseTableElement(elementDict, titleFieldName, elementType){
         elementString += "</ul>";
 
         // add edit button
-        elementString += "<div class='addNewPostButton' style='position:absolute; right: 0; bottom: 13%; text-align: center; width: 35px; height: 25px;' onclick='toggleExpandExistingForm(" + '"expand", "' + elementType + '", "' + elementDict["post"]["postID"]["value"] + '");' + "'><div style='font-size: 0.9em; font-weight: 500; margin-top: 1px;padding: 2px;'>Edit</div></div>";
+        elementString += "<div class='addNewPostButton' id='editPostButton_" + elementDict["post"]["postID"]["value"] + "' style='position:absolute; right: 0; bottom: 13%; text-align: center; width: 35px; height: 25px;' onclick='toggleExpandExistingForm(" + '"expand", "' + elementType + '", "' + elementDict["post"]["postID"]["value"] + '");' + "'><div style='font-size: 0.9em; font-weight: 500; margin-top: 1px;padding: 2px;'>Edit</div></div>";
 
         elementString += "</div></div></td>";
 

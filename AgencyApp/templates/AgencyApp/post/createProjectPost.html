@@ -615,6 +615,7 @@
     }
 
     function toggleExpandExistingForm(toggleType, panelType, postID, shrinkAnimationFinishCallback){
+        var editButton = document.getElementById("editPostButton_" + postID)
         if(toggleType === "expand"){
             var postRow = $('[id=browseTablePost_' + postID + ']').closest('tr');
             var rowDiv = document.getElementById(postRow[0].id);
@@ -641,13 +642,28 @@
                 rowDiv.parentNode.insertBefore(newRow, rowDiv.nextSibling);
                 $("#insertExistingFormDiv").animate({marginTop: "0px", height: roleFormHeight}, transitionSpeed + 200);
             }
+
+            // Change onclick of edit button to shrink form
+            if(editButton != null){
+                editButton.onclick = function(){
+                    toggleExpandExistingForm("shrink", panelType, postID, shrinkAnimationFinishCallback);
+                };
+                console.log("editbutton onclick is " + editButton.onclick);
+            }
         }else{
-            $("#insertExistingFormDiv").animate({marginTop: "0px", height: "0px"}, transitionSpeed + 200, function(){
+            $("#insertExistingFormDiv").animate({marginTop: "0px", height: "0px"}, transitionSpeed, function(){
                     $("#insertExistingFormDivContainerRow").remove()
                     if(shrinkAnimationFinishCallback != null){
                         shrinkAnimationFinishCallback();
                     }
                 });
+
+            // Change onclick of edit buttonback to expand form
+            if(editButton != null){
+                editButton.onclick = function(){
+                    toggleExpandExistingForm("expand", panelType, postID);
+                };
+            }
         }
     }
 
