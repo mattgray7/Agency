@@ -648,7 +648,7 @@
                 editButton.onclick = function(){
                     toggleExpandExistingForm("shrink", panelType, postID, shrinkAnimationFinishCallback);
                 };
-                console.log("editbutton onclick is " + editButton.onclick);
+                editButton.innerHTML = "Hide";
             }
         }else{
             $("#insertExistingFormDiv").animate({marginTop: "0px", height: "0px"}, transitionSpeed, function(){
@@ -663,6 +663,7 @@
                 editButton.onclick = function(){
                     toggleExpandExistingForm("expand", panelType, postID);
                 };
+                editButton.innerHTML = "Edit";
             }
         }
     }
