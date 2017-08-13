@@ -538,7 +538,6 @@ function getPostPicturePanel(panelName, pictureURL, editOnclick, pictureName, hi
             pictureSizeInfo = resizePicture("shrink")
         }
     }
-    console.log(pictureSizeInfo)
     return '<td class="formPicturePanelColumn" style="position: relative; min-width: ' + pictureSizeInfo.columnMinWidth + ';"><div style="position:absolute; width: ' + pictureSizeInfo.container.width + '; top: 0;"><div id="' + panelName + '" class="postPictureContainer" style="background: #000; margin-left: 10px; margin-top: 47px; height: ' + pictureSizeInfo.container.height + '; width: ' + pictureSizeInfo.container.width + ';"><img id="' + pictureName + '" src="' + pictureURL + '" style="max-width:100%; max-height:100%;"/></div><div class="formEditPictureButtonContainer" style="width: ' + pictureSizeInfo.container.width + ';"><a onclick="' + editOnclick + '">Edit</a></div><div id="' + hiddenPictureInputName + '" style="display: none;">' + hiddenPictureInput + '</div></div></td>';
 }
 

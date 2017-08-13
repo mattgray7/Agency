@@ -106,7 +106,8 @@ def createNewCastingPost(request):
     else:
         pictureSuccess = True
     return JsonResponse({"success": createSuccess and pictureSuccess, "errors": newPost.formErrors,
-                         "pictureURL": postInstance and postInstance.postPicture and postInstance.postPicture.url or ""})
+                         "pictureURL": postInstance and postInstance.postPicture and postInstance.postPicture.url or "",
+                         "postID": postID})
 
 def _uploadTempPictureToPostDatabase(request):
     success = False
@@ -122,8 +123,6 @@ def _uploadTempPictureToPostDatabase(request):
             else:
                 postData = _getPostPictureRequestData(request)
                 if tempPicture and tempPicture.postPicture and postData:
-                    print tempPicture
-                    print tempPicture.postPicture
                     postInstance.postPicture = tempPicture.postPicture
                     postInstance.save()
                     success = helpers.savePostPictureInDatabase(request, "postPicture", postInstance, postData.get("cropInfo", {}), postData.get("filename"))
@@ -147,7 +146,6 @@ def editExistingPost(request):
                             oldValue = bool(oldValue)
                     else:
                         if newValue != oldValue:
-                            print "key {0} has diff values: old={1}, new={2}".format(key, oldValue, newValue)
                             postObj.__dict__[key] = newValue
             postObj.save()
             editSuccess = True
@@ -160,14 +158,10 @@ def editExistingPost(request):
                 pictureSuccess = True
             tempPictureURL = newPicData.get("tempPictureURL")
             if tempPictureURL:
-                print "HERE doing temp"
                 pictureURL = tempPictureURL
             else:
-                print "doing post instance"
                 pictureURL = postInstance and postInstance.postPicture and str(postInstance.postPicture.url) or None
-
-    print "pictureURL IS {0}".format(pictureURL)
-    return JsonResponse({"success": editSuccess and pictureSuccess, "pictureURL": pictureURL})
+    return JsonResponse({"success": editSuccess and pictureSuccess, "pictureURL": pictureURL, "postID": postID})
 
 
 def _getPostPictureRequestData(request):

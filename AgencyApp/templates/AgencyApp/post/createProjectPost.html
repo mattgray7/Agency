@@ -209,6 +209,11 @@
                 dataType: "json",
                 success : function(data) {
                     if(data["success"]){
+                        // If a new picture has been added and page has not been refreshed, need to set picURl to temp value (browser won't update image at same path)
+                        var newPictureURL = newPostPictureURLs[postID];
+                        if(newPictureURL != null){
+                            data["postPicture"] = newPictureURL
+                        }
                         var castingDict = getCastingFormDict(false, data["postData"])
                         loadSuccessCallback(castingDict);
                     }
@@ -431,6 +436,7 @@
         }
     }
 
+    var newPostPictureURLs = {}
     function submitProjectSubForm(formName, edit){
         // Submits the form while adding values of select bars with id '{{name}}SelectBar' to form input '{{name}}SelectInput'
         var statusDiv = document.getElementById("statusSelectBar");
@@ -460,7 +466,8 @@
                 dataType: "json",
                 success : function(data) {
                     if(data["success"]){
-                        console.log("PIc ture url is " + currentBaseFormPicture)
+                        // currentBaseFormPicture set in image.js
+                        newPostPictureURLs[data["postID"]] = currentBaseFormPicture;
                         addNewPostToExistingList(form, currentBaseFormPicture, edit);
                         if(edit){
                             toggleExpandExistingForm("shrink", data["pictureURL"], edit, function(){selectProjectTab('roles')})
@@ -544,6 +551,7 @@
             // Adding new element, so don't need to modify existing lists, just add new post
             roleEntries[newPost.post.status.value].push(newPost);
         }
+        console.log(roleEntries[newPost.post.status.value])
     }
 
     function getNewElementForm(formType){
@@ -562,7 +570,6 @@
         var formString = "";
         if(formType === "roles"){
             var castingFormDict = getExistingCastingFormDict(postID, function(postFields){
-                console.log("got postFields " + postFields)
                 var newFormString = addCreateCastingPost(postFields, "{{currentPageURL}}", "createCastingPostForm");
                 elementContentDiv.innerHTML = newFormString;
             })
