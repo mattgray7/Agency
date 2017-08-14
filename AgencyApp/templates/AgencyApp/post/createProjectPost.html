@@ -204,7 +204,7 @@
         return postFields;
     }
 
-    function getExistingCastingFormDict(postID, loadSuccessCallback){
+    function getExistingFormDict(postID, postType, loadSuccessCallback){
         var postData;
         if(postID != null && postID.length > 0){
             $.ajax({
@@ -219,53 +219,27 @@
                         if(newPictureURL != null){
                             data["postData"]["postPicture"] = newPictureURL
                         }
-                        var castingDict = getCastingFormDict(false, data["postData"])
-                        loadSuccessCallback(castingDict);
+                        var formDict;
+                        if(postType === "roles"){
+                            formDict = getCastingFormDict(false, data["postData"])
+                        }else if(postType === "jobs"){
+                            formDict = getWorkFormDict(false, data["postData"])
+                        }
+                        loadSuccessCallback(formDict);
                     }
                 }
             });
         }
     }
 
-        function getCastingFormDict(newPost, existingPostData){
-            var postFields = {}
-            {% if forms.role %}
-                {% spaceless %}
+    function getCastingFormDict(newPost, existingPostData){
+        var postFields = {}
+        {% if forms.role %}
+            {% spaceless %}
                 {% for field in forms.role %}
-                    // Either get value from context for new posts, or existingPostData for existing posts
-                    var existingValue = '{{field.value}}';
-                    if(existingPostData != null){
-                        if(existingPostData['{{field.name}}'] != null && existingPostData['{{field.name}}'].length > 0 && existingPostData['{{field.name'] != "None"){
-                            existingValue = existingPostData['{{field.name}}'];
-                        }
-                    }
-                    if(existingValue === "None"){
-                        existingValue = "";
-                    }
-
-                    // Create the postField for this field and add it to the dict, indexed by field name
-                    var postField = createPostField('casting', '{{field.name}}', existingValue, '{{field.label}}', '{{field}}')
-                    if(postField != null){
-                        postFields[postField.name] = postField;
-                    }
+                    addPostField(postFields, "casting", '{{field.name}}', '{{field.value}}', '{{field.label}}', '{{field}}', existingPostData)
                 {% endfor %}
-                {% endspaceless %}
-
-                // Add other required fields (csrf_token, onCancel, etc)
-                postFields = modifyCastingPostFields(postFields, newPost);
-            {% endif %}
-            return postFields;
-        }
-
-        // Adds the necessary casting post fields to the postFields dict
-        function modifyCastingPostFields(postFields, newPost){
-            // Add project
-            var projectField = {"name": "project"}
-            {% if post and post.title %}
-                projectField.title  = '{{post.title}}';
-                projectField.projectID = '{{post.postID}}';
-            {% endif %}
-            postFields["project"] = projectField
+            {% endspaceless %}
 
             // Add actor
             var actorField = {"username": "{{actor.username}}", "cleanName": "{{actor.cleanName}}"}
@@ -281,6 +255,71 @@
             {% endif %}
             postFields["actor"] = actorField;
 
+            // Add other required fields (csrf_token, onCancel, etc)
+            postFields = modifyCastingPostFields(postFields, newPost, "roles");
+        {% endif %}
+        return postFields;
+    }
+
+    function getWorkFormDict(newPost, existingPostData){
+        var postFields = {}
+        {% if forms.job %}
+            {% spaceless %}
+                {% for field in forms.job %}
+                    addPostField(postFields, "work", '{{field.name}}', '{{field.value}}', '{{field.label}}', '{{field}}', existingPostData)
+                {% endfor %}
+            {% endspaceless %}
+
+            // Add actor
+            var workerField = {"username": "{{worker.username}}", "cleanName": "{{worker.cleanName}}"}
+            {% if actor %}
+                workerField["username"] = "{{worker.username}}";
+                workerField["cleanName"] = "{{worker.cleanName}}";
+                {% if worker.profilePicture %}
+                    workerField.profilePictureURL = '{{worker.profilePicture.url}}';
+                {% endif %}
+            {% else %}
+                workerField["username"] = null;
+                workerField.profilePictureURL = '{{images.noProfilePicture}}';
+            {% endif %}
+            postFields["worker"] = workerField;
+
+            // Add other required fields (csrf_token, onCancel, etc)
+            postFields = modifyCastingPostFields(postFields, newPost, "jobs");
+        {% endif %}
+        return postFields;
+    }
+
+    function addPostField(targetList, postType, name, value, label, input, existingValues){
+        // Either get value from context for new posts, or existingPostData for existing posts
+        if(existingValues != null){
+            var tempValue = existingValues[name];
+            if(tempValue != null && tempValue.length > 0 && tempValue != "None"){
+                value = tempValue;
+            }
+        }
+
+        if(value === "None"){
+            value = "";
+        }
+
+        // Create the postField for this field and add it to the dict, indexed by field name
+        var postField = createPostField(postType, name, value, label, input)
+        if(postField != null){
+            targetList[postField.name] = postField;
+        }
+    }
+
+    // Adds the necessary casting post fields to the postFields dict
+    function modifyCastingPostFields(postFields, newPost, postType){
+            // Add project
+            var projectField = {"name": "project"}
+            {% if post and post.title %}
+                projectField.title  = '{{post.title}}';
+                projectField.projectID = '{{post.postID}}';
+            {% endif %}
+            postFields["project"] = projectField
+
             // Add csrf token
             var csrfField = {"name": "csrf_token", "input": "{% csrf_token %}", "hidden": true};
             postFields['csrf_token'] = csrfField;
@@ -288,9 +327,9 @@
             // Add cancel button with onclick
             var editOnclick;
             if(newPost){
-                editOnclick = 'toggleExpandNewForm("shrink", "roles");'
+                editOnclick = 'toggleExpandNewForm("shrink", "' + postType + '");'
             }else{
-                editOnclick = 'toggleExpandExistingForm("shrink", "roles");'
+                editOnclick = 'toggleExpandExistingForm("shrink", "' + postType + '");'
             }
             var cancelButton = {'name': 'cancelButton', 'onclick': editOnclick, "hidden": true};
             postFields['cancelButton'] = cancelButton;
@@ -301,9 +340,9 @@
 
             postFields["newPost"] = newPost;
             return postFields;
-        }
+    }
 
-        function createPostField(postType, name, value, label, input){
+    function createPostField(postType, name, value, label, input){
             var save = true;
             var postField = {"name": name, "value": value, "hidden": false, "label": label, 'input': input}
             if(input.indexOf('hidden') >= 0){
@@ -575,7 +614,6 @@
             // Adding new element, so don't need to modify existing lists, just add new post
             roleEntries[newPost.post.status.value].push(newPost);
         }
-        console.log(roleEntries[newPost.post.status.value])
     }
 
     function getNewElementForm(formType){
@@ -583,7 +621,7 @@
         if(formType === "roles"){
             formString += addCreateCastingPost(getCastingFormDict(true, null), "{{currentPageURL}}", "createCastingPostForm");
         }else if(formType === "jobs"){
-            return "jobs"
+            formString += addCreateWorkPost(getWorkFormDict(true, null), "{{currentPageURL}}", "createCastingPostForm");
         }else if(formType === "events"){
             return "events"
         }
@@ -593,12 +631,15 @@
     function setExistingElementForm(formType, postID, elementContentDiv){
         var formString = "";
         if(formType === "roles"){
-            var castingFormDict = getExistingCastingFormDict(postID, function(postFields){
+            var castingFormDict = getExistingFormDict(postID, formType, function(postFields){
                 var newFormString = addCreateCastingPost(postFields, "{{currentPageURL}}", "createCastingPostForm");
                 elementContentDiv.innerHTML = newFormString;
             })
         }else if(formType === "jobs"){
-            return "jobs"
+            var workFormDict = getExistingFormDict(postID, formType, function(postFields){
+                var newFormString = addCreateWorkPost(postFields, "{{currentPageURL}}", "createWorkPostForm");
+                elementContentDiv.innerHTML = newFormString;
+            })
         }else if(formType === "events"){
             return "events"
         }
@@ -606,8 +647,8 @@
     }
 
     var expanded = false;
-    var roleFormHeight = "1375px";
     var transitionSpeed = 350;
+    var formHeights = {"roles": "1375px", "jobs": "1150px", "events": "1375px"}
     function toggleExpandNewForm(toggleType, panelType, shrinkAnimationFinishCallback){
         var newFormDiv = document.getElementById("insertNewFormDiv")
         var browsePostsDiv = document.getElementById("projectContentList")
@@ -618,7 +659,7 @@
 
         if(toggleType === "expand"){
             newFormDiv.style.visibility = "visible";
-            $("#insertNewFormDiv").animate({marginTop: "0px", height: roleFormHeight}, transitionSpeed);
+            $("#insertNewFormDiv").animate({marginTop: "0px", height: formHeights[panelType]}, transitionSpeed);
 
             //newFormDiv.style.border = "2px solid #000";
             // Optional: animate filter bar to shrink as opposed to just making invisible
@@ -679,7 +720,7 @@
                 newCol.appendChild(newFormDiv)
                 newRow.appendChild(newCol)
                 rowDiv.parentNode.insertBefore(newRow, rowDiv.nextSibling);
-                $("#insertExistingFormDiv").animate({marginTop: "0px", height: roleFormHeight}, transitionSpeed + 200);
+                $("#insertExistingFormDiv").animate({marginTop: "0px", height: formHeights[panelType]}, transitionSpeed + 200);
             }
 
             // Change onclick of edit button to shrink form
@@ -1024,7 +1065,6 @@ document.write(getPanelInfoFromNumColumns(tableColCount)["mainViewPanelWidth"] +
 
     var eventEntries;
     function selectProjectTab(tabType){
-        console.log("Selecting project tab with type " + tabType)
         for(var i=0; i < projectTabs.length; i++){
             var buttonId = projectTabs[i] + "Button";
             var borderCoverId = projectTabs[i] + "BorderCover";

@@ -234,11 +234,8 @@ def getPostData(request):
                 # Skip hidden attributes
                 if not key.startswith("_"):
                     dataDict[key] = postObj.__dict__[key]
-                    print "{0}: {1}".format(key, dataDict[key])
             if postObj.postPicture:
-                print postObj.postPicture
                 dataDict["postPicture"] = postObj.postPicture and str(postObj.postPicture.url)
-            print dataDict
             success = True
 
     return JsonResponse({"success": success, "postData": dataDict})
