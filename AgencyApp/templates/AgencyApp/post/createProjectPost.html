@@ -629,6 +629,7 @@
     var currentExistingFormPostID = ''
     function toggleExpandExistingForm(toggleType, panelType, postID, shrinkAnimationFinishCallback){
         var editButton = document.getElementById("editPostButton_" + postID)
+        var borderCover = document.getElementById("postPanelBorderCover_" + postID);
         if(toggleType === "expand"){
             if(currentExistingFormPostID != ''){
                 // Shrink existing panel and then expand new one
@@ -668,6 +669,11 @@
                 };
                 editButton.innerHTML = "Hide";
             }
+
+            // Add border cover
+            if(borderCover != null){
+                borderCover.style.visibility = "visible";
+            }
         }else{
             // Shrinking, so no post id is active
             currentExistingFormPostID = '';
@@ -675,6 +681,12 @@
             // Shrink the form and call any cleanup functions 
             $("#insertExistingFormDiv").animate({marginTop: "0px", height: "0px"}, transitionSpeed, function(){
                 $("#insertExistingFormDivContainerRow").remove()
+
+                // Add border cover
+                if(borderCover != null){
+                    borderCover.style.visibility = "hidden";
+                }
+
                 if(shrinkAnimationFinishCallback != null){
                     shrinkAnimationFinishCallback();
                 }
@@ -687,6 +699,7 @@
                 };
                 editButton.innerHTML = "Edit";
             }
+
         }
     }
 

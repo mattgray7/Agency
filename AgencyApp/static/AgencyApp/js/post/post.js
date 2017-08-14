@@ -563,7 +563,7 @@ function createBrowseTableElement(elementDict, titleFieldName, elementType){
     if("addNewPanel" in elementDict){
         elementString += "Add new";
     }else{
-        elementString += "<table style='width: 100%;'><tr id='hi'>";
+        elementString += "<table style='width: 100%;'><tr>";
 
         // add status bar
         elementString += "<td colspan=2>"
@@ -585,10 +585,10 @@ function createBrowseTableElement(elementDict, titleFieldName, elementType){
         elementString += "'><div style='position: absolute; left: 0; margin-top: 0px; margin-left: 5px;'><h2><a onclick='redirectToPost(" + '"' + elementDict["post"]["postID"]["value"] + '");' + "'>" + elementDict["post"][titleFieldName]["value"] + "</a></h2></div><div style='position: absolute; right: 5px; margin-top: 7px;'>" + status + "</div></div></td></tr><tr>";
 
         // add picture column
-        elementString += "<td style='width: 50%; '><img src='" + elementDict["post"]["postPicture"]["value"] + "' style='height: 180px; margin-left: -20px; margin-top: -5px; border: 1px solid #000;'></td>";
+        elementString += "<td style='width: 50%; '><img src='" + elementDict["post"]["postPicture"]["value"] + "' style='height: 165px; margin-left: -5px; margin-top: -5px; border: 1px solid #000;'></td>";
 
         // add element data
-        elementString += "<td style='width: 50%;'><div style='width: 100%; text-align: left;'><div style='position: relative; height: 180px;'><ul style='position: absolute; top: 0; right: 0; height: 180px; width: 100%;'>";
+        elementString += "<td style='width: 50%;'><div style='width: 100%; text-align: left;'><div style='position: relative; height: 165px;'><ul style='position: absolute; top: 0; right: 0; height: 180px; width: 100%;'>";
         for(var field in elementDict["post"]){
             var value = elementDict["post"][field]["value"];
             if(!elementDict["post"][field]["hidden"] && field != "postPicture" && field != titleFieldName){
@@ -608,10 +608,12 @@ function createBrowseTableElement(elementDict, titleFieldName, elementType){
 
         elementString += "</div></div></td>";
 
-
         elementString += "</tr></table>"
     }
     elementString += "</div>";
+
+    // Add hidden cover
+    elementString += "<div id='postPanelBorderCover_" + elementDict["post"]["postID"]["value"] + "' style='position: relative; visibility: hidden;'><div style='position: absolute; top: 0; margin-top: -3px; background: #FFF; height: 9px; width: 98.8%; z-index: 100; border-left: 2px solid #000; border-right: 2px solid #000;'></div></div>"
     return elementString;
 }
 
