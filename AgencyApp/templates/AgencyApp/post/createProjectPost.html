@@ -471,11 +471,16 @@
                 dataType: "json",
                 success : function(data) {
                     if(data["success"]){
-                        // currentBaseFormPicture set in image.js
-                        newPostPictureURLs[data["postID"]] = currentBaseFormPicture;
-                        addNewPostToExistingList(form, currentBaseFormPicture, edit);
+                        var nextPic = data["pictureURL"];
+                        if(nextPic == null && currentBaseFormPicture != null){
+                            // currentBaseFormPicture set in image.js
+                            nextPic = currentBaseFormPicture;
+                        }
+
+                        newPostPictureURLs[data["postID"]] = nextPic;
+                        addNewPostToExistingList(form, nextPic, edit);
                         if(edit){
-                            toggleExpandExistingForm("shrink", data["pictureURL"], edit, function(){selectProjectTab('roles')})
+                            toggleExpandExistingForm("shrink", nextPic, edit, function(){selectProjectTab('roles')})
                         }else{
                             toggleExpandNewForm("shrink", activeTab, function(){selectProjectTab('roles')})
                         }
