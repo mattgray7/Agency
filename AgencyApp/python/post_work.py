@@ -124,7 +124,7 @@ class ViewWorkPostView(post.GenericViewPostView):
         if self._worker is None:
             if self.post.record.status == "Filled" and self.job:
                 try:
-                    self._worker = models.UserAccount.objects.get(username=self.job.username)
+                    self._worker = models.UserAccount.objects.get(username=self.job.workerName)
                 except models.UserAccount.DoesNotExist:
                     pass
         return self._worker

@@ -958,7 +958,7 @@ document.write(getPanelInfoFromNumColumns(tableColCount)["mainViewPanelWidth"] +
     var jobEntries;
     function getBrowseJobsDict(){
         if(jobEntries == null){
-            var jobDict = {"Open": [], "Filled": []};
+            var jobDict = {"Open": [], "Opening soon": [], "Filled": []};
             {% if jobs %}
                 {% for job in jobs %}
                     var newJob = {"user": {}, "post": {}};
@@ -972,15 +972,15 @@ document.write(getPanelInfoFromNumColumns(tableColCount)["mainViewPanelWidth"] +
                     {% endif %}
 
                     {% if job.post %}
-                        newJob["post"] = {"postID": {'value': '{{job.user.postID}}', 'hidden': true},
-                                           "profession": {'value': '{{job.user.profession}}', 'hidden': false},
-                                           "startDate": {'value': 'Start: {{job.user.startDate}}', 'hidden': false},
-                                           "endDate": {'value': 'End: {{job.user.endDate}}', 'hidden': false},
-                                           "hoursPerWeek": {'value': 'Hours/week: {{job.user.hoursPerWeek}}', 'hidden': false},
-                                           "paid": {'value': '{{job.user.paid}}', "hidden": false},
-                                           "title": {'value': '{{job.user.title}}', 'hidden': false},
-                                           "location": {'value': '{{job.user.location}}', 'hidden': true},
-                                           "status": {'value': '{{job.user.status}}', 'hidden': true},
+                        newJob["post"] = {"postID": {'value': '{{job.post.postID}}', 'hidden': true},
+                                           "profession": {'value': '{{job.post.profession}}', 'hidden': false},
+                                           "startDate": {'value': 'Start: {{job.post.startDate}}', 'hidden': false},
+                                           "endDate": {'value': 'End: {{job.post.endDate}}', 'hidden': false},
+                                           "hoursPerWeek": {'value': 'Hours/week: {{job.post.hoursPerWeek}}', 'hidden': false},
+                                           "paid": {'value': '{{job.post.paid}}', "hidden": false},
+                                           "title": {'value': '{{job.post.title}}', 'hidden': false},
+                                           "location": {'value': '{{job.post.location}}', 'hidden': true},
+                                           "status": {'value': '{{job.post.status}}', 'hidden': true},
                                            "postPicture": {"value": '{{images.noPicture}}', "hidden": false},
                                        };
                         {% if job.post.postPicture and job.post.postPicture.url %}
@@ -1043,11 +1043,12 @@ document.write(getPanelInfoFromNumColumns(tableColCount)["mainViewPanelWidth"] +
             titleFieldName = "characterName";
         }else if(tabType == "jobs"){
             entries = getBrowseJobsDict();
-            sectionOrder = ["Open", "Filled"];
+            sectionOrder = ["Open", "Opening soon", "Filled"];
             titleFieldName = "profession";
         }else if(tabType == "events"){
             selectEvents();
         }
+        console.log(entries)
         var table = createBrowseTable(tabType, entries, sectionOrder, true, titleFieldName)
         var contentDiv = document.getElementById("projectContentList")
         if(contentDiv != null){
