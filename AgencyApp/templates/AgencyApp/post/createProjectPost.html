@@ -788,7 +788,7 @@
             expandType = "shrink";
         }
 
-        buttonString += "<div class='addNewPostButton' onclick='toggleExpandNewForm(" + '"' + expandType + '", "' + tabType + '");' + "' style='position: relative; margin-top: 4px; margin-left: 4px;'> <div style='margin-top: -15px; position: absolute; top: 55%; margin-left: 7px;'><h3 style='font-weight: 300;'>Add</h3></div> <img src='{{images.plus}}' style='height: 23px; width: 23px; position:absolute; right: 6%; top: 12%;'></div>";
+        buttonString += "<div id='addNewBrowseFormButton' class='addNewPostButton' onclick='toggleExpandNewForm(" + '"' + expandType + '", "' + tabType + '");' + "' style='position: relative; margin-top: 4px; margin-left: 4px;'> <div style='margin-top: -15px; position: absolute; top: 55%; margin-left: 7px;'><h3 style='font-weight: 300;'>Add</h3></div> <img src='{{images.plus}}' style='height: 23px; width: 23px; position:absolute; right: 6%; top: 12%;'></div>";
         
         return buttonString
     }
@@ -1089,6 +1089,15 @@ document.write(getPanelInfoFromNumColumns(tableColCount)["mainViewPanelWidth"] +
                 }
             }
         }
+
+        // Change the onclick of the addNew button
+        var addNewButton = document.getElementById("addNewBrowseFormButton");
+        if(addNewButton != null){
+            addNewButton.onclick = function(){
+                toggleExpandNewForm("expand", activeTab);
+            }
+        }
+
         var entries;
         var sectionOrder;
         var titleFieldName;
