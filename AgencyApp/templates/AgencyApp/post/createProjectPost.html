@@ -955,8 +955,59 @@ document.write(getPanelInfoFromNumColumns(tableColCount)["mainViewPanelWidth"] +
         return roleEntries;
     }
 
-    
     var jobEntries;
+    function getBrowseJobsDict(){
+        if(jobEntries == null){
+            var jobDict = {"Open": [], "Filled": []};
+            {% if jobs %}
+                {% for job in jobs %}
+                    var newJob = {"user": {}, "post": {}};
+                    {% if job.worker %}
+                        newJob["user"] = {"username": '{{job.user.username}}', "cleanName": '{{job.user.cleanName}}'}
+                        {% if role.actor.profilePicture and role.actor.profilePicture.url %}
+                            newJob["user"]["profilePicture"] = '{{job.user.profilePicture.url}}';
+                        {% else %}
+                            newJob["user"]["profilePicture"] = '{{images.noProfilePicture}}';
+                        {% endif %}
+                    {% endif %}
+
+                    {% if job.post %}
+                        newJob["post"] = {"postID": {'value': '{{job.user.postID}}', 'hidden': true},
+                                           "profession": {'value': '{{job.user.profession}}', 'hidden': false},
+                                           "startDate": {'value': 'Start: {{job.user.startDate}}', 'hidden': false},
+                                           "endDate": {'value': 'End: {{job.user.endDate}}', 'hidden': false},
+                                           "hoursPerWeek": {'value': 'Hours/week: {{job.user.hoursPerWeek}}', 'hidden': false},
+                                           "paid": {'value': '{{job.user.paid}}', "hidden": false},
+                                           "title": {'value': '{{job.user.title}}', 'hidden': false},
+                                           "location": {'value': '{{job.user.location}}', 'hidden': true},
+                                           "status": {'value': '{{job.user.status}}', 'hidden': true},
+                                           "postPicture": {"value": '{{images.noPicture}}', "hidden": false},
+                                       };
+                        {% if job.post.postPicture and job.post.postPicture.url %}
+                            newJob["post"]["postPicture"]["value"] = '{{job.post.postPicture.url}}';
+                        {% endif %}
+
+                        {% if job.post.paid and job.post.paidDescription %}
+                            newJob["post"]["paid"]["value"] = "Paid &#10004 - {{job.post.paidDescription}}";
+                        {% elif job.post.paid %}
+                            newJob["post"]["paid"]["value"] = "Paid &#10004";
+                        {% elif job.post.paidDescription %}
+                            newJob["post"]["paid"]["value"] = "Unpaid - {{job.post.paidDescription}}";
+                        {% else %}
+                            newJob["post"]["paid"]["value"] = "Unpaid";
+                        {% endif %}
+
+                    if('{{job.post.status}}' in jobDict){
+                        jobDict['{{job.post.status}}'].push(newJob);
+                    };
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+            jobEntries = jobDict;
+        }
+        return jobEntries;
+    }
+
     var eventEntries;
     function selectProjectTab(tabType){
         for(var i=0; i < projectTabs.length; i++){
@@ -991,7 +1042,9 @@ document.write(getPanelInfoFromNumColumns(tableColCount)["mainViewPanelWidth"] +
             sectionOrder = ["Open", "Opening soon", "Cast"];
             titleFieldName = "characterName";
         }else if(tabType == "jobs"){
-            selectJobs();
+            entries = getBrowseJobsDict();
+            sectionOrder = ["Open", "Filled"];
+            titleFieldName = "profession";
         }else if(tabType == "events"){
             selectEvents();
         }
@@ -1008,102 +1061,7 @@ document.write(getPanelInfoFromNumColumns(tableColCount)["mainViewPanelWidth"] +
         });
     }
 
-    /*function selectRoles(){
-        var listDiv = document.getElementById("projectContentList");
-        var contentString = "";
-        if(listDiv != null){
-            {% if roles %}
-                contentString += "<table><tr>";
-                //contentString += "<td><div id='addRoleListElement' class='projectContentListElement grayBackground grayHover' onclick='expandListPanel(" + '"roles"' + ");' style='width:98.5%;'>Add new role</div></td>";
-                {% for roleObj in roles %}
-                    {% if roleObj.post.status == "Cast" and roleObj.actor %}
-                        var roleID = "{{roleObj.post.postID}}_ListElement";
-                        contentString += "<td id='" + roleID + "' class='projectContentListElement grayBackground grayHover' onclick='redirectToPost(" + '"{{roleObj.post.postID}}");' + "'>";
-
-                        // CAST label
-                        contentString += "<div style='text-align: left;margin-top: -20px; margin-left: 5px; padding: 0em 0em 0.7em 0em; font-weight: 500;'><h3 style='display: inline;'>CAST</h3> - <a onclick='redirectToUser(" + '"{{roleObj.actor.username}}");' + "'>{{roleObj.actor.cleanName}}</a></div>"
-
-                        // profilePic
-                        contentString += "<div class='projectContentListElementPicturePanel'><div class='projectContentListElementPicture'>";
-                        {% if roleObj.actor.profilePicture %}
-                            contentString += '<img src="{{ roleObj.actor.profilePicture.url }}" style="max-width: 150px; max-height:150px;"/>'
-                        {% else %}
-                            contentString += '<img src="{{images.noProfilePicture}}" style="max-width: 150px; max-height: 150px;">';
-                        {% endif %}
-                        contentString += "</div></div><br>";
-                        contentString += "<div class='projectContentListElementText'><h2>{{roleObj.post.characterName}}</h2><p>{{roleObj.post.shortCharacterDescription}}</p></div>"
-                    {% elif roleObj.post %}
-                        contentString += "<td class='projectContentListElement greenBackground darkGreenHover' onclick='redirectToPost(" + '"{{roleObj.post.postID}}");' + "'>"
-                        contentString += "<div style='text-align: left;margin-top: -20px; margin-left: 5px; padding: 0em 0em 0.7em 0em; font-weight: 500;'><h3 style='display: inline;'>OPEN</h3></div>";
-
-                        // postPic
-                        contentString += "<div class='projectContentListElementPicturePanel'><div class='projectContentListElementPicture'>";
-                        {% if roleObj.post.postPicture %}
-                            contentString += '<img src="{{ roleObj.post.postPicture.url }}" style="max-width: 150px; max-height:150px;"/>'
-                        {% else %}
-                            contentString += '<img src="{{images.noProfilePicture}}" style="width: 150px; max-height: 150px;">';
-                        {% endif %}
-                        contentString += "</div></div><br>";
-                        contentString += "<div class='projectContentListElementText'><h2>{{roleObj.post.characterName}}</h2><p>{{roleObj.post.shortCharacterDescription}}</p></div>"
-
-                    {% else %}
-                        contentString += "{{roleObj.post.characterName}}, {{roleObj.post.status}}, {{roleObj.actor}}"
-                    {% endif %}
-                    contentString += "</td>";
-                {% endfor %}
-                contentString += "</tr></table>"
-            {% endif %}
-            listDiv.innerHTML = contentString
-        }
-    }
-
-    function selectJobs(){
-        var listDiv = document.getElementById("projectContentList");
-        var contentString = "";
-        if(listDiv != null){
-            {% if jobs %}
-                contentString += "<table><tr>";
-                {% for jobObj in jobs %}
-                    {% if jobObj.post.status == "Filled" and jobObj.user %}
-                        contentString += "<td class='projectContentListElement grayBackground grayHover' onclick='redirectToPost(" + '"{{jobObj.post.postID}}");' + "'>";
-
-                        // CAST label
-                        contentString += "<div style='text-align: left;margin-top: -20px; margin-left: 5px; padding: 0em 0em 0.7em 0em; font-weight: 500;'><h3 style='display: inline;'>FILLED</h3> - <a onclick='redirectToUser(" + '"{{jobObj.user.username}}");' + "'>{{jobObj.user.cleanName}}</a></div>"
-
-                        // profilePic
-                        contentString += "<div class='projectContentListElementPicturePanel'><div class='projectContentListElementPicture'>";
-                        {% if jobObj.user.profilePicture %}
-                            contentString += '<img src="{{ jobObj.user.profilePicture.url }}" style="max-width: 150px; max-height:150px;"/>'
-                        {% else %}
-                            contentString += '<img src="{{images.noProfilePicture}}" style="width: 150px; max-height: 150px;">';
-                        {% endif %}
-                        contentString += "</div></div><br>";
-                        contentString += "<div class='projectContentListElementText'><h2>{{jobObj.post.profession}}</h2><p>{{jobObj.post.shortDescription}}</p></div>"
-                    {% elif jobObj.post.status == "Hiring" and jobObj.post %}
-                        contentString += "<td class='projectContentListElement greenBackground darkGreenHover' onclick='redirectToPost(" + '"{{jobObj.post.postID}}");' + "'>"
-                        contentString += "<div style='text-align: left;margin-top: -20px; margin-left: 5px; padding: 0em 0em 0.7em 0em; font-weight: 500;'><h3 style='display: inline;'>AVAILABLE</h3></div>";
-
-                        // postPic
-                        contentString += "<div class='projectContentListElementPicturePanel'><div class='projectContentListElementPicture'>";
-                        {% if jobObj.post.postPicture %}
-                            contentString += '<img src="{{ jobObj.post.postPicture.url }}" style="max-width: 150px; max-height:150px;"/>'
-                        {% else %}
-                            contentString += '<img src="{{images.noProfilePicture}}" style="width: 150px; max-height: 150px;">';
-                        {% endif %}
-                        contentString += "</div></div><br>";
-                        contentString += "<div class='projectContentListElementText'><h2>{{jobObj.post.profession}}</h2><p>{{jobObj.post.shortDescription}}</p></div>"
-
-                    {% else %}
-                        contentString += "{{jobObj.post.profession}}"
-                    {% endif %}
-                    contentString += "</td>";
-                {% endfor %}
-                contentString += "</tr></table>"
-            {% endif %}
-            listDiv.innerHTML = contentString
-        }
-    }
-
+    /*
     function selectEvents(){
         var listDiv = document.getElementById("projectContentList");
         var contentString = "";
