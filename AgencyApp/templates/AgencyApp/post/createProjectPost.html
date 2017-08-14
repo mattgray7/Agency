@@ -449,15 +449,29 @@
             // Set the status from the select bar in the form
             document.getElementById("statusSelectInput").value = statusDiv.value;
         }
-        {% if selectFields.roles.names %}
-            {% for name in selectFields.roles.names %}
-                var selectDiv = document.getElementById('{{name}}SelectBar')
-                if(selectDiv != null){
-                    document.getElementById('{{name}}SelectInput').value = selectDiv.value;
-                }
-            {% endfor %}
-        {% endif %}
-        var ajaxURL = "/ajax/createNewCastingPost/";
+
+        var ajaxURL;
+        if(activeTab === "casting"){
+            ajaxURL = "/ajax/createNewCastingPost/";
+            {% if selectFields.roles.names %}
+                {% for name in selectFields.roles.names %}
+                    var selectDiv = document.getElementById('{{name}}SelectBar')
+                    if(selectDiv != null){
+                        document.getElementById('{{name}}SelectInput').value = selectDiv.value;
+                    }
+                {% endfor %}
+            {% endif %}
+        }else if(activeTab === "work"){
+            ajaxURL = "/ajax/createNewWorkPost/";
+            {% if selectFields.jobs.names %}
+                {% for name in selectFields.jobs.names %}
+                    var selectDiv = document.getElementById('{{name}}SelectBar')
+                    if(selectDiv != null){
+                        document.getElementById('{{name}}SelectInput').value = selectDiv.value;
+                    }
+                {% endfor %}
+            {% endif %}
+        }
         if(edit){
             ajaxURL = "/ajax/editExistingPost/";
         }
@@ -1010,6 +1024,7 @@ document.write(getPanelInfoFromNumColumns(tableColCount)["mainViewPanelWidth"] +
 
     var eventEntries;
     function selectProjectTab(tabType){
+        console.log("Selecting project tab with type " + tabType)
         for(var i=0; i < projectTabs.length; i++){
             var buttonId = projectTabs[i] + "Button";
             var borderCoverId = projectTabs[i] + "BorderCover";
@@ -1048,7 +1063,6 @@ document.write(getPanelInfoFromNumColumns(tableColCount)["mainViewPanelWidth"] +
         }else if(tabType == "events"){
             selectEvents();
         }
-        console.log(entries)
         var table = createBrowseTable(tabType, entries, sectionOrder, true, titleFieldName)
         var contentDiv = document.getElementById("projectContentList")
         if(contentDiv != null){
@@ -1057,7 +1071,7 @@ document.write(getPanelInfoFromNumColumns(tableColCount)["mainViewPanelWidth"] +
         $(window).resize(function () {
             resizeBrowseTable(function(){
                 document.getElementById("browseTable").style.width = tableColCount * 300 + "px";
-                selectProjectTab(tabType);
+                selectProjectTab(activeTab);
             });
         });
     }
