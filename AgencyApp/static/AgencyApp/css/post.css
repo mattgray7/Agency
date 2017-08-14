@@ -227,6 +227,7 @@
 		border: 2px solid #000;
 		border-radius: 2px;
 		text-align: center;
+		transition: background 0.2s ease;
 	}
 	.projectContentListElement:hover
 	{

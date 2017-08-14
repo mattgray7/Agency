@@ -630,6 +630,7 @@
     function toggleExpandExistingForm(toggleType, panelType, postID, shrinkAnimationFinishCallback){
         var editButton = document.getElementById("editPostButton_" + postID)
         var borderCover = document.getElementById("postPanelBorderCover_" + postID);
+        var postPanel = document.getElementById("browseTablePost_" + postID);
         if(toggleType === "expand"){
             if(currentExistingFormPostID != ''){
                 // Shrink existing panel and then expand new one
@@ -670,6 +671,11 @@
                 editButton.innerHTML = "Hide";
             }
 
+            // Change panel background to white
+            if(postPanel != null){
+                postPanel.style.background = "#FFF";
+            }
+
             // Add border cover
             if(borderCover != null){
                 borderCover.style.visibility = "visible";
@@ -685,6 +691,11 @@
                 // Add border cover
                 if(borderCover != null){
                     borderCover.style.visibility = "hidden";
+                }
+
+                // Change panel background to white
+                if(postPanel != null){
+                    postPanel.style.background = "#efefef";
                 }
 
                 if(shrinkAnimationFinishCallback != null){
