@@ -613,7 +613,7 @@ function createBrowseTableElement(elementDict, titleFieldName, elementType){
     elementString += "</div>";
 
     // Add hidden cover
-    elementString += "<div id='postPanelBorderCover_" + elementDict["post"]["postID"]["value"] + "' style='position: relative; visibility: hidden;'><div style='position: absolute; top: 0; margin-top: -3px; background: #FFF; height: 9px; width: 98.8%; z-index: 100; border-left: 2px solid #000; border-right: 2px solid #000;'></div></div>"
+    elementString += "<div id='postPanelBorderCover_" + elementDict["post"]["postID"]["value"] + "' style='position: relative; visibility: hidden;'><div style='position: absolute; top: 0; margin-top: -3px; background: #FFF; height: 9px; width: 98.8%; z-index: 2; border-left: 2px solid #000; border-right: 2px solid #000;'></div></div>"
     return elementString;
 }
 
