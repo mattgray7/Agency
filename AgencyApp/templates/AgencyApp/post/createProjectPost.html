@@ -525,10 +525,6 @@
                 success : function(data) {
                     if(data["success"]){
                         var nextPic = data["pictureURL"];
-                        if(nextPic == null && currentBaseFormPicture != null){
-                            // currentBaseFormPicture set in image.js
-                            nextPic = currentBaseFormPicture;
-                        }
 
                         newPostPictureURLs[data["postID"]] = nextPic;
                         addNewPostToExistingList(form, nextPic, edit);

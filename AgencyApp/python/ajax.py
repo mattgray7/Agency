@@ -123,6 +123,7 @@ def _createNewPost(request, postTypeInstance):
 def _uploadTempPictureToPostDatabase(request):
     success = False
     tempPicture = None
+    tempPictureURL = None
     postInstance = post.getPost(request.POST.get("postID"));
     if postInstance:
         tempPostPictureID = request.POST.get("tempPostPictureID")
@@ -134,10 +135,11 @@ def _uploadTempPictureToPostDatabase(request):
             else:
                 postData = _getPostPictureRequestData(request)
                 if tempPicture and tempPicture.postPicture and postData:
+                    tempPictureURL = str(tempPicture.postPicture.url)
                     postInstance.postPicture = tempPicture.postPicture
                     postInstance.save()
                     success = helpers.savePostPictureInDatabase(request, "postPicture", postInstance, postData.get("cropInfo", {}), postData.get("filename"))
-    return {"success": success, "post": postInstance, "tempPictureURL": tempPicture and tempPicture.postPicture and tempPicture.postPicture.url}
+    return {"success": success, "post": postInstance, "tempPictureURL": tempPictureURL}
 
 def editExistingPost(request):
     postID = request.POST.get("postID")
@@ -147,6 +149,8 @@ def editExistingPost(request):
     if postID:
         postObj = post.getPost(postID)
         if postObj:
+
+            # Set any text values of the post that are different from db instance
             for key in postObj.__dict__:
                 if not key.startswith("_"):
                     newValue = request.POST.get(key, None)
@@ -161,19 +165,20 @@ def editExistingPost(request):
             postObj.save()
             editSuccess = True
             
-            newPicData = _uploadTempPictureToPostDatabase(request)
-            postInstance = newPicData.get("post")
+            # If there is a temp picture saved, upload it to this post
             if request.POST.get("tempPostPictureID"):
+                newPicData = _uploadTempPictureToPostDatabase(request)
                 pictureSuccess = newPicData.get("success")
+                postObj= newPicData.get("post")
+                pictureURL = newPicData.get("tempPictureURL")
             else:
                 pictureSuccess = True
-            tempPictureURL = newPicData.get("tempPictureURL")
-            if tempPictureURL:
-                pictureURL = tempPictureURL
-            else:
-                pictureURL = postInstance and postInstance.postPicture and str(postInstance.postPicture.url) or None
-    return JsonResponse({"success": editSuccess and pictureSuccess, "pictureURL": pictureURL, "postID": postID})
 
+    # If no temp picture saved, return the existing pic path
+    if not pictureURL:
+        pictureURL = postObj and postObj.postPicture and str(postObj.postPicture.url) or None
+
+    return JsonResponse({"success": editSuccess and pictureSuccess, "pictureURL": pictureURL, "postID": postID})
 
 def _getPostPictureRequestData(request):
     data = {}
