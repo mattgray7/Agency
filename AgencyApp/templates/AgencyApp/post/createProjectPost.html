@@ -99,6 +99,7 @@
         setPictureID(pictureID);
         setButtonLoadingGifURL("{{images.loading.mid}}");
         setDefaultImageURL("{{images.loading.light}}")
+        setDefaultPicture("{{images.noPicture}}")
 
         // Set the onclick to include isProject
         var updatePictureButton = document.getElementById("updatePictureButton");
@@ -712,6 +713,7 @@
         var newFormDiv = document.getElementById("insertNewFormDiv")
         var browsePostsDiv = document.getElementById("projectContentList")
         var filterBarDiv = document.getElementById("projectContentListHeader")
+        var removeButton = document.getElementById("removeButton")
         if(newFormDiv == null || browsePostsDiv == null){
             return;
         }
@@ -750,6 +752,7 @@
         var editButton = document.getElementById("editPostButton_" + postID)
         var borderCover = document.getElementById("postPanelBorderCover_" + postID);
         var postPanel = document.getElementById("browseTablePost_" + postID);
+        var removeButton = document.getElementById("removeButton")
         if(toggleType === "expand"){
             if(currentExistingFormPostID != ''){
                 // Shrink existing panel and then expand new one
@@ -798,6 +801,12 @@
             // Add border cover
             if(borderCover != null){
                 borderCover.style.visibility = "visible";
+            }
+
+            if(removeButton != null){
+                removeButton.onclick = function(){
+                    removePicture(postID);
+                }
             }
         }else{
             // Shrinking, so no post id is active
@@ -886,7 +895,7 @@ document.write(getPanelInfoFromNumColumns(tableColCount)["mainViewPanelWidth"] +
                         <tr>
                             {% if post and post.postPicture and post.postPicture.url %}
                                 <td>
-                                    <div id="removeButton" class="whiteButton blackHover" style="width:70px; height:28px; display:block;" onclick="removePicture();">
+                                    <div id="removeButton" class="whiteButton blackHover" style="width:70px; height:28px; display:block;" onclick="removePicture('{{post.postID}}');">
                                         <div style="margin-left: 5px; margin-top: 2px;">Remove</div>
                                     </div>
                                 </td>

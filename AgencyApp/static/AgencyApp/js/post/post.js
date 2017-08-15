@@ -2,6 +2,28 @@ function addSelectProjectForm(postID, username){
 
 }
 
+function removePicture(postID, isProject){
+    var removeButton = document.getElementById("removeButton")
+    if(removeButton != null){
+        removeButton.innerHTML = "<img id='loadingGif' src='" + buttonLoadingGifURL + "' style='position: absolute; height: 60px; width: 60px; margin-top: -15px;'>"
+    }
+    $.ajax({
+            url : "/ajax/deletePostPicture/",
+            data : {"postID": postID},
+            type : 'POST',
+            dataType: "json",
+            success : function(data) {
+                if(data["success"]){
+                    addPopupPictureToBaseForm(null, null, isProject)
+                    if(removeButton != null){
+                        removeButton.innerHTML = "Remove";
+                    }
+                    toggleEditPicturePopup("hide", isProject, null);
+                }
+            }
+        });
+    }
+
 function getErrorPanel(errors){
     var panelString = "<div class='errorPanel'><div style='text-align: left; margin-top: 5px; margin-left: 5px;'><h3 style='margin-bottom: 5px;'>One or more errors occurred:</h3><div><ul>"
     for(var errorType in errors){
@@ -71,7 +93,12 @@ function addPopupPictureToBaseForm(tempPictureID, tempPictureURL, isProject){
         baseFormPictureInput = document.getElementById("mainProjectPictureInput")
         editPicture = document.getElementById("projectPicturePanelEditButton")
     }
-    baseFormPictureInput.innerHTML = "<input type='hidden' name='tempPostPictureID' value='" + tempPictureID + "'>"
+    if(tempPictureID != null){
+        baseFormPictureInput.innerHTML = "<input type='hidden' name='tempPostPictureID' value='" + tempPictureID + "'>";
+    }else{
+        baseFormPictureInput.innerHTML = "";
+        tempPictureURL = defaultPictureURL;
+    }
 
     // Update onclick of edit picture button to load tempPicture
     editPicture.onclick = function(){
@@ -92,6 +119,11 @@ function setBaseFormPicture(pictureURL, isProject){
         return true;
     }
     return false;
+}
+
+var defaultPictureURL;
+function setDefaultPicture(pictureURL){
+    defaultPictureURL = pictureURL;
 }
 
 function submitPictureForm(formName, isProject){
