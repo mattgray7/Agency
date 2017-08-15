@@ -770,8 +770,10 @@
         var editButton = document.getElementById("editPostButton_" + postID)
         var borderCover = document.getElementById("postPanelBorderCover_" + postID);
         var postPanel = document.getElementById("browseTablePost_" + postID);
+
+
         if(toggleType === "expand"){
-            if(currentExistingFormPostID != ''){
+            if(currentExistingFormPostID != '' && currentExistingFormPostID != null){
                 // Shrink existing panel and then expand new one
                 return toggleExpandExistingForm("shrink", panelType, currentExistingFormPostID, function(){toggleExpandExistingForm("expand", panelType, postID)});
             }
@@ -948,48 +950,12 @@ document.write(getPanelInfoFromNumColumns(tableColCount)["mainViewPanelWidth"] +
                                             Events
                                             <div id="eventsBorderCover" class="profileTabBorderCover"></div>
                                 </div>
-
-
-
-                            <!--<table style="width: 100%;">
-                                <tr style="text-align: center">
-                                    <td>
-                                        <div class="projectTabButtonInactive" id="rolesButton" onclick="selectProjectTab('roles')" style="margin-left: -4px;">
-                                            Roles
-                                            <div id="rolesBorderCover" class="profileTabBorderCover"></div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="projectTabButtonInactive" id="jobsButton" onclick="selectProjectTab('jobs')" style="margin-left: 0px;">
-                                            Jobs
-                                            <div id="jobsBorderCover" class="profileTabBorderCover"></div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="projectTabButtonInactive" id="eventsButton" onclick="selectProjectTab('events')" style="margin-right: -12px;">
-                                            Events
-                                            <div id="eventsBorderCover" class="profileTabBorderCover"></div>
-                                        </div>
-                                    </td>
-                                </tr>
-                            </table>-->
                         </td>
             </tr>
             <tr>
                         <td colspan="3">
                             <div style="position: relative;">
                             <div id="projectContentPanel" class="projectContentPanel" style="margin-left: -1px; margin-right:-8px; min-height: 70px; ">
-                                <!--<div id="addNewPanel" style="position: absolute; top: 0; left: 0; margin-top: 2px; margin-bottom: -10px; border: 2px solid #000; border-radius: 4px; width: 24.6%; text-align: center;">
-                                    <script>
-                                        {% if roles %}
-                                            document.write(createAddNewButton("roles"));
-                                        {% elif jobs %}
-                                            document.write(createAddNewButton("jobs"));
-                                        {% elif events}
-                                            document.write(createAddNewButton("events"));
-                                        {% endif %}
-                                    </script>
-                                </div>-->
                                 <div style='height:5px;'></div>
                                 <div id="projectContentListHeader" style="width: 99%; height: 40px; margin-left: 3px; background: rgba(0,0,0,0.1); border: 1px solid rgba(0,0,0,0.2); border-radius: 3px;">
                                     <script>
@@ -1168,6 +1134,10 @@ document.write(getPanelInfoFromNumColumns(tableColCount)["mainViewPanelWidth"] +
                 toggleExpandNewForm("expand", activeTab);
             }
         }
+
+        // If a post form was expanded on old tab, reset values
+        expanded = false;
+        currentExistingFormPostID = '';
 
         var entries;
         var sectionOrder;
