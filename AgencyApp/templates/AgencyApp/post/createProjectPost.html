@@ -904,19 +904,11 @@ document.write(getPanelInfoFromNumColumns(tableColCount)["mainViewPanelWidth"] +
 
                     <table>
                         <tr>
-                            {% if post and post.postPicture and post.postPicture.url %}
-                                <td>
-                                    <div id="removeButton" class="whiteButton blackHover" style="width:70px; height:28px; display:block;" onclick="removePicture('{{post.postID}}');">
-                                        <div style="margin-left: 5px; margin-top: 2px;">Remove</div>
-                                    </div>
-                                </td>
-                            {% else %}
-                                <td>
-                                    <div id="skipButton" class="whiteButton blackHover" style="width:70px; height:28px; display: block;" onclick="toggleEditPicturePopup('hide');">
-                                        <div style="margin-left: 5px; margin-top: 2px;">Cancel</div>
-                                    </div>
-                                </td>
-                            {% endif %}
+                            <td>
+                                <div id="removeButton" class="whiteButton blackHover" style="width:70px; height:28px; display:block;" onclick="removePicture();">
+                                    <div style="margin-left: 5px; margin-top: 2px;">Remove</div>
+                                </div>
+                            </td>
                             <td>
                                 <div id="updatePictureButton" class="whiteButton blackHover" style="width: 70px; height:28px; position: relative; display: block;">
                                     <div style="margin-left: 5px; margin-top: 2px;">Update</div>
