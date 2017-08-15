@@ -365,7 +365,14 @@ class PictureFormView(GenericFormView):
                 self._cropInfo = {}
         return self._cropInfo
 
+
     def updatePicturePathAndModel(self):
+        if self.request.POST.get("removePostPicture") in [True, "True", "true"]:
+            self.pictureModel.__dict__[self.pictureModelFieldName] = None
+            self._pictureModelPictureField = None;
+            self.pictureModel.save()
+            return True
+
         if self.pictureModel:
             if self.sourcePicture:
                 # Save the InMemoryUploadedFile instance in the file field of the model

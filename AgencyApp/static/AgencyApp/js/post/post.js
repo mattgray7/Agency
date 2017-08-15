@@ -2,7 +2,7 @@ function addSelectProjectForm(postID, username){
 
 }
 
-function removePicture(postID, isProject){
+function removePicture(isProject){
     addPopupPictureToBaseForm(null, null, isProject)
     toggleEditPicturePopup("hide", isProject, null);
     /*var removeButton = document.getElementById("removeButton")
