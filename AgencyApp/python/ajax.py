@@ -95,16 +95,14 @@ def getNewPostID(request):
 
 def createNewCastingPost(request):
     newPost = castingPost.CastingPostInstance(request=request, postID=request.POST.get("postID"), projectID=request.POST.get("projectID"), postType=constants.CREATE_CASTING_POST, formSubmitted=True)
-    return createNewPost(request, newPost)
+    return _createNewPost(request, newPost)
 
 def createNewWorkPost(request):
-    print request.POST.get("projectID")
     newPost = workPost.WorkPostInstance(request=request, postID=request.POST.get("postID"), projectID=request.POST.get("projectID"), postType=constants.CREATE_WORK_POST, formSubmitted=True)
-    return createNewPost(request, newPost)
+    return _createNewPost(request, newPost)
 
 
-def createNewPost(request, postTypeInstance):
-    print request.POST.get("status")
+def _createNewPost(request, postTypeInstance):
     createSuccess = postTypeInstance.formIsValid()
     pictureSuccess = False
     postInstance = None
@@ -117,9 +115,6 @@ def createNewPost(request, postTypeInstance):
             pictureSuccess = True
     else:
         pictureSuccess = True
-    print {"success": createSuccess and pictureSuccess, "errors": postTypeInstance.formErrors,
-                         "pictureURL": postInstance and postInstance.postPicture and postInstance.postPicture.url or "",
-                         "postID": request.POST.get("postID")}
     return JsonResponse({"success": createSuccess and pictureSuccess, "errors": postTypeInstance.formErrors,
                          "pictureURL": postInstance and postInstance.postPicture and postInstance.postPicture.url or "",
                          "postID": request.POST.get("postID")})

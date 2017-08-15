@@ -583,28 +583,84 @@
         return newPost;
     }
 
-    function addNewPostToExistingList(postForm, imageURL, edit){
-        if(roleEntries == null){
-            roleEntries = getBrowseRolesDict();
+    function createSingleJobDict(dataForm, imageURL){
+        var newPost = {"worker": {}, "post": {"postID": {'value': dataForm.postID.value, 'hidden': true},
+                                              "profession": {'value': dataForm.profession.value, 'hidden': false},
+                                             "startDate": {'value': 'Start: ' + dataForm.startDate.value, 'hidden': false},
+                                             "endDate": {'value': 'End: ' + dataForm.endDate.value, 'hidden': false},
+                                             "hoursPerWeek": {'value': 'Hours/week: ' + dataForm.hoursPerWeek.value, 'hidden': false},
+                                             "paid": {'value': dataForm.paid.value , "hidden": false},
+                                             "title": {'value': dataForm.title.value, 'hidden': false},
+                                             "location": {'value': dataForm.location.value, 'hidden': true},
+                                             "status": {'value': dataForm.status.value, 'hidden': true},
+                                             "postPicture": {"value": '{{images.noPicture}}', "hidden": false},
+                                       }};
+
+        // Explicitly set the image url of the new post
+        if(imageURL != null && imageURL.length > 0){
+            newPost["post"]["postPicture"]["value"] = imageURL;
         }
-        var newPost = createSingleRoleDict(postForm, imageURL);
+
+        // Add compensation info
+        if(dataForm.paid.value && dataForm.paidDescription.value){
+            newPost["post"]["paid"]["value"] = "Paid &#10004 - " + dataForm.paidDescription.value;
+        }else if(dataForm.paid.value){
+            newPost["post"]["paid"]["value"] = "Paid &#10004";
+        }else if(dataForm.paidDescription.value){
+            newPost["post"]["paid"]["value"] = "Unpaid - " + dataForm.paidDescription.value;
+        }else{
+            newPost["post"]["paid"]["value"] = "Unpaid";
+        }
+        return newPost;
+    }
+
+    function createSinglePostDict(dataForm, imageURL){
+        var postDict;
+        if(activeTab === "roles"){
+            postDict = createSingleRoleDict(dataForm, imageURL);
+        }else if(activeTab === "jobs"){
+            postDict = createSingleJobDict(dataForm, imageURL);
+        }
+        return postDict;
+    }
+
+    function addNewPostToExistingList(postForm, imageURL, edit){
+        // Get the existing list of entries, generate if non existing
+        var entries;
+        if(activeTab === "roles"){
+            if(roleEntries == null){
+                entries = getBrowseRolesDict();
+            }else{
+                entries = roleEntries;
+            }
+        }else if(activeTab === "jobs"){
+            if(jobEntries == null){
+                entries = getBrowseJobsDict();
+            }else{
+                entries = jobEntries;
+            }
+        }
+
+        // Create the new entry to add
+        var newPost = createSinglePostDict(postForm, imageURL);
         if(edit){
-            // Need to edit existing roleEntries list and find the post with the matching postID
+            // Need to edit existing entries list and find the post with the matching postID
             // Must iterate through all status', as we don't know the previous status if there was a status change
-            for(status in roleEntries){
-                if(roleEntries[status] != null){
-                    for(var i=0; i < roleEntries[status].length; i++){
-                        var existingPost = roleEntries[status][i]
+            for(status in entries){
+                if(entries[status] != null){
+                    for(var i=0; i < entries[status].length; i++){
+                        var existingPost = entries[status][i]
                         if(postForm.postID.value === existingPost["post"]["postID"]["value"]){
                             // This is the matching post
                             if(status != newPost.post.status.value){
                                 // A status change has occurred, so remove post from old status list and add to new status list
-                                roleEntries[status].splice(i, 1)
-                                roleEntries[newPost.post.status.value].push(newPost)
+                                entries[status].splice(i, 1)
+                                entries[newPost.post.status.value].push(newPost)
                             }else{
                                 // No status change, just update the current post with the new data
-                                roleEntries[newPost.post.status.value][i] = newPost;
+                                entries[newPost.post.status.value][i] = newPost;
                             }
+                            // Post was found, so loop can be exited
                             break;
                         }
                     }
@@ -612,7 +668,14 @@
             }
         }else{
             // Adding new element, so don't need to modify existing lists, just add new post
-            roleEntries[newPost.post.status.value].push(newPost);
+            entries[newPost.post.status.value].push(newPost);
+        }
+
+        // Set the global variable to the local var
+        if(activeTab === "roles"){
+            roleEntries = entries;
+        }else if(activeTab === "jobs"){
+            jobEntries = entries;
         }
     }
 
