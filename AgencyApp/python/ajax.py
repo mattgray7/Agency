@@ -146,6 +146,7 @@ def editExistingPost(request):
     editSuccess = False
     pictureSuccess = False
     pictureURL = None
+    removedPicture = False
     if postID:
         postObj = post.getPost(postID)
         if postObj:
@@ -166,19 +167,24 @@ def editExistingPost(request):
             editSuccess = True
             
             # If there is a temp picture saved, upload it to this post
-            if request.POST.get("tempPostPictureID"):
+            tempPicID = request.POST.get("tempPostPictureID")
+            if tempPicID:
                 newPicData = _uploadTempPictureToPostDatabase(request)
                 pictureSuccess = newPicData.get("success")
                 postObj= newPicData.get("post")
                 pictureURL = newPicData.get("tempPictureURL")
             else:
+                if request.POST.get("removePostPicture") in [True, "True", "true"]:
+                    deletePostPicture(request)
+                    removedPicture = True
                 pictureSuccess = True
 
     # If no temp picture saved, return the existing pic path
     if not pictureURL:
         pictureURL = postObj and postObj.postPicture and str(postObj.postPicture.url) or None
 
-    return JsonResponse({"success": editSuccess and pictureSuccess, "pictureURL": pictureURL, "postID": postID})
+    return JsonResponse({"success": editSuccess and pictureSuccess, "pictureURL": pictureURL, "postID": postID,
+                         "removedPicture": removedPicture})
 
 def _getPostPictureRequestData(request):
     data = {}

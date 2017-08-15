@@ -526,6 +526,9 @@
                 success : function(data) {
                     if(data["success"]){
                         var nextPic = data["pictureURL"];
+                        if(data["removedPicture"]){
+                            nextPic = "{{images.noPicture}}";
+                        }
 
                         newPostPictureURLs[data["postID"]] = nextPic;
                         addNewPostToExistingList(form, nextPic, edit);

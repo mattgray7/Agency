@@ -3,7 +3,9 @@ function addSelectProjectForm(postID, username){
 }
 
 function removePicture(postID, isProject){
-    var removeButton = document.getElementById("removeButton")
+    addPopupPictureToBaseForm(null, null, isProject)
+    toggleEditPicturePopup("hide", isProject, null);
+    /*var removeButton = document.getElementById("removeButton")
     if(removeButton != null){
         removeButton.innerHTML = "<img id='loadingGif' src='" + buttonLoadingGifURL + "' style='position: absolute; height: 60px; width: 60px; margin-top: -15px;'>"
     }
@@ -21,7 +23,7 @@ function removePicture(postID, isProject){
                     toggleEditPicturePopup("hide", isProject, null);
                 }
             }
-        });
+        });*/
     }
 
 function getErrorPanel(errors){
@@ -96,7 +98,7 @@ function addPopupPictureToBaseForm(tempPictureID, tempPictureURL, isProject){
     if(tempPictureID != null){
         baseFormPictureInput.innerHTML = "<input type='hidden' name='tempPostPictureID' value='" + tempPictureID + "'>";
     }else{
-        baseFormPictureInput.innerHTML = "";
+        baseFormPictureInput.innerHTML = "<input type='hidden' name='tempPostPictureID' value=''><input type='hidden' name='removePostPicture' value='true'>";
         tempPictureURL = defaultPictureURL;
     }
 
