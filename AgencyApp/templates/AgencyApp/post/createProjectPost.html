@@ -490,7 +490,7 @@
         }
 
         var ajaxURL;
-        if(activeTab === "casting"){
+        if(activeTab === "roles"){
             ajaxURL = "/ajax/createNewCastingPost/";
             {% if selectFields.roles.names %}
                 {% for name in selectFields.roles.names %}
@@ -500,7 +500,7 @@
                     }
                 {% endfor %}
             {% endif %}
-        }else if(activeTab === "work"){
+        }else if(activeTab === "jobs"){
             ajaxURL = "/ajax/createNewWorkPost/";
             {% if selectFields.jobs.names %}
                 {% for name in selectFields.jobs.names %}
@@ -533,9 +533,9 @@
                         newPostPictureURLs[data["postID"]] = nextPic;
                         addNewPostToExistingList(form, nextPic, edit);
                         if(edit){
-                            toggleExpandExistingForm("shrink", nextPic, edit, function(){selectProjectTab('roles')})
+                            toggleExpandExistingForm("shrink", nextPic, edit, function(){selectProjectTab(activeTab)})
                         }else{
-                            toggleExpandNewForm("shrink", activeTab, function(){selectProjectTab('roles')})
+                            toggleExpandNewForm("shrink", activeTab, function(){selectProjectTab(activeTab)})
                         }
                     }else{
                         if(data["errors"]){
@@ -621,7 +621,7 @@
         if(formType === "roles"){
             formString += addCreateCastingPost(getCastingFormDict(true, null), "{{currentPageURL}}", "createCastingPostForm");
         }else if(formType === "jobs"){
-            formString += addCreateWorkPost(getWorkFormDict(true, null), "{{currentPageURL}}", "createCastingPostForm");
+            formString += addCreateWorkPost(getWorkFormDict(true, null), "{{currentPageURL}}", "createWorkPostForm");
         }else if(formType === "events"){
             return "events"
         }

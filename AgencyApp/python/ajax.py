@@ -6,6 +6,8 @@ import models
 import helpers
 import constants
 import post_casting as castingPost
+import post_work as workPost
+
 
 
 def followPost(request, postID):
@@ -93,7 +95,17 @@ def getNewPostID(request):
 
 def createNewCastingPost(request):
     newPost = castingPost.CastingPostInstance(request=request, postID=request.POST.get("postID"), projectID=request.POST.get("projectID"), postType=constants.CREATE_CASTING_POST, formSubmitted=True)
-    createSuccess = newPost.formIsValid()
+    return createNewPost(request, newPost)
+
+def createNewWorkPost(request):
+    print request.POST.get("projectID")
+    newPost = workPost.WorkPostInstance(request=request, postID=request.POST.get("postID"), projectID=request.POST.get("projectID"), postType=constants.CREATE_WORK_POST, formSubmitted=True)
+    return createNewPost(request, newPost)
+
+
+def createNewPost(request, postTypeInstance):
+    print request.POST.get("status")
+    createSuccess = postTypeInstance.formIsValid()
     pictureSuccess = False
     postInstance = None
     if createSuccess:
@@ -105,9 +117,13 @@ def createNewCastingPost(request):
             pictureSuccess = True
     else:
         pictureSuccess = True
-    return JsonResponse({"success": createSuccess and pictureSuccess, "errors": newPost.formErrors,
+    print {"success": createSuccess and pictureSuccess, "errors": postTypeInstance.formErrors,
+                         "pictureURL": postInstance and postInstance.postPicture and postInstance.postPicture.url or "",
+                         "postID": request.POST.get("postID")}
+    return JsonResponse({"success": createSuccess and pictureSuccess, "errors": postTypeInstance.formErrors,
                          "pictureURL": postInstance and postInstance.postPicture and postInstance.postPicture.url or "",
                          "postID": request.POST.get("postID")})
+
 
 def _uploadTempPictureToPostDatabase(request):
     success = False

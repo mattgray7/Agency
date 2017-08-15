@@ -329,7 +329,6 @@ function addCreateWorkPost(formDict, formURL, formName){
                     continue;
                 }else if(fieldName === "workerName"){
                     if(field.value != null && field.value.length > 0){
-                        console.log(formDict)
                         var workerDict = formDict["worker"]
 
                         // Add actor text panel

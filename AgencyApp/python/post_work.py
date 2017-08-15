@@ -67,7 +67,7 @@ class CreateWorkPostView(post.GenericCreatePostView):
     def pageContext(self):
         self._pageContext = super(CreateWorkPostView, self).pageContext
         self._pageContext["professionList"] = json.dumps(constants.PROFESSIONS)
-        self._pageContext["defaultStatus"] = "Available"
+        self._pageContext["defaultStatus"] = "Open"
         self._pageContext["worker"] = self.worker
         self._pageContext["isWork"] = True
         return self._pageContext
