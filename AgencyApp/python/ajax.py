@@ -227,6 +227,7 @@ def updatePostPicture(request):
 
 def saveTempPostPicture(request):
     tempID = helpers.createUniqueID(models.TempPostPicture, "tempID")
+    tempPostPicture = None
     success = False
     if tempID:
         try:
@@ -242,7 +243,7 @@ def saveTempPostPicture(request):
                         "width": request.POST.get("crop_width"),
                         "height": request.POST.get("crop_height")}
             success = helpers.savePostPictureInDatabase(request, "postPicture", tempPostPicture, cropInfo, "tempPostPicture_{0}.jpg".format(tempID))
-    return JsonResponse({"success": success, "tempID": tempID, "pictureURL": tempPostPicture.postPicture.url})
+    return JsonResponse({"success": success, "tempID": tempID, "pictureURL": tempPostPicture and tempPostPicture.postPicture and tempPostPicture.postPicture.url or ''})
 
 def getPostData(request):
     """Return a key:value dict of a single post, postID should be passed in request"""
