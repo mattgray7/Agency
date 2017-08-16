@@ -111,13 +111,14 @@
 
         // Set the pictureURL to display
         var addCrop = true;
-        if(pictureURL == null){
+        if(pictureURL == null || pictureURL.length === 0){
             pictureURL = getPictureURL(isProject);
         }
 
         // Dont add crop on post picture
         {% if post and post.postPicture and post.postPicture.url %}
-            if(pictureURL === "{{post.postPicture.url}}"){
+            // Do endswith as well as pictureURL may not be relative path (ie inludes localhost:8000)
+            if(pictureURL === "{{post.postPicture.url}}" || pictureURL.endsWith("{{post.postPicture.url}}")){
                 addCrop = false;
             }
         {% endif %}

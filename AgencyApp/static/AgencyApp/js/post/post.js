@@ -129,6 +129,15 @@ function setDefaultPicture(pictureURL){
 }
 
 function submitPictureForm(formName, isProject){
+        // If button was pressed with no input changed, just close the window
+        var editPictureInput = document.getElementById("editPostPictureImage");
+        if(editPictureInput != null){
+            if(!pictureExists){
+                toggleEditPicturePopup("hide")
+                return;
+            }
+        }
+
         var updateButton = document.getElementById("updatePictureButton")
         var updateButtonHTML = updateButton.innerHTML;
         updateButton.innerHTML = "<img id='loadingGif' src='" + buttonLoadingGifURL + "' style='position: absolute; height: 60px; width: 60px; margin-top: -15px;'>"
