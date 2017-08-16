@@ -123,8 +123,10 @@
         {% endif %}
 
         // Dont add crop on noPicture image
+        var disableRemoveButton = false;
         if(pictureURL === "{{images.noPicture}}"){
             addCrop = false;
+            disableRemoveButton = true;
         }else{
             // Don't add crop for newly added photos
             for(var postID in newPostPictureURLs){
@@ -146,8 +148,14 @@
 
         var removeButton = document.getElementById("removeButton")
         if(removeButton != null){
-            removeButton.onclick = function(){
-                removePicture(isProject);
+            if(disableRemoveButton){
+                removeButton.className = "whiteButton disabledButton";
+                removeButton.onclick = "";
+            }else{
+                removeButton.className = "whiteButton blackHover";
+                removeButton.onclick = function(){
+                    removePicture(isProject);
+                }
             }
         }
 

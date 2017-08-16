@@ -484,6 +484,11 @@
 		transition: background .20s ease;
 	}
 
+	.disabledButton{
+		color: rgba(0,0,0,0.5);
+		cursor: auto;
+	}
+
 	.grayButton
 	{
 		display: inline-block;
