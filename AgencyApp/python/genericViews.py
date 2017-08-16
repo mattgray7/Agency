@@ -279,7 +279,6 @@ class PictureFormView(GenericFormView):
         self._filename = None
         self._sourcePicture = None
 
-
     @property
     def sourcePicture(self):
         if self._sourcePicture is None:

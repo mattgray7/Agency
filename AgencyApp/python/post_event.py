@@ -45,7 +45,8 @@ class CreateEventPostView(post.GenericCreatePostView):
     @property
     def post(self):
         if self._post is None:
-            self._post = EventPostInstance(request=self.request, postID=self.postID, projectID=self.projectID, postType=constants.EVENT_POST)
+            self._post = EventPostInstance(request=self.request, postID=self.postID, projectID=self.projectID,
+                                           postType=constants.EVENT_POST, formSubmitted=self.formSubmitted)
         return self._post
 
     @property
