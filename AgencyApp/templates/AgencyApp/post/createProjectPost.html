@@ -759,12 +759,12 @@
             // Optional: animate filter bar to shrink as opposed to just making invisible
             $("#projectContentListHeader").animate({marginTop: "0px", height: "40px"}, transitionSpeed, function(){
                 filterBarDiv.style.visibility = "visible";
+                newFormDiv.innerHTML = createAddNewButton(panelType);
                 if(shrinkAnimationFinishCallback != null){
                     shrinkAnimationFinishCallback();
                 }
             });
             browsePostsDiv.style.marginTop = "0px";
-            newFormDiv.innerHTML = createAddNewButton(panelType);
             expanded = false;
         }
     }
