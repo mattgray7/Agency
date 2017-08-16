@@ -6,23 +6,22 @@ import models
 class EventPostInstance(post.GenericPostInstance):
     def __init__(self, *args, **kwargs):
         kwargs["postType"] = constants.EVENT_POST
+        self._projectID = kwargs.get("projectID")
         super(EventPostInstance, self).__init__(*args, **kwargs)
         self._database = models.EventPost
 
     def checkModelFormValues(self):
-        valid = False
-        if self.request.method == "POST":
-            if len(self.request.POST.get("location")) < 1:
-                self.errors.append("Missing location")
-            else:
-                valid = True
-        return valid
+        return True
 
     def saveModelFormValues(self):
         if self.record:
-            self.record.location = self.request.POST.get("location", "")
-            self.record.date = self.request.POST.get("date", "")
+            self.record.location = self.request.POST.get("location")
+            self.record.date = self.request.POST.get("date")
             self.record.projectID = self.request.POST.get("projectID")
+            self.record.admissionInfo = self.request.POST.get("admissionInfo")
+            self.record.startTime = self.request.POST.get("startTime")
+            self.record.endTime = self.request.POST.get("endTime")
+            self.record.host = self.request.POST.get("host")
             self.record.save()
             return True
         return False
@@ -40,6 +39,9 @@ class CreateEventPostView(post.GenericCreatePostView):
         self._pageContext["isEvent"] = True
         return self._pageContext
 
+    def cancelPage(self):
+        pass
+
     @property
     def post(self):
         if self._post is None:
@@ -52,6 +54,10 @@ class CreateEventPostView(post.GenericCreatePostView):
         if self.post.record:
             self._formInitialValues["location"] = self.post.record.location
             self._formInitialValues["date"] = self.post.record.date
+            self._formInitialValues["startTime"] = self.post.record.startTime
+            self._formInitialValues["endTime"] = self.post.record.endTime
+            self._formInitialValues["host"] = self.post.record.host
+            self._formInitialValues["admissionInfo"] = self.post.record.admissionInfo
             self._formInitialValues["projectID"] = self.projectID
         return self._formInitialValues
 

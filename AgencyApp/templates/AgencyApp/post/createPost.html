@@ -84,16 +84,25 @@
                             postField["placeholder"] = "John is a charismatic father of 2 who loves his dogs."
                         {% elif isWork %}
                             postField["placeholder"] = 'The hiree must be able to handle all camera operations for all set days. They will be compensated at an hourly rate, with potential for reshoots after primary production.';
+                        {% elif isEvent %}
+                            postField["placeholder"] = "Casting multiple minor roles for The Greate Gatsby. All actors, male and female, of all ages are welcome."
                         {% endif %}
                     {% elif field.name == "poster" %}
                         postField.value = "{{ request.user.username }}"
                         postField.input = postField.input.replace('name="poster"', 'name="poster" value="' + postField.value + '"')
-                    {% elif field.name == "startDate" or field.name == "endDate" %}
+                    {% elif field.name == "startDate" or field.name == "endDate"  or field.name == "date" %}
                         postField.input = postField.input.replace('type="text"', 'type="date"')
-                        {% if field.name == "startDate" %}
-                            postField.value = currentDateString
+                        {% if field.name == "endDate" %}
+                            postField.value = tomorrowDateString
                         {% else %}
-                            postField.value = tomorrowDateString;
+                            postField.value = currentDateString;
+                        {% endif %}
+                    {% elif field.name == "startTime" or field.name == "endTime" %}
+                        postField.input = postField.input.replace('type="text"', 'type="time"')
+                        {% if field.name == "startTime" %}
+                            postField.value = defaultStartTime;
+                        {% else %}
+                            postField.value = defaultEndTime;
                         {% endif %}
                     {% elif field.name in selectFields.roles.names and isCasting %}
                         {% if selectFields.roles.options %}
@@ -209,6 +218,11 @@
                     equipmentField.value = "";
                 {% endif %}
             }
+            return postFields;
+        }
+
+        function getEventFormDict(){
+            var postFields = createValueDictFromForm();
             return postFields;
         }
 
@@ -339,6 +353,8 @@
                 newForm = addCreateCastingPost(getCastingFormDict(), "{{currentPageURL}}", "createCastingPostForm");
             {% elif isWork %}
                 newForm = addCreateWorkPost(getWorkFormDict(), "{{currentPageURL}}", "createWorkPostForm");
+            {% elif isEvent %}
+                newForm = addCreateEventPost(getEventFormDict(), "{{currentPageURL}}", "createEventPostForm");
             {% endif %}
             postFormDiv.innerHTML = newForm;
 

@@ -26,6 +26,8 @@
         var currentDateString = currentDate.toISOString().slice(0,10);
         var tomorrowDate = new Date(currentDate.getTime() + 24 * 60 * 60 * 1000);
         var tomorrowDateString = tomorrowDate.toISOString().slice(0,10);
+        var defaultStartTime = "18:00";
+        var defaultEndTime = "22:00";
 
         // Load all the loading gifs so that they are stored in cache
         {% for key, value in images.loading.items %}
