@@ -198,7 +198,7 @@
 	{
 		cursor: pointer;
 		background: #ededed;
-		width: 70px;
+		/*min-width: 70px;*/
 		height: 30px;
 		border: 1px solid rgba(0,0,0,0.2);
 		border-radius: 3px;
