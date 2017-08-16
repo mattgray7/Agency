@@ -129,10 +129,6 @@ class AbstractPost(models.Model):
     postPicture = models.ImageField(default=None, upload_to=image_directory_path, storage=imageStorage, blank=True, null=True)
     status = models.CharField(max_length=50, default="Open", blank=True, null=True)
 
-class EventPost(AbstractPost):
-    location = models.CharField(max_length=1000, default=None, blank=True, null=True)
-    date = models.DateField(default=None, blank=True, null=True)
-
 class ProjectPost(AbstractPost):
     projectType = models.CharField(max_length=200, blank=True, null=True)
     length = models.CharField(max_length=200, blank=True, null=True)      # only filled if status is Filled (vs Hiring)
@@ -256,6 +252,18 @@ class CastingPost(AbstractPost):
     @property
     def postType(self):
         return constants.CASTING_POST
+
+class EventPost(AbstractPost):
+    location = models.CharField(max_length=1000, default=None, blank=True, null=True)
+    date = models.DateField(default=None, blank=True, null=True)
+    startTime = models.TimeField(default=None, blank=True, null=True)
+    endTime = models.TimeField(default=None, blank=True, null=True)
+    host = models.CharField(max_length=200, default=None, blank=True, null=True)
+    admissionInfo = models.CharField(max_length=200, default=None, blank=True, null=True)
+
+    @property
+    def postType(self):
+        return constants.EVENT_POST
 
 class Actor(models.Model):
     username = models.CharField(max_length=200)

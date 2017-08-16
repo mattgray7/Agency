@@ -108,5 +108,16 @@ class CreateCastingPostForm(BaseForm):
     endDate = forms.DateField(label="End Date*", required=False, widget=forms.DateInput(attrs={'class':'datepicker'}))
     hoursPerWeek = forms.CharField(label="Hours Per Week", max_length=50, required=False, widget=forms.TextInput(attrs={'placeholder': 'TBD'}))
 
-
+class CreateEventPostForm(BaseForm):
+    postID = forms.CharField(widget=forms.HiddenInput, max_length=10)
+    projectID = forms.CharField(widget=forms.HiddenInput, required=False, max_length=10)
+    poster = forms.CharField(widget=forms.HiddenInput, max_length=200)
+    postPicture = forms.ImageField(label="Picture", required=False)
+    title = forms.CharField(label="Event Name*", max_length=500, required=True, widget=forms.TextInput(attrs={'placeholder': 'Oepn Casting Call'}))
+    location = forms.CharField(label="Location*", max_length=1000, required=True, widget=forms.TextInput(attrs={'placeholder': 'The Orpheum, 601 Smithe St, Vancouver, BC V6B 3L4'}))
+    date = forms.DateField(label="Date*", required=False, widget=forms.DateInput(attrs={'class':'datepicker'}))
+    startTime = forms.TimeField(label="Start Time*", required=False)
+    endTime = forms.TimeField(label="End Time*", required=False)
+    host = forms.CharField(label="Hosted by", required=False, max_length=200, widget=forms.TextInput(attrs={'placeholder': 'Matthew Gray, Amy Bolt'}))
+    admissionInfo = forms.CharField(label="Admission", required=False, max_length=200, widget=forms.TextInput(attrs={'placeholder': 'Open'}))
 
