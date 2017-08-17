@@ -101,6 +101,10 @@ def createNewWorkPost(request):
     newPost = workPost.WorkPostInstance(request=request, postID=request.POST.get("postID"), projectID=request.POST.get("projectID"), postType=constants.CREATE_WORK_POST, formSubmitted=True)
     return _createNewPost(request, newPost)
 
+def createNewEventPost(request):
+    newPost = eventPost.EventPostInstance(request=request, postID=request.POST.get("postID"), projectID=request.POST.get("projectID"), postType=constants.CREATE_EVENT_POST, formSubmitted=True)
+    return _createNewPost(request, newPost)
+
 
 def _createNewPost(request, postTypeInstance):
     createSuccess = postTypeInstance.formIsValid()
