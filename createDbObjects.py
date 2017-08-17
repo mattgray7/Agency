@@ -30,13 +30,43 @@ daisyBuchananDescription = """Daisy is The Great Gatsby's most enigmatic, and pe
 directorDescription = """Our vision is to change the way the world views productivity. We want Function Point to be a place where everyone feels respected, where they are doing important work and where everyone contributes to the growth and direction of our company, our customers and our community. Function Point is looking for a hands on, curious technology leader who wants to keep their technical skills sharp and apply their passion and smarts to lead engineering and devops towards delivering customer and business value. As Director of Engineering, you will work closely with our Director of Products to drive the development of Function Points products and services. You will lead the continued growth of engineering and devops with an emphasis on championing a strong engineering culture, measuring and increasing delivery velocity, ensuring high quality, and achieving schedule predictability."""
 #=================== Project 1
 # User 1
-project1User = User.objects.create_user(username="mattgray",
-                                   email="matt.gray.1993@gmail.com",
-                                   password="m",
-                                   first_name="matt",
-                                   last_name="gray")
-project1User.save()
-project1UserAccount = models.UserAccount(username="mattgray",
+def createUser(username, email, password, firstName, lastName, picURL=None):
+	user = User.objects.create_user(username=username,
+                                   	email=email,
+                                   	password=password,
+                                   	first_name=firstName,
+                                   	last_name=lastName)
+	user.save()
+	userAccount = models.UserAccount(username=username,
+								 		email=email,
+	                             		firstName=firstName,
+	                             		lastName=lastName,
+	                             		setupComplete=True)
+	userAccount.save()
+	userMediaDir = "/Users/MattGray/Projects/Agency/Agency/media/{0}/".format(username)
+	if not os.path.exists(userMediaDir):
+		os.makedirs(userMediaDir)
+	if picURL:
+		picResult = urllib.urlretrieve(picURL)
+		userAccount.profilePicture = File(open(picResult[0]))
+		userAccount.profilePicture.name = "/profile.jpg"
+		userAccount.save()
+
+project1UserAccount = createUser("mattgray", "matt.gray.1993@gmail.com", "m", "matt", "gray",
+				   "/Users/MattGray/Projects/Agency/Agency/scripts/media/mattGrayProfile.jpg")
+user2 = createUser("amybolt", "amy.bolt@hotmail.com", "m", "amy", "bolt",
+				   "/Users/MattGray/Projects/Agency/Agency/scripts/media/amyBoltProfile.jpg")
+user3 = createUser("adamcramer", "adam.cramos@gmail.com", "m", "adam", "cramer",
+				   "/Users/MattGray/Projects/Agency/Agency/scripts/media/adamCramerProfile.jpg")
+user4 = createUser("johnstongray", "johnston.gray@gmail.com", "m", "johnston", "gray",
+				   "/Users/MattGray/Projects/Agency/Agency/scripts/media/johnstonGrayProfile.jpg")
+user5 = createUser("sachahusband", "sasha.husband@gmail.com", "m", "sasha", "husband",
+				   "/Users/MattGray/Projects/Agency/Agency/scripts/media/sachaHusbandProfile.jpg")
+user6 = createUser("liamcarson", "liam.carson@gmail.com", "m", "liam", "carson")
+				   #"/Users/MattGray/Projects/Agency/Agency/scripts/media/liamCarsonProfile.jpg")
+
+
+"""project1UserAccount = models.UserAccount(username="mattgray",
 							 		email="matt.gray.1993@gmail.com",
                              		firstName="matt",
                              		lastName="gray",
@@ -48,7 +78,7 @@ os.makedirs("/Users/MattGray/Projects/Agency/Agency/media/mattgray/")
 picResult = urllib.urlretrieve("/Users/MattGray/Projects/Agency/Agency/scripts/media/mattGrayProfile.jpg")
 project1UserAccount.profilePicture = File(open(picResult[0]))
 project1UserAccount.profilePicture.name = "/profile.jpg"
-project1UserAccount.save()
+project1UserAccount.save()"""
 
 
 def createProject(poster, title, description, status, picURL):
@@ -155,6 +185,27 @@ def createProjectRole(projectID, status, title, characterName, paid, username=No
 		rolePost.postPicture.name = "/casting_{0}.jpg".format(roleID)
 		rolePost.save()
 	return roleID
+
+def createProjectEvent(projectID, title, location, date, startTime, endTime, description, poster="mattgray", host=None, admissionInfo=None, picURL=None):
+	postID = helpers.createUniqueID(models.EventPost, "postID")
+	post = models.EventPost(postID=postID,
+								 projectID=projectID,
+								 poster=poster,
+								 title=title,
+								 description=description,
+								 location=location,
+								 host=host,
+								 admissionInfo=admissionInfo,
+								 startTime=startTime,
+								 endTime=endTime,
+								 date=date)
+	post.save()
+	if picURL:
+		picResult = urllib.urlretrieve(picURL)
+		post.postPicture = File(open(picResult[0]))
+		post.postPicture.name = "/event_{0}.jpg".format(postID)
+		post.save()
+	return postID
 
 project1WorkPost2JobId = createProjectJob(projectID=project1ProjectID,
 								 		  username="mattgray",
@@ -294,6 +345,28 @@ project2RoleId1 = createProjectRole(projectID=project7ProjectPost.projectID,
 								 	status="Cast")
 
 # Open table read event
+eightPM = datetime.time(20, 0, 0, 0)
+tenPM = datetime.time(22, 0, 0, 0)
+project1EventPostID = createProjectEvent(projectID=project1ProjectID,
+								 poster="mattgray",
+								 host="Matt Gray",
+								 title="Open casting call",
+								 description="Casting for all roles",
+								 location="Hyatt Vancouver",
+								 date=datetime.datetime(2017, 06, 02),
+								 startTime=eightPM,
+								 endTime=tenPM,
+								 picURL="/Users/MattGray/Projects/Agency/Agency/scripts/media/castingCall.jpeg")
+project1EventPostID2 = createProjectEvent(projectID=project1ProjectID,
+								 poster="mattgray",
+								 host="ZOOM Film Festival",
+								 title="Screening",
+								 description="Screening of final cut at the Zoom film festival",
+								 location="Oprheum Theatre",
+								 date=datetime.datetime(2017, 8, 4),
+								 startTime=eightPM,
+								 endTime=tenPM)
+"""
 project1EventPostID = helpers.createUniqueID(models.EventPost, "postID")
 project1EventPost = models.EventPost(postID=project1EventPostID,
 								 projectID=project1ProjectID,
@@ -301,47 +374,15 @@ project1EventPost = models.EventPost(postID=project1EventPostID,
 								 title="Open casting call",
 								 description="Casting for all roles",
 								 location="Hyatt Vancouver",
-								 date=datetime.datetime(2017, 06, 02))
+								 date=datetime.datetime(2017, 06, 02),
+								 startTime=eightPM,
+								 endTime=tenPM,
+								 picURL="/Users/MattGray/Projects/Agency/Agency/scripts/media/castingCall.jpeg")
 picResult = urllib.urlretrieve("/Users/MattGray/Projects/Agency/Agency/scripts/media/castingCall.jpeg")
 project1EventPost.postPicture = File(open(picResult[0]))
 project1EventPost.postPicture.name = "/event_{0}.jpg".format(project1EventPostID)
-project1EventPost.save()
+project1EventPost.save()"""
 
-# ====================
-def createUser(username, email, password, firstName, lastName, picURL=None):
-	user = User.objects.create_user(username=username,
-                                   	email=email,
-                                   	password=password,
-                                   	first_name=firstName,
-                                   	last_name=lastName)
-	user.save()
-	userAccount = models.UserAccount(username=username,
-								 		email=email,
-	                             		firstName=firstName,
-	                             		lastName=lastName,
-	                             		setupComplete=True)
-	userAccount.save()
-	userMediaDir = "/Users/MattGray/Projects/Agency/Agency/media/{0}/".format(username)
-	if not os.path.exists(userMediaDir):
-		os.makedirs(userMediaDir)
-	if picURL:
-		picResult = urllib.urlretrieve(picURL)
-		userAccount.profilePicture = File(open(picResult[0]))
-		userAccount.profilePicture.name = "/profile.jpg"
-		userAccount.save()
-
-# Add more user stuff
-# User 2
-user2 = createUser("amybolt", "amy.bolt@hotmail.com", "m", "amy", "bolt",
-				   "/Users/MattGray/Projects/Agency/Agency/scripts/media/amyBoltProfile.jpg")
-user3 = createUser("adamcramer", "adam.cramos@gmail.com", "m", "adam", "cramer",
-				   "/Users/MattGray/Projects/Agency/Agency/scripts/media/adamCramerProfile.jpg")
-user4 = createUser("johnstongray", "johnston.gray@gmail.com", "m", "johnston", "gray",
-				   "/Users/MattGray/Projects/Agency/Agency/scripts/media/johnstonGrayProfile.jpg")
-user5 = createUser("sachahusband", "sasha.husband@gmail.com", "m", "sasha", "husband",
-				   "/Users/MattGray/Projects/Agency/Agency/scripts/media/sachaHusbandProfile.jpg")
-user6 = createUser("liamcarson", "liam.carson@gmail.com", "m", "liam", "carson")
-				   #"/Users/MattGray/Projects/Agency/Agency/scripts/media/liamCarsonProfile.jpg")
 
 # Add some professions
 professionList = [models.Interest(username="mattgray", mainInterest="work", subInterest="onSetProduction", professionName="Cinematographer"),
