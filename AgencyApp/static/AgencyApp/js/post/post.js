@@ -824,7 +824,7 @@ function createBrowseTable(tableType, tableEntries, sectionOrder, displayAddNewP
         }
         if(addHiddenPanels && data[i] == null){
             // Add a blank panel to fill out the row
-            tableString += "<td style='width: 300px;'></td>";
+            tableString += "<td style='width: 300px;'><div style='width: 304px;'></div></td>";
         }else{
             tableString += "<td style='width: 300px;'>" + createBrowseTableElement(data[i], titleFieldName, tableType) + "</td>";
         }
@@ -906,24 +906,25 @@ function resizeBrowseTable(changeCallback){
 
 function getPanelInfoFromNumColumns(numColumns){
     var base = numColumns * browseElementWidth;
-    var formLineWidth;
+    var formLineWidth = 360;
     if(numColumns === 2){
         base += 28;
-        formLineWidth = "340%";
+        formLineWidth = 340;
     }else if(numColumns === 3){
         base += 37;
-        formLineWidth = "380%";
+        formLineWidth = 380;
     }else if(numColumns === 4){
         base += 45; 
-        formLineWidth = "360%";
+        formLineWidth = 360;
     }else if(numColumns === 5){
         base += 52;
-        formLineWidth = "360%";
+        formLineWidth = 360;
     }else{
         base += 60;
-        formLineWidth = "360%";
+        formLineWidth = 360;
     }
     base += "px";
+    formLineWidth += "%";
 
     return {"mainViewPanelWidth": base, "formLineWidth": formLineWidth}
 }
