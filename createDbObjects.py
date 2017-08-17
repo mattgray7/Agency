@@ -366,23 +366,6 @@ project1EventPostID2 = createProjectEvent(projectID=project1ProjectID,
 								 date=datetime.datetime(2017, 8, 4),
 								 startTime=eightPM,
 								 endTime=tenPM)
-"""
-project1EventPostID = helpers.createUniqueID(models.EventPost, "postID")
-project1EventPost = models.EventPost(postID=project1EventPostID,
-								 projectID=project1ProjectID,
-								 poster="mattgray",
-								 title="Open casting call",
-								 description="Casting for all roles",
-								 location="Hyatt Vancouver",
-								 date=datetime.datetime(2017, 06, 02),
-								 startTime=eightPM,
-								 endTime=tenPM,
-								 picURL="/Users/MattGray/Projects/Agency/Agency/scripts/media/castingCall.jpeg")
-picResult = urllib.urlretrieve("/Users/MattGray/Projects/Agency/Agency/scripts/media/castingCall.jpeg")
-project1EventPost.postPicture = File(open(picResult[0]))
-project1EventPost.postPicture.name = "/event_{0}.jpg".format(project1EventPostID)
-project1EventPost.save()"""
-
 
 # Add some professions
 professionList = [models.Interest(username="mattgray", mainInterest="work", subInterest="onSetProduction", professionName="Cinematographer"),

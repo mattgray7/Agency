@@ -807,14 +807,27 @@ function createBrowseTable(tableType, tableEntries, sectionOrder, displayAddNewP
         console.log("Error: no section order passed to create browse table")
     }
 
+    // If there are less entries than can fill a single row, add hidden/blank panels of same size to fill the space
+    var iterateLength = data.length;
+    var addHiddenPanels = false;
+    if(data.length < tableColCount){
+        addHiddenPanels = true;
+        iterateLength = tableColCount;
+    }
+
     var desiredColCount = getBrowseTableNumColumnsFromWindowSize()
     var colCount = 0;
     var rowCount = 0;
-    for(var i=0; i < data.length; i++){
+    for(var i=0; i < iterateLength; i++){
         if(colCount === 0){
             tableString += "<tr id='browseTableRow_" + rowCount + "'>";
         }
-        tableString += "<td style='width: 300px;'>" + createBrowseTableElement(data[i], titleFieldName, tableType) + "</td>";
+        if(addHiddenPanels && data[i] == null){
+            // Add a blank panel to fill out the row
+            tableString += "<td style='width: 300px;'></td>";
+        }else{
+            tableString += "<td style='width: 300px;'>" + createBrowseTableElement(data[i], titleFieldName, tableType) + "</td>";
+        }
 
         colCount += 1;
         if(colCount === tableColCount){
