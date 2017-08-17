@@ -566,6 +566,8 @@
                     }
                 {% endfor %}
             {% endif %}
+        }else if(activeTab === "events"){
+            ajaxURL = "/ajax/createNewEventPost/"
         }
         if(edit){
             ajaxURL = "/ajax/editExistingPost/";
@@ -677,7 +679,7 @@
                                 "endTime": {'value': 'End: ' + dataForm.endTime.value, 'hidden': false},
                                 "host": {'value': dataForm.host.value, 'hidden': false},
                                 "title": {'value': dataForm.title.value, 'hidden': false},
-                                "status": {'value': dataForm.status.value, 'hidden': false},
+                                "status": {'value': "Upcoming", 'hidden': false},
                                 "location": {'value': dataForm.location.value, 'hidden': true},
                                 "postPicture": {"value": '{{images.noPicture}}', "hidden": false},
                                 }

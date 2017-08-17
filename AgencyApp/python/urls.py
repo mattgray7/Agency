@@ -40,6 +40,7 @@ urlpatterns = [
     url(r'^ajax/getPostData/$', ajax.getPostData, name='getPostData'),  #TODO find a way to secure this link
     url(r'^ajax/createNewCastingPost/$', ajax.createNewCastingPost, name='createNewCastingPost'),  #TODO find a way to secure this link
     url(r'^ajax/createNewWorkPost/$', ajax.createNewWorkPost, name='createNewWorkPost'),  #TODO find a way to secure this link
+    url(r'^ajax/createNewEventPost/$', ajax.createNewEventPost, name='createNewEventPost'),  #TODO find a way to secure this link
     url(r'^ajax/editExistingPost/$', ajax.editExistingPost, name='editExistingPost'),
     url(r'^ajax/updatePostPicture/$', ajax.updatePostPicture, name='updatePostPicture'),  #TODO find a way to secure this link
     url(r'^ajax/saveTempPostPicture/$', ajax.saveTempPostPicture, name='saveTempPostPicture'),  #TODO find a way to secure this link
