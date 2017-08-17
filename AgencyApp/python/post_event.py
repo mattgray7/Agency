@@ -36,6 +36,7 @@ class CreateEventPostView(post.GenericCreatePostView):
     def pageContext(self):
         self._pageContext = super(CreateEventPostView, self).pageContext
         self._pageContext["hideStatus"] = True
+        self._pageContext["defaultStatus"] = "Upcoming"
         self._pageContext["isEvent"] = True
         return self._pageContext
 

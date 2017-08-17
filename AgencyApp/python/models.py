@@ -254,6 +254,7 @@ class CastingPost(AbstractPost):
         return constants.CASTING_POST
 
 class EventPost(AbstractPost):
+    status = "Upcoming"
     location = models.CharField(max_length=1000, default=None, blank=True, null=True)
     date = models.DateField(default=None, blank=True, null=True)
     startTime = models.TimeField(default=None, blank=True, null=True)
@@ -264,6 +265,10 @@ class EventPost(AbstractPost):
     @property
     def postType(self):
         return constants.EVENT_POST
+
+    @property
+    def stastus(self):
+        return "Upcoming"
 
 class Actor(models.Model):
     username = models.CharField(max_length=200)

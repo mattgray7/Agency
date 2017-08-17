@@ -114,6 +114,7 @@ class CreateEventPostForm(BaseForm):
     poster = forms.CharField(widget=forms.HiddenInput, max_length=200)
     postPicture = forms.ImageField(label="Picture", required=False)
     title = forms.CharField(label="Event Name*", max_length=500, required=True, widget=forms.TextInput(attrs={'placeholder': 'Open Casting Call'}))
+    status = forms.CharField(widget=forms.HiddenInput, max_length=50, required=False)
     location = forms.CharField(label="Location*", max_length=1000, required=True, widget=forms.TextInput(attrs={'placeholder': 'The Orpheum, 601 Smithe St, Vancouver, BC V6B 3L4'}))
     date = forms.DateField(label="Date*", required=False, widget=forms.DateInput(attrs={'class':'datepicker'}))
     startTime = forms.TimeField(label="Start Time*", required=False, widget=forms.DateInput(attrs={'class':'datepicker'}))

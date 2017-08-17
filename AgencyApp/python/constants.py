@@ -109,7 +109,7 @@ PROJECT_TYPE_LIST = ["Film - Feature", "Film - Short", "Television", "Competitio
 PROJECT_STATUS_LIST = ["Pre-production", "In production", "Post production", "Screening", "Completed"]
 CASTING_STATUS_LIST = ["Opening soon", "Open", "Cast"]
 WORK_STATUS_LIST = ["Opening soon", "Open", "Filled"]
-EVENT_STATUS_LIST = ["Upcoming", "Today", "Past", "Cancelled", "Moved"]
+EVENT_STATUS_LIST = ["Today", "Upcoming", "Past", "Announced", "Cancelled"]
 PROFILE_STATUS_LIST = ["Currently available", "Currently unavailable"]
 
 

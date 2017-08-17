@@ -254,6 +254,8 @@
                             formDict = getCastingFormDict(false, data["postData"])
                         }else if(postType === "jobs"){
                             formDict = getWorkFormDict(false, data["postData"])
+                        }else if(postType === "events"){
+                            formDict = getEventFormDict(false, data["postData"])
                         }
                         loadSuccessCallback(formDict);
                     }
@@ -316,6 +318,21 @@
 
             // Add other required fields (csrf_token, onCancel, etc)
             postFields = modifyCastingPostFields(postFields, newPost, "jobs");
+        {% endif %}
+        return postFields;
+    }
+
+    function getEventFormDict(newPost, existingPostData){
+        var postFields = {}
+        {% if forms.event %}
+            {% spaceless %}
+                {% for field in forms.event %}
+                    addPostField(postFields, "work", '{{field.name}}', '{{field.value}}', '{{field.label}}', '{{field}}', existingPostData)
+                {% endfor %}
+            {% endspaceless %}
+
+            // Add other required fields (csrf_token, onCancel, etc)
+            postFields = modifyCastingPostFields(postFields, newPost, "events");
         {% endif %}
         return postFields;
     }
@@ -440,6 +457,8 @@
                     postField["placeholder"] = "John is a charismatic father of 2 who loves his dogs."
                 }else if(activeTab === "jobs"){
                     postField["placeholder"] = 'The hiree must be able to handle all camera operations for all set days. They will be compensated at an hourly rate, with potential for reshoots after primary production.';
+                }else if(activeTab === "events"){
+                    postField["placeholder"] = "Casting multiple minor roles for The Greate Gatsby. All actors, male and female, of all ages are welcome."
                 }else{
                     //project
                     postField["placeholder"] = "The Great Gatsby is a tale of love and loss. We will be shooting it over the next 3 weeks to create a short ode to the F Scott Fitzgerald classic."
@@ -447,13 +466,20 @@
             }else if(postField.name == "poster"){
                 postField.value = "{{ request.user.username }}"
                 postField.input = postField.input.replace('name="poster"', 'name="poster" value="' + postField.value + '"')
-            }else if(postField.name == "startDate" || postField.name == "endDate"){
+            }else if(postField.name === "startDate" || postField.name === "endDate" || postField.name === "date"){
                 postField.input = postField.input.replace('type="text"', 'type="date"')
                 {% if postField.name == "startDate" %}
                     postField.value = currentDateString
                 {% else %}
                     postField.value = tomorrowDateString;
                 {% endif %}
+            }else if(postField.name == "startTime" || postField.name == "endTime"){
+                postField.input = postField.input.replace('type="text"', 'type="time"')
+                if(postField.name == "startTime"){
+                    postField.value = defaultStartTime;
+                }else{
+                    postField.value = defaultEndTime;
+                }
             }else if(selectFields != null){
                 var roleSelectFields = {{ selectFields.roles.names|safe }};
                 var jobSelectFields = {{ selectFields.jobs.names|safe }}
@@ -643,12 +669,36 @@
         return newPost;
     }
 
+    function createSingleEventDict(dataForm, imageURL){
+        var newPost = {"post": {"postID": {'value': dataForm.postID.value, 'hidden': true},
+                                "admissionInfo": {'value': dataForm.admissionInfo.value, 'hidden': false},
+                                "date": {'value': 'Date: ' + dataForm.date.value, 'hidden': false},
+                                "startTime": {'value': 'Start: ' + dataForm.startTime.value, 'hidden': false},
+                                "endTime": {'value': 'End: ' + dataForm.endTime.value, 'hidden': false},
+                                "host": {'value': dataForm.host.value, 'hidden': false},
+                                "title": {'value': dataForm.title.value, 'hidden': false},
+                                "status": {'value': dataForm.status.value, 'hidden': false},
+                                "location": {'value': dataForm.location.value, 'hidden': true},
+                                "postPicture": {"value": '{{images.noPicture}}', "hidden": false},
+                                }
+                      };
+
+        // Explicitly set the image url of the new post
+        if(imageURL != null && imageURL.length > 0){
+            newPost["post"]["postPicture"]["value"] = imageURL;
+        }
+
+        return newPost;
+    }
+
     function createSinglePostDict(dataForm, imageURL){
         var postDict;
         if(activeTab === "roles"){
             postDict = createSingleRoleDict(dataForm, imageURL);
         }else if(activeTab === "jobs"){
             postDict = createSingleJobDict(dataForm, imageURL);
+        }else if(activeTab === "events"){
+            postDict = createSingleEventDict(dataForm, imageURL);
         }
         return postDict;
     }
@@ -667,6 +717,12 @@
                 entries = getBrowseJobsDict();
             }else{
                 entries = jobEntries;
+            }
+        }else if(activeTab === "events"){
+            if(eventEntries == null){
+                entries = getBrowseEventsDict();
+            }else{
+                entries = eventEntries;
             }
         }
 
@@ -705,6 +761,8 @@
             roleEntries = entries;
         }else if(activeTab === "jobs"){
             jobEntries = entries;
+        }else if(activeTab === "events"){
+            eventEntries = entries;
         }
     }
 
@@ -715,7 +773,7 @@
         }else if(formType === "jobs"){
             formString += addCreateWorkPost(getWorkFormDict(true, null), "{{currentPageURL}}", "createWorkPostForm");
         }else if(formType === "events"){
-            return "events"
+            formString += addCreateEventPost(getEventFormDict(true, null), "{{currentPageURL}}", "createEventPostForm");
         }
         return formString;
     }
@@ -733,7 +791,10 @@
                 elementContentDiv.innerHTML = newFormString;
             })
         }else if(formType === "events"){
-            return "events"
+            var eventFormDict = getExistingFormDict(postID, formType, function(postFields){
+                var newFormString = addCreateEventPost(postFields, "{{currentPageURL}}", "createEventPostForm");
+                elementContentDiv.innerHTML = newFormString;
+            })
         }
         return formString;
     }
@@ -1114,6 +1175,39 @@ document.write(getPanelInfoFromNumColumns(tableColCount)["mainViewPanelWidth"] +
     }
 
     var eventEntries;
+    function getBrowseEventsDict(){
+        if(eventEntries == null){
+            var eventDict = {"Announced": [], "Upcoming": [], "Today": [], "Past": [], "Cancelled": []};
+            {% if events %}
+                {% for event in events %}
+                    var newEvent = {"post": {}};
+                    {% if event.post %}
+                        newEvent["post"] = {"postID": {'value': '{{event.post.postID}}', 'hidden': true},
+                                            "admissionInfo": {'value': '{{event.post.admissionInfo}}', 'hidden': false},
+                                           "date": {'value': 'Date: {{event.post.date}}', 'hidden': false},
+                                           "startTime": {'value': 'Start: {{event.post.startTime}}', 'hidden': false},
+                                           "endTime": {'value': 'End: {{event.post.endTime}}', 'hidden': false},
+                                           "host": {'value': '{{event.post.host}}', 'hidden': false},
+                                           "title": {'value': '{{event.post.title}}', 'hidden': false},
+                                           "location": {'value': '{{event.post.location}}', 'hidden': true},
+                                           "status": {'value': 'Upcoming', 'hidden': true},
+                                           "postPicture": {"value": '{{images.noPicture}}', "hidden": false},
+                                       };
+                        {% if event.post.postPicture and event.post.postPicture.url %}
+                            newEvent["post"]["postPicture"]["value"] = '{{event.post.postPicture.url}}';
+                        {% endif %}
+
+                    if(newEvent["post"]["status"]["value"] in eventDict){
+                        eventDict[newEvent["post"]["status"]["value"]].push(newEvent);
+                    };
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+            eventEntries = eventDict;
+        }
+        return eventEntries;
+    }
+
     function selectProjectTab(tabType){
         for(var i=0; i < projectTabs.length; i++){
             var buttonId = projectTabs[i] + "Button";
@@ -1167,7 +1261,9 @@ document.write(getPanelInfoFromNumColumns(tableColCount)["mainViewPanelWidth"] +
             sectionOrder = ["Open", "Opening soon", "Filled"];
             titleFieldName = "profession";
         }else if(tabType == "events"){
-            selectEvents();
+            entries = getBrowseEventsDict();
+            sectionOrder = ["Today", "Upcoming", "Past", "Announced", "Cancelled"];
+            titleFieldName = "title";
         }
         var table = createBrowseTable(tabType, entries, sectionOrder, true, titleFieldName)
         var contentDiv = document.getElementById("projectContentList")
@@ -1181,32 +1277,6 @@ document.write(getPanelInfoFromNumColumns(tableColCount)["mainViewPanelWidth"] +
             });
         });
     }
-
-    /*
-    function selectEvents(){
-        var listDiv = document.getElementById("projectContentList");
-        var contentString = "";
-        if(listDiv != null){
-            {% if events %}
-                contentString += "<table><tr>";
-                {% for eventObj in events %}
-                    contentString += "<td class='projectContentListElement grayBackground grayHover' onclick='redirectToPost(" + '"{{eventObj.post.postID}}");' + "'>";
-                    // eventPic
-                    contentString += "<div class='projectContentListElementPicturePanel'><div class='projectContentListElementPicture'>";
-                    {% if eventObj.post.postPicture %}
-                        contentString += '<img src="{{ eventObj.post.postPicture.url }}" style="max-width: 150px; max-height:150px;"/>'
-                    {% else %}
-                        contentString += '<img src="{{images.noPicture}}" style="width: 150px; max-height: 150px;">';
-                    {% endif %}
-                    contentString += "</div></div><br>";
-                    contentString += "<div class='projectContentListElementText'><h2>{{eventObj.post.title}}</h2><h3>{{eventObj.post.date}}<br>Location: {{eventObj.post.location}}</h3><p>{{eventObj.post.description}}</p></div>";
-                    contentString += "</td>";
-                {% endfor %}
-                contentString += "</tr></table>"
-            {% endif %}
-            listDiv.innerHTML = contentString
-        }
-    }*/
 
     function submitForm(formName){
         if(formName == null){
