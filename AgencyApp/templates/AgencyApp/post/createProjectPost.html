@@ -468,11 +468,13 @@
                 postField.input = postField.input.replace('name="poster"', 'name="poster" value="' + postField.value + '"')
             }else if(postField.name === "startDate" || postField.name === "endDate" || postField.name === "date"){
                 postField.input = postField.input.replace('type="text"', 'type="date"')
-                {% if postField.name == "startDate" %}
-                    postField.value = currentDateString
-                {% else %}
-                    postField.value = tomorrowDateString;
-                {% endif %}
+                if(postField.value == null || postField.value.length === 0){
+                    {% if postField.name == "startDate" %}
+                        postField.value = currentDateString
+                    {% else %}
+                        postField.value = tomorrowDateString;
+                    {% endif %}
+                }
             }else if(postField.name == "startTime" || postField.name == "endTime"){
                 postField.input = postField.input.replace('type="text"', 'type="time"')
                 if(postField.name == "startTime"){
