@@ -1,6 +1,7 @@
 from __future__ import unicode_literals
 
 import json
+import datetime
 from django.db import models
 from django.core.files.storage import FileSystemStorage
 import helpers
@@ -254,7 +255,6 @@ class CastingPost(AbstractPost):
         return constants.CASTING_POST
 
 class EventPost(AbstractPost):
-    status = "Upcoming"
     location = models.CharField(max_length=1000, default=None, blank=True, null=True)
     date = models.DateField(default=None, blank=True, null=True)
     startTime = models.TimeField(default=None, blank=True, null=True)
@@ -267,8 +267,16 @@ class EventPost(AbstractPost):
         return constants.EVENT_POST
 
     @property
-    def stastus(self):
-        return "Upcoming"
+    def eventStatus(self):
+        eventStatus = "Past"
+        currentDate = datetime.datetime.now().date();
+        if self.date < currentDate:
+            eventStatus = "Past"
+        elif self.date == currentDate:
+            eventStatus = "Today"
+        elif self.date > currentDate:
+            eventStatus = "Upcoming"
+        return eventStatus
 
 class Actor(models.Model):
     username = models.CharField(max_length=200)

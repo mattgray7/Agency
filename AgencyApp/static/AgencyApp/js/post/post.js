@@ -736,13 +736,13 @@ function createBrowseTableElement(elementDict, titleFieldName, elementType){
         elementString += "<td colspan=2>"
         var status = elementDict["post"]["status"]["value"]
         elementString += "<div style='position: relative; margin-left: -5px; margin-right: -5px; margin-top: -5px; height: 35px; border: 1px solid #000;";
-        if(status === "Open" || status === "Hiring"){
+        if(status === "Open" || status === "Hiring" || status === "Today"){
             // green
             elementString += "background: rgba(7, 196, 23, 0.2);";
-        }else if(status === "Opening soon"){
+        }else if(status === "Opening soon" || status === "Upcoming"){
             // darker green
             elementString += "background: #87bf9a";
-        }else if(status === "Cast" || status === "Filled"){
+        }else if(status === "Cast" || status === "Filled" || status === "Past"){
             // grey
             elementString += "background: #d1d1d1;";
         }else{
@@ -933,6 +933,18 @@ var browseElementWidth = 300;
 function getBrowseTableNumColumnsFromWindowSize(){
     numColumns = Math.max(Math.round($(window).width() / browseElementWidth), 2);
     return numColumns
+}
+
+function getEventStatus(date){
+    var eventStatus;
+    if(date > currentDate){
+        eventStatus = "Upcoming";
+    }else if(date === currentDate || date.toISOString().slice(0,10) === currentDateString){
+        eventStatus = "Today"
+    }else{
+        eventStatus = "Past";
+    }
+    return eventStatus
 }
 
 

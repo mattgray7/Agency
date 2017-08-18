@@ -679,7 +679,7 @@
                                 "endTime": {'value': 'End: ' + dataForm.endTime.value, 'hidden': false},
                                 "host": {'value': dataForm.host.value, 'hidden': false},
                                 "title": {'value': dataForm.title.value, 'hidden': false},
-                                "status": {'value': "Upcoming", 'hidden': false},
+                                "status": {'value': getEventStatus(new Date(dataForm.date.value)), 'hidden': false},
                                 "location": {'value': dataForm.location.value, 'hidden': true},
                                 "postPicture": {"value": '{{images.noPicture}}', "hidden": false},
                                 }
@@ -1192,13 +1192,12 @@ document.write(getPanelInfoFromNumColumns(tableColCount)["mainViewPanelWidth"] +
                                            "host": {'value': '{{event.post.host}}', 'hidden': false},
                                            "title": {'value': '{{event.post.title}}', 'hidden': false},
                                            "location": {'value': '{{event.post.location}}', 'hidden': true},
-                                           "status": {'value': 'Upcoming', 'hidden': true},
+                                           "status": {'value': '{{event.post.eventStatus}}', 'hidden': true},
                                            "postPicture": {"value": '{{images.noPicture}}', "hidden": false},
                                        };
                         {% if event.post.postPicture and event.post.postPicture.url %}
                             newEvent["post"]["postPicture"]["value"] = '{{event.post.postPicture.url}}';
                         {% endif %}
-
                     if(newEvent["post"]["status"]["value"] in eventDict){
                         eventDict[newEvent["post"]["status"]["value"]].push(newEvent);
                     };
