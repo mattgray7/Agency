@@ -13,6 +13,213 @@
     var projectPicture;
     var projectSubFormPicture;
 
+    /* UI Functions */
+    function selectProjectTab(tabType){
+        for(var i=0; i < projectTabs.length; i++){
+            var buttonId = projectTabs[i] + "Button";
+            var borderCoverId = projectTabs[i] + "BorderCover";
+            var projectButtonDiv = document.getElementById(buttonId);
+            var projectButtonBorderCoverDiv = document.getElementById(borderCoverId)
+            if(projectButtonDiv != null && projectButtonBorderCoverDiv != null){
+                if(projectTabs[i] === tabType){
+                    projectButtonDiv.className = "projectTabButtonActive";
+                    activeTab = tabType;
+                    /*if(isElementListEmpty(tabType)){
+                        var projectContentPanel = document.getElementById("projectContentPanel");
+                        if(projectContentPanel != null){
+                            projectContentPanel.innerHTML = getEmptyListButton(tabType);
+                            $("#projectContentPanel").animate({marginTop: "-13px", height: "70px"}, 300);
+                            
+                        }
+                    }else{
+                        document.getElementById("addNewPanel").innerHTML = createAddNewButton(tabType);
+                    }*/
+                } else {
+                    projectButtonDiv.className = "projectTabButtonInactive";        
+                }
+            }
+        }
+
+        // Change the onclick of the addNew button
+        var addNewButton = document.getElementById("addNewBrowseFormButton");
+        if(addNewButton != null){
+            addNewButton.onclick = function(){
+                toggleExpandNewForm("expand", activeTab);
+            }
+        }
+
+        // If a post form was expanded on old tab, reset values
+        if(expanded){
+            toggleExpandNewForm("shrink", activeTab)
+        }
+        expanded = false;
+        currentExistingFormPostID = '';
+
+        var entries;
+        var sectionOrder;
+        var titleFieldName;
+        if(tabType === "roles"){
+            entries = getBrowseRolesDict();
+            sectionOrder = ["Open", "Opening soon", "Cast"];
+            titleFieldName = "characterName";
+        }else if(tabType == "jobs"){
+            entries = getBrowseJobsDict();
+            sectionOrder = ["Open", "Opening soon", "Filled"];
+            titleFieldName = "profession";
+        }else if(tabType == "events"){
+            entries = getBrowseEventsDict();
+            sectionOrder = ["Today", "Upcoming", "Past", "Announced", "Cancelled"];
+            titleFieldName = "title";
+        }
+        var table = createBrowseTable(tabType, entries, sectionOrder, true, titleFieldName)
+        var contentDiv = document.getElementById("projectContentList")
+        if(contentDiv != null){
+            contentDiv.innerHTML = table;
+        }
+        $(window).resize(function () {
+            resizeBrowseTable(function(){
+                document.getElementById("browseTable").style.width = tableColCount * 300 + "px";
+                selectProjectTab(activeTab);
+            });
+        });
+    }
+
+    var expanded = false;
+    var transitionSpeed = 350;
+    var formHeights = {"roles": "1335px", "jobs": "1105px", "events": "780px"}
+    function toggleExpandNewForm(toggleType, panelType, shrinkAnimationFinishCallback){
+        var newFormDiv = document.getElementById("insertNewFormDiv")
+        var browsePostsDiv = document.getElementById("projectContentList")
+        var filterBarDiv = document.getElementById("projectContentListHeader")
+        if(newFormDiv == null || browsePostsDiv == null){
+            return;
+        }
+
+        if(toggleType === "expand"){
+            newFormDiv.style.visibility = "visible";
+            $("#insertNewFormDiv").animate({marginTop: "0px", height: formHeights[panelType]}, transitionSpeed);
+
+            //newFormDiv.style.border = "2px solid #000";
+            // Optional: animate filter bar to shrink as opposed to just making invisible
+            $("#projectContentListHeader").animate({marginTop: "0px", height: "0px"}, transitionSpeed);
+            filterBarDiv.style.visibility = "hidden";
+            browsePostsDiv.style.marginTop = "20px";
+            newFormDiv.innerHTML = getNewElementForm(panelType);
+            addElementStatusSelect(panelType);
+            expanded = true;
+        }else{
+            $("#insertNewFormDiv").animate({marginTop: "0px", height: "0px"}, transitionSpeed, function(){newFormDiv.style.visibility = "hidden"});
+
+            //newFormDiv.style.border = "2px solid #000";
+            // Optional: animate filter bar to shrink as opposed to just making invisible
+            $("#projectContentListHeader").animate({marginTop: "0px", height: "40px"}, transitionSpeed, function(){
+                filterBarDiv.style.visibility = "visible";
+                newFormDiv.innerHTML = createAddNewButton(panelType);
+                if(shrinkAnimationFinishCallback != null){
+                    shrinkAnimationFinishCallback();
+                }
+            });
+            browsePostsDiv.style.marginTop = "0px";
+            expanded = false;
+        }
+    }
+
+    var currentExistingFormPostID = ''
+    function toggleExpandExistingForm(toggleType, panelType, postID, shrinkAnimationFinishCallback){
+        var editButton = document.getElementById("editPostButton_" + postID)
+        var borderCover = document.getElementById("postPanelBorderCover_" + postID);
+        var postPanel = document.getElementById("browseTablePost_" + postID);
+
+
+        if(toggleType === "expand"){
+            if(currentExistingFormPostID != '' && currentExistingFormPostID != null){
+                // Shrink existing panel and then expand new one
+                return toggleExpandExistingForm("shrink", panelType, currentExistingFormPostID, function(){toggleExpandExistingForm("expand", panelType, postID)});
+            }
+            currentExistingFormPostID = postID;
+            var postRow = $('[id=browseTablePost_' + postID + ']').closest('tr');
+            var rowDiv = document.getElementById(postRow[0].id);
+            if(rowDiv != null){
+                // Create new row
+                var newRow = document.createElement('tr');
+                newRow.id = "insertExistingFormDivContainerRow"
+
+                // Create new col with ful colspan
+                var newCol = document.createElement('td');
+                newCol.colSpan = tableColCount;
+
+                // Create new form div to put in column
+                var newFormDiv = document.createElement('div');
+                newFormDiv.className = "browseTableForm";
+                newFormDiv.id = "insertExistingFormDiv";
+                newFormDiv.style.overflow = "hidden";
+                newFormDiv.style.height = "0px";
+                setExistingElementForm(panelType, postID, newFormDiv)
+
+                // Add the div to col, col to row, and row after the parent row
+                newCol.appendChild(newFormDiv)
+                newRow.appendChild(newCol)
+                rowDiv.parentNode.insertBefore(newRow, rowDiv.nextSibling);
+                $("#insertExistingFormDiv").animate({marginTop: "0px", height: formHeights[panelType]}, transitionSpeed + 200);
+            }
+
+            // Change onclick of edit button to shrink form
+            if(editButton != null){
+                editButton.onclick = function(){
+                    toggleExpandExistingForm("shrink", panelType, postID, shrinkAnimationFinishCallback);
+                };
+                editButton.innerHTML = "Hide";
+            }
+
+            // Change panel background to white
+            if(postPanel != null){
+                postPanel.style.background = "#FFF";
+            }
+
+            // Add border cover
+            if(borderCover != null){
+                borderCover.style.visibility = "visible";
+            }
+        }else{
+            // Shrinking, so no post id is active
+            currentExistingFormPostID = '';
+
+            // Shrink the form and call any cleanup functions 
+            $("#insertExistingFormDiv").animate({marginTop: "0px", height: "0px"}, transitionSpeed, function(){
+                $("#insertExistingFormDivContainerRow").remove()
+
+                // Add border cover
+                if(borderCover != null){
+                    borderCover.style.visibility = "hidden";
+                }
+
+                // Change panel background to white
+                if(postPanel != null){
+                    postPanel.style.background = "#efefef";
+                }
+
+                if(shrinkAnimationFinishCallback != null){
+                    shrinkAnimationFinishCallback();
+                }
+            });
+
+            // Change onclick of edit buttonback to expand form
+            if(editButton != null){
+                editButton.onclick = function(){
+                    toggleExpandExistingForm("expand", panelType, postID);
+                };
+                editButton.innerHTML = "Edit";
+            }
+
+        }
+    }
+
+    /***************************************************************/
+
+
+
+    /************************ UTILITIES ****************************/
+
     function deletePostFromDB(postID, postType){
         $.ajax({
             url : "/ajax/deletePostFromDB/",
@@ -61,6 +268,11 @@
         generateNewPostID(postType)
         return nextID;
     }
+
+    /*************************************************************************/
+
+
+    /********************************* EDIT PICTURE FUNCTIONS ****************************/
 
     function getPictureURL(isProject){
         // Returns the URL to display in edit picture popup window. If one has been uploaded already, that one will be chosen, otherwise the existing picture will be chosen, otherwise the noPicture default is chosen
@@ -182,443 +394,149 @@
         });
     }
 
-    function getProjectFormDict(){
-        var postFields = {}
-        var errors = {"required": []};
-
-        {% if forms.project %}
-            {% spaceless %}
-            {% for field in forms.project %}
-                var postField = createPostField('project', '{{field.name}}', '{{field.value}}', '{{field.label}}', '{{field}}', '{{field.errors}}')
-                if(postField != null){
-                    postFields[postField.name] = postField;
-                }
-
-                // Add any form errors to the error dict
-                {% if field.errors %}
-                    {% for error in field.errors %}
-                        var errorString = '{{error}}';
-                        var fieldDisplayName = postField.label.replace("*", "");
-
-                        // Want to group all fields with the same error
-                        if(errorString ===  "This field is required."){
-                            errors["required"].push(fieldDisplayName);
-                        }
-                    {% endfor %}
-                {% endif %}
-            {% endfor %}
-            {% endspaceless %}
-
-            // Add csrf token
-            var csrfField = {"name": "csrf_token", "input": "{% csrf_token %}", "hidden": true};
-            postFields['csrf_token'] = csrfField;
-
-            // Add cancel button with onclick
-            var cancelButton = {'name': 'cancelButton', 'onclick': 'redirectToPost("{{post.postID}}");', "hidden": true};
-            postFields['cancelButton'] = cancelButton;
-
-            // Add create/update button with onclick
-            var createButton = {'name': 'createButton', 'onclickFunction': 'submitProjectForm', "hidden": true};
-            postFields['createButton'] = createButton;
-
-            if(errors["required"].length > 0){
-                postFields["errors"] = errors;
-            }
-
-            {% if post %}
-                postFields["newPost"] = false;
-            {% else %}
-                postFields["newPost"] = true;
-            {% endif %}
-        {% endif %}
-        return postFields;
-    }
-
-    function getExistingFormDict(postID, postType, loadSuccessCallback){
-        var postData;
-        if(postID != null && postID.length > 0){
-            $.ajax({
-                url : "/ajax/getPostData/",
-                data : {"postID": postID},
-                type : 'POST',
-                dataType: "json",
-                success : function(data) {
-                    if(data["success"]){
-                        // If a new picture has been added and page has not been refreshed, need to set picURl to temp value (browser won't update image at same path)
-                        var newPictureURL = newPostPictureURLs[postID];
-                        if(newPictureURL != null){
-                            data["postData"]["postPicture"] = newPictureURL
-                        }
-                        var formDict;
-                        if(postType === "roles"){
-                            formDict = getCastingFormDict(false, data["postData"])
-                        }else if(postType === "jobs"){
-                            formDict = getWorkFormDict(false, data["postData"])
-                        }else if(postType === "events"){
-                            formDict = getEventFormDict(false, data["postData"])
-                        }
-                        loadSuccessCallback(formDict);
-                    }
-                }
-            });
-        }
-    }
-
-    function getCastingFormDict(newPost, existingPostData){
-        var postFields = {}
-        {% if forms.role %}
-            {% spaceless %}
-                {% for field in forms.role %}
-                    addPostField(postFields, "casting", '{{field.name}}', '{{field.value}}', '{{field.label}}', '{{field}}', existingPostData)
-                {% endfor %}
-            {% endspaceless %}
-
-            // Add actor
-            var actorField = {"username": "{{actor.username}}", "cleanName": "{{actor.cleanName}}"}
-            {% if actor %}
-                actorField["username"] = "{{actor.username}}";
-                actorField["cleanName"] = "{{actor.cleanName}}";
-                {% if actor.profilePicture %}
-                    actorField.profilePictureURL = '{{actor.profilePicture.url}}';
-                {% endif %}
-            {% else %}
-                actorField["username"] = null;
-                actorField.profilePictureURL = '{{images.noProfilePicture}}';
-            {% endif %}
-            postFields["actor"] = actorField;
-
-            // Add other required fields (csrf_token, onCancel, etc)
-            postFields = modifyCastingPostFields(postFields, newPost, "roles");
-        {% endif %}
-        return postFields;
-    }
-
-    function getWorkFormDict(newPost, existingPostData){
-        var postFields = {}
-        {% if forms.job %}
-            {% spaceless %}
-                {% for field in forms.job %}
-                    addPostField(postFields, "work", '{{field.name}}', '{{field.value}}', '{{field.label}}', '{{field}}', existingPostData)
-                {% endfor %}
-            {% endspaceless %}
-
-            // Add actor
-            var workerField = {"username": "{{worker.username}}", "cleanName": "{{worker.cleanName}}"}
-            {% if actor %}
-                workerField["username"] = "{{worker.username}}";
-                workerField["cleanName"] = "{{worker.cleanName}}";
-                {% if worker.profilePicture %}
-                    workerField.profilePictureURL = '{{worker.profilePicture.url}}';
-                {% endif %}
-            {% else %}
-                workerField["username"] = null;
-                workerField.profilePictureURL = '{{images.noProfilePicture}}';
-            {% endif %}
-            postFields["worker"] = workerField;
-
-            // Add other required fields (csrf_token, onCancel, etc)
-            postFields = modifyCastingPostFields(postFields, newPost, "jobs");
-        {% endif %}
-        return postFields;
-    }
-
-    function getEventFormDict(newPost, existingPostData){
-        var postFields = {}
-        {% if forms.event %}
-            {% spaceless %}
-                {% for field in forms.event %}
-                    addPostField(postFields, "work", '{{field.name}}', '{{field.value}}', '{{field.label}}', '{{field}}', existingPostData)
-                {% endfor %}
-            {% endspaceless %}
-
-            // Add other required fields (csrf_token, onCancel, etc)
-            postFields = modifyCastingPostFields(postFields, newPost, "events");
-        {% endif %}
-        return postFields;
-    }
-
-    function addPostField(targetList, postType, name, value, label, input, existingValues){
-        // Either get value from context for new posts, or existingPostData for existing posts
-        if(existingValues != null){
-            var tempValue = existingValues[name];
-            if(tempValue != null && tempValue.length > 0 && tempValue != "None"){
-                value = tempValue;
-            }
-        }
-
-        if(value === "None"){
-            value = "";
-        }
-
-        // Create the postField for this field and add it to the dict, indexed by field name
-        var postField = createPostField(postType, name, value, label, input)
-        if(postField != null){
-            targetList[postField.name] = postField;
-        }
-    }
-
-    // Adds the necessary casting post fields to the postFields dict
-    function modifyCastingPostFields(postFields, newPost, postType){
-            // Add project
-            var projectField = {"name": "project"}
-            {% if post and post.title %}
-                projectField.title  = '{{post.title}}';
-                projectField.projectID = '{{post.postID}}';
-            {% endif %}
-            postFields["project"] = projectField
-
-            // Add csrf token
-            var csrfField = {"name": "csrf_token", "input": "{% csrf_token %}", "hidden": true};
-            postFields['csrf_token'] = csrfField;
-
-            // Add cancel button with onclick
-            var editOnclick;
-            if(newPost){
-                editOnclick = 'toggleExpandNewForm("shrink", "' + postType + '");'
-            }else{
-                editOnclick = 'toggleExpandExistingForm("shrink", "' + postType + '");'
-            }
-            var cancelButton = {'name': 'cancelButton', 'onclick': editOnclick, "hidden": true};
-            postFields['cancelButton'] = cancelButton;
-
-            // Add create/update button with onclick
-            var createButton = {'name': 'createButton', 'onclickFunction': 'submitProjectSubForm', "hidden": true};
-            postFields['createButton'] = createButton;
-
-            postFields["newPost"] = newPost;
-            return postFields;
-    }
-
-    function createPostField(postType, name, value, label, input){
-            var save = true;
-            var postField = {"name": name, "value": value, "hidden": false, "label": label, 'input': input}
-            if(input.indexOf('hidden') >= 0){
-                postField.hidden = true;
-            }
-
-            var statusOptions;
-            {% if statusOptions %}
-                statusOptions = {{ statusOptions|safe }}
-            {% endif %}
-
-            var selectFields;
-            {% if selectFields %};
-                selectFields = {{ selectFields|safe }};
-            {% endif %}
+    /*************************************************************************/
 
 
-            if(postField.name == "projectID"){
-                postField.value = "{{post.projectID}}";
-            }else if(postField.name == "postID" && (value == null || value.length === 0)){
-                if(postType != 'project'){
-                    postField.value = getNewPostID(postType);
-                }else{
-                    postField.value = '{{post.postID}}';
-                }
-            }else if(postField.name == "postPicture"){
-                var isProject = false;
-                if(postType === "project"){
-                    isProject = true;
-                    {% if post.postPicture %}
-                        postField.value = "{{post.postPicture.url}}";
-                    {% else %}
-                        postField.value = "{{images.noPicture}}";
+    /******************************* Get browse table data ****************************/
+
+    var roleEntries;
+    function getBrowseRolesDict(){
+        if(roleEntries == null){
+            var roleDict = {"Open": [], "Cast": [], "Opening soon": []};
+            {% if roles %}
+                {% for role in roles %}
+                    var newRole = {"actor": {}, "post": {}};
+                    {% if role.actor %}
+                        newRole["actor"] = {"username": '{{role.actor.username}}', "cleanName": '{{role.actor.cleanName}}'}
+                        {% if role.actor.profilePicture and role.actor.profilePicture.url %}
+                            newRole["actor"]["profilePicture"] = '{{role.actor.profilePicture.url}}';
+                        {% else %}
+                            newRole["actor"]["profilePicture"] = '{{images.noProfilePicture}}';
+                        {% endif %}
                     {% endif %}
-                }else if(value == null || value.length === 0){
-                    postField.value = "{{images.noPicture}}";
-                }
-                postField.editOnclick = "toggleEditPicturePopup('show', " + isProject + ", '" + postField.value + "')";
-            }else if(postField.name == "paid"){
-                var currentInput = postField.input;
-                var paidDescription = '{{post.paidDescription}}'
-                if(paidDescription === "None"){
-                    paidDescription = ''
-                }
-                postField.input = "<div style='position: relative; margin-top: -5px;'>" + currentInput + "<div style='position: absolute; top: 0; right: 0; margin-top: 6px; width: 90%; min-width: 180px; text-align: right;'><div style='position: relative;'> <div style='position: absolute; left: 0;' class='editPostLabelPanel'>Specify </div><div style='position: absolute; left: 0; right: 0; margin-right: 3px; margin-left: 68px; margin-top: -3px;'><input type='text' name='paidDescription' value='" + paidDescription + "' style='display: inline; margin-top: -10px;'></div></div></div>"
-            }else if(postField.name === "paidDescription"){
-                // Paid description will be on same line as paid
-                save = false;
-            }else if(postField.name === "status"){
-                var options = [];
-                if("roles" in statusOptions && postType == "casting"){
-                    options = {{ statusOptions.roles|safe }}
-                }else if("jobs" in statusOptions && postType == "work"){
-                    options = {{ statusOptions.jobs|safe }}
-                }else{
-                    options = {{ statusOptions.projects|safe }}
-                }
-                postField.options = options;
-            }else if(postField.name == "description"){
-                postField.numRows = 20;
-                if(postField.value.length <= 0 || postField.value === "None"){
-                    postField.value = "";
-                }
-                if(activeTab === "roles"){
-                    postField["placeholder"] = "John is a charismatic father of 2 who loves his dogs."
-                }else if(activeTab === "jobs"){
-                    postField["placeholder"] = 'The hiree must be able to handle all camera operations for all set days. They will be compensated at an hourly rate, with potential for reshoots after primary production.';
-                }else if(activeTab === "events"){
-                    postField["placeholder"] = "Casting multiple minor roles for The Greate Gatsby. All actors, male and female, of all ages are welcome."
-                }else{
-                    //project
-                    postField["placeholder"] = "The Great Gatsby is a tale of love and loss. We will be shooting it over the next 3 weeks to create a short ode to the F Scott Fitzgerald classic."
-                }
-            }else if(postField.name == "poster"){
-                postField.value = "{{ request.user.username }}"
-                postField.input = postField.input.replace('name="poster"', 'name="poster" value="' + postField.value + '"')
-            }else if(postField.name === "startDate" || postField.name === "endDate" || postField.name === "date"){
-                postField.input = postField.input.replace('type="text"', 'type="date"')
-                if(postField.value == null || postField.value.length === 0){
-                    {% if postField.name == "startDate" %}
-                        postField.value = currentDateString
-                    {% else %}
-                        postField.value = tomorrowDateString;
+
+                    {% if role.post %}
+                        newRole["post"] = {"postID": {'value': '{{role.post.postID}}', 'hidden': true},
+                                           "characterName": {'value': '{{role.post.characterName}}', 'hidden': false},
+                                           "startDate": {'value': 'Start: {{role.post.startDate}}', 'hidden': false},
+                                           "endDate": {'value': 'End: {{role.post.endDate}}', 'hidden': false},
+                                           "hoursPerWeek": {'value': 'Hours/week: {{role.post.hoursPerWeek}}', 'hidden': false},
+                                           "paid": {'value': '{{role.post.paid}}', "hidden": false},
+                                           "title": {'value': '{{role.post.title}}', 'hidden': false},
+
+                                           "gender": {'value': '{{role.post.gender}}', 'hidden': true},
+                                           "status": {'value': '{{role.post.status}}', 'hidden': true},
+                                           "postPicture": {"value": '{{images.noPicture}}', "hidden": false},
+                                       };
+                        {% if role.post.postPicture and role.post.postPicture.url %}
+                            newRole["post"]["postPicture"]["value"] = '{{role.post.postPicture.url}}';
+                        {% endif %}
+
+                        {% if role.post.paid and role.post.paidDescription %}
+                            newRole["post"]["paid"]["value"] = "Paid &#10004 - {{role.post.paidDescription}}";
+                        {% elif role.post.paid %}
+                            newRole["post"]["paid"]["value"] = "Paid &#10004";
+                        {% elif role.post.paidDescription %}
+                            newRole["post"]["paid"]["value"] = "Unpaid - {{role.post.paidDescription}}";
+                        {% else %}
+                            newRole["post"]["paid"]["value"] = "Unpaid";
+                        {% endif %}
+
+                    if('{{role.post.status}}' in roleDict){
+                        roleDict['{{role.post.status}}'].push(newRole);
+                    };
                     {% endif %}
-                }
-            }else if(postField.name == "startTime" || postField.name == "endTime"){
-                postField.input = postField.input.replace('type="text"', 'type="time"')
-                if(postField.name == "startTime"){
-                    postField.value = defaultStartTime;
-                }else{
-                    postField.value = defaultEndTime;
-                }
-            }else if(selectFields != null){
-                var roleSelectFields = {{ selectFields.roles.names|safe }};
-                var jobSelectFields = {{ selectFields.jobs.names|safe }}
-                if(roleSelectFields.indexOf(name) >= 0 && activeTab == "roles"){
-                    {% if selectFields.roles.options %}
-                        var options = {{ selectFields.roles.options|safe }}
-                        postField.options = options[postField.name]
-                    {% endif %}
-                }else if(jobSelectFields.indexOf(name) >= 0 && activeTab == "jobs"){
-                    {% if selectFields.jobs.options %}
-                        var options = {{ selectFields.jobs.options|safe }}
-                        postField.options = options[postField.name]
-                    {% endif %}
-                }else{
-                    //project
-                    var projectSelectFields = {{ selectFields.projects.names|safe }};
-                    {% if selectFields.projects.options %}
-                        var options = {{ selectFields.projects.options|safe }}
-                        postField.options = options[postField.name]
-                    {% endif %}
-                }
-            }
-            if(save){
-                // If value was added but it's not in input, add it (TODO change value in input if it is already there)
-                if(postField.input.indexOf("value=") < 0 && postField.value.length > 0 && postField.value != "None"){
-                    postField.input = postField.input.replace(">", " value='" + postField.value + "'>")
-                }
-                return postField;
-            }
-        return null;
-    }
-
-    function submitProjectForm(formName){
-        // Set the status from the select bar in the form
-        var statusDiv = document.getElementById("statusSelectBarProject");
-        if(statusDiv != null){
-            document.getElementById("statusSelectInputProject").value = statusDiv.value;
-        }
-
-        // Set values of all other select fields
-        {% if selectFields.projects.names %}
-            {% for name in selectFields.projects.names %}
-                var selectDiv = document.getElementById('{{name}}SelectBarProject')
-                if(selectDiv != null){
-                    document.getElementById('{{name}}SelectInputProject').value = selectDiv.value;
-                }
-            {% endfor %}
-        {% endif %}
-
-        // Submit the form
-        var form = document.getElementById(formName)
-        if(form != null){
-            return form.submit();
-        }
-    }
-
-    var newPostPictureURLs = {}
-    function submitProjectSubForm(formName, edit){
-        // Submits the form while adding values of select bars with id '{{name}}SelectBar' to form input '{{name}}SelectInput'
-        var statusDiv = document.getElementById("statusSelectBar");
-        if(statusDiv != null){
-            // Set the status from the select bar in the form
-            document.getElementById("statusSelectInput").value = statusDiv.value;
-        }
-
-        var ajaxURL;
-        if(activeTab === "roles"){
-            ajaxURL = "/ajax/createNewCastingPost/";
-            {% if selectFields.roles.names %}
-                {% for name in selectFields.roles.names %}
-                    var selectDiv = document.getElementById('{{name}}SelectBar')
-                    if(selectDiv != null){
-                        document.getElementById('{{name}}SelectInput').value = selectDiv.value;
-                    }
                 {% endfor %}
             {% endif %}
-        }else if(activeTab === "jobs"){
-            ajaxURL = "/ajax/createNewWorkPost/";
-            {% if selectFields.jobs.names %}
-                {% for name in selectFields.jobs.names %}
-                    var selectDiv = document.getElementById('{{name}}SelectBar')
-                    if(selectDiv != null){
-                        document.getElementById('{{name}}SelectInput').value = selectDiv.value;
-                    }
+            roleEntries = roleDict;
+        }
+        return roleEntries;
+    }
+
+    var jobEntries;
+    function getBrowseJobsDict(){
+        if(jobEntries == null){
+            var jobDict = {"Open": [], "Opening soon": [], "Filled": []};
+            {% if jobs %}
+                {% for job in jobs %}
+                    var newJob = {"user": {}, "post": {}};
+                    {% if job.worker %}
+                        newJob["user"] = {"username": '{{job.user.username}}', "cleanName": '{{job.user.cleanName}}'}
+                        {% if role.actor.profilePicture and role.actor.profilePicture.url %}
+                            newJob["user"]["profilePicture"] = '{{job.user.profilePicture.url}}';
+                        {% else %}
+                            newJob["user"]["profilePicture"] = '{{images.noProfilePicture}}';
+                        {% endif %}
+                    {% endif %}
+
+                    {% if job.post %}
+                        newJob["post"] = {"postID": {'value': '{{job.post.postID}}', 'hidden': true},
+                                           "profession": {'value': '{{job.post.profession}}', 'hidden': false},
+                                           "startDate": {'value': 'Start: {{job.post.startDate}}', 'hidden': false},
+                                           "endDate": {'value': 'End: {{job.post.endDate}}', 'hidden': false},
+                                           "hoursPerWeek": {'value': 'Hours/week: {{job.post.hoursPerWeek}}', 'hidden': false},
+                                           "paid": {'value': '{{job.post.paid}}', "hidden": false},
+                                           "title": {'value': '{{job.post.title}}', 'hidden': false},
+                                           "location": {'value': '{{job.post.location}}', 'hidden': true},
+                                           "status": {'value': '{{job.post.status}}', 'hidden': true},
+                                           "postPicture": {"value": '{{images.noPicture}}', "hidden": false},
+                                       };
+                        {% if job.post.postPicture and job.post.postPicture.url %}
+                            newJob["post"]["postPicture"]["value"] = '{{job.post.postPicture.url}}';
+                        {% endif %}
+
+                        {% if job.post.paid and job.post.paidDescription %}
+                            newJob["post"]["paid"]["value"] = "Paid &#10004 - {{job.post.paidDescription}}";
+                        {% elif job.post.paid %}
+                            newJob["post"]["paid"]["value"] = "Paid &#10004";
+                        {% elif job.post.paidDescription %}
+                            newJob["post"]["paid"]["value"] = "Unpaid - {{job.post.paidDescription}}";
+                        {% else %}
+                            newJob["post"]["paid"]["value"] = "Unpaid";
+                        {% endif %}
+
+                    if('{{job.post.status}}' in jobDict){
+                        jobDict['{{job.post.status}}'].push(newJob);
+                    };
+                    {% endif %}
                 {% endfor %}
             {% endif %}
-        }else if(activeTab === "events"){
-            // Events currently has no select bars, so dont need to update any inputs
-            ajaxURL = "/ajax/createNewEventPost/"
+            jobEntries = jobDict;
         }
-        if(edit){
-            ajaxURL = "/ajax/editExistingPost/";
+        return jobEntries;
+    }
+
+    var eventEntries;
+    function getBrowseEventsDict(){
+        if(eventEntries == null){
+            var eventDict = {"Announced": [], "Upcoming": [], "Today": [], "Past": [], "Cancelled": []};
+            {% if events %}
+                {% for event in events %}
+                    var newEvent = {"post": {}};
+                    {% if event.post %}
+                        newEvent["post"] = {"postID": {'value': '{{event.post.postID}}', 'hidden': true},
+                                            "admissionInfo": {'value': '{{event.post.admissionInfo}}', 'hidden': false},
+                                           "date": {'value': 'Date: {{event.post.date}}', 'hidden': false},
+                                           "startTime": {'value': 'Start: {{event.post.startTime}}', 'hidden': false},
+                                           "endTime": {'value': 'End: {{event.post.endTime}}', 'hidden': false},
+                                           "host": {'value': '{{event.post.host}}', 'hidden': false},
+                                           "title": {'value': '{{event.post.title}}', 'hidden': false},
+                                           "location": {'value': '{{event.post.location}}', 'hidden': true},
+                                           "status": {'value': '{{event.post.eventStatus}}', 'hidden': true},
+                                           "postPicture": {"value": '{{images.noPicture}}', "hidden": false},
+                                       };
+                        {% if event.post.postPicture and event.post.postPicture.url %}
+                            newEvent["post"]["postPicture"]["value"] = '{{event.post.postPicture.url}}';
+                        {% endif %}
+                    if(newEvent["post"]["status"]["value"] in eventDict){
+                        eventDict[newEvent["post"]["status"]["value"]].push(newEvent);
+                    };
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+            eventEntries = eventDict;
         }
-
-        var form = document.getElementById(formName)
-        if(form != null){
-            $.ajax({
-                url : ajaxURL,
-                data : $("[id='" + formName + "']").serialize(),
-                type : 'POST',
-                dataType: "json",
-                success : function(data) {
-                    if(data["success"]){
-                        var nextPic = data["pictureURL"];
-                        if(data["removedPicture"]){
-                            nextPic = "{{images.noPicture}}";
-                        }
-
-                        newPostPictureURLs[data["postID"]] = nextPic;
-                        addNewPostToExistingList(form, nextPic, edit);
-                        if(edit){
-                            toggleExpandExistingForm("shrink", nextPic, edit, function(){selectProjectTab(activeTab)})
-                        }else{
-                            toggleExpandNewForm("shrink", activeTab, function(){selectProjectTab(activeTab)})
-                        }
-                    }else{
-                        if(data["errors"]){
-                            errorRow = document.getElementById("formErrorRow");
-                            if(errorRow != null){
-                                errorRow.innerHTML = "<td colspan='3'>" + getErrorPanel(data["errors"]) + "</td>";
-                            }
-                            currentFormHeight = formHeights[activeTab];
-                            currentFormHeightInt = parseInt(currentFormHeight.substring(0, currentFormHeight.length - 2));
-                            newFormHeight = (currentFormHeightInt + 95) + "px";
-
-                            formDiv = document.getElementById("insertNewFormDiv");
-                            if(edit){
-                                formDiv = document.getElementById("insertExistingFormDiv");
-                            }
-                            if(formDiv != null){
-                                formDiv.style.height = newFormHeight;
-                            }
-                        }
-                    }
-                }
-            });
-        }
+        return eventEntries;
     }
 
     function createSingleRoleDict(dataForm, imageURL){
@@ -780,6 +698,32 @@
         }
     }
 
+    function getSingularFromPlural(plural){
+        if(plural.substring(plural.length-1, plural.length) == "s"){
+            return plural.substring(0, plural.length-1);
+        }
+        return plural
+    }
+
+    function createAddNewButton(tabType){
+        var buttonString = "";
+        var expandType = "expand";
+        if(expanded){
+            expandType = "shrink";
+        }
+
+        buttonString += "<div id='addNewBrowseFormButton' class='addNewPostButton' onclick='toggleExpandNewForm(" + '"' + expandType + '", "' + tabType + '");' + "' style='width: 110px;position: relative; margin-top: 4px; margin-left: 4px;'> <div style='margin-top: -15px; position: absolute; top: 55%; margin-left: 7px;'><h3 style='font-weight: 300;'>Add new</h3></div> <img src='{{images.plus}}' style='height: 23px; width: 23px; position:absolute; right: 6%; top: 12%;'></div>";
+        
+        return buttonString
+    }
+
+    function getEmptyListButton(listType){
+        var contentString = "<div style='position: relative; margin-top: 20px;'><div id='addNewPanel' class='addNewPanel' style='height:0px; width: 99.5%; border: none; position: absolute; top:0; z-index: 2; margin-top: -13px;'></div><div style='width: 100%; height: 60px; text-align: center; position:absolute; top: 30%; left: -20%; background: #FFF;' ><h3 style='display: inline;'>No " + listType + " registered.</h3><div class='whiteButton blackHover' onclick='toggleExpandListPanel(" + '"expand", "' + listType + '", "vertical");' + "' style='position: absolute; left: 70%; margin-top: -12px; width: 22%;'> Add </div></div>"
+        return contentString
+    }
+
+    /********************************* getFormDictFunctions (get data for new/existing forms) ****************************/
+
     function getNewElementForm(formType){
         var formString = "";
         if(formType === "roles"){
@@ -813,153 +757,486 @@
         return formString;
     }
 
-    var expanded = false;
-    var transitionSpeed = 350;
-    var formHeights = {"roles": "1335px", "jobs": "1105px", "events": "780px"}
-    function toggleExpandNewForm(toggleType, panelType, shrinkAnimationFinishCallback){
-        var newFormDiv = document.getElementById("insertNewFormDiv")
-        var browsePostsDiv = document.getElementById("projectContentList")
-        var filterBarDiv = document.getElementById("projectContentListHeader")
-        if(newFormDiv == null || browsePostsDiv == null){
-            return;
-        }
+    function getProjectFormDict(){
+        var postFields = {}
+        var errors = {"required": []};
 
-        if(toggleType === "expand"){
-            newFormDiv.style.visibility = "visible";
-            $("#insertNewFormDiv").animate({marginTop: "0px", height: formHeights[panelType]}, transitionSpeed);
+        {% if forms.project %}
+            {% spaceless %}
+            {% for field in forms.project %}
+                var postField = createPostField('project', '{{field.name}}', '{{field.value}}', '{{field.label}}', '{{field}}', '{{field.errors}}')
+                if(postField != null){
+                    postFields[postField.name] = postField;
+                }
 
-            //newFormDiv.style.border = "2px solid #000";
-            // Optional: animate filter bar to shrink as opposed to just making invisible
-            $("#projectContentListHeader").animate({marginTop: "0px", height: "0px"}, transitionSpeed);
-            filterBarDiv.style.visibility = "hidden";
-            browsePostsDiv.style.marginTop = "20px";
-            newFormDiv.innerHTML = getNewElementForm(panelType);
-            addElementStatusSelect(panelType);
-            expanded = true;
-        }else{
-            $("#insertNewFormDiv").animate({marginTop: "0px", height: "0px"}, transitionSpeed, function(){newFormDiv.style.visibility = "hidden"});
+                // Add any form errors to the error dict
+                {% if field.errors %}
+                    {% for error in field.errors %}
+                        var errorString = '{{error}}';
+                        var fieldDisplayName = postField.label.replace("*", "");
 
-            //newFormDiv.style.border = "2px solid #000";
-            // Optional: animate filter bar to shrink as opposed to just making invisible
-            $("#projectContentListHeader").animate({marginTop: "0px", height: "40px"}, transitionSpeed, function(){
-                filterBarDiv.style.visibility = "visible";
-                newFormDiv.innerHTML = createAddNewButton(panelType);
-                if(shrinkAnimationFinishCallback != null){
-                    shrinkAnimationFinishCallback();
+                        // Want to group all fields with the same error
+                        if(errorString ===  "This field is required."){
+                            errors["required"].push(fieldDisplayName);
+                        }
+                    {% endfor %}
+                {% endif %}
+            {% endfor %}
+            {% endspaceless %}
+
+            // Add csrf token
+            var csrfField = {"name": "csrf_token", "input": "{% csrf_token %}", "hidden": true};
+            postFields['csrf_token'] = csrfField;
+
+            // Add cancel button with onclick
+            var cancelButton = {'name': 'cancelButton', 'onclick': 'redirectToPost("{{post.postID}}");', "hidden": true};
+            postFields['cancelButton'] = cancelButton;
+
+            // Add create/update button with onclick
+            var createButton = {'name': 'createButton', 'onclickFunction': 'submitProjectForm', "hidden": true};
+            postFields['createButton'] = createButton;
+
+            if(errors["required"].length > 0){
+                postFields["errors"] = errors;
+            }
+
+            {% if post %}
+                postFields["newPost"] = false;
+            {% else %}
+                postFields["newPost"] = true;
+            {% endif %}
+        {% endif %}
+        return postFields;
+    }
+
+    function getExistingFormDict(postID, postType, loadSuccessCallback){
+        var postData;
+        if(postID != null && postID.length > 0){
+            $.ajax({
+                url : "/ajax/getPostData/",
+                data : {"postID": postID},
+                type : 'POST',
+                dataType: "json",
+                success : function(data) {
+                    if(data["success"]){
+                        // If a new picture has been added and page has not been refreshed, need to set picURl to temp value (browser won't update image at same path)
+                        var newPictureURL = newPostPictureURLs[postID];
+                        if(newPictureURL != null){
+                            data["postData"]["postPicture"] = newPictureURL
+                        }
+                        var formDict;
+                        if(postType === "roles"){
+                            formDict = getCastingFormDict(false, data["postData"])
+                        }else if(postType === "jobs"){
+                            formDict = getWorkFormDict(false, data["postData"])
+                        }else if(postType === "events"){
+                            formDict = getEventFormDict(false, data["postData"])
+                        }
+                        loadSuccessCallback(formDict);
+                    }
                 }
             });
-            browsePostsDiv.style.marginTop = "0px";
-            expanded = false;
         }
     }
 
-    var currentExistingFormPostID = ''
-    function toggleExpandExistingForm(toggleType, panelType, postID, shrinkAnimationFinishCallback){
-        var editButton = document.getElementById("editPostButton_" + postID)
-        var borderCover = document.getElementById("postPanelBorderCover_" + postID);
-        var postPanel = document.getElementById("browseTablePost_" + postID);
+    function getCastingFormDict(newPost, existingPostData){
+        var postFields = {}
+        {% if forms.role %}
+            {% spaceless %}
+                {% for field in forms.role %}
+                    addPostField(postFields, "casting", '{{field.name}}', '{{field.value}}', '{{field.label}}', '{{field}}', existingPostData)
+                {% endfor %}
+            {% endspaceless %}
 
+            // Add actor
+            var actorField = {"username": "{{actor.username}}", "cleanName": "{{actor.cleanName}}"}
+            {% if actor %}
+                actorField["username"] = "{{actor.username}}";
+                actorField["cleanName"] = "{{actor.cleanName}}";
+                {% if actor.profilePicture %}
+                    actorField.profilePictureURL = '{{actor.profilePicture.url}}';
+                {% endif %}
+            {% else %}
+                actorField["username"] = null;
+                actorField.profilePictureURL = '{{images.noProfilePicture}}';
+            {% endif %}
+            postFields["actor"] = actorField;
 
-        if(toggleType === "expand"){
-            if(currentExistingFormPostID != '' && currentExistingFormPostID != null){
-                // Shrink existing panel and then expand new one
-                return toggleExpandExistingForm("shrink", panelType, currentExistingFormPostID, function(){toggleExpandExistingForm("expand", panelType, postID)});
+            // Add other required fields (csrf_token, onCancel, etc)
+            postFields = modifyCastingPostFields(postFields, newPost, "roles");
+        {% endif %}
+        return postFields;
+    }
+
+    function getWorkFormDict(newPost, existingPostData){
+        var postFields = {}
+        {% if forms.job %}
+            {% spaceless %}
+                {% for field in forms.job %}
+                    addPostField(postFields, "work", '{{field.name}}', '{{field.value}}', '{{field.label}}', '{{field}}', existingPostData)
+                {% endfor %}
+            {% endspaceless %}
+
+            // Add actor
+            var workerField = {"username": "{{worker.username}}", "cleanName": "{{worker.cleanName}}"}
+            {% if actor %}
+                workerField["username"] = "{{worker.username}}";
+                workerField["cleanName"] = "{{worker.cleanName}}";
+                {% if worker.profilePicture %}
+                    workerField.profilePictureURL = '{{worker.profilePicture.url}}';
+                {% endif %}
+            {% else %}
+                workerField["username"] = null;
+                workerField.profilePictureURL = '{{images.noProfilePicture}}';
+            {% endif %}
+            postFields["worker"] = workerField;
+
+            // Add other required fields (csrf_token, onCancel, etc)
+            postFields = modifyCastingPostFields(postFields, newPost, "jobs");
+        {% endif %}
+        return postFields;
+    }
+
+    function getEventFormDict(newPost, existingPostData){
+        var postFields = {}
+        {% if forms.event %}
+            {% spaceless %}
+                {% for field in forms.event %}
+                    addPostField(postFields, "work", '{{field.name}}', '{{field.value}}', '{{field.label}}', '{{field}}', existingPostData)
+                {% endfor %}
+            {% endspaceless %}
+
+            // Add other required fields (csrf_token, onCancel, etc)
+            postFields = modifyCastingPostFields(postFields, newPost, "events");
+        {% endif %}
+        return postFields;
+    }
+
+    function addElementStatusSelect(elementType){
+        var elementStatusSelectDiv = document.getElementById("elementStatusSelectDiv");
+        if(elementStatusSelectDiv != null){
+            var options = null;
+            if(elementType == "roles"){
+                {% if statusOptions.roles %}
+                    options = {{statusOptions.roles|safe}}
+                {% endif %}
+            }else if(elementType == "jobs"){
+                {% if statusOptions.jobs %}
+                    options = {{statusOptions.jobs|safe}}
+                {% endif %}
+            }else if(elementType == "events"){
+                {% if statusOptions.events %}
+                    options = {{statusOptions.events|safe}}
+                {% endif %}
             }
-            currentExistingFormPostID = postID;
-            var postRow = $('[id=browseTablePost_' + postID + ']').closest('tr');
-            var rowDiv = document.getElementById(postRow[0].id);
-            if(rowDiv != null){
-                // Create new row
-                var newRow = document.createElement('tr');
-                newRow.id = "insertExistingFormDivContainerRow"
+            addStatusBar("elementStatusSelectDiv", "elementStatusSelect", "Open", "addNewElementForm", options)
+        }
+    }
 
-                // Create new col with ful colspan
-                var newCol = document.createElement('td');
-                newCol.colSpan = tableColCount;
+    /*************************************************************************/
 
-                // Create new form div to put in column
-                var newFormDiv = document.createElement('div');
-                newFormDiv.className = "browseTableForm";
-                newFormDiv.id = "insertExistingFormDiv";
-                newFormDiv.style.overflow = "hidden";
-                newFormDiv.style.height = "0px";
-                setExistingElementForm(panelType, postID, newFormDiv)
 
-                // Add the div to col, col to row, and row after the parent row
-                newCol.appendChild(newFormDiv)
-                newRow.appendChild(newCol)
-                rowDiv.parentNode.insertBefore(newRow, rowDiv.nextSibling);
-                $("#insertExistingFormDiv").animate({marginTop: "0px", height: formHeights[panelType]}, transitionSpeed + 200);
+    /********************************* Helper functions to create form dict ****************************/
+
+    // Add a new post field
+    function addPostField(targetList, postType, name, value, label, input, existingValues){
+        // Either get value from context for new posts, or existingPostData for existing posts
+        if(existingValues != null){
+            var tempValue = existingValues[name];
+            if(tempValue != null && tempValue.length > 0 && tempValue != "None"){
+                value = tempValue;
+            }
+        }
+
+        if(value === "None"){
+            value = "";
+        }
+
+        // Create the postField for this field and add it to the dict, indexed by field name
+        var postField = createPostField(postType, name, value, label, input)
+        if(postField != null){
+            targetList[postField.name] = postField;
+        }
+    }
+
+    // Adds the necessary casting post fields to the postFields dict
+    function modifyCastingPostFields(postFields, newPost, postType){
+            // Add project
+            var projectField = {"name": "project"}
+            {% if post and post.title %}
+                projectField.title  = '{{post.title}}';
+                projectField.projectID = '{{post.postID}}';
+            {% endif %}
+            postFields["project"] = projectField
+
+            // Add csrf token
+            var csrfField = {"name": "csrf_token", "input": "{% csrf_token %}", "hidden": true};
+            postFields['csrf_token'] = csrfField;
+
+            // Add cancel button with onclick
+            var editOnclick;
+            if(newPost){
+                editOnclick = 'toggleExpandNewForm("shrink", "' + postType + '");'
+            }else{
+                editOnclick = 'toggleExpandExistingForm("shrink", "' + postType + '");'
+            }
+            var cancelButton = {'name': 'cancelButton', 'onclick': editOnclick, "hidden": true};
+            postFields['cancelButton'] = cancelButton;
+
+            // Add create/update button with onclick
+            var createButton = {'name': 'createButton', 'onclickFunction': 'submitProjectSubForm', "hidden": true};
+            postFields['createButton'] = createButton;
+
+            postFields["newPost"] = newPost;
+            return postFields;
+    }
+
+    // Actually create the post field
+    function createPostField(postType, name, value, label, input){
+            var save = true;
+            var postField = {"name": name, "value": value, "hidden": false, "label": label, 'input': input}
+            if(input.indexOf('hidden') >= 0){
+                postField.hidden = true;
             }
 
-            // Change onclick of edit button to shrink form
-            if(editButton != null){
-                editButton.onclick = function(){
-                    toggleExpandExistingForm("shrink", panelType, postID, shrinkAnimationFinishCallback);
-                };
-                editButton.innerHTML = "Hide";
-            }
+            var statusOptions;
+            {% if statusOptions %}
+                statusOptions = {{ statusOptions|safe }}
+            {% endif %}
 
-            // Change panel background to white
-            if(postPanel != null){
-                postPanel.style.background = "#FFF";
-            }
+            var selectFields;
+            {% if selectFields %};
+                selectFields = {{ selectFields|safe }};
+            {% endif %}
 
-            // Add border cover
-            if(borderCover != null){
-                borderCover.style.visibility = "visible";
-            }
-        }else{
-            // Shrinking, so no post id is active
-            currentExistingFormPostID = '';
 
-            // Shrink the form and call any cleanup functions 
-            $("#insertExistingFormDiv").animate({marginTop: "0px", height: "0px"}, transitionSpeed, function(){
-                $("#insertExistingFormDivContainerRow").remove()
-
-                // Add border cover
-                if(borderCover != null){
-                    borderCover.style.visibility = "hidden";
+            if(postField.name == "projectID"){
+                postField.value = "{{post.projectID}}";
+            }else if(postField.name == "postID" && (value == null || value.length === 0)){
+                if(postType != 'project'){
+                    postField.value = getNewPostID(postType);
+                }else{
+                    postField.value = '{{post.postID}}';
                 }
-
-                // Change panel background to white
-                if(postPanel != null){
-                    postPanel.style.background = "#efefef";
+            }else if(postField.name == "postPicture"){
+                var isProject = false;
+                if(postType === "project"){
+                    isProject = true;
+                    {% if post.postPicture %}
+                        postField.value = "{{post.postPicture.url}}";
+                    {% else %}
+                        postField.value = "{{images.noPicture}}";
+                    {% endif %}
+                }else if(value == null || value.length === 0){
+                    postField.value = "{{images.noPicture}}";
                 }
+                postField.editOnclick = "toggleEditPicturePopup('show', " + isProject + ", '" + postField.value + "')";
+            }else if(postField.name == "paid"){
+                var currentInput = postField.input;
+                var paidDescription = '{{post.paidDescription}}'
+                if(paidDescription === "None"){
+                    paidDescription = ''
+                }
+                postField.input = "<div style='position: relative; margin-top: -5px;'>" + currentInput + "<div style='position: absolute; top: 0; right: 0; margin-top: 6px; width: 90%; min-width: 180px; text-align: right;'><div style='position: relative;'> <div style='position: absolute; left: 0;' class='editPostLabelPanel'>Specify </div><div style='position: absolute; left: 0; right: 0; margin-right: 3px; margin-left: 68px; margin-top: -3px;'><input type='text' name='paidDescription' value='" + paidDescription + "' style='display: inline; margin-top: -10px;'></div></div></div>"
+            }else if(postField.name === "paidDescription"){
+                // Paid description will be on same line as paid
+                save = false;
+            }else if(postField.name === "status"){
+                var options = [];
+                if("roles" in statusOptions && postType == "casting"){
+                    options = {{ statusOptions.roles|safe }}
+                }else if("jobs" in statusOptions && postType == "work"){
+                    options = {{ statusOptions.jobs|safe }}
+                }else{
+                    options = {{ statusOptions.projects|safe }}
+                }
+                postField.options = options;
+            }else if(postField.name == "description"){
+                postField.numRows = 20;
+                if(postField.value.length <= 0 || postField.value === "None"){
+                    postField.value = "";
+                }
+                if(activeTab === "roles"){
+                    postField["placeholder"] = "John is a charismatic father of 2 who loves his dogs."
+                }else if(activeTab === "jobs"){
+                    postField["placeholder"] = 'The hiree must be able to handle all camera operations for all set days. They will be compensated at an hourly rate, with potential for reshoots after primary production.';
+                }else if(activeTab === "events"){
+                    postField["placeholder"] = "Casting multiple minor roles for The Greate Gatsby. All actors, male and female, of all ages are welcome."
+                }else{
+                    //project
+                    postField["placeholder"] = "The Great Gatsby is a tale of love and loss. We will be shooting it over the next 3 weeks to create a short ode to the F Scott Fitzgerald classic."
+                }
+            }else if(postField.name == "poster"){
+                postField.value = "{{ request.user.username }}"
+                postField.input = postField.input.replace('name="poster"', 'name="poster" value="' + postField.value + '"')
+            }else if(postField.name === "startDate" || postField.name === "endDate" || postField.name === "date"){
+                postField.input = postField.input.replace('type="text"', 'type="date"')
+                if(postField.value == null || postField.value.length === 0){
+                    {% if postField.name == "startDate" %}
+                        postField.value = currentDateString
+                    {% else %}
+                        postField.value = tomorrowDateString;
+                    {% endif %}
+                }
+            }else if(postField.name == "startTime" || postField.name == "endTime"){
+                postField.input = postField.input.replace('type="text"', 'type="time"')
+                if(postField.name == "startTime"){
+                    postField.value = defaultStartTime;
+                }else{
+                    postField.value = defaultEndTime;
+                }
+            }else if(selectFields != null){
+                var roleSelectFields = {{ selectFields.roles.names|safe }};
+                var jobSelectFields = {{ selectFields.jobs.names|safe }}
+                if(roleSelectFields.indexOf(name) >= 0 && activeTab == "roles"){
+                    {% if selectFields.roles.options %}
+                        var options = {{ selectFields.roles.options|safe }}
+                        postField.options = options[postField.name]
+                    {% endif %}
+                }else if(jobSelectFields.indexOf(name) >= 0 && activeTab == "jobs"){
+                    {% if selectFields.jobs.options %}
+                        var options = {{ selectFields.jobs.options|safe }}
+                        postField.options = options[postField.name]
+                    {% endif %}
+                }else{
+                    //project
+                    var projectSelectFields = {{ selectFields.projects.names|safe }};
+                    {% if selectFields.projects.options %}
+                        var options = {{ selectFields.projects.options|safe }}
+                        postField.options = options[postField.name]
+                    {% endif %}
+                }
+            }
+            if(save){
+                // If value was added but it's not in input, add it (TODO change value in input if it is already there)
+                if(postField.input.indexOf("value=") < 0 && postField.value.length > 0 && postField.value != "None"){
+                    postField.input = postField.input.replace(">", " value='" + postField.value + "'>")
+                }
+                return postField;
+            }
+        return null;
+    }
 
-                if(shrinkAnimationFinishCallback != null){
-                    shrinkAnimationFinishCallback();
+    /*function submitForm(formName){
+        if(formName == null){
+            formName = "editContentForm";
+        }
+        var statusDiv = document.getElementById("statusSelect");
+        if(statusDiv != null){
+            // Set the status from the select bar in the form
+            document.getElementById("id_status").value = statusDiv.value;
+        }
+        var form = document.getElementById(formName)
+        if(form != null){
+            return form.submit()
+        }
+    }*/
+
+    function submitProjectForm(formName){
+        // Set the status from the select bar in the form
+        var statusDiv = document.getElementById("statusSelectBarProject");
+        if(statusDiv != null){
+            document.getElementById("statusSelectInputProject").value = statusDiv.value;
+        }
+
+        // Set values of all other select fields
+        {% if selectFields.projects.names %}
+            {% for name in selectFields.projects.names %}
+                var selectDiv = document.getElementById('{{name}}SelectBarProject')
+                if(selectDiv != null){
+                    document.getElementById('{{name}}SelectInputProject').value = selectDiv.value;
+                }
+            {% endfor %}
+        {% endif %}
+
+        // Submit the form
+        var form = document.getElementById(formName)
+        if(form != null){
+            return form.submit();
+        }
+    }
+
+    var newPostPictureURLs = {}
+    function submitProjectSubForm(formName, edit){
+        // Submits the form while adding values of select bars with id '{{name}}SelectBar' to form input '{{name}}SelectInput'
+        var statusDiv = document.getElementById("statusSelectBar");
+        if(statusDiv != null){
+            // Set the status from the select bar in the form
+            document.getElementById("statusSelectInput").value = statusDiv.value;
+        }
+
+        var ajaxURL;
+        if(activeTab === "roles"){
+            ajaxURL = "/ajax/createNewCastingPost/";
+            {% if selectFields.roles.names %}
+                {% for name in selectFields.roles.names %}
+                    var selectDiv = document.getElementById('{{name}}SelectBar')
+                    if(selectDiv != null){
+                        document.getElementById('{{name}}SelectInput').value = selectDiv.value;
+                    }
+                {% endfor %}
+            {% endif %}
+        }else if(activeTab === "jobs"){
+            ajaxURL = "/ajax/createNewWorkPost/";
+            {% if selectFields.jobs.names %}
+                {% for name in selectFields.jobs.names %}
+                    var selectDiv = document.getElementById('{{name}}SelectBar')
+                    if(selectDiv != null){
+                        document.getElementById('{{name}}SelectInput').value = selectDiv.value;
+                    }
+                {% endfor %}
+            {% endif %}
+        }else if(activeTab === "events"){
+            // Events currently has no select bars, so dont need to update any inputs
+            ajaxURL = "/ajax/createNewEventPost/"
+        }
+        if(edit){
+            ajaxURL = "/ajax/editExistingPost/";
+        }
+
+        var form = document.getElementById(formName)
+        if(form != null){
+            $.ajax({
+                url : ajaxURL,
+                data : $("[id='" + formName + "']").serialize(),
+                type : 'POST',
+                dataType: "json",
+                success : function(data) {
+                    if(data["success"]){
+                        var nextPic = data["pictureURL"];
+                        if(data["removedPicture"]){
+                            nextPic = "{{images.noPicture}}";
+                        }
+
+                        newPostPictureURLs[data["postID"]] = nextPic;
+                        addNewPostToExistingList(form, nextPic, edit);
+                        if(edit){
+                            toggleExpandExistingForm("shrink", nextPic, edit, function(){selectProjectTab(activeTab)})
+                        }else{
+                            toggleExpandNewForm("shrink", activeTab, function(){selectProjectTab(activeTab)})
+                        }
+                    }else{
+                        if(data["errors"]){
+                            errorRow = document.getElementById("formErrorRow");
+                            if(errorRow != null){
+                                errorRow.innerHTML = "<td colspan='3'>" + getErrorPanel(data["errors"]) + "</td>";
+                            }
+                            currentFormHeight = formHeights[activeTab];
+                            currentFormHeightInt = parseInt(currentFormHeight.substring(0, currentFormHeight.length - 2));
+                            newFormHeight = (currentFormHeightInt + 95) + "px";
+
+                            formDiv = document.getElementById("insertNewFormDiv");
+                            if(edit){
+                                formDiv = document.getElementById("insertExistingFormDiv");
+                            }
+                            if(formDiv != null){
+                                formDiv.style.height = newFormHeight;
+                            }
+                        }
+                    }
                 }
             });
-
-            // Change onclick of edit buttonback to expand form
-            if(editButton != null){
-                editButton.onclick = function(){
-                    toggleExpandExistingForm("expand", panelType, postID);
-                };
-                editButton.innerHTML = "Edit";
-            }
-
         }
-    }
-
-    function getSingularFromPlural(plural){
-        if(plural.substring(plural.length-1, plural.length) == "s"){
-            return plural.substring(0, plural.length-1);
-        }
-        return plural
-    }
-
-    function createAddNewButton(tabType){
-        var buttonString = "";
-        var expandType = "expand";
-        if(expanded){
-            expandType = "shrink";
-        }
-
-        buttonString += "<div id='addNewBrowseFormButton' class='addNewPostButton' onclick='toggleExpandNewForm(" + '"' + expandType + '", "' + tabType + '");' + "' style='width: 110px;position: relative; margin-top: 4px; margin-left: 4px;'> <div style='margin-top: -15px; position: absolute; top: 55%; margin-left: 7px;'><h3 style='font-weight: 300;'>Add new</h3></div> <img src='{{images.plus}}' style='height: 23px; width: 23px; position:absolute; right: 6%; top: 12%;'></div>";
-        
-        return buttonString
     }
 </script>
 
@@ -1015,13 +1292,6 @@ document.write(getPanelInfoFromNumColumns(tableColCount)["mainViewPanelWidth"] +
     <div id="editPostPanel" class="editPostPanel">
         <div id="projectForm"></div>
     </div>
-    <script>
-        var projectFormDiv = document.getElementById("projectForm");
-        if(projectFormDiv != null){
-            var newForm = addCreateProjectPost(getProjectFormDict(), "{{currentPageURL}}", "createProjectPostForm");
-            projectFormDiv.innerHTML = newForm;
-        }
-    </script>
     <table id='browseTableContainer' style="margin-top: 10px;">
             <tr>
                         <td colspan="3" >
@@ -1070,240 +1340,18 @@ document.write(getPanelInfoFromNumColumns(tableColCount)["mainViewPanelWidth"] +
         </table>
     </div>
 </div>
+
 <script>
+    // Run when all html is loaded
     var newPostIDs = {"casting": null, "work": null, "event": null}
     for(postType in newPostIDs){
         generateNewPostID(postType)
     }
 
-    function getEmptyListButton(listType){
-        var contentString = "<div style='position: relative; margin-top: 20px;'><div id='addNewPanel' class='addNewPanel' style='height:0px; width: 99.5%; border: none; position: absolute; top:0; z-index: 2; margin-top: -13px;'></div><div style='width: 100%; height: 60px; text-align: center; position:absolute; top: 30%; left: -20%; background: #FFF;' ><h3 style='display: inline;'>No " + listType + " registered.</h3><div class='whiteButton blackHover' onclick='toggleExpandListPanel(" + '"expand", "' + listType + '", "vertical");' + "' style='position: absolute; left: 70%; margin-top: -12px; width: 22%;'> Add </div></div>"
-        return contentString
-    }
-
-    var roleEntries;
-    function getBrowseRolesDict(){
-        if(roleEntries == null){
-            var roleDict = {"Open": [], "Cast": [], "Opening soon": []};
-            {% if roles %}
-                {% for role in roles %}
-                    var newRole = {"actor": {}, "post": {}};
-                    {% if role.actor %}
-                        newRole["actor"] = {"username": '{{role.actor.username}}', "cleanName": '{{role.actor.cleanName}}'}
-                        {% if role.actor.profilePicture and role.actor.profilePicture.url %}
-                            newRole["actor"]["profilePicture"] = '{{role.actor.profilePicture.url}}';
-                        {% else %}
-                            newRole["actor"]["profilePicture"] = '{{images.noProfilePicture}}';
-                        {% endif %}
-                    {% endif %}
-
-                    {% if role.post %}
-                        newRole["post"] = {"postID": {'value': '{{role.post.postID}}', 'hidden': true},
-                                           "characterName": {'value': '{{role.post.characterName}}', 'hidden': false},
-                                           "startDate": {'value': 'Start: {{role.post.startDate}}', 'hidden': false},
-                                           "endDate": {'value': 'End: {{role.post.endDate}}', 'hidden': false},
-                                           "hoursPerWeek": {'value': 'Hours/week: {{role.post.hoursPerWeek}}', 'hidden': false},
-                                           "paid": {'value': '{{role.post.paid}}', "hidden": false},
-                                           "title": {'value': '{{role.post.title}}', 'hidden': false},
-
-                                           "gender": {'value': '{{role.post.gender}}', 'hidden': true},
-                                           "status": {'value': '{{role.post.status}}', 'hidden': true},
-                                           "postPicture": {"value": '{{images.noPicture}}', "hidden": false},
-                                       };
-                        {% if role.post.postPicture and role.post.postPicture.url %}
-                            newRole["post"]["postPicture"]["value"] = '{{role.post.postPicture.url}}';
-                        {% endif %}
-
-                        {% if role.post.paid and role.post.paidDescription %}
-                            newRole["post"]["paid"]["value"] = "Paid &#10004 - {{role.post.paidDescription}}";
-                        {% elif role.post.paid %}
-                            newRole["post"]["paid"]["value"] = "Paid &#10004";
-                        {% elif role.post.paidDescription %}
-                            newRole["post"]["paid"]["value"] = "Unpaid - {{role.post.paidDescription}}";
-                        {% else %}
-                            newRole["post"]["paid"]["value"] = "Unpaid";
-                        {% endif %}
-
-                    if('{{role.post.status}}' in roleDict){
-                        roleDict['{{role.post.status}}'].push(newRole);
-                    };
-                    {% endif %}
-                {% endfor %}
-            {% endif %}
-            roleEntries = roleDict;
-        }
-        return roleEntries;
-    }
-
-    var jobEntries;
-    function getBrowseJobsDict(){
-        if(jobEntries == null){
-            var jobDict = {"Open": [], "Opening soon": [], "Filled": []};
-            {% if jobs %}
-                {% for job in jobs %}
-                    var newJob = {"user": {}, "post": {}};
-                    {% if job.worker %}
-                        newJob["user"] = {"username": '{{job.user.username}}', "cleanName": '{{job.user.cleanName}}'}
-                        {% if role.actor.profilePicture and role.actor.profilePicture.url %}
-                            newJob["user"]["profilePicture"] = '{{job.user.profilePicture.url}}';
-                        {% else %}
-                            newJob["user"]["profilePicture"] = '{{images.noProfilePicture}}';
-                        {% endif %}
-                    {% endif %}
-
-                    {% if job.post %}
-                        newJob["post"] = {"postID": {'value': '{{job.post.postID}}', 'hidden': true},
-                                           "profession": {'value': '{{job.post.profession}}', 'hidden': false},
-                                           "startDate": {'value': 'Start: {{job.post.startDate}}', 'hidden': false},
-                                           "endDate": {'value': 'End: {{job.post.endDate}}', 'hidden': false},
-                                           "hoursPerWeek": {'value': 'Hours/week: {{job.post.hoursPerWeek}}', 'hidden': false},
-                                           "paid": {'value': '{{job.post.paid}}', "hidden": false},
-                                           "title": {'value': '{{job.post.title}}', 'hidden': false},
-                                           "location": {'value': '{{job.post.location}}', 'hidden': true},
-                                           "status": {'value': '{{job.post.status}}', 'hidden': true},
-                                           "postPicture": {"value": '{{images.noPicture}}', "hidden": false},
-                                       };
-                        {% if job.post.postPicture and job.post.postPicture.url %}
-                            newJob["post"]["postPicture"]["value"] = '{{job.post.postPicture.url}}';
-                        {% endif %}
-
-                        {% if job.post.paid and job.post.paidDescription %}
-                            newJob["post"]["paid"]["value"] = "Paid &#10004 - {{job.post.paidDescription}}";
-                        {% elif job.post.paid %}
-                            newJob["post"]["paid"]["value"] = "Paid &#10004";
-                        {% elif job.post.paidDescription %}
-                            newJob["post"]["paid"]["value"] = "Unpaid - {{job.post.paidDescription}}";
-                        {% else %}
-                            newJob["post"]["paid"]["value"] = "Unpaid";
-                        {% endif %}
-
-                    if('{{job.post.status}}' in jobDict){
-                        jobDict['{{job.post.status}}'].push(newJob);
-                    };
-                    {% endif %}
-                {% endfor %}
-            {% endif %}
-            jobEntries = jobDict;
-        }
-        return jobEntries;
-    }
-
-    var eventEntries;
-    function getBrowseEventsDict(){
-        if(eventEntries == null){
-            var eventDict = {"Announced": [], "Upcoming": [], "Today": [], "Past": [], "Cancelled": []};
-            {% if events %}
-                {% for event in events %}
-                    var newEvent = {"post": {}};
-                    {% if event.post %}
-                        newEvent["post"] = {"postID": {'value': '{{event.post.postID}}', 'hidden': true},
-                                            "admissionInfo": {'value': '{{event.post.admissionInfo}}', 'hidden': false},
-                                           "date": {'value': 'Date: {{event.post.date}}', 'hidden': false},
-                                           "startTime": {'value': 'Start: {{event.post.startTime}}', 'hidden': false},
-                                           "endTime": {'value': 'End: {{event.post.endTime}}', 'hidden': false},
-                                           "host": {'value': '{{event.post.host}}', 'hidden': false},
-                                           "title": {'value': '{{event.post.title}}', 'hidden': false},
-                                           "location": {'value': '{{event.post.location}}', 'hidden': true},
-                                           "status": {'value': '{{event.post.eventStatus}}', 'hidden': true},
-                                           "postPicture": {"value": '{{images.noPicture}}', "hidden": false},
-                                       };
-                        {% if event.post.postPicture and event.post.postPicture.url %}
-                            newEvent["post"]["postPicture"]["value"] = '{{event.post.postPicture.url}}';
-                        {% endif %}
-                    if(newEvent["post"]["status"]["value"] in eventDict){
-                        eventDict[newEvent["post"]["status"]["value"]].push(newEvent);
-                    };
-                    {% endif %}
-                {% endfor %}
-            {% endif %}
-            eventEntries = eventDict;
-        }
-        return eventEntries;
-    }
-
-    function selectProjectTab(tabType){
-        for(var i=0; i < projectTabs.length; i++){
-            var buttonId = projectTabs[i] + "Button";
-            var borderCoverId = projectTabs[i] + "BorderCover";
-            var projectButtonDiv = document.getElementById(buttonId);
-            var projectButtonBorderCoverDiv = document.getElementById(borderCoverId)
-            if(projectButtonDiv != null && projectButtonBorderCoverDiv != null){
-                if(projectTabs[i] === tabType){
-                    projectButtonDiv.className = "projectTabButtonActive";
-                    activeTab = tabType;
-                    /*if(isElementListEmpty(tabType)){
-                        var projectContentPanel = document.getElementById("projectContentPanel");
-                        if(projectContentPanel != null){
-                            projectContentPanel.innerHTML = getEmptyListButton(tabType);
-                            $("#projectContentPanel").animate({marginTop: "-13px", height: "70px"}, 300);
-                            
-                        }
-                    }else{
-                        document.getElementById("addNewPanel").innerHTML = createAddNewButton(tabType);
-                    }*/
-                } else {
-                    projectButtonDiv.className = "projectTabButtonInactive";        
-                }
-            }
-        }
-
-        // Change the onclick of the addNew button
-        var addNewButton = document.getElementById("addNewBrowseFormButton");
-        if(addNewButton != null){
-            addNewButton.onclick = function(){
-                toggleExpandNewForm("expand", activeTab);
-            }
-        }
-
-        // If a post form was expanded on old tab, reset values
-        if(expanded){
-            toggleExpandNewForm("shrink", activeTab)
-        }
-        expanded = false;
-        currentExistingFormPostID = '';
-
-        var entries;
-        var sectionOrder;
-        var titleFieldName;
-        if(tabType === "roles"){
-            entries = getBrowseRolesDict();
-            sectionOrder = ["Open", "Opening soon", "Cast"];
-            titleFieldName = "characterName";
-        }else if(tabType == "jobs"){
-            entries = getBrowseJobsDict();
-            sectionOrder = ["Open", "Opening soon", "Filled"];
-            titleFieldName = "profession";
-        }else if(tabType == "events"){
-            entries = getBrowseEventsDict();
-            sectionOrder = ["Today", "Upcoming", "Past", "Announced", "Cancelled"];
-            titleFieldName = "title";
-        }
-        var table = createBrowseTable(tabType, entries, sectionOrder, true, titleFieldName)
-        var contentDiv = document.getElementById("projectContentList")
-        if(contentDiv != null){
-            contentDiv.innerHTML = table;
-        }
-        $(window).resize(function () {
-            resizeBrowseTable(function(){
-                document.getElementById("browseTable").style.width = tableColCount * 300 + "px";
-                selectProjectTab(activeTab);
-            });
-        });
-    }
-
-    function submitForm(formName){
-        if(formName == null){
-            formName = "editContentForm";
-        }
-        var statusDiv = document.getElementById("statusSelect");
-        if(statusDiv != null){
-            // Set the status from the select bar in the form
-            document.getElementById("id_status").value = statusDiv.value;
-        }
-        var form = document.getElementById(formName)
-        if(form != null){
-            return form.submit()
-        }
+    var projectFormDiv = document.getElementById("projectForm");
+    if(projectFormDiv != null){
+        var newForm = addCreateProjectPost(getProjectFormDict(), "{{currentPageURL}}", "createProjectPostForm");
+        projectFormDiv.innerHTML = newForm;
     }
 
     selectProjectTab("roles")
@@ -1315,27 +1363,5 @@ document.write(getPanelInfoFromNumColumns(tableColCount)["mainViewPanelWidth"] +
         {% endif %}
         addStatusBar("statusSelectDiv", "statusSelect", "{{ post.status }}", "editContentForm", options)
     }
-
-    function addElementStatusSelect(elementType){
-        var elementStatusSelectDiv = document.getElementById("elementStatusSelectDiv");
-        if(elementStatusSelectDiv != null){
-            var options = null;
-            if(elementType == "roles"){
-                {% if statusOptions.roles %}
-                    options = {{statusOptions.roles|safe}}
-                {% endif %}
-            }else if(elementType == "jobs"){
-                {% if statusOptions.jobs %}
-                    options = {{statusOptions.jobs|safe}}
-                {% endif %}
-            }else if(elementType == "events"){
-                {% if statusOptions.events %}
-                    options = {{statusOptions.events|safe}}
-                {% endif %}
-            }
-            addStatusBar("elementStatusSelectDiv", "elementStatusSelect", "Open", "addNewElementForm", options)
-        }
-    }
-
 </script>
 {% endblock %}

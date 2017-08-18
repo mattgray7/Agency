@@ -5,25 +5,6 @@ function addSelectProjectForm(postID, username){
 function removePicture(isProject){
     addPopupPictureToBaseForm(null, null, isProject)
     toggleEditPicturePopup("hide", isProject, null);
-    /*var removeButton = document.getElementById("removeButton")
-    if(removeButton != null){
-        removeButton.innerHTML = "<img id='loadingGif' src='" + buttonLoadingGifURL + "' style='position: absolute; height: 60px; width: 60px; margin-top: -15px;'>"
-    }
-    $.ajax({
-            url : "/ajax/deletePostPicture/",
-            data : {"postID": postID},
-            type : 'POST',
-            dataType: "json",
-            success : function(data) {
-                if(data["success"]){
-                    addPopupPictureToBaseForm(null, null, isProject)
-                    if(removeButton != null){
-                        removeButton.innerHTML = "Remove";
-                    }
-                    toggleEditPicturePopup("hide", isProject, null);
-                }
-            }
-        });*/
     }
 
 function getErrorPanel(errors){
