@@ -103,7 +103,7 @@ class CreateCastingPostForm(BaseForm):
     build = forms.CharField(label="Build", max_length=50, required=False)
     height = forms.CharField(label="Height", max_length=50, required=False)
     skills = forms.CharField(label="Required Skills", max_length=300, required=False, widget=forms.TextInput(attrs={'placeholder': 'Stage combat, Singing, and Basketball'}))
-    languages = forms.CharField(label="Required Languages ", max_length=300, required=False, widget=forms.TextInput(attrs={'placeholder': '(excluding English)'}))
+    languages = forms.CharField(label="Languages ", max_length=300, required=False, widget=forms.TextInput(attrs={'placeholder': '(excluding English)'}))
     startDate = forms.DateField(label="Start Date*", required=False, widget=forms.DateInput(attrs={'class':'datepicker'}))
     endDate = forms.DateField(label="End Date*", required=False, widget=forms.DateInput(attrs={'class':'datepicker'}))
     hoursPerWeek = forms.CharField(label="Hours Per Week", max_length=50, required=False, widget=forms.TextInput(attrs={'placeholder': 'TBD'}))
