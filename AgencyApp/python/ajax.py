@@ -152,25 +152,18 @@ def editExistingPost(request):
     pictureSuccess = False
     pictureURL = None
     removedPicture = False
+    postInstance = None
     if postID:
         postObj = post.getPost(postID)
         if postObj:
+            # Save the text values of the form
+            createPage = constants.CREATE_POST_PAGE_MAP.get(postObj.postType)
+            PostInstanceClass = post.getPostInstanceClass(postID)
+            if PostInstanceClass:
+                postInstance = PostInstanceClass(request=request, postID=postID, projectID=request.POST.get("projectID"),
+                                                 postType=createPage, formSubmitted=True)
+                editSuccess = postInstance.formIsValid()
 
-            # Set any text values of the post that are different from db instance
-            for key in postObj.__dict__:
-                if not key.startswith("_"):
-                    newValue = request.POST.get(key, None)
-                    oldValue = postObj.__dict__[key]
-                    if not newValue:
-                        if oldValue in ["True", "False"]:
-                            newValue = False
-                            oldValue = bool(oldValue)
-                    else:
-                        if newValue != oldValue:
-                            postObj.__dict__[key] = newValue
-            postObj.save()
-            editSuccess = True
-            
             # If there is a temp picture saved, upload it to this post
             tempPicID = request.POST.get("tempPostPictureID")
             if tempPicID:
@@ -189,7 +182,7 @@ def editExistingPost(request):
         pictureURL = postObj and postObj.postPicture and str(postObj.postPicture.url) or None
 
     return JsonResponse({"success": editSuccess and pictureSuccess, "pictureURL": pictureURL, "postID": postID,
-                         "removedPicture": removedPicture})
+                         "removedPicture": removedPicture, "errors": postInstance and postInstance.formErrors})
 
 def _getPostPictureRequestData(request):
     data = {}

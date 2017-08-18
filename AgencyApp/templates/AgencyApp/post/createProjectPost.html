@@ -605,8 +605,13 @@
                             currentFormHeightInt = parseInt(currentFormHeight.substring(0, currentFormHeight.length - 2));
                             newFormHeight = (currentFormHeightInt + 95) + "px";
 
-                            newFormDiv = document.getElementById("insertNewFormDiv")
-                            newFormDiv.style.height = newFormHeight;
+                            formDiv = document.getElementById("insertNewFormDiv");
+                            if(edit){
+                                formDiv = document.getElementById("insertExistingFormDiv");
+                            }
+                            if(formDiv != null){
+                                formDiv.style.height = newFormHeight;
+                            }
                         }
                     }
                 }

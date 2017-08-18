@@ -156,9 +156,10 @@ class GenericPostInstance(object):
     def formIsValid(self):
         if self.request.POST:
             if self.checkBasicFormValues() and self.checkModelFormValues():
-                if self.saveBasicFormValues() and self.saveModelFormValues():
-                    self.createPostAdmin()
-                    return True
+                if not self.formErrors:
+                    if self.saveBasicFormValues() and self.saveModelFormValues():
+                        self.createPostAdmin()
+                        return True
         return False
 
     def _checkTitle(self, title):
@@ -640,6 +641,22 @@ def getPostDatabase(postID):
     elif isCastingPost(postID):
         database = models.CastingPost
     return database
+
+def getPostInstanceClass(postID):
+    import post_casting as castingPost
+    import post_work as workPost
+    import post_event as eventPost
+    import post_project as projectPost
+    instance = None
+    if isEventPost(postID):
+        instance = eventPost.EventPostInstance
+    elif isProjectPost(postID):
+        instance = projectPost.ProjectPostInstance
+    elif isWorkPost(postID):
+        instance = workPost.WorkPostInstance
+    elif isCastingPost(postID):
+        instance = castingPost.CastingPostInstance
+    return instance
 
 def isEventPost(postID):
     return _postIDExistsInDb(postID, models.EventPost)
