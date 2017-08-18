@@ -710,7 +710,7 @@ function getFormDividerLine(){
     return "<div class='formLabelDividingLine' style='position: absolute; width:" + width + "; border: 1px solid #7c7b7b; height: 0px; bottom: 0; margin-bottom: 15px; margin-left: 0px;'></div>"
 }
 
-function createBrowseTableElement(elementDict, titleFieldName, elementType){
+function createBrowseTableElement(elementDict, titleFieldName, elementType, allowEdit){
     var elementString = "<div id='browseTablePost_" + elementDict["post"]["postID"]["value"] + "' class='projectContentListElement'>";
     if("addNewPanel" in elementDict){
         elementString += "Add new";
@@ -756,7 +756,9 @@ function createBrowseTableElement(elementDict, titleFieldName, elementType){
         elementString += "</ul>";
 
         // add edit button
-        elementString += "<div class='addNewPostButton' id='editPostButton_" + elementDict["post"]["postID"]["value"] + "' style='position:absolute; right: 0; bottom: 7%; text-align: center; width: 35px; height: 20px; font-size: 0.9em; font-weight: 500; padding-top: 1px;' onclick='toggleExpandExistingForm(" + '"expand", "' + elementType + '", "' + elementDict["post"]["postID"]["value"] + '");' + "'>Edit</div>";
+        if(allowEdit){
+            elementString += "<div class='addNewPostButton' id='editPostButton_" + elementDict["post"]["postID"]["value"] + "' style='position:absolute; right: 0; bottom: 7%; text-align: center; width: 35px; height: 20px; font-size: 0.9em; font-weight: 500; padding-top: 1px;' onclick='toggleExpandExistingForm(" + '"expand", "' + elementType + '", "' + elementDict["post"]["postID"]["value"] + '");' + "'>Edit</div>";
+        }
 
         elementString += "</div></div></td>";
 
@@ -770,7 +772,7 @@ function createBrowseTableElement(elementDict, titleFieldName, elementType){
 }
 
 var tableColCount = 3;
-function createBrowseTable(tableType, tableEntries, sectionOrder, displayAddNewPanel, titleFieldName){
+function createBrowseTable(tableType, tableEntries, sectionOrder, displayAddNewPanel, titleFieldName, allowEdit){
     tableColCount = getBrowseTableNumColumnsFromWindowSize()
     var tableString = "<div id='browseTableContainer'><table id='browseTable' style='width: '" + tableColCount * browseElementWidth + "px'>"
 
@@ -811,7 +813,7 @@ function createBrowseTable(tableType, tableEntries, sectionOrder, displayAddNewP
             // Add a blank panel to fill out the row
             tableString += "<td style='width: 300px;'><div style='width: 304px;'></div></td>";
         }else{
-            tableString += "<td style='width: 300px;'>" + createBrowseTableElement(data[i], titleFieldName, tableType) + "</td>";
+            tableString += "<td style='width: 300px;'>" + createBrowseTableElement(data[i], titleFieldName, tableType, allowEdit) + "</td>";
         }
 
         colCount += 1;

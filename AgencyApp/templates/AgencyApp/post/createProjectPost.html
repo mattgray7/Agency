@@ -71,7 +71,7 @@
             sectionOrder = ["Today", "Upcoming", "Past", "Announced", "Cancelled"];
             titleFieldName = "title";
         }
-        var table = createBrowseTable(tabType, entries, sectionOrder, true, titleFieldName)
+        var table = createBrowseTable(tabType, entries, sectionOrder, true, titleFieldName, true)
         var contentDiv = document.getElementById("projectContentList")
         if(contentDiv != null){
             contentDiv.innerHTML = table;

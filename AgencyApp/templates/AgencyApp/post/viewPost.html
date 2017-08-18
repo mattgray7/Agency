@@ -102,7 +102,7 @@
             sectionOrder = ["Today", "Upcoming", "Past", "Announced", "Cancelled"];
             titleFieldName = "title";
         }
-        var table = createBrowseTable(tabType, entries, sectionOrder, true, titleFieldName)
+        var table = createBrowseTable(tabType, entries, sectionOrder, true, titleFieldName, false)
         var contentDiv = document.getElementById("projectContentList")
         if(contentDiv != null){
             contentDiv.innerHTML = table;
@@ -405,7 +405,6 @@
 						</td>
 					</tr>
 				</table>
-				<br>
 				<table id='browseTableContainer' style="margin-top: 10px;">
 		            <tr>
 		                <td colspan="3" >
