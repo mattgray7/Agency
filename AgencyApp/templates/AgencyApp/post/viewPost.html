@@ -118,7 +118,11 @@
 
 	{% if post %}
 		{% if isProject %}
-		<div id="mainViewPanel" class="mainViewPanel">
+			<script>
+				document.write('<div id="mainViewPanel" class="mainViewPanel" style="width: ')
+				tableColCount = getBrowseTableNumColumnsFromWindowSize();
+				document.write(getPanelInfoFromNumColumns(tableColCount)["mainViewPanelWidth"] + ';">');
+			</script>
 			<div id="postPanel" class="postPanel">
 				<table style="width:99%;">
 					<tr>
