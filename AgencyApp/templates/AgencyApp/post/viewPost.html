@@ -114,6 +114,28 @@
             });
         });
     }
+
+    function addViewPostPanel(){
+    	var postString;
+    	{% if post %}
+	    	var postString = "<ul style='100%'>";
+
+	    	// Add top row with picture and main info
+	    	postString += "<li style='position: relative; height: 300px;'>"
+
+	    	// Add picture
+			var pictureURL;
+			{% if post.postPicture and post.postPicture.url %}
+				pictureURL = '{{post.postPicture.url}}';
+			{% else %}
+				pictureURL = '{{images.noPicture}}';
+			{% endif %}
+			postString += getPostPicturePanel("div", "postPicturePanel", pictureURL, null, "postPictureImg", false, null, null);
+			postString += "</li>"
+
+		{% endif %}
+		return postString;
+    }
 </script>
 
 	{% if post %}
@@ -283,8 +305,21 @@
 				</script>
 			</div>
 		{% else %}
-			<div id="mainViewPanel" class="mainViewPanel">
-			{% if isCasting and post %}
+			<!-- Just display the data and -->
+			<div id="mainViewPanel" class="mainViewPanel" style='background: #FFF'>
+				{% if post %}
+					<div id='viewPostPanel'>
+						<script>
+							document.write(addViewPostPanel());
+						</script>
+					</div>
+				{% else %}
+					No post found
+				{% endif %}
+			</div>
+			
+
+			<!--{% if isCasting and post %}
 
 				<div id="postPanel" class="postPanelFullHeight">
 					<table style="width:99%;">
@@ -615,7 +650,7 @@
 											</div>
 										</div>
 									{% endif %}-->
-									<h4 class="postInfoSubTitle" style="">
+									<!--<h4 class="postInfoSubTitle" style="">
 										{% if project and project.record %}
 											Project: <a onclick='redirectToPost("{{ project.record.postID }}");' >{{ project.record.title }}</a><br>
 										{% endif %}
@@ -636,7 +671,7 @@
 								</div>
 							</td>
 						</tr>
-					</table>
+					</table>-->
 			{% endif %}
 											<!--{% if project and projectID and project.record.title %}
 													<form method='post' action="/post/view/{{ projectID }}/">
