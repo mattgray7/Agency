@@ -567,6 +567,7 @@
                 {% endfor %}
             {% endif %}
         }else if(activeTab === "events"){
+            // Events currently has no select bars, so dont need to update any inputs
             ajaxURL = "/ajax/createNewEventPost/"
         }
         if(edit){
@@ -600,8 +601,12 @@
                             if(errorRow != null){
                                 errorRow.innerHTML = "<td colspan='3'>" + getErrorPanel(data["errors"]) + "</td>";
                             }
+                            currentFormHeight = formHeights[activeTab];
+                            currentFormHeightInt = parseInt(currentFormHeight.substring(0, currentFormHeight.length - 2));
+                            newFormHeight = (currentFormHeightInt + 95) + "px";
+
                             newFormDiv = document.getElementById("insertNewFormDiv")
-                            newFormDiv.style.height = "1470px";
+                            newFormDiv.style.height = newFormHeight;
                         }
                     }
                 }
