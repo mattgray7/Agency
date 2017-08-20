@@ -107,6 +107,7 @@ class ViewWorkPostView(post.GenericViewPostView):
                                                      "viewPost": constants.VIEW_POST}
         self._pageContext["job"] = self.job
         self._pageContext["worker"] = self.worker
+        self._pageContext["isWork"] = True
         return self._pageContext
 
 

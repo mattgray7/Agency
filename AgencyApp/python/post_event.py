@@ -69,6 +69,12 @@ class ViewEventPostView(post.GenericViewPostView):
         super(ViewEventPostView, self).__init__(*args, **kwargs)
 
     @property
+    def pageContext(self):
+        self._pageContext = super(ViewEventPostView, self).pageContext
+        self._pageContext["isEvent"] = True
+        return self._pageContext
+
+    @property
     def post(self):
         if self._post is None:
             if self.postID:

@@ -172,6 +172,7 @@ class ViewProjectPostView(post.GenericViewPostView):
                                                      }
         self._pageContext["project"] = self.post
         self._pageContext["projectID"] = self.post.record.postID
+        self._pageContext["isProject"] = True
         self._pageContext["roles"] = self.post.roles
         self._pageContext["jobs"] = self.post.jobs
         self._pageContext["events"] = self.post.events

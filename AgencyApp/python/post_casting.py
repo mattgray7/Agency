@@ -130,6 +130,7 @@ class ViewCastingPostView(post.GenericViewPostView):
     def pageContext(self):
         self._pageContext = super(ViewCastingPostView, self).pageContext
         self._pageContext["actor"] = self.actor
+        self._pageContext["isCasting"] = True
         if self.attributeListObject.attributes:
             self._pageContext["attributes"] = self.attributeListObject.attributes
             self._pageContext["descriptionEnabled"] = self.post.record.descriptionEnabled
@@ -147,3 +148,13 @@ class ViewCastingPostView(post.GenericViewPostView):
             # Cant pass projectID as it will lead to infinite loop
             self._post = CastingPostInstance(request=self.request, postID=self.postID, postType=constants.CASTING_POST)
         return self._post
+
+    @property
+    def postTitle(self):
+        if self._postTitle is None:
+            if self.post and self.post.record:
+                self._postTitle = self.post.record.characterName
+        return self._postTitle
+
+
+

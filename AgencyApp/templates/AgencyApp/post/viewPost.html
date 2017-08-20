@@ -115,6 +115,18 @@
         });
     }
 
+    function getViewPostHeader(){
+    	var headerString = "<div style='position: relative;'><div style='position: absolute; left: 300px; height: 300px; width: 600px; text-align: left;'>"
+
+    	// Add title
+    	{% if viewPostData and viewPostData.header.title %}
+    		headerString += '<h1 class="postInfoTitle"><a onclick="' + "redirectToPost('{{post.postID}}');" + '"> {{ viewPostData.header.title }}</a></h1>';
+    	{% endif %}
+
+    	headerString += "</div></div>";
+    	return headerString;
+    }
+
     function addViewPostPanel(){
     	var postString;
     	{% if post %}
@@ -131,7 +143,10 @@
 				pictureURL = '{{images.noPicture}}';
 			{% endif %}
 			postString += getPostPicturePanel("div", "postPicturePanel", pictureURL, null, "postPictureImg", false, null, null);
+
+			postString += getViewPostHeader()
 			postString += "</li>"
+			postString += "</ul>"
 
 		{% endif %}
 		return postString;

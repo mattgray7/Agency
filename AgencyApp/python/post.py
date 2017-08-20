@@ -442,6 +442,13 @@ class GenericViewPostView(views.GenericFormView):
         self._isPostAdmin = False
         self._projectDisplayStatus = None
 
+        # View post data
+        self._viewPostData = None
+        self._postTitle = None
+        self._postSubTitles = None
+        self._postHeaderFields = None
+        self._postBodyFields = None
+
     @property
     def projectDisplayStatus(self):
         if self._projectDisplayStatus is None:
@@ -540,6 +547,39 @@ class GenericViewPostView(views.GenericFormView):
         return self._cancelDestination
 
     @property
+    def postTitle(self):
+        if self._postTitle is None:
+            if self.post and self.post.record:
+                self._postTitle = self.post.record.title;
+        return self._postTitle
+
+    @property
+    def postSubTitles(self):
+        """ TO be overridden in specific post class"""
+        return self._postSubTitles
+
+    @property
+    def postHeaderFields(self):
+        """ TO be overridden in specific post class"""
+        return self._postHeaderFields
+
+    @property
+    def postBodyFields(self):
+        """ TO be overridden in specific post class"""
+        return self._postBodyFields
+
+    @property
+    def viewPostData(self):
+        if self._viewPostData is None:
+            if self.post and self.post.record:
+                self._viewPostData = {"header": {"title": self.postTitle,
+                                                 "subTitles": self.postSubTitles,
+                                                 "fields": self.postHeaderFields},
+                                      "body": {"fields": self.postBodyFields}
+                                      }
+        return self._viewPostData
+
+    @property
     def pageContext(self):
         self._pageContext["post"] = self.postID and self.post.record or None
         self._pageContext["possibleSources"] = {"profile": constants.PROFILE}
@@ -550,11 +590,6 @@ class GenericViewPostView(views.GenericFormView):
                                                                 "projects": constants.BROWSE_PROJECTS,
                                                                 "users": constants.BROWSE_USERS,
                                                                 "posts": constants.BROWSE_POSTS}}
-        self._pageContext["isEvent"] = isEventPost(self.postID)
-        self._pageContext["isProject"] = isProjectPost(self.postID)
-        self._pageContext["isCollaboration"] = isCollaborationPost(self.postID)
-        self._pageContext["isWork"] = isWorkPost(self.postID)
-        self._pageContext["isCasting"] = isCastingPost(self.postID)
         self._pageContext["userIsAdmin"] = self.isPostAdmin
         self._pageContext["displayStatus"] = self.projectDisplayStatus
         self._pageContext['statusOptions'] = {"roles": constants.CASTING_STATUS_LIST,
@@ -565,6 +600,9 @@ class GenericViewPostView(views.GenericFormView):
             self._pageContext["projectID"] = self.projectID
         self._pageContext["project"] = self.project
         self._pageContext["following"] = isFollowingPost(self.postID, self.request.user.username)
+
+        # View post data
+        self._pageContext["viewPostData"] = self.viewPostData
         return self._pageContext
 
     def createProjectChild(self):

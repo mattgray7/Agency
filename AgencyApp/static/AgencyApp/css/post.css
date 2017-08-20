@@ -163,10 +163,12 @@
 	}
 	.postInfoTitle a
 	{
+		color: #262626;
 		text-shadow: -0.5px 0 black, 0 0.5px black, 0.5px 0 black, 0 -0.5px black;
 	}
 	.postInfoTitle a:hover
 	{
+		cursor: pointer;
 		color: #7c7c7c;
 		text-shadow: -0.5px 0 black, 0 0.5px black, 0.5px 0 black, 0 -0.5px black;
 	}
