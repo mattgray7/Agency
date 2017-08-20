@@ -6,6 +6,7 @@ import random, string
 import models
 import json
 import os
+import datetime
 from PIL import Image
 
 def redirect(request, currentPage, destinationPage):
@@ -202,6 +203,38 @@ def getMessageFromKey(request, key):
         if splitted[0] == key:
             return splitted[1]
     return None
+
+
+def getDateString(date1, date2):
+    """Returns a human readable date string, eg:
+        August 20, 2017
+        August 20 - 25, 2017
+        August 20 - September 5, 2017
+        August 20, 2017 - January 5, 2018
+
+    :param datetime.date date1: The first date to include in string
+    :param datetime.date date2: The second date to include in string (order does not matter)
+    :return str: The formatted date string
+    """
+    dateString = "{0} - {1}".format(date1, date2)
+    if type(date1) == datetime.date and type(date2) == datetime.date:
+        if date1 < date2:
+            first = date1
+            second = date2
+        else:
+            first = date2
+            second = date1
+        if first.year == second.year:
+            if first.month == second.month:
+                if first.day == second.day:
+                    dateString = first.strftime("%B %d, %Y")
+                else:
+                    dateString = first.strftime("%B %d") + " - " + second.strftime("%d, %Y")
+            else:
+                dateString = first.strftime("%B %d") + " - " + second.strftime("%B %d, %Y")
+        else:
+            dateString = first.strftime("%B %d, %Y") + " - " + second.strftime("%B %d, %Y")
+    return dateString
 
 
 def capitalizeName(name):

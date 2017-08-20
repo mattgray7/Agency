@@ -168,8 +168,8 @@ class ViewCastingPostView(post.GenericViewPostView):
         if not self._postHeaderFields:
             if self.post and self.post.record:
                 self._postHeaderFields = [{'id': 'paid', 'value': self.post.record.paid, 'label': 'Paid'},
-                                          {'id': 'startDate', 'value': self.post.record.startDate, 'label': 'Start'},
-                                          {'id': 'endDate', 'value': self.post.record.endDate, 'label': 'End'}]
+                                          {'id': 'dates', 'value': helpers.getDateString(self.post.record.startDate, self.post.record.endDate), 'label': 'Dates'},
+                                          ]
                 
                 # Add project to front of list if it is linked
                 if self.project and self.project.record:
