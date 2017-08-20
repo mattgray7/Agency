@@ -30,7 +30,7 @@ daisyBuchananDescription = """Daisy is The Great Gatsby's most enigmatic, and pe
 directorDescription = """Our vision is to change the way the world views productivity. We want Function Point to be a place where everyone feels respected, where they are doing important work and where everyone contributes to the growth and direction of our company, our customers and our community. Function Point is looking for a hands on, curious technology leader who wants to keep their technical skills sharp and apply their passion and smarts to lead engineering and devops towards delivering customer and business value. As Director of Engineering, you will work closely with our Director of Products to drive the development of Function Points products and services. You will lead the continued growth of engineering and devops with an emphasis on championing a strong engineering culture, measuring and increasing delivery velocity, ensuring high quality, and achieving schedule predictability."""
 #=================== Project 1
 # User 1
-def createUser(username, email, password, firstName, lastName, picURL=None):
+def createUser(username, email, password, firstName, lastName, picURL=None, imdbLink='None', bio="None"):
 	user = User.objects.create_user(username=username,
                                    	email=email,
                                    	password=password,
@@ -41,7 +41,9 @@ def createUser(username, email, password, firstName, lastName, picURL=None):
 								 		email=email,
 	                             		firstName=firstName,
 	                             		lastName=lastName,
-	                             		setupComplete=True)
+	                             		setupComplete=True,
+	                             		imdbLink=imdbLink,
+	                             		bio=bio)
 	userAccount.save()
 	userMediaDir = "/Users/MattGray/Projects/Agency/Agency/media/{0}/".format(username)
 	if not os.path.exists(userMediaDir):
@@ -53,7 +55,9 @@ def createUser(username, email, password, firstName, lastName, picURL=None):
 		userAccount.save()
 
 project1UserAccount = createUser("mattgray", "matt.gray.1993@gmail.com", "m", "matt", "gray",
-				   "/Users/MattGray/Projects/Agency/Agency/scripts/media/mattGrayProfile.jpg")
+				   picURL="/Users/MattGray/Projects/Agency/Agency/scripts/media/mattGrayProfile.jpg",
+				   imdbLink="http://www.imdb.com/name/nm6547223/?ref_=ttfc_fc_cl_t47",
+                   bio="I love dogs, films, and video games. And buttholes.")
 user2 = createUser("amybolt", "amy.bolt@hotmail.com", "m", "amy", "bolt",
 				   "/Users/MattGray/Projects/Agency/Agency/scripts/media/amyBoltProfile.jpg")
 user3 = createUser("adamcramer", "adam.cramos@gmail.com", "m", "adam", "cramer",
