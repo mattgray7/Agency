@@ -123,7 +123,13 @@
             headerString += '<h1 class="postInfoTitle"><a onclick="' + "redirectToPost('{{post.postID}}');" + '"> {{ viewPostData.header.title }}</a></h1>';
             {% if viewPostData.header.subTitles %}
                 {% for subTitle in viewPostData.header.subTitles %}
-                    headerString += '<div class="postInfoSubTitle">{{ subTitle }}</div>';
+                    headerString += '<div class="postInfoSubTitle">{{subTitle}}</div>';
+                {% endfor %}
+            {% endif %}
+
+            {% if viewPostData.header.fields %}
+                {% for field in viewPostData.header.fields %}
+                    headerString += '<div class="postInfoSingleField">{{field.label}}: {{field.value}}</div>'
                 {% endfor %}
             {% endif %}
         {% endif %}

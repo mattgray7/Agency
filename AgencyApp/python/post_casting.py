@@ -170,6 +170,11 @@ class ViewCastingPostView(post.GenericViewPostView):
                 self._postHeaderFields = [{'id': 'paid', 'value': self.post.record.paid, 'label': 'Paid'},
                                           {'id': 'startDate', 'value': self.post.record.startDate, 'label': 'Start'},
                                           {'id': 'endDate', 'value': self.post.record.endDate, 'label': 'End'}]
+                
+                # Add project to front of list if it is linked
+                if self.project and self.project.record:
+                    self._postHeaderFields = [{'id': 'project', 'value': self.project.record.title, 'label': 'Project'}] + self._postHeaderFields
+                                          
         return self._postHeaderFields
 
     @property
