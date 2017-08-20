@@ -21,13 +21,13 @@ class CastingPostInstance(post.GenericPostInstance):
         if self.record:
             self.record.paid = self.request.POST.get("paid", False) and True  #get value will be 'true' instead of True
             self.record.paidDescription = self.request.POST.get("paidDescription")
-            self.record.shortCharacterDescription = self.request.POST.get("shortCharacterDescription")
+            self.record.location = self.request.POST.get("location")
             self.record.actorName = self.request.POST.get("actorName")
             self.record.characterName = self.request.POST.get("characterName")
             self.record.characterType = self.request.POST.get("characterType")
             self.record.hairColor = self.request.POST.get("hairColor")
             self.record.eyeColor = self.request.POST.get("eyeColor")
-            self.record.complexion = self.request.POST.get("complexion")
+            self.record.ethnicity = self.request.POST.get("ethnicity")
             self.record.ageRange = self.request.POST.get("ageRange")
             self.record.gender = self.request.POST.get("gender")
             self.record.height = self.request.POST.get("height")
@@ -99,7 +99,7 @@ class CreateCastingPostView(post.GenericCreatePostView):
             self._formInitialValues["startDate"] = self.post.record.startDate
             self._formInitialValues["endDate"] = self.post.record.endDate
             self._formInitialValues["characterName"] = self.post.record.characterName
-            self._formInitialValues["shortCharacterDescription"] = self.post.record.shortCharacterDescription
+            self._formInitialValues["location"] = self.post.record.location
             if self.actor:
                 self._formInitialValues["actorName"] = self.actor.username
             self._formInitialValues["postID"] = self.post.record.postID
@@ -173,7 +173,7 @@ class ViewCastingPostView(post.GenericViewPostView):
                                                         {'id': 'hoursPerWeek', 'value': self.post.record.hoursPerWeek, 'label': 'Hours/Week'},
                                                         ],
                                             "Character": [{'id': 'gender', 'value': self.post.record.gender, 'label': 'Gender'},
-                                                          {'id': 'ageRange', 'value': self.post.record.ageRange, 'label': 'ageRange'},
+                                                          {'id': 'ageRange', 'value': self.post.record.ageRange, 'label': 'Age Range'},
                                                           {'id': 'characterType', 'value': self.post.record.characterType, 'label': 'Type'}
                                                          ],
                                             "Description": [{'id': 'description', 'value': self.post.record.description, 'label': 'Description'}

@@ -157,10 +157,10 @@ function addCreateCastingPost(formDict, formURL, formName){
 
 
     // Fill text content
-    var sectionMap = {"Details": ["title", "project", "characterType", "status", "startDate", "endDate", "hoursPerWeek", "paid"],
-                      "Character": ["characterName", "shortCharacterDescription", "description", "skills", "languages"],
+    var sectionMap = {"Details": ["project", "title", "status", "startDate", "endDate", "location", "hoursPerWeek", "paid"],
+                      "Character": ["characterName", "characterType", "gender", "ageRange", "description", "skills", "languages"],
                       "Performer": ["actorName"],
-                      "Physical": ["hairColor", "eyeColor", "complexion", "height", "build", "gender", "ageRange"],
+                      "Physical": ["height", "build", "hairColor", "eyeColor", "ethnicity"],
                       "hidden": ["csrf_token", "postID", "source", "next", "destination", "projectID", "poster", "postType"]}
     var mainLabelsColumn = "<td class='editPostLabelPanel' style='width: 20%; position:relative; line-height: 38.2px;'><ul style='margin-bottom: -14px; margin-top: -40px;'>";
     var mainInputsColumn = "<td class='editPostInputPanel' style='width: 50%; position: relative; line-height: 39px;'><ul style='margin-top: -20px; '>";

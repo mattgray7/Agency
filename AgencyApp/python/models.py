@@ -236,10 +236,9 @@ class CastingPost(AbstractPost):
     actorName = models.CharField(max_length=200, blank=True, null=True)
     characterName = models.CharField(max_length=200)
     characterType = models.CharField(max_length=100, default="Actor")
-    shortCharacterDescription = models.CharField(max_length=200, blank=True, null=True)
     hairColor = models.CharField(max_length=50, blank=True, null=True)
     eyeColor = models.CharField(max_length=50, blank=True, null=True)
-    complexion = models.CharField(max_length=50, blank=True, null=True)
+    ethnicity = models.CharField(max_length=50, blank=True, null=True)
     ageRange = models.CharField(max_length=50, blank=True, null=True)
     gender = models.CharField(max_length=50, blank=True, null=True)
     height = models.CharField(max_length=50, blank=True, null=True)
@@ -248,6 +247,7 @@ class CastingPost(AbstractPost):
     languages = models.CharField(max_length=300, blank=True, null=True)
     startDate = models.DateField(default=None, blank=True, null=True)
     endDate = models.DateField(default=None, blank=True, null=True)
+    location = models.CharField(max_length=1000, default=None, blank=True, null=True)
     hoursPerWeek = models.TextField(max_length=50, blank=True, null=True, default="TBD")
 
     @property

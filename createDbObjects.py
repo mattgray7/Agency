@@ -173,11 +173,11 @@ def createProjectJob(projectID, status, profession, title, paid, username=None, 
 		jobPost.save()
 	return jobID
 
-def createProjectRole(projectID, status, title, characterName, paid, username=None, gender=None, shortCharacterDescription=None, characterDescription=None, picURL=None, poster="mattgray", startDate=None, endDate=None):
+def createProjectRole(projectID, status, title, characterName, paid, username=None, gender=None, location=None, characterDescription=None, picURL=None, poster="mattgray", startDate=None, endDate=None):
 	roleID = helpers.createUniqueID(models.CastingPost, "postID")
 	rolePost = models.CastingPost(title=title, postID=roleID, projectID=projectID, poster=poster, status=status,
 								  actorName=username, characterName=characterName, gender=gender,
-								  description=characterDescription, shortCharacterDescription=shortCharacterDescription,
+								  description=characterDescription, location=location,
 								  paid=paid, startDate=startDate or today, endDate=endDate or tomorrow)
 	rolePost.save()
 
@@ -271,8 +271,8 @@ project1RoleId1 = createProjectRole(projectID=project1ProjectID,
 								 		    username="liamcarson",
 								 		    title="Male lead needed",
 								 		    characterName="Nick Carraway",
-								 		    characterDescription="A guy that gets taken in by this rich guy and then some stuff happens idk I kind of forget the book it was so long ago.",
-								 		    shortCharacterDescription="24-30 innocent looking male, he should be soft spoken and calm",
+								 		    characterDescription="A guy that gets taken in by this rich guy and then some stuff happens idk I kind of forget the book it was so long ago. 24-30 innocent looking male, he should be soft spoken and calm",
+								 		    location="UBC Campus",
 								 		    paid=True,
 								 		    status="Cast",
 								 		    picURL="/Users/MattGray/Projects/Agency/Agency/scripts/media/nickCarraway.png")
@@ -282,7 +282,7 @@ project1RoleId2 = createProjectRole(projectID=project1ProjectID,
 								 		    title="Male lead needed",
 								 		    characterName="Jay Gatsby",
 								 		    characterDescription='The guy that the book is named after, so he must be kinf od important right. That makes sense. Anyways, he is rich and you should look like you are.',
-								 		    shortCharacterDescription="Lead male aged 40-50",
+								 		    location="UBC Campus",
 								 		    paid=True,
 								 		    status="Cast",
 								 		    picURL="/Users/MattGray/Projects/Agency/Agency/scripts/media/jayGatsby.jpg")
@@ -292,7 +292,7 @@ project1RoleId3 = createProjectRole(projectID=project1ProjectID,
 								 		    title="Female lead",
 								 		    characterName="Daisy Buchanan",
 								 		    characterDescription=daisyBuchananDescription,
-								 		    shortCharacterDescription="Mid-20s brunette female lead",
+								 		    location="UBC Campus",
 								 		    paid=True,
 								 		    status="Cast",
 								 		    picURL="/Users/MattGray/Projects/Agency/Agency/scripts/media/daisyBuchanan.png")
@@ -301,7 +301,7 @@ project1RoleId4 = createProjectRole(projectID=project1ProjectID,
 								 		    title="Child lead - female",
 								 		    characterName="Lizzy",
 								 		    characterDescription=daisyBuchananDescription,
-								 		    shortCharacterDescription="8-12 caucasian girl",
+								 		    location="UBC Campus",
 								 		    paid=True,
 								 		    gender="Female",
 								 		    status="Open")
@@ -310,8 +310,8 @@ project1RoleId5 = createProjectRole(projectID=project1ProjectID,
 								 		     title="Child lead - male",
 								 		     characterName="Kevin",
 								 		     gender="Male",
-								 		     characterDescription="Dammit Kevin.",
-								 		     shortCharacterDescription="13-15 stupid looking boy",
+								 		     location="UBC Campus",
+								 		     characterDescription="13-15 stupid looking boy, Dammit Kevin.",
 								 		     paid=True,
 								 		     status="Open")
 								 		    
@@ -319,6 +319,7 @@ project1RoleId6 = createProjectRole(projectID=project1ProjectID,
 									poster="mattgray",
 								 	title="Looking for young 20-something male to play a random guy",
 								 	characterName="Clark",
+								 	location="UBC Campus",
 								 	characterDescription="Looks like he comes from a wealthy family",
 								 	paid=True,
 								 	status="Open")
@@ -327,7 +328,7 @@ project1RoleId7 = createProjectRole(projectID=project1ProjectID,
 								 	title="Looking for young 20-something female to play a random guy's gf",
 								 	characterName="Mona Lisa Saperstein",
 								 	characterDescription = "She is the worst. It is unbelievable how bad she is. She is the brother of jean rakphio saperstein, so actress must look related.",
-								 	shortCharacterDescription="She is the wooooooooooorst",
+								 	location="UBC Campus",
 								 	paid=True,
 								 	status="Open",
 								 	picURL="/Users/MattGray/Projects/Agency/Agency/scripts/media/randomChickDrawing.jpg")
