@@ -164,23 +164,24 @@ class ViewCastingPostView(post.GenericViewPostView):
         return self._postSubTitles
 
     @property
-    def postHeaderFields(self):
-        if not self._postHeaderFields:
+    def postFieldsBySection(self):
+        if not self._postFieldsBySection:
             if self.post and self.post.record:
-                self._postHeaderFields = [{'id': 'paid', 'value': self.post.record.paid, 'label': 'Paid'},
-                                          {'id': 'dates', 'value': helpers.getDateString(self.post.record.startDate, self.post.record.endDate), 'label': None},
-                                          ]
+                self._postFieldsBySection = {"Details": [{'id': 'status', 'value': self.post.record.status, 'label': 'Status'},
+                                                        {'id': 'dates', 'value': helpers.getDateString(self.post.record.startDate, self.post.record.endDate), 'label': None},
+                                                        {'id': 'paid', 'value': self.post.record.paid, 'label': 'Paid'},
+                                                        {'id': 'hoursPerWeek', 'value': self.post.record.hoursPerWeek, 'label': 'Hours/Week'},
+                                                        ],
+                                            "Character": [{'id': 'gender', 'value': self.post.record.gender, 'label': 'Gender'},
+                                                          {'id': 'ageRange', 'value': self.post.record.ageRange, 'label': 'ageRange'},
+                                                          {'id': 'characterType', 'value': self.post.record.characterType, 'label': 'Type'}
+                                                         ],
+                                            "Description": [{'id': 'description', 'value': self.post.record.description, 'label': 'Description'}
+                                                            ]
+                                            }
                 
                 # Add project to front of list if it is linked
                 if self.project and self.project.record:
-                    self._postHeaderFields = [{'id': 'project', 'value': self.project.record.title, 'label': 'Project'}] + self._postHeaderFields
-                                          
-        return self._postHeaderFields
-
-    @property
-    def postBodyFields(self):
-        if not self._postBodyFields:
-            if self.post and self.post.record:
-                self._postBodyFields = [{'id': 'description', 'value': self.post.record.description, 'label': 'Description'}]
-        return self._postBodyFields
+                    self._postFieldsBySection["Details"] = [{'id': 'project', 'value': self.project.record.title, 'label': 'Project'}] + self._postFieldsBySection["Details"]                
+        return self._postFieldsBySection
 

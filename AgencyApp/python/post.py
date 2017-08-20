@@ -446,8 +446,7 @@ class GenericViewPostView(views.GenericFormView):
         self._viewPostData = None
         self._postTitle = None
         self._postSubTitles = None
-        self._postHeaderFields = None
-        self._postBodyFields = None
+        self._postFieldsBySection = None
 
     @property
     def projectDisplayStatus(self):
@@ -559,24 +558,18 @@ class GenericViewPostView(views.GenericFormView):
         return self._postSubTitles
 
     @property
-    def postHeaderFields(self):
+    def postFieldsBySection(self):
         """ TO be overridden in specific post class"""
-        return self._postHeaderFields
+        return self._postFieldsBySection
 
-    @property
-    def postBodyFields(self):
-        """ TO be overridden in specific post class"""
-        return self._postBodyFields
 
     @property
     def viewPostData(self):
         if self._viewPostData is None:
             if self.post and self.post.record:
-                self._viewPostData = {"header": {"title": self.postTitle,
-                                                 "subTitles": self.postSubTitles,
-                                                 "fields": self.postHeaderFields},
-                                      "body": {"fields": self.postBodyFields}
-                                      }
+                self._viewPostData = {"title": self.postTitle,
+                                      "subTitles": self.postSubTitles,
+                                      "fields": self.postFieldsBySection}
         return self._viewPostData
 
     @property

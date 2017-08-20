@@ -115,25 +115,27 @@
         });
     }
 
-    function getViewPostHeader(){
+    function getViewPostText(){
         var headerString = "<div style='position: relative;'><div style='position: absolute; left: 300px; height: 300px; width: 600px; text-align: left;'>"
 
         // Add title
-        {% if viewPostData and viewPostData.header %}
-            headerString += '<h1 class="postInfoTitle"><a onclick="' + "redirectToPost('{{post.postID}}');" + '"> {{ viewPostData.header.title }}</a></h1>';
-            {% if viewPostData.header.subTitles %}
-                {% for subTitle in viewPostData.header.subTitles %}
+        {% if viewPostData %}
+            headerString += '<h1 class="postInfoTitle"><a onclick="' + "redirectToPost('{{post.postID}}');" + '"> {{ viewPostData.title }}</a></h1>';
+            {% if viewPostData.subTitles %}
+                {% for subTitle in viewPostData.subTitles %}
                     headerString += '<div class="postInfoSubTitle">{{subTitle}}</div>';
                 {% endfor %}
             {% endif %}
 
-            {% if viewPostData.header.fields %}
-                {% for field in viewPostData.header.fields %}
-                    headerString += '<div class="postInfoSingleField">';
-                    {% if field.label %}
-                        headerString += '{{field.label}}: ';
-                    {% endif %}
-                    headerString += '{{field.value}}</div>';
+            {% if viewPostData.fields %}
+                {% for section, fields in viewPostData.fields.items %}
+                    {% for field in fields %}
+                        headerString += '<div class="postInfoSingleField">';
+                        {% if field.label %}
+                            headerString += '{{field.label}}: ';
+                        {% endif %}
+                        headerString += '{{field.value}}</div>';
+                    {% endfor %}
                 {% endfor %}
             {% endif %}
         {% endif %}
@@ -142,29 +144,10 @@
         return headerString;
     }
 
-    function getViewPostBody(){
-        var bodyString = "<div style='width: 100%;'>"
-
-        {% if viewPostData and viewPostData.body and viewPostData.body.fields %}
-            {% for field in viewPostData.body.fields %}
-                bodyString += '<div class="postInfoSingleField">';
-                {% if field.label %}
-                    bodyString += '{{field.label}}: ';
-                {% endif %}
-                bodyString += '{{field.value}}</div>';
-            {% endfor %}
-        {% endif %}
-        bodyString += "</div>"
-        return bodyString
-    }
-
     function addViewPostPanel(){
         var postString;
         {% if post %}
-            var postString = "<ul style='100%'>";
-
-            // Add top row with picture and main info
-            postString += "<li style='position: relative; height: 300px;'>"
+            var postString = "<div style='position: relative; height: 300px;'>"
 
             // Add picture
             var pictureURL;
@@ -175,11 +158,8 @@
             {% endif %}
             postString += getPostPicturePanel("div", "postPicturePanel", pictureURL, null, "postPictureImg", false, null, null);
 
-            postString += getViewPostHeader();
-            postString += "</li>"
-
-            postString += "<li>" + getViewPostBody() + "</li>";
-            postString += "</ul>"
+            postString += getViewPostText();
+            postString += "</div>"
 
         {% endif %}
         return postString;
