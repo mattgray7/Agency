@@ -129,13 +129,33 @@
 
             {% if viewPostData.header.fields %}
                 {% for field in viewPostData.header.fields %}
-                    headerString += '<div class="postInfoSingleField">{{field.label}}: {{field.value}}</div>'
+                    headerString += '<div class="postInfoSingleField">';
+                    {% if field.label %}
+                        headerString += '{{field.label}}: ';
+                    {% endif %}
+                    headerString += '{{field.value}}</div>';
                 {% endfor %}
             {% endif %}
         {% endif %}
 
         headerString += "</div></div>";
         return headerString;
+    }
+
+    function getViewPostBody(){
+        var bodyString = "<div style='width: 100%;'>"
+
+        {% if viewPostData and viewPostData.body and viewPostData.body.fields %}
+            {% for field in viewPostData.body.fields %}
+                bodyString += '<div class="postInfoSingleField">';
+                {% if field.label %}
+                    bodyString += '{{field.label}}: ';
+                {% endif %}
+                bodyString += '{{field.value}}</div>';
+            {% endfor %}
+        {% endif %}
+        bodyString += "</div>"
+        return bodyString
     }
 
     function addViewPostPanel(){
@@ -155,8 +175,10 @@
             {% endif %}
             postString += getPostPicturePanel("div", "postPicturePanel", pictureURL, null, "postPictureImg", false, null, null);
 
-            postString += getViewPostHeader()
+            postString += getViewPostHeader();
             postString += "</li>"
+
+            postString += "<li>" + getViewPostBody() + "</li>";
             postString += "</ul>"
 
         {% endif %}
