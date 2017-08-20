@@ -119,8 +119,13 @@
     	var headerString = "<div style='position: relative;'><div style='position: absolute; left: 300px; height: 300px; width: 600px; text-align: left;'>"
 
     	// Add title
-    	{% if viewPostData and viewPostData.header.title %}
+    	{% if viewPostData and viewPostData.header %}
     		headerString += '<h1 class="postInfoTitle"><a onclick="' + "redirectToPost('{{post.postID}}');" + '"> {{ viewPostData.header.title }}</a></h1>';
+    		{% if viewPostData.header.subTitles %}
+    			{% for subTitle in viewPostData.header.subTitles %}
+    				headerString += '<div class="postInfoSubTitle">{{ subTitle }}</div>';
+    			{% endfor %}
+    		{% endif %}
     	{% endif %}
 
     	headerString += "</div></div>";

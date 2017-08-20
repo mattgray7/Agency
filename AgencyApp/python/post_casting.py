@@ -156,5 +156,26 @@ class ViewCastingPostView(post.GenericViewPostView):
                 self._postTitle = self.post.record.characterName
         return self._postTitle
 
+    @property
+    def postSubTitles(self):
+        if not self._postSubTitles:
+            if self.post and self.post.record:
+                self._postSubTitles = [self.post.record.title]
+        return self._postSubTitles
 
+    @property
+    def postHeaderFields(self):
+        if not self._postHeaderFields:
+            if self.post and self.post.record:
+                self._postHeaderFields = [{'id': 'paid', 'value': self.post.record.paid, 'label': 'Paid'},
+                                          {'id': 'startDate', 'value': self.post.record.startDate, 'label': 'Start'},
+                                          {'id': 'endDate', 'value': self.post.record.endDate, 'label': 'End'}]
+        return self._postHeaderFields
+
+    @property
+    def postBodyFields(self):
+        if not self._postBodyFields:
+            if self.post and self.post.record:
+                self._postBodyFields = [{'id': 'description', 'value': self.post.record.description, 'label': 'Description'}]
+        return self._postBodyFields
 
