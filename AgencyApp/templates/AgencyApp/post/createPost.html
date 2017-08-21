@@ -60,13 +60,7 @@
                         {% endif %}
                         postField.editOnclick = "toggleEditPicturePopup('show')";
                     {% elif field.name == "compensationType" %}
-                        /*var currentInput = postField.input;
-                        var paidDescription = '{{post.paidDescription}}'
-                        if(paidDescription === "None"){
-                            paidDescription = ''
-                        }
-                        postField.input = "<div style='position: relative; margin-top: -5px;'>" + currentInput + "<div style='position: absolute; top: 0; right: 0; margin-top: 6px; width: 90%; min-width: 180px; text-align: right;'><div style='position: relative;'> <div style='position: absolute; left: 0;' class='editPostLabelPanel'>Specify </div><div style='position: absolute; left: 0; right: 0; margin-right: 3px; margin-left: 68px; margin-top: -3px;'><input type='text' name='paidDescription' value='" + paidDescription + "' style='display: inline; margin-top: -10px;'></div></div></div>"*/
-                        postField.input = getCompensationPanel('{{field.value}}') + "<div style='display: none;'><input type='text' name='compensationType' id='compensationTypeInput'/><input type='text' name='compensationDescription' id='compensationDescriptionInput'/></div>"
+                        postField.input = getCompensationPanel('{{field.value}}', '{{form.compensationDescription.value}}') + "<div style='display: none;'><input type='text' name='compensationType' id='compensationTypeInput'/><input type='text' name='compensationDescription' id='compensationDescriptionInput'/></div>"
                     {% elif field.name == "compensationDescription" %}
                         // Paid description will be on same line as paid
                         save = false;
