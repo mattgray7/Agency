@@ -964,7 +964,7 @@ function getCompensationPanel(value){
 function createMultiTabOption(tabList, panelID, activeOnclickCallback){
     var tabs = "<div style='height: 32px;'><div class='formInput' id='" + panelID + "' style='width: 97.5%; margin-top: 6px; padding: 0px 9px; border-radius: 4px; height: 32px;'>";
     if(tabList.length === 3){
-        tabs += "<div style='position: relative; height: 32px; margin: 0px -9px; margin-top: -2px;'>";
+        tabs += "<div style='position: relative; height: 33px; margin: 0px -9px; margin-top: -2px; '>";
 
         // left
         tabs += "<div class='editCompensationPanelButton' id='optionTab_" + tabList[0].value + "' style='position: absolute; left: 0; width: 33%; height: 32px;' onclick='changeMultiTabOptionClasses(" + '"' + tabList[0].value + '", "' + panelID + '", "' + activeOnclickCallback + '"' + ");'><div style='margin-top: -3px;'>" + tabList[0].label + '</div></div>';
@@ -975,7 +975,12 @@ function createMultiTabOption(tabList, panelID, activeOnclickCallback){
         // right
         tabs += "<div class='editCompensationPanelButton' id='optionTab_" + tabList[2].value + "' style='position: absolute; right: 0; width: 33%; height: 32px; margin-right: -1px;' onclick='changeMultiTabOptionClasses(" + '"' + tabList[2].value + '", "' + panelID + '", "' + activeOnclickCallback + '"' + ");'><div style='margin-top: -3px;'>" + tabList[2].label + '</div></div>';
 
+        // Text box below
+        tabs += "<div id='" + panelID + "DropdownPanel' style='position: absolute; top: 14px; left: 0; right: 0; border-radius: 3px; border: none; height: 13px; margin-left: -2px; margin-right: -2px; visibility: hidden; overflow: hidden;' class='formInput'><input type='text' name='compensationType' value='$10/hour' style='position: absolute; left: 2px; right: 0; border: none; margin: -7px 0px 0px 1px; padding: 0px 0px 0px 0px; height: 26px;' /> </div>"
+
         tabs += "</div>";
+
+
     }
     tabs += "</div></div>";
     return tabs;
@@ -1000,10 +1005,16 @@ function changeMultiTabOptionClasses(activePostType, panelID, activeOnclickCallb
     }
 }
 
+var compensationPanelExpanded = false
 function expandCompensationPanel(activeID){
     var formInputBox = document.getElementById('compensationPanelTabs');
     if(formInputBox != null){
-        $("#compensationPanelTabs").animate({marginTop: "6px", height: "62px"}, 400);
+        if(!compensationPanelExpanded){
+            compensationPanelExpanded = true;
+            $("#compensationPanelTabs").animate({marginTop: "6px", height: "62px"}, 400, function(){
+                document.getElementById("compensationPanelTabsDropdownPanel").style.visibility = "visible";
+            });
+        }
     }
 }
 
