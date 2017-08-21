@@ -1041,9 +1041,9 @@ var compensationType;
 function expandCompensationPanel(compType){
     var formInputBox = document.getElementById('compensationPanelTabs');
     if(formInputBox != null){
+        compensationType = compType
         if(!compensationPanelExpanded){
             compensationPanelExpanded = true;
-            compensationType = compType
             $("#compensationPanelTabs").animate({marginTop: "6px", height: "62px"}, 150, function(){
                 document.getElementById("compensationPanelTabsDropdownPanel").style.visibility = "visible";
             });
