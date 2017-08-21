@@ -92,8 +92,8 @@ class CreateCastingPostForm(BaseForm):
     status = forms.CharField(label="Role Status*", widget=forms.HiddenInput, max_length=50, required=False)
     location = forms.CharField(label="Location*", widget=forms.TextInput(attrs={'placeholder': 'Metro Vancouver'}), max_length=1000, required=True)
     description = forms.CharField(label="Description*", widget=forms.TextInput(attrs={'placeholder': 'John is a charismatic father of 2 who loves his dogs.'}), required=True, max_length=5000)
-    paid = forms.BooleanField(label="Paid", required=False)
-    paidDescription = forms.CharField(label="Specify", max_length=100, required=False)
+    compensationType = forms.CharField(label="Compensation", required=False)
+    compensationDescription = forms.CharField(widget=forms.HiddenInput, max_length=100, required=False)
     actorName = forms.CharField(widget=forms.HiddenInput, max_length=200, required=False)      # only filled if Cast
     hairColor = forms.CharField(label="Hair Color", max_length=50, required=False)
     eyeColor = forms.CharField(label="Eye Color", max_length=50, required=False)

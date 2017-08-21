@@ -229,8 +229,8 @@ class WorkPost(AbstractPost):
         return constants.WORK_POST
 
 class CastingPost(AbstractPost):
-    paid = models.BooleanField(default=False)
-    paidDescription = models.CharField(max_length=200, blank=True, null=True)
+    compensationType = models.CharField(default="Unpaid", max_length=200, blank=True, null=True)
+    compensationDescription = models.CharField(max_length=200, blank=True, null=True)
     descriptionEnabled = models.BooleanField(default=False)
     roleType = models.CharField(max_length=100, default="Acting", blank=True, null=True)
     actorName = models.CharField(max_length=200, blank=True, null=True)

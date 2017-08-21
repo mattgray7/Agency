@@ -70,6 +70,40 @@
 		transition: opacity .25s ease;
 
 	}
+	.editCompensationPanel
+	{
+		width: 100%;
+		text-align: center;
+	}
+
+	.editCompensationPanelButtonActive,
+	.editCompensationPanelButton
+	{
+		letter-spacing: 1px;
+		text-align: center;
+		text-decoration: none;
+		text-transform: uppercase;
+		font-size: 0.9em;
+		font-weight: 600;
+		border: 1px solid rgba(0,0,0,0);
+		color: rgba(0,0,0,0.6);
+		border-radius: 1px;
+	}
+	.editCompensationPanelButton:hover
+	{
+		border: 1px solid rgba(0,0,0,1);
+		border-radius: 3px;
+		color: rgba(0,0,0,0.9);
+		cursor: pointer;
+	}	
+	.editCompensationPanelButtonActive
+	{
+		border: 1px solid rgba(0,0,0,1);
+		border-radius: 3px;
+		background: #ededed;
+		color: rgba(0,0,0,0.9);
+		cursor: pointer;
+	}
 	.formLabelDividingLine{
 		z-index: 0;
 	}
