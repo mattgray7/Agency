@@ -950,9 +950,16 @@ function getEventStatus(date){
 function getCompensationPanel(value){
     var panelString = "<div style='width:98%;'>"
 
-    var tabList = [{"label": "Paid", "value": "paid"},
-                   {"label": "Negotiable", "value": "negotiable"},
-                   {"label": "Unpaid", "value": "unpaid"}]
+    var tabList = [{"label": "Paid", "value": "Paid"},
+                   {"label": "Negotiable", "value": "Negotiable"},
+                   {"label": "Unpaid", "value": "Unpaid"}]
+    for(var i=0; i < tabList.length; i++){
+        if(tabList[i].value === value){
+            tabList[i]["active"] = true;
+        }else{
+            tabList[i]["active"] = false;
+        }
+    }
 
     var activeOnclickCallback = "expandCompensationPanel";
     panelString += createMultiTabOption(tabList, "compensationPanelTabs", activeOnclickCallback);
@@ -967,13 +974,25 @@ function createMultiTabOption(tabList, panelID, activeOnclickCallback){
         tabs += "<div style='position: relative; height: 33px; margin: 0px -9px; margin-top: -2px; '>";
 
         // left
-        tabs += "<div class='editCompensationPanelButton' id='optionTab_" + tabList[0].value + "' style='position: absolute; left: 0; width: 33%; height: 32px;' onclick='changeMultiTabOptionClasses(" + '"' + tabList[0].value + '", "' + panelID + '", "' + activeOnclickCallback + '"' + ");'><div style='margin-top: -3px;'>" + tabList[0].label + '</div></div>';
+        tabs += "<div class='editCompensationPanelButton";
+        if(tabList[0].active){
+            tabs += 'Active';
+        }
+        tabs += "' id='optionTab_" + tabList[0].value + "' style='position: absolute; left: 0; width: 33%; height: 32px;' onclick='changeMultiTabOptionClasses(" + '"' + tabList[0].value + '", "' + panelID + '", "' + activeOnclickCallback + '"' + ");'><div style='margin-top: -3px;'>" + tabList[0].label + '</div></div>';
 
         // middle
-        tabs += "<div class='editCompensationPanelButton' id='optionTab_" + tabList[1].value + "' style='position: absolute; left: 33.3%; width: 33%; height: 32px;' onclick='changeMultiTabOptionClasses(" + '"' + tabList[1].value + '", "' + panelID + '", "' + activeOnclickCallback + '"' + ");'><div style='margin-top: -3px;'>" + tabList[1].label + '</div></div>';
+        tabs += "<div class='editCompensationPanelButton";
+        if(tabList[1].active){
+            tabs += 'Active';
+        }
+        tabs += "' id='optionTab_" + tabList[1].value + "' style='position: absolute; left: 33.3%; width: 33%; height: 32px;' onclick='changeMultiTabOptionClasses(" + '"' + tabList[1].value + '", "' + panelID + '", "' + activeOnclickCallback + '"' + ");'><div style='margin-top: -3px;'>" + tabList[1].label + '</div></div>';
 
         // right
-        tabs += "<div class='editCompensationPanelButton' id='optionTab_" + tabList[2].value + "' style='position: absolute; right: 0; width: 33%; height: 32px; margin-right: -1px;' onclick='changeMultiTabOptionClasses(" + '"' + tabList[2].value + '", "' + panelID + '", "' + activeOnclickCallback + '"' + ");'><div style='margin-top: -3px;'>" + tabList[2].label + '</div></div>';
+        tabs += "<div class='editCompensationPanelButton";
+        if(tabList[2].active){
+            tabs += 'Active';
+        }
+        tabs += "' id='optionTab_" + tabList[2].value + "' style='position: absolute; right: 0; width: 33%; height: 32px; margin-right: -1px;' onclick='changeMultiTabOptionClasses(" + '"' + tabList[2].value + '", "' + panelID + '", "' + activeOnclickCallback + '"' + ");'><div style='margin-top: -3px;'>" + tabList[2].label + '</div></div>';
 
         // Text box below
         tabs += "<div id='" + panelID + "DropdownPanel' style='position: absolute; top: 14px; left: 0; right: 0; border-radius: 3px; border: none; height: 13px; margin-left: -2px; margin-right: -2px; visibility: hidden; overflow: hidden;' class='formInput'><input class='noFormInputFormatting' type='text' name='compensationDetscription' id='compensationDescription' placeholder='Details...' style='position: absolute; left: 2px; border: none; margin: -7px 0px 0px 1px; padding: 0px 0px 0px 4px; height: 26px; width: 96%;' /> </div>"
@@ -1011,7 +1030,7 @@ function expandCompensationPanel(compType){
         if(!compensationPanelExpanded){
             compensationPanelExpanded = true;
             compensationType = compType
-            $("#compensationPanelTabs").animate({marginTop: "6px", height: "62px"}, 400, function(){
+            $("#compensationPanelTabs").animate({marginTop: "6px", height: "62px"}, 150, function(){
                 document.getElementById("compensationPanelTabsDropdownPanel").style.visibility = "visible";
             });
         }
