@@ -24,8 +24,8 @@ class WorkPostInstance(post.GenericPostInstance):
         if self.record:
             self.record.profession = self.request.POST.get("profession")
             self.record.projectID = self.request.POST.get("projectID")
-            self.record.paid = self.request.POST.get("paid", False) and True  #get value will be 'true' instead of True
-            self.record.paidDescription = self.request.POST.get("paidDescription")
+            self.record.compensationType = self.request.POST.get("compensationType")
+            self.record.compensationDescription = self.request.POST.get("compensationDescription")
             self.record.shortDescription = self.request.POST.get("shortDescription")
             self.record.workerName = self.request.POST.get("workerName")
             self.record.skills = self.request.POST.get("skills")
@@ -76,8 +76,8 @@ class CreateWorkPostView(post.GenericCreatePostView):
     def formInitialValues(self):
         self._formInitialValues = super(CreateWorkPostView, self).formInitialValues
         if self.post.record:
-            self._formInitialValues["paid"] = self.post.record.paid
-            self._formInitialValues["paidDescription"] = self.post.record.paidDescription
+            self._formInitialValues["compensationType"] = self.post.record.compensationType
+            self._formInitialValues["compensationDescription"] = self.post.record.compensationDescription
             self._formInitialValues["skills"] = self.post.record.skills
             self._formInitialValues["hoursPerWeek"] = self.post.record.hoursPerWeek
             self._formInitialValues["startDate"] = self.post.record.startDate

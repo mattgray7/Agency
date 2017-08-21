@@ -213,8 +213,8 @@ class CollaborationPost(AbstractPost):
 class WorkPost(AbstractPost):
     profession = models.CharField(max_length=200)
     workerName = models.CharField(max_length=200, blank=True, null=True)      # only filled if status is Filled (vs Hiring)
-    paid = models.BooleanField(default=False)
-    paidDescription = models.CharField(max_length=200, blank=True, null=True)
+    compensationType = models.CharField(default="Unpaid", max_length=200, blank=True, null=True)
+    compensationDescription = models.CharField(max_length=200, blank=True, null=True)
     shortDescription = models.CharField(max_length=200, blank=True, null=True)
     skills = models.CharField(max_length=300, blank=True, null=True)
     location = models.CharField(max_length=300, blank=True, null=True)
@@ -227,6 +227,15 @@ class WorkPost(AbstractPost):
     @property
     def postType(self):
         return constants.WORK_POST
+
+    @property
+    def compensation(self):
+        if self.compensationType:
+            if self.compensationDescription:
+                return "{0} - {1}".format(self.compensationType, self.compensationDescription)
+            else:
+                return self.compensationType
+        return "Unspecified"
 
 class CastingPost(AbstractPost):
     compensationType = models.CharField(default="Unpaid", max_length=200, blank=True, null=True)

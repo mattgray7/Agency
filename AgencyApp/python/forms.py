@@ -59,7 +59,6 @@ class CreateCollaborationPostForm(GenericCreatePostForm):
 
 class CreateWorkPostForm(GenericCreatePostForm):
     profession = forms.CharField(max_length=200, required=True)
-    paid = forms.BooleanField(label="Paid", required=False)
     postID = forms.CharField(widget=forms.HiddenInput, max_length=10)
     projectID = forms.CharField(widget=forms.HiddenInput, required=False, max_length=10)
     poster = forms.CharField(widget=forms.HiddenInput, max_length=200)
@@ -69,8 +68,8 @@ class CreateWorkPostForm(GenericCreatePostForm):
     status = forms.CharField(label="Job Status*", widget=forms.HiddenInput, max_length=50, required=False)
     shortDescription = forms.CharField(label="Short Description*", widget=forms.TextInput(attrs={'placeholder': 'Basic single camera work on tv show'}), max_length=200, required=True)
     description = forms.CharField(label="Description*", widget=forms.TextInput(attrs={'placeholder': 'The hiree must be able to handle all camera operations for all set days. They will be compensated at an hourly rate, with potential for reshoots after primary production.'}), required=True, max_length=5000)
-    paid = forms.BooleanField(label="Paid", required=False)
-    paidDescription = forms.CharField(label="Specify", max_length=100, required=False)
+    compensationType = forms.CharField(label="Compensation", required=False)
+    compensationDescription = forms.CharField(widget=forms.HiddenInput, max_length=100, required=False)
     workerName = forms.CharField(widget=forms.HiddenInput, max_length=200, required=False)      # only filled if Cast
     skills = forms.CharField(label="Required Skills", max_length=300, required=False, widget=forms.TextInput(attrs={'placeholder': 'Knowledge of Canon Rebel T series or Nikon D3000 series a plus.'}))
     startDate = forms.DateField(label="Start Date*", required=False, widget=forms.DateInput(attrs={'class':'datepicker'}))
