@@ -10,29 +10,31 @@
 <script>
         // Submits the form while adding values of select bars with id '{{name}}SelectBar' to form input '{{name}}SelectInput'
         function submitForm(formName){
-            var statusDiv = document.getElementById("statusSelectBar");
-            if(statusDiv != null){
-                // Set the status from the select bar in the form
-                document.getElementById("statusSelectInput").value = statusDiv.value;
-            }
-            {% if selectFields.roles.names %}
-                {% for name in selectFields.roles.names %}
-                    var selectDiv = document.getElementById('{{name}}SelectBar')
-                    if(selectDiv != null){
-                        document.getElementById('{{name}}SelectInput').value = selectDiv.value;
-                    }
-                {% endfor %}
-            {% endif %}
-            {% if selectFields.jobs.names %}
-                {% for name in selectFields.jobs.names %}
-                    var selectDiv = document.getElementById('{{name}}SelectBar')                    
-                    if(selectDiv != null){
-                        document.getElementById('{{name}}SelectInput').value = selectDiv.value;
-                    }
-                {% endfor %}
-            {% endif %}
             var form = document.getElementById(formName)
             if(form != null){
+                var statusDiv = document.getElementById("statusSelectBar");
+                if(statusDiv != null){
+                    // Set the status from the select bar in the form
+                    document.getElementById("statusSelectInput").value = statusDiv.value;
+                }
+                {% if selectFields.roles.names %}
+                    {% for name in selectFields.roles.names %}
+                        var selectDiv = document.getElementById('{{name}}SelectBar')
+                        if(selectDiv != null){
+                            document.getElementById('{{name}}SelectInput').value = selectDiv.value;
+                        }
+                    {% endfor %}
+                {% endif %}
+                {% if selectFields.jobs.names %}
+                    {% for name in selectFields.jobs.names %}
+                        var selectDiv = document.getElementById('{{name}}SelectBar')                    
+                        if(selectDiv != null){
+                            document.getElementById('{{name}}SelectInput').value = selectDiv.value;
+                        }
+                    {% endfor %}
+                {% endif %}
+
+                setCompensationInputs()
                 return form.submit()
             }
         }
@@ -64,7 +66,7 @@
                             paidDescription = ''
                         }
                         postField.input = "<div style='position: relative; margin-top: -5px;'>" + currentInput + "<div style='position: absolute; top: 0; right: 0; margin-top: 6px; width: 90%; min-width: 180px; text-align: right;'><div style='position: relative;'> <div style='position: absolute; left: 0;' class='editPostLabelPanel'>Specify </div><div style='position: absolute; left: 0; right: 0; margin-right: 3px; margin-left: 68px; margin-top: -3px;'><input type='text' name='paidDescription' value='" + paidDescription + "' style='display: inline; margin-top: -10px;'></div></div></div>"*/
-                        postField.input = getCompensationPanel('{{field.value}}')
+                        postField.input = getCompensationPanel('{{field.value}}') + "<div style='display: none;'><input type='text' name='compensationType' id='compensationTypeInput'/><input type='text' name='compensationDescription' id='compensationDescriptionInput'/></div>"
                     {% elif field.name == "compensationDescription" %}
                         // Paid description will be on same line as paid
                         save = false;

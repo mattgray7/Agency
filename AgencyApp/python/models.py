@@ -254,6 +254,15 @@ class CastingPost(AbstractPost):
     def postType(self):
         return constants.CASTING_POST
 
+    @property
+    def compensation(self):
+        if self.compensationType:
+            if self.compensationDescription:
+                return "{0} - {1}".format(self.compensationType, self.compensationDescription)
+            else:
+                return self.compensationType
+        return "Unspecified"
+
 class EventPost(AbstractPost):
     location = models.CharField(max_length=1000, default=None, blank=True, null=True)
     date = models.DateField(default=None, blank=True, null=True)

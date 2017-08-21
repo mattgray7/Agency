@@ -19,8 +19,8 @@ class CastingPostInstance(post.GenericPostInstance):
 
     def saveModelFormValues(self):
         if self.record:
-            self.record.paid = self.request.POST.get("paid", False) and True  #get value will be 'true' instead of True
-            self.record.paidDescription = self.request.POST.get("paidDescription")
+            self.record.compensationType = self.request.POST.get("compensationType", "Unspecified")
+            self.record.compensationDescription = self.request.POST.get("compensationDescription")
             self.record.location = self.request.POST.get("location")
             self.record.actorName = self.request.POST.get("actorName")
             self.record.characterName = self.request.POST.get("characterName")
@@ -91,8 +91,8 @@ class CreateCastingPostView(post.GenericCreatePostView):
     def formInitialValues(self):
         self._formInitialValues = super(CreateCastingPostView, self).formInitialValues
         if self.post.record:
-            self._formInitialValues["paid"] = self.post.record.paid
-            self._formInitialValues["paidDescription"] = self.post.record.paidDescription
+            self._formInitialValues["compensationType"] = self.post.record.compensationType
+            self._formInitialValues["compensationDescription"] = self.post.record.compensationDescription
             self._formInitialValues["skills"] = self.post.record.skills
             self._formInitialValues["languages"] = self.post.record.languages
             self._formInitialValues["hoursPerWeek"] = self.post.record.hoursPerWeek
@@ -169,7 +169,7 @@ class ViewCastingPostView(post.GenericViewPostView):
             if self.post and self.post.record:
                 self._postFieldsBySection = {"Details": [{'id': 'status', 'value': self.post.record.status, 'label': 'Status'},
                                                         {'id': 'dates', 'value': helpers.getDateString(self.post.record.startDate, self.post.record.endDate), 'label': None},
-                                                        {'id': 'paid', 'value': self.post.record.paid, 'label': 'Paid'},
+                                                        {'id': 'compensation', 'value': self.post.record.compensation, 'label': 'Compensation'},
                                                         {'id': 'hoursPerWeek', 'value': self.post.record.hoursPerWeek, 'label': 'Hours/Week'},
                                                         ],
                                             "Character": [{'id': 'gender', 'value': self.post.record.gender, 'label': 'Gender'},
