@@ -967,13 +967,13 @@ function createMultiTabOption(tabList, panelID){
         tabs += "<div id='" + panelID + "' style='position: relative; height: 32px; margin: 0px -9px; margin-top: -2px;'>";
 
         // left
-        tabs += "<div class='editCompensationPanelButton' id='optionTab_" + tabList[0].value + "' style='position: absolute; left: 0; width: 33.2%; height: 32px;' onclick='changeMultiTabOptionClasses(" + '"' + tabList[0].value + '", "' + panelID + '"' + ");'><div style='margin-top: -3px;'>" + tabList[0].label + '</div></div>';
+        tabs += "<div class='editCompensationPanelButton' id='optionTab_" + tabList[0].value + "' style='position: absolute; left: 0; width: 33%; height: 32px;' onclick='changeMultiTabOptionClasses(" + '"' + tabList[0].value + '", "' + panelID + '"' + ");'><div style='margin-top: -3px;'>" + tabList[0].label + '</div></div>';
 
         // middle
-        tabs += "<div class='editCompensationPanelButton' id='optionTab_" + tabList[1].value + "' style='position: absolute; left: 33.3%; width: 33.2%; height: 32px;' onclick='changeMultiTabOptionClasses(" + '"' + tabList[1].value + '", "' + panelID + '"' + ");'><div style='margin-top: -3px;'>" + tabList[1].label + '</div></div>';
+        tabs += "<div class='editCompensationPanelButton' id='optionTab_" + tabList[1].value + "' style='position: absolute; left: 33.3%; width: 33%; height: 32px;' onclick='changeMultiTabOptionClasses(" + '"' + tabList[1].value + '", "' + panelID + '"' + ");'><div style='margin-top: -3px;'>" + tabList[1].label + '</div></div>';
 
         // right
-        tabs += "<div class='editCompensationPanelButton' id='optionTab_" + tabList[2].value + "' style='position: absolute; right: 0; width: 33.2%; height: 32px; margin-right: -1px;' onclick='changeMultiTabOptionClasses(" + '"' + tabList[2].value + '", "' + panelID + '"' + ");'><div style='margin-top: -3px;'>" + tabList[2].label + '</div></div>';
+        tabs += "<div class='editCompensationPanelButton' id='optionTab_" + tabList[2].value + "' style='position: absolute; right: 0; width: 33%; height: 32px; margin-right: -1px;' onclick='changeMultiTabOptionClasses(" + '"' + tabList[2].value + '", "' + panelID + '"' + ");'><div style='margin-top: -3px;'>" + tabList[2].label + '</div></div>';
 
         tabs += "</div>";
     }
