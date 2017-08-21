@@ -976,11 +976,9 @@ function createMultiTabOption(tabList, panelID, activeOnclickCallback){
         tabs += "<div class='editCompensationPanelButton' id='optionTab_" + tabList[2].value + "' style='position: absolute; right: 0; width: 33%; height: 32px; margin-right: -1px;' onclick='changeMultiTabOptionClasses(" + '"' + tabList[2].value + '", "' + panelID + '", "' + activeOnclickCallback + '"' + ");'><div style='margin-top: -3px;'>" + tabList[2].label + '</div></div>';
 
         // Text box below
-        tabs += "<div id='" + panelID + "DropdownPanel' style='position: absolute; top: 14px; left: 0; right: 0; border-radius: 3px; border: none; height: 13px; margin-left: -2px; margin-right: -2px; visibility: hidden; overflow: hidden;' class='formInput'><input type='text' name='compensationType' value='$10/hour' style='position: absolute; left: 2px; right: 0; border: none; margin: -7px 0px 0px 1px; padding: 0px 0px 0px 0px; height: 26px;' /> </div>"
+        tabs += "<div id='" + panelID + "DropdownPanel' style='position: absolute; top: 14px; left: 0; right: 0; border-radius: 3px; border: none; height: 13px; margin-left: -2px; margin-right: -2px; visibility: hidden; overflow: hidden;' class='formInput'><input class='noFormInputFormatting' type='text' name='compensationType' placeholder='Details...' style='position: absolute; left: 2px; border: none; margin: -7px 0px 0px 1px; padding: 0px 0px 0px 4px; height: 26px; width: 96%;' /> </div>"
 
         tabs += "</div>";
-
-
     }
     tabs += "</div></div>";
     return tabs;

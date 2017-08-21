@@ -200,6 +200,16 @@
     font-family: Georgia, "Times New Roman", Times, serif;
 }
 
+.noFormInputFormatting{
+    width: 100%;
+    line-height: 25px;
+    font-size: 1.2em;
+}
+.noFormInputFormatting:focus{
+    outline-width: 0;
+}
+
+
 .form-style-7 input[type="text"]:focus,
 .form-style-7 input[type="date"]:focus,
 .form-style-7 input[type="datetime"]:focus,
