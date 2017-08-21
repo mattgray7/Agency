@@ -116,32 +116,50 @@
     }
 
     function getViewPostText(){
-        var headerString = "<div style='position: relative;'><div style='position: absolute; left: 300px; height: 300px; width: 600px; text-align: left;'>"
+        var postString = "<div style='position: relative;'><div style='position: absolute; left: 300px; height: 300px; width: 500px; text-align: left;'>"
 
         // Add title
         {% if viewPostData %}
-            headerString += '<h1 class="postInfoTitle"><a onclick="' + "redirectToPost('{{post.postID}}');" + '"> {{ viewPostData.title }}</a></h1>';
+            postString += '<h1 class="postInfoTitle"><a onclick="' + "redirectToPost('{{post.postID}}');" + '"> {{ viewPostData.title }}</a></h1>';
+
+            // Add top right button
+            {% if userIsAdmin or user.is_authenticated %}
+                postString += '<div style="position: relative;"><div class="whiteButton blackHover" style="position: absolute; right: 0; top: -40px; padding: 0.25em 0.5em 0.25em 0.5em; font-weight: 400; font-size: 1em;" ';
+                {% if userIsAdmin %}
+                    postString += 'onclick="redirectToEditPost(' + "'{{post.postID}}'" + ');">Edit</div>';
+                {% elif user.is_authenticated %}
+                    postString += 'onclick="updatePostFollow();"><div id="followButtonText">';
+                    {% if following %}
+                        postString += 'Following &#10004;'
+                    {% else %}
+                        postString += 'Follow'
+                    {% endif %}
+                    postString += "</div></div>";
+                {% endif %}
+                postString += "</div>"
+            {% endif %}
+
             {% if viewPostData.subTitles %}
                 {% for subTitle in viewPostData.subTitles %}
-                    headerString += '<div class="postInfoSubTitle">{{subTitle}}</div>';
+                    postString += '<div class="postInfoSubTitle">{{subTitle}}</div>';
                 {% endfor %}
             {% endif %}
 
             {% if viewPostData.fields %}
                 {% for section, fields in viewPostData.fields.items %}
                     {% for field in fields %}
-                        headerString += '<div class="postInfoSingleField">';
+                        postString += '<div class="postInfoSingleField">';
                         {% if field.label %}
-                            headerString += '{{field.label}}: ';
+                            postString += '{{field.label}}: ';
                         {% endif %}
-                        headerString += '{{field.value}}</div>';
+                        postString += '{{field.value}}</div>';
                     {% endfor %}
                 {% endfor %}
             {% endif %}
         {% endif %}
 
-        headerString += "</div></div>";
-        return headerString;
+        postString += "</div></div>";
+        return postString;
     }
 
     function addViewPostPanel(){
