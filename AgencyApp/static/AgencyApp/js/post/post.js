@@ -980,7 +980,9 @@ function createMultiTabOption(tabList, panelID, expandInitially, textFieldValue,
         panelHeight = 62;
         compensationPanelExpanded = true;
         dropdownVisibilityStyle = "visibility: visibile; height: 62px; "
-        textFieldValueElement += "value='" + textFieldValue + "' ";     // Add value to placeholder
+        if(textFieldValue != null && textFieldValue.length > 0 && textFieldValue != "None"){
+            textFieldValueElement += "value='" + textFieldValue + "' ";     // Add value to placeholder
+        }
     }
 
     var tabs = "<div style='height: 32px;'><div class='formInput' id='" + panelID + "' style='width: 97.5%; margin-top: 6px; padding: 0px 9px; border-radius: 4px; height: " + panelHeight + "px;'>";
