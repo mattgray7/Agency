@@ -953,42 +953,35 @@ function getCompensationPanel(value){
     var tabList = [{"label": "Paid", "value": "paid"},
                    {"label": "Negotiable", "value": "negotiable"},
                    {"label": "Unpaid", "value": "unpaid"}]
-    panelString += createMultiTabOption(tabList, "compensationPanelTabs");
+
+    var activeOnclickCallback = "expandCompensationPanel";
+    panelString += createMultiTabOption(tabList, "compensationPanelTabs", activeOnclickCallback);
 
     panelString += "</div>";
     return panelString
 }
 
-function createMultiTabOption(tabList, panelID){
-    //var tabs = "<div class='formInput' style='width: 98%; margin-top: 8px; padding: 0px 9px; border-radius: 4px; height: 32px; '><table id='" + panelID + "' cellspacing='0' style='margin-top: -3px; margin-left: -10px; width: 106.8%;'><tr>"
-
-    var tabs = "<div class='formInput' style='width: 98%; margin-top: 8px; padding: 0px 9px; border-radius: 4px; height: 32px;'>";
+function createMultiTabOption(tabList, panelID, activeOnclickCallback){
+    var tabs = "<div style='height: 32px;'><div class='formInput' id='" + panelID + "' style='width: 97.5%; margin-top: 6px; padding: 0px 9px; border-radius: 4px; height: 32px;'>";
     if(tabList.length === 3){
-        tabs += "<div id='" + panelID + "' style='position: relative; height: 32px; margin: 0px -9px; margin-top: -2px;'>";
+        tabs += "<div style='position: relative; height: 32px; margin: 0px -9px; margin-top: -2px;'>";
 
         // left
-        tabs += "<div class='editCompensationPanelButton' id='optionTab_" + tabList[0].value + "' style='position: absolute; left: 0; width: 33%; height: 32px;' onclick='changeMultiTabOptionClasses(" + '"' + tabList[0].value + '", "' + panelID + '"' + ");'><div style='margin-top: -3px;'>" + tabList[0].label + '</div></div>';
+        tabs += "<div class='editCompensationPanelButton' id='optionTab_" + tabList[0].value + "' style='position: absolute; left: 0; width: 33%; height: 32px;' onclick='changeMultiTabOptionClasses(" + '"' + tabList[0].value + '", "' + panelID + '", "' + activeOnclickCallback + '"' + ");'><div style='margin-top: -3px;'>" + tabList[0].label + '</div></div>';
 
         // middle
-        tabs += "<div class='editCompensationPanelButton' id='optionTab_" + tabList[1].value + "' style='position: absolute; left: 33.3%; width: 33%; height: 32px;' onclick='changeMultiTabOptionClasses(" + '"' + tabList[1].value + '", "' + panelID + '"' + ");'><div style='margin-top: -3px;'>" + tabList[1].label + '</div></div>';
+        tabs += "<div class='editCompensationPanelButton' id='optionTab_" + tabList[1].value + "' style='position: absolute; left: 33.3%; width: 33%; height: 32px;' onclick='changeMultiTabOptionClasses(" + '"' + tabList[1].value + '", "' + panelID + '", "' + activeOnclickCallback + '"' + ");'><div style='margin-top: -3px;'>" + tabList[1].label + '</div></div>';
 
         // right
-        tabs += "<div class='editCompensationPanelButton' id='optionTab_" + tabList[2].value + "' style='position: absolute; right: 0; width: 33%; height: 32px; margin-right: -1px;' onclick='changeMultiTabOptionClasses(" + '"' + tabList[2].value + '", "' + panelID + '"' + ");'><div style='margin-top: -3px;'>" + tabList[2].label + '</div></div>';
+        tabs += "<div class='editCompensationPanelButton' id='optionTab_" + tabList[2].value + "' style='position: absolute; right: 0; width: 33%; height: 32px; margin-right: -1px;' onclick='changeMultiTabOptionClasses(" + '"' + tabList[2].value + '", "' + panelID + '", "' + activeOnclickCallback + '"' + ");'><div style='margin-top: -3px;'>" + tabList[2].label + '</div></div>';
 
         tabs += "</div>";
     }
-    tabs += "</div>";
-
-
-
-    /*    for(var i=0; i < tabList.length; i++){
-            tabs += "<td style='width: 33.3%;'><div class='editCompensationPanelButton' id='optionTab_" + tabList[i].value + "' style='height: 32px;'><a style='display: block; margin-top: -4px;' onclick='changeMultiTabOptionClasses(" + '"' + tabList[i].value + '", "' + panelID + '"' + ");'>" + tabList[i].label + '</a></div></td>';
-        }
-    tabs += "</tr></table></div>";*/
+    tabs += "</div></div>";
     return tabs;
 }
 
-function changeMultiTabOptionClasses(activePostType, panelID){
+function changeMultiTabOptionClasses(activePostType, panelID, activeOnclickCallback){
     var tabsPanel = document.getElementById(panelID)
     var activeListItemID = "optionTab_" + activePostType;
     if(tabsPanel != null){
@@ -997,10 +990,20 @@ function changeMultiTabOptionClasses(activePostType, panelID){
             var tab = tabs[i];
             if(tab.id === activeListItemID){
                 tab.className = "editCompensationPanelButtonActive";
+
+                // Call the function name passed with the active id as a parameter
+                window[activeOnclickCallback](tab.id);
             }else if(tab.id.startsWith("optionTab_")){
                 tab.className = "editCompensationPanelButton"
             }
         }
+    }
+}
+
+function expandCompensationPanel(activeID){
+    var formInputBox = document.getElementById('compensationPanelTabs');
+    if(formInputBox != null){
+        $("#compensationPanelTabs").animate({marginTop: "6px", height: "62px"}, 400);
     }
 }
 
