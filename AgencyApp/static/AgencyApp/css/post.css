@@ -108,9 +108,9 @@
 		z-index: 0;
 	}
 	.postPictureContainer{
-		text-align: center;
+		text-align: left;
 		width: 30%;
-		min-width: 270px;
+		/*min-width: 270px;*/
 	}
 	.formEditPictureButtonContainer{
 		text-align: center;
