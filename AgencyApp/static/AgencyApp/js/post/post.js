@@ -1020,6 +1020,14 @@ function createMultiTabOption(tabList, panelID, expandInitially, textFieldValue,
 }
 
 function changeMultiTabOptionClasses(activePostType, panelID, activeOnclickCallback){
+    if(panelID == null){
+        panelID = "compensationPanelTabs";
+    }
+
+    if(activeOnclickCallback == null){
+        activeOnclickCallback = "expandCompensationTable"
+    }
+
     var tabsPanel = document.getElementById(panelID)
     var activeListItemID = "optionTab_" + activePostType;
     if(tabsPanel != null){

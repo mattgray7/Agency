@@ -90,12 +90,18 @@
                 // If there is a form already expanded when resizing, want to re-expand it after resize
                 var expandedFormPostID;
                 var expandedFormData;
+                var expandedCompensationType;       // Special case to set toggle button
                 if(currentExistingFormPostID != null && currentExistingFormPostID.length > 0){
                     expandedFormPostID = currentExistingFormPostID
                     expandedFormData = {};
                     $("[id='" + formName + "'] :input").each(function(){
                         var input = $(this)[0]; // This is the jquery object of the input, do what you will
                         expandedFormData[input.name] = input.value;
+
+                        // Special case
+                        if(input.name === "compensationType"){
+                            expandedCompensationType = compensationType;
+                        }
                     })
                 }
 
@@ -108,8 +114,15 @@
                         if(document.getElementById(formName) != null){
                             $("[id='" + formName + "'] :input").each(function(){
                                 var input = $(this)[0];
-                                if(expandedFormData[input.name] != input.value){
-                                    input.value = expandedFormData[input.name]
+                                if(input.type != "file"){
+                                    if(expandedFormData[input.name] != input.value){
+                                        input.value = expandedFormData[input.name]
+                                    }
+                                }
+
+                                // Special case for compensation toggle button
+                                if(input.name === "compensationType"){
+                                    changeMultiTabOptionClasses(expandedCompensationType, null, "expandCompensationPanel")
                                 }
                             })
                         }
