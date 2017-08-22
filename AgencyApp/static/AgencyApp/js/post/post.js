@@ -962,6 +962,7 @@ function getCompensationPanel(value, description){
     }
 
     var expandInitially = false;
+    compensationPanelExpanded = false
     if(value != null && value.length > 0 && value != "None"){
         compensationType = value;
         expandInitially = true;
