@@ -82,7 +82,20 @@
         $(window).resize(function () {
             resizeBrowseTable(function(){
                 document.getElementById("browseTable").style.width = tableColCount * 300 + "px";
+
+                // If there is a form already expanded when resizing, want to re-expand it after resize
+                var expandedFormPostID;
+                if(currentExistingFormPostID != null && currentExistingFormPostID.length > 0){
+                    expandedFormPostID = currentExistingFormPostID
+                }
+
                 selectProjectTab(activeTab);
+
+                // Re-expand the form
+                if(expandedFormPostID != null){
+                    toggleExpandExistingForm("expand", tabType, expandedFormPostID, null)
+                }
+
             });
         });
     }
@@ -145,7 +158,6 @@
         var borderCover = document.getElementById("postPanelBorderCover_" + postID);
         var postPanel = document.getElementById("browseTablePost_" + postID);
 
-
         if(toggleType === "expand"){
             if(currentExistingFormPostID != '' && currentExistingFormPostID != null){
                 // Shrink existing panel and then expand new one
@@ -153,29 +165,31 @@
             }
             currentExistingFormPostID = postID;
             var postRow = $('[id=browseTablePost_' + postID + ']').closest('tr');
-            var rowDiv = document.getElementById(postRow[0].id);
-            if(rowDiv != null){
-                // Create new row
-                var newRow = document.createElement('tr');
-                newRow.id = "insertExistingFormDivContainerRow"
+            if(postRow.length > 0){
+                var rowDiv = document.getElementById(postRow[0].id);
+                if(rowDiv != null){
+                    // Create new row
+                    var newRow = document.createElement('tr');
+                    newRow.id = "insertExistingFormDivContainerRow"
 
-                // Create new col with ful colspan
-                var newCol = document.createElement('td');
-                newCol.colSpan = tableColCount;
+                    // Create new col with ful colspan
+                    var newCol = document.createElement('td');
+                    newCol.colSpan = tableColCount;
 
-                // Create new form div to put in column
-                var newFormDiv = document.createElement('div');
-                newFormDiv.className = "browseTableForm";
-                newFormDiv.id = "insertExistingFormDiv";
-                newFormDiv.style.overflow = "hidden";
-                newFormDiv.style.height = "0px";
-                setExistingElementForm(panelType, postID, newFormDiv)
+                    // Create new form div to put in column
+                    var newFormDiv = document.createElement('div');
+                    newFormDiv.className = "browseTableForm";
+                    newFormDiv.id = "insertExistingFormDiv";
+                    newFormDiv.style.overflow = "hidden";
+                    newFormDiv.style.height = "0px";
+                    setExistingElementForm(panelType, postID, newFormDiv)
 
-                // Add the div to col, col to row, and row after the parent row
-                newCol.appendChild(newFormDiv)
-                newRow.appendChild(newCol)
-                rowDiv.parentNode.insertBefore(newRow, rowDiv.nextSibling);
-                $("#insertExistingFormDiv").animate({marginTop: "0px", height: formHeights[panelType]}, transitionSpeed + 200);
+                    // Add the div to col, col to row, and row after the parent row
+                    newCol.appendChild(newFormDiv)
+                    newRow.appendChild(newCol)
+                    rowDiv.parentNode.insertBefore(newRow, rowDiv.nextSibling);
+                    $("#insertExistingFormDiv").animate({marginTop: "0px", height: formHeights[panelType]}, transitionSpeed + 200);
+                }
             }
 
             // Change onclick of edit button to shrink form
