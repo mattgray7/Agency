@@ -730,7 +730,15 @@
             postFields["actor"] = actorField;
 
             if("compensationType" in postFields){
-                postFields["compensationType"]["input"] = getCompensationPanel(existingPostData["compensationType"], existingPostData["compensationDescription"]) + "<div style='display: none;'><input type='text' name='compensationType' id='compensationTypeInput'/></div>"
+                var compType;
+                if(existingPostData != null && "compensationType" in existingPostData){
+                    compType = existingPostData["compensationType"];
+                }
+                var compDescription;
+                if(existingPostData != null && "compensationDescription" in existingPostData){
+                    compDescription = existingPostData["compensationDescription"]
+                }
+                postFields["compensationType"]["input"] = getCompensationPanel(compType, compDescription) + "<div style='display: none;'><input type='text' name='compensationType' id='compensationTypeInput'/></div>"
             }
 
             // Add other required fields (csrf_token, onCancel, etc)
@@ -763,7 +771,15 @@
             postFields["worker"] = workerField;
 
             if("compensationType" in postFields){
-                postFields["compensationType"]["input"] = getCompensationPanel(existingPostData["compensationType"], existingPostData["compensationDescription"]) + "<div style='display: none;'><input type='text' name='compensationType' id='compensationTypeInput'/></div>"
+                var compType;
+                if(existingPostData != null && "compensationType" in existingPostData){
+                    compType = existingPostData["compensationType"];
+                }
+                var compDescription;
+                if(existingPostData != null && "compensationDescription" in existingPostData){
+                    compDescription = existingPostData["compensationDescription"]
+                }
+                postFields["compensationType"]["input"] = getCompensationPanel(compType, compDescription) + "<div style='display: none;'><input type='text' name='compensationType' id='compensationTypeInput'/></div>"
             }
 
             // Add other required fields (csrf_token, onCancel, etc)
