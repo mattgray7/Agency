@@ -61,18 +61,22 @@
         var entries;
         var sectionOrder;
         var titleFieldName;
+        var formName;
         if(tabType === "roles"){
             entries = getBrowseRolesDict();
             sectionOrder = ["Open", "Opening soon", "Cast"];
             titleFieldName = "characterName";
+            formName = "createCastingPostForm";
         }else if(tabType == "jobs"){
             entries = getBrowseJobsDict();
             sectionOrder = ["Open", "Opening soon", "Filled"];
             titleFieldName = "profession";
+            formName = "createWorkPostForm";
         }else if(tabType == "events"){
             entries = getBrowseEventsDict();
             sectionOrder = ["Today", "Upcoming", "Past", "Announced", "Cancelled"];
             titleFieldName = "title";
+            formName = "createEventPostForm";
         }
         var table = createBrowseTable(tabType, entries, sectionOrder, true, titleFieldName, true)
         var contentDiv = document.getElementById("projectContentList")
@@ -85,17 +89,32 @@
 
                 // If there is a form already expanded when resizing, want to re-expand it after resize
                 var expandedFormPostID;
+                var expandedFormData;
                 if(currentExistingFormPostID != null && currentExistingFormPostID.length > 0){
                     expandedFormPostID = currentExistingFormPostID
+                    expandedFormData = {};
+                    $("[id='" + formName + "'] :input").each(function(){
+                        var input = $(this)[0]; // This is the jquery object of the input, do what you will
+                        expandedFormData[input.name] = input.value;
+                    })
                 }
 
                 selectProjectTab(activeTab);
 
                 // Re-expand the form
                 if(expandedFormPostID != null){
-                    toggleExpandExistingForm("expand", tabType, expandedFormPostID, null)
+                    toggleExpandExistingForm("expand", tabType, expandedFormPostID, null, function(){
+                        // If any values were entered on the expanded form that weren't save, update them on the re-expanded form
+                        if(document.getElementById(formName) != null){
+                            $("[id='" + formName + "'] :input").each(function(){
+                                var input = $(this)[0];
+                                if(expandedFormData[input.name] != input.value){
+                                    input.value = expandedFormData[input.name]
+                                }
+                            })
+                        }
+                    })
                 }
-
             });
         });
     }
@@ -153,7 +172,7 @@
     }
 
     var currentExistingFormPostID = ''
-    function toggleExpandExistingForm(toggleType, panelType, postID, shrinkAnimationFinishCallback){
+    function toggleExpandExistingForm(toggleType, panelType, postID, animationFinishCallback, formLoadCallback){
         var editButton = document.getElementById("editPostButton_" + postID)
         var borderCover = document.getElementById("postPanelBorderCover_" + postID);
         var postPanel = document.getElementById("browseTablePost_" + postID);
@@ -182,7 +201,7 @@
                     newFormDiv.id = "insertExistingFormDiv";
                     newFormDiv.style.overflow = "hidden";
                     newFormDiv.style.height = "0px";
-                    setExistingElementForm(panelType, postID, newFormDiv)
+                    setExistingElementForm(panelType, postID, newFormDiv, formLoadCallback)
 
                     // Add the div to col, col to row, and row after the parent row
                     newCol.appendChild(newFormDiv)
@@ -209,6 +228,10 @@
             if(borderCover != null){
                 borderCover.style.visibility = "visible";
             }
+
+            if(animationFinishCallback != null){
+                animationFinishCallback();
+            }
         }else{
             // Shrinking, so no post id is active
             currentExistingFormPostID = '';
@@ -227,8 +250,8 @@
                     postPanel.style.background = "#efefef";
                 }
 
-                if(shrinkAnimationFinishCallback != null){
-                    shrinkAnimationFinishCallback();
+                if(animationFinishCallback != null){
+                    animationFinishCallback();
                 }
             });
 
@@ -444,8 +467,6 @@
                                              "status": {'value': dataForm.status.value, 'hidden': true},
                                              "postPicture": {"value": '{{images.noPicture}}', "hidden": false},
                                        }};
-        console.log(dataForm.compensationType)
-        console.log(dataForm.compensationDescription)
 
         // Explicitly set the image url of the new post
         if(imageURL != null && imageURL.length > 0){
@@ -617,22 +638,34 @@
         return formString;
     }
 
-    function setExistingElementForm(formType, postID, elementContentDiv){
+    function setExistingElementForm(formType, postID, elementContentDiv, formLoadCallback){
         var formString = "";
         if(formType === "roles"){
             var castingFormDict = getExistingFormDict(postID, formType, function(postFields){
                 var newFormString = addCreateCastingPost(postFields, "{{currentPageURL}}", "createCastingPostForm");
                 elementContentDiv.innerHTML = newFormString;
+
+                if(formLoadCallback != null){
+                    formLoadCallback();
+                }
             })
         }else if(formType === "jobs"){
             var workFormDict = getExistingFormDict(postID, formType, function(postFields){
                 var newFormString = addCreateWorkPost(postFields, "{{currentPageURL}}", "createWorkPostForm");
                 elementContentDiv.innerHTML = newFormString;
+
+                if(formLoadCallback != null){
+                    formLoadCallback();
+                }
             })
         }else if(formType === "events"){
             var eventFormDict = getExistingFormDict(postID, formType, function(postFields){
                 var newFormString = addCreateEventPost(postFields, "{{currentPageURL}}", "createEventPostForm");
                 elementContentDiv.innerHTML = newFormString;
+
+                if(formLoadCallback != null){
+                    formLoadCallback();
+                }
             })
         }
         return formString;
