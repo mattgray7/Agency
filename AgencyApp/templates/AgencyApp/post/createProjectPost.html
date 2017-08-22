@@ -61,22 +61,18 @@
         var entries;
         var sectionOrder;
         var titleFieldName;
-        var formName;
         if(tabType === "roles"){
             entries = getBrowseRolesDict();
             sectionOrder = ["Open", "Opening soon", "Cast"];
             titleFieldName = "characterName";
-            formName = "createCastingPostForm";
-        }else if(tabType == "jobs"){
+        }else if(tabType === "jobs"){
             entries = getBrowseJobsDict();
             sectionOrder = ["Open", "Opening soon", "Filled"];
             titleFieldName = "profession";
-            formName = "createWorkPostForm";
-        }else if(tabType == "events"){
+        }else if(tabType === "events"){
             entries = getBrowseEventsDict();
             sectionOrder = ["Today", "Upcoming", "Past", "Announced", "Cancelled"];
             titleFieldName = "title";
-            formName = "createEventPostForm";
         }
         var table = createBrowseTable(tabType, entries, sectionOrder, true, titleFieldName, true)
         var contentDiv = document.getElementById("projectContentList")
@@ -91,6 +87,7 @@
                 var expandedFormPostID;
                 var expandedFormData;
                 var expandedCompensationType;       // Special case to set toggle button
+                var formName = getFormNameFromTabType(activeTab)
                 if(currentExistingFormPostID != null && currentExistingFormPostID.length > 0){
                     expandedFormPostID = currentExistingFormPostID
                     expandedFormData = {};
@@ -109,7 +106,7 @@
 
                 // Re-expand the form
                 if(expandedFormPostID != null){
-                    toggleExpandExistingForm("expand", tabType, expandedFormPostID, null, function(){
+                    toggleExpandExistingForm("expand", activeTab, expandedFormPostID, null, function(){
                         // If any values were entered on the expanded form that weren't save, update them on the re-expanded form
                         if(document.getElementById(formName) != null){
                             $("[id='" + formName + "'] :input").each(function(){
@@ -130,6 +127,18 @@
                 }
             });
         });
+    }
+
+    function getFormNameFromTabType(tabType){
+        var formName;
+        if(tabType === "roles"){
+            formName = "createCastingPostForm";
+        }else if(tabType === "jobs"){
+            formName = "createWorkPostForm";
+        }else if(tabType === "events"){
+            formName = "createEventPostForm";
+        }
+        return formName
     }
 
     function moveAddNewButton(tabType){
