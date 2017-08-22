@@ -153,7 +153,11 @@
                         {% if field.label %}
                             postString += '{{field.label}}: ';
                         {% endif %}
-                        postString += '{{field.value}}</div>';
+                        {% if field.onclick %}
+                            postString += '<a onclick="{{field.onclick}}">{{field.value}}</a></div>';
+                        {% else %}
+                            postString += '{{field.value}}</div>';
+                        {% endif %}
                     {% endfor %}
                 {% endfor %}
             {% endif %}

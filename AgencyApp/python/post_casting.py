@@ -169,6 +169,7 @@ class ViewCastingPostView(post.GenericViewPostView):
             if self.post and self.post.record:
                 self._postFieldsBySection = {"Details": [{'id': 'status', 'value': self.post.record.status, 'label': 'Status'},
                                                         {'id': 'dates', 'value': helpers.getDateString(self.post.record.startDate, self.post.record.endDate), 'label': None},
+                                                        {'id': 'location', 'value': self.post.record.location, 'label': 'Location'},
                                                         {'id': 'compensation', 'value': self.post.record.compensation, 'label': 'Compensation'},
                                                         {'id': 'hoursPerWeek', 'value': self.post.record.hoursPerWeek, 'label': 'Hours/Week'},
                                                         ],
@@ -182,6 +183,7 @@ class ViewCastingPostView(post.GenericViewPostView):
                 
                 # Add project to front of list if it is linked
                 if self.project and self.project.record:
-                    self._postFieldsBySection["Details"] = [{'id': 'project', 'value': self.project.record.title, 'label': 'Project'}] + self._postFieldsBySection["Details"]                
+                    self._postFieldsBySection["Details"] = [{'id': 'project', 'value': self.project.record.title, 'label': 'Project',
+                                                             'onclick': 'redirectToPost("{0}");'.format(self.project.record.postID)}] + self._postFieldsBySection["Details"]
         return self._postFieldsBySection
 

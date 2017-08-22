@@ -9,6 +9,16 @@
 		border-radius: 4px;
 		padding: .5em;
 	}
+	.mainViewPanel a
+	{
+		color: #1e1e1e;
+		font-weight: 900;
+	}
+	.mainViewPanel a:hover
+	{
+		cursor: pointer;
+		color: #b7b7b7;
+	}
 	.errorPanel
 	{
 		background: #ffc5bf;

@@ -473,8 +473,8 @@
 		display: inline-block;
 		padding: 1em 3em 1em 3em;
 		letter-spacing: 0.10em;
-		border: 2px solid #000;
-		border-radius: 6px;
+		border: 1px solid #000;
+		border-radius: 4px;
 		text-decoration: none;
 		font-weight: 700;
 		font-size: 1em;
