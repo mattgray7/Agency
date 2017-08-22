@@ -48,6 +48,9 @@
             }
         }
 
+        // Move the add new button under the panel
+        moveAddNewButton(tabType);
+
         // If a post form was expanded on old tab, reset values
         if(expanded){
             toggleExpandNewForm("shrink", activeTab)
@@ -82,6 +85,18 @@
                 selectProjectTab(activeTab);
             });
         });
+    }
+
+    function moveAddNewButton(tabType){
+        // Moves the add new button under the proper tab
+        for(var i=0; i < projectTabs.length; i++){
+            var tabColumn = document.getElementById("addNewTableCol_" + projectTabs[i])
+            if(projectTabs[i] === tabType){
+                tabColumn.innerHTML = createAddNewButton(tabType)
+            }else{
+                tabColumn.innerHTML = "";
+            }
+        }
     }
 
     var expanded = false;
@@ -564,7 +579,7 @@
             expandType = "shrink";
         }
 
-        buttonString += "<div id='addNewBrowseFormButton' class='addNewPostButton' onclick='toggleExpandNewForm(" + '"' + expandType + '", "' + tabType + '");' + "' style='width: 110px;position: relative; margin-top: 4px; margin-left: 4px;'> <div style='margin-top: -15px; position: absolute; top: 55%; margin-left: 7px;'><h3 style='font-weight: 300;'>Add new</h3></div> <img src='{{images.plus}}' style='height: 23px; width: 23px; position:absolute; right: 6%; top: 12%;'></div>";
+        buttonString += "<center><div id='projectContentListHeader' style='width: 113px; height: 34px; margin-left: 3px; background: rgba(0,0,0,0.1); border: 1px solid rgba(0,0,0,0.2); border-radius: 3px;'><div id='addNewBrowseFormButton' class='addNewPostButton' onclick='toggleExpandNewForm(" + '"' + expandType + '", "' + tabType + '");' + "' style='width: 110px; position: relative; margin-top: 1px; margin-left: 0px;'> <div style='margin-top: -15px; position: absolute; top: 55%; margin-left: 7px;'><h3 style='font-weight: 300;'>Add new</h3></div> <img src='{{images.plus}}' style='height: 23px; width: 23px; position:absolute; right: 6%; top: 12%;'></center></div>";
         
         return buttonString
     }
@@ -1171,21 +1186,29 @@ document.write(getPanelInfoFromNumColumns(tableColCount)["mainViewPanelWidth"] +
                         <td colspan="3">
                             <div style="position: relative;">
                             <div id="projectContentPanel" class="projectContentPanel" style="margin-left: -1px; margin-right:-8px; min-height: 70px; ">
-                                <div style='height:5px;'></div>
-                                <div id="projectContentListHeader" style="width: 120px; height: 40px; margin-left: 3px; background: rgba(0,0,0,0.1); border: 1px solid rgba(0,0,0,0.2); border-radius: 3px;">
-                                    <script>
-                                        {% if roles %}
-                                            document.write(createAddNewButton("roles"));
-                                        {% elif jobs %}
-                                            document.write(createAddNewButton("jobs"));
-                                        {% elif events %}
-                                            document.write(createAddNewButton("events"));
-                                        {% else %}
-                                            document.write(createAddNewButton("roles"));
-                                        {% endif %}
-                                    </script>
-                                </div>
-                                <div style='height:5px;'></div>
+                                <div style='height:2px;'></div>
+                                <table style='width: 100%;'>
+                                    <tr>
+                                        <td id='addNewTableCol_roles' style='width: 33.3%;'>
+                                            <center>
+                                                    <script>
+                                                        {% if roles %}
+                                                            document.write(createAddNewButton("roles"));
+                                                        {% elif jobs %}
+                                                            document.write(createAddNewButton("jobs"));
+                                                        {% elif events %}
+                                                            document.write(createAddNewButton("events"));
+                                                        {% else %}
+                                                            document.write(createAddNewButton("roles"));
+                                                        {% endif %}
+                                                    </script>
+                                            </center>
+                                        </td>
+                                        <td id='addNewTableCol_jobs' style='width: 33.3%;'></td>
+                                        <td id='addNewTableCol_events' style='width: 33.3%;'></td>
+                                    </tr>
+                                </table>
+                                <div style='height:2px;'></div>
                                 <div id='insertNewFormDiv' style="border: 2px solid rgba(0,0,0,0.3); border-radius: 4px; visibility: hidden; background: #FFF;"></div>
                                 <div id="projectContentList" style=" width: 100%; margin-left: 0px; min-height: 360px;">
 
