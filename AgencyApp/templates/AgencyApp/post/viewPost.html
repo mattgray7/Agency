@@ -116,7 +116,7 @@
     }
 
     function getViewPostText(){
-        var postString = "<div style='position: relative;'><div style='position: absolute; left: 300px; height: 500px; width: 500px; text-align: left;'>"
+        var postString = "<div style='position: relative;'><div style='margin-left: 300px;text-align: left;'>"
 
         // Add title
         {% if viewPostData %}
@@ -159,14 +159,14 @@
             {% endif %}
         {% endif %}
 
-        postString += "</div></div>";
+        postString += "</div><div style='height: 20px;'></div></div>";
         return postString;
     }
 
     function addViewPostPanel(){
         var postString;
         {% if post %}
-            var postString = "<div style='position: relative; height: 500px;'>"
+            var postString = "<div style='position: relative;'>"
 
             // Add picture
             var pictureURL;
