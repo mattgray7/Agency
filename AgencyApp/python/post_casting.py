@@ -176,7 +176,7 @@ class ViewCastingPostView(post.GenericViewPostView):
                                                           {'id': 'ageRange', 'value': self.post.record.ageRange, 'label': 'Age Range'},
                                                           {'id': 'characterType', 'value': self.post.record.characterType, 'label': 'Type'}
                                                          ],
-                                            "Description": [{'id': 'description', 'value': self.post.record.description, 'label': 'Description'}
+                                            "Description": [{'id': 'description', 'value': self.post.record.description, 'label': None}
                                                             ]
                                             }
                 

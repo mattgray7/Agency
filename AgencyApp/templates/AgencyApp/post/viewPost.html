@@ -116,7 +116,7 @@
     }
 
     function getViewPostText(){
-        var postString = "<div style='position: relative;'><div style='position: absolute; left: 300px; height: 300px; width: 500px; text-align: left;'>"
+        var postString = "<div style='position: relative;'><div style='position: absolute; left: 300px; height: 500px; width: 500px; text-align: left;'>"
 
         // Add title
         {% if viewPostData %}
@@ -147,6 +147,7 @@
 
             {% if viewPostData.fields %}
                 {% for section, fields in viewPostData.fields.items %}
+                    postString += '<div class="postInfoSectionTitle">{{section}}</div>'
                     {% for field in fields %}
                         postString += '<div class="postInfoSingleField">';
                         {% if field.label %}
@@ -165,7 +166,7 @@
     function addViewPostPanel(){
         var postString;
         {% if post %}
-            var postString = "<div style='position: relative; height: 300px;'>"
+            var postString = "<div style='position: relative; height: 500px;'>"
 
             // Add picture
             var pictureURL;
