@@ -266,7 +266,7 @@
             // Change onclick of edit button to shrink form
             if(editButton != null){
                 editButton.onclick = function(){
-                    toggleExpandExistingForm("shrink", panelType, postID, shrinkAnimationFinishCallback);
+                    toggleExpandExistingForm("shrink", panelType, postID, animationFinishCallback);
                 };
                 editButton.innerHTML = "Hide";
             }
@@ -962,11 +962,12 @@
             postFields['csrf_token'] = csrfField;
 
             // Add cancel button with onclick
+            console.log(postFields["postID"])
             var editOnclick;
             if(newPost){
                 editOnclick = 'toggleExpandNewForm("shrink", "' + postType + '");'
             }else{
-                editOnclick = 'toggleExpandExistingForm("shrink", "' + postType + '");'
+                editOnclick = 'toggleExpandExistingForm("shrink", "' + postType + '", "' + postFields["postID"].value + '");'
             }
             var cancelButton = {'name': 'cancelButton', 'onclick': editOnclick, "hidden": true};
             postFields['cancelButton'] = cancelButton;
