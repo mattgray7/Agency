@@ -60,7 +60,8 @@
                         {% endif %}
                         postField.editOnclick = "toggleEditPicturePopup('show')";
                     {% elif field.name == "compensationType" %}
-                        postField.input = getCompensationPanel('{{field.value}}', '{{form.compensationDescription.value}}') + "<div style='display: none;'><input type='text' name='compensationType' id='compensationTypeInput'/><input type='text' name='compensationDescription' id='compensationDescriptionInput'/></div>"
+                        // Only need input for type input, panel will add description input
+                        postField.input = getCompensationPanel('{{field.value}}', '{{form.compensationDescription.value}}') + "<div style='display: none;'><input type='text' name='compensationType' id='compensationTypeInput'/></div>"
                     {% elif field.name == "compensationDescription" %}
                         // Paid description will be on same line as paid
                         save = false;

@@ -1011,7 +1011,7 @@ function createMultiTabOption(tabList, panelID, expandInitially, textFieldValue,
         tabs += "' id='optionTab_" + tabList[2].value + "' style='position: absolute; right: 0; width: 33%; height: 32px; margin-right: -1px;' onclick='changeMultiTabOptionClasses(" + '"' + tabList[2].value + '", "' + panelID + '", "' + activeOnclickCallback + '"' + ");'><div style='margin-top: -4px;'>" + tabList[2].label + '</div></div>';
 
         // Text box below
-        tabs += "<div id='" + panelID + "DropdownPanel' style='position: absolute; top: 14px; left: 0; right: 0; border-radius: 3px; border: none; margin-left: -2px; margin-right: -2px; " + dropdownVisibilityStyle + "overflow: hidden;' class='formInput'><input class='noFormInputFormatting' type='text' name='compensationDetscription' id='compensationDescription' " + textFieldValueElement + "style='position: absolute; left: 2px; border: none; margin: -7px 0px 0px 1px; padding: 0px 0px 0px 4px; height: 26px; width: 96%;' /> </div>"
+        tabs += "<div id='" + panelID + "DropdownPanel' style='position: absolute; top: 14px; left: 0; right: 0; border-radius: 3px; border: none; margin-left: -2px; margin-right: -2px; " + dropdownVisibilityStyle + "overflow: hidden;' class='formInput'><input class='noFormInputFormatting' type='text' name='compensationDescription' id='compensationDescription' " + textFieldValueElement + "style='position: absolute; left: 2px; border: none; margin: -7px 0px 0px 1px; padding: 0px 0px 0px 4px; height: 26px; width: 96%;' /> </div>"
 
         tabs += "</div>";
     }
@@ -1054,21 +1054,12 @@ function expandCompensationPanel(compType){
 }
 
 function setCompensationInputs(){
-    // Copy the compensation info if necessary
+    // Only need to do type, as description is an input in the form already
     if(compensationType != null){
         // Set the compensation type
         var typeInput = document.getElementById("compensationTypeInput")
         if(typeInput != null){
             typeInput.value = compensationType;
-        }
-
-        // Set the compensation description
-        var compensationDescription = document.getElementById("compensationDescription")
-        if(compensationDescription != null){
-            var descriptionInput = document.getElementById("compensationDescriptionInput");
-            if(descriptionInput != null){
-                descriptionInput.value = compensationDescription.value;
-            }
         }
     }
 }

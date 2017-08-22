@@ -216,7 +216,7 @@
                                            "startDate": {'value': 'Start: {{role.post.startDate}}', 'hidden': false},
                                            "endDate": {'value': 'End: {{role.post.endDate}}', 'hidden': false},
                                            "hoursPerWeek": {'value': 'Hours/week: {{role.post.hoursPerWeek}}', 'hidden': false},
-                                           "paid": {'value': '{{role.post.paid}}', "hidden": false},
+                                           "compensation": {'value': '{{role.post.compensation}}', "hidden": false},
                                            "title": {'value': '{{role.post.title}}', 'hidden': false},
 
                                            "gender": {'value': '{{role.post.gender}}', 'hidden': true},
@@ -225,16 +225,6 @@
                                        };
                         {% if role.post.postPicture and role.post.postPicture.url %}
                             newRole["post"]["postPicture"]["value"] = '{{role.post.postPicture.url}}';
-                        {% endif %}
-
-                        {% if role.post.paid and role.post.paidDescription %}
-                            newRole["post"]["paid"]["value"] = "Paid &#10004 - {{role.post.paidDescription}}";
-                        {% elif role.post.paid %}
-                            newRole["post"]["paid"]["value"] = "Paid &#10004";
-                        {% elif role.post.paidDescription %}
-                            newRole["post"]["paid"]["value"] = "Unpaid - {{role.post.paidDescription}}";
-                        {% else %}
-                            newRole["post"]["paid"]["value"] = "Unpaid";
                         {% endif %}
 
                     if('{{role.post.status}}' in roleDict){
@@ -272,7 +262,7 @@
                                            "startDate": {'value': 'Start: {{job.post.startDate}}', 'hidden': false},
                                            "endDate": {'value': 'End: {{job.post.endDate}}', 'hidden': false},
                                            "hoursPerWeek": {'value': 'Hours/week: {{job.post.hoursPerWeek}}', 'hidden': false},
-                                           "paid": {'value': '{{job.post.paid}}', "hidden": false},
+                                           "compensation": {'value': '{{job.post.compensation}}', "hidden": false},
                                            "title": {'value': '{{job.post.title}}', 'hidden': false},
                                            "location": {'value': '{{job.post.location}}', 'hidden': true},
                                            "status": {'value': '{{job.post.status}}', 'hidden': true},
@@ -280,16 +270,6 @@
                                        };
                         {% if job.post.postPicture and job.post.postPicture.url %}
                             newJob["post"]["postPicture"]["value"] = '{{job.post.postPicture.url}}';
-                        {% endif %}
-
-                        {% if job.post.paid and job.post.paidDescription %}
-                            newJob["post"]["paid"]["value"] = "Paid &#10004 - {{job.post.paidDescription}}";
-                        {% elif job.post.paid %}
-                            newJob["post"]["paid"]["value"] = "Paid &#10004";
-                        {% elif job.post.paidDescription %}
-                            newJob["post"]["paid"]["value"] = "Unpaid - {{job.post.paidDescription}}";
-                        {% else %}
-                            newJob["post"]["paid"]["value"] = "Unpaid";
                         {% endif %}
 
                     if('{{job.post.status}}' in jobDict){

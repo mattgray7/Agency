@@ -409,27 +409,22 @@
                                              "startDate": {'value': 'Start: ' + dataForm.startDate.value, 'hidden': false},
                                              "endDate": {'value': 'End: ' + dataForm.endDate.value, 'hidden': false},
                                              "hoursPerWeek": {'value': 'Hours/week: ' + dataForm.hoursPerWeek.value, 'hidden': false},
-                                             "paid": {'value': dataForm.paid.value , "hidden": false},
+                                             "compensation": {'value': dataForm.compensationType.value, "hidden": false},
                                              "title": {'value': dataForm.title.value, 'hidden': false},
                                              "gender": {'value': dataForm.gender.value, 'hidden': true},
                                              "status": {'value': dataForm.status.value, 'hidden': true},
                                              "postPicture": {"value": '{{images.noPicture}}', "hidden": false},
                                        }};
+        console.log(dataForm.compensationType)
+        console.log(dataForm.compensationDescription)
 
         // Explicitly set the image url of the new post
         if(imageURL != null && imageURL.length > 0){
             newPost["post"]["postPicture"]["value"] = imageURL;
         }
 
-        // Add compensation info
-        if(dataForm.paid.value && dataForm.paidDescription.value){
-            newPost["post"]["paid"]["value"] = "Paid &#10004 - " + dataForm.paidDescription.value;
-        }else if(dataForm.paid.value){
-            newPost["post"]["paid"]["value"] = "Paid &#10004";
-        }else if(dataForm.paidDescription.value){
-            newPost["post"]["paid"]["value"] = "Unpaid - " + dataForm.paidDescription.value;
-        }else{
-            newPost["post"]["paid"]["value"] = "Unpaid";
+        if(dataForm.compensationDescription != null && dataForm.compensationDescription.value != null && dataForm.compensationDescription.value.length > 0){
+            newPost["post"]["compensation"]["value"] += " - " + dataForm.compensationDescription.value;
         }
         return newPost;
     }
@@ -440,7 +435,7 @@
                                              "startDate": {'value': 'Start: ' + dataForm.startDate.value, 'hidden': false},
                                              "endDate": {'value': 'End: ' + dataForm.endDate.value, 'hidden': false},
                                              "hoursPerWeek": {'value': 'Hours/week: ' + dataForm.hoursPerWeek.value, 'hidden': false},
-                                             "paid": {'value': dataForm.paid.value , "hidden": false},
+                                             "compensation": {'value': dataForm.compensationType.value , "hidden": false},
                                              "title": {'value': dataForm.title.value, 'hidden': false},
                                              "location": {'value': dataForm.location.value, 'hidden': true},
                                              "status": {'value': dataForm.status.value, 'hidden': true},
@@ -452,15 +447,8 @@
             newPost["post"]["postPicture"]["value"] = imageURL;
         }
 
-        // Add compensation info
-        if(dataForm.paid.value && dataForm.paidDescription.value){
-            newPost["post"]["paid"]["value"] = "Paid &#10004 - " + dataForm.paidDescription.value;
-        }else if(dataForm.paid.value){
-            newPost["post"]["paid"]["value"] = "Paid &#10004";
-        }else if(dataForm.paidDescription.value){
-            newPost["post"]["paid"]["value"] = "Unpaid - " + dataForm.paidDescription.value;
-        }else{
-            newPost["post"]["paid"]["value"] = "Unpaid";
+        if(dataForm.compensationDescription != null && dataForm.compensationDescription.value != null && dataForm.compensationDescription.value.length > 0){
+            newPost["post"]["compensation"]["value"] += " - " + dataForm.compensationDescription.value;
         }
         return newPost;
     }
@@ -727,7 +715,7 @@
             postFields["actor"] = actorField;
 
             if("compensationType" in postFields){
-                postFields["compensationType"]["input"] = getCompensationPanel(existingPostData["compensationType"], existingPostData["compensationDescription"]) + "<div style='display: none;'><input type='text' name='compensationType' id='compensationTypeInput'/><input type='text' name='compensationDescription' id='compensationDescriptionInput'/></div>"
+                postFields["compensationType"]["input"] = getCompensationPanel(existingPostData["compensationType"], existingPostData["compensationDescription"]) + "<div style='display: none;'><input type='text' name='compensationType' id='compensationTypeInput'/></div>"
             }
 
             // Add other required fields (csrf_token, onCancel, etc)
@@ -760,7 +748,7 @@
             postFields["worker"] = workerField;
 
             if("compensationType" in postFields){
-                postFields["compensationType"]["input"] = getCompensationPanel(existingPostData["compensationType"], existingPostData["compensationDescription"]) + "<div style='display: none;'><input type='text' name='compensationType' id='compensationTypeInput'/><input type='text' name='compensationDescription' id='compensationDescriptionInput'/></div>"
+                postFields["compensationType"]["input"] = getCompensationPanel(existingPostData["compensationType"], existingPostData["compensationDescription"]) + "<div style='display: none;'><input type='text' name='compensationType' id='compensationTypeInput'/></div>"
             }
 
             // Add other required fields (csrf_token, onCancel, etc)
@@ -905,8 +893,8 @@
                 postField.editOnclick = "toggleEditPicturePopup('show', " + isProject + ", '" + postField.value + "')";
             }else if(postField.name == "compensationType"){
                 postField.input = "";
-            }else if(postField.name === "paidDescription"){
-                // Paid description will be on same line as paid
+            }else if(postField.name === "compensationDescription"){
+                // Handled by compensationType
                 save = false;
             }else if(postField.name === "status"){
                 var options = [];
@@ -1034,6 +1022,7 @@
 
         var ajaxURL;
         if(activeTab === "roles"){
+            setCompensationInputs()
             ajaxURL = "/ajax/createNewCastingPost/";
             {% if selectFields.roles.names %}
                 {% for name in selectFields.roles.names %}
@@ -1044,6 +1033,7 @@
                 {% endfor %}
             {% endif %}
         }else if(activeTab === "jobs"){
+            setCompensationInputs()
             ajaxURL = "/ajax/createNewWorkPost/";
             {% if selectFields.jobs.names %}
                 {% for name in selectFields.jobs.names %}
