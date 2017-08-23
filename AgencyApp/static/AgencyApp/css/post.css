@@ -3,6 +3,7 @@
 		background: #efefef;
 		text-align: center;
 		padding: 10px 0px;
+		min-width: 580px;
 	}
 
 	.mainViewPanel

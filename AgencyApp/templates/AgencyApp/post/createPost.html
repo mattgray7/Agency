@@ -281,88 +281,88 @@
 </script>
 
 
-<div id="mainViewPanel" class="mainViewPanel" style="display:block; display: relative">
-    <div id="hiddenGrayPopupOverlay" class="hiddenGrayPopupOverlay" style="background: rgba(0,0,0,0); height:0%; width:0%; position: absolute; top:0; z-index: 3">
-        <div style="position: relative; height: 100%;"><div id="selectProjectPanel" class="popupContentPanel" style="width: 80%; height: 400px; display: none; position: fixed; top: 10%; left: 10%;" onclick="toggleSelectProjectPopup('hide', 'asdasds');"></div></div>
-        <div style="position: relative; height: 100%;">
-            <div id="editPicturePanel" class="popupContentPanel" style="width: 400px; padding-bottom: 1.5em; display: none; position: fixed; top: 2%; left: 25%;">
-                <center>
-                <div id="backToProfileButton" style="width:170px; padding: 0em 0em 0em 0em; float: left; margin-top: 5px; margin-left: 5px;"><a onclick="toggleEditPicturePopup('hide');" class="noBorderButton" style="border: none; float: left; margin-left: 10px;">X</a></div>
-                <br><br>
-                {% if post.postPicture and post.postPicture.url %}
-                    <h1> Edit Picture </h1>
-                {% else %}
-                    <h1> Add Picture </h1>
-                {% endif %}
-                <br>
-                
-                <center>
-                    <div style='position: relative; width: 300px;'>
-                        <div id="loadingPictureGrayOverlay" class="hiddenGrayPopupOverlay" style="background: rgba(0,0,0,0); height:0%; width:0%; position: absolute; margin-top: 6px; margin-left: 6px;top:0; z-index: 1000">
-                            <img id='loadingGif' src='{{images.loading.light}}' style='height: 70px; width: 70px; display: none; margin-top: 50%; margin-left: 5%; z-index: 1001'></div>
-                    </div>
-                    <div id="editPostPictureDiv" class="editPostPictureDiv" style='width: 300px;'>
-                    </div>
-                </center>
+<div id='backgroundPanel' class='backgroundPanel' style='min-width: 700px;'>
+    <center>
+        <div id="mainViewPanel" class="mainViewPanel" style="display: block; position: relative; min-width: 700px;">
+            <div id="hiddenGrayPopupOverlay" class="hiddenGrayPopupOverlay" style="background: rgba(0,0,0,0); height:0%; width:0%; position: absolute; top:0; z-index: 3">
+                <div style="position: relative; height: 100%;"><div id="selectProjectPanel" class="popupContentPanel" style="width: 80%; height: 400px; display: none; position: fixed; top: 10%; left: 10%;" onclick="toggleSelectProjectPopup('hide', 'asdasds');"></div></div>
+                <div style="position: relative; height: 100%;">
+                    <div id="editPicturePanel" class="popupContentPanel" style="width: 400px; padding-bottom: 1.5em; display: none; position: fixed; top: 2%; left: 25%;">
+                        <div id="backToProfileButton" style="width:170px; padding: 0em 0em 0em 0em; float: left; margin-top: 5px; margin-left: 5px;"><a onclick="toggleEditPicturePopup('hide');" class="noBorderButton" style="border: none; float: left; margin-left: 10px;">X</a></div>
+                        <br><br>
+                        {% if post.postPicture and post.postPicture.url %}
+                            <h1> Edit Picture </h1>
+                        {% else %}
+                            <h1> Add Picture </h1>
+                        {% endif %}
+                        <br>
 
-                <form method="post" id="editPostPictureForm" enctype="multipart/form-data">
-                    {% csrf_token %} 
-                    <div style='text-align: center; margin-left: 30px;'><input type='file' name='postPicture' id='editPostPictureImage'></div><br>
-                    <input type='hidden' name='postID' value='{{post.postID}}'>
-                    <input type='hidden' name='postType' value='{{postType}}'>
+                        <div style='position: relative; width: 300px;'>
+                            <div id="loadingPictureGrayOverlay" class="hiddenGrayPopupOverlay" style="background: rgba(0,0,0,0); height:0%; width:0%; position: absolute; margin-top: 6px; margin-left: 6px;top:0; z-index: 1000">
+                                <img id='loadingGif' src='{{images.loading.light}}' style='height: 70px; width: 70px; display: none; margin-top: 50%; margin-left: 5%; z-index: 1001'></div>
+                        </div>
+                        <div id="editPostPictureDiv" class="editPostPictureDiv" style='width: 300px;'></div>
 
-                    <table>
-                        <tr>
-                            {% if post and post.postPicture and post.postPicture.url %}
-                                <td>
-                                    <div id="removeButton" class="whiteButton blackHover" style="width:70px; height:28px; display:block;" onclick="removePicture();">
-                                        <div style="margin-left: 5px; margin-top: 2px;">Remove</div>
-                                    </div>
-                                </td>
-                            {% else %}
-                                <td>
-                                    <div id="skipButton" class="whiteButton blackHover" style="width:70px; height:28px; display: block;" onclick="toggleEditPicturePopup('hide');">
-                                        <div style="margin-left: 5px; margin-top: 2px;">Cancel</div>
-                                    </div>
-                                </td>
-                            {% endif %}
-                            <td>
-                                <div id="updatePictureButton" class="whiteButton blackHover" style="width: 70px; height:28px; position: relative; display: block;" onclick="submitPictureForm('editPostPictureForm')">
-                                    <div style="margin-left: 5px; margin-top: 2px;">Update</div>
-                                </div>
-                            </td>
-                        </tr>
-                    </table>
-                    <div id="cropInfoInputs"></div>
-                </form>
+                        <form method="post" id="editPostPictureForm" enctype="multipart/form-data">
+                            {% csrf_token %} 
+                            <div style='text-align: center; margin-left: 30px;'><input type='file' name='postPicture' id='editPostPictureImage'></div><br>
+                            <input type='hidden' name='postID' value='{{post.postID}}'>
+                            <input type='hidden' name='postType' value='{{postType}}'>
+
+                            <table>
+                                <tr>
+                                    {% if post and post.postPicture and post.postPicture.url %}
+                                        <td>
+                                            <div id="removeButton" class="whiteButton blackHover" style="width:70px; height:28px; display:block;" onclick="removePicture();">
+                                                <div style="margin-left: 5px; margin-top: 2px;">Remove</div>
+                                            </div>
+                                        </td>
+                                    {% else %}
+                                        <td>
+                                            <div id="skipButton" class="whiteButton blackHover" style="width:70px; height:28px; display: block;" onclick="toggleEditPicturePopup('hide');">
+                                                <div style="margin-left: 5px; margin-top: 2px;">Cancel</div>
+                                            </div>
+                                        </td>
+                                    {% endif %}
+                                    <td>
+                                        <div id="updatePictureButton" class="whiteButton blackHover" style="width: 70px; height:28px; position: relative; display: block;" onclick="submitPictureForm('editPostPictureForm')">
+                                            <div style="margin-left: 5px; margin-top: 2px;">Update</div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                            <div id="cropInfoInputs"></div>
+                        </form>
+                    </div>
+                </div>
             </div>
-            </center>
+
+            <div id="editPostPanel" class="editPostPanel">
+                <div id="postForm"></div>
+            </div>
+            <script>
+                var postFormDiv = document.getElementById("postForm");
+                if(postFormDiv != null){
+                    var newForm;
+                    {% if isCasting %}
+                        newForm = addCreateCastingPost(getCastingFormDict(), "{{currentPageURL}}", "createCastingPostForm");
+                    {% elif isWork %}
+                        newForm = addCreateWorkPost(getWorkFormDict(), "{{currentPageURL}}", "createWorkPostForm");
+                    {% elif isEvent %}
+                        newForm = addCreateEventPost(getEventFormDict(), "{{currentPageURL}}", "createEventPostForm");
+                    {% endif %}
+                    postFormDiv.innerHTML = newForm;
+
+                    var selectProjectPanelDiv = document.getElementById("selectProjectPanel");
+                    if(selectProjectPanelDiv != null){
+                        newForm = addSelectProjectForm("{{post.postID}}", "{{request.user.username}}")
+                    }
+                }
+            </script>
         </div>
-    </div>
-
-    <div id="editPostPanel" class="editPostPanel">
-        <div id="postForm"></div>
-    </div>
-    <script>
-        var postFormDiv = document.getElementById("postForm");
-        if(postFormDiv != null){
-            var newForm;
-            {% if isCasting %}
-                newForm = addCreateCastingPost(getCastingFormDict(), "{{currentPageURL}}", "createCastingPostForm");
-            {% elif isWork %}
-                newForm = addCreateWorkPost(getWorkFormDict(), "{{currentPageURL}}", "createWorkPostForm");
-            {% elif isEvent %}
-                newForm = addCreateEventPost(getEventFormDict(), "{{currentPageURL}}", "createEventPostForm");
-            {% endif %}
-            postFormDiv.innerHTML = newForm;
-
-            var selectProjectPanelDiv = document.getElementById("selectProjectPanel");
-            if(selectProjectPanelDiv != null){
-                newForm = addSelectProjectForm("{{post.postID}}", "{{request.user.username}}")
-            }
-        }
-    </script>
+    </center>
 </div>
+
     <!--{% if errors %}
         <ul>
             {% for error in errors %}
