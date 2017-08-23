@@ -1,6 +1,7 @@
 import post
 import constants
 import models
+import helpers
 
 import json
 
@@ -137,10 +138,42 @@ class ViewWorkPostView(post.GenericViewPostView):
                 self._post = WorkPostInstance(request=self.request, postID=self.postID, postType=constants.WORK_POST)
         return self._post
 
-    """def createProjectChild(self):
-        try:
-            newJob = models.ProjectJob.objects.get(postID=self.postID, projectID=self.projectID)
-        except models.ProjectJob.DoesNotExist:
-            newJob = models.ProjectJob(postID=self.postID, projectID=self.projectID, status="Hiring")
-            newJob.save()"""
+    @property
+    def postTitle(self):
+        if self._postTitle is None:
+            if self.post and self.post.record:
+                self._postTitle = self.post.record.profession + " Wanted"
+        return self._postTitle
+
+    @property
+    def postSubTitles(self):
+        if not self._postSubTitles:
+            if self.post and self.post.record:
+                self._postSubTitles = [self.post.record.title]
+        return self._postSubTitles
+
+    @property
+    def postFieldsBySection(self):
+        if not self._postFieldsBySection:
+            if self.post and self.post.record:
+                self._postFieldsBySection = {"Details": [{'id': 'status', 'value': self.post.record.status, 'label': 'Status'},
+                                                        {'id': 'dates', 'value': helpers.getDateString(self.post.record.startDate, self.post.record.endDate), 'label': None},
+                                                        {'id': 'location', 'value': self.post.record.location, 'label': 'Location'},
+                                                        {'id': 'compensation', 'value': self.post.record.compensation, 'label': 'Compensation'},
+                                                        {'id': 'hoursPerWeek', 'value': self.post.record.hoursPerWeek, 'label': 'Hours/Week'},
+                                                        ]}
+                """Position": [{'id': 'gender', 'value': self.post.record.gender, 'label': 'Gender'},
+                                                          {'id': 'ageRange', 'value': self.post.record.ageRange, 'label': 'Age Range'},
+                                                          {'id': 'characterType', 'value': self.post.record.characterType, 'label': 'Type'}
+                                                         ],
+                                            "Description": [{'id': 'description', 'value': self.post.record.description, 'label': None}
+                                                            ]
+                                            }"""
+                
+                # Add project to front of list if it is linked
+                if self.project and self.project.record:
+                    self._postFieldsBySection["Details"] = [{'id': 'project', 'value': self.project.record.title, 'label': 'Project',
+                                                             'onclick': 'redirectToPost("{0}");'.format(self.project.record.postID)}] + self._postFieldsBySection["Details"]
+        return self._postFieldsBySection
+
 
