@@ -200,7 +200,8 @@ class GenericPostInstance(object):
                             errorDict[errorMessage] = [field.label.replace("*", "")]
 
                 # Add more error messages here when they occur and should be stopped
-                self._formErrors["required"] =  errorDict["This field is required."]
+                if "This field is required." in errorDict:
+                    self._formErrors["required"] =  errorDict["This field is required."]
         return self._formErrors
 
     @property

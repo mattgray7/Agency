@@ -961,8 +961,7 @@
     function modifyCastingPostFields(postFields, newPost, postType){
             // Add project
             var projectField = {"name": "project"}
-            {% if post and post.title %}
-                projectField.title  = '{{post.title}}';
+            {% if post and post.postID %}
                 projectField.projectID = '{{post.postID}}';
             {% endif %}
             postFields["project"] = projectField
@@ -1007,9 +1006,12 @@
                 selectFields = {{ selectFields|safe }};
             {% endif %}
 
-
             if(postField.name == "projectID"){
-                postField.value = "{{post.projectID}}";
+                if("{{post.projectID}}".length > 0 && "{{post.projectID}}" != "None"){
+                    postField.value = "{{post.projectID}}";
+                }else{
+                    postField.value = "{{post.postID}}";
+                }
             }else if(postField.name == "postID" && (value == null || value.length === 0)){
                 if(postType != 'project'){
                     postField.value = getNewPostID(postType);
