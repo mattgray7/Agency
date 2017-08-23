@@ -178,6 +178,32 @@ class ViewProjectPostView(post.GenericViewPostView):
         self._pageContext["events"] = self.post.events
         return self._pageContext
 
+    @property
+    def postTitle(self):
+        if self._postTitle is None:
+            if self.post and self.post.record:
+                self._postTitle = self.post.record.title
+        return self._postTitle
+
+    @property
+    def postSubTitles(self):
+        if not self._postSubTitles:
+            if self.post and self.post.record:
+                self._postSubTitles = [self.post.record.projectType]
+        return self._postSubTitles
+
+    @property
+    def postFieldsBySection(self):
+        if not self._postFieldsBySection:
+            if self.post and self.post.record:
+                self._postFieldsBySection = {"Details": [{'id': 'status', 'value': self.post.record.status, 'label': 'Status'},
+                                                        {'id': 'location', 'value': self.post.record.location, 'label': 'Location'},
+                                                        ],
+                                            "Description": [{'id': 'description', 'value': self.post.record.description, 'label': None}
+                                                            ]
+                                            }
+        return self._postFieldsBySection
+
 
 def getProjectObject(projectID):
     try:

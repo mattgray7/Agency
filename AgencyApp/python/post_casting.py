@@ -180,7 +180,7 @@ class ViewCastingPostView(post.GenericViewPostView):
                                             "Description": [{'id': 'description', 'value': self.post.record.description, 'label': None}
                                                             ]
                                             }
-                
+
                 # Add project to front of list if it is linked
                 if self.project and self.project.record:
                     self._postFieldsBySection["Details"] = [{'id': 'project', 'value': self.project.record.title, 'label': 'Project',
