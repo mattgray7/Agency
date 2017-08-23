@@ -29,6 +29,7 @@ class ProjectPostInstance(post.GenericPostInstance):
             self.record.union = self.request.POST.get("union", False) and True
             self.record.projectType = self.request.POST.get("projectType")
             self.record.shortDescription = self.request.POST.get("shortDescription")
+            self.record.projectID = self.projectID
             self.record.save()
         return True
 

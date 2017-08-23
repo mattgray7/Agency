@@ -1009,8 +1009,10 @@
             if(postField.name == "projectID"){
                 if("{{post.projectID}}".length > 0 && "{{post.projectID}}" != "None"){
                     postField.value = "{{post.projectID}}";
-                }else{
+                }else if("{{post.postID}}".length > 0 && "{{post.postID}}" != "None"){
                     postField.value = "{{post.postID}}";
+                }else{
+                    postField.value = "{{projectID}}";
                 }
             }else if(postField.name == "postID" && (value == null || value.length === 0)){
                 if(postType != 'project'){
