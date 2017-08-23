@@ -357,16 +357,20 @@
             </div>
         {% else %}
             <!-- Just display the data and -->
-            <div id="mainViewPanel" class="mainViewPanel" style='background: #FFF'>
-                {% if post %}
-                    <div id='viewPostPanel'>
-                        <script>
-                            document.write(addViewPostPanel());
-                        </script>
-                    </div>
-                {% else %}
-                    No post found
-                {% endif %}
+            <div id="backgroundPanel" class="backgroundPanel">
+                <center>
+                <div id="mainViewPanel" class="mainViewPanel" style='background: #FFF'>
+                    {% if post %}
+                        <div id='viewPostPanel'>
+                            <script>
+                                document.write(addViewPostPanel());
+                            </script>
+                        </div>
+                    {% else %}
+                        No post found
+                    {% endif %}
+                </div>
+            </center>
             </div>
             
 
