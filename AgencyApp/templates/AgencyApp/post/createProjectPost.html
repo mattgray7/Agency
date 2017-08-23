@@ -28,6 +28,7 @@
             if(projectButtonDiv != null && projectButtonBorderCoverDiv != null){
                 if(projectTabs[i] === tabType){
                     projectButtonDiv.className = "projectTabButtonActive";
+                    projectButtonBorderCoverDiv.style.opacity = 1;
                     activeTab = tabType;
                     /*if(isElementListEmpty(tabType)){
                         var projectContentPanel = document.getElementById("projectContentPanel");
@@ -40,6 +41,7 @@
                         document.getElementById("addNewPanel").innerHTML = createAddNewButton(tabType);
                     }*/
                 } else {
+                    projectButtonBorderCoverDiv.style.opacity = 0;
                     projectButtonDiv.className = "projectTabButtonInactive";        
                 }
             }
@@ -1233,113 +1235,113 @@
     }
 </script>
 
-<script>
-document.write('<div id="mainViewPanel" class="mainViewPanel" style="width: ')
-tableColCount = getBrowseTableNumColumnsFromWindowSize();
-document.write(getPanelInfoFromNumColumns(tableColCount)["mainViewPanelWidth"] + ';">');
-</script>
-    <div id="hiddenGrayPopupOverlay" class="hiddenGrayPopupOverlay" style="background: rgba(0,0,0,0); height:0%; width:0%; position: fixed; top:0; z-index: 3">
-        <div style="position: relative; height: 100%;"><div id="selectProjectPanel" class="popupContentPanel" style="width: 80%; height: 400px; display: none; position: fixed; top: 10%; left: 10%;" onclick="toggleSelectProjectPopup('hide', 'asdasds');"></div></div>
-        <div style="position: relative; height: 100%;">
-            <div id="editPicturePanel" class="popupContentPanel" style="width: 400px; padding-bottom: 1.5em; display: none; position: fixed; top: 2%; left: 25%;">
-                <center>
-                <div id="backToProfileButton" style="width:170px; padding: 0em 0em 0em 0em; float: left; margin-top: 5px; margin-left: 5px;"><a onclick="toggleEditPicturePopup('hide');" class="noBorderButton" style="border: none; float: left; margin-left: 10px;">X</a></div>
-                <br><br>
-                    <h1> Add Picture </h1>
-                <br>
-                <center>
-                    <div style='position: relative; width: 300px;'>
-                        <div id="loadingPictureGrayOverlay" class="hiddenGrayPopupOverlay" style="background: rgba(0,0,0,0); height:0%; width:0%; position: absolute; margin-top: 6px; margin-left: 6px;top:0; z-index: 1000">
-                            <img id='loadingGif' src='{{images.loading.light}}' style='height: 70px; width: 70px; display: none; margin-top: 50%; margin-left: 5%; z-index: 1001'></div>
-                    </div>
-                    <div id="editPostPictureDiv" class="editPostPictureDiv" style='width: 300px;'>
-                    </div>
-                </center>
-
-                <form method="post" id="editPostPictureForm" enctype="multipart/form-data">
-                    {% csrf_token %}
-                    <div style='text-align: center; margin-left: 30px;'><input type='file' name='postPicture' id='editPostPictureImage'></div><br>
-                    <input type='hidden' name='postID' value='{{post.postID}}'>
-                    <input type='hidden' name='postType' value='{{postType}}'>
-
-                    <table>
-                        <tr>
-                            <td>
-                                <div id="removeButton" class="whiteButton blackHover" style="width:70px; height:28px; display:block;" onclick="removePicture();">
-                                    <div style="margin-left: 5px; margin-top: 2px;">Remove</div>
-                                </div>
-                            </td>
-                            <td>
-                                <div id="updatePictureButton" class="whiteButton blackHover" style="width: 70px; height:28px; position: relative; display: block;">
-                                    <div style="margin-left: 5px; margin-top: 2px;">Update</div>
-                                </div>
-                            </td>
-                        </tr>
-                    </table>
-                    <div id="cropInfoInputs"></div>
-                </form>
-            </div>
-            </center>
-        </div>
-    </div>
-    <div id="editPostPanel" class="editPostPanel">
-        <div id="projectForm"></div>
-    </div>
-    <table id='browseTableContainer' style="margin-top: 10px;">
-            <tr>
-                        <td colspan="3" >
-                            <div style='position: relative; width: 100%; height: 55px;'>
-                                <div class="projectTabButtonInactive" id="rolesButton" onclick="selectProjectTab('roles')" style="position: absolute; left: 0; margin-left: -1px;">
-                                    Roles
-                                    <div id="rolesBorderCover" class="profileTabBorderCover"></div>
-                                </div>
-                                <div class="projectTabButtonInactive" id="jobsButton" onclick="selectProjectTab('jobs')" style="position: absolute; left:33.8%;">
-                                            Jobs
-                                            <div id="jobsBorderCover" class="profileTabBorderCover"></div>
-                                </div>
-                                <div class="projectTabButtonInactive" id="eventsButton" onclick="selectProjectTab('events')" style="position: absolute; right: 0; margin-right: -8px;">
-                                            Events
-                                            <div id="eventsBorderCover" class="profileTabBorderCover"></div>
-                                </div>
-                        </td>
-            </tr>
-            <tr>
-                        <td colspan="3">
-                            <div style="position: relative;">
-                            <div id="projectContentPanel" class="projectContentPanel" style="margin-left: -1px; margin-right:-8px; min-height: 70px; ">
-                                <div style='height:2px;'></div>
-                                <table style='width: 100%;'>
-                                    <tr>
-                                        <td id='addNewTableCol_roles' style='width: 33.3%;'>
-                                            <center>
-                                                    <script>
-                                                        {% if roles %}
-                                                            document.write(createAddNewButton("roles"));
-                                                        {% elif jobs %}
-                                                            document.write(createAddNewButton("jobs"));
-                                                        {% elif events %}
-                                                            document.write(createAddNewButton("events"));
-                                                        {% else %}
-                                                            document.write(createAddNewButton("roles"));
-                                                        {% endif %}
-                                                    </script>
-                                            </center>
-                                        </td>
-                                        <td id='addNewTableCol_jobs' style='width: 33.3%;'></td>
-                                        <td id='addNewTableCol_events' style='width: 33.3%;'></td>
-                                    </tr>
-                                </table>
-                                <div style='height:2px;'></div>
-                                <div id='insertNewFormDiv' style="border: 2px solid rgba(0,0,0,0.3); border-radius: 4px; visibility: hidden; background: #FFF;"></div>
-                                <div id="projectContentList" style=" width: 100%; margin-left: 0px; min-height: 360px;">
-
-                                </div>
+<div id="backgroundPanel" class="backgroundPanel">
+    <center>
+        <script>
+        document.write('<div id="mainViewPanel" class="mainViewPanel" style="max-width: 1000px; width: ')
+        tableColCount = getBrowseTableNumColumnsFromWindowSize();
+        document.write(getPanelInfoFromNumColumns(tableColCount)["mainViewPanelWidth"] + ';">');
+        </script>
+            <div id="hiddenGrayPopupOverlay" class="hiddenGrayPopupOverlay" style="background: rgba(0,0,0,0); height:0%; width:0%; position: fixed; top:0; z-index: 3">
+                <div style="position: relative; height: 100%;"><div id="selectProjectPanel" class="popupContentPanel" style="width: 80%; height: 400px; display: none; position: fixed; top: 10%; left: 10%;" onclick="toggleSelectProjectPopup('hide', 'asdasds');"></div></div>
+                <div style="position: relative; height: 100%;">
+                    <div id="editPicturePanel" class="popupContentPanel" style="width: 400px; padding-bottom: 1.5em; display: none; position: fixed; top: 2%; left: 25%;">
+                        <div id="backToProfileButton" style="width:170px; padding: 0em 0em 0em 0em; float: left; margin-top: 5px; margin-left: 5px;"><a onclick="toggleEditPicturePopup('hide');" class="noBorderButton" style="border: none; float: left; margin-left: 10px;">X</a></div>
+                        <br><br>
+                            <h1> Add Picture </h1>
+                        <br>
+                            <div style='position: relative; width: 300px;'>
+                                <div id="loadingPictureGrayOverlay" class="hiddenGrayPopupOverlay" style="background: rgba(0,0,0,0); height:0%; width:0%; position: absolute; margin-top: 6px; margin-left: 6px;top:0; z-index: 1000">
+                                    <img id='loadingGif' src='{{images.loading.light}}' style='height: 70px; width: 70px; display: none; margin-top: 50%; margin-left: 5%; z-index: 1001'></div>
                             </div>
-                        </div>
-                        </td>
-            </tr>
-        </table>
-    </div>
+                            <div id="editPostPictureDiv" class="editPostPictureDiv" style='width: 300px;'>
+                            </div>
+
+                        <form method="post" id="editPostPictureForm" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <div style='text-align: center; margin-left: 30px;'><input type='file' name='postPicture' id='editPostPictureImage'></div><br>
+                            <input type='hidden' name='postID' value='{{post.postID}}'>
+                            <input type='hidden' name='postType' value='{{postType}}'>
+
+                            <table>
+                                <tr>
+                                    <td>
+                                        <div id="removeButton" class="whiteButton blackHover" style="width:70px; height:28px; display:block;" onclick="removePicture();">
+                                            <div style="margin-left: 5px; margin-top: 2px;">Remove</div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div id="updatePictureButton" class="whiteButton blackHover" style="width: 70px; height:28px; position: relative; display: block;">
+                                            <div style="margin-left: 5px; margin-top: 2px;">Update</div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                            <div id="cropInfoInputs"></div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div id="editPostPanel" class="editPostPanel">
+                <div id="projectForm"></div>
+            </div>
+            <table id='browseTableContainer' style="margin-top: 10px;">
+                    <tr>
+                                <td colspan="3" >
+                                    <div style='position: relative; width: 100%; height: 55px;'>
+                                        <div class="projectTabButtonInactive" id="rolesButton" onclick="selectProjectTab('roles')" style="position: absolute; left: 0; margin-left: -1px;">
+                                            Roles
+                                            <div id="rolesBorderCover" class="projectTabBorderCover"></div>
+                                        </div>
+                                        <div class="projectTabButtonInactive" id="jobsButton" onclick="selectProjectTab('jobs')" style="position: absolute; left:33.8%;">
+                                                    Jobs
+                                                    <div id="jobsBorderCover" class="projectTabBorderCover"></div>
+                                        </div>
+                                        <div class="projectTabButtonInactive" id="eventsButton" onclick="selectProjectTab('events')" style="position: absolute; right: 0; margin-right: -8px;">
+                                                    Events
+                                                    <div id="eventsBorderCover" class="projectTabBorderCover"></div>
+                                        </div>
+                                </td>
+                    </tr>
+                    <tr>
+                                <td colspan="3">
+                                    <div style="position: relative;">
+                                    <div id="projectContentPanel" class="projectContentPanel" style="margin-left: -1px; margin-right:-8px; min-height: 70px; ">
+                                        <div style='height:2px;'></div>
+                                        <table style='width: 100%;'>
+                                            <tr>
+                                                <td id='addNewTableCol_roles' style='width: 33.3%;'>
+                                                    <center>
+                                                            <script>
+                                                                {% if roles %}
+                                                                    document.write(createAddNewButton("roles"));
+                                                                {% elif jobs %}
+                                                                    document.write(createAddNewButton("jobs"));
+                                                                {% elif events %}
+                                                                    document.write(createAddNewButton("events"));
+                                                                {% else %}
+                                                                    document.write(createAddNewButton("roles"));
+                                                                {% endif %}
+                                                            </script>
+                                                    </center>
+                                                </td>
+                                                <td id='addNewTableCol_jobs' style='width: 33.3%;'></td>
+                                                <td id='addNewTableCol_events' style='width: 33.3%;'></td>
+                                            </tr>
+                                        </table>
+                                        <div style='height:2px;'></div>
+                                        <div id='insertNewFormDiv' style="border: 2px solid rgba(0,0,0,0.3); border-radius: 4px; visibility: hidden; background: #FFF;"></div>
+                                        <div id="projectContentList" style=" width: 100%; margin-left: 0px; min-height: 360px;">
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </center>
 </div>
 
 <script>
