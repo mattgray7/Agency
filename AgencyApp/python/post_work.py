@@ -27,7 +27,6 @@ class WorkPostInstance(post.GenericPostInstance):
             self.record.projectID = self.request.POST.get("projectID")
             self.record.compensationType = self.request.POST.get("compensationType")
             self.record.compensationDescription = self.request.POST.get("compensationDescription")
-            self.record.shortDescription = self.request.POST.get("shortDescription")
             self.record.workerName = self.request.POST.get("workerName")
             self.record.skills = self.request.POST.get("skills")
             self.record.hoursPerWeek = self.request.POST.get("hoursPerWeek")
@@ -83,7 +82,6 @@ class CreateWorkPostView(post.GenericCreatePostView):
             self._formInitialValues["hoursPerWeek"] = self.post.record.hoursPerWeek
             self._formInitialValues["startDate"] = self.post.record.startDate
             self._formInitialValues["endDate"] = self.post.record.endDate
-            self._formInitialValues["shortDescription"] = self.post.record.shortDescription
             if self.worker:
                 self._formInitialValues["workerName"] = self.worker.username
             self._formInitialValues["postID"] = self.post.record.postID

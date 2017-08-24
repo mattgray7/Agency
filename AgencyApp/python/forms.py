@@ -66,7 +66,6 @@ class CreateWorkPostForm(GenericCreatePostForm):
     postPicture = forms.ImageField(label="Picture", required=False)
     title = forms.CharField(label="Post Title*", max_length=500, required=True, widget=forms.TextInput(attrs={'placeholder': 'Looking for Camera Operator'}))
     status = forms.CharField(label="Job Status*", widget=forms.HiddenInput, max_length=50, required=False)
-    shortDescription = forms.CharField(label="Short Description*", widget=forms.TextInput(attrs={'placeholder': 'Basic single camera work on tv show'}), max_length=200, required=True)
     description = forms.CharField(label="Description*", widget=forms.TextInput(attrs={'placeholder': 'The hiree must be able to handle all camera operations for all set days. They will be compensated at an hourly rate, with potential for reshoots after primary production.'}), required=True, max_length=5000)
     compensationType = forms.CharField(label="Compensation", required=False)
     compensationDescription = forms.CharField(widget=forms.HiddenInput, max_length=100, required=False)

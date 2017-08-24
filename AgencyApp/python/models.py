@@ -215,7 +215,6 @@ class WorkPost(AbstractPost):
     workerName = models.CharField(max_length=200, blank=True, null=True)      # only filled if status is Filled (vs Hiring)
     compensationType = models.CharField(default="Unpaid", max_length=200, blank=True, null=True)
     compensationDescription = models.CharField(max_length=200, blank=True, null=True)
-    shortDescription = models.CharField(max_length=200, blank=True, null=True)
     skills = models.CharField(max_length=300, blank=True, null=True)
     location = models.CharField(max_length=300, blank=True, null=True)
     startDate = models.DateField(default=None, blank=True, null=True)
