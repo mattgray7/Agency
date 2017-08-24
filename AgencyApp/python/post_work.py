@@ -154,24 +154,25 @@ class ViewWorkPostView(post.GenericViewPostView):
     def postFieldsBySection(self):
         if not self._postFieldsBySection:
             if self.post and self.post.record:
-                self._postFieldsBySection = {"Details": [{'id': 'status', 'value': self.post.record.status, 'label': 'Status'},
-                                                        {'id': 'dates', 'value': helpers.getDateString(self.post.record.startDate, self.post.record.endDate), 'label': None},
-                                                        {'id': 'location', 'value': self.post.record.location, 'label': 'Location'},
-                                                        {'id': 'compensation', 'value': self.post.record.compensation, 'label': 'Compensation'},
-                                                        {'id': 'hoursPerWeek', 'value': self.post.record.hoursPerWeek, 'label': 'Hours/Week'},
-                                                        ]}
-                """Position": [{'id': 'gender', 'value': self.post.record.gender, 'label': 'Gender'},
-                                                          {'id': 'ageRange', 'value': self.post.record.ageRange, 'label': 'Age Range'},
-                                                          {'id': 'characterType', 'value': self.post.record.characterType, 'label': 'Type'}
-                                                         ],
-                                            "Description": [{'id': 'description', 'value': self.post.record.description, 'label': None}
-                                                            ]
-                                            }"""
+                self._postFieldsBySection = {"head": {"Details": [{'id': 'status', 'value': self.post.record.status, 'label': 'Status'},
+                                                                  {'id': 'dates', 'value': helpers.getDateString(self.post.record.startDate, self.post.record.endDate), 'label': None},
+                                                                  {'id': 'location', 'value': self.post.record.location, 'label': 'Location'},
+                                                                  {'id': 'compensation', 'value': self.post.record.compensation, 'label': 'Compensation'},
+                                                                  {'id': 'hoursPerWeek', 'value': self.post.record.hoursPerWeek, 'label': 'Hours/Week'},
+                                                                  ],
+                                                      },
+                                             "body": {"Description": [{'id': 'description', 'value': self.post.record.description, 'label': None}
+                                                                  ],
+                                                      "Position": [{'id': 'skills', 'value': self.post.record.skills, 'label': 'Required Skills'}
+                                                                  ]
+                                                     }
+                                             }
+                print self._postFieldsBySection["body"]
                 
                 # Add project to front of list if it is linked
                 if self.project and self.project.record:
-                    self._postFieldsBySection["Details"] = [{'id': 'project', 'value': self.project.record.title, 'label': 'Project',
-                                                             'onclick': 'redirectToPost("{0}");'.format(self.project.record.postID)}] + self._postFieldsBySection["Details"]
+                    self._postFieldsBySection["head"]["Details"] = [{'id': 'project', 'value': self.project.record.title, 'label': 'Project',
+                                                                     'onclick': 'redirectToPost("{0}");'.format(self.project.record.postID)}] + self._postFieldsBySection["head"]["Details"]
         return self._postFieldsBySection
 
 

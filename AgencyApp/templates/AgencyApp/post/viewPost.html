@@ -174,9 +174,10 @@
         var postString = "<div style='position: relative; min-height: 100px;'><div style='text-align: left; margin-left: 1px; margin-right: 20px; margin-bottom: 20px;'>"
         {% if viewPostData and viewPostData.fields and viewPostData.fields.body %}
             postString += "<div style='margin-left: 20px; text-align: left;'>";
-            {% for section, fields in viewPostData.fields.body.items %}
-                postString += '<div class="postInfoSectionTitle">{{section}}</div>'
-                {% for field in fields %}
+            // Add description right under photo
+            {% if viewPostData.fields.body.Description %}
+                postString += '<div class="postInfoSectionTitle">Description</div>'
+                {% for field in viewPostData.fields.body.Description %}
                     postString += '<div class="postInfoSingleField">';
                     {% if field.label %}
                         postString += '{{field.label}}: ';
@@ -187,6 +188,23 @@
                         postString += '{{field.value}}</div>';
                     {% endif %}
                 {% endfor %}
+            {% endif %}
+
+            {% for section, fields in viewPostData.fields.body.items %}
+                if("{{section}}" != "Description"){
+                    postString += '<div class="postInfoSectionTitle">{{section}}</div>'
+                    {% for field in fields %}
+                        postString += '<div class="postInfoSingleField">';
+                        {% if field.label %}
+                            postString += '{{field.label}}: ';
+                        {% endif %}
+                        {% if field.onclick %}
+                            postString += '<a onclick="{{field.onclick}}">{{field.value}}</a></div>';
+                        {% else %}
+                            postString += '{{field.value}}</div>';
+                        {% endif %}
+                    {% endfor %}
+                }
             {% endfor %}
             postString += "</div>";
         {% endif %}
