@@ -1,6 +1,7 @@
 import post
 import constants
 import models
+import helpers
 
 
 class EventPostInstance(post.GenericPostInstance):
@@ -16,7 +17,8 @@ class EventPostInstance(post.GenericPostInstance):
     def saveModelFormValues(self):
         if self.record:
             self.record.location = self.request.POST.get("location")
-            self.record.date = self.request.POST.get("date")
+            self.record.startDate = self.request.POST.get("startDate")
+            self.record.endDate = self.request.POST.get("endDate")
             self.record.projectID = self.request.POST.get("projectID")
             self.record.admissionInfo = self.request.POST.get("admissionInfo")
             self.record.startTime = self.request.POST.get("startTime")
@@ -55,7 +57,8 @@ class CreateEventPostView(post.GenericCreatePostView):
         self._formInitialValues = super(CreateEventPostView, self).formInitialValues
         if self.post.record:
             self._formInitialValues["location"] = self.post.record.location
-            self._formInitialValues["date"] = self.post.record.date
+            self._formInitialValues["startDate"] = self.post.record.startDate
+            self._formInitialValues["endDate"] = self.post.record.endDate
             self._formInitialValues["startTime"] = self.post.record.startTime
             self._formInitialValues["endTime"] = self.post.record.endTime
             self._formInitialValues["host"] = self.post.record.host
@@ -80,4 +83,32 @@ class ViewEventPostView(post.GenericViewPostView):
             if self.postID:
                 self._post = EventPostInstance(request=self.request, postID=self.postID, postType=constants.EVENT_POST)
         return self._post
+
+    @property
+    def postSubTitles(self):
+        if not self._postSubTitles:
+            if self.post and self.post.record:
+                if self.post.record.host:
+                    self._postSubTitles = ["Hosted by {0}".format(self.post.record.title)]
+        return self._postSubTitles
+
+    @property
+    def postFieldsBySection(self):
+        if not self._postFieldsBySection:
+            if self.post and self.post.record:
+                self._postFieldsBySection = {"head": {"Details": [{'id': 'status', 'value': self.post.record.status, 'label': 'Status'},
+                                                                  {'id': 'dates', 'value': helpers.getDateString(self.post.record.startDate, self.post.record.endDate), 'label': None},
+                                                                  {'id': 'location', 'value': self.post.record.location, 'label': 'Location'},
+                                                                  ],
+                                                      },
+                                             "body": {"Description": [{'id': 'description', 'value': self.post.record.description, 'label': None}
+                                                                  ]
+                                                      }
+                                             }
+                
+                # Add project to front of list if it is linked
+                if self.project and self.project.record:
+                    self._postFieldsBySection["head"]["Details"] = [{'id': 'project', 'value': self.project.record.title, 'label': 'Project',
+                                                                     'onclick': 'redirectToPost("{0}");'.format(self.project.record.postID)}] + self._postFieldsBySection["head"]["Details"]
+        return self._postFieldsBySection
 

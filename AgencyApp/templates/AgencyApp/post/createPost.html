@@ -93,7 +93,11 @@
                         {% if field.name == "endDate" %}
                             postField.value = tomorrowDateString
                         {% else %}
-                            postField.value = currentDateString;
+                            {% if isEvent %}
+                                postField.value = tomorrowDateString;
+                            {% else %}
+                                postField.value = currentDateString;
+                            {% endif %}
                         {% endif %}
                     {% elif field.name == "startTime" or field.name == "endTime" %}
                         postField.input = postField.input.replace('type="text"', 'type="time"')

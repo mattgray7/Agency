@@ -550,7 +550,7 @@ class GenericViewPostView(views.GenericFormView):
     def postTitle(self):
         if self._postTitle is None:
             if self.post and self.post.record:
-                self._postTitle = self.post.record.title;
+                self._postTitle = self.post.record.title
         return self._postTitle
 
     @property

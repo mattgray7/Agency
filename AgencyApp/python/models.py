@@ -273,7 +273,8 @@ class CastingPost(AbstractPost):
 
 class EventPost(AbstractPost):
     location = models.CharField(max_length=1000, default=None, blank=True, null=True)
-    date = models.DateField(default=None, blank=True, null=True)
+    startDate = models.DateField(default=None, blank=True, null=True)
+    endDate = models.DateField(default=None, blank=True, null=True)
     startTime = models.TimeField(default=None, blank=True, null=True)
     endTime = models.TimeField(default=None, blank=True, null=True)
     host = models.CharField(max_length=200, default=None, blank=True, null=True)
@@ -287,11 +288,13 @@ class EventPost(AbstractPost):
     def eventStatus(self):
         eventStatus = "Past"
         currentDate = datetime.datetime.now().date();
-        if self.date < currentDate:
+        if self.startDate < currentDate and self.endDate < currentDate:
             eventStatus = "Past"
-        elif self.date == currentDate:
+        elif self.startDate == currentDate == self.endDate:
             eventStatus = "Today"
-        elif self.date > currentDate:
+        elif self.startDate < currentDate and self.endDate >= currentDate:
+            eventStatus = "On Now"
+        elif self.startDate > currentDate:
             eventStatus = "Upcoming"
         return eventStatus
 

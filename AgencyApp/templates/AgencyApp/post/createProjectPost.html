@@ -1070,7 +1070,11 @@
                 postField.input = postField.input.replace('type="text"', 'type="date"')
                 if(postField.value == null || postField.value.length === 0){
                     {% if postField.name == "startDate" %}
-                        postField.value = currentDateString
+                        if(activeTab === "events"){
+                            postField.value = tomorrowDateString;
+                        }else{
+                            postField.value = currentDateString;
+                        }
                     {% else %}
                         postField.value = tomorrowDateString;
                     {% endif %}
