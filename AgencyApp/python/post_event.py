@@ -59,8 +59,8 @@ class CreateEventPostView(post.GenericCreatePostView):
             self._formInitialValues["location"] = self.post.record.location
             self._formInitialValues["startDate"] = self.post.record.startDate
             self._formInitialValues["endDate"] = self.post.record.endDate
-            self._formInitialValues["startTime"] = self.post.record.startTime
-            self._formInitialValues["endTime"] = self.post.record.endTime
+            self._formInitialValues["startTime"] = self.post.record.startTime.strftime("%H:%M")
+            self._formInitialValues["endTime"] = self.post.record.endTime.strftime("%H:%M")
             self._formInitialValues["host"] = self.post.record.host
             self._formInitialValues["admissionInfo"] = self.post.record.admissionInfo
             self._formInitialValues["projectID"] = self.projectID

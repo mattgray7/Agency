@@ -101,11 +101,13 @@
                         {% endif %}
                     {% elif field.name == "startTime" or field.name == "endTime" %}
                         postField.input = postField.input.replace('type="text"', 'type="time"')
-                        {% if field.name == "startTime" %}
-                            postField.value = defaultStartTime;
-                        {% else %}
-                            postField.value = defaultEndTime;
-                        {% endif %}
+                        if(postField.value == null || postField.value.length === 0){
+                            {% if field.name == "startTime" %}
+                                postField.value = defaultStartTime;
+                            {% else %}
+                                postField.value = defaultEndTime;
+                            {% endif %}
+                        }
                     {% elif field.name in selectFields.roles.names and isCasting %}
                         {% if selectFields.roles.options %}
                             var options = {{ selectFields.roles.options|safe }}

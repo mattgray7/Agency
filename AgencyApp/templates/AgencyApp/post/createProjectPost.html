@@ -1081,10 +1081,12 @@
                 }
             }else if(postField.name == "startTime" || postField.name == "endTime"){
                 postField.input = postField.input.replace('type="text"', 'type="time"')
-                if(postField.name == "startTime"){
-                    postField.value = defaultStartTime;
-                }else{
-                    postField.value = defaultEndTime;
+                if(postField.value == null || postField.value.length === 0){
+                    if(postField.name == "startTime"){
+                        postField.value = defaultStartTime;
+                    }else{
+                        postField.value = defaultEndTime;
+                    }
                 }
             }else if(selectFields != null){
                 var roleSelectFields = {{ selectFields.roles.names|safe }};
