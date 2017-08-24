@@ -83,7 +83,7 @@
             titleFieldName = "profession";
         }else if(tabType === "events"){
             entries = getBrowseEventsDict();
-            sectionOrder = ["Today", "Upcoming", "Past", "Announced", "Cancelled"];
+            sectionOrder = ["Today", "Happening Now", "Upcoming", "Past"];
             titleFieldName = "title";
         }
         var table = createBrowseTable(tabType, entries, sectionOrder, true, titleFieldName, true)
@@ -565,12 +565,12 @@
     function createSingleEventDict(dataForm, imageURL){
         var newPost = {"post": {"postID": {'value': dataForm.postID.value, 'hidden': true},
                                 "admissionInfo": {'value': dataForm.admissionInfo.value, 'hidden': false},
-                                "date": {'value': 'Date: ' + dataForm.date.value, 'hidden': false},
+                                "date": {'value': 'Date: ' + getDateString(new Date(dataForm.startDate.value), new Date(dataForm.endDate.value)), 'hidden': false},
                                 "startTime": {'value': 'Start: ' + dataForm.startTime.value, 'hidden': false},
                                 "endTime": {'value': 'End: ' + dataForm.endTime.value, 'hidden': false},
                                 "host": {'value': dataForm.host.value, 'hidden': false},
                                 "title": {'value': dataForm.title.value, 'hidden': false},
-                                "status": {'value': getEventStatus(new Date(dataForm.date.value)), 'hidden': false},
+                                "status": {'value': getEventStatus(new Date(dataForm.startDate.value), new Date(dataForm.endDate.value)), 'hidden': false},
                                 "location": {'value': dataForm.location.value, 'hidden': true},
                                 "postPicture": {"value": '{{images.noPicture}}', "hidden": false},
                                 }

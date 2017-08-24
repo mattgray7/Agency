@@ -736,7 +736,7 @@ function createBrowseTableElement(elementDict, titleFieldName, elementType, allo
         elementString += "<td colspan=2>"
         var status = elementDict["post"]["status"]["value"]
         elementString += "<div style='position: relative; margin-left: -5px; margin-right: -5px; margin-top: -5px; height: 35px; border: 1px solid #000;";
-        if(status === "Open" || status === "Hiring" || status === "Today"){
+        if(status === "Open" || status === "Hiring" || status === "Today" || status === "Happening Now"){
             // green
             elementString += "background: rgba(7, 196, 23, 0.2);";
         }else if(status === "Opening soon" || status === "Upcoming"){
@@ -937,16 +937,65 @@ function getBrowseTableNumColumnsFromWindowSize(){
     return numColumns
 }
 
-function getEventStatus(date){
+function getEventStatus(date1, date2){
     var eventStatus;
-    if(date > currentDate){
-        eventStatus = "Upcoming";
-    }else if(date === currentDate || date.toISOString().slice(0,10) === currentDateString){
-        eventStatus = "Today"
-    }else{
-        eventStatus = "Past";
+    if(date1 != null && date2 != null){
+        var first;
+        var second;
+        if(date1 < date2){
+            first = date1;
+            second = date2;
+        }else{
+            first = date2;
+            second = date1
+        }
+        if(first > currentDate){
+            eventStatus = "Upcoming";
+        }else if(first <= currentDate){
+            if(second > currentDate){
+                eventStatus = "Happening Now";
+            }else if(second.toISOString().slice(0,10)  === first.toISOString().slice(0,10)){
+                eventStatus = "Today";
+            }else{
+                eventStatus = "Past";
+            }
+        }else if(first === currentDate || first.toISOString().slice(0,10) === currentDateString){
+            eventStatus = "Today";
+        }else{
+            eventStatus = "Past";
+        }
     }
     return eventStatus
+}
+
+function getDateString(date1, date2){
+    var dateString;
+    if(date1 != null && date2 != null){
+        console.log(date1)
+        var first;
+        var second;
+        if(date1 < date2){
+            first = date1;
+            second = date2;
+        }else{
+            first = date2;
+            second = date1
+        }
+        if(first.getYear() === second.getYear()){
+            if(first.getMonth() === second.getMonth()){
+                if(first.getDay() === second.getDay()){
+                    dateString = first.toString() + " - " + second.toString()
+                }else{
+                    dateString = first.toString() + " - " + second.toString()
+                }
+            }else{
+                dateString = first.toString() + " - " + second.toString()
+            }
+        }else{
+            dateString = first.toString() + " - " + second.toString()
+        }
+    }
+    return dateString;
 }
 
 function getCompensationPanel(value, description){

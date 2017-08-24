@@ -288,14 +288,14 @@
     function getBrowseEventsDict(){
         var eventDict;
         if(eventEntries == null){
-            eventDict = {"Announced": [], "Upcoming": [], "Today": [], "Past": [], "Cancelled": []};
+            eventDict = {"Upcoming": [], "Today": [], "Happening Now": [], "Past": []};
             {% if events %}
                 {% for event in events %}
                     var newEvent = {"post": {}};
                     {% if event.post %}
                         newEvent["post"] = {"postID": {'value': '{{event.post.postID}}', 'hidden': true},
                                             "admissionInfo": {'value': '{{event.post.admissionInfo}}', 'hidden': false},
-                                           "date": {'value': 'Date: {{event.post.date}}', 'hidden': false},
+                                           "date": {'value': 'Date: {{event.post.dateString}}', 'hidden': false},
                                            "startTime": {'value': 'Start: {{event.post.startTime}}', 'hidden': false},
                                            "endTime": {'value': 'End: {{event.post.endTime}}', 'hidden': false},
                                            "host": {'value': '{{event.post.host}}', 'hidden': false},

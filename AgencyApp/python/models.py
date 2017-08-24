@@ -292,11 +292,15 @@ class EventPost(AbstractPost):
             eventStatus = "Past"
         elif self.startDate == currentDate == self.endDate:
             eventStatus = "Today"
-        elif self.startDate < currentDate and self.endDate >= currentDate:
-            eventStatus = "On Now"
+        elif self.startDate < currentDate and self.endDate > currentDate:
+            eventStatus = "Happening Now"
         elif self.startDate > currentDate:
             eventStatus = "Upcoming"
         return eventStatus
+
+    @property
+    def dateString(self):
+        return helpers.getDateString(self.startDate, self.endDate)
 
 class Actor(models.Model):
     username = models.CharField(max_length=200)
