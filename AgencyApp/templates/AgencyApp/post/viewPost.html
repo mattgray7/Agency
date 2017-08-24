@@ -118,8 +118,8 @@
         });
     }
 
-    function getViewPostText(){
-        var postString = "<div style='position: relative; min-height: 300px;'><div style='margin-left: 300px;text-align: left;'>"
+    function getViewPostHeader(){
+        var postString = "<div style='position: relative; min-height: 300px; margin-top: 10px;'><div style='margin-left: 310px; margin-right: 20px; text-align: left;'>"
 
         // Add title
         {% if viewPostData %}
@@ -127,7 +127,7 @@
 
             // Add top right button
             {% if userIsAdmin or user.is_authenticated %}
-                postString += '<div style="position: relative;"><div class="whiteButton blackHover" style="position: absolute; right: 0; top: -40px; padding: 0.25em 0.5em 0.25em 0.5em; font-weight: 400; font-size: 1em;" ';
+                postString += '<div style="position: relative;"><div class="whiteButton blackHover" style="position: absolute; right: 0; top: -35px; padding: 0.25em 0.5em 0.25em 0.5em; font-weight: 400; font-size: 1em;" ';
                 {% if userIsAdmin %}
                     postString += 'onclick="redirectToEditPost(' + "'{{post.postID}}'" + ');">Edit</div>';
                 {% elif user.is_authenticated %}
@@ -165,8 +165,13 @@
                 {% endfor %}
             {% endif %}
         {% endif %}
-        postString += "</div><div style='height: 20px;'></div>";
+        postString += "</div><div style='height: 0px;'></div></div>";
+        return postString
+    }
 
+
+    function getViewPostBody(){
+        var postString = "<div style='position: relative; min-height: 100px;'><div style='text-align: left; margin-left: 1px; margin-right: 20px; margin-bottom: 20px;'>"
         {% if viewPostData and viewPostData.fields and viewPostData.fields.body %}
             postString += "<div style='margin-left: 20px; text-align: left;'>";
             {% for section, fields in viewPostData.fields.body.items %}
@@ -201,9 +206,10 @@
             {% else %}
                 pictureURL = '{{images.noPicture}}';
             {% endif %}
-            postString += getPostPicturePanel("div", "postPicturePanel", pictureURL, null, "postPictureImg", false, null, null);
+            postString += "<div style='position:absolute; top: 7px; margin-left: 15px; '>" + getPostPicturePanel("div", "postPicturePanel", pictureURL, null, "postPictureImg", false, null, null) + "</div>";
 
-            postString += getViewPostText();
+            postString += getViewPostHeader();
+            postString += getViewPostBody();
             postString += "</div>"
 
         {% endif %}
