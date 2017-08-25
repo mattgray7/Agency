@@ -1091,6 +1091,9 @@ function createDropdownTextBox(panelID, visibilityString, textValueString, addBo
 }
 
 function changeMultiTabOptionClasses(activePostType, panelID, activeOnclickCallback){
+    if(compensationPanelWidthType != "expanded"){
+        return;
+    }
     if(panelID == null){
         panelID = "compensationPanelTabs";
     }
@@ -1150,7 +1153,7 @@ function resizeCompensationPanel(){
             if(inputRow != null){
                 compensationPanelWidthType = "shrunk";
 
-                var selectForm = createSelectForm("blah", "compensationTypeSelectBar", ["Paid", "Negotiable", "Unpaid"], "Paid");
+                var selectForm = createSelectForm("blah", "compensationTypeSelectBar", ["Paid", "Negotiable", "Unpaid"], compensationType);
 
                 // Add comp description value if is set
                 var inputValueString = "placeholder='Details...' ";

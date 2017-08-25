@@ -136,7 +136,12 @@
 
                                 // Special case for compensation toggle button
                                 if(input.name === "compensationType"){
-                                    changeMultiTabOptionClasses(expandedCompensationType, null, "expandCompensationPanel")
+                                    var compSelectBar = document.getElementById("compensationTypeSelectBar")
+                                    if(compSelectBar != null){
+                                        compSelectBar.value = compensationType;
+                                    }else{
+                                        changeMultiTabOptionClasses(expandedCompensationType, null, "expandCompensationPanel")
+                                    }
                                 }
                             })
                         }
@@ -206,7 +211,8 @@
             expanded = true;
 
             if(panelType === "roles" || panelType === "jobs"){
-                $(window).resize(function(){
+                $("#compensationTypeContainerRow").unbind('resize');
+                $("#compensationTypeContainerRow").resize(function(){
                     resizeCompensationPanel();
                 });
 
@@ -274,8 +280,8 @@
                             formLoadCallback();
                         }
                         if(panelType === "roles" || panelType === "jobs"){
-                            console.log("adding resize listener and calling once to set properly");
-                            $(window).resize(function(){
+                            $("#compensationTypeContainerRow").unbind('resize');
+                            $("#compensationTypeContainerRow").resize(function(){
                                 resizeCompensationPanel();
                             });
 
