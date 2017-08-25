@@ -971,7 +971,6 @@ function getEventStatus(date1, date2){
 function getDateString(date1, date2){
     var dateString;
     if(date1 != null && date2 != null){
-        console.log(date1)
         var first;
         var second;
         if(date1 < date2){
@@ -981,18 +980,20 @@ function getDateString(date1, date2){
             first = date2;
             second = date1
         }
+        var firstString = first.toUTCString();
+        var secondString = second.toUTCString();
         if(first.getYear() === second.getYear()){
             if(first.getMonth() === second.getMonth()){
                 if(first.getDay() === second.getDay()){
-                    dateString = first.toString() + " - " + second.toString()
+                    dateString = firstString.slice(0, 16);
                 }else{
-                    dateString = first.toString() + " - " + second.toString()
+                    dateString = firstString.slice(8,11) + " " + firstString.slice(5,7) + " - " + secondString.slice(5,7) + ", " + second.getFullYear();
                 }
             }else{
-                dateString = first.toString() + " - " + second.toString()
+                dateString = firstString.slice(8, 11) + " " + firstString.slice(5,7) + " - " + secondString.slice(8, 11) + " " + secondString.slice(5,7) + ", " + second.getFullYear();
             }
         }else{
-            dateString = first.toString() + " - " + second.toString()
+            dateString = firstString.slice(8, 11) + " " + firstString.slice(5,7) + ", " + first.getFullYear() + " - " + secondString.slice(8, 11) + " " + secondString.slice(5,7) + ", " + second.getFullYear();
         }
     }
     return dateString;
