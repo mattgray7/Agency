@@ -43,7 +43,7 @@ function togglePopup(toggleType, overlayDivID, contentDivID){
             overlay.style.height = "1500px";
             overlay.style.width = "118%";
             overlay.style.background = "rgba(0,0,0,0.5)"
-            contentBox.style.display = "block";
+            contentBox.style.display = "inline";
             contentBox.style.background = "rgba(255,255,255,1)"
         }else if(toggleType === "hide"){
             overlay.style.background = "rgba(0,0,0,0)"

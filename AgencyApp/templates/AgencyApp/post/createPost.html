@@ -288,8 +288,7 @@
 
 
 <div id='backgroundPanel' class='backgroundPanel' style='min-width: 700px;'>
-    <center>
-        <div id="mainViewPanel" class="mainViewPanel" style="display: block; position: relative; min-width: 700px;">
+        <div id="mainViewPanel" class="mainViewPanel" style="position: relative; min-width: 700px;">
             <div id="hiddenGrayPopupOverlay" class="hiddenGrayPopupOverlay" style="background: rgba(0,0,0,0); height:0%; width:0%; position: absolute; top:0; z-index: 3">
                 <div style="position: relative; height: 100%;"><div id="selectProjectPanel" class="popupContentPanel" style="width: 80%; height: 400px; display: none; position: fixed; top: 10%; left: 10%;" onclick="toggleSelectProjectPopup('hide', 'asdasds');"></div></div>
                 <div style="position: relative; height: 100%;">
@@ -303,6 +302,7 @@
                         {% endif %}
                         <br>
 
+                        <center>
                         <div style='position: relative; width: 300px;'>
                             <div id="loadingPictureGrayOverlay" class="hiddenGrayPopupOverlay" style="background: rgba(0,0,0,0); height:0%; width:0%; position: absolute; margin-top: 6px; margin-left: 6px;top:0; z-index: 1000">
                                 <img id='loadingGif' src='{{images.loading.light}}' style='height: 70px; width: 70px; display: none; margin-top: 50%; margin-left: 5%; z-index: 1001'></div>
@@ -339,6 +339,7 @@
                             </table>
                             <div id="cropInfoInputs"></div>
                         </form>
+                        </center>
                     </div>
                 </div>
             </div>
@@ -366,7 +367,6 @@
                 }
             </script>
         </div>
-    </center>
 </div>
 
     <!--{% if errors %}
