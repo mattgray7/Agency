@@ -1119,6 +1119,7 @@ function changeMultiTabOptionClasses(activePostType, panelID, activeOnclickCallb
 
 var compensationPanelExpanded = false
 var compensationType;
+var compensationDescription;
 function expandCompensationPanel(compType){
     var formInputBox = document.getElementById('compensationPanelTabs');
     if(formInputBox != null){
@@ -1137,22 +1138,44 @@ function resizeCompensationPanel(){
     var panelWidthToggleValue = 280;
     var formInputBox = document.getElementById('compensationPanelTabs');
     var inputRow = document.getElementById('compensationTypeContainerRow');
-        if(compensationPanelWidthType === "expanded"){
-            if($("#compensationPanelTabs").width() < panelWidthToggleValue){
-                compensationPanelWidthType = "shrunk";
-                if(inputRow != null){
-                    var selectForm = createSelectForm(null, "compensationTypeSelectBar", ["Paid", "Negotiable", "Unpaid"], "Paid");
-                    inputRow.innerHTML = "<div id='compensationPanelShrunk' style='position: relative; width: 100%; min-height: 36px;'><div style='position: absolute; left: 0; right: 0; '>" + selectForm + "</div>" + createDropdownTextBox("compensationPanelShrunk", "visibility: visible;", "placeholder='Details...'", true) + "</div>";
+
+    var compDescriptionValue;
+    var descInput = document.getElementById("compensationDescription")
+    if(descInput != null && descInput.value != ""){
+        compensationDescription = descInput.value;
+    }
+
+    if(compensationPanelWidthType === "expanded"){
+        if($("#compensationPanelTabs").width() < panelWidthToggleValue){
+            compensationPanelWidthType = "shrunk";
+            if(inputRow != null){
+                var selectForm = createSelectForm(null, "compensationTypeSelectBar", ["Paid", "Negotiable", "Unpaid"], compensationType);
+
+                // Add comp description value if is set
+                var inputValueString = "placeholder='Details...' ";
+                if(compensationDescription != null && compensationDescription.length > 0){
+                    inputValueString += "value='" + compensationDescription + "' ";
                 }
-            }
-        }else if(compensationPanelWidthType === "shrunk"){
-            if($("#compensationPanelShrunk").width() >= panelWidthToggleValue){
-                compensationPanelWidthType = "expanded";
-                if(inputRow != null){
-                    inputRow.innerHTML = getCompensationPanel(compensationType, null);
-                }
+
+                inputRow.innerHTML = "<div id='compensationPanelShrunk' style='position: relative; width: 100%; min-height: 36px;'><div style='position: absolute; left: 0; right: 0; '>" + selectForm + "</div>" + createDropdownTextBox("compensationPanelShrunk", "visibility: visible;", inputValueString, true) + "</div>";
+
+                // Add listener to update comp type when an option is clicked from the select menu
+                $('#compensationTypeSelectBar').on('change', function () {
+                    var compType = $(this).val(); // get selected value
+                    if(compType != compensationType){
+                        compensationType = compType;
+                    }
+                });
             }
         }
+    }else if(compensationPanelWidthType === "shrunk"){
+        if($("#compensationPanelShrunk").width() >= panelWidthToggleValue){
+            compensationPanelWidthType = "expanded";
+            if(inputRow != null){
+                inputRow.innerHTML = getCompensationPanel(compensationType, compensationDescription);
+            }
+        }
+    }
 }
 
 function setCompensationInputs(){
