@@ -183,7 +183,7 @@ function addCreateCastingPost(formDict, formURL, formName){
         }
 
         if(sectionTitle != "hidden"){
-            sectionLabelTableElement += "<div style='position: relative; height: 50px; width: 100%;'> <h2 class='" + sectionClass + "' style='position: absolute; z-index: 1; right: 0; margin-left: 80px;'> " + sectionTitle + "</h2>" + getFormDividerLine() + "</div></div>"
+            sectionLabelTableElement += "<div style='position: relative; height: 30px; width: 100%;'> <h2 class='" + sectionClass + "' style='position: absolute; bottom: 0; z-index: 1; right: 0; margin-left: 80px; '><div style='margin-top: -10px;'>" + sectionTitle + "</div></h2>" + getFormDividerLine() + "</div></div>"
             sectionInputTableElement += "<div style='height: 60px;'></div>";
 
             for(i in fieldList){
@@ -1070,12 +1070,24 @@ function createMultiTabOption(tabList, panelID, expandInitially, textFieldValue,
         tabs += "' id='optionTab_" + tabList[2].value + "' style='position: absolute; right: 0; width: 33%; height: 32px; margin-right: -1px;' onclick='changeMultiTabOptionClasses(" + '"' + tabList[2].value + '", "' + panelID + '", "' + activeOnclickCallback + '"' + ");'><div style='margin-top: -4px;'>" + tabList[2].label + '</div></div>';
 
         // Text box below
-        tabs += "<div id='" + panelID + "DropdownPanel' style='position: absolute; top: 14px; left: 0; right: 0; border-radius: 3px; border: none; margin-left: -2px; margin-right: -2px; " + dropdownVisibilityStyle + "overflow: hidden;' class='formInput'><input class='noFormInputFormatting' type='text' name='compensationDescription' id='compensationDescription' " + textFieldValueElement + "style='position: absolute; left: 2px; border: none; margin: -7px 0px 0px 1px; padding: 0px 0px 0px 4px; height: 26px; width: 96%;' /> </div>"
+        tabs += createDropdownTextBox(panelID, dropdownVisibilityStyle, textFieldValueElement, false)
 
         tabs += "</div>";
     }
     tabs += "</div></div>";
     return tabs;
+}
+
+function createDropdownTextBox(panelID, visibilityString, textValueString, addBorder){
+    var textPanel = "<div id='" + panelID + "DropdownPanel' style='position: absolute; top: 14px; left: 0; right: 0; border-radius: 3px; margin-left: -2px; margin-right: -2px; " + visibilityString + "overflow: hidden; "
+    if(addBorder){
+        textPanel += "height: 10px; margin-right: -8px; margin-left: 0px; top: 15px;";
+    }else{
+        textPanel += "border: none; ";
+    }
+
+    textPanel += "' class='formInput'><input class='noFormInputFormatting' type='text' name='compensationDescription' id='compensationDescription' " + textValueString + "style='position: absolute; left: 2px; border: none; margin: -7px 0px 0px 1px; padding: 0px 0px 0px 4px; height: 26px; width: 96%;' /> </div>";
+    return textPanel;
 }
 
 function changeMultiTabOptionClasses(activePostType, panelID, activeOnclickCallback){
@@ -1125,23 +1137,22 @@ function resizeCompensationPanel(){
     var panelWidthToggleValue = 280;
     var formInputBox = document.getElementById('compensationPanelTabs');
     var inputRow = document.getElementById('compensationTypeContainerRow');
-    if(formInputBox != null){
         if(compensationPanelWidthType === "expanded"){
             if($("#compensationPanelTabs").width() < panelWidthToggleValue){
                 compensationPanelWidthType = "shrunk";
                 if(inputRow != null){
-                    formInputBox.innerHTML = "Select commensation";
+                    var selectForm = createSelectForm(null, "compensationTypeSelectBar", ["Paid", "Negotiable", "Unpaid"], "Paid");
+                    inputRow.innerHTML = "<div id='compensationPanelShrunk' style='position: relative; width: 100%; min-height: 36px;'><div style='position: absolute; left: 0; right: 0; '>" + selectForm + "</div>" + createDropdownTextBox("compensationPanelShrunk", "visibility: visible;", "placeholder='Details...'", true) + "</div>";
                 }
             }
         }else if(compensationPanelWidthType === "shrunk"){
-            if($("#compensationPanelTabs").width() >= panelWidthToggleValue){
+            if($("#compensationPanelShrunk").width() >= panelWidthToggleValue){
                 compensationPanelWidthType = "expanded";
                 if(inputRow != null){
                     inputRow.innerHTML = getCompensationPanel(compensationType, null);
                 }
             }
         }
-    }
 }
 
 function setCompensationInputs(){
