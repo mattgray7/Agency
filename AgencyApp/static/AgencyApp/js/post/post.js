@@ -1118,7 +1118,7 @@ function changeMultiTabOptionClasses(activePostType, panelID, activeOnclickCallb
 }
 
 var compensationPanelExpanded = false
-var compensationType;
+var compensationType = "Paid";
 var compensationDescription;
 function expandCompensationPanel(compType){
     var formInputBox = document.getElementById('compensationPanelTabs');
@@ -1146,15 +1146,11 @@ function resizeCompensationPanel(){
     }
 
     if(compensationPanelWidthType === "expanded"){
-        if($("#compensationPanelTabs").width() < panelWidthToggleValue){
-            compensationPanelWidthType = "shrunk";
+        if($("#compensationTypeContainerRow").width() < panelWidthToggleValue){
             if(inputRow != null){
+                compensationPanelWidthType = "shrunk";
 
-                var selectFormValue = " - ";
-                if(compensationType != null){
-                    selectFormValue = compensationType;
-                }
-                var selectForm = createSelectForm(null, "compensationTypeSelectBar", ["-", "Paid", "Negotiable", "Unpaid"], selectFormValue);
+                var selectForm = createSelectForm("blah", "compensationTypeSelectBar", ["Paid", "Negotiable", "Unpaid"], "Paid");
 
                 // Add comp description value if is set
                 var inputValueString = "placeholder='Details...' ";
@@ -1164,21 +1160,18 @@ function resizeCompensationPanel(){
 
                 inputRow.innerHTML = "<div id='compensationPanelShrunk' style='position: relative; width: 100%; min-height: 36px;'><div style='position: absolute; left: 0; right: 0; '>" + selectForm + "</div>" + createDropdownTextBox("compensationPanelShrunk", "visibility: visible;", inputValueString, true) + "</div><div style='display: none;'><input type='text' name='compensationType' id='compensationTypeInput'/></div>";
 
+                $("#compensationTypeSelectBar select").val(compensationType);
                 // Add listener to update comp type when an option is clicked from the select menu
                 $('#compensationTypeSelectBar').on('change', function () {
                     var compType = $(this).val(); // get selected value
                     if(compType != compensationType){
-                        if(compType === "-"){
-                            compensationType = "Unspecified"
-                        }else{
-                            compensationType = compType;
-                        }
+                        compensationType = compType;
                     }
                 });
             }
         }
     }else if(compensationPanelWidthType === "shrunk"){
-        if($("#compensationPanelShrunk").width() >= panelWidthToggleValue){
+        if($("#compensationTypeContainerRow").width() >= panelWidthToggleValue){
             compensationPanelWidthType = "expanded";
             if(inputRow != null){
                 inputRow.innerHTML = getCompensationPanel(compensationType, compensationDescription);

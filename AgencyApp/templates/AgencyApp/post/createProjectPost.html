@@ -205,6 +205,15 @@
             addElementStatusSelect(panelType);
             expanded = true;
 
+            if(panelType === "roles" || panelType === "jobs"){
+                $(window).resize(function(){
+                    resizeCompensationPanel();
+                });
+
+                // Resize compensation panel initially
+                resizeCompensationPanel();
+            }
+
             if(animationFinishCallback != null){
                 animationFinishCallback();
             }
@@ -260,13 +269,27 @@
                     newFormDiv.id = "insertExistingFormDiv";
                     newFormDiv.style.overflow = "hidden";
                     newFormDiv.style.height = "0px";
-                    setExistingElementForm(panelType, postID, newFormDiv, formLoadCallback)
+                    setExistingElementForm(panelType, postID, newFormDiv, function(){
+                        if(formLoadCallback != null){
+                            formLoadCallback();
+                        }
+                        if(panelType === "roles" || panelType === "jobs"){
+                            console.log("adding resize listener and calling once to set properly");
+                            $(window).resize(function(){
+                                resizeCompensationPanel();
+                            });
+
+                            // Resize compensation panel initially
+                            resizeCompensationPanel();
+                        }
+                    });
 
                     // Add the div to col, col to row, and row after the parent row
                     newCol.appendChild(newFormDiv)
                     newRow.appendChild(newCol)
                     rowDiv.parentNode.insertBefore(newRow, rowDiv.nextSibling);
                     $("#insertExistingFormDiv").animate({marginTop: "0px", height: formHeights[panelType]}, transitionSpeed + 200);
+
                 }
             }
 
