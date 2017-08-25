@@ -921,7 +921,7 @@ function getPanelInfoFromNumColumns(numColumns){
         base += 37;
         formLineWidth = 380;
     }else if(numColumns === 4){
-        base += 45; 
+        base += 45;
         formLineWidth = 360;
     }else if(numColumns === 5){
         base += 52;
@@ -938,7 +938,8 @@ function getPanelInfoFromNumColumns(numColumns){
 
 var browseElementWidth = 300;
 function getBrowseTableNumColumnsFromWindowSize(){
-    numColumns = Math.max(Math.round($(window).width() / browseElementWidth), 2);
+    // Set size between 2 and 3 columns for now
+    numColumns = Math.min(Math.max(Math.floor($(window).width() / browseElementWidth), 2), 3);
     return numColumns
 }
 
