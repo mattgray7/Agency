@@ -155,11 +155,12 @@ function addCreateCastingPost(formDict, formURL, formName){
     var pictureField = formDict["postPicture"];
     var pictureColumn =  getPostPicturePanel("td", "postPicturePanel", pictureField.value, pictureField.editOnclick, "postPictureImg", true, pictureField.input, "mainPostPictureInput", formPictureMarginInfo);
 
+    var postID = formDict["postID"].value
 
     // Fill text content
     var sectionMap = {"Details": ["project", "title", "status", "startDate", "endDate", "location", "hoursPerWeek", "compensationType"],
                       "Character": ["characterName", "characterType", "gender", "ageRange", "description", "skills", "languages"],
-                      "Performer": ["actorName"],
+                      "Actor": ["actorName"],
                       "Physical": ["height", "build", "hairColor", "eyeColor", "ethnicity"],
                       "hidden": ["csrf_token", "postID", "source", "next", "destination", "projectID", "poster", "postType"]}
     var mainLabelsColumn = "<td class='editPostLabelPanel' style='width: 20%; position:relative; line-height: 38.2px;'><ul style='margin-bottom: -14px; margin-top: -40px;'>";
@@ -217,7 +218,11 @@ function addCreateCastingPost(formDict, formURL, formName){
                             sectionLabelTableElement += "<label for='name'>Search</label><br>";
 
                             sectionInputTableElement+= "<div style='width: 100%; position: relative; height: 37px;' class='editCastMemberPanel'>"
-                            sectionInputTableElement += '<div style="position: absolute; left: 0;"><input type="text" name="performerSearchText"></div>';
+                            sectionInputTableElement += '<div style="position: absolute; left: 0; right: 65px;"><input type="text" name="actorSearchText" id="actorSearchTextInput"></div>';
+
+                            // Add submit submit button
+                            sectionInputTableElement += '<div class="whiteButton blackHover" onclick="savePostParticipant(' + "'" + postID + "', 'actorSearchTextInput'" + ');"' + ") style='position: absolute; right: 0; top: 5px; padding: 5px; height: 20px;'><div style='margin-top: -8px;'>Save</div></div>";
+
                         }
                         sectionInputTableElement += "</div>";
                     }
@@ -1125,5 +1130,25 @@ function setCompensationInputs(){
     }
 }
 
+function savePostParticipant(postID, inputDivID){
+    var inputDiv = document.getElementById(inputDivID);
+    if(inputDiv != null){
+        var inputData = inputDiv.value;
+        $.ajax({
+                url : "/ajax/savePostParticipant/",
+                data : {"postID": postID, "name": inputData},
+                type : 'POST',
+                dataType: "json",
+                success : function(data) {
+                    if(data["success"]){
+                        console.log(data["user"]);
+                    }else{
+                        console.log("No user found with name " + inputData)
+                    }
+                }
+            });
+    }
+
+}
 
 

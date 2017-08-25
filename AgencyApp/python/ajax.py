@@ -261,4 +261,35 @@ def getPostData(request):
 
     return JsonResponse({"success": success, "postData": dataDict})
 
+def savePostParticipant(request):
+    postID = request.POST.get("postID")
+    success = False
+    matchingUser = None
+    if postID:
+        participantName = request.POST.get("name").lower()
+        if participantName:
+            # First search usernames:
+            try:
+                matchingUser = models.UserAccount.objects.get(username=participantName)
+            except models.UserAccount.DoesNotExist:
+                # Try first/last names
+                if " " in participantName:
+                    splitted = participantName.split(" ")
+                    if len(splitted) > 1:
+                        try:
+                            matchingUser = models.UserAccount.objects.get(firstName=splitted[0], lastName=splitted[1])
+                        except models.UserAccount.DoesNotExist:
+                            pass
+
+            if matchingUser:
+                try:
+                    existingParticipant = models.PostParticipant.objects.get(postID=postID, username=matchingUser.username)
+                except models.PostParticipant.DoesNotExist:
+                    # Create it it if it doesn't exist (if it does, TODO update the label?)
+                    existingParticipant = models.PostParticipant(postID=postID, username=matchingUser.username)
+                    existingParticipant.save()
+                success = True
+
+
+    return JsonResponse({"success": success, "user": matchingUser and matchingUser.username})
 
