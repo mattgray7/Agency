@@ -1136,7 +1136,7 @@ function expandCompensationPanel(compType){
     }
 }
 
-var compensationPanelWidthType = "expanded";
+var compensationPanelWidthType;
 function resizeCompensationPanel(){
     var panelWidthToggleValue = 280;
     var formInputBox = document.getElementById('compensationPanelTabs');
@@ -1148,8 +1148,32 @@ function resizeCompensationPanel(){
         compensationDescription = descInput.value;
     }
 
-    if(compensationPanelWidthType === "expanded"){
-        if($("#compensationTypeContainerRow").width() < panelWidthToggleValue){
+    var direction;
+    var updateRequired = false;
+    var containerRowWidth = $("#compensationTypeContainerRow").width();
+    if(compensationPanelWidthType == null){
+        updateRequired = true;
+        if(containerRowWidth < panelWidthToggleValue){
+            direction = "shrink";
+        }else{
+            direction = "expand";
+        }
+    }else{
+        if(compensationPanelWidthType === "expanded"){
+            if(containerRowWidth < panelWidthToggleValue){
+                direction = "shrink";
+                updateRequired = true;
+            }
+        }else if(compensationPanelWidthType === "shrunk"){
+            if(containerRowWidth >= panelWidthToggleValue){
+                direction = "expand"
+                updateRequired = true;
+            }
+        }
+    }
+
+    if(updateRequired && direction != null){
+        if(direction === "shrink"){
             if(inputRow != null){
                 compensationPanelWidthType = "shrunk";
 
@@ -1172,12 +1196,12 @@ function resizeCompensationPanel(){
                     }
                 });
             }
-        }
-    }else if(compensationPanelWidthType === "shrunk"){
-        if($("#compensationTypeContainerRow").width() >= panelWidthToggleValue){
-            compensationPanelWidthType = "expanded";
-            if(inputRow != null){
-                inputRow.innerHTML = getCompensationPanel(compensationType, compensationDescription);
+        }else if(direction === "expand"){
+            if($("#compensationTypeContainerRow").width() >= panelWidthToggleValue){
+                compensationPanelWidthType = "expanded";
+                if(inputRow != null){
+                    inputRow.innerHTML = getCompensationPanel(compensationType, compensationDescription);
+                }
             }
         }
     }

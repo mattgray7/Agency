@@ -237,6 +237,7 @@
             });
             browsePostsDiv.style.marginTop = "0px";
             expanded = false;
+            compensationPanelWidthType = null;
         }
     }
 
@@ -323,6 +324,7 @@
         }else{
             // Shrinking, so no post id is active
             currentExistingFormPostID = '';
+            compensationPanelWidthType = null;
 
             // Shrink the form and call any cleanup functions 
             $("#insertExistingFormDiv").animate({marginTop: "0px", height: "0px"}, transitionSpeed, function(){
