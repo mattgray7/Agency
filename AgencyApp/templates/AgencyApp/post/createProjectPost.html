@@ -237,7 +237,7 @@
                 toggleExpandNewForm("shrink", panelType)
             }
 
-            if(currentExistingFormPostID != '' && currentExistingFormPostID != null){
+            if(currentExistingFormPostID != '' && currentExistingFormPostID != null && currentExistingFormPostID != postID){
                 // Shrink existing panel and then expand new one
                 return toggleExpandExistingForm("shrink", panelType, currentExistingFormPostID, function(){toggleExpandExistingForm("expand", panelType, postID)});
             }
