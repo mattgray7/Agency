@@ -1027,7 +1027,7 @@ function getCompensationPanel(value, description){
     }
     var activeOnclickCallback = "expandCompensationPanel";
     panelString += createMultiTabOption(tabList, "compensationPanelTabs", expandInitially, description, activeOnclickCallback);
-    panelString += "</div>";
+    panelString += "</div><div style='display: none;'><input type='text' name='compensationType' id='compensationTypeInput'/></div>";
     return panelString
 }
 
@@ -1116,6 +1116,30 @@ function expandCompensationPanel(compType){
             $("#compensationPanelTabs").animate({marginTop: "6px", height: "62px"}, 150, function(){
                 document.getElementById("compensationPanelTabsDropdownPanel").style.visibility = "visible";
             });
+        }
+    }
+}
+
+var compensationPanelWidthType = "expanded";
+function resizeCompensationPanel(){
+    var panelWidthToggleValue = 280;
+    var formInputBox = document.getElementById('compensationPanelTabs');
+    var inputRow = document.getElementById('compensationTypeContainerRow');
+    if(formInputBox != null){
+        if(compensationPanelWidthType === "expanded"){
+            if($("#compensationPanelTabs").width() < panelWidthToggleValue){
+                compensationPanelWidthType = "shrunk";
+                if(inputRow != null){
+                    formInputBox.innerHTML = "Select commensation";
+                }
+            }
+        }else if(compensationPanelWidthType === "shrunk"){
+            if($("#compensationPanelTabs").width() >= panelWidthToggleValue){
+                compensationPanelWidthType = "expanded";
+                if(inputRow != null){
+                    inputRow.innerHTML = getCompensationPanel(compensationType, null);
+                }
+            }
         }
     }
 }

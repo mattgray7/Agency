@@ -845,7 +845,7 @@
                 if(existingPostData != null && "compensationDescription" in existingPostData){
                     compDescription = existingPostData["compensationDescription"]
                 }
-                postFields["compensationType"]["input"] = getCompensationPanel(compType, compDescription) + "<div style='display: none;'><input type='text' name='compensationType' id='compensationTypeInput'/></div>"
+                postFields["compensationType"]["input"] = getCompensationPanel(compType, compDescription);
             }
 
             // Add other required fields (csrf_token, onCancel, etc)
