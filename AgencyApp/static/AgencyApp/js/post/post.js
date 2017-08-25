@@ -1149,7 +1149,12 @@ function resizeCompensationPanel(){
         if($("#compensationPanelTabs").width() < panelWidthToggleValue){
             compensationPanelWidthType = "shrunk";
             if(inputRow != null){
-                var selectForm = createSelectForm(null, "compensationTypeSelectBar", ["Paid", "Negotiable", "Unpaid"], compensationType);
+
+                var selectFormValue = " - ";
+                if(compensationType != null){
+                    selectFormValue = compensationType;
+                }
+                var selectForm = createSelectForm(null, "compensationTypeSelectBar", ["-", "Paid", "Negotiable", "Unpaid"], selectFormValue);
 
                 // Add comp description value if is set
                 var inputValueString = "placeholder='Details...' ";
@@ -1157,13 +1162,17 @@ function resizeCompensationPanel(){
                     inputValueString += "value='" + compensationDescription + "' ";
                 }
 
-                inputRow.innerHTML = "<div id='compensationPanelShrunk' style='position: relative; width: 100%; min-height: 36px;'><div style='position: absolute; left: 0; right: 0; '>" + selectForm + "</div>" + createDropdownTextBox("compensationPanelShrunk", "visibility: visible;", inputValueString, true) + "</div>";
+                inputRow.innerHTML = "<div id='compensationPanelShrunk' style='position: relative; width: 100%; min-height: 36px;'><div style='position: absolute; left: 0; right: 0; '>" + selectForm + "</div>" + createDropdownTextBox("compensationPanelShrunk", "visibility: visible;", inputValueString, true) + "</div><div style='display: none;'><input type='text' name='compensationType' id='compensationTypeInput'/></div>";
 
                 // Add listener to update comp type when an option is clicked from the select menu
                 $('#compensationTypeSelectBar').on('change', function () {
                     var compType = $(this).val(); // get selected value
                     if(compType != compensationType){
-                        compensationType = compType;
+                        if(compType === "-"){
+                            compensationType = "Unspecified"
+                        }else{
+                            compensationType = compType;
+                        }
                     }
                 });
             }
