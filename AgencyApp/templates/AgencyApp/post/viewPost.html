@@ -102,7 +102,7 @@
             titleFieldName = "profession";
         }else if(tabType == "events"){
             entries = getBrowseEventsDict();
-            sectionOrder = ["Today", "Upcoming", "Past", "Announced", "Cancelled"];
+            sectionOrder = ["Today", "Happening Now", "Upcoming", "Past"];
             titleFieldName = "title";
         }
         var table = createBrowseTable(tabType, entries, sectionOrder, true, titleFieldName, false)

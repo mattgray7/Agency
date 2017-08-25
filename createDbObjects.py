@@ -156,10 +156,10 @@ import datetime
 today = datetime.datetime.now()
 tomorrow = today + datetime.timedelta(days=1)
 
-def createProjectJob(projectID, status, profession, title, paid, username=None, shortDescription=None, description=None, picURL=None, poster="mattgray", startDate=None, endDate=None):
+def createProjectJob(projectID, status, profession, title, compensationType="Paid", compensationDescription="$100/day", username=None,description=None, picURL=None, poster="mattgray", startDate=None, endDate=None):
 	jobID = helpers.createUniqueID(models.WorkPost, "postID")
-	jobPost = models.WorkPost(postID=jobID, projectID=projectID, poster=poster, workerName=username, shortDescription=shortDescription,
-							  title=title, description=description, paid=paid, profession=profession,
+	jobPost = models.WorkPost(postID=jobID, projectID=projectID, poster=poster, workerName=username,
+							  title=title, description=description, compensationType=compensationType, compensationDescription=compensationDescription, profession=profession,
 							  status=status, startDate=startDate or today, endDate=endDate or tomorrow)
 	jobPost.save()
 
@@ -173,12 +173,12 @@ def createProjectJob(projectID, status, profession, title, paid, username=None, 
 		jobPost.save()
 	return jobID
 
-def createProjectRole(projectID, status, title, characterName, paid, username=None, gender=None, location=None, characterDescription=None, picURL=None, poster="mattgray", startDate=None, endDate=None):
+def createProjectRole(projectID, status, title, characterName, compensationType="Paid", compensationDescription="$100/day", username=None, gender=None, location=None, characterDescription=None, picURL=None, poster="mattgray", startDate=None, endDate=None):
 	roleID = helpers.createUniqueID(models.CastingPost, "postID")
 	rolePost = models.CastingPost(title=title, postID=roleID, projectID=projectID, poster=poster, status=status,
 								  actorName=username, characterName=characterName, gender=gender,
 								  description=characterDescription, location=location,
-								  paid=paid, startDate=startDate or today, endDate=endDate or tomorrow)
+								  compensationType=compensationType, compensationDescription=compensationDescription, startDate=startDate or today, endDate=endDate or tomorrow)
 	rolePost.save()
 
 	admin = models.PostAdmin(postID=roleID, username=poster)
@@ -190,7 +190,7 @@ def createProjectRole(projectID, status, title, characterName, paid, username=No
 		rolePost.save()
 	return roleID
 
-def createProjectEvent(projectID, title, location, date, startTime, endTime, description, poster="mattgray", host=None, admissionInfo=None, picURL=None):
+def createProjectEvent(projectID, title, location, startDate, endDate, startTime, endTime, description, poster="mattgray", host=None, admissionInfo=None, picURL=None):
 	postID = helpers.createUniqueID(models.EventPost, "postID")
 	post = models.EventPost(postID=postID,
 								 projectID=projectID,
@@ -202,7 +202,8 @@ def createProjectEvent(projectID, title, location, date, startTime, endTime, des
 								 admissionInfo=admissionInfo,
 								 startTime=startTime,
 								 endTime=endTime,
-								 date=date)
+								 startDate=startDate,
+								 endDate=endDate)
 	post.save()
 	if picURL:
 		picResult = urllib.urlretrieve(picURL)
@@ -214,56 +215,49 @@ def createProjectEvent(projectID, title, location, date, startTime, endTime, des
 project1WorkPost2JobId = createProjectJob(projectID=project1ProjectID,
 								 		  username="mattgray",
 								 		  title="Director Needed",
-								 		  shortDescription="Need someone to oversee production and director this script.",
 								 		  description=directorDescription,
-								 		  paid=True,
 								 		  profession="Director",
 								 		  status="Filled")
 project1WorkPost3JobId = createProjectJob(projectID=project1ProjectID,
 								 		  title="Co-Director Needed",
-								 		  shortDescription="Head of directing",
-								 		  paid=True,
+								 		  description="Head of directing",
+								 		  compensationType="Negotiable",
+								 		  compensationDescription="Depends on number of days worked",
 								 		  profession="Director",
 								 		  status="Open")
 project1WorkPost4JobId = createProjectJob(projectID=project1ProjectID,
 								 		  username="mattgray",
 								 		  title="Photographer needed",
-								 		  shortDescription="I need someone to shoot our set while filiming",
-								 		  paid=True,
+								 		  description="I need someone to shoot our set while filiming",
 								 		  profession="Photographer",
 								 		  status="Open",
 								 		  picURL="/Users/MattGray/Projects/Agency/Agency/scripts/media/photographer.jpg")
 project1WorkPost5JobId = createProjectJob(projectID=project1ProjectID,
 								 		  username="adamcramer",
 								 		  title="SFX Heavy show, need supervisor",
-								 		  shortDescription="Head/Producer of SFX",
-								 		  paid=True,
+								 		  description="Head/Producer of SFX",
 								 		  profession="Producer",
 								 		  status="Filled")
 project1WorkPost6JobId = createProjectJob(projectID=project1ProjectID,
 								 		  username="amybolt",
 								 		  title="Screenwriter wanted",
-								 		  shortDescription="I need someone to write this script from my idea",
-								 		  paid=True,
+								 		  compensationType="Unpaid",
 								 		  profession="Screenwriter",
 								 		  status="Filled")
 project1WorkPost7JobId = createProjectJob(projectID=project1ProjectID,
 								 		  username="amybolt",
 								 		  title="Screenwriter wanted",
-								 		  shortDescription="I need someone to write this script from my idea",
-								 		  paid=True,
+								 		  description="I need someone to write this script from my idea",
 								 		  profession="Screenwriter",
 								 		  status="Filled")
 project1WorkPost7JobId = createProjectJob(projectID=project1ProjectID,
 								 		  title="Key Grip",
-								 		  shortDescription="Be prepared to work 12 - 16 hour days, every day of production",
-								 		  paid=True,
+								 		  description="Be prepared to work 12 - 16 hour days, every day of production",
 								 		  profession="Key Grip",
 								 		  status="Opening soon")
 project1WorkPost7JobId = createProjectJob(projectID=project1ProjectID,
-								 		  title="Looling for a Senior Camera Operator",
-								 		  shortDescription="Primary and seconday cmaera operators",
-								 		  paid=True,
+								 		  title="Looking for a Senior Camera Operator",
+								 		  description="Primary and seconday cmaera operators",
 								 		  profession="Camera Operator",
 								 		  status="Opening soon")
 
@@ -273,7 +267,6 @@ project1RoleId1 = createProjectRole(projectID=project1ProjectID,
 								 		    characterName="Nick Carraway",
 								 		    characterDescription="A guy that gets taken in by this rich guy and then some stuff happens idk I kind of forget the book it was so long ago. 24-30 innocent looking male, he should be soft spoken and calm",
 								 		    location="UBC Campus",
-								 		    paid=True,
 								 		    status="Cast",
 								 		    picURL="/Users/MattGray/Projects/Agency/Agency/scripts/media/nickCarraway.png")
 
@@ -283,7 +276,7 @@ project1RoleId2 = createProjectRole(projectID=project1ProjectID,
 								 		    characterName="Jay Gatsby",
 								 		    characterDescription='The guy that the book is named after, so he must be kinf od important right. That makes sense. Anyways, he is rich and you should look like you are.',
 								 		    location="UBC Campus",
-								 		    paid=True,
+								 		    compensationType="Unpaid",
 								 		    status="Cast",
 								 		    picURL="/Users/MattGray/Projects/Agency/Agency/scripts/media/jayGatsby.jpg")
 
@@ -293,7 +286,6 @@ project1RoleId3 = createProjectRole(projectID=project1ProjectID,
 								 		    characterName="Daisy Buchanan",
 								 		    characterDescription=daisyBuchananDescription,
 								 		    location="UBC Campus",
-								 		    paid=True,
 								 		    status="Cast",
 								 		    picURL="/Users/MattGray/Projects/Agency/Agency/scripts/media/daisyBuchanan.png")
 
@@ -302,7 +294,8 @@ project1RoleId4 = createProjectRole(projectID=project1ProjectID,
 								 		    characterName="Lizzy",
 								 		    characterDescription=daisyBuchananDescription,
 								 		    location="UBC Campus",
-								 		    paid=True,
+								 		    compensationType="Negotiable",
+								 		    compensationDescription="Will be discussed with parents/guardians",
 								 		    gender="Female",
 								 		    status="Open")
 
@@ -312,7 +305,6 @@ project1RoleId5 = createProjectRole(projectID=project1ProjectID,
 								 		     gender="Male",
 								 		     location="UBC Campus",
 								 		     characterDescription="13-15 stupid looking boy, Dammit Kevin.",
-								 		     paid=True,
 								 		     status="Open")
 								 		    
 project1RoleId6 = createProjectRole(projectID=project1ProjectID,
@@ -321,7 +313,6 @@ project1RoleId6 = createProjectRole(projectID=project1ProjectID,
 								 	characterName="Clark",
 								 	location="UBC Campus",
 								 	characterDescription="Looks like he comes from a wealthy family",
-								 	paid=True,
 								 	status="Open")
 project1RoleId7 = createProjectRole(projectID=project1ProjectID,
 								 	poster="mattgray",
@@ -329,7 +320,6 @@ project1RoleId7 = createProjectRole(projectID=project1ProjectID,
 								 	characterName="Mona Lisa Saperstein",
 								 	characterDescription = "She is the worst. It is unbelievable how bad she is. She is the brother of jean rakphio saperstein, so actress must look related.",
 								 	location="UBC Campus",
-								 	paid=True,
 								 	status="Open",
 								 	picURL="/Users/MattGray/Projects/Agency/Agency/scripts/media/randomChickDrawing.jpg")
 
@@ -337,7 +327,6 @@ project2JobId1 = createProjectJob(projectID=project7ProjectPost.projectID,
 								 		    username="johnstongray",
 								 		    title="Creator",
 								 		    description="I wrote the whole thing",
-								 		    paid=True,
 								 		    profession="Director",
 								 		    status="Filled")
 
@@ -346,7 +335,6 @@ project2RoleId1 = createProjectRole(projectID=project7ProjectPost.projectID,
 								 	title="blah",
 								 	characterName="James",
 								 	characterDescription="Own the room",
-								 	paid=True,
 								 	status="Cast")
 
 # Open table read event
@@ -358,19 +346,23 @@ project1EventPostID = createProjectEvent(projectID=project1ProjectID,
 								 title="Open casting call",
 								 description="Casting for all roles",
 								 location="Hyatt Vancouver",
-								 date=datetime.datetime(2017, 06, 02),
+								 startDate=datetime.datetime(2017, 06, 02),
+								 endDate=datetime.datetime(2017, 06, 02),
 								 startTime=eightPM,
 								 endTime=tenPM,
+								 admissionInfo="Open to public",
 								 picURL="/Users/MattGray/Projects/Agency/Agency/scripts/media/castingCall.jpeg")
 project1EventPostID2 = createProjectEvent(projectID=project1ProjectID,
 								 poster="mattgray",
 								 host="ZOOM Film Festival",
 								 title="Screening",
-								 description="Screening of final cut at the Zoom film festival",
+								 description="Ongoing showcase of final cut at the Zoom film festival",
 								 location="Oprheum Theatre",
-								 date=datetime.datetime(2017, 8, 4),
+								 startDate=datetime.datetime(2017, 8, 4),
+								 endDate=datetime.datetime(2017, 9, 10),
 								 startTime=eightPM,
-								 endTime=tenPM)
+								 endTime=tenPM,
+								 admissionInfo="Entrance is by donation")
 
 # Add some professions
 professionList = [models.Interest(username="mattgray", mainInterest="work", subInterest="onSetProduction", professionName="Cinematographer"),
