@@ -171,8 +171,9 @@
 
 
     function getViewPostBody(){
-        var postString = "<div style='position: relative; min-height: 100px;'><div style='text-align: left; margin-left: 1px; margin-right: 20px; margin-bottom: 20px;'>"
+        var postString = '';
         {% if viewPostData and viewPostData.fields and viewPostData.fields.body %}
+            postString += "<div style='position: relative; min-height: 100px;'><div style='text-align: left; margin-left: 1px; margin-right: 20px; margin-bottom: 20px;'>"
             postString += "<div style='margin-left: 20px; text-align: left;'>";
             // Add description right under photo
             {% if viewPostData.fields.body.Description %}
@@ -206,9 +207,10 @@
                     {% endfor %}
                 }
             {% endfor %}
-            postString += "</div>";
+            postString += "</div></div>";
+        {% else %}
+            postString += "<div style='height: 50px;'></div>"
         {% endif %}
-        postString += "</div>";
         return postString;
     }
 

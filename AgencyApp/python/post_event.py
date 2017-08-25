@@ -89,7 +89,7 @@ class ViewEventPostView(post.GenericViewPostView):
         if not self._postSubTitles:
             if self.post and self.post.record:
                 if self.post.record.host:
-                    self._postSubTitles = ["Hosted by {0}".format(self.post.record.title)]
+                    self._postSubTitles = ["Hosted by {0}".format(self.post.record.host)]
         return self._postSubTitles
 
     @property
@@ -98,11 +98,8 @@ class ViewEventPostView(post.GenericViewPostView):
             if self.post and self.post.record:
                 self._postFieldsBySection = {"head": {"Details": [{'id': 'status', 'value': self.post.record.status, 'label': 'Status'},
                                                                   {'id': 'dates', 'value': helpers.getDateString(self.post.record.startDate, self.post.record.endDate), 'label': None},
-                                                                  {'id': 'location', 'value': self.post.record.location, 'label': 'Location'},
-                                                                  ],
-                                                      },
-                                             "body": {"Description": [{'id': 'description', 'value': self.post.record.description, 'label': None}
-                                                                  ]
+                                                                  {'id': 'location', 'value': self.post.record.location, 'label': 'Location'}],
+                                                      "Description": [{'id': 'description', 'value': self.post.record.description, 'label': None}]
                                                       }
                                              }
                 
