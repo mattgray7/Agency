@@ -236,7 +236,7 @@ function addCreateCastingPost(formDict, formURL, formName){
                         sectionInputTableElement += "<li><textarea rows='" + field.numRows + "' name='" + field.name + "' form='" + formName + "' style='height:100px; width: 97.7%; resize: none;' placeholder='" + field.placeholder + "'>" + field.value + "</textarea></li>";
                     }else{
                         sectionLabelTableElement += "<label for='name'>" + field.label + "</label><br>";
-                        sectionInputTableElement += "<li>"
+                        sectionInputTableElement += "<li id='" + field.name + "ContainerRow'>";
                         if(field.options){
                             var selectForm = createSelectForm(formName, field.name + "SelectBar", field.options, field.value);
                             sectionInputTableElement += selectForm;
@@ -388,7 +388,7 @@ function addCreateWorkPost(formDict, formURL, formName){
                         sectionInputTableElement += "<li><textarea rows='" + field.numRows + "' name='" + field.name + "' form='" + formName + "' style='height:100px; width: 97.7%; resize: none;' placeholder='" + field.placeholder + "'>" + field.value + "</textarea></li>";
                     }else{
                         sectionLabelTableElement += "<label for='name'>" + field.label + "</label><br>";
-                        sectionInputTableElement += "<li>"
+                        sectionInputTableElement += "<li id='" + field.name + "ContainerRow'>";
                         if(field.options){
                             var selectForm = createSelectForm(formName, field.name + "SelectBar", field.options, field.value);
                             sectionInputTableElement += selectForm;
@@ -512,7 +512,7 @@ function addCreateEventPost(formDict, formURL, formName){
                             sectionInputTableElement += "<li><textarea rows='" + field.numRows + "' name='" + field.name + "' form='" + formName + "' style='height:100px; width: 97.7%; resize: none;' placeholder='" + field.placeholder + "'>" + field.value + "</textarea></li>";
                         }else{
                             sectionLabelTableElement += "<label for='name'>" + field.label + "</label><br>";
-                            sectionInputTableElement += "<li>"
+                            sectionInputTableElement += "<li id='" + field.name + "ContainerRow'>";
                             if(field.options){
                                 var selectForm = createSelectForm(formName, field.name + "SelectBar", field.options, field.value);
                                 sectionInputTableElement += selectForm;
@@ -627,7 +627,7 @@ function addCreateProjectPost(formDict, formURL, formName){
                         sectionInputTableElement += "<li><textarea rows='" + field.numRows + "' name='" + field.name + "' form='" + formName + "' style='height:100px; width: 97.7%; resize: none;' placeholder='" + field.placeholder + "'>" + field.value + "</textarea></li>";
                     }else{
                         sectionLabelTableElement += "<label for='name'>" + field.label + "</label><br>";
-                        sectionInputTableElement += "<li>"
+                        sectionInputTableElement += "<li id='" + field.name + "ContainerRow'>";
                         if(field.options){
                             var selectForm = createSelectForm(formName, field.name + "SelectBarProject", field.options, field.value);
                             sectionInputTableElement += selectForm;
