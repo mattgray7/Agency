@@ -28,7 +28,6 @@ class ProjectPostInstance(post.GenericPostInstance):
             self.record.length = self.request.POST.get("length")
             self.record.union = self.request.POST.get("union", False) and True
             self.record.projectType = self.request.POST.get("projectType")
-            self.record.shortDescription = self.request.POST.get("shortDescription")
             self.record.projectID = self.projectID
             self.record.save()
         return True
@@ -131,7 +130,6 @@ class CreateProjectPostView(post.GenericCreatePostView):
             self._formInitialValues["length"] = self.post.record.length
             self._formInitialValues["union"] = self.post.record.union
             self._formInitialValues["projectType"] = self.post.record.projectType
-            self._formInitialValues["shortDescription"] = self.post.record.shortDescription
         return self._formInitialValues
 
     @property
@@ -197,11 +195,10 @@ class ViewProjectPostView(post.GenericViewPostView):
     def postFieldsBySection(self):
         if not self._postFieldsBySection:
             if self.post and self.post.record:
-                self._postFieldsBySection = {"Details": [{'id': 'status', 'value': self.post.record.status, 'label': 'Status'},
-                                                        {'id': 'location', 'value': self.post.record.location, 'label': 'Location'},
-                                                        ],
-                                            "Description": [{'id': 'description', 'value': self.post.record.description, 'label': None}
-                                                            ]
+                self._postFieldsBySection = {"head": {"Details": [{'id': 'status', 'value': self.post.record.status, 'label': 'Status'},
+                                                                  {'id': 'location', 'value': self.post.record.location, 'label': 'Location'}],
+                                                      "Description": [{'id': 'description', 'value': self.post.record.description, 'label': None}]
+                                                     }
                                             }
         return self._postFieldsBySection
 

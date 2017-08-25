@@ -85,14 +85,16 @@ project1UserAccount.profilePicture.name = "/profile.jpg"
 project1UserAccount.save()"""
 
 
-def createProject(poster, title, description, status, picURL):
+def createProject(poster, title, description, status, picURL, projectType="Film - Feature", location="Vancouver"):
 	projectID = helpers.createUniqueID(models.ProjectPost, "postID")
 	projectPost = models.ProjectPost(postID=projectID,
 									 projectID=projectID,
 									 poster=poster,
 									 title=title,
 									 description=description,
-									 status=status)
+									 status=status,
+									 projectType=projectType,
+									 location=location)
 	if picURL:
 		picResult = urllib.urlretrieve(picURL)
 		projectPost.postPicture = File(open(picResult[0]))

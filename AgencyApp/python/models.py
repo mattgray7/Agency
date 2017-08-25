@@ -135,7 +135,6 @@ class ProjectPost(AbstractPost):
     length = models.CharField(max_length=200, blank=True, null=True)      # only filled if status is Filled (vs Hiring)
     union = models.BooleanField(default=False, blank=True, null=True)
     location = models.CharField(max_length=200, blank=True, null=True)
-    shortDescription = models.CharField(max_length=200, blank=True, null=True)
 
     def __init__(self, *args, **kwargs):
         super(ProjectPost, self).__init__(*args, **kwargs)

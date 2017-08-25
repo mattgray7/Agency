@@ -585,7 +585,7 @@ function addCreateProjectPost(formDict, formURL, formName){
 
     // Fill text content
     var sectionMap = {"Details": ["title", "projectType", "status", "location", "union", "length"],
-                      "The Project": ["shortDescription", "description"],
+                      "The Project": ["description"],
                       "hidden": ["csrf_token", "postID", "source", "next", "destination", "projectID", "poster"]}
     var mainLabelsColumn = "<td class='editPostLabelPanel' style='width: 20%; position:relative; line-height: 38.2px;'><ul style='margin-bottom: -14px; margin-top: -40px;'>";
     var mainInputsColumn = "<td class='editPostInputPanel' style='width: 50%; position: relative; line-height: 39px;'><ul style='margin-top: -20px; '>";
