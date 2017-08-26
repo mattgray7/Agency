@@ -30,7 +30,7 @@ daisyBuchananDescription = """Daisy is The Great Gatsby's most enigmatic, and pe
 directorDescription = """Our vision is to change the way the world views productivity. We want Function Point to be a place where everyone feels respected, where they are doing important work and where everyone contributes to the growth and direction of our company, our customers and our community. Function Point is looking for a hands on, curious technology leader who wants to keep their technical skills sharp and apply their passion and smarts to lead engineering and devops towards delivering customer and business value. As Director of Engineering, you will work closely with our Director of Products to drive the development of Function Points products and services. You will lead the continued growth of engineering and devops with an emphasis on championing a strong engineering culture, measuring and increasing delivery velocity, ensuring high quality, and achieving schedule predictability."""
 #=================== Project 1
 # User 1
-def createUser(username, email, password, firstName, lastName, picURL=None, imdbLink='None', bio="None"):
+def createUser(username, email, password, firstName, lastName, picURL=None, mainProfession="Actor", imdbLink='None', bio="None"):
 	user = User.objects.create_user(username=username,
                                    	email=email,
                                    	password=password,
@@ -43,7 +43,8 @@ def createUser(username, email, password, firstName, lastName, picURL=None, imdb
 	                             		lastName=lastName,
 	                             		setupComplete=True,
 	                             		imdbLink=imdbLink,
-	                             		bio=bio)
+	                             		bio=bio,
+	                             		mainProfession=mainProfession)
 	userAccount.save()
 	userMediaDir = "/Users/MattGray/Projects/Agency/Agency/media/{0}/".format(username)
 	if not os.path.exists(userMediaDir):
@@ -57,17 +58,31 @@ def createUser(username, email, password, firstName, lastName, picURL=None, imdb
 project1UserAccount = createUser("mattgray", "matt.gray.1993@gmail.com", "m", "matt", "gray",
 				   picURL="/Users/MattGray/Projects/Agency/Agency/scripts/media/mattGrayProfile.jpg",
 				   imdbLink="http://www.imdb.com/name/nm6547223/?ref_=ttfc_fc_cl_t47",
-                   bio="I love dogs, films, and video games. And buttholes.")
+                   bio="I love dogs, films, and video games. And buttholes.",
+                   mainProfession="Actor")
 user2 = createUser("amybolt", "amy.bolt@hotmail.com", "m", "amy", "bolt",
-				   "/Users/MattGray/Projects/Agency/Agency/scripts/media/amyBoltProfile.jpg")
+				   "/Users/MattGray/Projects/Agency/Agency/scripts/media/amyBoltProfile.jpg",
+				   mainProfession="Actor")
 user3 = createUser("adamcramer", "adam.cramos@gmail.com", "m", "adam", "cramer",
-				   "/Users/MattGray/Projects/Agency/Agency/scripts/media/adamCramerProfile.jpg")
+				   "/Users/MattGray/Projects/Agency/Agency/scripts/media/adamCramerProfile.jpg",
+				   mainProfession="SPFX Supervisor")
 user4 = createUser("johnstongray", "johnston.gray@gmail.com", "m", "johnston", "gray",
-				   "/Users/MattGray/Projects/Agency/Agency/scripts/media/johnstonGrayProfile.jpg")
+				   "/Users/MattGray/Projects/Agency/Agency/scripts/media/johnstonGrayProfile.jpg",
+				   mainProfession="Screenwriter")
 user5 = createUser("sachahusband", "sasha.husband@gmail.com", "m", "sasha", "husband",
-				   "/Users/MattGray/Projects/Agency/Agency/scripts/media/sachaHusbandProfile.jpg")
-user6 = createUser("liamcarson", "liam.carson@gmail.com", "m", "liam", "carson")
+				   "/Users/MattGray/Projects/Agency/Agency/scripts/media/sachaHusbandProfile.jpg",
+				   mainProfession="Director")
+user6 = createUser("liamcarson", "liam.carson@gmail.com", "m", "liam", "carson",
+				   mainProfession="Model")
 				   #"/Users/MattGray/Projects/Agency/Agency/scripts/media/liamCarsonProfile.jpg")
+user7 = createUser("peterm", "peter.m@gmail.com", "m", "peter", "m",
+				   mainProfession="Actor")
+user8 = createUser("happymuller", "happy@gmail.com", "m", "happy", "muller",
+				   mainProfession="Dancer")
+user9 = createUser("johnnymater", "2k@gmail.com", "m", "johnny", "mater",
+				   mainProfession="Screenwriter")
+user10 = createUser("jonnycarson", "jonny.carson@gmail.com", "m", "jonny", "carson",
+				   mainProfession="Actor")
 
 
 """project1UserAccount = models.UserAccount(username="mattgray",
