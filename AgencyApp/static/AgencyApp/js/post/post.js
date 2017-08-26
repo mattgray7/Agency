@@ -228,7 +228,7 @@ function addCreateCastingPost(formDict, formURL, formName){
                             sectionInputTableElement += '<div style="position: absolute; left: 0; top: 0; right: 65px;"><input type="text" name="participantSearchText" id="participantSearchTextInput"></div>';
 
                             // Add dropdown div
-                            sectionInputTableElement += '<div id="castingParticipantDropdown" style="position: absolute; left: 0; right: 62px; height: 60px; top: 35px; background: rgba(0,0,0,0.1); margin-left: 2px;"></div>';
+                            sectionInputTableElement += '<div id="castingParticipantDropdown" style="position: absolute; left: 0; right: 62px; top: 35px; z-index: 5; border: 1px solid #000; border-top: none; display: none; background: #FFF; margin-left: 2px;"></div>';
 
                             // Add submit button
                             sectionInputTableElement += '<div class="whiteButton blackHover" onclick="savePostParticipant(' + "'" + postID + "', 'actorSearchTextInput'" + ');"' + ") style='position: absolute; right: 0; top: 5px; padding: 5px; height: 20px;'><div style='margin-top: -8px;'>Save</div></div>";
@@ -1232,7 +1232,7 @@ function previewTextInDropdown(textInputDivName, dropdownDivName, getDataFunctio
     var textInput = document.getElementById(textInputDivName);
     var dropdownDiv = document.getElementById(dropdownDivName);
     if(textInput != null && dropdownDiv != null){
-        if(textInput.value != null && textInput.value.length > 0){
+        if(textInput.value != null){
             window[getDataFunctionName](textInput.value, dropdownDiv)
         }
     }
@@ -1241,6 +1241,13 @@ function previewTextInDropdown(textInputDivName, dropdownDivName, getDataFunctio
 function searchPreviewActors(textValue, container){
     if(container != null){
         // TODO get the data
+        //container.innerHTML = "<img src='" + buttonLoadingGifURL + "' style='height: 100px; width: 100px;'>";
+
+        if(textValue.length === 0){
+            container.style.display = "none";
+        }else{
+            container.style.display = "block";
+        }
         $.ajax({
                 url : "/ajax/getSearchPreviewActors/",
                 data : {"text": textValue},
@@ -1258,7 +1265,7 @@ function searchPreviewActors(textValue, container){
                             container.innerHTML = previewString;
                         }
                     }else{
-                        console.log("No user found with name " + inputData)
+                        container.innerHTML = "No user found with name " + textValue
                     }
                 }
             });
