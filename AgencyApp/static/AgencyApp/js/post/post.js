@@ -146,7 +146,7 @@ function submitPictureForm(formName, isProject){
         }
     }
 
-var formPictureMarginInfo = "margin-left: 10px; margin-top: 47px;";
+var formPictureMarginInfo = "margin-left: 10px; margin-top: 65px;";
 function addCreateCastingPost(formDict, formURL, formName){
     var formString = "<form method='post' action='" + formURL + "' id='" + formName + "' class='form-style-1' style='width: 90%; background: none; margin-left: 3.2%;' enctype='multipart/form-data'>";
     formString += "<table style='width: 100%;'><tr>"
@@ -324,15 +324,15 @@ function addCreateWorkPost(formDict, formURL, formName){
     var pictureColumn = getPostPicturePanel("td", "postPicturePanel", pictureField.value, pictureField.editOnclick, "postPictureImg", true, pictureField.input, "mainPostPictureInput", formPictureMarginInfo);
 
     // Fill text content
-    var sectionMap = {"Details": ["title", "project", "profession", "status", "startDate", "endDate", "hoursPerWeek", "compensationType"],
+    var sectionMap = {"Details": ["project", "title", "profession", "status", "startDate", "endDate", "hoursPerWeek", "compensationType"],
                       "The Job": ["description", "location", "skills"],
                       "Worker": ["workerName"],
                       "Equipment": ["workerNeedsEquipment", "equipmentDescription"],
                       "hidden": ["csrf_token", "postID", "source", "next", "destination", "projectID", "poster"]}
-    var mainLabelsColumn = "<td class='editPostLabelPanel' style='width: 20%; position:relative; line-height: 38.2px;'><ul style='margin-bottom: -14px; margin-top: -40px;'>";
-    var mainInputsColumn = "<td class='editPostInputPanel' style='width: 50%; position: relative; line-height: 39px;'><ul style='margin-top: -20px; '>";
+    var mainLabelsColumn = "<td class='editPostLabelPanel' style='width: 20%; position:relative; line-height: 38.2px;'><ul style='margin-bottom: -14px; margin-top: -60px;'>";
+    var mainInputsColumn = "<td class='editPostInputPanel' style='width: 50%; position: relative; line-height: 39px;'><ul style='margin-top: 5px; '>";
     var otherLabelsColumn = "<td class='editPostLabelPanel' style='width: 30%; min-width: 170px; position:relative;'><ul style='margin-top: 5px;'>";
-    var otherInputsColumn = "<td class='editPostInputPanel' colspan='2' style='width: 70%; vertical-align: top;'><div style='margin-top: -6px;'><ul>";
+    var otherInputsColumn = "<td class='editPostInputPanel' colspan='2' style='width: 70%; vertical-align: top;'><div style='margin-top: 25px;'><ul>";
     for(sectionTitle in sectionMap){
         var fieldList = sectionMap[sectionTitle];
         var sectionInputTableElement = null;
@@ -349,7 +349,7 @@ function addCreateWorkPost(formDict, formURL, formName){
         }
 
         if(sectionTitle != "hidden"){
-            sectionLabelTableElement += "<div style='position: relative; height: 50px; width: 100%;'> <h2 class='" + sectionClass + "' style='position: absolute; z-index: 1; right: 0; margin-left: 80px;'> " + sectionTitle + "</h2>" + getFormDividerLine() + "</div></div>"
+            sectionLabelTableElement += "<div style='position: relative; margin-top: 40px; height: 50px; width: 100%;'> <h2 class='" + sectionClass + "' style='position: absolute; z-index: 1; right: 0; margin-left: 80px;'> " + sectionTitle + "</h2>" + getFormDividerLine() + "</div></div>"
             if(true){
                 sectionInputTableElement += "<div style='height: 62px;'></div>";
             }
@@ -364,7 +364,7 @@ function addCreateWorkPost(formDict, formURL, formName){
                     if(field.title != null){
                         sectionInputTableElement += "<li style='margin-top: 6px;'><a  onclick='redirectToPost(" + '"' + field.projectID + '"' + ");'>" + field.title + "</a></li>";
                     }else{
-                        sectionInputTableElement += "<li style='margin-top: 6px;'>None - <a onclick='" + field.addNewOnclick + "'>Add</a></li>";
+                        sectionInputTableElement += "<li style='margin-top: -4px; height: 30px;'>None - <a onclick='" + field.addNewOnclick + "'>Add</a></li>";
                     }
                     continue;
                 }else if(fieldName === "workerName"){
