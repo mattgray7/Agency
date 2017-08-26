@@ -395,6 +395,8 @@
 		border-top: none;
 		border-radius: 2px;
 		background: #FFF;
+		max-height: 270px;
+		overflow: scroll;
 	}
 	.previewDropdownPanel li
 	{

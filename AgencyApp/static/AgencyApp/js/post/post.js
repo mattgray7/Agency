@@ -1241,7 +1241,7 @@ function previewTextInDropdown(textInputDivName, dropdownDivName, getDataFunctio
 function getPreviewActorsString(userList){
     var previewString = "<ul>";
     for(var i=0; i < userList.length; i++){
-        previewString += "<li onclick='selectPostParticipant(" + '"' + userList[i]["username"] + '", "' + userList[i]["cleanName"] + '", "castingParticipantSearchTextInput", "castingParticipantDropdown");' + "'>" + userList[i]["cleanName"] + " - " + userList[i]["profession"] + "</li>";
+        previewString += "<li onclick='selectPostParticipant(" + '"' + userList[i]["username"] + '", "' + userList[i]["cleanName"] + '", "castingParticipantSearchTextInput", "castingParticipantDropdown");' + "'><img src='" + userList[i]["profilePicture"] + "' style='height: 50px; width:50px;' />" + userList[i]["cleanName"] + " - " + userList[i]["profession"] + "</li>";
     }
     previewString += "</ul>";
     return previewString;
