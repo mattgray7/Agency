@@ -289,7 +289,18 @@ def savePostParticipant(request):
                     existingParticipant = models.PostParticipant(postID=postID, username=matchingUser.username)
                     existingParticipant.save()
                 success = True
-
-
     return JsonResponse({"success": success, "user": matchingUser and matchingUser.username})
+
+def getSearchPreviewActors(request):
+    text = request.POST.get("text")
+    success = False
+    returnList = []
+    if text:
+        matchingActors = models.UserAccount.objects.filter(username__icontains=text)
+        if matchingActors:
+            success = True
+            returnList = [{"username": x.username, "cleanName": x.cleanName} for x in matchingActors]
+    return JsonResponse({"success": success, "users": returnList})
+
+
 

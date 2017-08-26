@@ -1241,14 +1241,27 @@ function previewTextInDropdown(textInputDivName, dropdownDivName, getDataFunctio
 function searchPreviewActors(textValue, container){
     if(container != null){
         // TODO get the data
-        var data = ["Matthew Gray", "Amy Bolt"];
-
-        var previewString = "<ul>";
-        for(var i=0; i < data.length; i++){
-            previewString += "<li>" + data[i] + "</li>";
-        }
-        previewString += "</ul>";
-        container.innerHTML = previewString;
+        $.ajax({
+                url : "/ajax/getSearchPreviewActors/",
+                data : {"text": textValue},
+                type : 'POST',
+                dataType: "json",
+                success : function(data) {
+                    if(data["success"]){
+                        if(data["users"]){
+                            console.log("There are users")
+                            var previewString = "<ul>";
+                            for(var i=0; i < data["users"].length; i++){
+                                previewString += "<li>" + data["users"][i]["cleanName"] + "</li>";
+                            }
+                            previewString += "</ul>";
+                            container.innerHTML = previewString;
+                        }
+                    }else{
+                        console.log("No user found with name " + inputData)
+                    }
+                }
+            });
     }
 }
 
