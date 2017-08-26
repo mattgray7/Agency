@@ -369,6 +369,14 @@
                         // Resize compensation panel initially
                         resizeCompensationPanel();
                     {% endif %}
+
+                    // Add participant dropdown
+                    var dropdownDiv = document.getElementById("participantSearchTextInput");
+                    if(dropdownDiv != null){
+                        dropdownDiv.onkeyup = function(){
+                            previewTextInDropdown("participantSearchTextInput", "castingParticipantDropdown", "searchPreviewActors");
+                        }
+                    }
                 }
             </script>
         </div>

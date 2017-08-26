@@ -166,7 +166,7 @@ function addCreateCastingPost(formDict, formURL, formName){
     var mainLabelsColumn = "<td class='editPostLabelPanel' style='width: 20%; position:relative; line-height: 38.2px;'><ul style='margin-bottom: -14px; margin-top: -40px;'>";
     var mainInputsColumn = "<td class='editPostInputPanel' style='width: 50%; position: relative; line-height: 39px;'><ul style='margin-top: -2px; '>";
     var otherLabelsColumn = "<td class='editPostLabelPanel' style='width: 30%; min-width: 170px; height: 600px; position:relative;'><ul style='margin-top: 5px;'>";
-    var otherInputsColumn = "<td class='editPostInputPanel' colspan='2' style='width: 70%;'><div style='margin-top: -45px;'><ul>";
+    var otherInputsColumn = "<td class='editPostInputPanel' colspan='2' style='width: 70%;'><div style='margin-top: 10px;'><ul>";
     for(sectionTitle in sectionMap){
         var fieldList = sectionMap[sectionTitle];
         var sectionInputTableElement = null;
@@ -185,7 +185,9 @@ function addCreateCastingPost(formDict, formURL, formName){
         if(sectionTitle != "hidden"){
             sectionLabelTableElement += "<div style='position: relative; height: 30px; margin-top: 40px; width: 100%;'> <h2 class='" + sectionClass + "' style='position: absolute; bottom: 0; z-index: 1; right: 0; margin-left: 80px; '><div style='margin-top: -10px;'>" + sectionTitle + "</div></h2>" + getFormDividerLine() + "</div></div>"
             sectionInputTableElement += "<div style='height: 60px;'></div>";
-
+            if(sectionTitle === "Physical"){
+                sectionInputTableElement += "<div style='height:60px;'></div>"
+            }
 
             for(i in fieldList){
                 var fieldName = sectionMap[sectionTitle][i];
@@ -220,17 +222,16 @@ function addCreateCastingPost(formDict, formURL, formName){
                             sectionLabelTableElement += "<label for='name'>Search</label><br>";
 
                             // Add container
-                            sectionInputTableElement+= "<div style='width: 100%; position: relative; height: 37px; margin-top: 0px;' class='editCastMemberPanel'>"
+                            sectionInputTableElement+= "<div style='width: 100%; position: relative; height: 20px; margin-top: 17px;' class='editCastMemberPanel'>"
 
                             // Add text box
-                            sectionInputTableElement += '<div style="position: absolute; left: 0; top: 0; right: 65px;"><input type="text" name="actorSearchText" id="actorSearchTextInput"></div>';
+                            sectionInputTableElement += '<div style="position: absolute; left: 0; top: 0; right: 65px;"><input type="text" name="participantSearchText" id="participantSearchTextInput"></div>';
 
-                            /*// Add dropdown div
-                            sectionInputTableElement += '<div style="position: absolute; left: 0; right 65px; height: 20px; background: rgba(0,0,0,0.1);">Search Options</div>';*/
+                            // Add dropdown div
+                            sectionInputTableElement += '<div id="castingParticipantDropdown" style="position: absolute; left: 0; right: 62px; height: 60px; top: 35px; background: rgba(0,0,0,0.1); margin-left: 2px;"></div>';
 
                             // Add submit button
                             sectionInputTableElement += '<div class="whiteButton blackHover" onclick="savePostParticipant(' + "'" + postID + "', 'actorSearchTextInput'" + ');"' + ") style='position: absolute; right: 0; top: 5px; padding: 5px; height: 20px;'><div style='margin-top: -8px;'>Save</div></div>";
-
                         }
                         sectionInputTableElement += "</div>";
                     }
@@ -1227,6 +1228,30 @@ function setCompensationInputs(){
     }
 }
 
+function previewTextInDropdown(textInputDivName, dropdownDivName, getDataFunctionName){
+    var textInput = document.getElementById(textInputDivName);
+    var dropdownDiv = document.getElementById(dropdownDivName);
+    if(textInput != null && dropdownDiv != null){
+        if(textInput.value != null && textInput.value.length > 0){
+            window[getDataFunctionName](textInput.value, dropdownDiv)
+        }
+    }
+}
+
+function searchPreviewActors(textValue, container){
+    if(container != null){
+        // TODO get the data
+        var data = ["Matthew Gray", "Amy Bolt"];
+
+        var previewString = "<ul>";
+        for(var i=0; i < data.length; i++){
+            previewString += "<li>" + data[i] + "</li>";
+        }
+        previewString += "</ul>";
+        container.innerHTML = previewString;
+    }
+}
+
 function savePostParticipant(postID, inputDivID){
     var inputDiv = document.getElementById(inputDivID);
     if(inputDiv != null){
@@ -1245,7 +1270,6 @@ function savePostParticipant(postID, inputDivID){
                 }
             });
     }
-
 }
 
 
