@@ -68,19 +68,6 @@
     width: 97%;
     line-height: 38.5px;
 }
-.editPostInputPanel input[type="date"],
-.editPostInputPanel input[type="number"]
-{
-    display: block;
-    padding: 0.3em 0.4em 0.3em 0.4em;
-    border: 1.5px solid #DDDDDD;
-    margin-top: 5px;
-    margin-bottom: 5px;
-    border-radius: 4px;
-    width: 98%;
-    height: 22px;
-    font-size: 0.8em;
-}
 
 .editPostInputPanel input[type="checkbox"]
 {
@@ -89,13 +76,15 @@
 }
 
 .editPostInputPanel input[type="text"],
+.editPostInputPanel input[type="date"],
+.editPostInputPanel input[type="number"],
 .editPostInputPanel textarea
 {
     display: block;
     padding: 0.3em 0.4em 0.3em 0.4em;
     border: 1.5px solid #DDDDDD;
-    margin-top: 5px;
-    margin-bottom: 2px;
+    margin-top: 6px;
+    margin-bottom: 5px;
     border-radius: 4px;
     width: 98%;
     height: 22px;
@@ -107,11 +96,8 @@
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     width: 103%;
-    padding: 0em 0.3em;
     outline: none;
     border: none;
-    height: 25px;
-    line-height: 20px;
     font-size: 1.0em;
     font-family: 'Didact Gothic', sans-serif;
 }

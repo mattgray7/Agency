@@ -164,9 +164,9 @@ function addCreateCastingPost(formDict, formURL, formName){
                       "Physical": ["height", "build", "hairColor", "eyeColor", "ethnicity"],
                       "hidden": ["csrf_token", "postID", "source", "next", "destination", "projectID", "poster", "postType"]}
     var mainLabelsColumn = "<td class='editPostLabelPanel' style='width: 20%; position:relative; line-height: 38.2px;'><ul style='margin-bottom: -14px; margin-top: -40px;'>";
-    var mainInputsColumn = "<td class='editPostInputPanel' style='width: 50%; position: relative; line-height: 39px;'><ul style='margin-top: -20px; '>";
+    var mainInputsColumn = "<td class='editPostInputPanel' style='width: 50%; position: relative; line-height: 39px;'><ul style='margin-top: -2px; '>";
     var otherLabelsColumn = "<td class='editPostLabelPanel' style='width: 30%; min-width: 170px; height: 600px; position:relative;'><ul style='margin-top: 5px;'>";
-    var otherInputsColumn = "<td class='editPostInputPanel' colspan='2' style='width: 70%;'><div style='margin-top: -6px;'><ul>";
+    var otherInputsColumn = "<td class='editPostInputPanel' colspan='2' style='width: 70%;'><div style='margin-top: -45px;'><ul>";
     for(sectionTitle in sectionMap){
         var fieldList = sectionMap[sectionTitle];
         var sectionInputTableElement = null;
@@ -183,8 +183,9 @@ function addCreateCastingPost(formDict, formURL, formName){
         }
 
         if(sectionTitle != "hidden"){
-            sectionLabelTableElement += "<div style='position: relative; height: 30px; width: 100%;'> <h2 class='" + sectionClass + "' style='position: absolute; bottom: 0; z-index: 1; right: 0; margin-left: 80px; '><div style='margin-top: -10px;'>" + sectionTitle + "</div></h2>" + getFormDividerLine() + "</div></div>"
+            sectionLabelTableElement += "<div style='position: relative; height: 30px; margin-top: 40px; width: 100%;'> <h2 class='" + sectionClass + "' style='position: absolute; bottom: 0; z-index: 1; right: 0; margin-left: 80px; '><div style='margin-top: -10px;'>" + sectionTitle + "</div></h2>" + getFormDividerLine() + "</div></div>"
             sectionInputTableElement += "<div style='height: 60px;'></div>";
+
 
             for(i in fieldList){
                 var fieldName = sectionMap[sectionTitle][i];
@@ -197,9 +198,9 @@ function addCreateCastingPost(formDict, formURL, formName){
                 if(fieldName === "project"){
                     sectionLabelTableElement += "<label for='name'>Project</label><br>";
                     if(field.title != null){
-                        sectionInputTableElement += "<li style='margin-top: 6px;'><a  onclick='redirectToPost(" + '"' + field.projectID + '"' + ");'>" + field.title + "</a></li>";
+                        sectionInputTableElement += "<li style='margin-top: 0px;'><a  onclick='redirectToPost(" + '"' + field.projectID + '"' + ");'>" + field.title + "</a></li>";
                     }else{
-                        sectionInputTableElement += "<li style='margin-top: 6px;'>None - <a onclick='" + field.addNewOnclick + "'>Add</a></li>";
+                        sectionInputTableElement += "<li style='margin-top: 4px; height: 36px;'>None - <a onclick='" + field.addNewOnclick + "'>Add</a></li>";
                     }
                     continue;
                 }else if(fieldName === "actorName"){
@@ -215,12 +216,19 @@ function addCreateCastingPost(formDict, formURL, formName){
                             // Add actor profile picture panel
                             sectionInputTableElement += '<div style="position: absolute; right: 0; margin-top: 2px; margin-right: 2px;"><div id="actorPicturePanel" class="postPicture" style="width: 100px; height: 100px; background: #000;"><img id="actorPictureImg" src="' + actorDict.profilePictureURL + '" style="max-width:100%; max-height:100%;"/></div></div>';
                         }else{
+                            // Add label
                             sectionLabelTableElement += "<label for='name'>Search</label><br>";
 
-                            sectionInputTableElement+= "<div style='width: 100%; position: relative; height: 37px;' class='editCastMemberPanel'>"
-                            sectionInputTableElement += '<div style="position: absolute; left: 0; right: 65px;"><input type="text" name="actorSearchText" id="actorSearchTextInput"></div>';
+                            // Add container
+                            sectionInputTableElement+= "<div style='width: 100%; position: relative; height: 37px; margin-top: 0px;' class='editCastMemberPanel'>"
 
-                            // Add submit submit button
+                            // Add text box
+                            sectionInputTableElement += '<div style="position: absolute; left: 0; top: 0; right: 65px;"><input type="text" name="actorSearchText" id="actorSearchTextInput"></div>';
+
+                            /*// Add dropdown div
+                            sectionInputTableElement += '<div style="position: absolute; left: 0; right 65px; height: 20px; background: rgba(0,0,0,0.1);">Search Options</div>';*/
+
+                            // Add submit button
                             sectionInputTableElement += '<div class="whiteButton blackHover" onclick="savePostParticipant(' + "'" + postID + "', 'actorSearchTextInput'" + ');"' + ") style='position: absolute; right: 0; top: 5px; padding: 5px; height: 20px;'><div style='margin-top: -8px;'>Save</div></div>";
 
                         }
@@ -236,13 +244,14 @@ function addCreateCastingPost(formDict, formURL, formName){
                         sectionInputTableElement += "<li><textarea rows='" + field.numRows + "' name='" + field.name + "' form='" + formName + "' style='height:100px; width: 97.7%; resize: none;' placeholder='" + field.placeholder + "'>" + field.value + "</textarea></li>";
                     }else{
                         sectionLabelTableElement += "<label for='name'>" + field.label + "</label><br>";
-                        sectionInputTableElement += "<li id='" + field.name + "ContainerRow'>";
+                        sectionInputTableElement += "<li id='" + field.name + "ContainerRow' ";
                         if(field.options){
+                            sectionInputTableElement += 'style="height: 36px; margin-top: 1px;margin-bottom: 2px;">';
                             var selectForm = createSelectForm(formName, field.name + "SelectBar", field.options, field.value);
                             sectionInputTableElement += selectForm;
                             sectionInputTableElement += "<input type='hidden' name='" + field.name + "' id='" + field.name + "SelectInput' >";
                         }else{
-                            sectionInputTableElement += field.input;
+                            sectionInputTableElement += 'style="">' + field.input;
                         }
                         sectionInputTableElement += '</li>';
                     }
@@ -1185,7 +1194,7 @@ function resizeCompensationPanel(){
                     inputValueString += "value='" + compensationDescription + "' ";
                 }
 
-                inputRow.innerHTML = "<div id='compensationPanelShrunk' style='position: relative; width: 100%; min-height: 36px;'><div style='position: absolute; left: 0; right: 0; '>" + selectForm + "</div>" + createDropdownTextBox("compensationPanelShrunk", "visibility: visible;", inputValueString, true) + "</div><div style='display: none;'><input type='text' name='compensationType' id='compensationTypeInput'/></div>";
+                inputRow.innerHTML = "<div id='compensationPanelShrunk' style='position: relative; width: 100%; min-height: 36px; margin-top: -8px;'><div style='position: absolute; left: 0; right: 0; '>" + selectForm + "</div>" + createDropdownTextBox("compensationPanelShrunk", "visibility: visible;", inputValueString, true) + "</div><div style='display: none;'><input type='text' name='compensationType' id='compensationTypeInput'/></div>";
 
                 $("#compensationTypeSelectBar select").val(compensationType);
                 // Add listener to update comp type when an option is clicked from the select menu
