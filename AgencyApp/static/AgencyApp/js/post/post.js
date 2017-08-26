@@ -225,10 +225,10 @@ function addCreateCastingPost(formDict, formURL, formName){
                             sectionInputTableElement+= "<div style='width: 100%; position: relative; height: 20px; margin-top: 17px;' class='editCastMemberPanel'>"
 
                             // Add text box
-                            sectionInputTableElement += '<div style="position: absolute; left: 0; top: 0; right: 65px;"><input type="text" name="participantSearchText" id="participantSearchTextInput"></div>';
+                            sectionInputTableElement += '<div style="position: absolute; left: 0; top: 0; right: 65px;"><input type="text" name="participantSearchText" id="castingParticipantSearchTextInput"></div>';
 
                             // Add dropdown div
-                            sectionInputTableElement += '<div id="castingParticipantDropdown" style="position: absolute; left: 0; right: 62px; top: 35px; z-index: 5; border: 1px solid #000; border-top: none; display: none; background: #FFF; margin-left: 2px;"></div>';
+                            sectionInputTableElement += '<div id="castingParticipantDropdown" class="previewDropdownPanel" style="position: absolute; left: 0; right: 61px; top: 35px; display: none; margin-left: 0px;"></div>';
 
                             // Add submit button
                             sectionInputTableElement += '<div class="whiteButton blackHover" onclick="savePostParticipant(' + "'" + postID + "', 'actorSearchTextInput'" + ');"' + ") style='position: absolute; right: 0; top: 5px; padding: 5px; height: 20px;'><div style='margin-top: -8px;'>Save</div></div>";
@@ -1238,6 +1238,15 @@ function previewTextInDropdown(textInputDivName, dropdownDivName, getDataFunctio
     }
 }
 
+function getPreviewActorsString(userList){
+    var previewString = "<ul>";
+    for(var i=0; i < userList.length; i++){
+        previewString += "<li onclick='selectPostParticipant(" + '"' + userList[i]["username"] + '", "' + userList[i]["cleanName"] + '", "castingParticipantSearchTextInput", "castingParticipantDropdown");' + "'>" + userList[i]["cleanName"] + " - " + userList[i]["profession"] + "</li>";
+    }
+    previewString += "</ul>";
+    return previewString;
+}
+
 function searchPreviewActors(textValue, container){
     if(container != null){
         // TODO get the data
@@ -1256,19 +1265,26 @@ function searchPreviewActors(textValue, container){
                 success : function(data) {
                     if(data["success"]){
                         if(data["users"]){
-                            console.log("There are users")
-                            var previewString = "<ul>";
-                            for(var i=0; i < data["users"].length; i++){
-                                previewString += "<li>" + data["users"][i]["cleanName"] + "</li>";
-                            }
-                            previewString += "</ul>";
-                            container.innerHTML = previewString;
+                            var contentString = getPreviewActorsString(data["users"]);
+                            container.innerHTML = contentString;
                         }
                     }else{
                         container.innerHTML = "No user found with name " + textValue
                     }
                 }
             });
+    }
+}
+
+function selectPostParticipant(username, cleanName, textDivName, dropdownDivName){
+    var textDiv = document.getElementById(textDivName);
+    var dropdownDiv = document.getElementById(dropdownDivName);
+    if(textDiv != null){
+        textDiv.value = cleanName;
+    }
+    if(dropdownDiv != null){
+        dropdownDiv.style.display = "none";
+        dropdownDiv.innerHTML = "";
     }
 }
 

@@ -306,7 +306,7 @@ def getSearchPreviewActors(request):
             matchingActors = models.UserAccount.objects.filter(username__icontains=text)
         if matchingActors:
             success = True
-            returnList = [{"username": x.username, "cleanName": x.cleanName} for x in matchingActors]
+            returnList = [{"username": x.username, "cleanName": x.cleanName, "profession": x.mainProfession} for x in matchingActors]
     return JsonResponse({"success": success, "users": returnList})
 
 

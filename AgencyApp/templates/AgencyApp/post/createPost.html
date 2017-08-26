@@ -372,10 +372,10 @@
                     {% endif %}
 
                     // Add participant dropdown
-                    var dropdownDiv = document.getElementById("participantSearchTextInput");
+                    var dropdownDiv = document.getElementById("castingParticipantSearchTextInput");
                     if(dropdownDiv != null){
                         dropdownDiv.onkeyup = function(){
-                            previewTextInDropdown("participantSearchTextInput", "castingParticipantDropdown", "searchPreviewActors");
+                            previewTextInDropdown("castingParticipantSearchTextInput", "castingParticipantDropdown", "searchPreviewActors");
                         }
                     }
                 }

@@ -372,13 +372,11 @@
 		color: #c6c6c6;
 		transition: color .20s ease;
 	}
-
 	.projectTabButtonActive:hover
 	{
 		color: #6d6d6d;
 		transition: color .20s ease;
 	}
-
 	.projectTabBorderCover
 	{
 		width: 100%;
@@ -389,5 +387,22 @@
 		z-index: 3;
 		opacity: 0;
 		transition: background .2s ease;
+	}
+	.previewDropdownPanel
+	{
+		z-index: 5;
+		border: 2px solid #DDDDDD;
+		border-top: none;
+		border-radius: 2px;
+		background: #FFF;
+	}
+	.previewDropdownPanel li
+	{
+		border-bottom: 1px solid rgba(0,0,0,0.3);
+	}
+	.previewDropdownPanel li:hover
+	{
+		background: rgba(0,0,0,0.05);
+		cursor: pointer;
 	}
 
