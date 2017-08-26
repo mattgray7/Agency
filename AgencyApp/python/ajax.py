@@ -295,8 +295,15 @@ def getSearchPreviewActors(request):
     text = request.POST.get("text")
     success = False
     returnList = []
+    matchingActors = None
     if text:
-        matchingActors = models.UserAccount.objects.filter(username__icontains=text)
+        if " " in text:
+            splitted = text.split(" ")
+            if len(splitted) >= 2:
+                matchingActors = models.UserAccount.objects.filter(firstName__icontains=splitted[0],
+                                                                   lastName__icontains=splitted[1])
+        if not matchingActors:
+            matchingActors = models.UserAccount.objects.filter(username__icontains=text)
         if matchingActors:
             success = True
             returnList = [{"username": x.username, "cleanName": x.cleanName} for x in matchingActors]
