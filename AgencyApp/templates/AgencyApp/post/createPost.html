@@ -144,6 +144,19 @@
                 {% endspaceless %}
             {% endif %}
 
+            // Add post participants
+            var participantsField = []
+            {% if postParticipants %}
+                {% for part in postParticipants %}
+                    var newField = {"username": "{{part.username}}", "cleanName": "{{part.cleanName}}", "profilePictureURL": "{{part.profilePictureURL}}", "profession": "{{part.profession}}", "label": "{{part.label}}"};
+                    participantsField.push(newField)
+                {% endfor %}
+                if(participantsField.length > 0){
+                    postFields["participants"] = participantsField;
+                    console.log("Adding field " + participantsField)
+                }
+            {% endif %}
+
             // Add project
             var projectField = {"name": "project"}
             {% if project and project.title %}
@@ -181,8 +194,8 @@
         function getCastingFormDict(){
             var postFields = createValueDictFromForm()
 
-            // Add actor
-            var actorField = {"username": "{{actor.username}}", "cleanName": "{{actor.cleanName}}"}
+            /*// Add actor
+            var actorField = {"username": "{{actor.username}}", "cleanName": "{{actor.cleanName}}", "value": "{{actor.username}}"}
             {% if actor %}
                 actorField["username"] = "{{actor.username}}";
                 actorField["cleanName"] = "{{actor.cleanName}}";
@@ -193,7 +206,8 @@
                 actorField["username"] = null;
                 actorField.profilePictureURL = '{{images.noProfilePicture}}';
             {% endif %}
-            postFields["actor"] = actorField;
+            postFields["participants"] = actorField;*/
+
 
             return postFields;
         }

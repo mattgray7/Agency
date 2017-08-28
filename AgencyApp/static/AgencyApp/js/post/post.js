@@ -160,7 +160,7 @@ function addCreateCastingPost(formDict, formURL, formName){
     // Fill text content
     var sectionMap = {"Details": ["project", "title", "status", "startDate", "endDate", "location", "hoursPerWeek", "compensationType"],
                       "Character": ["characterName", "characterType", "gender", "ageRange", "description", "skills", "languages"],
-                      "Actor": ["actorName"],
+                      "Users": ["participants"],
                       "Physical": ["height", "build", "hairColor", "eyeColor", "ethnicity"],
                       "hidden": ["csrf_token", "postID", "source", "next", "destination", "projectID", "poster", "postType"]}
     var mainLabelsColumn = "<td class='editPostLabelPanel' style='width: 20%; position:relative; line-height: 38.2px;'><ul style='margin-bottom: -14px; margin-top: -40px;'>";
@@ -195,7 +195,6 @@ function addCreateCastingPost(formDict, formURL, formName){
                 if(!field){
                     continue;
                 }
-
                 // Add project
                 if(fieldName === "project"){
                     sectionLabelTableElement += "<label for='name'>Project</label><br>";
@@ -205,40 +204,35 @@ function addCreateCastingPost(formDict, formURL, formName){
                         sectionInputTableElement += "<li style='margin-top: 4px; height: 36px;'>None - <a onclick='" + field.addNewOnclick + "'>Add</a></li>";
                     }
                     continue;
-                }else if(fieldName === "actorName"){
-                    if(field.value != null && field.value.length > 0){
-                        var actorDict = formDict["actor"]
+                }else if(fieldName === "participants"){
+                        var participants = formDict["participants"]
 
-                        // Add actor text panel
-                        if(actorDict.cleanName != null && actorDict.username != null){
+                        // Add participants panel
+                        if(participants != null && participants.length > 0){
                             sectionLabelTableElement += "<div style='height: 120px;'></div>";
                             
                             sectionInputTableElement+= "<div style='width: 100%; position: relative; height: 90px;'>"
-
-                            sectionInputTableElement += getPostParticipantTable(postID, [actorDict]);
-
-                            /*sectionInputTableElement += "</div>";
-                            sectionInputTableElement += '<div style="position: absolute; left: 0;"><h2>' + actorDict.cleanName + "</h2></div>";
-                            // Add actor profile picture panel
-                            sectionInputTableElement += '<div style="position: absolute; right: 0; margin-top: 2px; margin-right: 2px;"><div id="actorPicturePanel" class="postPicture" style="width: 45px; height: 50px; border: 1px solid rgba(0,0,0,0.2);"><img id="actorPictureImg" src="' + actorDict.profilePictureURL + '" style="max-width:100%; max-height:100%;"/></div></div>';*/
-                        }else{
-                            // Add label
-                            sectionLabelTableElement += "<label for='name'>Search</label><br>";
-
-                            // Add container
-                            sectionInputTableElement+= "<div style='width: 100%; position: relative; height: 20px; margin-top: 17px;' class='editCastMemberPanel'>"
-
-                            // Add text box
-                            sectionInputTableElement += '<div style="position: absolute; left: 0; top: 0; right: 65px; padding: 0px;"><input type="text" class="noFocusTextInput" name="participantSearchText" id="castingParticipantSearchTextInput"></div>';
-
-                            // Add dropdown div
-                            sectionInputTableElement += '<div id="castingParticipantDropdown" class="previewDropdownPanel" style="position: absolute; left: 0; right: 59px; top: 35px; display: none; max-width: 456px;"></div>';
-
-                            // Add submit button
-                            sectionInputTableElement += '<div class="whiteButton blackHover" onclick="savePostParticipant(' + "'" + postID + "', 'castingParticipantSearchTextInput'" + ');"' + ") style='position: absolute; right: 0; top: 5px; padding: 5px; height: 20px;'><div style='margin-top: -8px;'>Save</div></div>";
+                            sectionInputTableElement += getPostParticipantTable(postID, participants);
+                            sectionInputTableElement += "</div>"
                         }
+
+                        // Add label
+                        sectionLabelTableElement += "<label for='name'>Search</label><br>";
+
+                        // Add container
+                        sectionInputTableElement+= "<div style='width: 100%; position: relative; height: 20px; margin-top: 17px;' class='editCastMemberPanel'>"
+
+                        // Add text box
+                        sectionInputTableElement += '<div style="position: absolute; left: 0; top: 0; right: 65px; padding: 0px;"><input type="text" class="noFocusTextInput" name="participantSearchText" id="castingParticipantSearchTextInput" autocomplete="off"></div>';
+
+                        // Add dropdown div
+                        sectionInputTableElement += '<div id="castingParticipantDropdown" class="previewDropdownPanel" style="position: absolute; left: 0; right: 59px; top: 35px; display: none; max-width: 456px;"></div>';
+
+                        // Add submit button
+                        sectionInputTableElement += '<div class="whiteButton blackHover" onclick="savePostParticipant(' + "'" + postID + "', 'castingParticipantSearchTextInput'" + ');"' + ") style='position: absolute; right: 0; top: 5px; padding: 5px; height: 20px;'><div style='margin-top: -8px;'>Save</div></div>";
+                        
                         sectionInputTableElement += "</div>";
-                    }
+                    
                     continue;
                 }
                 if(!field.hidden || field.name === "status"){
@@ -1343,6 +1337,7 @@ function getPostParticipantTable(postID, participants){
     var tableString = "<table style='width: 100%;' class='browseTable'><tr><td>User</td><td>Label</td></tr>";
     for(var i=0; i < participants.length; i++){
         var user = participants[i];
+        console.log(user)
         // Add user picture and name
         tableString += "<tr><td style='width:50%; position: relative;'><div style='position: absolute; left: 5px; top: 0;'>" + user["cleanName"] + "</div><img style='position: absolute; right: 0; top: 0; width: 32px; height: 36px; border: 1px solid rgba(0,0,0,0.2);' id='actorPictureImg' src='" + user.profilePictureURL + "'/></td>";
 

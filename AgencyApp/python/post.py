@@ -225,6 +225,7 @@ class GenericCreatePostView(views.PictureFormView):
         self._jobSelectFields = None
         self._projectSelectFields = None
         self._postParticipants = None
+        self._postParticipantsFormatted = None
 
     @property
     def projectID(self):
@@ -323,12 +324,34 @@ class GenericCreatePostView(views.PictureFormView):
         return self._postParticipants
 
     @property
+    def postParticipantsFormatted(self):
+        if not self._postParticipantsFormatted:
+            self._postParticipantsFormatted = []
+            if self.postParticipants:
+                for part in self.postParticipants:
+                    if part.get("username"):
+                        try:
+                            user = models.UserAccount.objects.get(username=part.get("username"))
+                        except models.UserAccount.DoesNotExist:
+                            self._postParticipantsFormatted.append({"username": part.get("username"),
+                                                                    "error": True})
+                        else:
+                            self._postParticipantsFormatted.append({"username": part.get("username"),
+                                                                    "cleanName": user.cleanName,
+                                                                    "profilePictureURL": user.profilePicture and user.profilePicture.url or constants.NO_PROFILE_PICTURE_PATH,
+                                                                    "profession": user.mainProfession,
+                                                                    "label": part.get("label", "Involved")})
+        return self._postParticipantsFormatted
+
+
+    @property
     def pageContext(self):
         self._pageContext["post"] = self.post.record
         self._pageContext["project"] = self.project and self.project.record
         self._pageContext["projectID"] = self.projectID
         self._pageContext["hideStatus"] = False
         self._pageContext["postType"] = self.post.postType
+        self._pageContext["postParticipants"] = self.postParticipantsFormatted
         self._pageContext["possibleDestinations"] = {"viewPost": constants.VIEW_POST}
         self._pageContext["selectFields"] = {"roles": self.roleSelectFields,
                                              "jobs": self.jobSelectFields,
