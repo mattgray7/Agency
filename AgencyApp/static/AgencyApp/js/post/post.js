@@ -220,11 +220,14 @@ function addCreateCastingPost(formDict, formURL, formName){
                         // Add container
                         sectionInputTableElement+= "<div id='castingParticipantSearchContainer' style='width: 100%; position: relative; height: 20px; margin-top: 0px;' class='editCastMemberPanel'>"
 
-                        // Add text box
-                        sectionInputTableElement += '<div style="position: absolute; left: 0; top: 0; right: 65px; padding: 0px;"><input type="text" class="noFocusTextInput" name="participantSearchText" id="castingParticipantSearchTextInput" autocomplete="off"></div>';
+                        // Add name text box
+                        sectionInputTableElement += '<div style="position: absolute; left: 0; top: 0; right: 60%; padding: 0px;"><input type="text" class="noFocusTextInput" name="participantSearchText" id="castingParticipantSearchTextInput" autocomplete="off" placeholder="Name"></div>';
+
+                         // Add label text box
+                        sectionInputTableElement += '<div style="position: absolute; left: 43.5%; top: 0; right: 69px; padding: 0px;"><input type="text" class="noFocusTextInput" name="participantSearchTextLabel" id="castingParticipantSearchTextLabelInput" autocomplete="off" placeholder="Label"></div>';
 
                         // Add dropdown div
-                        sectionInputTableElement += '<div id="castingParticipantDropdown" class="previewDropdownPanel" style="position: absolute; left: 0; right: 59px; top: 35px; display: none; max-width: 456px;"></div>';
+                        sectionInputTableElement += '<div id="castingParticipantDropdown" class="previewDropdownPanel" style="position: absolute; left: 0; right: 58%; top: 35px; margin-right: 1px; min-width: 184.5px; display: none; max-width: 456px;"></div>';
 
                         // Add submit button
                         sectionInputTableElement += '<div class="whiteButton blackHover" onclick="savePostParticipant(' + "'" + postID + "', 'castingParticipantSearchTextInput'" + ');"' + ") style='position: absolute; right: 0; top: 5px; padding: 5px; height: 20px;'><div style='margin-top: -8px;'>Save</div></div>";
