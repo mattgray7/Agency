@@ -225,10 +225,10 @@ function addCreateCastingPost(formDict, formURL, formName){
                             sectionInputTableElement+= "<div style='width: 100%; position: relative; height: 20px; margin-top: 17px;' class='editCastMemberPanel'>"
 
                             // Add text box
-                            sectionInputTableElement += '<div style="position: absolute; left: 0; top: 0; right: 65px;"><input type="text" name="participantSearchText" id="castingParticipantSearchTextInput"></div>';
+                            sectionInputTableElement += '<div style="position: absolute; left: 0; top: 0; right: 65px; padding: 0px;"><input type="text" class="noFocusTextInput" name="participantSearchText" id="castingParticipantSearchTextInput"></div>';
 
                             // Add dropdown div
-                            sectionInputTableElement += '<div id="castingParticipantDropdown" class="previewDropdownPanel" style="position: absolute; left: 0; right: 61px; top: 35px; display: none; margin-left: 0px;"></div>';
+                            sectionInputTableElement += '<div id="castingParticipantDropdown" class="previewDropdownPanel" style="position: absolute; left: 0; right: 59px; top: 35px; display: none; max-width: 456px;"></div>';
 
                             // Add submit button
                             sectionInputTableElement += '<div class="whiteButton blackHover" onclick="savePostParticipant(' + "'" + postID + "', 'actorSearchTextInput'" + ');"' + ") style='position: absolute; right: 0; top: 5px; padding: 5px; height: 20px;'><div style='margin-top: -8px;'>Save</div></div>";
