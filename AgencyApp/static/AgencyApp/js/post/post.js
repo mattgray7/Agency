@@ -211,12 +211,16 @@ function addCreateCastingPost(formDict, formURL, formName){
 
                         // Add actor text panel
                         if(actorDict.cleanName != null && actorDict.username != null){
-                            sectionLabelTableElement += "<div style='height: 165px;'></div>";
+                            sectionLabelTableElement += "<div style='height: 120px;'></div>";
                             
-                            sectionInputTableElement+= "<div style='width: 100%; position: relative; height: 161px;' class='editCastMemberPanel'>"
+                            sectionInputTableElement+= "<div style='width: 100%; position: relative; height: 90px;'>"
+
+                            sectionInputTableElement += getPostParticipantTable([actorDict]);
+
+                            /*sectionInputTableElement += "</div>";
                             sectionInputTableElement += '<div style="position: absolute; left: 0;"><h2>' + actorDict.cleanName + "</h2></div>";
                             // Add actor profile picture panel
-                            sectionInputTableElement += '<div style="position: absolute; right: 0; margin-top: 2px; margin-right: 2px;"><div id="actorPicturePanel" class="postPicture" style="width: 100px; height: 100px; background: #000;"><img id="actorPictureImg" src="' + actorDict.profilePictureURL + '" style="max-width:100%; max-height:100%;"/></div></div>';
+                            sectionInputTableElement += '<div style="position: absolute; right: 0; margin-top: 2px; margin-right: 2px;"><div id="actorPicturePanel" class="postPicture" style="width: 45px; height: 50px; border: 1px solid rgba(0,0,0,0.2);"><img id="actorPictureImg" src="' + actorDict.profilePictureURL + '" style="max-width:100%; max-height:100%;"/></div></div>';*/
                         }else{
                             // Add label
                             sectionLabelTableElement += "<label for='name'>Search</label><br>";
@@ -1319,6 +1323,23 @@ function savePostParticipant(postID, inputDivID){
                 }
             });
     }
+}
+
+function getPostParticipantTable(participants){
+    var tableString = "<table style='width: 100%;' class='browseTable'><tr><td>User</td><td>Label</td></tr>";
+    for(var i=0; i < participants.length; i++){
+        var user = participants[i];
+        // Add user picture and name
+        tableString += "<tr><td style='width:50%; position: relative;'><div style='position: absolute; left: 5px; top: 0;'>" + user["cleanName"] + "</div><img style='position: absolute; right: 0; top: 0; width: 32px; height: 36px; border: 1px solid rgba(0,0,0,0.2);' id='actorPictureImg' src='" + user.profilePictureURL + "'/></td>";
+
+        var label = user["label"];
+        if(label == null || label.length < 0 || label === "None"){
+            label = "Actor"
+        }
+        tableString += "<td style='width: 50%; position: relative; height: 40px;'><div style='position:absolute; left: 5px; top: 0;'>" + label + "</div><div style='position:absolute; right: 10px; top: 0;'><a style='font-size: 1.3em; font-weight: 100;'>X</a></div></td></tr>"
+    }
+    tableString += "</table>";
+    return tableString;
 }
 
 

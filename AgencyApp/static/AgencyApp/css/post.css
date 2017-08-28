@@ -407,4 +407,11 @@
 		background: rgba(0,0,0,0.05);
 		cursor: pointer;
 	}
+	.postParticipantTable
+	{
+
+	}
+	.postParticipantTable td{
+		border: 1px solid #000;
+	}
 
