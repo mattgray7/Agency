@@ -267,6 +267,7 @@ def savePostParticipant(request):
     matchingUser = None
     if postID:
         participantName = request.POST.get("name").lower()
+        label = request.POST.get("label") or "Involved"
         if participantName:
             # First search usernames:
             try:
@@ -286,14 +287,14 @@ def savePostParticipant(request):
                     existingParticipant = models.PostParticipant.objects.get(postID=postID, username=matchingUser.username)
                 except models.PostParticipant.DoesNotExist:
                     # Create it it if it doesn't exist (if it does, TODO update the label?)
-                    existingParticipant = models.PostParticipant(postID=postID, username=matchingUser.username)
+                    existingParticipant = models.PostParticipant(postID=postID, username=matchingUser.username, label=label)
                     existingParticipant.save()
                 success = True
     return JsonResponse({"success": success, "user": matchingUser and {"username": matchingUser.username,
                                                                        "cleanName": matchingUser.cleanName,
                                                                        "profilePictureURL": matchingUser.profilePicture and matchingUser.profilePicture.url or constants.NO_PROFILE_PICTURE_PATH,
                                                                        "profession": matchingUser.mainProfession,
-                                                                       "label": "Involved"}})
+                                                                       "label": label}})
 
 def deletePostParticipant(request):
     postID = request.POST.get("postID")

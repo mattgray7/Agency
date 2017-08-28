@@ -1331,12 +1331,15 @@ function removeUserFromPostParticipants(username){
 
 function savePostParticipant(postID, inputDivID){
     var inputDiv = document.getElementById(inputDivID);
-    if(inputDiv != null){
+    var labelInputDiv = document.getElementById(inputDivID.replace("SearchText", "SearchTextLabel"))
+    if(inputDiv != null && labelInputDiv != null){
         var inputData = inputDiv.value;
+        var labelInputValue = labelInputDiv.value;
         inputDiv.value = '';
+        labelInputDiv.value = '';
         $.ajax({
                 url : "/ajax/savePostParticipant/",
-                data : {"postID": postID, "name": inputData},
+                data : {"postID": postID, "name": inputData, "label": labelInputValue},
                 type : 'POST',
                 dataType: "json",
                 success : function(data) {
