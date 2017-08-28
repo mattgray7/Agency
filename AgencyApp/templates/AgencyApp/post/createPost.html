@@ -153,7 +153,6 @@
                 {% endfor %}
                 if(participantsField.length > 0){
                     postFields["participants"] = participantsField;
-                    console.log("Adding field " + participantsField)
                 }
             {% endif %}
 
@@ -193,22 +192,6 @@
 
         function getCastingFormDict(){
             var postFields = createValueDictFromForm()
-
-            /*// Add actor
-            var actorField = {"username": "{{actor.username}}", "cleanName": "{{actor.cleanName}}", "value": "{{actor.username}}"}
-            {% if actor %}
-                actorField["username"] = "{{actor.username}}";
-                actorField["cleanName"] = "{{actor.cleanName}}";
-                {% if actor.profilePicture %}
-                    actorField.profilePictureURL = '{{actor.profilePicture.url}}';
-                {% endif %}
-            {% else %}
-                actorField["username"] = null;
-                actorField.profilePictureURL = '{{images.noProfilePicture}}';
-            {% endif %}
-            postFields["participants"] = actorField;*/
-
-
             return postFields;
         }
 

@@ -209,9 +209,11 @@ function addCreateCastingPost(formDict, formURL, formName){
 
                         // Add participants panel
                         if(participants != null && participants.length > 0){
-                            sectionLabelTableElement += "<div style='height: 120px;'></div>";
+                            var tableHeight = (participants.length * 42) + 30;
+
+                            sectionLabelTableElement += "<div style='height: " + (tableHeight + 30) + "px;'></div>";
                             
-                            sectionInputTableElement+= "<div style='width: 100%; position: relative; height: 90px;'>"
+                            sectionInputTableElement+= "<div style='width: 100%; position: relative; height: " + tableHeight + "px;'>"
                             sectionInputTableElement += getPostParticipantTable(postID, participants);
                             sectionInputTableElement += "</div>"
                         }
@@ -1337,7 +1339,6 @@ function getPostParticipantTable(postID, participants){
     var tableString = "<table style='width: 100%;' class='browseTable'><tr><td>User</td><td>Label</td></tr>";
     for(var i=0; i < participants.length; i++){
         var user = participants[i];
-        console.log(user)
         // Add user picture and name
         tableString += "<tr><td style='width:50%; position: relative;'><div style='position: absolute; left: 5px; top: 0;'>" + user["cleanName"] + "</div><img style='position: absolute; right: 0; top: 0; width: 32px; height: 36px; border: 1px solid rgba(0,0,0,0.2);' id='actorPictureImg' src='" + user.profilePictureURL + "'/></td>";
 

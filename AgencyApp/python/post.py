@@ -340,7 +340,7 @@ class GenericCreatePostView(views.PictureFormView):
                                                                     "cleanName": user.cleanName,
                                                                     "profilePictureURL": user.profilePicture and user.profilePicture.url or constants.NO_PROFILE_PICTURE_PATH,
                                                                     "profession": user.mainProfession,
-                                                                    "label": part.get("label", "Involved")})
+                                                                    "label": part.get("label") or "Involved"})
         return self._postParticipantsFormatted
 
 
