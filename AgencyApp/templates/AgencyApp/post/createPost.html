@@ -151,10 +151,9 @@
                     var newField = {"username": "{{part.username}}", "cleanName": "{{part.cleanName}}", "profilePictureURL": "{{part.profilePictureURL}}", "profession": "{{part.profession}}", "label": "{{part.label}}"};
                     participantsField.push(newField)
                 {% endfor %}
-                if(participantsField.length > 0){
-                    postFields["participants"] = participantsField;
-                }
             {% endif %}
+            postFields["participants"] = participantsField;
+
 
             // Add project
             var projectField = {"name": "project"}
