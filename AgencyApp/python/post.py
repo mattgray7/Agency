@@ -224,7 +224,7 @@ class GenericCreatePostView(views.PictureFormView):
         self._roleSelectFields = None
         self._jobSelectFields = None
         self._projectSelectFields = None
-
+        self._postParticipants = None
 
     @property
     def projectID(self):
@@ -313,6 +313,14 @@ class GenericCreatePostView(views.PictureFormView):
         if self._projectSelectFields is None:
             self._projectSelectFields = {"names": ["projectType"], "options": {"projectType": constants.PROJECT_TYPE_LIST}, "defaults": {"projectType": "-"}}
         return self._projectSelectFields
+
+    @property
+    def postParticipants(self):
+        if not self._postParticipants:
+            postParticipants = models.PostParticipant.objects.filter(postID=self.postID)
+            if postParticipants:
+                self._postParticipants = [{"username": x.username, "label": x.label} for x in postParticipants]
+        return self._postParticipants
 
     @property
     def pageContext(self):

@@ -231,7 +231,7 @@ function addCreateCastingPost(formDict, formURL, formName){
                             sectionInputTableElement += '<div id="castingParticipantDropdown" class="previewDropdownPanel" style="position: absolute; left: 0; right: 59px; top: 35px; display: none; max-width: 456px;"></div>';
 
                             // Add submit button
-                            sectionInputTableElement += '<div class="whiteButton blackHover" onclick="savePostParticipant(' + "'" + postID + "', 'actorSearchTextInput'" + ');"' + ") style='position: absolute; right: 0; top: 5px; padding: 5px; height: 20px;'><div style='margin-top: -8px;'>Save</div></div>";
+                            sectionInputTableElement += '<div class="whiteButton blackHover" onclick="savePostParticipant(' + "'" + postID + "', 'castingParticipantSearchTextInput'" + ');"' + ") style='position: absolute; right: 0; top: 5px; padding: 5px; height: 20px;'><div style='margin-top: -8px;'>Save</div></div>";
                         }
                         sectionInputTableElement += "</div>";
                     }
@@ -1301,7 +1301,9 @@ function selectPostParticipant(username, cleanName, textDivName, dropdownDivName
 
 function savePostParticipant(postID, inputDivID){
     var inputDiv = document.getElementById(inputDivID);
+    console.log("saving post participant for " + postID)
     if(inputDiv != null){
+        console.log("here")
         var inputData = inputDiv.value;
         $.ajax({
                 url : "/ajax/savePostParticipant/",

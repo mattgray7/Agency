@@ -64,10 +64,17 @@ class CreateCastingPostView(post.GenericCreatePostView):
     def actor(self):
         if self._actor is None:
             if self.post and self.post.record and self.post.record.status == "Cast":
-                try:
-                    self._actor = models.UserAccount.objects.get(username=self.post.record.actorName)
-                except models.UserAccount.DoesNotExist:
-                    pass
+                if self.postParticipants:
+                    if len(self.postParticipants) == 1:
+                        username = self.postParticipants[0].get("username")
+                    else:
+                        # TODO do something if multiple participants for casting post
+                        username = self.postParticipants[0].get("username")
+                   
+                    try:
+                        self._actor = models.UserAccount.objects.get(username=username)
+                    except models.UserAccount.DoesNotExist:
+                        pass
         return self._actor
 
     def cancelPage(self):
