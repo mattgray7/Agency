@@ -1404,18 +1404,27 @@ function deletePostParticipant(postID, username){
 var currentPostParticipants;
 function getPostParticipantTable(postID, participants){
     currentPostParticipants = participants;
-    var tableHeight = ((participants.length + 1) * 44);
-    var tableString = "<div style='width: 100%; position: relative; height: " + tableHeight + "px;'><table style='width: 100%;' class='browseTable'><tr><td>User</td><td>Label</td></tr>";
+    var tableHeight = ((participants.length + 1) * 48);
+    var tableString = "<div style='width: 100%; position: relative; height: " + tableHeight + "px;'><table style='width: 100%;' class='browseTable'><tr><td>User</td><td>Label</td><td style='text-align: center;'>Private</td><td style='text-align: center;'>Delete</td></tr>";
     for(var i=0; i < participants.length; i++){
         var user = participants[i];
         // Add user picture and name
-        tableString += "<tr><td style='width:50%; position: relative;'><div style='position: absolute; left: 5px; top: 0;'><a onclick='redirectToUser(" + '"' + user["username"] + '");' + "'>" + user["cleanName"] + "</div><img style='position: absolute; right: 0; top: 0; width: 32px; height: 36px; border: 1px solid rgba(0,0,0,0.2); border-radius: 2px;' id='actorPictureImg' src='" + user.profilePictureURL + "'/></td>";
+        tableString += "<tr><td style='width:35%; position: relative;'><div style='position: absolute; left: 5px; top: 5px;'><a onclick='redirectToUser(" + '"' + user["username"] + '");' + "'>" + user["cleanName"] + "</div><img style='position: absolute; right: 0; top: 0; width: 32px; height: 36px; border: 1px solid rgba(0,0,0,0.2); border-radius: 2px;' id='actorPictureImg' src='" + user.profilePictureURL + "'/></td>";
 
+        // Add label
         var label = user["label"];
         if(label == null || label.length < 0 || label === "None"){
-            label = "Actor"
+            label = "Involved"
         }
-        tableString += "<td style='width: 50%; position: relative; height: 40px;'><div style='position:absolute; left: 5px; top: 0;'>" + label + "</div><div style='position:absolute; right: 10px; top: 0;'><a style='font-size: 1.3em; font-weight: 100;' onclick='deletePostParticipant(" + '"' + postID + '", "' + user["username"] + '");' + "'>X</a></div></td></tr>";
+        tableString += "<td style='width: 35%; position: relative; height: 40px;'><div style='position:absolute; left: 5px; top: 5px;'>" + label + "</div></td>"
+
+        // Add privacy
+        tableString += "<td style='width: 15%; text-align: center;'><div style='margin-top: -8px;'><input type='checkbox' /></div></td>";
+
+        // Add delete button
+        tableString += "<td style='width: 15%; text-align: center;'><div style='margin-top: 0px;'><a style='font-size: 1.1em; font-weight: 100;' onclick='deletePostParticipant(" + '"' + postID + '", "' + user["username"] + '");' + "'>X</a></div></td>"
+
+        tableString += "</tr>";
     }
     tableString += "</table></div>";
     return {"html": tableString, "tableHeight": tableHeight}
