@@ -304,7 +304,7 @@ def deletePostParticipant(request):
         if matches:
             matches.delete()
             success = True
-    return JsonResponse({"success": success})
+    return JsonResponse({"success": success, "user": {"username": username}})
 
 def getSearchPreviewActors(request):
     text = request.POST.get("text")

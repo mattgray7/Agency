@@ -1312,10 +1312,25 @@ function addUserToPostParticipants(userDict){
     }
 }
 
+function removeUserFromPostParticipants(username){
+    if(currentPostParticipants != null){
+        var newList = [];
+        var newListIndex = 0;
+        for(var i=0; i < currentPostParticipants.length; i++){
+            if(currentPostParticipants[i]["username"] != username){
+                newList.push(currentPostParticipants[i]);
+                newListIndex += 1;
+            }
+        }
+        currentPostParticipants = newList;
+    }
+}
+
 function savePostParticipant(postID, inputDivID){
     var inputDiv = document.getElementById(inputDivID);
     if(inputDiv != null){
         var inputData = inputDiv.value;
+        inputDiv.value = '';
         $.ajax({
                 url : "/ajax/savePostParticipant/",
                 data : {"postID": postID, "name": inputData},
@@ -1356,7 +1371,23 @@ function deletePostParticipant(postID, username){
         dataType: "json",
         success : function(data) {
             if(data["success"]){
-                console.log("Removal successful");
+                var tableContainer = document.getElementById("postParticipantTableContainer")
+                var tableLabelContainer = document.getElementById("postParticipantLabelContainer");
+                var tableTextContainer = document.getElementById("castingParticipantSearchContainer");
+                if(tableContainer != null && tableLabelContainer != null && tableTextContainer != null){
+                    // Update currentPostParticipants
+                    removeUserFromPostParticipants(data["user"]["username"])
+
+                    // Recreate the table with new info
+                    var newTableInfo = getPostParticipantTable(postID, currentPostParticipants)
+                    tableContainer.innerHTML = newTableInfo["html"]
+
+                    // Update the label to move with the input table
+                    tableLabelContainer.style.height = newTableInfo["tableHeight"] + "px";
+
+                    // Move the text container input down by 1 panel length
+                    tableTextContainer.style.marginTop = parseInt(tableTextContainer.style.marginTop.slice(0,-2)) - 44 + "px";
+                }
             }else{
                 console.log("Something went wrong removing post participant");
             }
