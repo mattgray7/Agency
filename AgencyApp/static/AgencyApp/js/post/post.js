@@ -215,7 +215,7 @@ function addCreateCastingPost(formDict, formURL, formName){
                             
                             sectionInputTableElement+= "<div style='width: 100%; position: relative; height: 90px;'>"
 
-                            sectionInputTableElement += getPostParticipantTable([actorDict]);
+                            sectionInputTableElement += getPostParticipantTable(postID, [actorDict]);
 
                             /*sectionInputTableElement += "</div>";
                             sectionInputTableElement += '<div style="position: absolute; left: 0;"><h2>' + actorDict.cleanName + "</h2></div>";
@@ -1305,9 +1305,7 @@ function selectPostParticipant(username, cleanName, textDivName, dropdownDivName
 
 function savePostParticipant(postID, inputDivID){
     var inputDiv = document.getElementById(inputDivID);
-    console.log("saving post participant for " + postID)
     if(inputDiv != null){
-        console.log("here")
         var inputData = inputDiv.value;
         $.ajax({
                 url : "/ajax/savePostParticipant/",
@@ -1325,7 +1323,23 @@ function savePostParticipant(postID, inputDivID){
     }
 }
 
-function getPostParticipantTable(participants){
+function deletePostParticipant(postID, username){
+    $.ajax({
+        url : "/ajax/deletePostParticipant/",
+        data : {"postID": postID, "username": username},
+        type : 'POST',
+        dataType: "json",
+        success : function(data) {
+            if(data["success"]){
+                console.log("Removal successful");
+            }else{
+                console.log("Something went wrong removing post participant");
+            }
+        }
+    });
+}
+
+function getPostParticipantTable(postID, participants){
     var tableString = "<table style='width: 100%;' class='browseTable'><tr><td>User</td><td>Label</td></tr>";
     for(var i=0; i < participants.length; i++){
         var user = participants[i];
@@ -1336,7 +1350,7 @@ function getPostParticipantTable(participants){
         if(label == null || label.length < 0 || label === "None"){
             label = "Actor"
         }
-        tableString += "<td style='width: 50%; position: relative; height: 40px;'><div style='position:absolute; left: 5px; top: 0;'>" + label + "</div><div style='position:absolute; right: 10px; top: 0;'><a style='font-size: 1.3em; font-weight: 100;'>X</a></div></td></tr>"
+        tableString += "<td style='width: 50%; position: relative; height: 40px;'><div style='position:absolute; left: 5px; top: 0;'>" + label + "</div><div style='position:absolute; right: 10px; top: 0;'><a style='font-size: 1.3em; font-weight: 100;' onclick='deletePostParticipant(" + '"' + postID + '", "' + user["username"] + '");' + "'>X</a></div></td></tr>";
     }
     tableString += "</table>";
     return tableString;

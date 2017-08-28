@@ -291,6 +291,17 @@ def savePostParticipant(request):
                 success = True
     return JsonResponse({"success": success, "user": matchingUser and matchingUser.username})
 
+def deletePostParticipant(request):
+    postID = request.POST.get("postID")
+    username = request.POST.get("username")
+    success = False
+    if postID and username:
+        matches = models.PostParticipant.objects.filter(postID=postID, username=username)
+        if matches:
+            matches.delete()
+            success = True
+    return JsonResponse({"success": success})
+
 def getSearchPreviewActors(request):
     text = request.POST.get("text")
     success = False
