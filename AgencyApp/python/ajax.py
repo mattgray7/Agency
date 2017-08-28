@@ -307,7 +307,7 @@ def getSearchPreviewActors(request):
         if matchingActors:
             success = True
             returnList = [{"username": x.username, "cleanName": x.cleanName, "profession": x.mainProfession,
-                           "profilePicture": x.profilePicture and x.profilePicture.url or None} for x in matchingActors]
+                           "profilePicture": x.profilePicture and x.profilePicture.url or constants.NO_PROFILE_PICTURE_PATH} for x in matchingActors]
     return JsonResponse({"success": success, "users": returnList})
 
 

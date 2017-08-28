@@ -1241,7 +1241,18 @@ function previewTextInDropdown(textInputDivName, dropdownDivName, getDataFunctio
 function getPreviewActorsString(userList){
     var previewString = "<ul>";
     for(var i=0; i < userList.length; i++){
-        previewString += "<li onclick='selectPostParticipant(" + '"' + userList[i]["username"] + '", "' + userList[i]["cleanName"] + '", "castingParticipantSearchTextInput", "castingParticipantDropdown");' + "'><img src='" + userList[i]["profilePicture"] + "' style='height: 50px; width:50px;' />" + userList[i]["cleanName"] + " - " + userList[i]["profession"] + "</li>";
+        previewString += "<li onclick='selectPostParticipant(" + '"' + userList[i]["username"] + '", "' + userList[i]["cleanName"] + '", "castingParticipantSearchTextInput", "castingParticipantDropdown");' + "'><div style='position:relative; height: 50px;'>"
+
+        // Add user picture if it exists
+        previewString += "<img src='" + userList[i]["profilePicture"] + "' style='height: 40px; width:36px; position: absolute; top: 5px; left: 2px; border: 1px solid rgba(0,0,0,0.1);' />";
+
+        // Add name
+        previewString += "<div style='position: absolute; left: 45px; top: 0; margin-top: -2px; font-weight: 500;'>" + userList[i]["cleanName"] + "</div>";
+
+        // Add profession
+        previewString += "<div style='position: absolute; left: 45px; top: 17px; color: rgba(0,0,0,0.7); font-size: 0.9em;'>" + userList[i]["profession"] + "</div>";
+
+        previewString += "</div></li>";
     }
     previewString += "</ul>";
     return previewString;
