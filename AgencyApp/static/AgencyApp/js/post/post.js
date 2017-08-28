@@ -1372,7 +1372,7 @@ function getPostParticipantTable(postID, participants){
     for(var i=0; i < participants.length; i++){
         var user = participants[i];
         // Add user picture and name
-        tableString += "<tr><td style='width:50%; position: relative;'><div style='position: absolute; left: 5px; top: 0;'>" + user["cleanName"] + "</div><img style='position: absolute; right: 0; top: 0; width: 32px; height: 36px; border: 1px solid rgba(0,0,0,0.2); border-radius: 2px;' id='actorPictureImg' src='" + user.profilePictureURL + "'/></td>";
+        tableString += "<tr><td style='width:50%; position: relative;'><div style='position: absolute; left: 5px; top: 0;'><a onclick='redirectToUser(" + '"' + user["username"] + '");' + "'>" + user["cleanName"] + "</div><img style='position: absolute; right: 0; top: 0; width: 32px; height: 36px; border: 1px solid rgba(0,0,0,0.2); border-radius: 2px;' id='actorPictureImg' src='" + user.profilePictureURL + "'/></td>";
 
         var label = user["label"];
         if(label == null || label.length < 0 || label === "None"){

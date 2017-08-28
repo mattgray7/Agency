@@ -142,6 +142,7 @@
             if (e.stopPropagation) e.stopPropagation();
             var extraInputs = []
             extraInputs.push({key: "username", value: username});
+            extraInputs.push({key: "redirect", value: "True"})
             var form = createPageRedirectForm("{{next}}", "{{next}}", "{{toolbarDestinations.profile}}", "{{currentPageURL}}", extraInputs, null);
             form.submit();
         }
