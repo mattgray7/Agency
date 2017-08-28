@@ -210,15 +210,15 @@ function addCreateCastingPost(formDict, formURL, formName){
                         // Add participants panel
                         if(participants != null && participants.length > 0){
                             var participantTableInfo = getPostParticipantTable(postID, participants);
-                            sectionInputTableElement += "<div id='postParticipantTableContainer'>" + participantTableInfo["html"] + "</div>"
-                            sectionLabelTableElement += "<div style='height: " + (participantTableInfo["tableHeight"] + 30) + "px;'></div>";
+                            sectionInputTableElement += "<div id='postParticipantTableContainer' style='height: " + participantTableInfo["tableHeight"] + "px;'>" + participantTableInfo["html"] + "</div>"
+                            sectionLabelTableElement += "<div id='postParticipantLabelContainer' style='height: " + participantTableInfo["tableHeight"] + "px;'></div>";
                         }
 
                         // Add label
-                        sectionLabelTableElement += "<label for='name'>Search</label><br>";
+                        sectionLabelTableElement += "<label for='name'>Add User</label><br>";
 
                         // Add container
-                        sectionInputTableElement+= "<div style='width: 100%; position: relative; height: 20px; margin-top: 17px;' class='editCastMemberPanel'>"
+                        sectionInputTableElement+= "<div id='castingParticipantSearchContainer' style='width: 100%; position: relative; height: 20px; margin-top: 0px;' class='editCastMemberPanel'>"
 
                         // Add text box
                         sectionInputTableElement += '<div style="position: absolute; left: 0; top: 0; right: 65px; padding: 0px;"><input type="text" class="noFocusTextInput" name="participantSearchText" id="castingParticipantSearchTextInput" autocomplete="off"></div>';
@@ -1240,7 +1240,7 @@ function getPreviewActorsString(userList){
         previewString += "<li onclick='selectPostParticipant(" + '"' + userList[i]["username"] + '", "' + userList[i]["cleanName"] + '", "castingParticipantSearchTextInput", "castingParticipantDropdown");' + "'><div style='position:relative; height: 50px;'>"
 
         // Add user picture if it exists
-        previewString += "<img src='" + userList[i]["profilePicture"] + "' style='height: 40px; width:36px; position: absolute; top: 5px; left: 2px; border: 1px solid rgba(0,0,0,0.1);' />";
+        previewString += "<img src='" + userList[i]["profilePicture"] + "' style='height: 40px; width:36px; position: absolute; top: 5px; left: 2px; border: 1px solid rgba(0,0,0,0.1); border-radius: 2px;' />";
 
         // Add name
         previewString += "<div style='position: absolute; left: 45px; top: 0; margin-top: -2px; font-weight: 500;'>" + userList[i]["cleanName"] + "</div>";
@@ -1295,6 +1295,23 @@ function selectPostParticipant(username, cleanName, textDivName, dropdownDivName
     }
 }
 
+function addUserToPostParticipants(userDict){
+    if(currentPostParticipants != null){
+        var userExists = false
+        for(var i=0; i < currentPostParticipants.length; i++){
+            if(currentPostParticipants[i]["username"] === userDict["username"]){
+                userExists = true;
+                break;
+            }
+        }
+        if(!userExists){
+            currentPostParticipants.push(userDict);
+        }
+    }else{
+        currentPostParticipants = [userDict];
+    }
+}
+
 function savePostParticipant(postID, inputDivID){
     var inputDiv = document.getElementById(inputDivID);
     if(inputDiv != null){
@@ -1307,11 +1324,21 @@ function savePostParticipant(postID, inputDivID){
                 success : function(data) {
                     if(data["success"]){
                         var tableContainer = document.getElementById("postParticipantTableContainer")
-                        if(tableContainer != null){
-                            currentPostParticipants.push(data["user"])
-                            var newTable = getPostParticipantTable(postID, currentPostParticipants)
-                            tableContainer.innerHTML = newTable["html"]
-                            console.log("updating")
+                        var tableLabelContainer = document.getElementById("postParticipantLabelContainer");
+                        var tableTextContainer = document.getElementById("castingParticipantSearchContainer");
+                        if(tableContainer != null && tableLabelContainer != null && tableTextContainer != null){
+                            // Update currentPostParticipants
+                            addUserToPostParticipants(data["user"])
+
+                            // Recreate the table with new info
+                            var newTableInfo = getPostParticipantTable(postID, currentPostParticipants)
+                            tableContainer.innerHTML = newTableInfo["html"]
+
+                            // Update the label to move with the input table
+                            tableLabelContainer.style.height = newTableInfo["tableHeight"] + "px";
+
+                            // Move the text container input down by 1 panel length
+                            tableTextContainer.style.marginTop = parseInt(tableTextContainer.style.marginTop.slice(0,-2)) + 44 + "px";
                         }
                     }else{
                         console.log("No user found with name " + inputData)
@@ -1340,12 +1367,12 @@ function deletePostParticipant(postID, username){
 var currentPostParticipants;
 function getPostParticipantTable(postID, participants){
     currentPostParticipants = participants;
-    var tableHeight = (participants.length * 42) + 30;
+    var tableHeight = ((participants.length + 1) * 44);
     var tableString = "<div style='width: 100%; position: relative; height: " + tableHeight + "px;'><table style='width: 100%;' class='browseTable'><tr><td>User</td><td>Label</td></tr>";
     for(var i=0; i < participants.length; i++){
         var user = participants[i];
         // Add user picture and name
-        tableString += "<tr><td style='width:50%; position: relative;'><div style='position: absolute; left: 5px; top: 0;'>" + user["cleanName"] + "</div><img style='position: absolute; right: 0; top: 0; width: 32px; height: 36px; border: 1px solid rgba(0,0,0,0.2);' id='actorPictureImg' src='" + user.profilePictureURL + "'/></td>";
+        tableString += "<tr><td style='width:50%; position: relative;'><div style='position: absolute; left: 5px; top: 0;'>" + user["cleanName"] + "</div><img style='position: absolute; right: 0; top: 0; width: 32px; height: 36px; border: 1px solid rgba(0,0,0,0.2); border-radius: 2px;' id='actorPictureImg' src='" + user.profilePictureURL + "'/></td>";
 
         var label = user["label"];
         if(label == null || label.length < 0 || label === "None"){
