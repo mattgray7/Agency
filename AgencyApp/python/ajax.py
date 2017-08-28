@@ -289,7 +289,11 @@ def savePostParticipant(request):
                     existingParticipant = models.PostParticipant(postID=postID, username=matchingUser.username)
                     existingParticipant.save()
                 success = True
-    return JsonResponse({"success": success, "user": matchingUser and matchingUser.username})
+    return JsonResponse({"success": success, "user": matchingUser and {"username": matchingUser.username,
+                                                                       "cleanName": matchingUser.cleanName,
+                                                                       "profilePictureURL": matchingUser.profilePicture and matchingUser.profilePicture.url or constants.NO_PROFILE_PICTURE_PATH,
+                                                                       "profession": matchingUser.mainProfession,
+                                                                       "label": "Involved"}})
 
 def deletePostParticipant(request):
     postID = request.POST.get("postID")

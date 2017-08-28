@@ -209,13 +209,9 @@ function addCreateCastingPost(formDict, formURL, formName){
 
                         // Add participants panel
                         if(participants != null && participants.length > 0){
-                            var tableHeight = (participants.length * 42) + 30;
-
-                            sectionLabelTableElement += "<div style='height: " + (tableHeight + 30) + "px;'></div>";
-                            
-                            sectionInputTableElement+= "<div style='width: 100%; position: relative; height: " + tableHeight + "px;'>"
-                            sectionInputTableElement += getPostParticipantTable(postID, participants);
-                            sectionInputTableElement += "</div>"
+                            var participantTableInfo = getPostParticipantTable(postID, participants);
+                            sectionInputTableElement += "<div id='postParticipantTableContainer'>" + participantTableInfo["html"] + "</div>"
+                            sectionLabelTableElement += "<div style='height: " + (participantTableInfo["tableHeight"] + 30) + "px;'></div>";
                         }
 
                         // Add label
@@ -1310,7 +1306,13 @@ function savePostParticipant(postID, inputDivID){
                 dataType: "json",
                 success : function(data) {
                     if(data["success"]){
-                        console.log(data["user"]);
+                        var tableContainer = document.getElementById("postParticipantTableContainer")
+                        if(tableContainer != null){
+                            currentPostParticipants.push(data["user"])
+                            var newTable = getPostParticipantTable(postID, currentPostParticipants)
+                            tableContainer.innerHTML = newTable["html"]
+                            console.log("updating")
+                        }
                     }else{
                         console.log("No user found with name " + inputData)
                     }
@@ -1335,8 +1337,11 @@ function deletePostParticipant(postID, username){
     });
 }
 
+var currentPostParticipants;
 function getPostParticipantTable(postID, participants){
-    var tableString = "<table style='width: 100%;' class='browseTable'><tr><td>User</td><td>Label</td></tr>";
+    currentPostParticipants = participants;
+    var tableHeight = (participants.length * 42) + 30;
+    var tableString = "<div style='width: 100%; position: relative; height: " + tableHeight + "px;'><table style='width: 100%;' class='browseTable'><tr><td>User</td><td>Label</td></tr>";
     for(var i=0; i < participants.length; i++){
         var user = participants[i];
         // Add user picture and name
@@ -1348,8 +1353,8 @@ function getPostParticipantTable(postID, participants){
         }
         tableString += "<td style='width: 50%; position: relative; height: 40px;'><div style='position:absolute; left: 5px; top: 0;'>" + label + "</div><div style='position:absolute; right: 10px; top: 0;'><a style='font-size: 1.3em; font-weight: 100;' onclick='deletePostParticipant(" + '"' + postID + '", "' + user["username"] + '");' + "'>X</a></div></td></tr>";
     }
-    tableString += "</table>";
-    return tableString;
+    tableString += "</table></div>";
+    return {"html": tableString, "tableHeight": tableHeight}
 }
 
 
