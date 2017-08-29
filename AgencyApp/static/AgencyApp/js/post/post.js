@@ -221,13 +221,13 @@ function addCreateCastingPost(formDict, formURL, formName){
                     if(participants != null && participants.length > 0){
                         var participantTableInfo = getPostParticipantTable(postID, "casting", participants);
                         containerHeight += participantTableInfo["tableHeight"];
-                        userTableString += "<div id='postParticipantTableContainer' style='position: relative; height: " + participantTableInfo["tableHeight"] + "px;'>" + participantTableInfo["html"] + "</div>"
-                        sectionLabelTableElement += "<div id='postParticipantLabelContainer' style='height: " + (participantTableInfo["tableHeight"] - 5) +  "px;'></div>";
+                        userTableString += "<div id='castingParticipantTableContainer' style='position: relative; height: " + participantTableInfo["tableHeight"] + "px;'>" + participantTableInfo["html"] + "</div>"
+                        sectionLabelTableElement += "<div id='castingParticipantLabelContainer' style='height: " + (participantTableInfo["tableHeight"] - 5) +  "px;'></div>";
                     }
 
                     // Add label
                     sectionLabelTableElement += "<label for='name'>Add new</label><br>";
-                    sectionInputTableElement += "<div id='postParticipantPanel' style='height: " + containerHeight + "px;'>" + userTableString + getPostParticipantForm(postID, "casting", formName, formDict["participationSelectFields"], "Interested") + "</div>";
+                    sectionInputTableElement += "<div id='castingParticipantPanel' style='height: " + containerHeight + "px;'>" + userTableString + getPostParticipantForm(postID, "casting", formName, formDict["participationSelectFields"], "Interested") + "</div>";
                     continue;
                 }
                 if(!field.hidden || field.name === "status"){
@@ -1387,10 +1387,10 @@ function savePostParticipant(postID, postType, inputDivID, labelDivID){
                 dataType: "json",
                 success : function(data) {
                     if(data["success"]){
-                        var tableContainer = document.getElementById("postParticipantTableContainer")
-                        var tableLabelContainer = document.getElementById("postParticipantLabelContainer");
+                        var tableContainer = document.getElementById(postType + "ParticipantTableContainer")
+                        var tableLabelContainer = document.getElementById(postType + "ParticipantLabelContainer");
                         var tableTextContainer = document.getElementById(postType + "ParticipantSearchContainer");
-                        var panelContainer = document.getElementById("postParticipantPanel");
+                        var panelContainer = document.getElementById(postType + "ParticipantPanel");
                         if(tableContainer != null && tableLabelContainer != null && tableTextContainer != null && panelContainer != null){
                             // Update currentPostParticipants
                             addSuccess = addUserToPostParticipants(data["user"])
@@ -1427,10 +1427,10 @@ function deletePostParticipant(postID, postType, username){
         dataType: "json",
         success : function(data) {
             if(data["success"]){
-                var tableContainer = document.getElementById("postParticipantTableContainer")
-                var tableLabelContainer = document.getElementById("postParticipantLabelContainer");
+                var tableContainer = document.getElementById(postType + "ParticipantTableContainer")
+                var tableLabelContainer = document.getElementById(postType + "ParticipantLabelContainer");
                 var tableTextContainer = document.getElementById(postType + "ParticipantSearchContainer");
-                var panelContainer = document.getElementById("postParticipantPanel");
+                var panelContainer = document.getElementById(postType + "ParticipantPanel");
                 if(tableContainer != null && tableLabelContainer != null && tableTextContainer != null && panelContainer != null){
                     // Update currentPostParticipants
                     removeUserFromPostParticipants(data["user"]["username"])
@@ -1455,8 +1455,8 @@ function deletePostParticipant(postID, postType, username){
     });
 }
 
-function updatePostParticipationPrivacy(postID, username){
-    var publicCheckbox = document.getElementById('postParticipationPublicCheckbox_' + username)
+function updatePostParticipationPrivacy(postID, postType, username){
+    var publicCheckbox = document.getElementById(postType + 'ParticipationPublicCheckbox_' + username)
     if(publicCheckbox != null){
         if(currentPostParticipants != null){
             for(var i=0; i < currentPostParticipants.length; i++){
@@ -1502,7 +1502,7 @@ function getPostParticipantTable(postID, postType, participants){
         tableString += "<td style='width: 35%; position: relative; height: 40px;'><div style='position:absolute; left: 5px; top: 5px;'>" + label + "</div></td>"
 
         // Add public toggle
-        tableString += "<td style='width: 15%; text-align: center;'><div style='margin-top: -8px;'><input type='checkbox' onclick='updatePostParticipationPrivacy(" + '"' + postID + '", "' + user["username"] + '");' + "' id='postParticipationPublicCheckbox_" + user["username"] + "' ";
+        tableString += "<td style='width: 15%; text-align: center;'><div style='margin-top: -8px;'><input type='checkbox' onclick='updatePostParticipationPrivacy(" + '"' + postID + '", "' + postType + '", "' + user["username"] + '");' + "' id='" + postType + "ParticipationPublicCheckbox_" + user["username"] + "' ";
         if(user["publicParticipation"] === "True" || user["publicParticipation"] === true){
             tableString += "checked ";
         }
