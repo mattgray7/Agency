@@ -223,14 +223,17 @@ function addCreateCastingPost(formDict, formURL, formName){
                         // Add name text box
                         sectionInputTableElement += '<div style="position: absolute; left: 0; top: 0; right: 60%; padding: 0px;"><input type="text" class="noFocusTextInput" name="participantSearchText" id="castingParticipantSearchTextInput" autocomplete="off" placeholder="Name"></div>';
 
-                         // Add label text box
-                        sectionInputTableElement += '<div style="position: absolute; left: 43.5%; top: 0; right: 69px; padding: 0px;"><input type="text" class="noFocusTextInput" name="participantSearchTextLabel" id="castingParticipantSearchTextLabelInput" autocomplete="off" placeholder="Label"></div>';
-
+                         // Add status select bar
+                        sectionInputTableElement += '<div style="position: absolute; left: 43.5%; top: 2px; right: 69px; padding: 0px;">';
+                        var selectForm = createSelectForm(formName, "castingParticipantSelectBar", formDict["participationSelectFields"], "Interested");
+                        sectionInputTableElement += selectForm;
+                        sectionInputTableElement += "<input type='hidden' name='castingParticipantSelectBarInput' id='castingParticipantSelectBarInput' ></div>";
+                        
                         // Add dropdown div
                         sectionInputTableElement += '<div id="castingParticipantDropdown" class="previewDropdownPanel" style="position: absolute; left: 0; right: 58%; top: 35px; margin-right: 1px; min-width: 184.5px; display: none; max-width: 234px;"></div>';
 
                         // Add submit button
-                        sectionInputTableElement += '<div class="whiteButton blackHover" onclick="savePostParticipant(' + "'" + postID + "', 'castingParticipantSearchTextInput'" + ');"' + ") style='position: absolute; right: 0; top: 5px; padding: 5px; height: 20px;'><div style='margin-top: -8px;'>Save</div></div>";
+                        sectionInputTableElement += '<div class="whiteButton blackHover" onclick="savePostParticipant(' + "'" + postID + "', 'castingParticipantSearchTextInput', 'castingParticipantSelectBar'" + ');"' + ") style='position: absolute; right: 0; top: 5px; padding: 5px; height: 20px;'><div style='margin-top: -8px;'>Save</div></div>";
                         
                         sectionInputTableElement += "</div>";
                     
@@ -1376,14 +1379,14 @@ function removeUserFromPostParticipants(username){
     }
 }
 
-function savePostParticipant(postID, inputDivID){
+function savePostParticipant(postID, inputDivID, labelDivID){
     var inputDiv = document.getElementById(inputDivID);
-    var labelInputDiv = document.getElementById(inputDivID.replace("SearchText", "SearchTextLabel"))
+    var labelInputDiv = document.getElementById(labelDivID);
     if(inputDiv != null && labelInputDiv != null){
         var inputData = inputDiv.value;
         var labelInputValue = labelInputDiv.value;
         inputDiv.value = '';
-        labelInputDiv.value = '';
+        labelInputDiv.value = 'Interested';
 
         $.ajax({
                 url : "/ajax/savePostParticipant/",

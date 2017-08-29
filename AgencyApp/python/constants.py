@@ -112,6 +112,9 @@ WORK_STATUS_LIST = ["Opening soon", "Open", "Filled"]
 EVENT_STATUS_LIST = ["Today", "Upcoming", "Past", "Announced", "Cancelled"]
 PROFILE_STATUS_LIST = ["Currently available", "Currently unavailable"]
 
+PARTICIPATION_LABEL_SELECT_FIELDS = {"roles": ["Interested", "Awaiting Response", "Offer Pending", "Cast"],
+									 "jobs": ["Interest", "Awaiting Response", "Offer Pending", "Hired"],
+									 "events": ["Invited", "Attending", "Not Attending"]}
 
 URL_MAP = {HOME: "/",
 		   LOGIN:"/login/",

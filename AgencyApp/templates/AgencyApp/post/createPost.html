@@ -154,7 +154,6 @@
             {% endif %}
             postFields["participants"] = participantsField;
 
-
             // Add project
             var projectField = {"name": "project"}
             {% if project and project.title %}
@@ -191,6 +190,9 @@
 
         function getCastingFormDict(){
             var postFields = createValueDictFromForm()
+            {% if participationSelectFields.roles %}
+                postFields["participationSelectFields"] = {{participationSelectFields.roles|safe}};
+            {% endif %}
             return postFields;
         }
 

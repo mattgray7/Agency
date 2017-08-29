@@ -357,6 +357,7 @@ class GenericCreatePostView(views.PictureFormView):
         self._pageContext["selectFields"] = {"roles": self.roleSelectFields,
                                              "jobs": self.jobSelectFields,
                                              "projects": self.projectSelectFields}
+        self._pageContext["participationSelectFields"] = constants.PARTICIPATION_LABEL_SELECT_FIELDS
         self._pageContext['statusOptions'] = {"roles": constants.CASTING_STATUS_LIST,
                                               "jobs": constants.WORK_STATUS_LIST,
                                               "events": constants.EVENT_STATUS_LIST,
