@@ -1399,14 +1399,16 @@ function savePostParticipant(postID, postType, inputDivID, labelDivID){
                                 var newTableInfo = getPostParticipantTable(postID, postType, currentPostParticipants)
                                 tableContainer.innerHTML = newTableInfo["html"]
 
-                                // Update the label to move with the input table
-                                tableLabelContainer.style.height = (newTableInfo["tableHeight"] - 5) + "px";
+                                if(currentPostParticipants.length > 1){
+                                    // Update the label to move with the input table
+                                    tableLabelContainer.style.height = (newTableInfo["tableHeight"] - 5) + "px";
 
-                                // Update the participation panel container height
-                                panelContainer.style.height = (newTableInfo["tableHeight"] + participantPanelBaseHeight) + "px";
+                                    // Update the participation panel container height
+                                    panelContainer.style.height = (newTableInfo["tableHeight"] + participantPanelBaseHeight) + "px";
 
-                                // Move the text container input down by 1 panel length
-                                tableTextContainer.style.marginTop = parseInt(tableTextContainer.style.marginTop.slice(0,-2)) + 44 + "px";
+                                    // Move the text container input down by 1 panel length
+                                    tableTextContainer.style.marginTop = parseInt(tableTextContainer.style.marginTop.slice(0,-2)) + 44 + "px";
+                                }
                             }else{
                                 // Should only be false when adding a user that is already a participant
                             }
@@ -1433,20 +1435,23 @@ function deletePostParticipant(postID, postType, username){
                 var panelContainer = document.getElementById(postType + "ParticipantPanel");
                 if(tableContainer != null && tableLabelContainer != null && tableTextContainer != null && panelContainer != null){
                     // Update currentPostParticipants
+                    var previousNumParticipants = currentPostParticipants.length;
                     removeUserFromPostParticipants(data["user"]["username"])
 
                     // Recreate the table with new info
                     var newTableInfo = getPostParticipantTable(postID, postType, currentPostParticipants)
                     tableContainer.innerHTML = newTableInfo["html"]
 
-                    // Update the label to move with the input table
-                    tableLabelContainer.style.height = (newTableInfo["tableHeight"] - 5) + "px";
+                    if(previousNumParticipants > 1){
+                        // Update the label to move with the input table
+                        tableLabelContainer.style.height = (newTableInfo["tableHeight"] - 5) + "px";
 
-                    // Update the participation panel container height
-                    panelContainer.style.height = (newTableInfo["tableHeight"] + participantPanelBaseHeight) + "px";
+                        // Update the participation panel container height
+                        panelContainer.style.height = (newTableInfo["tableHeight"] + participantPanelBaseHeight) + "px";
 
-                    // Move the text container input down by 1 panel length
-                    tableTextContainer.style.marginTop = parseInt(tableTextContainer.style.marginTop.slice(0,-2)) - 44 + "px";
+                        // Move the text container input down up 1 panel length
+                        tableTextContainer.style.marginTop = parseInt(tableTextContainer.style.marginTop.slice(0,-2)) - 44 + "px";
+                    }
                 }
             }else{
                 console.log("Something went wrong removing post participant");
@@ -1487,33 +1492,39 @@ function updatePostParticipationPrivacy(postID, postType, username){
 var currentPostParticipants;
 function getPostParticipantTable(postID, postType, participants){
     currentPostParticipants = participants;
-    var tableHeight = ((participants.length + 1) * 44);
-    var tableString = "<div style='width: 100%; position: relative; height: " + tableHeight + "px;'><table style='width: 100%;' class='browseTable'><tr><td>User</td><td>Status</td><td style='text-align: center;'>Public</td><td style='text-align: center;'>Delete</td></tr>";
-    for(var i=0; i < participants.length; i++){
-        var user = participants[i];
-        // Add user picture and name
-        tableString += "<tr><td style='width:35%; position: relative;'><div style='position: absolute; left: 5px; top: 5px;'><a onclick='redirectToUser(" + '"' + user["username"] + '");' + "'>" + user["cleanName"] + "</div><img style='position: absolute; right: 0; top: 0; width: 32px; height: 36px; border: 1px solid rgba(0,0,0,0.2); border-radius: 2px;' id='actorPictureImg' src='" + user.profilePictureURL + "'/></td>";
+    var tableString = "<div style='width: 100%; position: relative; height: " + tableHeight + "px;'><table style='width: 100%;' class='browseTable'><tr><td style='width:35%;'>User</td><td style='width:35%;'>Status</td><td style='text-align: center; width:15%;'>Public</td><td style='text-align: center; width:15%;'>Delete</td></tr>";
+    var tableHeight;
+    if(participants.length > 0){
+        tableHeight = ((participants.length + 1) * 44);
+        for(var i=0; i < participants.length; i++){
+            var user = participants[i];
+            // Add user picture and name
+            tableString += "<tr><td style='width:35%; position: relative;'><div style='position: absolute; left: 5px; top: 5px;'><a onclick='redirectToUser(" + '"' + user["username"] + '");' + "'>" + user["cleanName"] + "</div><img style='position: absolute; right: 0; top: 0; width: 32px; height: 36px; border: 1px solid rgba(0,0,0,0.2); border-radius: 2px;' id='actorPictureImg' src='" + user.profilePictureURL + "'/></td>";
 
-        // Add label
-        var label = user["label"];
-        if(label == null || label.length < 0 || label === "None"){
-            label = "Involved"
+            // Add label
+            var label = user["label"];
+            if(label == null || label.length < 0 || label === "None"){
+                label = "Involved"
+            }
+            tableString += "<td style='width: 35%; position: relative; height: 40px;'><div style='position:absolute; left: 5px; top: 5px;'>" + label + "</div></td>"
+
+            // Add public toggle
+            tableString += "<td style='width: 15%; text-align: center;'><div style='margin-top: -8px;'><input type='checkbox' onclick='updatePostParticipationPrivacy(" + '"' + postID + '", "' + postType + '", "' + user["username"] + '");' + "' id='" + postType + "ParticipationPublicCheckbox_" + user["username"] + "' ";
+            if(user["publicParticipation"] === "True" || user["publicParticipation"] === true){
+                tableString += "checked ";
+            }
+            tableString += "/></div></td>";
+
+            // Add delete button
+            tableString += "<td style='width: 15%; text-align: center;'><div style='margin-top: 0px;'><a style='font-size: 1.1em; font-weight: 100;' onclick='deletePostParticipant(" + '"' + postID + '", "' + postType + '", "' + user["username"] + '");' + "'>X</a></div></td>"
+
+            tableString += "</tr>";
         }
-        tableString += "<td style='width: 35%; position: relative; height: 40px;'><div style='position:absolute; left: 5px; top: 5px;'>" + label + "</div></td>"
-
-        // Add public toggle
-        tableString += "<td style='width: 15%; text-align: center;'><div style='margin-top: -8px;'><input type='checkbox' onclick='updatePostParticipationPrivacy(" + '"' + postID + '", "' + postType + '", "' + user["username"] + '");' + "' id='" + postType + "ParticipationPublicCheckbox_" + user["username"] + "' ";
-        if(user["publicParticipation"] === "True" || user["publicParticipation"] === true){
-            tableString += "checked ";
-        }
-        tableString += "/></div></td>";
-
-        // Add delete button
-        tableString += "<td style='width: 15%; text-align: center;'><div style='margin-top: 0px;'><a style='font-size: 1.1em; font-weight: 100;' onclick='deletePostParticipant(" + '"' + postID + '", "' + postType + '", "' + user["username"] + '");' + "'>X</a></div></td>"
-
-        tableString += "</tr>";
+        tableString += "</table></div>";
+    }else{
+        tableHeight = 88;
+        tableString += "<tr><td style='width: 100%; position: relative; text-align: center;' colspan=4>No users added</td></tr>";
     }
-    tableString += "</table></div>";
     return {"html": tableString, "tableHeight": tableHeight}
 }
 
