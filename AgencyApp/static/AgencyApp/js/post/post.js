@@ -227,7 +227,7 @@ function addCreateCastingPost(formDict, formURL, formName){
                         sectionInputTableElement += '<div style="position: absolute; left: 43.5%; top: 0; right: 69px; padding: 0px;"><input type="text" class="noFocusTextInput" name="participantSearchTextLabel" id="castingParticipantSearchTextLabelInput" autocomplete="off" placeholder="Label"></div>';
 
                         // Add dropdown div
-                        sectionInputTableElement += '<div id="castingParticipantDropdown" class="previewDropdownPanel" style="position: absolute; left: 0; right: 58%; top: 35px; margin-right: 1px; min-width: 184.5px; display: none; max-width: 456px;"></div>';
+                        sectionInputTableElement += '<div id="castingParticipantDropdown" class="previewDropdownPanel" style="position: absolute; left: 0; right: 58%; top: 35px; margin-right: 1px; min-width: 184.5px; display: none; max-width: 234px;"></div>';
 
                         // Add submit button
                         sectionInputTableElement += '<div class="whiteButton blackHover" onclick="savePostParticipant(' + "'" + postID + "', 'castingParticipantSearchTextInput'" + ');"' + ") style='position: absolute; right: 0; top: 5px; padding: 5px; height: 20px;'><div style='margin-top: -8px;'>Save</div></div>";
@@ -1434,7 +1434,7 @@ var currentPostParticipants;
 function getPostParticipantTable(postID, participants){
     currentPostParticipants = participants;
     var tableHeight = ((participants.length + 1) * 48);
-    var tableString = "<div style='width: 100%; position: relative; height: " + tableHeight + "px;'><table style='width: 100%;' class='browseTable'><tr><td>User</td><td>Label</td><td style='text-align: center;'>Private</td><td style='text-align: center;'>Delete</td></tr>";
+    var tableString = "<div style='width: 100%; position: relative; height: " + tableHeight + "px;'><table style='width: 100%;' class='browseTable'><tr><td>User</td><td>Status</td><td style='text-align: center;'>Private</td><td style='text-align: center;'>Delete</td></tr>";
     for(var i=0; i < participants.length; i++){
         var user = participants[i];
         // Add user picture and name
