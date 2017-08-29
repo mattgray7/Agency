@@ -1240,7 +1240,7 @@ function previewTextInDropdown(textInputDivName, dropdownDivName, getDataFunctio
 var dropdownFocusIndex = -1
 function moveDropdownFocus(direction, dropdownListID){
     var dropdownList = document.getElementById(dropdownListID)
-    if(dropdownList.style.display != "none"){
+    if(dropdownList != null){
         var dropdownListItems = $("[id='" + dropdownListID + "'] li")
         var previousFocusIndex = dropdownFocusIndex;
 
@@ -1265,6 +1265,17 @@ function moveDropdownFocus(direction, dropdownListID){
         }
         if(previousFocusIndex >= 0 && previousFocusIndex < dropdownListItems.length){
             dropdownListItems[previousFocusIndex].style.background = "#FFF";
+        }
+    }
+}
+
+function selectDropdownFocusElement(dropdownListID){
+    var dropdownList = document.getElementById(dropdownListID)
+    if(dropdownList != null){
+        var dropdownListItems = $("[id='" + dropdownListID + "'] li")
+        if(dropdownFocusIndex > -1 && dropdownFocusIndex < dropdownListItems.length){
+            dropdownListItems[dropdownFocusIndex].click()
+            dropdownFocusIndex = -1;
         }
     }
 }
