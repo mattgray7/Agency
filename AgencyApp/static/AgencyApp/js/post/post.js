@@ -218,7 +218,7 @@ function addCreateCastingPost(formDict, formURL, formName){
                     // Add participants panel
                     var userTableString = '';
                     var containerHeight = participantPanelBaseHeight;
-                    if(participants != null && participants.length > 0){
+                    if(participants != null){
                         var participantTableInfo = getPostParticipantTable(postID, "casting", participants);
                         containerHeight += participantTableInfo["tableHeight"];
                         userTableString += "<div id='castingParticipantTableContainer' style='position: relative; height: " + participantTableInfo["tableHeight"] + "px;'>" + participantTableInfo["html"] + "</div>"
@@ -1520,11 +1520,11 @@ function getPostParticipantTable(postID, postType, participants){
 
             tableString += "</tr>";
         }
-        tableString += "</table></div>";
     }else{
         tableHeight = 88;
         tableString += "<tr><td style='width: 100%; position: relative; text-align: center;' colspan=4>No users added</td></tr>";
     }
+    tableString += "</table></div>";
     return {"html": tableString, "tableHeight": tableHeight}
 }
 
