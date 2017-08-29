@@ -1241,17 +1241,29 @@ var dropdownFocusIndex = -1
 function moveDropdownFocus(direction, dropdownListID){
     var dropdownList = document.getElementById(dropdownListID)
     if(dropdownList.style.display != "none"){
-        var previousFocusIndex = dropdownFocusIndex;
-        if(direction === "down"){
-            dropdownFocusIndex += 1;
-        }else{
-            dropdownFocusIndex -= 1;
-        }
         var dropdownListItems = $("[id='" + dropdownListID + "'] li")
-        if(dropdownFocusIndex >= 0){
+        var previousFocusIndex = dropdownFocusIndex;
+
+        // Only move the focus if it's not at top or bottom element
+        if(direction === "down"){
+            if(dropdownFocusIndex < dropdownListItems.length - 1){
+                dropdownFocusIndex += 1;
+            }else{
+                return
+            }
+        }else{
+            if(dropdownFocusIndex > 0){
+                dropdownFocusIndex -= 1;
+            }else{
+                return
+            }
+        }
+
+        // Update the focus of the previous and current focus elements
+        if(dropdownFocusIndex >= 0 && dropdownFocusIndex < dropdownListItems.length){
             dropdownListItems[dropdownFocusIndex].style.background = "rgba(0,0,0,0.05)";
         }
-        if(previousFocusIndex >= 0){
+        if(previousFocusIndex >= 0 && previousFocusIndex < dropdownListItems.length){
             dropdownListItems[previousFocusIndex].style.background = "#FFF";
         }
     }
