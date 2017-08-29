@@ -211,11 +211,11 @@ function addCreateCastingPost(formDict, formURL, formName){
                         if(participants != null && participants.length > 0){
                             var participantTableInfo = getPostParticipantTable(postID, participants);
                             sectionInputTableElement += "<div id='postParticipantTableContainer' style='height: " + participantTableInfo["tableHeight"] + "px;'>" + participantTableInfo["html"] + "</div>"
-                            sectionLabelTableElement += "<div id='postParticipantLabelContainer' style='height: " + participantTableInfo["tableHeight"] + "px;'></div>";
+                            sectionLabelTableElement += "<div id='postParticipantLabelContainer' style='height: " + (participantTableInfo["tableHeight"] - 10) +  "px;'></div>";
                         }
 
                         // Add label
-                        sectionLabelTableElement += "<label for='name'>Add User</label><br>";
+                        sectionLabelTableElement += "<label for='name'>Add new</label><br>";
 
                         // Add container
                         sectionInputTableElement+= "<div id='castingParticipantSearchContainer' style='width: 100%; position: relative; height: 20px; margin-top: 0px;' class='editCastMemberPanel'>"
@@ -1353,10 +1353,13 @@ function addUserToPostParticipants(userDict){
         }
         if(!userExists){
             currentPostParticipants.push(userDict);
+        }else{
+            return false;
         }
     }else{
         currentPostParticipants = [userDict];
     }
+    return true;
 }
 
 function removeUserFromPostParticipants(username){
@@ -1381,6 +1384,7 @@ function savePostParticipant(postID, inputDivID){
         var labelInputValue = labelInputDiv.value;
         inputDiv.value = '';
         labelInputDiv.value = '';
+
         $.ajax({
                 url : "/ajax/savePostParticipant/",
                 data : {"postID": postID, "name": inputData, "label": labelInputValue, "privateParticipation": true},
@@ -1393,17 +1397,20 @@ function savePostParticipant(postID, inputDivID){
                         var tableTextContainer = document.getElementById("castingParticipantSearchContainer");
                         if(tableContainer != null && tableLabelContainer != null && tableTextContainer != null){
                             // Update currentPostParticipants
-                            addUserToPostParticipants(data["user"])
+                            addSuccess = addUserToPostParticipants(data["user"])
+                            if(addSuccess){
+                                // Recreate the table with new info
+                                var newTableInfo = getPostParticipantTable(postID, currentPostParticipants)
+                                tableContainer.innerHTML = newTableInfo["html"]
 
-                            // Recreate the table with new info
-                            var newTableInfo = getPostParticipantTable(postID, currentPostParticipants)
-                            tableContainer.innerHTML = newTableInfo["html"]
+                                // Update the label to move with the input table
+                                tableLabelContainer.style.height = (newTableInfo["tableHeight"] - 10) + "px";
 
-                            // Update the label to move with the input table
-                            tableLabelContainer.style.height = newTableInfo["tableHeight"] + "px";
-
-                            // Move the text container input down by 1 panel length
-                            tableTextContainer.style.marginTop = parseInt(tableTextContainer.style.marginTop.slice(0,-2)) + 44 + "px";
+                                // Move the text container input down by 1 panel length
+                                tableTextContainer.style.marginTop = parseInt(tableTextContainer.style.marginTop.slice(0,-2)) + 44 + "px";
+                            }else{
+                                // Should only be false when adding a user that is already a participant
+                            }
                         }
                     }else{
                         console.log("No user found with name " + inputData)
@@ -1477,7 +1484,7 @@ function updatePostParticipationPrivacy(postID, username){
 var currentPostParticipants;
 function getPostParticipantTable(postID, participants){
     currentPostParticipants = participants;
-    var tableHeight = ((participants.length + 1) * 48);
+    var tableHeight = ((participants.length + 1) * 44);
     var tableString = "<div style='width: 100%; position: relative; height: " + tableHeight + "px;'><table style='width: 100%;' class='browseTable'><tr><td>User</td><td>Status</td><td style='text-align: center;'>Private</td><td style='text-align: center;'>Delete</td></tr>";
     for(var i=0; i < participants.length; i++){
         var user = participants[i];
