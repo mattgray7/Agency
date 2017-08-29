@@ -183,11 +183,19 @@ function addCreateCastingPost(formDict, formURL, formName){
         }
 
         if(sectionTitle != "hidden"){
-            sectionLabelTableElement += "<div style='position: relative; height: 30px; margin-top: 40px; width: 100%;'> <h2 class='" + sectionClass + "' style='position: absolute; bottom: 0; z-index: 1; right: 0; margin-left: 80px; '><div style='margin-top: -10px;'>" + sectionTitle + "</div></h2>" + getFormDividerLine() + "</div></div>"
-            sectionInputTableElement += "<div style='height: 60px;'></div>";
-            if(sectionTitle === "Physical"){
-                sectionInputTableElement += "<div style='height:60px;'></div>"
+            if(sectionTitle === "Details"){
+                sectionInputTableElement += "<div style='height: 60px;'></div>";
+            }else if(sectionTitle === "Character"){
+                sectionLabelTableElement += "<div style='height: 28px;'></div>";
+                sectionInputTableElement += "<div style='height: 68px;'></div>";
+            }else if(sectionTitle === "Users"){
+                sectionLabelTableElement += "<div style='height: 10px;'></div>";
+                sectionInputTableElement += "<div style='height: 80px;'></div>";
+            }else if(sectionTitle === "Physical"){
+                sectionLabelTableElement += "<div style='height: 0px;'></div>";
+                sectionInputTableElement += "<div style='height: 75px;'></div>"
             }
+            sectionLabelTableElement += "<div style='position: relative; height: 30px; margin-top: 40px; width: 100%;'> <h2 class='" + sectionClass + "' style='position: absolute; bottom: 0; z-index: 1; right: 0; margin-left: 80px; '><div style='margin-top: -10px;'>" + sectionTitle + "</div></h2>" + getFormDividerLine() + "</div></div>"
 
             for(i in fieldList){
                 var fieldName = sectionMap[sectionTitle][i];
@@ -208,21 +216,25 @@ function addCreateCastingPost(formDict, formURL, formName){
                     var participants = formDict["participants"]
 
                     // Add participants panel
+                    var containerHeight = 40;
+                    var userTableString = '';
                     if(participants != null && participants.length > 0){
                         var participantTableInfo = getPostParticipantTable(postID, participants);
-                        sectionInputTableElement += "<div id='postParticipantTableContainer' style='position: relative; height: " + participantTableInfo["tableHeight"] + "px;'>" + participantTableInfo["html"] + "</div>"
-                        sectionLabelTableElement += "<div id='postParticipantLabelContainer' style='height: " + (participantTableInfo["tableHeight"] - 10) +  "px;'></div>";
+                        containerHeight += participantTableInfo["tableHeight"];
+                        userTableString += "<div id='postParticipantTableContainer' style='position: relative; height: " + participantTableInfo["tableHeight"] + "px;'>" + participantTableInfo["html"] + "</div>"
+                        sectionLabelTableElement += "<div id='postParticipantLabelContainer' style='height: " + (participantTableInfo["tableHeight"] - 5) +  "px;'></div>";
                     }
+                    console.log(containerHeight)
 
                     // Add label
                     sectionLabelTableElement += "<label for='name'>Add new</label><br>";
-                    sectionInputTableElement += getPostParticipantForm(postID, "casting", formName, formDict["participationSelectFields"], "Interested");
+                    sectionInputTableElement += "<div style='height: " + containerHeight + "px;'>" + userTableString + getPostParticipantForm(postID, "casting", formName, formDict["participationSelectFields"], "Interested") + "</div>";
                     continue;
                 }
                 if(!field.hidden || field.name === "status"){
                     if(field.numRows > 1){
                         // stupid hack I hate myself right now
-                        sectionLabelTableElement += "<li style='height:" + '' + field.numRows*5.9 + 'px;' + "'><label for='name'>" + field.label + "</label></li>";
+                        sectionLabelTableElement += "<li style='height:" + '' + field.numRows*5.95 + 'px;' + "'><label for='name'>" + field.label + "</label></li>";
                         // TODO replace newlines in description as it will break js
                         sectionInputTableElement += "<li><textarea rows='" + field.numRows + "' name='" + field.name + "' form='" + formName + "' style='height:100px; width: 97.7%; resize: none;' placeholder='" + field.placeholder + "'>" + field.value + "</textarea></li>";
                     }else{
