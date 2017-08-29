@@ -1237,8 +1237,28 @@ function previewTextInDropdown(textInputDivName, dropdownDivName, getDataFunctio
     }
 }
 
+var dropdownFocusIndex = -1
+function moveDropdownFocus(direction, dropdownListID){
+    var dropdownList = document.getElementById(dropdownListID)
+    if(dropdownList.style.display != "none"){
+        var previousFocusIndex = dropdownFocusIndex;
+        if(direction === "down"){
+            dropdownFocusIndex += 1;
+        }else{
+            dropdownFocusIndex -= 1;
+        }
+        var dropdownListItems = $("[id='" + dropdownListID + "'] li")
+        if(dropdownFocusIndex >= 0){
+            dropdownListItems[dropdownFocusIndex].style.background = "rgba(0,0,0,0.05)";
+        }
+        if(previousFocusIndex >= 0){
+            dropdownListItems[previousFocusIndex].style.background = "#FFF";
+        }
+    }
+}
+
 function getPreviewActorsString(userList){
-    var previewString = "<ul>";
+    var previewString = "<ul id='castingParticipationDropdownList'>";
     for(var i=0; i < userList.length; i++){
         previewString += "<li onclick='selectPostParticipant(" + '"' + userList[i]["username"] + '", "' + userList[i]["cleanName"] + '", "castingParticipantSearchTextInput", "castingParticipantDropdown");' + "'><div style='position:relative; height: 50px;'>"
 
@@ -1267,6 +1287,7 @@ function searchPreviewActors(textValue, container){
         }else{
             container.style.display = "block";
         }
+
         $.ajax({
                 url : "/ajax/getSearchPreviewActors/",
                 data : {"text": textValue},
