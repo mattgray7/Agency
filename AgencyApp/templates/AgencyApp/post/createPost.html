@@ -148,7 +148,7 @@
             var participantsField = []
             {% if postParticipants %}
                 {% for part in postParticipants %}
-                    var newField = {"username": "{{part.username}}", "cleanName": "{{part.cleanName}}", "profilePictureURL": "{{part.profilePictureURL}}", "profession": "{{part.profession}}", "label": "{{part.label}}"};
+                    var newField = {"username": "{{part.username}}", "cleanName": "{{part.cleanName}}", "profilePictureURL": "{{part.profilePictureURL}}", "profession": "{{part.profession}}", "label": "{{part.label}}", "privateParticipation": "{{part.privateParticipation}}"};
                     participantsField.push(newField)
                 {% endfor %}
             {% endif %}

@@ -1339,7 +1339,7 @@ function savePostParticipant(postID, inputDivID){
         labelInputDiv.value = '';
         $.ajax({
                 url : "/ajax/savePostParticipant/",
-                data : {"postID": postID, "name": inputData, "label": labelInputValue},
+                data : {"postID": postID, "name": inputData, "label": labelInputValue, "privateParticipation": true},
                 type : 'POST',
                 dataType: "json",
                 success : function(data) {
@@ -1401,6 +1401,35 @@ function deletePostParticipant(postID, username){
     });
 }
 
+function updatePostParticipationPrivacy(postID, username){
+    var privacyCheckbox = document.getElementById('postParticipationPrivateCheckbox_' + username)
+    if(privacyCheckbox != null){
+        if(currentPostParticipants != null){
+            for(var i=0; i < currentPostParticipants.length; i++){
+                if(currentPostParticipants[i]["username"] === username){
+                    if(privacyCheckbox.checked){
+                        if(currentPostParticipants[i]["privateParticipation"] === "False"){
+                            currentPostParticipants[i]["privateParticipation"] = "True";
+                        }
+                    }else{
+                        if(currentPostParticipants[i]["privateParticipation"] === "True"){
+                            currentPostParticipants[i]["privateParticipation"] = "False";
+                        }
+                    }
+                }
+            }
+        }
+
+        $.ajax({
+            url : "/ajax/updatePostParticipationPrivacy/",
+            data : {"postID": postID, "username": username, "value": privacyCheckbox.checked},
+            type : 'POST',
+            dataType: "json",
+            success : function(data) {}
+        });
+    }
+}
+
 var currentPostParticipants;
 function getPostParticipantTable(postID, participants){
     currentPostParticipants = participants;
@@ -1419,7 +1448,11 @@ function getPostParticipantTable(postID, participants){
         tableString += "<td style='width: 35%; position: relative; height: 40px;'><div style='position:absolute; left: 5px; top: 5px;'>" + label + "</div></td>"
 
         // Add privacy
-        tableString += "<td style='width: 15%; text-align: center;'><div style='margin-top: -8px;'><input type='checkbox' /></div></td>";
+        tableString += "<td style='width: 15%; text-align: center;'><div style='margin-top: -8px;'><input type='checkbox' onclick='updatePostParticipationPrivacy(" + '"' + postID + '", "' + user["username"] + '");' + "' id='postParticipationPrivateCheckbox_" + user["username"] + "' ";
+        if(user["privateParticipation"] === "True" || user["privateParticipation"] === true){
+            tableString += "checked ";
+        }
+        tableString += "/></div></td>";
 
         // Add delete button
         tableString += "<td style='width: 15%; text-align: center;'><div style='margin-top: 0px;'><a style='font-size: 1.1em; font-weight: 100;' onclick='deletePostParticipant(" + '"' + postID + '", "' + user["username"] + '");' + "'>X</a></div></td>"
