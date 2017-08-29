@@ -216,19 +216,18 @@ function addCreateCastingPost(formDict, formURL, formName){
                     var participants = formDict["participants"]
 
                     // Add participants panel
-                    var containerHeight = 40;
                     var userTableString = '';
+                    var containerHeight = participantPanelBaseHeight;
                     if(participants != null && participants.length > 0){
                         var participantTableInfo = getPostParticipantTable(postID, participants);
                         containerHeight += participantTableInfo["tableHeight"];
                         userTableString += "<div id='postParticipantTableContainer' style='position: relative; height: " + participantTableInfo["tableHeight"] + "px;'>" + participantTableInfo["html"] + "</div>"
                         sectionLabelTableElement += "<div id='postParticipantLabelContainer' style='height: " + (participantTableInfo["tableHeight"] - 5) +  "px;'></div>";
                     }
-                    console.log(containerHeight)
 
                     // Add label
                     sectionLabelTableElement += "<label for='name'>Add new</label><br>";
-                    sectionInputTableElement += "<div style='height: " + containerHeight + "px;'>" + userTableString + getPostParticipantForm(postID, "casting", formName, formDict["participationSelectFields"], "Interested") + "</div>";
+                    sectionInputTableElement += "<div id='postParticipantPanel' style='height: " + containerHeight + "px;'>" + userTableString + getPostParticipantForm(postID, "casting", formName, formDict["participationSelectFields"], "Interested") + "</div>";
                     continue;
                 }
                 if(!field.hidden || field.name === "status"){
@@ -1371,6 +1370,7 @@ function removeUserFromPostParticipants(username){
     }
 }
 
+var participantPanelBaseHeight = 40;
 function savePostParticipant(postID, inputDivID, labelDivID){
     var inputDiv = document.getElementById(inputDivID);
     var labelInputDiv = document.getElementById(labelDivID);
@@ -1390,7 +1390,8 @@ function savePostParticipant(postID, inputDivID, labelDivID){
                         var tableContainer = document.getElementById("postParticipantTableContainer")
                         var tableLabelContainer = document.getElementById("postParticipantLabelContainer");
                         var tableTextContainer = document.getElementById("castingParticipantSearchContainer");
-                        if(tableContainer != null && tableLabelContainer != null && tableTextContainer != null){
+                        var panelContainer = document.getElementById("postParticipantPanel");
+                        if(tableContainer != null && tableLabelContainer != null && tableTextContainer != null && panelContainer != null){
                             // Update currentPostParticipants
                             addSuccess = addUserToPostParticipants(data["user"])
                             if(addSuccess){
@@ -1399,7 +1400,10 @@ function savePostParticipant(postID, inputDivID, labelDivID){
                                 tableContainer.innerHTML = newTableInfo["html"]
 
                                 // Update the label to move with the input table
-                                tableLabelContainer.style.height = (newTableInfo["tableHeight"] - 10) + "px";
+                                tableLabelContainer.style.height = (newTableInfo["tableHeight"] - 5) + "px";
+
+                                // Update the participation panel container height
+                                panelContainer.style.height = (newTableInfo["tableHeight"] + participantPanelBaseHeight) + "px";
 
                                 // Move the text container input down by 1 panel length
                                 tableTextContainer.style.marginTop = parseInt(tableTextContainer.style.marginTop.slice(0,-2)) + 44 + "px";
@@ -1426,7 +1430,8 @@ function deletePostParticipant(postID, username){
                 var tableContainer = document.getElementById("postParticipantTableContainer")
                 var tableLabelContainer = document.getElementById("postParticipantLabelContainer");
                 var tableTextContainer = document.getElementById("castingParticipantSearchContainer");
-                if(tableContainer != null && tableLabelContainer != null && tableTextContainer != null){
+                var panelContainer = document.getElementById("postParticipantPanel");
+                if(tableContainer != null && tableLabelContainer != null && tableTextContainer != null && panelContainer != null){
                     // Update currentPostParticipants
                     removeUserFromPostParticipants(data["user"]["username"])
 
@@ -1435,7 +1440,10 @@ function deletePostParticipant(postID, username){
                     tableContainer.innerHTML = newTableInfo["html"]
 
                     // Update the label to move with the input table
-                    tableLabelContainer.style.height = newTableInfo["tableHeight"] + "px";
+                    tableLabelContainer.style.height = (newTableInfo["tableHeight"] - 5) + "px";
+
+                    // Update the participation panel container height
+                    panelContainer.style.height = (newTableInfo["tableHeight"] + participantPanelBaseHeight) + "px";
 
                     // Move the text container input down by 1 panel length
                     tableTextContainer.style.marginTop = parseInt(tableTextContainer.style.marginTop.slice(0,-2)) - 44 + "px";
