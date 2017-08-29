@@ -205,38 +205,18 @@ function addCreateCastingPost(formDict, formURL, formName){
                     }
                     continue;
                 }else if(fieldName === "participants"){
-                        var participants = formDict["participants"]
+                    var participants = formDict["participants"]
 
-                        // Add participants panel
-                        if(participants != null && participants.length > 0){
-                            var participantTableInfo = getPostParticipantTable(postID, participants);
-                            sectionInputTableElement += "<div id='postParticipantTableContainer' style='height: " + participantTableInfo["tableHeight"] + "px;'>" + participantTableInfo["html"] + "</div>"
-                            sectionLabelTableElement += "<div id='postParticipantLabelContainer' style='height: " + (participantTableInfo["tableHeight"] - 10) +  "px;'></div>";
-                        }
+                    // Add participants panel
+                    if(participants != null && participants.length > 0){
+                        var participantTableInfo = getPostParticipantTable(postID, participants);
+                        sectionInputTableElement += "<div id='postParticipantTableContainer' style='height: " + participantTableInfo["tableHeight"] + "px;'>" + participantTableInfo["html"] + "</div>"
+                        sectionLabelTableElement += "<div id='postParticipantLabelContainer' style='height: " + (participantTableInfo["tableHeight"] - 10) +  "px;'></div>";
+                    }
 
-                        // Add label
-                        sectionLabelTableElement += "<label for='name'>Add new</label><br>";
-
-                        // Add container
-                        sectionInputTableElement+= "<div id='castingParticipantSearchContainer' style='width: 100%; position: relative; height: 20px; margin-top: 0px;' class='editCastMemberPanel'>"
-
-                        // Add name text box
-                        sectionInputTableElement += '<div style="position: absolute; left: 0; top: 0; right: 60%; padding: 0px;"><input type="text" class="noFocusTextInput" name="participantSearchText" id="castingParticipantSearchTextInput" autocomplete="off" placeholder="Name"></div>';
-
-                         // Add status select bar
-                        sectionInputTableElement += '<div style="position: absolute; left: 43.5%; top: 2px; right: 69px; padding: 0px;">';
-                        var selectForm = createSelectForm(formName, "castingParticipantSelectBar", formDict["participationSelectFields"], "Interested");
-                        sectionInputTableElement += selectForm;
-                        sectionInputTableElement += "<input type='hidden' name='castingParticipantSelectBarInput' id='castingParticipantSelectBarInput' ></div>";
-                        
-                        // Add dropdown div
-                        sectionInputTableElement += '<div id="castingParticipantDropdown" class="previewDropdownPanel" style="position: absolute; left: 0; right: 58%; top: 35px; margin-right: 1px; min-width: 184.5px; display: none; max-width: 234px;"></div>';
-
-                        // Add submit button
-                        sectionInputTableElement += '<div class="whiteButton blackHover" onclick="savePostParticipant(' + "'" + postID + "', 'castingParticipantSearchTextInput', 'castingParticipantSelectBar'" + ');"' + ") style='position: absolute; right: 0; top: 5px; padding: 5px; height: 20px;'><div style='margin-top: -8px;'>Save</div></div>";
-                        
-                        sectionInputTableElement += "</div>";
-                    
+                    // Add label
+                    sectionLabelTableElement += "<label for='name'>Add new</label><br>";
+                    sectionInputTableElement += getPostParticipantForm(postID, "casting", formName, formDict["participationSelectFields"], "Interested");
                     continue;
                 }
                 if(!field.hidden || field.name === "status"){
@@ -1515,6 +1495,25 @@ function getPostParticipantTable(postID, participants){
     }
     tableString += "</table></div>";
     return {"html": tableString, "tableHeight": tableHeight}
+}
+
+function getPostParticipantForm(postID, postType, formName, statusSelectFields, defaultStatus){
+    // Add container
+    var formString = "<div id='" + postType + "ParticipantSearchContainer' style='width: 100%; position: relative; height: 20px; margin-top: 0px;' class='editCastMemberPanel'>"
+
+    // Add name text box
+    formString += '<div style="position: absolute; left: 0; top: 0; right: 60%; padding: 0px;"><input type="text" class="noFocusTextInput" name="participantSearchText" id="' + postType + 'ParticipantSearchTextInput" autocomplete="off" placeholder="Name"></div>';
+
+    // Add status select bar
+    var selectForm = createSelectForm(formName, postType + "ParticipantSelectBar", statusSelectFields, defaultStatus);
+    formString += '<div style="position: absolute; left: 43.5%; top: 2px; right: 69px; padding: 0px;">' + selectForm + "<input type='hidden' name='" + postType + "ParticipantSelectBarInput' id='" + postType + "ParticipantSelectBarInput' ></div>";
+
+    // Add dropdown div
+    formString += '<div id="' + postType + 'ParticipantDropdown" class="previewDropdownPanel" style="position: absolute; left: 0; right: 58%; top: 35px; margin-right: 1px; min-width: 184.5px; display: none; max-width: 234px;"></div>';
+
+    // Add submit button
+    formString += '<div class="whiteButton blackHover" onclick="savePostParticipant(' + "'" + postID + "', '" + postType + "ParticipantSearchTextInput', '" + postType + "ParticipantSelectBar'" + ');"' + ") style='position: absolute; right: 0; top: 5px; padding: 5px; height: 20px;'><div style='margin-top: -8px;'>Save</div></div></div>";
+    return formString;
 }
 
 
