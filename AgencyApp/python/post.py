@@ -320,7 +320,7 @@ class GenericCreatePostView(views.PictureFormView):
         if not self._postParticipants:
             postParticipants = models.PostParticipant.objects.filter(postID=self.postID)
             if postParticipants:
-                self._postParticipants = [{"username": x.username, "label": x.label, "private": x.privateParticipation} for x in postParticipants]
+                self._postParticipants = [{"username": x.username, "label": x.label, "public": x.publicParticipation} for x in postParticipants]
         return self._postParticipants
 
     @property
@@ -341,7 +341,7 @@ class GenericCreatePostView(views.PictureFormView):
                                                                     "profilePictureURL": user.profilePicture and user.profilePicture.url or constants.NO_PROFILE_PICTURE_PATH,
                                                                     "profession": user.mainProfession,
                                                                     "label": part.get("label") or "Involved",
-                                                                    "privateParticipation": part.get("private")})
+                                                                    "publicParticipation": part.get("public")})
         return self._postParticipantsFormatted
 
 

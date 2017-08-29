@@ -1390,7 +1390,7 @@ function savePostParticipant(postID, inputDivID, labelDivID){
 
         $.ajax({
                 url : "/ajax/savePostParticipant/",
-                data : {"postID": postID, "name": inputData, "label": labelInputValue, "privateParticipation": true},
+                data : {"postID": postID, "name": inputData, "label": labelInputValue, "publicParticipation": false},
                 type : 'POST',
                 dataType: "json",
                 success : function(data) {
@@ -1456,18 +1456,18 @@ function deletePostParticipant(postID, username){
 }
 
 function updatePostParticipationPrivacy(postID, username){
-    var privacyCheckbox = document.getElementById('postParticipationPrivateCheckbox_' + username)
-    if(privacyCheckbox != null){
+    var publicCheckbox = document.getElementById('postParticipationPublicCheckbox_' + username)
+    if(publicCheckbox != null){
         if(currentPostParticipants != null){
             for(var i=0; i < currentPostParticipants.length; i++){
                 if(currentPostParticipants[i]["username"] === username){
-                    if(privacyCheckbox.checked){
-                        if(currentPostParticipants[i]["privateParticipation"] === "False"){
-                            currentPostParticipants[i]["privateParticipation"] = "True";
+                    if(publicCheckbox.checked){
+                        if(currentPostParticipants[i]["publicParticipation"] === "False"){
+                            currentPostParticipants[i]["publicParticipation"] = "True";
                         }
                     }else{
-                        if(currentPostParticipants[i]["privateParticipation"] === "True"){
-                            currentPostParticipants[i]["privateParticipation"] = "False";
+                        if(currentPostParticipants[i]["publicParticipation"] === "True"){
+                            currentPostParticipants[i]["publicParticipation"] = "False";
                         }
                     }
                 }
@@ -1476,7 +1476,7 @@ function updatePostParticipationPrivacy(postID, username){
 
         $.ajax({
             url : "/ajax/updatePostParticipationPrivacy/",
-            data : {"postID": postID, "username": username, "value": privacyCheckbox.checked},
+            data : {"postID": postID, "username": username, "value": publicCheckbox.checked},
             type : 'POST',
             dataType: "json",
             success : function(data) {}
@@ -1488,7 +1488,7 @@ var currentPostParticipants;
 function getPostParticipantTable(postID, participants){
     currentPostParticipants = participants;
     var tableHeight = ((participants.length + 1) * 44);
-    var tableString = "<div style='width: 100%; position: relative; height: " + tableHeight + "px;'><table style='width: 100%;' class='browseTable'><tr><td>User</td><td>Status</td><td style='text-align: center;'>Private</td><td style='text-align: center;'>Delete</td></tr>";
+    var tableString = "<div style='width: 100%; position: relative; height: " + tableHeight + "px;'><table style='width: 100%;' class='browseTable'><tr><td>User</td><td>Status</td><td style='text-align: center;'>Public</td><td style='text-align: center;'>Delete</td></tr>";
     for(var i=0; i < participants.length; i++){
         var user = participants[i];
         // Add user picture and name
@@ -1501,9 +1501,9 @@ function getPostParticipantTable(postID, participants){
         }
         tableString += "<td style='width: 35%; position: relative; height: 40px;'><div style='position:absolute; left: 5px; top: 5px;'>" + label + "</div></td>"
 
-        // Add privacy
-        tableString += "<td style='width: 15%; text-align: center;'><div style='margin-top: -8px;'><input type='checkbox' onclick='updatePostParticipationPrivacy(" + '"' + postID + '", "' + user["username"] + '");' + "' id='postParticipationPrivateCheckbox_" + user["username"] + "' ";
-        if(user["privateParticipation"] === "True" || user["privateParticipation"] === true){
+        // Add public toggle
+        tableString += "<td style='width: 15%; text-align: center;'><div style='margin-top: -8px;'><input type='checkbox' onclick='updatePostParticipationPrivacy(" + '"' + postID + '", "' + user["username"] + '");' + "' id='postParticipationPublicCheckbox_" + user["username"] + "' ";
+        if(user["publicParticipation"] === "True" || user["publicParticipation"] === true){
             tableString += "checked ";
         }
         tableString += "/></div></td>";

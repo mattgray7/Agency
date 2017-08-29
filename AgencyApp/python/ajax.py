@@ -264,7 +264,7 @@ def getPostData(request):
 def savePostParticipant(request):
     postID = request.POST.get("postID")
     label = request.POST.get("label") or "Involved"
-    privateParticipation = request.POST.get("privateParticipation") == "true"
+    publicParticipation = request.POST.get("publicParticipation") == "true"
     success = False
     matchingUser = None
     if postID:
@@ -288,7 +288,7 @@ def savePostParticipant(request):
                     existingParticipant = models.PostParticipant.objects.get(postID=postID, username=matchingUser.username)
                 except models.PostParticipant.DoesNotExist:
                     # Create it it if it doesn't exist (if it does, TODO update the label?)
-                    existingParticipant = models.PostParticipant(postID=postID, username=matchingUser.username, label=label, privateParticipation=privateParticipation)
+                    existingParticipant = models.PostParticipant(postID=postID, username=matchingUser.username, label=label, publicParticipation=publicParticipation)
                     existingParticipant.save()
                 success = True
     return JsonResponse({"success": success, "user": matchingUser and {"username": matchingUser.username,
@@ -296,7 +296,7 @@ def savePostParticipant(request):
                                                                        "profilePictureURL": matchingUser.profilePicture and matchingUser.profilePicture.url or constants.NO_PROFILE_PICTURE_PATH,
                                                                        "profession": matchingUser.mainProfession,
                                                                        "label": label,
-                                                                       "privateParticipation": privateParticipation}})
+                                                                       "publicParticipation": publicParticipation}})
 
 def deletePostParticipant(request):
     postID = request.POST.get("postID")
@@ -320,7 +320,7 @@ def updatePostParticipationPrivacy(request):
         except models.PostParticipant.DoesNotExist:
             pass
         else:
-            part.privateParticipation = privacyValue
+            part.publicParticipation = privacyValue
             part.save()
     return JsonResponse({"success": success})
 
