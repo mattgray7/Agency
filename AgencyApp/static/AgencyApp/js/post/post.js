@@ -219,7 +219,7 @@ function addCreateCastingPost(formDict, formURL, formName){
                     var userTableString = '';
                     var containerHeight = participantPanelBaseHeight;
                     if(participants != null && participants.length > 0){
-                        var participantTableInfo = getPostParticipantTable(postID, participants);
+                        var participantTableInfo = getPostParticipantTable(postID, "casting", participants);
                         containerHeight += participantTableInfo["tableHeight"];
                         userTableString += "<div id='postParticipantTableContainer' style='position: relative; height: " + participantTableInfo["tableHeight"] + "px;'>" + participantTableInfo["html"] + "</div>"
                         sectionLabelTableElement += "<div id='postParticipantLabelContainer' style='height: " + (participantTableInfo["tableHeight"] - 5) +  "px;'></div>";
@@ -1371,7 +1371,7 @@ function removeUserFromPostParticipants(username){
 }
 
 var participantPanelBaseHeight = 40;
-function savePostParticipant(postID, inputDivID, labelDivID){
+function savePostParticipant(postID, postType, inputDivID, labelDivID){
     var inputDiv = document.getElementById(inputDivID);
     var labelInputDiv = document.getElementById(labelDivID);
     if(inputDiv != null && labelInputDiv != null){
@@ -1389,14 +1389,14 @@ function savePostParticipant(postID, inputDivID, labelDivID){
                     if(data["success"]){
                         var tableContainer = document.getElementById("postParticipantTableContainer")
                         var tableLabelContainer = document.getElementById("postParticipantLabelContainer");
-                        var tableTextContainer = document.getElementById("castingParticipantSearchContainer");
+                        var tableTextContainer = document.getElementById(postType + "ParticipantSearchContainer");
                         var panelContainer = document.getElementById("postParticipantPanel");
                         if(tableContainer != null && tableLabelContainer != null && tableTextContainer != null && panelContainer != null){
                             // Update currentPostParticipants
                             addSuccess = addUserToPostParticipants(data["user"])
                             if(addSuccess){
                                 // Recreate the table with new info
-                                var newTableInfo = getPostParticipantTable(postID, currentPostParticipants)
+                                var newTableInfo = getPostParticipantTable(postID, postType, currentPostParticipants)
                                 tableContainer.innerHTML = newTableInfo["html"]
 
                                 // Update the label to move with the input table
@@ -1419,7 +1419,7 @@ function savePostParticipant(postID, inputDivID, labelDivID){
     }
 }
 
-function deletePostParticipant(postID, username){
+function deletePostParticipant(postID, postType, username){
     $.ajax({
         url : "/ajax/deletePostParticipant/",
         data : {"postID": postID, "username": username},
@@ -1429,14 +1429,14 @@ function deletePostParticipant(postID, username){
             if(data["success"]){
                 var tableContainer = document.getElementById("postParticipantTableContainer")
                 var tableLabelContainer = document.getElementById("postParticipantLabelContainer");
-                var tableTextContainer = document.getElementById("castingParticipantSearchContainer");
+                var tableTextContainer = document.getElementById(postType + "ParticipantSearchContainer");
                 var panelContainer = document.getElementById("postParticipantPanel");
                 if(tableContainer != null && tableLabelContainer != null && tableTextContainer != null && panelContainer != null){
                     // Update currentPostParticipants
                     removeUserFromPostParticipants(data["user"]["username"])
 
                     // Recreate the table with new info
-                    var newTableInfo = getPostParticipantTable(postID, currentPostParticipants)
+                    var newTableInfo = getPostParticipantTable(postID, postType, currentPostParticipants)
                     tableContainer.innerHTML = newTableInfo["html"]
 
                     // Update the label to move with the input table
@@ -1485,7 +1485,7 @@ function updatePostParticipationPrivacy(postID, username){
 }
 
 var currentPostParticipants;
-function getPostParticipantTable(postID, participants){
+function getPostParticipantTable(postID, postType, participants){
     currentPostParticipants = participants;
     var tableHeight = ((participants.length + 1) * 44);
     var tableString = "<div style='width: 100%; position: relative; height: " + tableHeight + "px;'><table style='width: 100%;' class='browseTable'><tr><td>User</td><td>Status</td><td style='text-align: center;'>Public</td><td style='text-align: center;'>Delete</td></tr>";
@@ -1509,7 +1509,7 @@ function getPostParticipantTable(postID, participants){
         tableString += "/></div></td>";
 
         // Add delete button
-        tableString += "<td style='width: 15%; text-align: center;'><div style='margin-top: 0px;'><a style='font-size: 1.1em; font-weight: 100;' onclick='deletePostParticipant(" + '"' + postID + '", "' + user["username"] + '");' + "'>X</a></div></td>"
+        tableString += "<td style='width: 15%; text-align: center;'><div style='margin-top: 0px;'><a style='font-size: 1.1em; font-weight: 100;' onclick='deletePostParticipant(" + '"' + postID + '", "' + postType + '", "' + user["username"] + '");' + "'>X</a></div></td>"
 
         tableString += "</tr>";
     }
@@ -1532,7 +1532,7 @@ function getPostParticipantForm(postID, postType, formName, statusSelectFields, 
     formString += '<div id="' + postType + 'ParticipantDropdown" class="previewDropdownPanel" style="position: absolute; left: 0; right: 58%; top: 35px; margin-right: 1px; min-width: 184.5px; display: none; max-width: 234px;"></div>';
 
     // Add submit button
-    formString += '<div class="whiteButton blackHover" onclick="savePostParticipant(' + "'" + postID + "', '" + postType + "ParticipantSearchTextInput', '" + postType + "ParticipantSelectBar'" + ');"' + ") style='position: absolute; right: 0; top: 5px; padding: 5px; height: 20px;'><div style='margin-top: -8px;'>Save</div></div></div>";
+    formString += '<div class="whiteButton blackHover" onclick="savePostParticipant(' + "'" + postID + "', '" + postType + "', '" + postType + "ParticipantSearchTextInput', '" + postType + "ParticipantSelectBar'" + ');"' + ") style='position: absolute; right: 0; top: 5px; padding: 5px; height: 20px;'><div style='margin-top: -8px;'>Save</div></div></div>";
     return formString;
 }
 
