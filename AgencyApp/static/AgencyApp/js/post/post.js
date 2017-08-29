@@ -219,7 +219,7 @@ function addCreateCastingPost(formDict, formURL, formName){
                     var userTableString = '';
                     var containerHeight = participantPanelBaseHeight;
                     if(participants != null){
-                        var participantTableInfo = getPostParticipantTable(postID, "casting", participants);
+                        var participantTableInfo = getPostParticipantTable(postID, "casting", participants, formName, formDict["participationSelectFields"]);
                         containerHeight += participantTableInfo["tableHeight"];
                         userTableString += "<div id='castingParticipantTableContainer' style='position: relative; height: " + participantTableInfo["tableHeight"] + "px;'>" + participantTableInfo["html"] + "</div>"
                         sectionLabelTableElement += "<div id='castingParticipantLabelContainer' style='height: " + (participantTableInfo["tableHeight"] - 5) +  "px;'></div>";
@@ -1490,7 +1490,21 @@ function updatePostParticipationPrivacy(postID, postType, username){
 }
 
 var currentPostParticipants;
-function getPostParticipantTable(postID, postType, participants){
+var postParticipantSelectFields = {};
+function getPostParticipantTable(postID, postType, participants,  formName, statusSelectFields){
+    if(statusSelectFields == null){
+        if(postType in postParticipantSelectFields){
+            statusSelectFields = postParticipantSelectFields[postType]
+        }else{
+            console.log("ERROR DOING POST PART TABLE")
+            return
+        }
+    }else{
+        if(!(postType in postParticipantSelectFields)){
+            postParticipantSelectFields[postType] = statusSelectFields;
+        }
+    }
+
     currentPostParticipants = participants;
     var tableString = "<div style='width: 100%; position: relative; height: " + tableHeight + "px;'><table style='width: 100%;' class='browseTable'><tr><td style='width:35%;'>User</td><td style='width:35%;'>Status</td><td style='text-align: center; width:15%;'>Public</td><td style='text-align: center; width:15%;'>Delete</td></tr>";
     var tableHeight;
@@ -1499,14 +1513,17 @@ function getPostParticipantTable(postID, postType, participants){
         for(var i=0; i < participants.length; i++){
             var user = participants[i];
             // Add user picture and name
-            tableString += "<tr><td style='width:35%; position: relative;'><div style='position: absolute; left: 5px; top: 5px;'><a onclick='redirectToUser(" + '"' + user["username"] + '");' + "'>" + user["cleanName"] + "</div><img style='position: absolute; right: 0; top: 0; width: 32px; height: 36px; border: 1px solid rgba(0,0,0,0.2); border-radius: 2px;' id='actorPictureImg' src='" + user.profilePictureURL + "'/></td>";
+            tableString += "<tr><td style='width:35%; position: relative;'><div style='position: absolute; left: 5px; top: 2px;'><a onclick='redirectToUser(" + '"' + user["username"] + '");' + "'>" + user["cleanName"] + "</div><img style='position: absolute; right: 0; top: 0; width: 32px; height: 36px; border: 1px solid rgba(0,0,0,0.2); border-radius: 2px;' id='actorPictureImg' src='" + user.profilePictureURL + "'/></td>";
 
-            // Add label
+            // Add status
             var label = user["label"];
+            console.log("label is " + label)
             if(label == null || label.length < 0 || label === "None"){
-                label = "Involved"
+                label = "Interested"
             }
-            tableString += "<td style='width: 35%; position: relative; height: 40px;'><div style='position:absolute; left: 5px; top: 5px;'>" + label + "</div></td>"
+            var statusLabelID = postType + "ParticipationEditStatusSelect_" + user["username"]
+            var selectForm = createSelectForm(formName, statusLabelID, statusSelectFields, label);
+            tableString += "<td id='" + statusLabelID + "' style='width: 35%; position: relative; height: 40px;'><div style='position:absolute; left: 5px; top: 1px;'>" + selectForm + "</div></td>";
 
             // Add public toggle
             tableString += "<td style='width: 15%; text-align: center;'><div style='margin-top: -8px;'><input type='checkbox' onclick='updatePostParticipationPrivacy(" + '"' + postID + '", "' + postType + '", "' + user["username"] + '");' + "' id='" + postType + "ParticipationPublicCheckbox_" + user["username"] + "' ";
@@ -1537,7 +1554,7 @@ function getPostParticipantForm(postID, postType, formName, statusSelectFields, 
 
     // Add status select bar
     var selectForm = createSelectForm(formName, postType + "ParticipantSelectBar", statusSelectFields, defaultStatus);
-    formString += '<div style="position: absolute; left: 43.5%; top: 2px; right: 69px; padding: 0px;">' + selectForm + "<input type='hidden' name='" + postType + "ParticipantSelectBarInput' id='" + postType + "ParticipantSelectBarInput' ></div>";
+    formString += '<div style="position: absolute; left: 43.5%; top: 2px; right: 69px; padding: 0px;">' + selectForm + "</div>";
 
     // Add dropdown div
     formString += '<div id="' + postType + 'ParticipantDropdown" class="previewDropdownPanel" style="position: absolute; left: 0; right: 58%; top: 35px; margin-right: 1px; min-width: 184.5px; display: none; max-width: 234px;"></div>';
