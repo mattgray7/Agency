@@ -210,7 +210,7 @@ function addCreateCastingPost(formDict, formURL, formName){
                     // Add participants panel
                     if(participants != null && participants.length > 0){
                         var participantTableInfo = getPostParticipantTable(postID, participants);
-                        sectionInputTableElement += "<div id='postParticipantTableContainer' style='height: " + participantTableInfo["tableHeight"] + "px;'>" + participantTableInfo["html"] + "</div>"
+                        sectionInputTableElement += "<div id='postParticipantTableContainer' style='position: relative; height: " + participantTableInfo["tableHeight"] + "px;'>" + participantTableInfo["html"] + "</div>"
                         sectionLabelTableElement += "<div id='postParticipantLabelContainer' style='height: " + (participantTableInfo["tableHeight"] - 10) +  "px;'></div>";
                     }
 
