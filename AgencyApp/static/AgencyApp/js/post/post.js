@@ -1379,7 +1379,6 @@ function savePostParticipant(postID, postType, inputDivID, labelDivID){
         var labelInputValue = labelInputDiv.value;
         inputDiv.value = '';
         labelInputDiv.value = 'Interested';
-        console.log(labelInputValue)
 
         $.ajax({
                 url : "/ajax/savePostParticipant/",
@@ -1469,9 +1468,7 @@ function updatePostParticipationStatus(postID, postType, username){
             data : {"postID": postID, "username": username, "value": userStatus.value},
             type : 'POST',
             dataType: "json",
-            success : function(data) {
-                console.log(data["success"])
-            }
+            success : function(data) {}
         });
     }
 }
@@ -1532,14 +1529,12 @@ function getPostParticipantTable(postID, postType, participants,  formName, stat
 
             // Add status
             var statusLabel = user["status"];
-            console.log(statusLabel)
             if(statusLabel == null || statusLabel.length < 0 || statusLabel === "None"){
                 statusLabel = "Interested"
             }
-            console.log(statusLabel)
             var statusLabelID = postType + "ParticipationEditStatusSelect_" + user["username"]
             var selectForm = createSelectForm(formName, statusLabelID, statusSelectFields, statusLabel);
-            tableString += "<td id='" + statusLabelID + "' style='width: 35%; position: relative; height: 40px;'><div style='position:absolute; left: 0px; top: 1px; right: 2px;' onchange='updatePostParticipationStatus(" + '"' + postID + '", "' + postType + '", "' + user["username"] + '");' + "'>" + selectForm + "</div></td>";
+            tableString += "<td style='width: 35%; position: relative; height: 40px;'><div style='position:absolute; left: 0px; top: 1px; right: 2px;' onchange='updatePostParticipationStatus(" + '"' + postID + '", "' + postType + '", "' + user["username"] + '");' + "'>" + selectForm + "</div></td>";
 
             // Add public toggle
             tableString += "<td style='width: 15%; text-align: center;'><div style='margin-top: -8px;'><input type='checkbox' onclick='updatePostParticipationPrivacy(" + '"' + postID + '", "' + postType + '", "' + user["username"] + '");' + "' id='" + postType + "ParticipationPublicCheckbox_" + user["username"] + "' ";

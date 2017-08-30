@@ -329,7 +329,6 @@ def updatePostParticipationStatus(request):
     postID = request.POST.get("postID")
     username = request.POST.get("username")
     statusValue = request.POST.get("value")
-    print statsuValue
     success = False
     if postID and username:
         try:
