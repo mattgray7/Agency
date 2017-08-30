@@ -8,8 +8,8 @@
 <script type="text/javascript" src="{% static "/AgencyApp/js/image/image.js" %}"></script>
 <script type="text/javascript" src="{% static "/AgencyApp/js/post/post.js" %}"></script>
 <script>
-    var projectTabs = ["roles", "jobs", "events"];
-    var activeTab = "roles";
+    var projectTabs = ["casting", "jobs", "events"];
+    var activeTab = "casting";
     var projectPicture;
     var projectSubFormPicture;
 
@@ -73,7 +73,7 @@
         var entries;
         var sectionOrder;
         var titleFieldName;
-        if(tabType === "roles"){
+        if(tabType === "casting"){
             entries = getBrowseRolesDict();
             sectionOrder = ["Open", "Opening soon", "Cast"];
             titleFieldName = "characterName";
@@ -160,7 +160,7 @@
 
     function getFormNameFromTabType(tabType){
         var formName;
-        if(tabType === "roles"){
+        if(tabType === "casting"){
             formName = "createCastingPostForm";
         }else if(tabType === "jobs"){
             formName = "createWorkPostForm";
@@ -184,7 +184,7 @@
 
     var expanded = false;
     var transitionSpeed = 350;
-    var formHeights = {"roles": "1565px", "jobs": "1105px", "events": "780px"}
+    var formHeights = {"casting": "1565px", "jobs": "1105px", "events": "780px"}
     function toggleExpandNewForm(toggleType, panelType, animationFinishCallback){
         var newFormDiv = document.getElementById("insertNewFormDiv")
         var browsePostsDiv = document.getElementById("projectContentList")
@@ -211,7 +211,7 @@
             addElementStatusSelect(panelType);
             expanded = true;
 
-            if(panelType === "roles" || panelType === "jobs"){
+            if(panelType === "casting" || panelType === "jobs"){
                 $("#compensationTypeContainerRow").unbind('resize');
                 $("#compensationTypeContainerRow").resize(function(){
                     resizeCompensationPanel();
@@ -222,20 +222,18 @@
             }
 
             // Add participant dropdown
-            var dropdownDiv = document.getElementById("castingParticipantSearchTextInput");
+            var dropdownDiv = document.getElementById(activeTab + "ParticipantSearchTextInput");
             if(dropdownDiv != null){
-                console.log("dropdown div is not none")
                 dropdownDiv.onkeyup = function(event){
-                    console.log(event.keyCode)
                     //40 is down, 38 is up
                     if(event.keyCode === 40){
-                        moveDropdownFocus("down", "castingParticipantDropdown")
+                        moveDropdownFocus("down", activeTab + "ParticipantDropdown")
                     }else if(event.keyCode === 38){
-                        moveDropdownFocus("up", "castingParticipantDropdown")
+                        moveDropdownFocus("up", activeTab + "ParticipantDropdown")
                     }else if(event.keyCode === 13){
-                        selectDropdownFocusElement("castingParticipantDropdown");
+                        selectDropdownFocusElement(activeTab + "ParticipantDropdown");
                     }else{
-                        previewTextInDropdown("castingParticipantSearchTextInput", "castingParticipantDropdown", "searchPreviewActors");
+                        previewTextInDropdown(activeTab + "ParticipantSearchTextInput", activeTab + "ParticipantDropdown", "searchPreviewActors");
                     }
                 }
              }
@@ -300,7 +298,7 @@
                         if(formLoadCallback != null){
                             formLoadCallback();
                         }
-                        if(panelType === "roles" || panelType === "jobs"){
+                        if(panelType === "casting" || panelType === "jobs"){
                             $("#compensationTypeContainerRow").unbind('resize');
                             $("#compensationTypeContainerRow").resize(function(){
                                 resizeCompensationPanel();
@@ -398,8 +396,8 @@
 
     function isElementListEmpty(listType){
         var listEmpty = false;
-        if(listType == "roles"){
-            {% if not roles %}
+        if(listType == "casting"){
+            {% if not casting %}
                 listEmpty = true;
             {% endif %}
         }else if(listType == "jobs"){
@@ -637,7 +635,7 @@
 
     function createSinglePostDict(dataForm, imageURL){
         var postDict;
-        if(activeTab === "roles"){
+        if(activeTab === "casting"){
             postDict = createSingleRoleDict(dataForm, imageURL);
         }else if(activeTab === "jobs"){
             postDict = createSingleJobDict(dataForm, imageURL);
@@ -650,7 +648,7 @@
     function addNewPostToExistingList(postForm, imageURL, edit){
         // Get the existing list of entries, generate if non existing
         var entries;
-        if(activeTab === "roles"){
+        if(activeTab === "casting"){
             if(roleEntries == null){
                 entries = getBrowseRolesDict();
             }else{
@@ -701,7 +699,7 @@
         }
 
         // Set the global variable to the local var
-        if(activeTab === "roles"){
+        if(activeTab === "casting"){
             roleEntries = entries;
         }else if(activeTab === "jobs"){
             jobEntries = entries;
@@ -739,7 +737,7 @@
 
     function getNewElementForm(formType){
         var formString = "";
-        if(formType === "roles"){
+        if(formType === "casting"){
             formString += addCreateCastingPost(getCastingFormDict(true, null), "{{currentPageURL}}", "createCastingPostForm");
         }else if(formType === "jobs"){
             formString += addCreateWorkPost(getWorkFormDict(true, null), "{{currentPageURL}}", "createWorkPostForm");
@@ -751,7 +749,7 @@
 
     function setExistingElementForm(formType, postID, elementContentDiv, formLoadCallback){
         var formString = "";
-        if(formType === "roles"){
+        if(formType === "casting"){
             var castingFormDict = getExistingFormDict(postID, formType, function(postFields){
                 var newFormString = addCreateCastingPost(postFields, "{{currentPageURL}}", "createCastingPostForm");
                 elementContentDiv.innerHTML = newFormString;
@@ -850,7 +848,7 @@
                             data["postData"]["postPicture"] = newPictureURL
                         }
                         var formDict;
-                        if(postType === "roles"){
+                        if(postType === "casting"){
                             formDict = getCastingFormDict(false, data["postData"])
                         }else if(postType === "jobs"){
                             formDict = getWorkFormDict(false, data["postData"])
@@ -901,7 +899,7 @@
             }
 
             // Add other required fields (csrf_token, onCancel, etc)
-            postFields = modifyCastingPostFields(postFields, newPost, "roles");
+            postFields = modifyCastingPostFields(postFields, newPost, "casting");
         {% endif %}
         return postFields;
     }
@@ -966,9 +964,9 @@
         var elementStatusSelectDiv = document.getElementById("elementStatusSelectDiv");
         if(elementStatusSelectDiv != null){
             var options = null;
-            if(elementType == "roles"){
-                {% if statusOptions.roles %}
-                    options = {{statusOptions.roles|safe}}
+            if(elementType == "casting"){
+                {% if statusOptions.casting %}
+                    options = {{statusOptions.casting|safe}}
                 {% endif %}
             }else if(elementType == "jobs"){
                 {% if statusOptions.jobs %}
@@ -1092,7 +1090,7 @@
                 save = false;
             }else if(postField.name === "status"){
                 var options = [];
-                if("roles" in statusOptions && postType == "casting"){
+                if("casting" in statusOptions && postType == "casting"){
                     options = {{ statusOptions.roles|safe }}
                 }else if("jobs" in statusOptions && postType == "work"){
                     options = {{ statusOptions.jobs|safe }}
@@ -1105,7 +1103,7 @@
                 if(postField.value.length <= 0 || postField.value === "None"){
                     postField.value = "";
                 }
-                if(activeTab === "roles"){
+                if(activeTab === "casting"){
                     postField["placeholder"] = "John is a charismatic father of 2 who loves his dogs."
                 }else if(activeTab === "jobs"){
                     postField["placeholder"] = 'The hiree must be able to handle all camera operations for all set days. They will be compensated at an hourly rate, with potential for reshoots after primary production.';
@@ -1141,10 +1139,10 @@
                     }
                 }
             }else if(selectFields != null){
-                var roleSelectFields = {{ selectFields.roles.names|safe }};
+                var castingelectFields = {{ selectFields.roles.names|safe }};
                 var jobSelectFields = {{ selectFields.jobs.names|safe }}
-                if(roleSelectFields.indexOf(name) >= 0 && activeTab == "roles"){
-                    {% if selectFields.roles.options %}
+                if(castingelectFields.indexOf(name) >= 0 && activeTab == "casting"){
+                    {% if selectFields.casting.options %}
                         var options = {{ selectFields.roles.options|safe }}
                         postField.options = options[postField.name]
                     {% endif %}
@@ -1221,7 +1219,7 @@
         }
 
         var ajaxURL;
-        if(activeTab === "roles"){
+        if(activeTab === "casting"){
             setCompensationInputs()
             ajaxURL = "/ajax/createNewCastingPost/";
             {% if selectFields.roles.names %}
@@ -1352,9 +1350,9 @@
                     <tr>
                                 <td colspan="3" >
                                     <div style='position: relative; width: 100%; height: 55px;'>
-                                        <div class="projectTabButtonInactive" id="rolesButton" onclick="selectProjectTab('roles')" style="position: absolute; left: 0; margin-left: -1px;">
+                                        <div class="projectTabButtonInactive" id="castingButton" onclick="selectProjectTab('casting')" style="position: absolute; left: 0; margin-left: -1px;">
                                             Roles
-                                            <div id="rolesBorderCover" class="projectTabBorderCover"></div>
+                                            <div id="castingBorderCover" class="projectTabBorderCover"></div>
                                         </div>
                                         <div class="projectTabButtonInactive" id="jobsButton" onclick="selectProjectTab('jobs')" style="position: absolute; left:33.8%;">
                                                     Jobs
@@ -1373,17 +1371,17 @@
                                         <div style='height:2px;'></div>
                                         <table style='width: 100%;'>
                                             <tr>
-                                                <td id='addNewTableCol_roles' style='width: 33.3%;'>
+                                                <td id='addNewTableCol_casting' style='width: 33.3%;'>
                                                     <center>
                                                             <script>
                                                                 {% if roles %}
-                                                                    document.write(createAddNewButton("roles"));
+                                                                    document.write(createAddNewButton("casting"));
                                                                 {% elif jobs %}
                                                                     document.write(createAddNewButton("jobs"));
                                                                 {% elif events %}
                                                                     document.write(createAddNewButton("events"));
                                                                 {% else %}
-                                                                    document.write(createAddNewButton("roles"));
+                                                                    document.write(createAddNewButton("casting"));
                                                                 {% endif %}
                                                             </script>
                                                     </center>
@@ -1419,7 +1417,7 @@
         projectFormDiv.innerHTML = newForm;
     }
 
-    selectProjectTab("roles")
+    selectProjectTab("casting")
     var statusSelectDiv = document.getElementById("statusSelectDiv");
     if(statusSelectDiv != null){
         var options = null;
