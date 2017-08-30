@@ -47,6 +47,8 @@ urlpatterns = [
     url(r'^ajax/savePostParticipant/$', ajax.savePostParticipant, name='savePostParticipant'),  #TODO find a way to secure this link
     url(r'^ajax/deletePostParticipant/$', ajax.deletePostParticipant, name='deletePostParticipant'),  #TODO find a way to secure this link
     url(r'^ajax/updatePostParticipationPrivacy/$', ajax.updatePostParticipationPrivacy, name='updatePostParticipationPrivacy'),  #TODO find a way to secure this link
+    url(r'^ajax/updatePostParticipationStatus/$', ajax.updatePostParticipationStatus, name='updatePostParticipationStatus'),  #TODO find a way to secure this link
+
 
     url(r'^ajax/getSearchPreviewActors/$', ajax.getSearchPreviewActors, name='getSearchPreviewActors'),  #TODO find a way to secure this link
 

@@ -1379,10 +1379,11 @@ function savePostParticipant(postID, postType, inputDivID, labelDivID){
         var labelInputValue = labelInputDiv.value;
         inputDiv.value = '';
         labelInputDiv.value = 'Interested';
+        console.log(labelInputValue)
 
         $.ajax({
                 url : "/ajax/savePostParticipant/",
-                data : {"postID": postID, "name": inputData, "label": labelInputValue, "publicParticipation": false},
+                data : {"postID": postID, "name": inputData, "status": labelInputValue, "publicParticipation": false},
                 type : 'POST',
                 dataType: "json",
                 success : function(data) {
@@ -1460,6 +1461,21 @@ function deletePostParticipant(postID, postType, username){
     });
 }
 
+function updatePostParticipationStatus(postID, postType, username){
+    var userStatus = document.getElementById(postType + 'ParticipationEditStatusSelect_' + username)
+    if(userStatus != null){
+        $.ajax({
+            url : "/ajax/updatePostParticipationStatus/",
+            data : {"postID": postID, "username": username, "value": userStatus.value},
+            type : 'POST',
+            dataType: "json",
+            success : function(data) {
+                console.log(data["success"])
+            }
+        });
+    }
+}
+
 function updatePostParticipationPrivacy(postID, postType, username){
     var publicCheckbox = document.getElementById(postType + 'ParticipationPublicCheckbox_' + username)
     if(publicCheckbox != null){
@@ -1496,8 +1512,7 @@ function getPostParticipantTable(postID, postType, participants,  formName, stat
         if(postType in postParticipantSelectFields){
             statusSelectFields = postParticipantSelectFields[postType]
         }else{
-            console.log("ERROR DOING POST PART TABLE")
-            return
+            return;
         }
     }else{
         if(!(postType in postParticipantSelectFields)){
@@ -1516,14 +1531,15 @@ function getPostParticipantTable(postID, postType, participants,  formName, stat
             tableString += "<tr><td style='width:35%; position: relative;'><div style='position: absolute; left: 5px; top: 2px;'><a onclick='redirectToUser(" + '"' + user["username"] + '");' + "'>" + user["cleanName"] + "</div><img style='position: absolute; right: 0; top: 0; width: 32px; height: 36px; border: 1px solid rgba(0,0,0,0.2); border-radius: 2px;' id='actorPictureImg' src='" + user.profilePictureURL + "'/></td>";
 
             // Add status
-            var label = user["label"];
-            console.log("label is " + label)
-            if(label == null || label.length < 0 || label === "None"){
-                label = "Interested"
+            var statusLabel = user["status"];
+            console.log(statusLabel)
+            if(statusLabel == null || statusLabel.length < 0 || statusLabel === "None"){
+                statusLabel = "Interested"
             }
+            console.log(statusLabel)
             var statusLabelID = postType + "ParticipationEditStatusSelect_" + user["username"]
-            var selectForm = createSelectForm(formName, statusLabelID, statusSelectFields, label);
-            tableString += "<td id='" + statusLabelID + "' style='width: 35%; position: relative; height: 40px;'><div style='position:absolute; left: 5px; top: 1px;'>" + selectForm + "</div></td>";
+            var selectForm = createSelectForm(formName, statusLabelID, statusSelectFields, statusLabel);
+            tableString += "<td id='" + statusLabelID + "' style='width: 35%; position: relative; height: 40px;'><div style='position:absolute; left: 0px; top: 1px; right: 2px;' onchange='updatePostParticipationStatus(" + '"' + postID + '", "' + postType + '", "' + user["username"] + '");' + "'>" + selectForm + "</div></td>";
 
             // Add public toggle
             tableString += "<td style='width: 15%; text-align: center;'><div style='margin-top: -8px;'><input type='checkbox' onclick='updatePostParticipationPrivacy(" + '"' + postID + '", "' + postType + '", "' + user["username"] + '");' + "' id='" + postType + "ParticipationPublicCheckbox_" + user["username"] + "' ";

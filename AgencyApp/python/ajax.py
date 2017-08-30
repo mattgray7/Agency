@@ -263,7 +263,7 @@ def getPostData(request):
 
 def savePostParticipant(request):
     postID = request.POST.get("postID")
-    label = request.POST.get("label") or "Involved"
+    statusLabel = request.POST.get("status") or "Involved"
     publicParticipation = request.POST.get("publicParticipation") == "true"
     success = False
     matchingUser = None
@@ -288,14 +288,14 @@ def savePostParticipant(request):
                     existingParticipant = models.PostParticipant.objects.get(postID=postID, username=matchingUser.username)
                 except models.PostParticipant.DoesNotExist:
                     # Create it it if it doesn't exist (if it does, TODO update the label?)
-                    existingParticipant = models.PostParticipant(postID=postID, username=matchingUser.username, label=label, publicParticipation=publicParticipation)
+                    existingParticipant = models.PostParticipant(postID=postID, username=matchingUser.username, status=statusLabel, publicParticipation=publicParticipation)
                     existingParticipant.save()
                 success = True
     return JsonResponse({"success": success, "user": matchingUser and {"username": matchingUser.username,
                                                                        "cleanName": matchingUser.cleanName,
                                                                        "profilePictureURL": matchingUser.profilePicture and matchingUser.profilePicture.url or constants.NO_PROFILE_PICTURE_PATH,
                                                                        "profession": matchingUser.mainProfession,
-                                                                       "label": label,
+                                                                       "status": statusLabel,
                                                                        "publicParticipation": publicParticipation}})
 
 def deletePostParticipant(request):
@@ -322,6 +322,24 @@ def updatePostParticipationPrivacy(request):
         else:
             part.publicParticipation = privacyValue
             part.save()
+            success = True
+    return JsonResponse({"success": success})
+
+def updatePostParticipationStatus(request):
+    postID = request.POST.get("postID")
+    username = request.POST.get("username")
+    statusValue = request.POST.get("value")
+    print statsuValue
+    success = False
+    if postID and username:
+        try:
+            part = models.PostParticipant.objects.get(postID=postID, username=username)
+        except models.PostParticipant.DoesNotExist:
+            pass
+        else:
+            part.status = statusValue
+            part.save()
+            success = True
     return JsonResponse({"success": success})
 
 def getSearchPreviewActors(request):

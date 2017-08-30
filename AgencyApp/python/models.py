@@ -133,7 +133,7 @@ class AbstractPost(models.Model):
 class PostParticipant(models.Model):
     postID = models.CharField(max_length=10)
     username = models.CharField(max_length=200)
-    label = models.CharField(max_length=200, default=None, blank=True, null=True)
+    status = models.CharField(max_length=200, default=None, blank=True, null=True)
     publicParticipation = models.BooleanField(default=False, blank=True, null=True)
 
 class ProjectPost(AbstractPost):
