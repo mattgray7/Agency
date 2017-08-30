@@ -259,6 +259,23 @@ def getPostData(request):
                 dataDict["postPicture"] = postObj.postPicture and str(postObj.postPicture.url)
             success = True
 
+            # Get participants
+            participants = models.PostParticipant.objects.filter(postID=postID)
+            participantList = []
+            if participants:
+                for part in participants:
+                    try:
+                        user = models.UserAccount.objects.get(username=part.username)
+                    except models.UserAccount.DoesNotExist:
+                        continue
+                    else:
+                        newPart = {"username": part.username, "status": part.status,
+                                   "publicParticipation": part.publicParticipation,
+                                   "profilePictureURL": user.profilePicture and user.profilePicture.url or constants.NO_PROFILE_PICTURE_PATH,
+                                   "cleanName": user.cleanName, "profession": user.mainProfession}
+                        participantList.append(newPart)
+            if participantList:
+                dataDict["participants"] = participantList
     return JsonResponse({"success": success, "postData": dataDict})
 
 def savePostParticipant(request):
