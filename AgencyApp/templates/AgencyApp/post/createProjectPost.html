@@ -965,8 +965,8 @@
         if(elementStatusSelectDiv != null){
             var options = null;
             if(elementType == "casting"){
-                {% if statusOptions.casting %}
-                    options = {{statusOptions.casting|safe}}
+                {% if statusOptions.roles %}
+                    options = {{statusOptions.roles|safe}}
                 {% endif %}
             }else if(elementType == "jobs"){
                 {% if statusOptions.jobs %}
@@ -1090,7 +1090,7 @@
                 save = false;
             }else if(postField.name === "status"){
                 var options = [];
-                if("casting" in statusOptions && postType == "casting"){
+                if("roles" in statusOptions && postType == "casting"){
                     options = {{ statusOptions.roles|safe }}
                 }else if("jobs" in statusOptions && postType == "work"){
                     options = {{ statusOptions.jobs|safe }}
@@ -1142,7 +1142,7 @@
                 var castingelectFields = {{ selectFields.roles.names|safe }};
                 var jobSelectFields = {{ selectFields.jobs.names|safe }}
                 if(castingelectFields.indexOf(name) >= 0 && activeTab == "casting"){
-                    {% if selectFields.casting.options %}
+                    {% if selectFields.roles.options %}
                         var options = {{ selectFields.roles.options|safe }}
                         postField.options = options[postField.name]
                     {% endif %}
