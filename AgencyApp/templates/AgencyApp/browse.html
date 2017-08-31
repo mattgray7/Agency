@@ -8,19 +8,19 @@
 
 <div id='backgroundPanel' class='backgroundPanel' style='min-width: 700px;'>
     <div id="mainViewPanel" class="mainViewPanel" style="position: relative; min-width: 700px; max-width: 700px;">
-    	<table style="margin-top: 10px; width: 100%;">
+        <table style="margin-top: 10px; width: 100%;">
             <tr>
                 <td colspan="3" >
                     <div style='position: relative; width: 100%; height: 55px;'>
                         <div class="projectTabButtonInactive" id="castingButton" onclick="selectProjectTab('casting')" style="position: absolute; left: 0; margin-left: -3px;">
                             POSTS
-                        	<div id="castingBorderCover" class="projectTabBorderCover"></div>
-                    	</div>
-                    	<div class="projectTabButtonInactive" id="jobsButton" onclick="selectProjectTab('jobs')" style="position: absolute; left:33.35%;">
-                            USERS
-                    		<div id="jobsBorderCover" class="projectTabBorderCover"></div>
+                            <div id="castingBorderCover" class="projectTabBorderCover"></div>
                         </div>
-                    	<div class="projectTabButtonInactive" id="eventsButton" onclick="selectProjectTab('events')" style="position: absolute; right: 0; margin-right: -3px;">
+                        <div class="projectTabButtonInactive" id="jobsButton" onclick="selectProjectTab('jobs')" style="position: absolute; left:33.35%;">
+                            USERS
+                            <div id="jobsBorderCover" class="projectTabBorderCover"></div>
+                        </div>
+                        <div class="projectTabButtonInactive" id="eventsButton" onclick="selectProjectTab('events')" style="position: absolute; right: 0; margin-right: -3px;">
                             EVENTS
                             <div id="eventsBorderCover" class="projectTabBorderCover"></div>
                         </div>
@@ -28,11 +28,11 @@
                 </td>
             </tr>
         </table>
-    	<div id='browseContent' style='margin-top: -10px;'>
-    		<div id='searchPanel' class='browseSearchPanel' style='height: 200px;'></div>
-    		<br>
-    		<div id='searchResults' class='browseSearchResults' style='height: 400px;'></div>
-    	</div>
+        <div id='browseContent' style='margin-top: -10px;'>
+            <div id='searchPanel' class='browseSearchPanel' style='height: 200px;'></div>
+            <br>
+            <div id='searchResults' class='browseSearchResults' style='height: 400px;'></div>
+        </div>
     </div>
 </div>
 
@@ -41,47 +41,47 @@
 </script>
 
 <!--<script>
-	function search(){
-		var searchInput = document.getElementById("searchInput");
-		if(searchInput != null){
-			var searchValue = searchInput.value;
-			console.log(searchValue);
-		}
-	}
+    function search(){
+        var searchInput = document.getElementById("searchInput");
+        if(searchInput != null){
+            var searchValue = searchInput.value;
+            console.log(searchValue);
+        }
+    }
 
 </script>
 
 <div id="searchBar">
-	<div id="searchOptions"></div>
-		<ul>
-	   		<li id="searchOptions.post"><a href="/browse/posts/">Posts</a></li>
-			<li id="searchOptions.project"><a href="/browse/projects/">Projects</a></li>
-			<li id="searchOptions.event"><a href="/browse/events/">Events</a></li>
-			<li id="searchOptions.user"><a href="/browse/users/">Users</a></li>
-		</ul>
-		<br>
-		<div id="secondSearchOptions">
-			<div id="postSearchOptions" style="display:none">
-				<ul>
-					<li id="secondSearchOptions.casting"><a onclick='filterPosts("casting");'>Casting</a></li>
-					<li id="secondSearchOptions.work"><a onclick='filterPosts("work");'>Set Work</a></li>
-					<li id="secondSearchOptions.collaboration"><a onclick='filterPosts("collaboration");'>Collaboration</a></li>
-				</ul>
-			</div>
-			<div id="userSearchOptions" style="display:none">
-				<ul>
-					<li id="secondSearchOptions.actors"><a onclick='filterUsers("actors");'>Actors</a></li>
-					<li id="secondSearchOptions.workers"><a onclick='filterUsers("workers");'>On-set Workers</a></li>
-					<li id="secondSearchOptions.other"><a onclick='filterUsers("other");'>Other</a></li>
+    <div id="searchOptions"></div>
+        <ul>
+            <li id="searchOptions.post"><a href="/browse/posts/">Posts</a></li>
+            <li id="searchOptions.project"><a href="/browse/projects/">Projects</a></li>
+            <li id="searchOptions.event"><a href="/browse/events/">Events</a></li>
+            <li id="searchOptions.user"><a href="/browse/users/">Users</a></li>
+        </ul>
+        <br>
+        <div id="secondSearchOptions">
+            <div id="postSearchOptions" style="display:none">
+                <ul>
+                    <li id="secondSearchOptions.casting"><a onclick='filterPosts("casting");'>Casting</a></li>
+                    <li id="secondSearchOptions.work"><a onclick='filterPosts("work");'>Set Work</a></li>
+                    <li id="secondSearchOptions.collaboration"><a onclick='filterPosts("collaboration");'>Collaboration</a></li>
+                </ul>
+            </div>
+            <div id="userSearchOptions" style="display:none">
+                <ul>
+                    <li id="secondSearchOptions.actors"><a onclick='filterUsers("actors");'>Actors</a></li>
+                    <li id="secondSearchOptions.workers"><a onclick='filterUsers("workers");'>On-set Workers</a></li>
+                    <li id="secondSearchOptions.other"><a onclick='filterUsers("other");'>Other</a></li>
 
-				</ul>
-			</div>
-		</div>
-	</div>
-	<br>
-	<input type="text" placeholder="Search" name="searchInput" id="searchInput" />
-	<button onclick="search()"> Search</button>
-	<br><br>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <br>
+    <input type="text" placeholder="Search" name="searchInput" id="searchInput" />
+    <button onclick="search()"> Search</button>
+    <br><br>
 </div>
 
 <div id="eventsViewDiv"></div>
@@ -93,12 +93,12 @@
 <div id="browseCancelButton" class="button"><div id="cancelButtonLabel"></div></div>
 
 {% if source == possibleDestinations.viewPost %}
-	<script>
-	$(document).ready(function(){
-		var cancelButtonDiv2 = document.getElementById("browseCancelButton");
-		var cancelButton2 = createCancelButton(cancelButtonDiv2, "{{ possibleDestinations.browse }}", "{{ currentPageURL }}", "Back to browse")
-	});
-	</script>
+    <script>
+    $(document).ready(function(){
+        var cancelButtonDiv2 = document.getElementById("browseCancelButton");
+        var cancelButton2 = createCancelButton(cancelButtonDiv2, "{{ possibleDestinations.browse }}", "{{ currentPageURL }}", "Back to browse")
+    });
+    </script>
 {% endif %}
 
 <!-<div id="collabViewDiv"></div>
@@ -106,412 +106,412 @@
 <div id="castingViewDiv"></div>!->
 
 <script>/* TODO use this function when I have internet to fio how to pass django objects to a functino
-	function addPostPictureColumn(post){
-		// Add empty column even if a pic exists
-		var colString = '<td>';
-		{% if post.postPicture %}
-			colString += '<img src="' + post.postPicture.url + '" height="50px" width="70px"/>'
-		{% else %}
-			//TODO add a default pic
-			console.log(picURL)
-			colString += '<img height="50px" width="70px"/>'
-		{% endif %}
-		colString += '</td>';
-		return colString
-	}*/
+    function addPostPictureColumn(post){
+        // Add empty column even if a pic exists
+        var colString = '<td>';
+        {% if post.postPicture %}
+            colString += '<img src="' + post.postPicture.url + '" height="50px" width="70px"/>'
+        {% else %}
+            //TODO add a default pic
+            console.log(picURL)
+            colString += '<img height="50px" width="70px"/>'
+        {% endif %}
+        colString += '</td>';
+        return colString
+    }*/
 
-	/* TODO figure out how to make ajax call blocking when I get internet
-	function getFollowingCol(postID){
-		var followingCol = null;
-		$.ajax({
-			url : "/ajax/getPostFollowingBool/",
-			data : {"postID": postID},
-			type : 'POST',
-			dataType: "json",
-			success : function(data) {
-				followingCol += "<td>"
-				console.log("1. followingCol is " + followingCol);
+    /* TODO figure out how to make ajax call blocking when I get internet
+    function getFollowingCol(postID){
+        var followingCol = null;
+        $.ajax({
+            url : "/ajax/getPostFollowingBool/",
+            data : {"postID": postID},
+            type : 'POST',
+            dataType: "json",
+            success : function(data) {
+                followingCol += "<td>"
+                console.log("1. followingCol is " + followingCol);
 
-				if(data["following"]){
-					followingCol += "&#10004";
-				}
-				followingCol += "</td>";
-			}
-		});
-		return followingCol
-	}*/
-	var posterNameMap = {{ posterNameMap|safe }};
-
-
-	function getFollowingCol(postID){
-		var colString = "<td>";
-		{% for followingPostID in followingPostIDs %}
-			if(postID == "{{followingPostID}}"){
-				colString += "&#10004";
-				//TODO add django for loop break
-			}
-		{% endfor %}
-		colString += "</td>";
-		return colString
-	}
-
-	function createViewEventsTable(){
-		var tableString = '<h3>Browse events</h3>';
-		{% if events %}
-			tableString += '<table class="browseTable">';
-			tableString += ("<tr> " +
-								"<td></td>"	+  //post picture
-								"<td> Title </td>" +
-								"<td> Posted by </td>" +
-								"<td> Date </td>" +
-								"<td> Location </td>" +
-								"<td> Description </td>" +
-								"<td> Following </td>" +	// TODO don't add following column if user is not logged in
-							"</tr>");
-
-			//Add each event
-
-			{% for eventObj in events %}
-				var picURL = null;
-				{% if eventObj.postPicture %}
-					picURL = "{{ eventObj.postPicture.url }}"
-				{% endif %}
-				tableString += ("<tr>" + getPictureCol(picURL, "browseImage") +
-									"<td><button onclick='createPostRedirectForm(" + '"{{eventObj.postID}}","{{possibleDestinations.viewPost}}"' + ");'>{{eventObj.title}}</button></td>" +
-									"<td><div id='" + getNextProfileName() + "'>{{eventObj.poster}}</td>" +
-									"<td>{{eventObj.date}}</td>" +
-									"<td>{{eventObj.location}}</td>" +
-									"<td>{{eventObj.description}}</td>" + getFollowingCol("{{eventObj.postID}}") + 
-								"</tr>");
-			{% endfor %}
-			tableString += "</table>";
-		{% endif %}
-		return tableString;
-	};
-
-	function createViewProjectsTable(){
-		var tableString = '<h3>Browse projects</h3>';
-		{% if projects %}
-			tableString += '<table class="browseTable">';
-			tableString += ("<tr><td></td>" +
-								"<td> Title </td>" +
-								"<td> Posted by </td>" +
-								"<td> Status </td>" +
-								"<td> Description </td>" +
-								"<td> Following </td>" +
-							"</tr>");
-
-			//Add each event
-			{% for projectObj in projects %}
-				var picURL = null;
-				{% if projectObj.postPicture %}
-					picURL = "{{ projectObj.postPicture.url }}"
-				{% endif %}
-				tableString += ("<tr>" + getPictureCol(picURL, "browseImage") +
-									"<td><button onclick='createPostRedirectForm(" + '"{{projectObj.postID}}","{{possibleDestinations.viewPost}}"' + ");'>{{projectObj.title}}</button></td>" +
-										"<td><div id='" + getNextProfileName() + "'>{{projectObj.poster}}</td>" +
-									"<td>{{projectObj.status}}</td>" +
-									"<td>{{projectObj.description}}</td>" + getFollowingCol("{{projectObj.postID}}") +
-								"</tr>");
-
-			{% endfor %}
-			tableString += "</table>";
-		{% endif %}
-		return tableString;
-	};
-
-	function createViewUsersTable(userType){
-		var tableTitle = "<h3> Browse users</h3>"
-		var userList = [];
-		if(userType === "actors"){
-			tableTitle = "<h3> Browse actors</h3>"
-			{% for actor in actors %}
-				var actorObj = {username: "{{actor.username}}",
-								profilePictureURL: null};
-				{% if actor.profilePicture %}
-					actorObj["profilePictureURL"] = "{{actor.profilePicture.url}}";
-				{% endif %}
-				userList.push(actorObj)
-			{% endfor %}
-		}else if(userType === "workers"){
-			tableTitle = "<h3> Browse on-set workers</h3>"
-			{% for worker in workers %}
-				var workerObj = {username: "{{worker.username}}",
-								 profilePictureURL: null};
-				{% if worker.profilePicture %}
-					workerObj["profilePictureURL"] = "{{worker.profilePicture.url}}";
-				{% endif %}
-				userList.push(workerObj)
-			{% endfor %}
-		}else{
-			tableTitle = "<h3> Browse other amateur and professional filmmakers</h3>"
-			{% for user in other %}
-				var userObj = {username: "{{user.username}}",
-							   profilePictureURL: null};
-				{% if user.profilePicture %}
-					userObj["profilePictureURL"] = "{{user.profilePicture.url}}";
-				{% endif %}
-				userList.push(userObj)
-			{% endfor %}
-		}
-
-		var tableString = tableTitle;
-		if(userList.length > 0){
-			tableString += '<table class="browseTable">';
-			tableString += ("<tr><td></td>" +
-								"<td> Name </td>" +
-								"<td> Professions </td>" +
-							"</tr>");
-
-			var posterNameMap = {{ posterNameMap|safe }};
-			if(userList != null){
-				for(var i=0; i < userList.length; i++){
-					var userObj = userList[i];
-					
-					var professionCol = "<td>";
-					{% if posterProfessionMap %}
-						var posterProfessionMap = {{ posterProfessionMap|safe }};
-						professionCol += posterProfessionMap[userObj["username"]];
-					{% endif %}
-					professionCol += "</td>";
-					var newRow = ("<tr>" + getPictureCol(userObj["profilePictureURL"], "browseImage") + "<td><button onclick='createProfileRedirectForm(" + '"' + userObj["username"] + '");' + "'>" + posterNameMap[userObj["username"]] + "</button></td>" + professionCol + "</tr>");
-					tableString += newRow;
-				}
-			}
-		}
-		tableString += "</table>";
-		return tableString;
-	};
-
-	function getPictureCol(sourceURL, className){
-		pictureCol = "<td>"
-		if(sourceURL != null && sourceURL != ""){
-			pictureCol += '<img class="' + className + '" width="150px" src="' + sourceURL + '" />';
-		}else{
-			pictureCol += '<img class="' + className + '" width="150px" height="150px">';
-		}
-		pictureCol += "</td>";
-		return pictureCol;
-	}
-
-	function createViewCollabPostTable(){
-		var tableString = '<h3>Browse posts seeking collaborators</h3>';
-		{% if posts.collaboration %}
-			tableString += '<table class="browseTable">';
-			tableString += ("<tr><td></td>" +
-								"<td> Title </td>" +
-								"<td> Posted by </td>" +
-								"<td> Seeking </td>" +
-								"<td> Description </td>" +
-								"<td> Following </td>" +
-							"</tr>");
-
-			//Add each event
-			{% for collabObj in posts.collaboration %}
-				var picURL = null;
-				{% if collabObj.postPicture %}
-					picURL = "{{ collabObj.postPicture.url }}"
-				{% endif %}
-				tableString += ("<tr>" + getPictureCol(picURL, "browseImage") +
-									"<td><button onclick='createPostRedirectForm(" + '"{{collabObj.postID}}","{{possibleDestinations.viewPost}}"' + ");'>{{collabObj.title}}</button></td>" +
-									"<td><div id='" + getNextProfileName() + "'>{{collabObj.poster}}</td>" +
-									"<td>{{collabObj.collaboratorRole}}</td>" +
-									"<td>{{collabObj.description}}</td>" + getFollowingCol("{{collabObj.postID}}") +
-								"</tr>");
-
-			{% endfor %}
-			tableString += "</table>";
-		{% endif %}
-		return tableString;
-	};
+                if(data["following"]){
+                    followingCol += "&#10004";
+                }
+                followingCol += "</td>";
+            }
+        });
+        return followingCol
+    }*/
+    var posterNameMap = {{ posterNameMap|safe }};
 
 
-	function createViewWorkPostTable(){
-		var tableString = '<h3>Browse posts seeking crew members</h3>';
-		{% if posts.work %}
-			tableString += '<table class="browseTable">';
-			tableString += ("<tr><td></td>" +
-								"<td> Title </td>" +
-								"<td> Posted by </td>" +
-								"<td> Seeking </td>" +
-								"<td> Description </td>" +
-								"<td> Paid </td>" +
-								"<td> Following </td>" +
-							"</tr>");
+    function getFollowingCol(postID){
+        var colString = "<td>";
+        {% for followingPostID in followingPostIDs %}
+            if(postID == "{{followingPostID}}"){
+                colString += "&#10004";
+                //TODO add django for loop break
+            }
+        {% endfor %}
+        colString += "</td>";
+        return colString
+    }
 
-			//Add each event
-			{% for workObj in posts.work %}
-				var picURL = null;
-				{% if workObj.postPicture %}
-					picURL = "{{ workObj.postPicture.url }}"
-				{% endif %}
-				tableString += ("<tr>" + getPictureCol(picURL, "browseImage") +
-									"<td><button onclick='createPostRedirectForm(" + '"{{workObj.postID}}","{{possibleDestinations.viewPost}}"' + ");'>{{workObj.title}}</button></td>" +
-									"<td><div id='" + getNextProfileName() + "'>{{workObj.poster}}</td>" +
-									"<td>{{workObj.profession}}</td>" +
-									"<td>{{workObj.description}}</td>")
-				
-				// Add tick or x for paid
-				{% if workObj.paid %}
-					tableString += "<td>&#10004;</td>";
-				{% else %}
-					tableString += "<td></td>";
-				{% endif %}
-				tableString += getFollowingCol("{{workObj.postID}}");
-				tableString += "</tr>";
-			{% endfor %}
-			tableString += "</table>";
-		{% endif %}
-		return tableString;
-	};
+    function createViewEventsTable(){
+        var tableString = '<h3>Browse events</h3>';
+        {% if events %}
+            tableString += '<table class="browseTable">';
+            tableString += ("<tr> " +
+                                "<td></td>" +  //post picture
+                                "<td> Title </td>" +
+                                "<td> Posted by </td>" +
+                                "<td> Date </td>" +
+                                "<td> Location </td>" +
+                                "<td> Description </td>" +
+                                "<td> Following </td>" +    // TODO don't add following column if user is not logged in
+                            "</tr>");
 
-	function createViewCastingPostTable(){
-		var tableString = '<h3>Browse casting posts</h3>';
-		{% if posts.casting %}
-			tableString += '<table class="browseTable">';
-			tableString += ("<tr><td></td>" +
-								"<td> Title </td>" +
-								"<td> Posted by </td>" +
-								"<td> Description </td>" +
-								"<td> Paid </td>" +
-								"<td> Following </td>" +
-							"</tr>");
+            //Add each event
 
-			//Add each event
-			{% for castingObj in posts.casting %}
-				var picURL = null;
-				{% if castingObj.postPicture %}
-					picURL = "{{ castingObj.postPicture.url }}"
-				{% endif %}
-				tableString += ("<tr>" + getPictureCol(picURL, "browseImage") +
-									"<td><button onclick='createPostRedirectForm(" + '"{{castingObj.postID}}","{{possibleDestinations.viewPost}}"' + ");'>{{castingObj.title}}</button></td>" +
-									"<td><div id='" + getNextProfileName() + "'>{{castingObj.poster}}</td>" +
-									"<td>{{castingObj.description}}</td>")
-				
-				// Add tick or x for paid
-				{% if castingObj.paid %}
-					tableString += "<td>&#10004;</td>";
-				{% else %}
-					tableString += "<td></td>";
-				{% endif %}
-				tableString += getFollowingCol("{{castingObj.postID}}");
-				tableString += "</tr>";
-			{% endfor %}
-			tableString += "</table>";
-		{% endif %}
-		return tableString;
-	};
+            {% for eventObj in events %}
+                var picURL = null;
+                {% if eventObj.postPicture %}
+                    picURL = "{{ eventObj.postPicture.url }}"
+                {% endif %}
+                tableString += ("<tr>" + getPictureCol(picURL, "browseImage") +
+                                    "<td><button onclick='createPostRedirectForm(" + '"{{eventObj.postID}}","{{possibleDestinations.viewPost}}"' + ");'>{{eventObj.title}}</button></td>" +
+                                    "<td><div id='" + getNextProfileName() + "'>{{eventObj.poster}}</td>" +
+                                    "<td>{{eventObj.date}}</td>" +
+                                    "<td>{{eventObj.location}}</td>" +
+                                    "<td>{{eventObj.description}}</td>" + getFollowingCol("{{eventObj.postID}}") + 
+                                "</tr>");
+            {% endfor %}
+            tableString += "</table>";
+        {% endif %}
+        return tableString;
+    };
 
-	function createPostRedirectForm(postID, destinationPageName){
-		//Create a dict with the postID
-		var extraInputs = []
-		extraInputs.push({key: "postID", value: postID});
-		var form = createPageRedirectForm("{{ next }}", "{{ next }}", destinationPageName, "{{ currentPageURL }}", extraInputs);
-		form.submit();
-	}
+    function createViewProjectsTable(){
+        var tableString = '<h3>Browse projects</h3>';
+        {% if projects %}
+            tableString += '<table class="browseTable">';
+            tableString += ("<tr><td></td>" +
+                                "<td> Title </td>" +
+                                "<td> Posted by </td>" +
+                                "<td> Status </td>" +
+                                "<td> Description </td>" +
+                                "<td> Following </td>" +
+                            "</tr>");
 
-	function createProfileRedirectForm(username){
-		var extraInputs = []
-		extraInputs.push({key: "profileName", value: username});
-		var form = createPageRedirectForm("{{ next }}", "{{ next }}", "{{ possibleDestinations.profile }}", "{{ currentPageURL }}", extraInputs);
-		form.submit();
-	}
+            //Add each event
+            {% for projectObj in projects %}
+                var picURL = null;
+                {% if projectObj.postPicture %}
+                    picURL = "{{ projectObj.postPicture.url }}"
+                {% endif %}
+                tableString += ("<tr>" + getPictureCol(picURL, "browseImage") +
+                                    "<td><button onclick='createPostRedirectForm(" + '"{{projectObj.postID}}","{{possibleDestinations.viewPost}}"' + ");'>{{projectObj.title}}</button></td>" +
+                                        "<td><div id='" + getNextProfileName() + "'>{{projectObj.poster}}</td>" +
+                                    "<td>{{projectObj.status}}</td>" +
+                                    "<td>{{projectObj.description}}</td>" + getFollowingCol("{{projectObj.postID}}") +
+                                "</tr>");
 
-	function displayEvents(){
-		document.getElementById("searchOptions.event").className = "active";
-		{% if events %}
-			document.getElementById("eventsViewDiv").innerHTML = createViewEventsTable();
-		{% else %}
-			document.getElementById("eventsViewDiv").innerHTML = "<h3> No events posted </h3>";
-		{% endif %}
-	}
+            {% endfor %}
+            tableString += "</table>";
+        {% endif %}
+        return tableString;
+    };
 
-	function displayPosts(){
-		secondSearchOptions = document.getElementById("postSearchOptions");
-		if(secondSearchOptions != null){
-			secondSearchOptions.style.display = "block";
-			document.getElementById("secondSearchOptions.work").className = "active";
-			document.getElementById("searchOptions.post").className = "active";
-			filterPosts("casting");
-		}
-	}
+    function createViewUsersTable(userType){
+        var tableTitle = "<h3> Browse users</h3>"
+        var userList = [];
+        if(userType === "actors"){
+            tableTitle = "<h3> Browse actors</h3>"
+            {% for actor in actors %}
+                var actorObj = {username: "{{actor.username}}",
+                                profilePictureURL: null};
+                {% if actor.profilePicture %}
+                    actorObj["profilePictureURL"] = "{{actor.profilePicture.url}}";
+                {% endif %}
+                userList.push(actorObj)
+            {% endfor %}
+        }else if(userType === "workers"){
+            tableTitle = "<h3> Browse on-set workers</h3>"
+            {% for worker in workers %}
+                var workerObj = {username: "{{worker.username}}",
+                                 profilePictureURL: null};
+                {% if worker.profilePicture %}
+                    workerObj["profilePictureURL"] = "{{worker.profilePicture.url}}";
+                {% endif %}
+                userList.push(workerObj)
+            {% endfor %}
+        }else{
+            tableTitle = "<h3> Browse other amateur and professional filmmakers</h3>"
+            {% for user in other %}
+                var userObj = {username: "{{user.username}}",
+                               profilePictureURL: null};
+                {% if user.profilePicture %}
+                    userObj["profilePictureURL"] = "{{user.profilePicture.url}}";
+                {% endif %}
+                userList.push(userObj)
+            {% endfor %}
+        }
 
-	function filterPosts(postType){
-		var postDivHTML = "";
-		document.getElementById("secondSearchOptions.casting").className = "";
-		document.getElementById("secondSearchOptions.work").className = "";
-		document.getElementById("secondSearchOptions.collaboration").className = "";
-		if(postType === "casting"){
-			document.getElementById("secondSearchOptions.casting").className = "active";
-			{% if posts.casting %}
-				postDivHTML += createViewCastingPostTable();
-			{% else %}
-				postDivHTML +="<h3> No casting ads posted</h3>";
-			{% endif %}
-		}else if(postType === "work"){
-			document.getElementById("secondSearchOptions.work").className = "active";
-			{% if posts.work %}
-				postDivHTML += createViewWorkPostTable();
-			{% else %}
-				postDivHTML +="<h3> No work ads posted</h3>";
-			{% endif %}
-		}else if(postType === "collaboration"){
-			document.getElementById("secondSearchOptions.collaboration").className = "active";
-			{% if posts.collaboration %}
-				postDivHTML += createViewCollabPostTable();
-			{% else %}
-				postDivHTML +="<h3> No collaboration ads posted</h3>";
-			{% endif %}
-		}
-		document.getElementById("postsViewDiv").innerHTML = postDivHTML;
-	}
+        var tableString = tableTitle;
+        if(userList.length > 0){
+            tableString += '<table class="browseTable">';
+            tableString += ("<tr><td></td>" +
+                                "<td> Name </td>" +
+                                "<td> Professions </td>" +
+                            "</tr>");
 
-	function displayUsers(){
-		secondSearchOptions = document.getElementById("userSearchOptions");
-		if(secondSearchOptions != null){
-			secondSearchOptions.style.display = "block";
-			document.getElementById("searchOptions.user").className = "active";
-			filterUsers("actors");
-		}
-	}
+            var posterNameMap = {{ posterNameMap|safe }};
+            if(userList != null){
+                for(var i=0; i < userList.length; i++){
+                    var userObj = userList[i];
+                    
+                    var professionCol = "<td>";
+                    {% if posterProfessionMap %}
+                        var posterProfessionMap = {{ posterProfessionMap|safe }};
+                        professionCol += posterProfessionMap[userObj["username"]];
+                    {% endif %}
+                    professionCol += "</td>";
+                    var newRow = ("<tr>" + getPictureCol(userObj["profilePictureURL"], "browseImage") + "<td><button onclick='createProfileRedirectForm(" + '"' + userObj["username"] + '");' + "'>" + posterNameMap[userObj["username"]] + "</button></td>" + professionCol + "</tr>");
+                    tableString += newRow;
+                }
+            }
+        }
+        tableString += "</table>";
+        return tableString;
+    };
 
-	function filterUsers(userType){
-		var postDivHTML = "";
-		document.getElementById("secondSearchOptions.actors").className = "";
-		document.getElementById("secondSearchOptions.workers").className = "";
-		document.getElementById("secondSearchOptions.other").className = "";
-		if(userType === "actors"){
-			document.getElementById("secondSearchOptions.actors").className = "active";
-		}else if(userType === "workers"){
-			document.getElementById("secondSearchOptions.workers").className = "active";
-		}else{
-			document.getElementById("secondSearchOptions.other").className = "active";
-		}
+    function getPictureCol(sourceURL, className){
+        pictureCol = "<td>"
+        if(sourceURL != null && sourceURL != ""){
+            pictureCol += '<img class="' + className + '" width="150px" src="' + sourceURL + '" />';
+        }else{
+            pictureCol += '<img class="' + className + '" width="150px" height="150px">';
+        }
+        pictureCol += "</td>";
+        return pictureCol;
+    }
 
-		{% if posterNameMap %}
-			var userTable = createViewUsersTable(userType);
-			document.getElementById("usersViewDiv").innerHTML = userTable;
-		{% else %}
-			document.getElementById("usersViewDiv").innerHTML = "<h3> No users registered</h3>";
-		{% endif %}
-	}
+    function createViewCollabPostTable(){
+        var tableString = '<h3>Browse posts seeking collaborators</h3>';
+        {% if posts.collaboration %}
+            tableString += '<table class="browseTable">';
+            tableString += ("<tr><td></td>" +
+                                "<td> Title </td>" +
+                                "<td> Posted by </td>" +
+                                "<td> Seeking </td>" +
+                                "<td> Description </td>" +
+                                "<td> Following </td>" +
+                            "</tr>");
 
-	$(document).ready(function(){
-		if("{{browseType}}" == "{{possibleViews.events}}"){
-			displayEvents();
-		}else if("{{browseType}}" == "{{possibleViews.projects}}"){
-			document.getElementById("searchOptions.project").className = "active";
-			{% if projects %}
-				document.getElementById("projectsViewDiv").innerHTML = createViewProjectsTable();
-			{% else %}
-				document.getElementById("projectsViewDiv").innerHTML = "<h3> No projects posted </h3>";
-			{% endif %}
-		}else if("{{browseType}}" == "{{possibleViews.users}}"){
-			displayUsers();
-		}else if("{{browseType}}" == "{{possibleViews.posts}}"){
-			displayPosts();
-		}
-	});
+            //Add each event
+            {% for collabObj in posts.collaboration %}
+                var picURL = null;
+                {% if collabObj.postPicture %}
+                    picURL = "{{ collabObj.postPicture.url }}"
+                {% endif %}
+                tableString += ("<tr>" + getPictureCol(picURL, "browseImage") +
+                                    "<td><button onclick='createPostRedirectForm(" + '"{{collabObj.postID}}","{{possibleDestinations.viewPost}}"' + ");'>{{collabObj.title}}</button></td>" +
+                                    "<td><div id='" + getNextProfileName() + "'>{{collabObj.poster}}</td>" +
+                                    "<td>{{collabObj.collaboratorRole}}</td>" +
+                                    "<td>{{collabObj.description}}</td>" + getFollowingCol("{{collabObj.postID}}") +
+                                "</tr>");
+
+            {% endfor %}
+            tableString += "</table>";
+        {% endif %}
+        return tableString;
+    };
+
+
+    function createViewWorkPostTable(){
+        var tableString = '<h3>Browse posts seeking crew members</h3>';
+        {% if posts.work %}
+            tableString += '<table class="browseTable">';
+            tableString += ("<tr><td></td>" +
+                                "<td> Title </td>" +
+                                "<td> Posted by </td>" +
+                                "<td> Seeking </td>" +
+                                "<td> Description </td>" +
+                                "<td> Paid </td>" +
+                                "<td> Following </td>" +
+                            "</tr>");
+
+            //Add each event
+            {% for workObj in posts.work %}
+                var picURL = null;
+                {% if workObj.postPicture %}
+                    picURL = "{{ workObj.postPicture.url }}"
+                {% endif %}
+                tableString += ("<tr>" + getPictureCol(picURL, "browseImage") +
+                                    "<td><button onclick='createPostRedirectForm(" + '"{{workObj.postID}}","{{possibleDestinations.viewPost}}"' + ");'>{{workObj.title}}</button></td>" +
+                                    "<td><div id='" + getNextProfileName() + "'>{{workObj.poster}}</td>" +
+                                    "<td>{{workObj.profession}}</td>" +
+                                    "<td>{{workObj.description}}</td>")
+                
+                // Add tick or x for paid
+                {% if workObj.paid %}
+                    tableString += "<td>&#10004;</td>";
+                {% else %}
+                    tableString += "<td></td>";
+                {% endif %}
+                tableString += getFollowingCol("{{workObj.postID}}");
+                tableString += "</tr>";
+            {% endfor %}
+            tableString += "</table>";
+        {% endif %}
+        return tableString;
+    };
+
+    function createViewCastingPostTable(){
+        var tableString = '<h3>Browse casting posts</h3>';
+        {% if posts.casting %}
+            tableString += '<table class="browseTable">';
+            tableString += ("<tr><td></td>" +
+                                "<td> Title </td>" +
+                                "<td> Posted by </td>" +
+                                "<td> Description </td>" +
+                                "<td> Paid </td>" +
+                                "<td> Following </td>" +
+                            "</tr>");
+
+            //Add each event
+            {% for castingObj in posts.casting %}
+                var picURL = null;
+                {% if castingObj.postPicture %}
+                    picURL = "{{ castingObj.postPicture.url }}"
+                {% endif %}
+                tableString += ("<tr>" + getPictureCol(picURL, "browseImage") +
+                                    "<td><button onclick='createPostRedirectForm(" + '"{{castingObj.postID}}","{{possibleDestinations.viewPost}}"' + ");'>{{castingObj.title}}</button></td>" +
+                                    "<td><div id='" + getNextProfileName() + "'>{{castingObj.poster}}</td>" +
+                                    "<td>{{castingObj.description}}</td>")
+                
+                // Add tick or x for paid
+                {% if castingObj.paid %}
+                    tableString += "<td>&#10004;</td>";
+                {% else %}
+                    tableString += "<td></td>";
+                {% endif %}
+                tableString += getFollowingCol("{{castingObj.postID}}");
+                tableString += "</tr>";
+            {% endfor %}
+            tableString += "</table>";
+        {% endif %}
+        return tableString;
+    };
+
+    function createPostRedirectForm(postID, destinationPageName){
+        //Create a dict with the postID
+        var extraInputs = []
+        extraInputs.push({key: "postID", value: postID});
+        var form = createPageRedirectForm("{{ next }}", "{{ next }}", destinationPageName, "{{ currentPageURL }}", extraInputs);
+        form.submit();
+    }
+
+    function createProfileRedirectForm(username){
+        var extraInputs = []
+        extraInputs.push({key: "profileName", value: username});
+        var form = createPageRedirectForm("{{ next }}", "{{ next }}", "{{ possibleDestinations.profile }}", "{{ currentPageURL }}", extraInputs);
+        form.submit();
+    }
+
+    function displayEvents(){
+        document.getElementById("searchOptions.event").className = "active";
+        {% if events %}
+            document.getElementById("eventsViewDiv").innerHTML = createViewEventsTable();
+        {% else %}
+            document.getElementById("eventsViewDiv").innerHTML = "<h3> No events posted </h3>";
+        {% endif %}
+    }
+
+    function displayPosts(){
+        secondSearchOptions = document.getElementById("postSearchOptions");
+        if(secondSearchOptions != null){
+            secondSearchOptions.style.display = "block";
+            document.getElementById("secondSearchOptions.work").className = "active";
+            document.getElementById("searchOptions.post").className = "active";
+            filterPosts("casting");
+        }
+    }
+
+    function filterPosts(postType){
+        var postDivHTML = "";
+        document.getElementById("secondSearchOptions.casting").className = "";
+        document.getElementById("secondSearchOptions.work").className = "";
+        document.getElementById("secondSearchOptions.collaboration").className = "";
+        if(postType === "casting"){
+            document.getElementById("secondSearchOptions.casting").className = "active";
+            {% if posts.casting %}
+                postDivHTML += createViewCastingPostTable();
+            {% else %}
+                postDivHTML +="<h3> No casting ads posted</h3>";
+            {% endif %}
+        }else if(postType === "work"){
+            document.getElementById("secondSearchOptions.work").className = "active";
+            {% if posts.work %}
+                postDivHTML += createViewWorkPostTable();
+            {% else %}
+                postDivHTML +="<h3> No work ads posted</h3>";
+            {% endif %}
+        }else if(postType === "collaboration"){
+            document.getElementById("secondSearchOptions.collaboration").className = "active";
+            {% if posts.collaboration %}
+                postDivHTML += createViewCollabPostTable();
+            {% else %}
+                postDivHTML +="<h3> No collaboration ads posted</h3>";
+            {% endif %}
+        }
+        document.getElementById("postsViewDiv").innerHTML = postDivHTML;
+    }
+
+    function displayUsers(){
+        secondSearchOptions = document.getElementById("userSearchOptions");
+        if(secondSearchOptions != null){
+            secondSearchOptions.style.display = "block";
+            document.getElementById("searchOptions.user").className = "active";
+            filterUsers("actors");
+        }
+    }
+
+    function filterUsers(userType){
+        var postDivHTML = "";
+        document.getElementById("secondSearchOptions.actors").className = "";
+        document.getElementById("secondSearchOptions.workers").className = "";
+        document.getElementById("secondSearchOptions.other").className = "";
+        if(userType === "actors"){
+            document.getElementById("secondSearchOptions.actors").className = "active";
+        }else if(userType === "workers"){
+            document.getElementById("secondSearchOptions.workers").className = "active";
+        }else{
+            document.getElementById("secondSearchOptions.other").className = "active";
+        }
+
+        {% if posterNameMap %}
+            var userTable = createViewUsersTable(userType);
+            document.getElementById("usersViewDiv").innerHTML = userTable;
+        {% else %}
+            document.getElementById("usersViewDiv").innerHTML = "<h3> No users registered</h3>";
+        {% endif %}
+    }
+
+    $(document).ready(function(){
+        if("{{browseType}}" == "{{possibleViews.events}}"){
+            displayEvents();
+        }else if("{{browseType}}" == "{{possibleViews.projects}}"){
+            document.getElementById("searchOptions.project").className = "active";
+            {% if projects %}
+                document.getElementById("projectsViewDiv").innerHTML = createViewProjectsTable();
+            {% else %}
+                document.getElementById("projectsViewDiv").innerHTML = "<h3> No projects posted </h3>";
+            {% endif %}
+        }else if("{{browseType}}" == "{{possibleViews.users}}"){
+            displayUsers();
+        }else if("{{browseType}}" == "{{possibleViews.posts}}"){
+            displayPosts();
+        }
+    });
 </script>-->
 
 {% endblock %}
