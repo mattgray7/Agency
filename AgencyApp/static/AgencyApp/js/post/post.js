@@ -1626,15 +1626,15 @@ function getPostParticipantForm(postID, postType, formName, isSubForm, isNewForm
 
     // Add submit button
     formString += '<div class="whiteButton blackHover" onclick="savePostParticipant(' + "'" + postID + "', '" + postType + "', '" + postType + "ParticipantSearchTextInput', '" + postType + "ParticipantSelectBar', ";
-        if(isSubForm){
-            if(expanded){
-                formString += "'insertNewFormDiv'";
-            }else{
-                formString += "'insertExistingFormDiv'";
-            }
+    if(isSubForm){
+        if(isNewForm){
+            formString += "'insertNewFormDiv'";
         }else{
-            formString += "null";
+            formString += "'insertExistingFormDiv'";
         }
+    }else{
+        formString += "null";
+    }
     formString += ');"' + ") style='position: absolute; right: 0; top: 5px; padding: 5px; height: 20px;'><div style='margin-top: -8px;'>Save</div></div></div>";
     return formString;
 }
