@@ -591,9 +591,12 @@ function addCreateProjectPost(formDict, formURL, formName){
     var pictureField = formDict["postPicture"];
     var pictureColumn = getPostPicturePanel("td", "projectPicturePanel", pictureField.value, pictureField.editOnclick, "projectPictureImg", true, pictureField.input, "mainProjectPictureInput", formPictureMarginInfo);
 
+    var postID = formDict["postID"].value
+
     // Fill text content
     var sectionMap = {"Details": ["title", "projectType", "status", "location", "union", "length"],
                       "The Project": ["description"],
+                      "Admins": ["participants"],
                       "hidden": ["csrf_token", "postID", "source", "next", "destination", "projectID", "poster"]}
     var mainLabelsColumn = "<td class='editPostLabelPanel' style='width: 20%; position:relative; line-height: 38.2px;'><ul style='margin-bottom: -14px; margin-top: -40px;'>";
     var mainInputsColumn = "<td class='editPostInputPanel' style='width: 50%; position: relative; line-height: 39px;'><ul style='margin-top: -20px; '>";
@@ -621,6 +624,24 @@ function addCreateProjectPost(formDict, formURL, formName){
             for(i in fieldList){
                 var fieldName = sectionMap[sectionTitle][i];
                 var field = formDict[fieldName];
+                if(fieldName === "participants"){
+                    var participants = formDict["participants"]
+
+                    // Add participants panel
+                    var userTableString = '';
+                    var containerHeight = participantPanelBaseHeight;
+                    if(participants != null){
+                        var participantTableInfo = getPostParticipantTable(postID, "project", participants, formName, false, formDict["participationSelectFields"]);
+                        containerHeight += participantTableInfo["tableHeight"];
+                        userTableString += "<div id='projectParticipantTableContainer' style='position: relative; height: " + participantTableInfo["tableHeight"] + "px;'>" + participantTableInfo["html"] + "</div>"
+                        sectionLabelTableElement += "<div id='projectParticipantLabelContainer' style='height: " + (participantTableInfo["tableHeight"] - 5) +  "px;'></div>";
+                    }
+
+                    // Add label
+                    sectionLabelTableElement += "<label for='name'>Add new</label><br>";
+                    sectionInputTableElement += "<div id='projectParticipantPanel' style='height: " + containerHeight + "px;'>" + userTableString + getPostParticipantForm(postID, "project", formName, true, formDict["newPost"], formDict["participationSelectFields"], "Producer") + "</div>";
+                    continue;
+                }
 
                 if(!field.hidden || field.name === "status"){
                     if(field.numRows > 1){

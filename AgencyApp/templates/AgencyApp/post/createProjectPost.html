@@ -813,6 +813,11 @@
                 postFields["errors"] = errors;
             }
 
+            postFields["participants"] = getParticipantsField()
+            {% if participationSelectFields.project %}
+                postFields["participationSelectFields"] = {{participationSelectFields.project|safe}};
+            {% endif %}
+
             {% if post %}
                 postFields["newPost"] = false;
             {% else %}
@@ -852,6 +857,25 @@
         }
     }
 
+    function getParticipantsField(existingPostData){
+        // Add post participants
+        var participantsField = []
+        if(existingPostData != null && "participants" in existingPostData){
+            for(var i=0; i < existingPostData["participants"].length; i++){
+                var newField = {"username": existingPostData["participants"][i]["username"], "cleanName": existingPostData["participants"][i]["cleanName"], "profilePictureURL": existingPostData["participants"][i]["profilePictureURL"], "profession": existingPostData["participants"][i]["profession"], "status": existingPostData["participants"][i]["status"], "publicParticipation": existingPostData["participants"][i]["publicParticipation"]};
+                participantsField.push(newField)
+            }
+        }else{
+            {% if postParticipants %}
+                {% for part in postParticipants %}
+                    var newField = {"username": "{{part.username}}", "cleanName": "{{part.cleanName}}", "profilePictureURL": "{{part.profilePictureURL}}", "profession": "{{part.profession}}", "status": "{{part.status}}", "publicParticipation": "{{part.publicParticipation}}"};
+                    participantsField.push(newField)
+                {% endfor %}
+            {% endif %}
+        }
+        return participantsField
+    }
+
     function getCastingFormDict(newPost, existingPostData){
         var postFields = {}
         {% if forms.role %}
@@ -864,17 +888,8 @@
             {% if participationSelectFields.roles %}
                 postFields["participationSelectFields"] = {{participationSelectFields.roles|safe}};
             {% endif %}
-
-            // Add post participants
-            var participantsField = []
-            if(existingPostData != null && "participants" in existingPostData){
-                for(var i=0; i < existingPostData["participants"].length; i++){
-                    var newField = {"username": existingPostData["participants"][i]["username"], "cleanName": existingPostData["participants"][i]["cleanName"], "profilePictureURL": existingPostData["participants"][i]["profilePictureURL"], "profession": existingPostData["participants"][i]["profession"], "status": existingPostData["participants"][i]["status"], "publicParticipation": existingPostData["participants"][i]["publicParticipation"]};
-                    participantsField.push(newField)
-                }
-            }
             
-            postFields["participants"] = participantsField;
+            postFields["participants"] = getParticipantsField(existingPostData)
 
             if("compensationType" in postFields){
                 var compType;
@@ -1405,6 +1420,8 @@
     if(projectFormDiv != null){
         var newForm = addCreateProjectPost(getProjectFormDict(), "{{currentPageURL}}", "createProjectPostForm");
         projectFormDiv.innerHTML = newForm;
+        // Add participant dropdown
+        addDropdownCallback("projectParticipant", "searchPreviewActors", "projectAddParticipantSubmitButton")
     }
 
     selectProjectTab("casting")
