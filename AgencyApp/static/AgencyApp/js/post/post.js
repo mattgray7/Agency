@@ -321,7 +321,7 @@ function addCreateWorkPost(formDict, formURL, formName, isProjectSubForm){
 
     // Fill text content
     var sectionMap = {"Details": ["project", "title", "profession", "status", "startDate", "endDate", "hoursPerWeek", "compensationType"],
-                      "The Job": ["description", "location", "skills"],
+                      "Position": ["description", "location", "skills"],
                       "Users": ["participants"],
                       "Equipment": ["workerNeedsEquipment", "equipmentDescription"],
                       "hidden": ["csrf_token", "postID", "source", "next", "destination", "projectID", "poster"]}
@@ -345,10 +345,19 @@ function addCreateWorkPost(formDict, formURL, formName, isProjectSubForm){
         }
 
         if(sectionTitle != "hidden"){
-            sectionLabelTableElement += "<div style='position: relative; margin-top: 40px; height: 50px; width: 100%;'> <h2 class='" + sectionClass + "' style='position: absolute; z-index: 1; right: 0; margin-left: 80px;'> " + sectionTitle + "</h2>" + getFormDividerLine() + "</div></div>"
-            if(true){
-                sectionInputTableElement += "<div style='height: 62px;'></div>";
+            if(sectionTitle === "Details"){
+                sectionInputTableElement += "<div style='height: 58px;'></div>";
+            }else if(sectionTitle === "Position"){
+                sectionLabelTableElement += "<div style='height: 0px;'></div>";
+                sectionInputTableElement += "<div style='height: 55px;'></div>";
+            }else if(sectionTitle === "Users"){
+                sectionLabelTableElement += "<div style='height: 0px;'></div>";
+                sectionInputTableElement += "<div style='height: 80px;'></div>";
+            }else if(sectionTitle === "Equipment"){
+                sectionLabelTableElement += "<div style='height: 0px;'></div>";
+                sectionInputTableElement += "<div style='height: 85px;'></div>"
             }
+            sectionLabelTableElement += "<div style='position: relative; margin-top: 40px; height: 40px; width: 100%;'> <h2 class='" + sectionClass + "' style='position: absolute; z-index: 1; right: 0; margin-left: 80px;'><div style='margin-top: -17px;'>" + sectionTitle + "</div></h2>" + getFormDividerLine() + "</div></div>"
 
             for(i in fieldList){
                 var fieldName = sectionMap[sectionTitle][i];
@@ -380,44 +389,24 @@ function addCreateWorkPost(formDict, formURL, formName, isProjectSubForm){
                     sectionLabelTableElement += "<label for='name'>Add new</label><br>";
                     sectionInputTableElement += "<div id='jobsParticipantPanel' style='height: " + containerHeight + "px;'>" + userTableString + getPostParticipantForm(postID, "jobs", formName, true, formDict["newPost"], formDict["participationSelectFields"], "Interested") + "</div>";
                     continue;
-
-
-                    /*if(field.value != null && field.value.length > 0){
-                        var workerDict = formDict["worker"]
-
-                        // Add actor text panel
-                        if(workerDict.cleanName != null && workerDict.username != null){
-                            sectionLabelTableElement += "<div style='height: 165px;'></div>";
-                            
-                            sectionInputTableElement+= "<div style='width: 100%; position: relative; height: 161px;' class='editCastMemberPanel'>"
-                            sectionInputTableElement += '<div style="position: absolute; left: 0;"><h2>' + workerDict.cleanName + "</h2></div>";
-                            // Add actor profile picture panel
-                            sectionInputTableElement += '<div style="position: absolute; right: 0; margin-top: 2px; margin-right: 2px;"><div id="actorPicturePanel" class="postPicture" style="width: 100px; height: 100px; background: #000;"><img id="actorPictureImg" src="' + workerDict.profilePictureURL + '" style="max-width:100%; max-height:100%;"/></div></div>';
-                        }else{
-                            sectionLabelTableElement += "<label for='name'>Search</label><br>";
-
-                            sectionInputTableElement+= "<div style='width: 100%; position: relative; height: 37px;' class='editCastMemberPanel'>"
-                            sectionInputTableElement += '<div style="position: absolute; left: 0;"><input type="text" name="performerSearchText"></div>';
-                        }
-                        sectionInputTableElement += "</div>";
-                    }
-                    continue;*/
                 }
                 if(!field.hidden || field.name === "status"){
                     if(field.numRows > 1){
                         // stupid hack I hate myself right now
-                        sectionLabelTableElement += "<li style='height:" + '' + field.numRows*5.9 + 'px;' + "'><label for='name'>" + field.label + "</label></li>";
+                        sectionLabelTableElement += "<li style='height:" + '' + field.numRows*6 + 'px;' + "'><label for='name'>" + field.label + "</label></li>";
                         // TODO replace newlines in description as it will break js
                         sectionInputTableElement += "<li><textarea rows='" + field.numRows + "' name='" + field.name + "' form='" + formName + "' style='height:100px; width: 97.7%; resize: none;' placeholder='" + field.placeholder + "'>" + field.value + "</textarea></li>";
                     }else{
                         sectionLabelTableElement += "<label for='name'>" + field.label + "</label><br>";
-                        sectionInputTableElement += "<li id='" + field.name + "ContainerRow'>";
+
+                        sectionInputTableElement += "<li id='" + field.name + "ContainerRow' ";
                         if(field.options){
+                            sectionInputTableElement += 'style="height: 36px; margin-top: -1px; margin-bottom: 5px;">';
                             var selectForm = createSelectForm(formName, field.name + "SelectBar", field.options, field.value);
                             sectionInputTableElement += selectForm;
                             sectionInputTableElement += "<input type='hidden' name='" + field.name + "' id='" + field.name + "SelectInput' >";
                         }else{
-                            sectionInputTableElement += field.input;
+                            sectionInputTableElement += 'style="">' + field.input;
                         }
                         sectionInputTableElement += '</li>';
                     }
