@@ -728,11 +728,11 @@
     function getNewElementForm(formType){
         var formString = "";
         if(formType === "casting"){
-            formString += addCreateCastingPost(getCastingFormDict(true, null), "{{currentPageURL}}", "createCastingPostForm");
+            formString += addCreateCastingPost(getCastingFormDict(true, null), "{{currentPageURL}}", "createCastingPostForm", true);
         }else if(formType === "jobs"){
-            formString += addCreateWorkPost(getWorkFormDict(true, null), "{{currentPageURL}}", "createWorkPostForm");
+            formString += addCreateWorkPost(getWorkFormDict(true, null), "{{currentPageURL}}", "createWorkPostForm", true);
         }else if(formType === "events"){
-            formString += addCreateEventPost(getEventFormDict(true, null), "{{currentPageURL}}", "createEventPostForm");
+            formString += addCreateEventPost(getEventFormDict(true, null), "{{currentPageURL}}", "createEventPostForm", true);
         }
         return formString;
     }

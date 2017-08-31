@@ -351,11 +351,11 @@
                 if(postFormDiv != null){
                     var newForm;
                     {% if isCasting %}
-                        newForm = addCreateCastingPost(getCastingFormDict(), "{{currentPageURL}}", "createCastingPostForm");
+                        newForm = addCreateCastingPost(getCastingFormDict(), "{{currentPageURL}}", "createCastingPostForm", false);
                     {% elif isWork %}
-                        newForm = addCreateWorkPost(getWorkFormDict(), "{{currentPageURL}}", "createWorkPostForm");
+                        newForm = addCreateWorkPost(getWorkFormDict(), "{{currentPageURL}}", "createWorkPostForm", false);
                     {% elif isEvent %}
-                        newForm = addCreateEventPost(getEventFormDict(), "{{currentPageURL}}", "createEventPostForm");
+                        newForm = addCreateEventPost(getEventFormDict(), "{{currentPageURL}}", "createEventPostForm", false);
                     {% endif %}
                     postFormDiv.innerHTML = newForm;
 

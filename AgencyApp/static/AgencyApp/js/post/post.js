@@ -147,7 +147,7 @@ function submitPictureForm(formName, isProject){
     }
 
 var formPictureMarginInfo = "margin-left: 10px; margin-top: 65px;";
-function addCreateCastingPost(formDict, formURL, formName){
+function addCreateCastingPost(formDict, formURL, formName, isProjectSubForm){
     var formString = "<form method='post' action='" + formURL + "' id='" + formName + "' class='form-style-1' style='width: 90%; background: none; margin-left: 3.2%;' enctype='multipart/form-data'>";
     formString += "<table style='width: 100%;'><tr>"
 
@@ -219,7 +219,7 @@ function addCreateCastingPost(formDict, formURL, formName){
                     var userTableString = '';
                     var containerHeight = participantPanelBaseHeight;
                     if(participants != null){
-                        var participantTableInfo = getPostParticipantTable(postID, "casting", participants, formName, true, formDict["participationSelectFields"]);
+                        var participantTableInfo = getPostParticipantTable(postID, "casting", participants, formName, isProjectSubForm, formDict["participationSelectFields"]);
                         containerHeight += participantTableInfo["tableHeight"];
                         userTableString += "<div id='castingParticipantTableContainer' style='position: relative; height: " + participantTableInfo["tableHeight"] + "px;'>" + participantTableInfo["html"] + "</div>"
                         sectionLabelTableElement += "<div id='castingParticipantLabelContainer' style='height: " + (participantTableInfo["tableHeight"] - 5) +  "px;'></div>";
@@ -309,7 +309,7 @@ function addCreateCastingPost(formDict, formURL, formName){
 }
 
 
-function addCreateWorkPost(formDict, formURL, formName){
+function addCreateWorkPost(formDict, formURL, formName, isProjectSubForm){
     var formString = "<form method='post' action='" + formURL + "' id='" + formName + "' class='form-style-1' style='width: 90%; background: none; margin-left: 3.2%;' enctype='multipart/form-data'>";
     formString += "<table style='width: 100%;'><tr>"
 
@@ -457,7 +457,7 @@ function addCreateWorkPost(formDict, formURL, formName){
     return formString;
 }
 
-function addCreateEventPost(formDict, formURL, formName){
+function addCreateEventPost(formDict, formURL, formName, isProjectSubForm){
     var formString = "<form method='post' action='" + formURL + "' id='" + formName + "' class='form-style-1' style='width: 90%; background: none; margin-left: 3.2%;' enctype='multipart/form-data'>";
     formString += "<table style='width: 100%;'><tr>"
 
@@ -1586,7 +1586,7 @@ function getPostParticipantTable(postID, postType, participants, formName, isSub
             // Add delete button
             tableString += "<td style='width: 15%; text-align: center;'><div style='margin-top: 0px;'><a style='font-size: 1.1em; font-weight: 100;' onclick='deletePostParticipant(" + '"' + postID + '", "' + postType + '", "' + user["username"] + '", ';
             if(isSubForm){
-                if(expanded){
+                if(typeof expanded !== 'undefined' && expanded){
                     tableString += '"insertNewFormDiv"';
                 }else{
                     tableString += '"insertExistingFormDiv"';
