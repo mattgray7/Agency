@@ -1432,7 +1432,7 @@ function removeUserFromPostParticipants(username, postType){
     }
 }
 
-var formHeights = {"casting": 1565, "jobs": 1105, "events": 780}
+var formHeights = {"casting": 1565, "jobs": 1305, "events": 830}
 function getSubFormHeight(formType){
     var baseHeight = formHeights[formType];
     if(currentPostParticipants[formType].length > 0){
@@ -1590,7 +1590,7 @@ function updatePostParticipationPrivacy(postID, postType, username){
     }
 }
 
-var currentPostParticipants = {"casting": [], "jobs": [], "event": [], "project": []};
+var currentPostParticipants = {"casting": [], "jobs": [], "events": [], "project": []};
 var postParticipantSelectFields = {};
 function getPostParticipantTable(postID, postType, participants, formName, isSubForm, statusSelectFields){
     if(statusSelectFields == null){
