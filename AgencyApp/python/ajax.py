@@ -326,21 +326,26 @@ def deletePostParticipant(request):
             success = True
     return JsonResponse({"success": success, "user": {"username": username}})
 
+def _userDoesExist(username):
+    try:
+        user = models.UserAccount.objects.get(username=username)
+        return True
+    except models.UserAccount.DoesNotExist:
+        pass
+    return False
+
+def _postDoesExist(postID):
+    if post.getPost(postID):
+        return True
+    return False
+
 def saveProjectAdmin(request):
     projectID = request.POST.get("projectID")
     username = request.POST.get("username")
     success = False
     if projectID and username:
-        try:
-            project = models.ProjectPost.objects.get(postID=projectID)
-        except models.ProjectPost.DoesNotExist:
-            pass
-        else:
-            try:
-                user = models.UserAccount.objects.get(username=username)
-            except models.UserAccount.DoesNotExist:
-                pass
-            else:
+        if _postDoesExist(projectID):
+            if _userDoesExist(username):
                 # User and project are valid, so can save admin
                 try:
                     admin = models.ProjectAdmin.objects.get(projectID=projectID, username=username)
@@ -348,6 +353,18 @@ def saveProjectAdmin(request):
                     admin = models.ProjectAdmin(projectID=projectID, username=username)
                     admin.save()
                     success = True
+    return JsonResponse({"success": success})
+
+def deleteProjectAdmin(request):
+    projectID = request.POST.get("projectID")
+    username = request.POST.get("username")
+    success = False
+    if projectID and username:
+        if _postDoesExist(projectID):
+            if _userDoesExist(username):
+                print "deleting admin {0}".format(username)
+                models.ProjectAdmin.objects.filter(projectID=projectID, username=username).delete()
+                success = True
     return JsonResponse({"success": success})
 
 def updatePostParticipationPrivacy(request):

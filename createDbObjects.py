@@ -120,8 +120,10 @@ def createProject(poster, title, description, status, picURL, projectType="Film 
 def createProjectAdmin(projectID, username):
 	newAdmin = models.ProjectAdmin(projectID=projectID, username=username)
 	newAdmin.save()
-	newAdmin = models.PostAdmin(postID=projectID, username=username)
-	newAdmin.save()
+	newPart = models.PostParticipant(postID=projectID, username=username, status="Creator")
+	newPart.save()
+	#newAdmin = models.PostAdmin(postID=projectID, username=username)
+	#newAdmin.save()
 
 # Great Gatsby project
 project1ProjectPost = createProject(poster="mattgray",

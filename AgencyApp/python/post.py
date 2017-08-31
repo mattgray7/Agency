@@ -596,7 +596,6 @@ class GenericViewPostView(views.GenericFormView):
         """ TO be overridden in specific post class"""
         return self._postFieldsBySection
 
-
     @property
     def viewPostData(self):
         if self._viewPostData is None:

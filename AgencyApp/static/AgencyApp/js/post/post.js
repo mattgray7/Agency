@@ -1441,20 +1441,25 @@ function getSubFormHeight(formType){
     return baseHeight
 }
 
-function saveProjectAdmin(projectID, username){
+function updateProjectAdmin(projectID, username, updateType){
+    var ajaxURL = "/ajax/" + updateType + "ProjectAdmin/";
     $.ajax({
-        url : "/ajax/saveProjectAdmin/",
+        url : ajaxURL,
         data : {"projectID": projectID, "username": username},
         type : 'POST',
         dataType: "json",
-        success : function(data) {
-            console.log(data)
-        }
+        success : function(data) {}
     });
 }
 
 var participantPanelBaseHeight = 40;
 function savePostParticipant(postID, postType, inputDivID, labelDivID, parentContainerDivID){
+    if(postType === "project"){
+        if(confirm("Are you sure you want to add this user? They will be able to edit and delete all related project posts.") == false){
+            return;
+        }
+    }
+
     var inputDiv = document.getElementById(inputDivID);
     var labelInputDiv = document.getElementById(labelDivID);
     if(inputDiv != null && labelInputDiv != null){
@@ -1483,7 +1488,7 @@ function savePostParticipant(postID, postType, inputDivID, labelDivID, parentCon
                             // Update currentPostParticipants
                             addSuccess = addUserToPostParticipants(data["user"], postType)
                             if(postType === "project"){
-                                saveProjectAdmin(postID, data["user"]["username"])
+                                updateProjectAdmin(postID, data["user"]["username"], "save")
                             }
                             if(addSuccess){
                                 // Recreate the table with new info
@@ -1519,6 +1524,12 @@ function savePostParticipant(postID, postType, inputDivID, labelDivID, parentCon
 }
 
 function deletePostParticipant(postID, postType, username, parentContainerDivID){
+    if(postType === "project"){
+        if(confirm("Are you sure you want to delete this user? They will lose edit access to all related project posts.") == false){
+            return;
+        }
+    }
+
     $.ajax({
         url : "/ajax/deletePostParticipant/",
         data : {"postID": postID, "username": username},
@@ -1526,6 +1537,11 @@ function deletePostParticipant(postID, postType, username, parentContainerDivID)
         dataType: "json",
         success : function(data) {
             if(data["success"]){
+                // Delete project admin if necessary
+                if(postType === "project"){
+                    updateProjectAdmin(postID, data["user"]["username"], "delete")
+                }
+
                 var tableContainer = document.getElementById(postType + "ParticipantTableContainer")
                 var tableLabelContainer = document.getElementById(postType + "ParticipantLabelContainer");
                 var tableTextContainer = document.getElementById(postType + "ParticipantSearchContainer");
