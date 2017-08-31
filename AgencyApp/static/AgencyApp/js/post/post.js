@@ -1441,6 +1441,18 @@ function getSubFormHeight(formType){
     return baseHeight
 }
 
+function saveProjectAdmin(projectID, username){
+    $.ajax({
+        url : "/ajax/saveProjectAdmin/",
+        data : {"projectID": projectID, "username": username},
+        type : 'POST',
+        dataType: "json",
+        success : function(data) {
+            console.log(data)
+        }
+    });
+}
+
 var participantPanelBaseHeight = 40;
 function savePostParticipant(postID, postType, inputDivID, labelDivID, parentContainerDivID){
     var inputDiv = document.getElementById(inputDivID);
@@ -1470,6 +1482,9 @@ function savePostParticipant(postID, postType, inputDivID, labelDivID, parentCon
                         if(tableContainer != null && tableLabelContainer != null && tableTextContainer != null && panelContainer != null){
                             // Update currentPostParticipants
                             addSuccess = addUserToPostParticipants(data["user"], postType)
+                            if(postType === "project"){
+                                saveProjectAdmin(postID, data["user"]["username"])
+                            }
                             if(addSuccess){
                                 // Recreate the table with new info
                                 var newTableInfo = getPostParticipantTable(postID, postType, currentPostParticipants[postType], null, true)

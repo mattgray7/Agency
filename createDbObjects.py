@@ -131,8 +131,8 @@ project1ProjectPost = createProject(poster="mattgray",
 									picURL="/Users/MattGray/Projects/Agency/Agency/scripts/media/greatGatsby.jpg")
 project1ProjectID = project1ProjectPost.projectID
 project1Admin = createProjectAdmin(project1ProjectID, "mattgray")
-project1Admin2 = createProjectAdmin(project1ProjectID, "amybolt")
-project1Admin3 = createProjectAdmin(project1ProjectID, "adamcramer")
+#project1Admin2 = createProjectAdmin(project1ProjectID, "amybolt")
+#project1Admin3 = createProjectAdmin(project1ProjectID, "adamcramer")
 
 project2ProjectPost = createProject(poster="mattgray",
 									title="The Kings of Summer",

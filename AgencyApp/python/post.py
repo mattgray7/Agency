@@ -615,7 +615,7 @@ class GenericViewPostView(views.GenericFormView):
                                                      "viewPost": constants.VIEW_POST,
                                                      "browse": constants.BROWSE
                                                      }
-        self._pageContext["userIsAdmin"] = self.isPostAdmin
+        self._pageContext["userIsAdmin"] = self.isPostAdmin or self.isProjectAdmin
         self._pageContext["displayStatus"] = self.projectDisplayStatus
         self._pageContext['statusOptions'] = {"roles": constants.CASTING_STATUS_LIST,
                                               "jobs": constants.WORK_STATUS_LIST,

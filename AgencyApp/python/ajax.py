@@ -326,6 +326,30 @@ def deletePostParticipant(request):
             success = True
     return JsonResponse({"success": success, "user": {"username": username}})
 
+def saveProjectAdmin(request):
+    projectID = request.POST.get("projectID")
+    username = request.POST.get("username")
+    success = False
+    if projectID and username:
+        try:
+            project = models.ProjectPost.objects.get(postID=projectID)
+        except models.ProjectPost.DoesNotExist:
+            pass
+        else:
+            try:
+                user = models.UserAccount.objects.get(username=username)
+            except models.UserAccount.DoesNotExist:
+                pass
+            else:
+                # User and project are valid, so can save admin
+                try:
+                    admin = models.ProjectAdmin.objects.get(projectID=projectID, username=username)
+                except models.ProjectAdmin.DoesNotExist:
+                    admin = models.ProjectAdmin(projectID=projectID, username=username)
+                    admin.save()
+                    success = True
+    return JsonResponse({"success": success})
+
 def updatePostParticipationPrivacy(request):
     postID = request.POST.get("postID")
     username = request.POST.get("username")
