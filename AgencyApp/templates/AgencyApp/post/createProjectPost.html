@@ -184,7 +184,6 @@
 
     var expanded = false;
     var transitionSpeed = 350;
-    var formHeights = {"casting": "1565px", "jobs": "1105px", "events": "780px"}
     function toggleExpandNewForm(toggleType, panelType, animationFinishCallback){
         var newFormDiv = document.getElementById("insertNewFormDiv")
         var browsePostsDiv = document.getElementById("projectContentList")
@@ -200,7 +199,7 @@
             }
 
             newFormDiv.style.visibility = "visible";
-            $("#insertNewFormDiv").animate({marginTop: "0px", height: formHeights[panelType]}, transitionSpeed);
+            $("#insertNewFormDiv").animate({marginTop: "0px", height: getSubFormHeight(panelType) + "px"}, transitionSpeed);
 
             //newFormDiv.style.border = "2px solid #000";
             // Optional: animate filter bar to shrink as opposed to just making invisible
@@ -298,14 +297,14 @@
 
                         // Add participant dropdown
                         addDropdownCallback(activeTab + "Participant", "searchPreviewActors")
+
+                        $("#insertExistingFormDiv").animate({marginTop: "0px", height: getSubFormHeight(panelType) + "px"}, transitionSpeed + 200);
                     });
 
                     // Add the div to col, col to row, and row after the parent row
                     newCol.appendChild(newFormDiv)
                     newRow.appendChild(newCol)
                     rowDiv.parentNode.insertBefore(newRow, rowDiv.nextSibling);
-                    $("#insertExistingFormDiv").animate({marginTop: "0px", height: formHeights[panelType]}, transitionSpeed + 200);
-
                 }
             }
 
@@ -1267,8 +1266,8 @@
                             if(errorRow != null){
                                 errorRow.innerHTML = "<td colspan='3'>" + getErrorPanel(data["errors"]) + "</td>";
                             }
-                            currentFormHeight = formHeights[activeTab];
-                            currentFormHeightInt = parseInt(currentFormHeight.substring(0, currentFormHeight.length - 2));
+                            currentFormHeightInt = getSubFormHeight(activeTab);
+                            //currentFormHeightInt = parseInt(currentFormHeight.substring(0, currentFormHeight.length - 2));
                             newFormHeight = (currentFormHeightInt + 95) + "px";
 
                             formDiv = document.getElementById("insertNewFormDiv");

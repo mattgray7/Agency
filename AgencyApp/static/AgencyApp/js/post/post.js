@@ -219,7 +219,7 @@ function addCreateCastingPost(formDict, formURL, formName){
                     var userTableString = '';
                     var containerHeight = participantPanelBaseHeight;
                     if(participants != null){
-                        var participantTableInfo = getPostParticipantTable(postID, "casting", participants, formName, formDict["participationSelectFields"]);
+                        var participantTableInfo = getPostParticipantTable(postID, "casting", participants, formName, true, formDict["participationSelectFields"]);
                         containerHeight += participantTableInfo["tableHeight"];
                         userTableString += "<div id='castingParticipantTableContainer' style='position: relative; height: " + participantTableInfo["tableHeight"] + "px;'>" + participantTableInfo["html"] + "</div>"
                         sectionLabelTableElement += "<div id='castingParticipantLabelContainer' style='height: " + (participantTableInfo["tableHeight"] - 5) +  "px;'></div>";
@@ -227,7 +227,7 @@ function addCreateCastingPost(formDict, formURL, formName){
 
                     // Add label
                     sectionLabelTableElement += "<label for='name'>Add new</label><br>";
-                    sectionInputTableElement += "<div id='castingParticipantPanel' style='height: " + containerHeight + "px;'>" + userTableString + getPostParticipantForm(postID, "casting", formName, formDict["participationSelectFields"], "Interested") + "</div>";
+                    sectionInputTableElement += "<div id='castingParticipantPanel' style='height: " + containerHeight + "px;'>" + userTableString + getPostParticipantForm(postID, "casting", formName, true, formDict["newPost"], formDict["participationSelectFields"], "Interested") + "</div>";
                     continue;
                 }
                 if(!field.hidden || field.name === "status"){
@@ -1355,42 +1355,51 @@ function selectPostParticipant(username, cleanName, textDivName, dropdownDivName
     }
 }
 
-function addUserToPostParticipants(userDict){
-    if(currentPostParticipants != null){
+function addUserToPostParticipants(userDict, postType){
+    if(currentPostParticipants[postType].length > 0){
         var userExists = false
-        for(var i=0; i < currentPostParticipants.length; i++){
-            if(currentPostParticipants[i]["username"] === userDict["username"]){
+        for(var i=0; i < currentPostParticipants[postType].length; i++){
+            if(currentPostParticipants[postType][i]["username"] === userDict["username"]){
                 userExists = true;
                 break;
             }
         }
         if(!userExists){
-            currentPostParticipants.push(userDict);
+            currentPostParticipants[postType].push(userDict);
         }else{
             return false;
         }
     }else{
-        currentPostParticipants = [userDict];
+        currentPostParticipants[postType] = [userDict];
     }
     return true;
 }
 
-function removeUserFromPostParticipants(username){
-    if(currentPostParticipants != null){
+function removeUserFromPostParticipants(username, postType){
+    if(currentPostParticipants[postType].length > 0){
         var newList = [];
         var newListIndex = 0;
-        for(var i=0; i < currentPostParticipants.length; i++){
-            if(currentPostParticipants[i]["username"] != username){
-                newList.push(currentPostParticipants[i]);
+        for(var i=0; i < currentPostParticipants[postType].length; i++){
+            if(currentPostParticipants[postType][i]["username"] != username){
+                newList.push(currentPostParticipants[postType][i]);
                 newListIndex += 1;
             }
         }
-        currentPostParticipants = newList;
+        currentPostParticipants[postType] = newList;
     }
 }
 
+var formHeights = {"casting": 1565, "jobs": 1105, "events": 780}
+function getSubFormHeight(formType){
+    var baseHeight = formHeights[formType];
+    if(currentPostParticipants[formType].length > 0){
+        baseHeight += 44 * Math.max(currentPostParticipants[formType].length - 1, 0);
+    }
+    return baseHeight
+}
+
 var participantPanelBaseHeight = 40;
-function savePostParticipant(postID, postType, inputDivID, labelDivID){
+function savePostParticipant(postID, postType, inputDivID, labelDivID, parentContainerDivID){
     var inputDiv = document.getElementById(inputDivID);
     var labelInputDiv = document.getElementById(labelDivID);
     if(inputDiv != null && labelInputDiv != null){
@@ -1412,13 +1421,13 @@ function savePostParticipant(postID, postType, inputDivID, labelDivID){
                         var panelContainer = document.getElementById(postType + "ParticipantPanel");
                         if(tableContainer != null && tableLabelContainer != null && tableTextContainer != null && panelContainer != null){
                             // Update currentPostParticipants
-                            addSuccess = addUserToPostParticipants(data["user"])
+                            addSuccess = addUserToPostParticipants(data["user"], postType)
                             if(addSuccess){
                                 // Recreate the table with new info
-                                var newTableInfo = getPostParticipantTable(postID, postType, currentPostParticipants)
+                                var newTableInfo = getPostParticipantTable(postID, postType, currentPostParticipants[postType], null, true)
                                 tableContainer.innerHTML = newTableInfo["html"]
 
-                                if(currentPostParticipants.length > 1){
+                                if(currentPostParticipants[postType].length > 1){
                                     // Update the label to move with the input table
                                     tableLabelContainer.style.height = (newTableInfo["tableHeight"] - 5) + "px";
 
@@ -1427,6 +1436,12 @@ function savePostParticipant(postID, postType, inputDivID, labelDivID){
 
                                     // Move the text container input down by 1 panel length
                                     tableTextContainer.style.marginTop = parseInt(tableTextContainer.style.marginTop.slice(0,-2)) + 44 + "px";
+
+                                    // Resize the parent container if necessary
+                                    var parentContainerDiv = document.getElementById(parentContainerDivID);
+                                    if(parentContainerDiv != null){
+                                        parentContainerDiv.style.height = getSubFormHeight(postType) + "px";
+                                    }
                                 }
                             }else{
                                 // Should only be false when adding a user that is already a participant
@@ -1440,7 +1455,7 @@ function savePostParticipant(postID, postType, inputDivID, labelDivID){
     }
 }
 
-function deletePostParticipant(postID, postType, username){
+function deletePostParticipant(postID, postType, username, parentContainerDivID){
     $.ajax({
         url : "/ajax/deletePostParticipant/",
         data : {"postID": postID, "username": username},
@@ -1454,11 +1469,11 @@ function deletePostParticipant(postID, postType, username){
                 var panelContainer = document.getElementById(postType + "ParticipantPanel");
                 if(tableContainer != null && tableLabelContainer != null && tableTextContainer != null && panelContainer != null){
                     // Update currentPostParticipants
-                    var previousNumParticipants = currentPostParticipants.length;
-                    removeUserFromPostParticipants(data["user"]["username"])
+                    var previousNumParticipants = currentPostParticipants[postType].length;
+                    removeUserFromPostParticipants(data["user"]["username"], postType)
 
                     // Recreate the table with new info
-                    var newTableInfo = getPostParticipantTable(postID, postType, currentPostParticipants)
+                    var newTableInfo = getPostParticipantTable(postID, postType, currentPostParticipants[postType], null, true)
                     tableContainer.innerHTML = newTableInfo["html"]
 
                     if(previousNumParticipants > 1){
@@ -1470,6 +1485,12 @@ function deletePostParticipant(postID, postType, username){
 
                         // Move the text container input down up 1 panel length
                         tableTextContainer.style.marginTop = parseInt(tableTextContainer.style.marginTop.slice(0,-2)) - 44 + "px";
+
+                        // Resize the parent container if necessary
+                        var parentContainerDiv = document.getElementById(parentContainerDivID);
+                        if(parentContainerDiv != null){
+                            parentContainerDiv.style.height = getSubFormHeight(postType) + "px";
+                        }
                     }
                 }
             }else{
@@ -1495,16 +1516,16 @@ function updatePostParticipationStatus(postID, postType, username){
 function updatePostParticipationPrivacy(postID, postType, username){
     var publicCheckbox = document.getElementById(postType + 'ParticipationPublicCheckbox_' + username)
     if(publicCheckbox != null){
-        if(currentPostParticipants != null){
-            for(var i=0; i < currentPostParticipants.length; i++){
-                if(currentPostParticipants[i]["username"] === username){
+        if(currentPostParticipants[postType] != null){
+            for(var i=0; i < currentPostParticipants[postType].length; i++){
+                if(currentPostParticipants[postType][i]["username"] === username){
                     if(publicCheckbox.checked){
-                        if(currentPostParticipants[i]["publicParticipation"] === "False"){
-                            currentPostParticipants[i]["publicParticipation"] = "True";
+                        if(currentPostParticipants[postType][i]["publicParticipation"] === "False"){
+                            currentPostParticipants[postType][i]["publicParticipation"] = "True";
                         }
                     }else{
-                        if(currentPostParticipants[i]["publicParticipation"] === "True"){
-                            currentPostParticipants[i]["publicParticipation"] = "False";
+                        if(currentPostParticipants[postType][i]["publicParticipation"] === "True"){
+                            currentPostParticipants[postType][i]["publicParticipation"] = "False";
                         }
                     }
                 }
@@ -1521,9 +1542,9 @@ function updatePostParticipationPrivacy(postID, postType, username){
     }
 }
 
-var currentPostParticipants;
+var currentPostParticipants = {"casting": [], "jobs": [], "event": []};
 var postParticipantSelectFields = {};
-function getPostParticipantTable(postID, postType, participants,  formName, statusSelectFields){
+function getPostParticipantTable(postID, postType, participants, formName, isSubForm, statusSelectFields){
     if(statusSelectFields == null){
         if(postType in postParticipantSelectFields){
             statusSelectFields = postParticipantSelectFields[postType]
@@ -1536,7 +1557,7 @@ function getPostParticipantTable(postID, postType, participants,  formName, stat
         }
     }
 
-    currentPostParticipants = participants;
+    currentPostParticipants[postType] = participants;
     var tableString = "<div style='width: 100%; position: relative; height: " + tableHeight + "px;'><table style='width: 100%;' class='browseTable'><tr><td style='width:35%;'>User</td><td style='width:35%;'>Status</td><td style='text-align: center; width:15%;'>Public</td><td style='text-align: center; width:15%;'>Delete</td></tr>";
     var tableHeight;
     if(participants.length > 0){
@@ -1563,7 +1584,17 @@ function getPostParticipantTable(postID, postType, participants,  formName, stat
             tableString += "/></div></td>";
 
             // Add delete button
-            tableString += "<td style='width: 15%; text-align: center;'><div style='margin-top: 0px;'><a style='font-size: 1.1em; font-weight: 100;' onclick='deletePostParticipant(" + '"' + postID + '", "' + postType + '", "' + user["username"] + '");' + "'>X</a></div></td>"
+            tableString += "<td style='width: 15%; text-align: center;'><div style='margin-top: 0px;'><a style='font-size: 1.1em; font-weight: 100;' onclick='deletePostParticipant(" + '"' + postID + '", "' + postType + '", "' + user["username"] + '", ';
+            if(isSubForm){
+                if(expanded){
+                    tableString += '"insertNewFormDiv"';
+                }else{
+                    tableString += '"insertExistingFormDiv"';
+                }
+            }else{
+                tableString += 'null';
+            }
+            tableString += ');' + "'>X</a></div></td>";
 
             tableString += "</tr>";
         }
@@ -1575,7 +1606,11 @@ function getPostParticipantTable(postID, postType, participants,  formName, stat
     return {"html": tableString, "tableHeight": tableHeight}
 }
 
-function getPostParticipantForm(postID, postType, formName, statusSelectFields, defaultStatus){
+function getPostParticipantForm(postID, postType, formName, isSubForm, isNewForm, statusSelectFields, defaultStatus){
+    if(isSubForm == null){
+        isSubForm = false;
+    }
+
     // Add container
     var formString = "<div id='" + postType + "ParticipantSearchContainer' style='width: 100%; position: relative; height: 20px; margin-top: 0px;' class='editCastMemberPanel'>"
 
@@ -1590,7 +1625,17 @@ function getPostParticipantForm(postID, postType, formName, statusSelectFields, 
     formString += '<div id="' + postType + 'ParticipantDropdown" class="previewDropdownPanel" style="position: absolute; left: 0; right: 58%; top: 35px; margin-right: 1px; min-width: 184.5px; display: none; max-width: 234px;"></div>';
 
     // Add submit button
-    formString += '<div class="whiteButton blackHover" onclick="savePostParticipant(' + "'" + postID + "', '" + postType + "', '" + postType + "ParticipantSearchTextInput', '" + postType + "ParticipantSelectBar'" + ');"' + ") style='position: absolute; right: 0; top: 5px; padding: 5px; height: 20px;'><div style='margin-top: -8px;'>Save</div></div></div>";
+    formString += '<div class="whiteButton blackHover" onclick="savePostParticipant(' + "'" + postID + "', '" + postType + "', '" + postType + "ParticipantSearchTextInput', '" + postType + "ParticipantSelectBar', ";
+        if(isSubForm){
+            if(expanded){
+                formString += "'insertNewFormDiv'";
+            }else{
+                formString += "'insertExistingFormDiv'";
+            }
+        }else{
+            formString += "null";
+        }
+    formString += ');"' + ") style='position: absolute; right: 0; top: 5px; padding: 5px; height: 20px;'><div style='margin-top: -8px;'>Save</div></div></div>";
     return formString;
 }
 
