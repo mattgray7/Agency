@@ -1231,6 +1231,25 @@ function previewTextInDropdown(textInputDivName, dropdownDivName, getDataFunctio
     }
 }
 
+function addDropdownCallback(dropdownID, callbackFunctionName){
+    // Add participant dropdown
+    var dropdownDiv = document.getElementById(dropdownID + "SearchTextInput");
+    if(dropdownDiv != null){
+        dropdownDiv.onkeyup = function(event){
+            //40 is down, 38 is up
+            if(event.keyCode === 40){
+                moveDropdownFocus("down", dropdownID + "Dropdown")
+            }else if(event.keyCode === 38){
+                moveDropdownFocus("up", dropdownID + "Dropdown")
+            }else if(event.keyCode === 13){
+                selectDropdownFocusElement(dropdownID + "Dropdown");
+            }else{
+                previewTextInDropdown(dropdownID + "SearchTextInput", dropdownID + "Dropdown", callbackFunctionName);
+            }
+        }
+    }
+}
+
 var dropdownFocusIndex = -1
 function moveDropdownFocus(direction, dropdownListID){
     var dropdownList = document.getElementById(dropdownListID)
