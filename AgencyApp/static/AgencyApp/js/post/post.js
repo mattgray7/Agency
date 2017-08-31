@@ -1242,20 +1242,20 @@ function setCompensationInputs(){
     }
 }
 
-function previewTextInDropdown(textInputDivName, dropdownDivName, getDataFunctionName){
+function previewTextInDropdown(textInputDivName, dropdownDivName, getDataFunctionName, extraInputs){
     var textInput = document.getElementById(textInputDivName);
     var dropdownDiv = document.getElementById(dropdownDivName);
     if(textInput != null && dropdownDiv != null){
         if(textInput.value != null){
-            window[getDataFunctionName](textInput.value, dropdownDiv)
+            window[getDataFunctionName](textInput.value, dropdownDiv, extraInputs)
         }
     }
 }
 
 var enterPressed = false;
-function addDropdownCallback(dropdownID, callbackFunctionName, secondaryEnterSubmitButton){
+function addDropdownCallback(postType, callbackFunctionName, secondaryEnterSubmitButton){
     // Add participant dropdown
-    var dropdownDiv = document.getElementById(dropdownID + "SearchTextInput");
+    var dropdownDiv = document.getElementById(postType + "ParticipantSearchTextInput");
     if(dropdownDiv != null){
         dropdownDiv.onkeyup = function(event){
             if(event.keyCode != 13){
@@ -1263,20 +1263,20 @@ function addDropdownCallback(dropdownID, callbackFunctionName, secondaryEnterSub
             }
             //40 is down, 38 is up
             if(event.keyCode === 40){
-                moveDropdownFocus("down", dropdownID + "Dropdown")
+                moveDropdownFocus("down", postType + "ParticipantDropdown")
             }else if(event.keyCode === 38){
-                moveDropdownFocus("up", dropdownID + "Dropdown")
+                moveDropdownFocus("up", postType + "ParticipantDropdown")
             }else if(event.keyCode === 13){
                 if(enterPressed){
                     if(secondaryEnterSubmitButton != null){
                         $("[id='" + secondaryEnterSubmitButton + "']").click();
                     }
                 }else{
-                    selectDropdownFocusElement(dropdownID + "Dropdown");
+                    selectDropdownFocusElement(postType + "ParticipantDropdown");
                 }
                 enterPressed = true;
             }else{
-                previewTextInDropdown(dropdownID + "SearchTextInput", dropdownID + "Dropdown", callbackFunctionName);
+                previewTextInDropdown(postType + "ParticipantSearchTextInput", postType + "ParticipantDropdown", callbackFunctionName, {"postType": postType});
             }
         }
     }
@@ -1325,10 +1325,10 @@ function selectDropdownFocusElement(dropdownListID){
     }
 }
 
-function getPreviewUsersString(userList){
-    var previewString = "<ul id='castingParticipationDropdownList'>";
+function getPreviewUsersString(userList, postType){
+    var previewString = "<ul id='" + postType + "ParticipationDropdownList'>";
     for(var i=0; i < userList.length; i++){
-        previewString += "<li onclick='selectPostParticipant(" + '"' + userList[i]["username"] + '", "' + userList[i]["cleanName"] + '", "castingParticipantSearchTextInput", "castingParticipantDropdown");' + "'><div style='position:relative; height: 50px;'>"
+        previewString += "<li onclick='selectPostParticipant(" + '"' + userList[i]["username"] + '", "' + userList[i]["cleanName"] + '", "' + postType + 'ParticipantSearchTextInput", "' + postType + 'ParticipantDropdown");' + "'><div style='position:relative; height: 50px;'>"
 
         // Add user picture if it exists
         previewString += "<img src='" + userList[i]["profilePicture"] + "' style='height: 40px; width:36px; position: absolute; top: 5px; left: 2px; border: 1px solid rgba(0,0,0,0.1); border-radius: 2px;' />";
@@ -1345,7 +1345,7 @@ function getPreviewUsersString(userList){
     return previewString;
 }
 
-function searchPreviewUsers(textValue, container){
+function searchPreviewUsers(textValue, container, extraInputs){
     if(container != null){
         // TODO get the data
         //container.innerHTML = "<img src='" + buttonLoadingGifURL + "' style='height: 100px; width: 100px;'>";
@@ -1364,8 +1364,10 @@ function searchPreviewUsers(textValue, container){
                 success : function(data) {
                     if(data["success"]){
                         if(data["users"]){
-                            var contentString = getPreviewUsersString(data["users"]);
-                            container.innerHTML = contentString;
+                            if(extraInputs["postType"] != null){
+                                var contentString = getPreviewUsersString(data["users"], extraInputs["postType"]);
+                                container.innerHTML = contentString;
+                            }
                         }
                     }else{
                         container.innerHTML = "No user found with name " + textValue

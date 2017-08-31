@@ -221,7 +221,7 @@
             }
 
             // Add participant dropdown
-            addDropdownCallback(activeTab + "Participant", "searchPreviewUsers", activeTab + "AddParticipantSubmitButton")
+            addDropdownCallback(activeTab, "searchPreviewUsers", activeTab + "AddParticipantSubmitButton")
 
             if(animationFinishCallback != null){
                 animationFinishCallback();
@@ -296,7 +296,7 @@
                         }
 
                         // Add participant dropdown
-                        addDropdownCallback(activeTab + "Participant", "searchPreviewUsers", activeTab + "AddParticipantSubmitButton")
+                        addDropdownCallback(activeTab, "searchPreviewUsers", activeTab + "AddParticipantSubmitButton")
 
                         $("#insertExistingFormDiv").animate({marginTop: "0px", height: getSubFormHeight(panelType) + "px"}, transitionSpeed + 200);
                     });
@@ -1421,7 +1421,7 @@
         var newForm = addCreateProjectPost(getProjectFormDict(), "{{currentPageURL}}", "createProjectPostForm");
         projectFormDiv.innerHTML = newForm;
         // Add participant dropdown
-        addDropdownCallback("projectParticipant", "searchPreviewUsers", "projectAddParticipantSubmitButton")
+        addDropdownCallback("project", "searchPreviewUsers", "projectAddParticipantSubmitButton")
     }
 
     selectProjectTab("casting")
