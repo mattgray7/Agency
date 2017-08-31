@@ -116,7 +116,7 @@ def getBaseContext(request):
                                          "home": constants.HOME,
                                          "logout": constants.LOGOUT,
                                          "profile": constants.PROFILE,
-                                         "browse": constants.BROWSE_CHOICE,
+                                         "browse": constants.BROWSE,
                                          "post": constants.CREATE_POST},
                 "source": source,
                 "default": constants.DEFAULT,

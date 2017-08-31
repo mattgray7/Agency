@@ -14,7 +14,7 @@ import models
 import json
 
 
-class BrowseChoiceView(views.GenericFormView):
+"""class BrowseChoiceView(views.GenericFormView):
     def __init__(self, *args, **kwargs):
         super(BrowseChoiceView, self).__init__(*args, **kwargs)
 
@@ -25,13 +25,13 @@ class BrowseChoiceView(views.GenericFormView):
                                                      "users": constants.BROWSE_USERS,
                                                      "posts": constants.BROWSE_POSTS,
                                                      "projects": constants.BROWSE_PROJECTS}
-        return self._pageContext
+        return self._pageContext"""
 
 
-class GenericBrowseView(views.GenericFormView):
+class BrowseView(views.GenericFormView):
     def __init__(self, *args, **kwargs):
         self._nextPostID = None
-        super(GenericBrowseView, self).__init__(*args, **kwargs)
+        super(BrowseView, self).__init__(*args, **kwargs)
         self._followingPostIDs = None
         self._posterNameMap = None
         self._posterProfessionMap = None
@@ -61,7 +61,7 @@ class GenericBrowseView(views.GenericFormView):
 
     @property
     def cancelButtonName(self):
-        if self.sourcePage == constants.BROWSE_CHOICE:
+        if self.sourcePage == constants.BROWSE:
             self._cancelButtonName = "Back to browse"
         elif self.sourcePage == constants.VIEW_POST:
             self._cancelButtonName = "Back to post"
@@ -87,7 +87,7 @@ class GenericBrowseView(views.GenericFormView):
             if self.sourcePage == constants.VIEW_POST:
                 self._cancelDestination = self.sourcePage
             else:
-                self._cancelDestination = constants.BROWSE_CHOICE
+                self._cancelDestination = constants.BROWSE
         return self._cancelDestination
 
     def cancelPage(self):
@@ -113,20 +113,20 @@ class GenericBrowseView(views.GenericFormView):
 
     @property
     def pageContext(self):
-        self._pageContext["possibleViews"] = {"events": constants.BROWSE_EVENTS,
+        """self._pageContext["possibleViews"] = {"events": constants.BROWSE_EVENTS,
                                               "projects": constants.BROWSE_PROJECTS,
                                               "posts": constants.BROWSE_POSTS,
-                                              "users": constants.BROWSE_USERS}
+                                              "users": constants.BROWSE_USERS}"""
         self._pageContext["possibleDestinations"] = {"profile": constants.PROFILE,
                                                      "viewPost": constants.VIEW_POST,
-                                                     "browse": constants.BROWSE_CHOICE}
+                                                     "browse": constants.BROWSE}
         self._pageContext["followingPostIDs"] = self.followingPostIDs
         self._pageContext["posterNameMap"] = json.dumps(self.posterNameMap)
         self._pageContext["posterProfessionMap"] = json.dumps(self.posterProfessionMap)
         self._pageContext["browseType"] = self.currentPage
         return self._pageContext
 
-
+"""
 class BrowseEventsView(GenericBrowseView):
     def __init__(self, *args, **kwargs):
         super(BrowseEventsView, self).__init__(*args, **kwargs)
@@ -237,8 +237,7 @@ class BrowsePostsView(GenericBrowseView):
         self._pageContext["posts"]["work"] = self.workPostList
         self._pageContext["posts"]["casting"] = self.castingPostList
         return self._pageContext
-
+"""
 
 def isBrowsePage(pageName):
-    return pageName in [constants.BROWSE_EVENTS, constants.BROWSE_PROJECTS, constants.BROWSE_PROJECTS,
-                        constants.BROWSE_POSTS]
+    return pageName in [constants.BROWSE]

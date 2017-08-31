@@ -54,9 +54,5 @@ urlpatterns = [
 
 
     # Browse
-    url(r'^browse/$', views.handleURL, name=constants.BROWSE_CHOICE),
-    url(r'^browse/events/$', views.handleURL, name=constants.BROWSE_EVENTS),
-    url(r'^browse/projects/$', views.handleURL, name=constants.BROWSE_PROJECTS),
-    url(r'^browse/users/$', views.handleURL, name=constants.BROWSE_USERS),
-    url(r'^browse/posts/$', views.handleURL, name=constants.BROWSE_POSTS),
+    url(r'^browse/$', views.handleURL, name=constants.BROWSE),
 ]

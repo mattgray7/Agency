@@ -43,11 +43,12 @@ CREATE_COLLABORATION_POST = "CREATE_COLLABORATION_POST"
 CREATE_WORK_POST = "CREATE_WORK_POST"
 CREATE_CASTING_POST = "CREATE_CASTING_POST"
 
-BROWSE_CHOICE = "BROWSE_CHOICE"
+"""BROWSE_CHOICE = "BROWSE_CHOICE"
 BROWSE_POSTS = "BROWSE_POSTS"
 BROWSE_EVENTS = "BROWSE_EVENTS"
 BROWSE_PROJECTS = "BROWSE_PROJECTS"
-BROWSE_USERS = "BROWSE_USERS"
+BROWSE_USERS = "BROWSE_USERS"""
+BROWSE = "BROWSE"
 
 RANDOM_ID_LENGTH = 6
 
@@ -142,11 +143,7 @@ URL_MAP = {HOME: "/",
 		   CREATE_CASTING_POST: "/post/create/casting/",
 		   
 		   # Browse
-		   BROWSE_CHOICE: "/browse/",
-		   BROWSE_POSTS: "/browse/posts/",
-		   BROWSE_EVENTS: "/browse/events/",
-		   BROWSE_PROJECTS: "/browse/projects/",
-		   BROWSE_USERS: "/browse/users/"
+		   BROWSE: "/browse/"
 		   }
 
 
@@ -178,11 +175,7 @@ DEFAULT_PAGE_MAP = {HOME: HOME,
 					CREATE_CASTING_POST: VIEW_POST,
 
 					# Browse
-					BROWSE_CHOICE: BROWSE_CHOICE,
-					BROWSE_EVENTS: VIEW_POST,
-					BROWSE_PROJECTS: VIEW_POST,
-					BROWSE_POSTS: VIEW_POST,
-					BROWSE_USERS: PROFILE
+					BROWSE: BROWSE
 					}
 
 
@@ -213,12 +206,7 @@ VIEW_CLASS_MAP = {HOME: home.HomeView,
 				  LOGIN: account.LoginView,
 				  LOGOUT: account.LogoutView,
 			   	  PROFILE: profile.ProfileView,
-
-                  BROWSE_CHOICE: browse.BrowseChoiceView,
-                  BROWSE_EVENTS: browse.BrowseEventsView,
-                  BROWSE_PROJECTS: browse.BrowseProjectsView,
-                  BROWSE_USERS: browse.BrowseUsersView,
-                  BROWSE_POSTS: browse.BrowsePostsView,
+                  BROWSE: browse.BrowseView,
 
 			   	  # Create posts
 			   	  CREATE_POST: post.CreatePostTypesView,	# event, project, work, collab, casting
@@ -266,11 +254,7 @@ HTML_MAP = {HOME: 'AgencyApp/home.html',
 			CREATE_CASTING_POST: 'AgencyApp/post/createPost.html',
 
 			# Browse
-			BROWSE_CHOICE: 'AgencyApp/browseChoice.html',
-			BROWSE_EVENTS: 'AgencyApp/browse.html',
-			BROWSE_PROJECTS: 'AgencyApp/browse.html',
-			BROWSE_POSTS: 'AgencyApp/browse.html',
-			BROWSE_USERS: 'AgencyApp/browse.html'
+			BROWSE: 'AgencyApp/browse.html'
 			}
 
 
@@ -293,11 +277,11 @@ CREATE_POST_PAGE_MAP = {EVENT_POST: CREATE_EVENT_POST,
 						COLLABORATION_POST: CREATE_COLLABORATION_POST,
 						WORK_POST: CREATE_WORK_POST,
 						CASTING_POST: CREATE_CASTING_POST}
-
+"""
 BROWSE_POST_PAGE_MAP = {EVENT_POST: BROWSE_EVENTS,
                         PROFILE: BROWSE_USERS,
                         PROJECT_POST: BROWSE_PROJECTS,
                         COLLABORATION_POST: BROWSE_POSTS,
                         WORK_POST: BROWSE_POSTS,
-                        CASTING_POST: BROWSE_POSTS}
+                        CASTING_POST: BROWSE_POSTS}"""
 
