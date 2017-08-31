@@ -813,7 +813,7 @@
                 postFields["errors"] = errors;
             }
 
-            postFields["participants"] = getParticipantsField()
+            postFields["participants"] = getParticipantsField(null, "project")
             {% if participationSelectFields.project %}
                 postFields["participationSelectFields"] = {{participationSelectFields.project|safe}};
             {% endif %}
@@ -857,7 +857,7 @@
         }
     }
 
-    function getParticipantsField(existingPostData){
+    function getParticipantsField(existingPostData, postType){
         // Add post participants
         var participantsField = []
         if(existingPostData != null && "participants" in existingPostData){
@@ -865,7 +865,7 @@
                 var newField = {"username": existingPostData["participants"][i]["username"], "cleanName": existingPostData["participants"][i]["cleanName"], "profilePictureURL": existingPostData["participants"][i]["profilePictureURL"], "profession": existingPostData["participants"][i]["profession"], "status": existingPostData["participants"][i]["status"], "publicParticipation": existingPostData["participants"][i]["publicParticipation"]};
                 participantsField.push(newField)
             }
-        }else{
+        }else if(postType === "project"){
             {% if postParticipants %}
                 {% for part in postParticipants %}
                     var newField = {"username": "{{part.username}}", "cleanName": "{{part.cleanName}}", "profilePictureURL": "{{part.profilePictureURL}}", "profession": "{{part.profession}}", "status": "{{part.status}}", "publicParticipation": "{{part.publicParticipation}}"};
@@ -885,11 +885,11 @@
                 {% endfor %}
             {% endspaceless %}
 
+            // Add post participants
             {% if participationSelectFields.roles %}
                 postFields["participationSelectFields"] = {{participationSelectFields.roles|safe}};
             {% endif %}
-            
-            postFields["participants"] = getParticipantsField(existingPostData)
+            postFields["participants"] = getParticipantsField(existingPostData, "casting")
 
             if("compensationType" in postFields){
                 var compType;
@@ -918,19 +918,11 @@
                 {% endfor %}
             {% endspaceless %}
 
-            // Add actor
-            var workerField = {"username": "{{worker.username}}", "cleanName": "{{worker.cleanName}}"}
-            {% if actor %}
-                workerField["username"] = "{{worker.username}}";
-                workerField["cleanName"] = "{{worker.cleanName}}";
-                {% if worker.profilePicture %}
-                    workerField.profilePictureURL = '{{worker.profilePicture.url}}';
-                {% endif %}
-            {% else %}
-                workerField["username"] = null;
-                workerField.profilePictureURL = '{{images.noProfilePicture}}';
+            // Add post participants
+            {% if participationSelectFields.jobs %}
+                postFields["participationSelectFields"] = {{participationSelectFields.jobs|safe}};
             {% endif %}
-            postFields["worker"] = workerField;
+            postFields["participants"] = getParticipantsField(existingPostData, "jobs")
 
             if("compensationType" in postFields){
                 var compType;
