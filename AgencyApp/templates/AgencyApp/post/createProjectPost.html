@@ -221,7 +221,7 @@
             }
 
             // Add participant dropdown
-            addDropdownCallback(activeTab + "Participant", "searchPreviewActors")
+            addDropdownCallback(activeTab + "Participant", "searchPreviewActors", activeTab + "AddParticipantSubmitButton")
 
             if(animationFinishCallback != null){
                 animationFinishCallback();
@@ -296,7 +296,7 @@
                         }
 
                         // Add participant dropdown
-                        addDropdownCallback(activeTab + "Participant", "searchPreviewActors")
+                        addDropdownCallback(activeTab + "Participant", "searchPreviewActors", activeTab + "AddParticipantSubmitButton")
 
                         $("#insertExistingFormDiv").animate({marginTop: "0px", height: getSubFormHeight(panelType) + "px"}, transitionSpeed + 200);
                     });
