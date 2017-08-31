@@ -1231,18 +1231,29 @@ function previewTextInDropdown(textInputDivName, dropdownDivName, getDataFunctio
     }
 }
 
-function addDropdownCallback(dropdownID, callbackFunctionName){
+var enterPressed = false;
+function addDropdownCallback(dropdownID, callbackFunctionName, secondaryEnterSubmitButton){
     // Add participant dropdown
     var dropdownDiv = document.getElementById(dropdownID + "SearchTextInput");
     if(dropdownDiv != null){
         dropdownDiv.onkeyup = function(event){
+            if(event.keyCode != 13){
+                enterPressed = false;
+            }
             //40 is down, 38 is up
             if(event.keyCode === 40){
                 moveDropdownFocus("down", dropdownID + "Dropdown")
             }else if(event.keyCode === 38){
                 moveDropdownFocus("up", dropdownID + "Dropdown")
             }else if(event.keyCode === 13){
-                selectDropdownFocusElement(dropdownID + "Dropdown");
+                if(enterPressed){
+                    if(secondaryEnterSubmitButton != null){
+                        $("[id='" + secondaryEnterSubmitButton + "']").click();
+                    }
+                }else{
+                    selectDropdownFocusElement(dropdownID + "Dropdown");
+                }
+                enterPressed = true;
             }else{
                 previewTextInDropdown(dropdownID + "SearchTextInput", dropdownID + "Dropdown", callbackFunctionName);
             }
@@ -1625,7 +1636,7 @@ function getPostParticipantForm(postID, postType, formName, isSubForm, isNewForm
     formString += '<div id="' + postType + 'ParticipantDropdown" class="previewDropdownPanel" style="position: absolute; left: 0; right: 58%; top: 35px; margin-right: 1px; min-width: 184.5px; display: none; max-width: 234px;"></div>';
 
     // Add submit button
-    formString += '<div class="whiteButton blackHover" onclick="savePostParticipant(' + "'" + postID + "', '" + postType + "', '" + postType + "ParticipantSearchTextInput', '" + postType + "ParticipantSelectBar', ";
+    formString += '<div class="whiteButton blackHover" id="' + postType + 'AddParticipantSubmitButton" onclick="savePostParticipant(' + "'" + postID + "', '" + postType + "', '" + postType + "ParticipantSearchTextInput', '" + postType + "ParticipantSelectBar', ";
     if(isSubForm){
         if(isNewForm){
             formString += "'insertNewFormDiv'";
