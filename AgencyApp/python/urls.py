@@ -50,7 +50,7 @@ urlpatterns = [
     url(r'^ajax/updatePostParticipationStatus/$', ajax.updatePostParticipationStatus, name='updatePostParticipationStatus'),  #TODO find a way to secure this link
 
 
-    url(r'^ajax/getSearchPreviewActors/$', ajax.getSearchPreviewActors, name='getSearchPreviewActors'),  #TODO find a way to secure this link
+    url(r'^ajax/getSearchPreviewUsers/$', ajax.getSearchPreviewUsers, name='getSearchPreviewUsers'),  #TODO find a way to secure this link
 
 
     # Browse

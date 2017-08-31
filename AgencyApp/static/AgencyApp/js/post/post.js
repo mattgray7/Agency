@@ -1325,7 +1325,7 @@ function selectDropdownFocusElement(dropdownListID){
     }
 }
 
-function getPreviewActorsString(userList){
+function getPreviewUsersString(userList){
     var previewString = "<ul id='castingParticipationDropdownList'>";
     for(var i=0; i < userList.length; i++){
         previewString += "<li onclick='selectPostParticipant(" + '"' + userList[i]["username"] + '", "' + userList[i]["cleanName"] + '", "castingParticipantSearchTextInput", "castingParticipantDropdown");' + "'><div style='position:relative; height: 50px;'>"
@@ -1345,7 +1345,7 @@ function getPreviewActorsString(userList){
     return previewString;
 }
 
-function searchPreviewActors(textValue, container){
+function searchPreviewUsers(textValue, container){
     if(container != null){
         // TODO get the data
         //container.innerHTML = "<img src='" + buttonLoadingGifURL + "' style='height: 100px; width: 100px;'>";
@@ -1357,14 +1357,14 @@ function searchPreviewActors(textValue, container){
         }
 
         $.ajax({
-                url : "/ajax/getSearchPreviewActors/",
+                url : "/ajax/getSearchPreviewUsers/",
                 data : {"text": textValue},
                 type : 'POST',
                 dataType: "json",
                 success : function(data) {
                     if(data["success"]){
                         if(data["users"]){
-                            var contentString = getPreviewActorsString(data["users"]);
+                            var contentString = getPreviewUsersString(data["users"]);
                             container.innerHTML = contentString;
                         }
                     }else{

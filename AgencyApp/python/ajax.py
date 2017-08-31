@@ -358,23 +358,23 @@ def updatePostParticipationStatus(request):
             success = True
     return JsonResponse({"success": success})
 
-def getSearchPreviewActors(request):
+def getSearchPreviewUsers(request):
     text = request.POST.get("text")
     success = False
     returnList = []
-    matchingActors = None
+    matchingUsers = None
     if text:
         if " " in text:
             splitted = text.split(" ")
             if len(splitted) >= 2:
-                matchingActors = models.UserAccount.objects.filter(firstName__icontains=splitted[0],
+                matchingUsers = models.UserAccount.objects.filter(firstName__icontains=splitted[0],
                                                                    lastName__icontains=splitted[1])
-        if not matchingActors:
-            matchingActors = models.UserAccount.objects.filter(username__icontains=text)
-        if matchingActors:
+        if not matchingUsers:
+            matchingUsers = models.UserAccount.objects.filter(username__icontains=text)
+        if matchingUsers:
             success = True
             returnList = [{"username": x.username, "cleanName": x.cleanName, "profession": x.mainProfession,
-                           "profilePicture": x.profilePicture and x.profilePicture.url or constants.NO_PROFILE_PICTURE_PATH} for x in matchingActors]
+                           "profilePicture": x.profilePicture and x.profilePicture.url or constants.NO_PROFILE_PICTURE_PATH} for x in matchingUsers]
     return JsonResponse({"success": success, "users": returnList})
 
 
