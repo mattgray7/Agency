@@ -1440,7 +1440,12 @@ function savePostParticipant(postID, postType, inputDivID, labelDivID, parentCon
         var inputData = inputDiv.value;
         var labelInputValue = labelInputDiv.value;
         inputDiv.value = '';
-        labelInputDiv.value = 'Interested';
+
+        if(postType === "project"){
+            labelInputDiv.value = "Producer";
+        }else{
+            labelInputDiv.value = 'Interested';
+        }
 
         $.ajax({
                 url : "/ajax/savePostParticipant/",
@@ -1576,7 +1581,7 @@ function updatePostParticipationPrivacy(postID, postType, username){
     }
 }
 
-var currentPostParticipants = {"casting": [], "jobs": [], "event": []};
+var currentPostParticipants = {"casting": [], "jobs": [], "event": [], "project": []};
 var postParticipantSelectFields = {};
 function getPostParticipantTable(postID, postType, participants, formName, isSubForm, statusSelectFields){
     if(statusSelectFields == null){
@@ -1604,7 +1609,11 @@ function getPostParticipantTable(postID, postType, participants, formName, isSub
             // Add status
             var statusLabel = user["status"];
             if(statusLabel == null || statusLabel.length < 0 || statusLabel === "None"){
-                statusLabel = "Interested"
+                if(postType === "project"){
+                    statusLabel = "Producer";
+                }else{
+                    statusLabel = "Interested"
+                }
             }
             var statusLabelID = postType + "ParticipationEditStatusSelect_" + user["username"]
             var selectForm = createSelectForm(formName, statusLabelID, statusSelectFields, statusLabel);
