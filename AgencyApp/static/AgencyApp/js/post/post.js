@@ -317,10 +317,12 @@ function addCreateWorkPost(formDict, formURL, formName, isProjectSubForm){
     var pictureField = formDict["postPicture"];
     var pictureColumn = getPostPicturePanel("td", "postPicturePanel", pictureField.value, pictureField.editOnclick, "postPictureImg", true, pictureField.input, "mainPostPictureInput", formPictureMarginInfo);
 
+    var postID = formDict["postID"].value
+
     // Fill text content
     var sectionMap = {"Details": ["project", "title", "profession", "status", "startDate", "endDate", "hoursPerWeek", "compensationType"],
                       "The Job": ["description", "location", "skills"],
-                      "Worker": ["workerName"],
+                      "Users": ["participants"],
                       "Equipment": ["workerNeedsEquipment", "equipmentDescription"],
                       "hidden": ["csrf_token", "postID", "source", "next", "destination", "projectID", "poster"]}
     var mainLabelsColumn = "<td class='editPostLabelPanel' style='width: 20%; position:relative; line-height: 38.2px;'><ul style='margin-bottom: -14px; margin-top: -60px;'>";
@@ -361,8 +363,26 @@ function addCreateWorkPost(formDict, formURL, formName, isProjectSubForm){
                         sectionInputTableElement += "<li style='margin-top: -4px; height: 30px;'>None - <a onclick='" + field.addNewOnclick + "'>Add</a></li>";
                     }
                     continue;
-                }else if(fieldName === "workerName"){
-                    if(field.value != null && field.value.length > 0){
+                }else if(fieldName === "participants"){
+                    var participants = formDict["participants"]
+
+                    // Add participants panel
+                    var userTableString = '';
+                    var containerHeight = participantPanelBaseHeight;
+                    if(participants != null){
+                        var participantTableInfo = getPostParticipantTable(postID, "jobs", participants, formName, isProjectSubForm, formDict["participationSelectFields"]);
+                        containerHeight += participantTableInfo["tableHeight"];
+                        userTableString += "<div id='jobsParticipantTableContainer' style='position: relative; height: " + participantTableInfo["tableHeight"] + "px;'>" + participantTableInfo["html"] + "</div>"
+                        sectionLabelTableElement += "<div id='jobsParticipantLabelContainer' style='height: " + (participantTableInfo["tableHeight"] - 5) +  "px;'></div>";
+                    }
+
+                    // Add label
+                    sectionLabelTableElement += "<label for='name'>Add new</label><br>";
+                    sectionInputTableElement += "<div id='jobsParticipantPanel' style='height: " + containerHeight + "px;'>" + userTableString + getPostParticipantForm(postID, "jobs", formName, true, formDict["newPost"], formDict["participationSelectFields"], "Interested") + "</div>";
+                    continue;
+
+
+                    /*if(field.value != null && field.value.length > 0){
                         var workerDict = formDict["worker"]
 
                         // Add actor text panel
@@ -381,7 +401,7 @@ function addCreateWorkPost(formDict, formURL, formName, isProjectSubForm){
                         }
                         sectionInputTableElement += "</div>";
                     }
-                    continue;
+                    continue;*/
                 }
                 if(!field.hidden || field.name === "status"){
                     if(field.numRows > 1){

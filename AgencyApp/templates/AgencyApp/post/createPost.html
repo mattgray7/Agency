@@ -198,20 +198,9 @@
 
         function getWorkFormDict(){
             var postFields = createValueDictFromForm();
-
-            // Add actor
-            var workerField = {"username": "{{worker.username}}", "cleanName": "{{worker.cleanName}}"}
-            {% if worker %}
-                workerField["username"] = "{{worker.username}}";
-                workerField["cleanName"] = "{{worker.cleanName}}";
-                {% if worker.profilePicture %}
-                    workerField.profilePictureURL = '{{worker.profilePicture.url}}';
-                {% endif %}
-            {% else %}
-                workerField["username"] = null;
-                workerField.profilePictureURL = '{{images.noProfilePicture}}';
+            {% if participationSelectFields.jobs %}
+                postFields["participationSelectFields"] = {{participationSelectFields.jobs|safe}};
             {% endif %}
-            postFields["worker"] = workerField;
 
             var equipmentField = postFields["equipmentDescription"]
             if(equipmentField){
@@ -370,7 +359,13 @@
                     {% endif %}
 
                     // Add participant dropdown
-                    addDropdownCallback("casting", "searchPreviewUsers", "castingAddParticipantSubmitButton")
+                    {% if isCasting %}
+                        addDropdownCallback("casting", "searchPreviewUsers", "castingAddParticipantSubmitButton")
+                    {% elif isWork %}
+                        addDropdownCallback("jobs", "searchPreviewUsers", "jobsAddParticipantSubmitButton")
+                    {% elif isEvent %}
+                        addDropdownCallback("event", "searchPreviewUsers", "eventAddParticipantSubmitButton")
+                    {% endif %}
                 }
             </script>
         </div>
