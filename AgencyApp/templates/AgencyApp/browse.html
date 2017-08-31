@@ -1,6 +1,44 @@
 {% extends "base.html" %}
 
 {% block content %}
+{% load static %}
+<link href="{% static "/AgencyApp/css/browse.css" %}" rel="stylesheet" type="text/css" media="all" />
+<script type="text/javascript" src="{% static "/AgencyApp/js/post/post.js" %}"></script>
+
+
+<div id='backgroundPanel' class='backgroundPanel' style='min-width: 700px;'>
+    <div id="mainViewPanel" class="mainViewPanel" style="position: relative; min-width: 700px; max-width: 700px;">
+    	<table style="margin-top: 10px; width: 100%;">
+            <tr>
+                <td colspan="3" >
+                    <div style='position: relative; width: 100%; height: 55px;'>
+                        <div class="projectTabButtonInactive" id="castingButton" onclick="selectProjectTab('casting')" style="position: absolute; left: 0; margin-left: -3px;">
+                            POSTS
+                        	<div id="castingBorderCover" class="projectTabBorderCover"></div>
+                    	</div>
+                    	<div class="projectTabButtonInactive" id="jobsButton" onclick="selectProjectTab('jobs')" style="position: absolute; left:33.35%;">
+                            USERS
+                    		<div id="jobsBorderCover" class="projectTabBorderCover"></div>
+                        </div>
+                    	<div class="projectTabButtonInactive" id="eventsButton" onclick="selectProjectTab('events')" style="position: absolute; right: 0; margin-right: -3px;">
+                            EVENTS
+                            <div id="eventsBorderCover" class="projectTabBorderCover"></div>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    	<div id='browseContent' style='margin-top: -10px;'>
+    		<div id='searchPanel' class='browseSearchPanel' style='height: 200px;'></div>
+    		<br>
+    		<div id='searchResults' class='browseSearchResults' style='height: 400px;'></div>
+    	</div>
+    </div>
+</div>
+
+<script>
+
+</script>
 
 <!--<script>
 	function search(){

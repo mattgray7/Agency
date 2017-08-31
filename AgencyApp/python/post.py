@@ -576,7 +576,7 @@ class GenericViewPostView(views.GenericFormView):
     @property
     def cancelDestination(self):
         if self._cancelDestination is None:
-            self._cancelDestination = constants.BROWSE_POST_PAGE_MAP.get(self.post and self.post.postType or constants.PROFILE)
+            self._cancelDestination = constants.BROWSE
         return self._cancelDestination
 
     @property
@@ -613,10 +613,8 @@ class GenericViewPostView(views.GenericFormView):
         self._pageContext["possibleDestinations"] = {"editPost": constants.EDIT_POST,
                                                      "profile": constants.PROFILE,
                                                      "viewPost": constants.VIEW_POST,
-                                                     "browse": {"events": constants.BROWSE_EVENTS,
-                                                                "projects": constants.BROWSE_PROJECTS,
-                                                                "users": constants.BROWSE_USERS,
-                                                                "posts": constants.BROWSE_POSTS}}
+                                                     "browse": constants.BROWSE
+                                                     }
         self._pageContext["userIsAdmin"] = self.isPostAdmin
         self._pageContext["displayStatus"] = self.projectDisplayStatus
         self._pageContext['statusOptions'] = {"roles": constants.CASTING_STATUS_LIST,
