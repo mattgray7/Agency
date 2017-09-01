@@ -53,3 +53,23 @@
 	opacity: 0;
 	transition: background .2s ease;
 }
+.browseSearchTextBoxContainer
+{
+	/*position: absolute;
+	left: 20%;
+	right: 20%;
+	top: 10px;*/
+}
+
+.browseSearchTextBoxContainer input
+{
+	display: block;
+    padding: 0.3em 0.4em 0.3em 0.4em;
+    border: 1px solid #86898e;
+    margin-top: 6px;
+    margin-bottom: 5px;
+    border-radius: 4px;
+    width: 98%;
+    height: 22px;
+    font-size: 0.8em;
+}
