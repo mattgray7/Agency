@@ -143,6 +143,7 @@
     margin-top: 20px;
     border-radius: 6px;
 }
+.noFormInput,
 .form-style-7 li:last-child{
     border:none;
     margin-bottom: 0px;
