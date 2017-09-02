@@ -126,6 +126,7 @@ class CreateAccountView(views.GenericFormView):
                                                  username=self.username,
                                                  firstName=firstName,
                                                  lastName=lastName,
+                                                 phoneNumber=self.formData.get("phoneNumber"),
                                                  setupComplete=False)
                 try:
                     user.save()

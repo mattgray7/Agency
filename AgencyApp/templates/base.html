@@ -440,7 +440,7 @@
                 return input;
             };
 
-            function createPageRedirectForm(source, next, destination, formProcessURL, extraHiddenInputs, formParent, submitButtonValue){
+            function createPageRedirectForm(source, next, destination, formProcessURL, extraHiddenInputs, formParent, submitButtonValue, hidden){
                 if (formProcessURL == null){
                     formProcessURL = "/";
                 }
@@ -454,6 +454,9 @@
                 form.setAttribute('method', "post");
                 form.setAttribute('action', formProcessURL);
                 form.setAttribute('id', 'redirectForm');
+                if(hidden){
+                    form.style.display = "none";
+                }
 
                 form.appendChild(createFormInput("hidden", "source", source));
                 form.appendChild(createFormInput("hidden", "next", next));
@@ -477,19 +480,31 @@
                 return form;
             }
 
+            function cancelPage(){
+                var form = createCancelPageForm(null, "{{ cancelDestination }}", "{{ cancelDestinationURL }}", "{{ cancelButtonName }}", true);
+                return form.submit()
+            }
+
+            function createCancelPageForm(parentDiv, destination, destinationURL, buttonName, hidden){
+                var extraInputs = []
+                extraInputs.push({key: "{{ cancel }}", value: "True"});
+                {% if cancelButtonExtraInputs %}
+                    var cancelButtonExtraInputs = {{ cancelButtonExtraInputs|safe }};
+                    for(var key in cancelButtonExtraInputs){
+                        extraInputs.push({key: key, value: cancelButtonExtraInputs[key]});
+                    }
+                {% endif %}
+        
+                // create hiddenForm
+                var cancelButtonForm = createPageRedirectForm("{{ cancelSource }}", "{{ next }}", destination, destinationURL, extraInputs, parentDiv, buttonName, hidden)
+                return cancelButtonForm
+            }
+
             //Cancel button
             function createCancelButton(cancelButtonDiv, destination, destinationURL, buttonName){
                 if (cancelButtonDiv != null){
-                    var extraInputs = []
-                    extraInputs.push({key: "{{ cancel }}", value: "True"});
-                    {% if cancelButtonExtraInputs %}
-                        var cancelButtonExtraInputs = {{ cancelButtonExtraInputs|safe }};
-                        for(var key in cancelButtonExtraInputs){
-                            extraInputs.push({key: key, value: cancelButtonExtraInputs[key]});
-                        }
-                    {% endif %}
+                    var cancelButtonForm = createCancelPageForm(cancelButtonDiv, destination, destinationURL, buttonName, false)
         
-                    var cancelButtonForm = createPageRedirectForm("{{ cancelSource }}", "{{ next }}", destination, destinationURL, extraInputs, cancelButtonDiv, buttonName)
                     var label = document.getElementById("cancelButtonLabel");
                     if(label != null){
                         if(buttonName != null){

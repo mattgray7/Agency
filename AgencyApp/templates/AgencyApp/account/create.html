@@ -1,19 +1,53 @@
 {% extends "base.html" %}
 
 {% block content %}
-	<h2>Basic Info</h2>
-	{% if errors %}
-		<ul>
-			{% for error in errors %}
-				<li>{{ error }}</li>
-			{% endfor %}
+<div id='backgroundPanel' class='backgroundPanel' style='min-width: 700px;'>
+    <div id="mainViewPanel" class="mainViewPanel" style="position: relative; min-width: 300px; max-width: 400px; min-height: 400px;">
+		<h1 style='margin-top: 10px;'>Basic Info</h1>
+		<div class="form-style-7">
+			{% if errors %}
+				<ul>
+					{% for error in errors %}
+						<li>{{ error }}</li>
+					{% endfor %}
+				</ul>
+			{% endif %}
+			<ul>
+			<form method='post' action="/account/create/basic/" id="createAccountForm">
+				{% csrf_token %}
+				<script>
+					{% for field in form %}
+	                    var lineString = '';
+	                    if(!('{{field}}'.includes("hidden"))){
+	                        lineString = "<li><label for='name'>{{field.label}}</label>";
+	                        if('{{field}}'.includes("password")){
+	                            lineString += "<input type='password' name='password'>"
+	                        }else{
+	                            lineString += "<input type='text' name='{{field.name}}' maxlength='100'>";
+	                        }
+	                        lineString += "</li>"
+	                    }else{
+	                        lineString += '{{field}}';
+	                    }
+	                    lineString += "<li style='display: none;'></li>"
+	                    document.write(lineString);
+	                {% endfor %}
+	            </script>
+
+			</form>
+			<li>
+				<div style='position: relative; height: 50px; width: 100%;'>
+	                <div style='position: absolute; left: 0; right: 55%;'>
+						<div id="cancel" class="whiteButton blackHover" style="width: 72%; height:28px; padding: 1em 2em; font-size: 0.85em;" onclick='cancelPage();'><div style='margin-top: 4px;'>Cancel</div></div>
+					</div>
+					<div style='position: absolute; left: 51%; right: 12px;'>
+						<div id="createAccountButton" class="whiteButton blackHover" style="width: 72%; height:28px; padding: 1em 2em; font-size: 0.85em;" onclick="document.getElementById('createAccountForm').submit();"><div style='margin-top: 4px;'>Create Account</div></div>
+					</div>
+				</div>
+			</li>
 		</ul>
-	{% endif %}
-	<form method='post' action="/account/create/basic/">
-		{% csrf_token %}
-		{{ form.as_p }}
-		<input type="submit" value="Create Account" />
-	</form>
-	<div id="cancelButton" class="button"><div id="cancelButtonLabel"></div></div>
+		</div>
+	</div>
+</div>
 
 {% endblock %}

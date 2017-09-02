@@ -36,6 +36,7 @@ class UserAccount(models.Model):
     username = models.CharField(max_length=100)
     firstName = models.CharField(max_length=100)
     lastName = models.CharField(max_length=100)
+    phoneNumber = models.CharField(max_length=30, blank=True, null=True)
     setupComplete = models.BooleanField(default=False)
 
     profilePicture = models.ImageField(default=None, upload_to=image_directory_path, storage=imageStorage)
