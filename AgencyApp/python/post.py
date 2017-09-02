@@ -78,7 +78,6 @@ class GenericPostInstance(object):
         self._projectID = kwargs.get("projectID")
         self._record = None
         self._database = None
-        self._formErrors = None
         self._errors = []
 
     @property

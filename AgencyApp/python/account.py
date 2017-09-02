@@ -97,6 +97,7 @@ class CreateAccountView(views.GenericFormView):
         self._pageContext["email"] = self.errorMemory.get("email")
         self._pageContext["firstName"] = self.errorMemory.get("firstName")
         self._pageContext["lastName"] = self.errorMemory.get("lastName")
+        self._pageContext["phoneNumber"] = self.errorMemory.get("phoneNumber")
         return self._pageContext
 
     @property
@@ -104,10 +105,12 @@ class CreateAccountView(views.GenericFormView):
         self._formInitialValues["email"] = self.errorMemory.get("email")
         self._formInitialValues["firstName"] = self.errorMemory.get("firstName")
         self._formInitialValues["lastName"] = self.errorMemory.get("lastName")
+        self._formInitialValues["phoneNumber"] = self.errorMemory.get("phoneNumber")
         return self._formInitialValues
 
     def processForm(self):
         """Overriding asbtract method"""
+        print "RPOCESSING CREATE FORM"
         if _emailIsRegistered(self.formData.get('email')):
             self._pageErrors.append("Email already in use.")
         else:
@@ -148,7 +151,7 @@ class CreateAccountFinishView(views.GenericFormView):
     def pageContext(self):
         self._pageContext["possibleDestinations"] = {"event": constants.CREATE_EVENT_POST,
                                                      "post": constants.CREATE_POST,
-                                                     "browse": constants.BROWSE_CHOICE}
+                                                     "browse": constants.BROWSE}
         return self._pageContext
 
     def checkFormValidity(self):

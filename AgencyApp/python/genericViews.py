@@ -184,6 +184,7 @@ class GenericFormView(GenericView):
         self._formInitialValues = {}
         self._formSubmitted = None
         self._formData = None
+        self._formErrors = None
         self.setupFormInitialValues()
 
     def setupFormInitialValues(self):
@@ -226,6 +227,29 @@ class GenericFormView(GenericView):
                 self._form = self.formClass(initial=self.formInitialValues)
         return self._form
 
+    @property
+    def formErrors(self):
+        if not self._formErrors:
+            self._formErrors = {}
+
+            # Dirty hack to get current page from post type
+            formClass = constants.FORM_MAP.get(self.currentPage)
+            form = formClass(self.request.POST)
+            if not form.is_valid():
+                errorDict = {}
+                for field in form:
+                    if field.errors:
+                        errorMessage = str(field.errors).replace('<ul class="errorlist"><li>', '').replace('</li></ul>', '')
+                        if errorMessage in errorDict:
+                            errorDict[errorMessage].append(field.label.replace("*", ""))
+                        else:
+                            errorDict[errorMessage] = [field.label.replace("*", "")]
+
+                # Add more error messages here when they occur and should be stopped
+                if "This field is required." in errorDict:
+                    self._formErrors["required"] =  errorDict["This field is required."]
+        return self._formErrors
+
     def checkFormValidity(self):
         formIsValid = False
         if self.request.POST.get(constants.CANCEL) != "True":
@@ -235,7 +259,9 @@ class GenericFormView(GenericView):
                         self.errorMemory = self.formData
                         formIsValid = self.processForm()
                     else:
-                        self.errorMemory = self.request.POST
+                        print "Form errors: {0}".format(self.form.errors)
+                        self.errorMemory = self.form.errors
+                        #self.errorMemory = self.request.POST
                 else:
                     formIsValid = self.processForm()
         else:
