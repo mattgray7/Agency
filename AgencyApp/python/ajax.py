@@ -5,6 +5,7 @@ import post
 import models
 import helpers
 import constants
+import browse
 import post_casting as castingPost
 import post_work as workPost
 import post_event as eventPost
@@ -418,5 +419,18 @@ def getSearchPreviewUsers(request):
                            "profilePicture": x.profilePicture and x.profilePicture.url or constants.NO_PROFILE_PICTURE_PATH} for x in matchingUsers]
     return JsonResponse({"success": success, "users": returnList})
 
+
+
+def getSearchResults(request):
+    searchValue = request.POST.get("searchValue")
+    categories = request.POST.getlist("categories[]")       # Need the brackets to convert js array to python list
+    results = {}
+    if len(categories) > 0:
+        for category in categories:
+            if category not in results:
+                results[category] = []
+            if category == "jobs":
+                results[category] += browse.getJobsSearchResults(searchValue, 10)
+    return JsonResponse({"success": True, "results": results})
 
 

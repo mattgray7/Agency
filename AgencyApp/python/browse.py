@@ -239,5 +239,38 @@ class BrowsePostsView(GenericBrowseView):
         return self._pageContext
 """
 
+def _formatSearchPostResult(dbObject, extraFields):
+    formattedResult = None
+    if dbObject:
+        formattedResult = {"title": dbObject.title,
+                            "status": dbObject.status,
+                            "postID": dbObject.postID,
+                            "postPictureURL": dbObject.postPicture and dbObject.postPicture.url or None,
+                            "poster": dbObject.poster,
+                            "description": dbObject.description}
+        if extraFields:
+            for fieldName in extraFields:
+                fieldValue = dbObject.__dict__.get(fieldName) or ""
+                formattedResult[fieldName] = fieldValue
+    return formattedResult
+
+def getJobsSearchResults(searchValue, numResults):
+    results = []
+    if searchValue and searchValue not in ["None", "null"]:
+        # Look in name
+        nameResults = models.WorkPost.objects.filter(title__icontains=searchValue)
+        if nameResults:
+            for i, res in enumerate(nameResults):
+                if(i >= numResults):
+                    break;
+                results.append(_formatSearchPostResult(res, ["compensationType",
+                                                             "compensationDescription",
+                                                             "startDate",
+                                                             "endDate",
+                                                             "location",
+                                                             "profession",
+                                                             "hoursPerWeek"]))
+    return results
+
 def isBrowsePage(pageName):
     return pageName in [constants.BROWSE]

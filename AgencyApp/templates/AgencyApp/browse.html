@@ -21,62 +21,25 @@
                 browseButton.className = "active";
             }
         }
-        /*for(var i=0; i < browseTabs.length; i++){
-            var buttonId = browseTabs[i] + "Button";
-            var borderCoverId = browseTabs[i] + "BorderCover";
-            var projectButtonDiv = document.getElementById(buttonId);
-            var projectButtonBorderCoverDiv = document.getElementById(borderCoverId)
-            if(projectButtonDiv != null && projectButtonBorderCoverDiv != null){
-                if(browseTabs[i] === tabType){
-                    projectButtonDiv.className = "browseTabButtonActive";
-                    projectButtonBorderCoverDiv.style.opacity = 1;
-                    activeTab = tabType;
-                } else {
-                    projectButtonDiv.className = "browseTabButtonInactive";
-                    projectButtonBorderCoverDiv.style.opacity = 0;
+    }
+
+    function submitSearch(){
+        var searchValue = ''
+        var searchInput = document.getElementById("searchTextInput");
+        if(searchInput != null && searchInput.value != null && searchInput.value.length > 0){
+            searchValue = searchInput.value;
+        }
+        if(activeTabs.length != 0){
+            $.ajax({
+                url : "/ajax/getSearchResults/",
+                data : {"categories": activeTabs, "searchValue": searchValue},
+                type : 'POST',
+                dataType: "json",
+                success : function(data) {
+                    console.log(data)
                 }
-            }
-        }
-
-        var searchPanel = document.getElementById("searchPanel")
-        if(searchPanel != null){
-            searchPanel.innerHTML = getSearchPanel(browseTabs)
-        }*/
-
-        // If a post form was expanded on old tab, reset values
-        /*if(expanded){
-            toggleExpandNewForm("shrink", activeTab)
-        }
-        expanded = false;
-        currentExistingFormPostID = '';*/
-
-        /*var entries;
-        var sectionOrder;
-        var titleFieldName;
-        if(tabType === "roles"){
-            entries = getBrowseRolesDict();
-            sectionOrder = ["Open", "Opening soon", "Cast"];
-            titleFieldName = "characterName";
-        }else if(tabType == "jobs"){
-            entries = getBrowseJobsDict();
-            sectionOrder = ["Open", "Opening soon", "Filled"];
-            titleFieldName = "profession";
-        }else if(tabType == "events"){
-            entries = getBrowseEventsDict();
-            sectionOrder = ["Today", "Happening Now", "Upcoming", "Past"];
-            titleFieldName = "title";
-        }
-        var table = createBrowseTable(tabType, entries, sectionOrder, true, titleFieldName, false)
-        var contentDiv = document.getElementById("projectContentList")
-        if(contentDiv != null){
-            contentDiv.innerHTML = table;
-        }
-        $(window).resize(function () {
-            resizeBrowseTable(function(){
-                document.getElementById("browseTable").style.width = tableColCount * 300 + "px";
-                selectbrowseTab(activeTab);
             });
-        });*/
+        }
     }
 
 </script>
@@ -91,9 +54,9 @@
                     <div class='browseSearchTextBoxContainer' style='position:absolute; top: 50px; width: 420px; margin: 0 auto; left: 0; right: 0;'>
                         <div style='position: relative;'>
                             <div style='position: absolute; left: 0; right: 80px;'>
-                                <input type='text' placeholder='Add search keywords'>
+                                <input type='text' id='searchTextInput' placeholder='Add search keywords'>
                             </div>
-                            <div style='position: absolute; right: -4px; padding: 5px 10px; margin-top: 7px; font-size: 0.9em;' class='whiteButton blackHover'>
+                            <div onclick='submitSearch();' style='position: absolute; right: -4px; padding: 5px 10px; margin-top: 7px; font-size: 0.9em;' class='whiteButton blackHover'>
                                 Search
                             </div>
                         </div>

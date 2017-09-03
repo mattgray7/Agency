@@ -130,6 +130,7 @@ class AbstractPost(models.Model):
     postPicturePath = models.CharField(max_length=5000, default=None, blank=True, null=True)
     postPicture = models.ImageField(default=None, upload_to=image_directory_path, storage=imageStorage, blank=True, null=True)
     status = models.CharField(max_length=50, default="Open", blank=True, null=True)
+    location = models.CharField(max_length=300, blank=True, null=True)
 
 class PostParticipant(models.Model):
     postID = models.CharField(max_length=10)
@@ -141,7 +142,6 @@ class ProjectPost(AbstractPost):
     projectType = models.CharField(max_length=200, blank=True, null=True)
     length = models.CharField(max_length=200, blank=True, null=True)      # only filled if status is Filled (vs Hiring)
     union = models.BooleanField(default=False, blank=True, null=True)
-    location = models.CharField(max_length=200, blank=True, null=True)
 
     def __init__(self, *args, **kwargs):
         super(ProjectPost, self).__init__(*args, **kwargs)
@@ -222,7 +222,6 @@ class WorkPost(AbstractPost):
     compensationType = models.CharField(default="Unpaid", max_length=200, blank=True, null=True)
     compensationDescription = models.CharField(max_length=200, blank=True, null=True)
     skills = models.CharField(max_length=300, blank=True, null=True)
-    location = models.CharField(max_length=300, blank=True, null=True)
     startDate = models.DateField(default=None, blank=True, null=True)
     endDate = models.DateField(default=None, blank=True, null=True)
     hoursPerWeek = models.TextField(max_length=50, blank=True, null=True, default="TBD")
@@ -261,7 +260,6 @@ class CastingPost(AbstractPost):
     languages = models.CharField(max_length=300, blank=True, null=True)
     startDate = models.DateField(default=None, blank=True, null=True)
     endDate = models.DateField(default=None, blank=True, null=True)
-    location = models.CharField(max_length=1000, default=None, blank=True, null=True)
     hoursPerWeek = models.TextField(max_length=50, blank=True, null=True, default="TBD")
 
     @property
@@ -278,7 +276,6 @@ class CastingPost(AbstractPost):
         return "Unspecified"
 
 class EventPost(AbstractPost):
-    location = models.CharField(max_length=1000, default=None, blank=True, null=True)
     startDate = models.DateField(default=None, blank=True, null=True)
     endDate = models.DateField(default=None, blank=True, null=True)
     startTime = models.TimeField(default=None, blank=True, null=True)
