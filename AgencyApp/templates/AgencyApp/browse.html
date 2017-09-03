@@ -6,9 +6,9 @@
 <script type="text/javascript" src="{% static "/AgencyApp/js/browse.js" %}"></script>
 
 <script>
-    var browseTabs = ["posts", "users", "events"]
+    var browseTabs = ["jobs", "roles", "users", "projects", "events"]
     function selectBrowseTab(tabType){
-        for(var i=0; i < browseTabs.length; i++){
+        /*for(var i=0; i < browseTabs.length; i++){
             var buttonId = browseTabs[i] + "Button";
             var borderCoverId = browseTabs[i] + "BorderCover";
             var projectButtonDiv = document.getElementById(buttonId);
@@ -28,7 +28,7 @@
         var searchPanel = document.getElementById("searchPanel")
         if(searchPanel != null){
             searchPanel.innerHTML = getSearchPanel(browseTabs)
-        }
+        }*/
 
         // If a post form was expanded on old tab, reset values
         /*if(expanded){
@@ -71,35 +71,24 @@
 
 <div id='backgroundPanel' class='backgroundPanel' style='min-width: 700px;'>
     <div id="mainViewPanel" class="mainViewPanel" style="position: relative; min-width: 700px; max-width: 700px; background: rgba(0,0,0,0.05); border: none;">
-        <table style="width: 100%;">
-            <tr>
-                <td colspan="3" >
-                    <div style='position: relative; width: 100%; height: 55px;'>
-                        <div class="browseTabButtonInactive" id="postsButton" onclick="selectBrowseTab('posts')" style="position: absolute; left: 0; margin-left: -3px;">
-                            POSTS
-                            <div id="postsBorderCover" class="browseTabBorderCover"></div>
-                        </div>
-                        <div class="browseTabButtonInactive" id="usersButton" onclick="selectBrowseTab('users')" style="position: absolute; left:33.35%;">
-                            USERS
-                            <div id="usersBorderCover" class="browseTabBorderCover"></div>
-                        </div>
-                        <div class="browseTabButtonInactive" id="eventsButton" onclick="selectBrowseTab('events')" style="position: absolute; right: 0; margin-right: -3px;">
-                            EVENTS
-                            <div id="eventsBorderCover" class="browseTabBorderCover"></div>
-                        </div>
-                    </div>
-                </td>
-            </tr>
-        </table>
         <div id='browseContent' style='margin-top: -10px; position: relative; height: 600px; width: 100%;'>
-            <div id='searchPanel' class='browseSearchPanel' style='position: absolute; height: 200px; left: 0; right: 0; z-index: 1;'></div>
+            <div id='searchPanel' class='browseSearchPanel' style='position: absolute; height: 200px; left: 0; right: 0; z-index: 1;'>
+                <div class="browseCategoriesList">
+                    <ul style='margin-top: 10px;'>
+                        <script>
+                            for(var i=0; i<browseTabs.length; i++){
+                                document.write("<li><a>" + browseTabs[i].toUpperCase() + "</a></li>")
+                            }
+                        </script>
+                    </ul>
+                </div>
+            </div>
             <div id='searchResults' class='browseSearchResults' style='position: absolute; height: 400px; width: 100%; margin-top: 10px;'></div>
         </div>
     </div>
 </div>
 
 <script>
-selectBrowseTab("posts")
 </script>
 
 <!--<script>
@@ -145,7 +134,7 @@ selectBrowseTab("posts")
     <button onclick="search()"> Search</button>
     <br><br>
 </div>
-
+9
 <div id="eventsViewDiv"></div>
 <div id="projectsViewDiv"></div>
 <div id="postsViewDiv"></div>

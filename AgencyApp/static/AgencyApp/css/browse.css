@@ -5,54 +5,48 @@
 .browseSearchResults{
 	background: rgba(0,0,0,0.2);
 }
-.browseTabButtonActive,
-.browseTabButtonInactive
+
+.browseCategoriesList ul
 {
-	width: 33%;
-	min-width: 100px;
-	padding: 10px 0px 20px 0px;
-	height: 20px;
 	display: inline-block;
-	letter-spacing: 0.10em;
-	border: 1px solid #000;
-	border-radius: 3px;
+}
+	
+.browseCategoriesList li
+{
+	display: block;
+	float: left;
 	text-align: center;
-	font-weight: 300;
-	font-size: 1em;
+}
+	
+.browseCategoriesList li a, .browseCategoriesList li span
+{
+	padding: .75em 1.0em;
+	letter-spacing: 1px;
+	text-decoration: none;
+	text-transform: uppercase;
+	font-size: 0.8em;
+	/*color: rgba(255,255,255,0.80);
+	border: 1px solid rgba(255,255,255,0);*/
+	color: rgba(0,0,0,0.8);
+	border: 1px solid rgba(0,0,0,0.8);
+	border-radius: 1px;
+}
+	
+.browseCategoriesList li:hover a, .browseCategoriesList li.active a, .browseCategoriesList li:active span
+{
+	border: 1px solid rgba(255,255,255,1);
+	border-radius: 0px;
+	color: rgba(255,255,255,1);
 	cursor: pointer;
-	transition: background .20s ease;
 }
-.browseTabButtonActive
+	
+.browseCategoriesList .active a
 {
-	color: #000;
-	background: #ededed;
+	border: 1px solid rgba(255,255,255,1);
+	border-radius: 6px;
+	color: rgba(255,255,255,1);
 }
-.browseTabButtonInactive
-{
-	color: #FFF;
-	background: #232323;
-}
-.browseTabButtonInactive:hover
-{
-	color: #c6c6c6;
-	transition: color .20s ease;
-}
-.browseTabButtonActive:hover
-{
-	color: #6d6d6d;
-	transition: color .20s ease;
-}
-.browseTabBorderCover
-{
-	width: 100%;
-	background: #ededed;
-	height: 4px;
-	margin: 15px 0px 0px 0px;
-	position: relative;
-	z-index: 3;
-	opacity: 0;
-	transition: background .2s ease;
-}
+
 .browseSearchTextBoxContainer
 {
 	/*position: absolute;
