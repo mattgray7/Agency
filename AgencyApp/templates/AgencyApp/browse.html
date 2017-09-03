@@ -69,22 +69,23 @@
 </script>
 
 
-<div id='backgroundPanel' class='backgroundPanel' style='min-width: 700px;'>
-    <div id="mainViewPanel" class="mainViewPanel" style="position: relative; min-width: 700px; max-width: 700px; background: rgba(0,0,0,0.05); border: none;">
+<div id='backgroundPanel' class='backgroundPanel' style='min-width: 600px;'>
+    <div id="mainViewPanel" class="mainViewPanel" style="position: relative; min-width: 600px; max-width: 600px; background: rgba(0,0,0,0.05); border: none;">
         <div id='browseContent' style='margin-top: -10px; position: relative; height: 600px; width: 100%;'>
             <div id='searchPanel' class='browseSearchPanel' style='position: absolute; height: 200px; left: 0; right: 0; z-index: 1;'>
                 <div id='searchPanelContent' style='position: relative; height: 100%; width: 100%;'>
-                    <div class='browseSearchTextBoxContainer' style='position:absolute; top: 10px; left: 5%; right: 5%;'>
+                    <h1 style='margin-top: 10px;'>Explore</h1>
+                    <div class='browseSearchTextBoxContainer' style='position:absolute; top: 50px; width: 420px; margin: 0 auto; left: 0; right: 0;'>
                         <div style='position: relative;'>
                             <div style='position: absolute; left: 0; right: 80px;'>
-                                <input type='text' placeholder='Browse projects, jobs, or roles'>
+                                <input type='text' placeholder='Add search keywords'>
                             </div>
-                            <div style='position: absolute; right: 0; padding: 4px; margin-top: 7px;' class='whiteButton blackHover'>
+                            <div style='position: absolute; right: -4px; padding: 5px 10px; margin-top: 7px; font-size: 0.9em;' class='whiteButton blackHover'>
                                 Search
                             </div>
                         </div>
                     </div>
-                    <div class="browseCategoriesList" style="position: absolute; top: 60px; margin: 0 auto; left: 0; right: 0;">
+                    <div class="browseCategoriesList" style="position: absolute; top: 87px; margin: 0 auto; left: 0; right: 0;">
                         <ul style='margin-top: 10px;'>
                             <script>
                                 for(var i=0; i<browseTabs.length; i++){
