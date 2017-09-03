@@ -79,6 +79,7 @@ class GenericPostInstance(object):
         self._record = None
         self._database = None
         self._errors = []
+        self._formErrors = []
 
     @property
     def postID(self):

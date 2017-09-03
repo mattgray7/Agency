@@ -248,28 +248,61 @@ def _formatSearchPostResult(dbObject, extraFields):
                             "postPictureURL": dbObject.postPicture and dbObject.postPicture.url or None,
                             "poster": dbObject.poster,
                             "description": dbObject.description}
+        if dbObject.projectID:
+            try:
+                proj = models.ProjectPost.objects.get(postID=dbObject.projectID)
+            except models.ProjectPost.DoesNotExist:
+                pass
+            else:
+                formattedResult["projectID"] = dbObject.projectID
+                formattedResult["projectName"] = proj.title
         if extraFields:
             for fieldName in extraFields:
                 fieldValue = dbObject.__dict__.get(fieldName) or ""
                 formattedResult[fieldName] = fieldValue
     return formattedResult
 
+def _appendPostResultsByType(existingList, filteredNewList, numResults, requiredFields):
+    if existingList is not None and len(existingList) < numResults:
+        if filteredNewList:
+            for i, res in enumerate(filteredNewList):
+                if(len(existingList) >= numResults):
+                    break;
+
+                # Check if post already matches, add if it doesn't
+                existing = False
+                for existingPost in existingList:
+                    if existingPost["postID"] == res.postID:
+                        existing = True
+                        break
+                if not existing:
+                    existingList.append(_formatSearchPostResult(res, requiredFields))
+    return existingList
+
 def getJobsSearchResults(searchValue, numResults):
     results = []
     if searchValue and searchValue not in ["None", "null"]:
+        # Search pattern is to look through professions, titles, project titles, and then descriptions
+        requiredFields = ["compensationType", "compensationDescription", "startDate",
+                          "endDate", "location", "profession", "hoursPerWeek"]
+
+        # Look in profession
+        results = _appendPostResultsByType(existingList=results,
+                                           filteredNewList=models.WorkPost.objects.filter(profession__icontains=searchValue),
+                                           numResults=numResults,
+                                           requiredFields=requiredFields)
+
         # Look in name
-        nameResults = models.WorkPost.objects.filter(title__icontains=searchValue)
-        if nameResults:
-            for i, res in enumerate(nameResults):
-                if(i >= numResults):
-                    break;
-                results.append(_formatSearchPostResult(res, ["compensationType",
-                                                             "compensationDescription",
-                                                             "startDate",
-                                                             "endDate",
-                                                             "location",
-                                                             "profession",
-                                                             "hoursPerWeek"]))
+        results = _appendPostResultsByType(existingList=results,
+                                           filteredNewList=models.WorkPost.objects.filter(title__icontains=searchValue),
+                                           numResults=numResults,
+                                           requiredFields=requiredFields)
+
+        # Look in description
+        results = _appendPostResultsByType(existingList=results,
+                                           filteredNewList=models.WorkPost.objects.filter(description__icontains=searchValue),
+                                           numResults=numResults,
+                                           requiredFields=requiredFields)
     return results
 
 def isBrowsePage(pageName):
