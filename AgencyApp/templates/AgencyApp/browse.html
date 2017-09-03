@@ -6,8 +6,21 @@
 <script type="text/javascript" src="{% static "/AgencyApp/js/browse.js" %}"></script>
 
 <script>
-    var browseTabs = ["jobs", "roles", "users", "projects", "events"]
-    function selectBrowseTab(tabType){
+    var browseTabs = ["jobs", "roles", "users", "projects", "events"];
+    var activeTabs = ["jobs", "roles", "users", "projects", "events"];
+    function selectBrowseTab(browseType){
+        var browseButton = document.getElementById(browseType + "BrowseCategoryButton")
+        if(browseButton != null){
+            // If button is active, deactivate it (and vice versa)
+            var activeTabListIndex = activeTabs.indexOf(browseType)
+            if(activeTabListIndex > -1){
+                activeTabs.splice(activeTabListIndex, 1)
+                browseButton.className = "";
+            }else{
+                activeTabs.push(browseType);
+                browseButton.className = "active";
+            }
+        }
         /*for(var i=0; i < browseTabs.length; i++){
             var buttonId = browseTabs[i] + "Button";
             var borderCoverId = browseTabs[i] + "BorderCover";
@@ -89,7 +102,7 @@
                         <ul style='margin-top: 10px;'>
                             <script>
                                 for(var i=0; i<browseTabs.length; i++){
-                                    document.write("<li>" + browseTabs[i].toUpperCase() + "</li>")
+                                    document.write("<li class='active' id='" + browseTabs[i] + "BrowseCategoryButton' onclick='selectBrowseTab(" + '"' + browseTabs[i] + '");' + "'>" + browseTabs[i].toUpperCase() + "</li>")
                                 }
                             </script>
                         </ul>
