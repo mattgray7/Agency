@@ -7,7 +7,7 @@
 
 <script>
     var browseTabs = ["jobs", "roles", "users", "projects", "events"];
-    var activeTabs = ["jobs", "roles", "users", "projects", "events"];
+    var activeTabs = [browseTabs[0]];
     function selectBrowseTab(browseType){
         var browseButton = document.getElementById(browseType + "BrowseCategoryButton")
         if(browseButton != null){
@@ -85,7 +85,7 @@
 <div id='backgroundPanel' class='backgroundPanel' style='min-width: 600px;'>
     <div id="mainViewPanel" class="mainViewPanel" style="position: relative; min-width: 600px; max-width: 600px; background: rgba(0,0,0,0.05); border: none;">
         <div id='browseContent' style='margin-top: -10px; position: relative; height: 600px; width: 100%;'>
-            <div id='searchPanel' class='browseSearchPanel' style='position: absolute; height: 200px; left: 0; right: 0; z-index: 1;'>
+            <div id='searchPanel' class='browseSearchPanel' style='position: absolute; height: 170px; left: 0; right: 0; z-index: 1;'>
                 <div id='searchPanelContent' style='position: relative; height: 100%; width: 100%;'>
                     <h1 style='margin-top: 10px;'>Explore</h1>
                     <div class='browseSearchTextBoxContainer' style='position:absolute; top: 50px; width: 420px; margin: 0 auto; left: 0; right: 0;'>
@@ -102,7 +102,12 @@
                         <ul style='margin-top: 10px;'>
                             <script>
                                 for(var i=0; i<browseTabs.length; i++){
-                                    document.write("<li class='active' id='" + browseTabs[i] + "BrowseCategoryButton' onclick='selectBrowseTab(" + '"' + browseTabs[i] + '");' + "'>" + browseTabs[i].toUpperCase() + "</li>")
+                                    var categoryButtonString = "<li ";
+                                    if(i === 0){
+                                        categoryButtonString += "class='active' "
+                                    }
+                                    categoryButtonString += "id='" + browseTabs[i] + "BrowseCategoryButton' onclick='selectBrowseTab(" + '"' + browseTabs[i] + '");' + "'>" + browseTabs[i].toUpperCase() + "</li>";
+                                    document.write(categoryButtonString)
                                 }
                             </script>
                         </ul>
