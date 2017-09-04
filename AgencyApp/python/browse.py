@@ -124,6 +124,7 @@ class BrowseView(views.GenericFormView):
         self._pageContext["posterNameMap"] = json.dumps(self.posterNameMap)
         self._pageContext["posterProfessionMap"] = json.dumps(self.posterProfessionMap)
         self._pageContext["browseType"] = self.currentPage
+        self._pageContext["professionDict"] = json.dumps(constants.PROFESSIONS)
         return self._pageContext
 
 """

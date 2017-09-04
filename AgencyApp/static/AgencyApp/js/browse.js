@@ -19,7 +19,7 @@ function createJobElement(dataDict){
 	return element
 }
 
-function addProfessionDropdownCallback(callbackFunctionName, secondaryEnterSubmitButton){
+function addProfessionDropdownCallback(callbackFunctionName, secondaryEnterSubmitButton, extraInputs){
     // Add participant dropdown
     var dropdownDiv = document.getElementById("searchTextInput");
     if(dropdownDiv != null){
@@ -42,7 +42,7 @@ function addProfessionDropdownCallback(callbackFunctionName, secondaryEnterSubmi
                 }
                 enterPressed = true;
             }else{
-                previewTextInDropdown("searchTextInput", "professionDropdown", callbackFunctionName);
+                previewTextInDropdown("searchTextInput", "professionDropdown", callbackFunctionName, extraInputs);
             }
         }
     }
@@ -65,29 +65,20 @@ function previewTextInDropdown(textInputDivName, dropdownDivName, getDataFunctio
     var dropdownDiv = document.getElementById(dropdownDivName);
     if(textInput != null && dropdownDiv != null){
         if(textInput.value != null){
-        	console.log(getDataFunctionName)
             window[getDataFunctionName](textInput.value, dropdownDiv, extraInputs)
         }
     }
 }
 
 function getPreviewProfessionString(professionList){
-    var previewString = "<ul id='professionDropdownList'>";
-    for(var i=0; i < professionList.length; i++){
-        previewString += "<li onclick='selectProfession(" + '"' + professionList[i] + '", "searchTextInput", "professionDropdown");' + "'><div style='position:relative; height: 30px;'>"
-
-        /*// Add user picture if it exists
-        previewString += "<img src='" + userList[i]["profilePicture"] + "' style='height: 40px; width:36px; position: absolute; top: 5px; left: 2px; border: 1px solid rgba(0,0,0,0.1); border-radius: 2px;' />";
-
-        // Add name
-        previewString += "<div style='position: absolute; left: 45px; top: 0; margin-top: -2px; font-weight: 500;'>" + userList[i]["cleanName"] + "</div>";
-
-        // Add profession
-        previewString += "<div style='position: absolute; left: 45px; top: 17px; color: rgba(0,0,0,0.7); font-size: 0.9em;'>" + userList[i]["profession"] + "</div>";*/
-        previewString += professionList[i];
-
-        previewString += "</div></li>";
-    }
+    var previewString = "<ul id='professionDropdownList' style='margin-bottom: -20px;'>";
+    if(professionList.length > 0){
+	    for(var i=0; i < professionList.length; i++){
+	        previewString += "<li style='border: none;' onclick='selectProfession(" + '"' + professionList[i] + '", "searchTextInput", "professionDropdown");' + "'><div style='position:relative; height: 30px; text-align: left; margin-left: 4px;'>" + professionList[i] + "</div></li>";
+	    }
+	}else{
+		previewString += "No matching professions"
+	}
     previewString += "</ul>";
     return previewString;
 }
@@ -97,33 +88,23 @@ function searchPreviewProfessions(textValue, container, extraInputs){
         // TODO get the data
         //container.innerHTML = "<img src='" + buttonLoadingGifURL + "' style='height: 100px; width: 100px;'>";
 
-        if(textValue.length === 0){
-            container.style.display = "none";
-        }else{
+        var professions = [];
+        if(textValue.length != 0){
             container.style.display = "block";
+	        if("professionDict" in extraInputs){
+				for(section in extraInputs["professionDict"]){
+					for(var i=0; i < extraInputs["professionDict"][section].length; i++){
+						var currentProfession = extraInputs["professionDict"][section][i];
+						if(currentProfession.toLowerCase().startsWith(textValue.toLowerCase())){
+							professions.push(currentProfession);
+						}
+					}
+				}
+			}
+        }else{
+            container.style.display = "none";
         }
-
-        var professions = ["Actor", "director", "person"];
         var professionString = getPreviewProfessionString(professions)
-        container.innerHTML = professionString;
-        /*$.ajax({
-                url : "/ajax/getSearchPreviewUsers/",
-                data : {"text": textValue},
-                type : 'POST',
-                dataType: "json",
-                success : function(data) {
-                    if(data["success"]){
-                        if(data["users"]){
-                            if(extraInputs["postType"] != null){
-                                var contentString = getPreviewProfessionString(data["users"], extraInputs["postType"]);
-                                container.innerHTML = contentString;
-                            }
-                        }
-                    }else{
-                        container.innerHTML = "No user found with name " + textValue
-                    }
-                }
-            });*/
-
+	    container.innerHTML = professionString;
     }
 }
