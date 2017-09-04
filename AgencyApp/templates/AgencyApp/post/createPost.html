@@ -360,11 +360,11 @@
 
                     // Add participant dropdown
                     {% if isCasting %}
-                        addDropdownCallback("casting", "searchPreviewUsers", "castingAddParticipantSubmitButton")
+                        addParticipantDropdownCallback("casting", "searchPreviewUsers", "castingAddParticipantSubmitButton")
                     {% elif isWork %}
-                        addDropdownCallback("jobs", "searchPreviewUsers", "jobsAddParticipantSubmitButton")
+                        addParticipantDropdownCallback("jobs", "searchPreviewUsers", "jobsAddParticipantSubmitButton")
                     {% elif isEvent %}
-                        addDropdownCallback("event", "searchPreviewUsers", "eventAddParticipantSubmitButton")
+                        addParticipantDropdownCallback("event", "searchPreviewUsers", "eventAddParticipantSubmitButton")
                     {% endif %}
                 }
             </script>

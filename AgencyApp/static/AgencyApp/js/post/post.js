@@ -1262,7 +1262,7 @@ function previewTextInDropdown(textInputDivName, dropdownDivName, getDataFunctio
 }
 
 var enterPressed = false;
-function addDropdownCallback(postType, callbackFunctionName, secondaryEnterSubmitButton){
+function addParticipantDropdownCallback(postType, callbackFunctionName, secondaryEnterSubmitButton){
     // Add participant dropdown
     var dropdownDiv = document.getElementById(postType + "ParticipantSearchTextInput");
     if(dropdownDiv != null){
