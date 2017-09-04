@@ -6,7 +6,7 @@ function createSearchResultsDisplay(resultList){
     var displayString = '';
     var tableHeight = 17;
     for(section in resultList){
-        displayString += "<h1 style='position: relative; width: 100%; height: 40px;'><div style='position: absolute; top: 0; left: 5px;'>" + section + "</div></h1>";
+        displayString += "<h1 style='position: relative; width: 100%; height: 40px;'><div style='position: absolute; top: 0; left: 5px;'>" + section + " (" + resultList[section].length + ")</div></h1>";
         tableHeight += 45
 
         displayString += "<ul>"
