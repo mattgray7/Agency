@@ -31,6 +31,12 @@
             searchValue = searchInput.value;
         }
 
+        var dropdown = document.getElementById("professionDropdown");
+        if(dropdown != null){
+            dropdown.style.display = "none";
+            dropdown.innerHTML = "";
+        }
+
         var resultsPanel = document.getElementById("searchResultsPanel")
         if(activeTabs.length != 0){
             $.ajax({
@@ -42,9 +48,13 @@
                     if(data["success"]){
                         if(data["results"]){
                             if(resultsPanel != null){
-                                var browseResultsTableString = createSearchResultsDisplay(data["results"])
-                                if(browseResultsTableString != null && browseResultsTableString.length > 0){
-                                    resultsPanel.innerHTML = browseResultsTableString;
+                                var browseResultsTableInfo = createSearchResultsDisplay(data["results"])
+                                if(browseResultsTableInfo["html"] != null && browseResultsTableInfo["html"].length > 0){
+                                    resultsPanel.innerHTML = browseResultsTableInfo["html"];
+                                    $("#searchResultsPanel").animate({marginTop: "10px", height: browseResultsTableInfo["tableHeight"] + "px"}, 500, function(){});
+
+                                    var newMainViewHeight = (browseResultsTableInfo["tableHeight"] + 180) + "px";
+                                    $("#browseContent").animate({marginTop: "-10px", height: newMainViewHeight}, 500, function(){});
                                 }
                             }
                         }
@@ -57,9 +67,9 @@
 </script>
 
 
-<div id='backgroundPanel' class='backgroundPanel' style='min-width: 600px;'>
+<div id='backgroundPanel' class='backgroundPanel' style='min-width: 600px; min-height: 100%;'>
     <div id="mainViewPanel" class="mainViewPanel" style="position: relative; min-width: 600px; max-width: 600px; background: rgba(0,0,0,0.05); border: none;">
-        <div id='browseContent' style='margin-top: -10px; position: relative; height: 600px; width: 100%;'>
+        <div id='browseContent' style='margin-top: -10px; display: block; position: relative; height: 170px; width: 100%;'>
             <div id='searchPanel' class='browseSearchPanel' style='position: absolute; height: 170px; left: 0; right: 0; z-index: 1;'>
                 <div id='searchPanelContent' style='position: relative; height: 100%; width: 100%;'>
                     <h1 style='margin-top: 10px;'>Explore</h1>
@@ -95,7 +105,7 @@
                     </div>
                 </div>
             </div>
-            <div id='searchResultsPanel' class='browseSearchResults' style='position: absolute; height: 400px; width: 100%; margin-top: 10px; top: 170px;'></div>
+            <div id='searchResultsPanel' class='browseSearchResults' style='position: absolute; height: 0px; left: 0; right: -2px; margin-top: 10px; top: 170px;'></div>
         </div>
     </div>
 </div>

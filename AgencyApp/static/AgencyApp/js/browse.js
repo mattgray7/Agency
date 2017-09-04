@@ -1,22 +1,27 @@
 
 //var categoryFunctionMap = {"jobs": createJobElemement, "roles": createRoleElement, "users": createUserElement,}
 
+var browseTableElementHeight = 165;
 function createSearchResultsDisplay(resultList){
 	var displayString = '';
+	var tableHeight = 17;
 	for(section in resultList){
 		displayString += "<h1 style='position: relative; width: 100%; height: 40px;'><div style='position: absolute; top: 0; left: 5px;'>" + section + "</div></h1>";
+		tableHeight += 45
+
 		displayString += "<ul>"
 		for(var i=0; i < resultList[section].length; i++){
 			displayString += createBrowseListElement(section, resultList[section][i]);
+			tableHeight += browseTableElementHeight + 5;
 		}
 		displayString += "</ul>"
 	}
-	return displayString
+	return {"html": displayString, "tableHeight": tableHeight}
 }
 
 var createBrowseListElementFunctionMap = {"jobs": createJobElement, "roles": createRoleElement}
 function createBrowseListElement(elementType, dataDict){
-	var element = "<li style='width: 100%; height: 170px; position: relative; overflow: hidden;'>"
+	var element = "<li style='height: " + browseTableElementHeight + "px; position: relative; overflow: hidden;'>"
 	
 	// Add picture
 	element += "<div style='position: absolute; left: 0; right: 75%; height: 100%; text-align: left;'><img src='" + dataDict["postPictureURL"] + "' style='margin-top: 8px; margin-left: 10px; max-height: 90%; max-width: 100%;'/></div>"
