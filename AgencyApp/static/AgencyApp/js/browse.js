@@ -6,7 +6,17 @@ function createSearchResultsDisplay(resultList){
     var displayString = '';
     var tableHeight = 17;
     for(section in resultList){
-        displayString += "<h1 style='position: relative; width: 100%; height: 40px;'><div style='position: absolute; top: 0; left: 5px;'>" + section + " (" + resultList[section].length + ")</div></h1>";
+        // Add section header container
+        displayString += "<div style='position: realtive; width: 100%; height: 40px;'>"
+
+        // Add shrink/expand section button
+        displayString += "<div class='browseTableExpandSectionButton' style='position: absolute; top: 20px; left: 5px;'><div style='margin-top: -7px; margin-left: 1px;'>+</div></div>";
+
+        displayString += "<h1 style='position: absolute; top: 0; left: 25px;'>"
+
+        // Add section title
+        displayString += "" + section + " (" + resultList[section].length + ")</h1>";
+        displayString += "</div>"
         tableHeight += 48
 
         displayString += "<ul>"

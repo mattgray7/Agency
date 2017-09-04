@@ -112,3 +112,12 @@
 .browseSearchTextBoxContainer input:focus{
     outline-width: 0;
 }
+
+.browseTableExpandSectionButton{
+	width: 10px;
+	height: 10px;
+	border: 1px solid #000;
+}
+.browseTableExpandSectionButton:hover{
+	cursor: pointer;
+}
