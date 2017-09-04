@@ -420,6 +420,22 @@ def getSearchPreviewUsers(request):
     return JsonResponse({"success": success, "users": returnList})
 
 
+def getSearchSuggestions(request):
+    searchValue = request.POST.get("text")
+    if searchValue:
+        # Get professions, projects, users
+
+        # Get professions
+        professionList = []
+        for category in constants.PROFESSIONS:
+            if any([x.lower().startswith(searchValue.lower()) for x in constants.PROFESSIONS[category]]):
+                for profession in constants.PROFESSIONS[category]:
+                    if profession.lower().startswith(searchValue.lower()):
+                        professionList.append(profession)
+        professionList = list(set(professionList))      # Remove duplicates
+    return JsonResponse({"success": True, "suggestions": professionList})
+
+
 
 def getSearchResults(request):
     searchValue = request.POST.get("searchValue")

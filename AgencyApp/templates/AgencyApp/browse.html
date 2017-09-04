@@ -32,7 +32,7 @@
             searchValue = searchInput.value;
         }
 
-        var dropdown = document.getElementById("professionDropdown");
+        var dropdown = document.getElementById("browseDropdown");
         if(dropdown != null){
             dropdown.style.display = "none";
             dropdown.innerHTML = "";
@@ -85,11 +85,11 @@
                         <div style='position: relative;'>
                             <div style='position: absolute; left: 0; right: 80px;'>
                                 <input type='text' id='searchTextInput' placeholder='Add search keywords'>
-                                <div id="professionDropdown" class="previewDropdownPanel" style="position: absolute; left: 0; right: 0; margin-right: -5px; top: 35px; border: 1px solid #86898e; display: none;">
+                                <div id="browseDropdown" class="previewDropdownPanel" style="position: absolute; left: 0; right: 0; margin-right: -5px; top: 35px; border: 1px solid #86898e; display: none;">
                                 </div>
 
                                 <script>
-                                    addProfessionDropdownCallback("searchPreviewProfessions", "submitSearchButton", {"professionDict": {{professionDict|safe}}})
+                                    addBrowseDropdownCallback("searchPreviewBrowseSuggestions", "submitSearchButton", {})
                                 </script>
                             </div>
                             <div onclick='submitSearch();' id='submitSearchButton' style='position: absolute; right: -4px; padding: 5px 10px; margin-top: 7px; font-size: 0.9em;' class='whiteButton blackHover'>

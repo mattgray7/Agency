@@ -96,7 +96,7 @@ function createJobElement(dataDict){
 	return element
 }
 
-function addProfessionDropdownCallback(callbackFunctionName, secondaryEnterSubmitButton, extraInputs){
+function addBrowseDropdownCallback(callbackFunctionName, secondaryEnterSubmitButton, extraInputs){
     // Add participant dropdown
     var dropdownDiv = document.getElementById("searchTextInput");
     if(dropdownDiv != null){
@@ -106,30 +106,30 @@ function addProfessionDropdownCallback(callbackFunctionName, secondaryEnterSubmi
             }
             //40 is down, 38 is up
             if(event.keyCode === 40){
-                moveDropdownFocus("down", "professionDropdown")
+                moveDropdownFocus("down", "browseDropdown")
             }else if(event.keyCode === 38){
-                moveDropdownFocus("up", "professionDropdown")
+                moveDropdownFocus("up", "browseDropdown")
             }else if(event.keyCode === 13){
                 if(enterPressed){
                     if(secondaryEnterSubmitButton != null){
                         $("[id='" + secondaryEnterSubmitButton + "']").click();
                     }
                 }else{
-                    selectDropdownFocusElement("professionDropdown");
+                    selectDropdownFocusElement("browseDropdown");
                 }
                 enterPressed = true;
             }else{
-                previewTextInDropdown("searchTextInput", "professionDropdown", callbackFunctionName, extraInputs);
+                previewTextInDropdown("searchTextInput", "browseDropdown", callbackFunctionName, extraInputs);
             }
         }
     }
 }
 
-function selectProfession(profession, textDivName, dropdownDivName){
+function selectBrowseSuggestion(value, textDivName, dropdownDivName){
 	var textDiv = document.getElementById(textDivName);
     var dropdownDiv = document.getElementById(dropdownDivName);
     if(textDiv != null){
-        textDiv.value = profession;
+        textDiv.value = value;
     }
     if(dropdownDiv != null){
         dropdownDiv.style.display = "none";
@@ -147,11 +147,11 @@ function previewTextInDropdown(textInputDivName, dropdownDivName, getDataFunctio
     }
 }
 
-function getPreviewProfessionString(professionList){
+function getPreviewBrowseSuggestionsString(professionList){
     var previewString = "<ul id='professionDropdownList' style='margin-bottom: -20px;'>";
     if(professionList.length > 0){
 	    for(var i=0; i < professionList.length; i++){
-	        previewString += "<li style='border: none;' onclick='selectProfession(" + '"' + professionList[i] + '", "searchTextInput", "professionDropdown");' + "'><div style='position:relative; height: 30px; text-align: left; margin-left: 4px;'>" + professionList[i] + "</div></li>";
+	        previewString += "<li style='border: none;' onclick='selectBrowseSuggestion(" + '"' + professionList[i] + '", "searchTextInput", "browseDropdown");' + "'><div style='position:relative; height: 30px; text-align: left; margin-left: 4px;'>" + professionList[i] + "</div></li>";
 	    }
 	}else{
 		previewString += "No matching professions"
@@ -160,28 +160,34 @@ function getPreviewProfessionString(professionList){
     return previewString;
 }
 
-function searchPreviewProfessions(textValue, container, extraInputs){
+function searchPreviewBrowseSuggestions(textValue, container, extraInputs){
     if(container != null){
         // TODO get the data
         //container.innerHTML = "<img src='" + buttonLoadingGifURL + "' style='height: 100px; width: 100px;'>";
-
-        var professions = [];
+        
         if(textValue.length != 0){
             container.style.display = "block";
-	        if("professionDict" in extraInputs){
-				for(section in extraInputs["professionDict"]){
-					for(var i=0; i < extraInputs["professionDict"][section].length; i++){
-						var currentProfession = extraInputs["professionDict"][section][i];
-						if(currentProfession.toLowerCase().startsWith(textValue.toLowerCase())){
-							professions.push(currentProfession);
-						}
-					}
-				}
-			}
+            var professions = [];
+			$.ajax({
+                url : "/ajax/getSearchSuggestions/",
+                data : {"text": textValue},
+                type : 'POST',
+                dataType: "json",
+                success : function(data) {
+                    if(data["success"]){
+                        if(data["suggestions"].length > 0){
+                        	professions = data["suggestions"];
+                        }
+                    }else{
+                        container.innerHTML = "No user found with name " + textValue
+                    }
+                    var professionString = getPreviewBrowseSuggestionsString(professions)
+	    			container.innerHTML = professionString;
+                }
+            });
         }else{
             container.style.display = "none";
         }
-        var professionString = getPreviewProfessionString(professions)
-	    container.innerHTML = professionString;
+        
     }
 }
