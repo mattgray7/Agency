@@ -48,6 +48,18 @@ function addProfessionDropdownCallback(callbackFunctionName, secondaryEnterSubmi
     }
 }
 
+function selectProfession(profession, textDivName, dropdownDivName){
+	var textDiv = document.getElementById(textDivName);
+    var dropdownDiv = document.getElementById(dropdownDivName);
+    if(textDiv != null){
+        textDiv.value = profession;
+    }
+    if(dropdownDiv != null){
+        dropdownDiv.style.display = "none";
+        dropdownDiv.innerHTML = "";
+    }
+}
+
 function previewTextInDropdown(textInputDivName, dropdownDivName, getDataFunctionName, extraInputs){
     var textInput = document.getElementById(textInputDivName);
     var dropdownDiv = document.getElementById(dropdownDivName);
@@ -62,7 +74,7 @@ function previewTextInDropdown(textInputDivName, dropdownDivName, getDataFunctio
 function getPreviewProfessionString(professionList){
     var previewString = "<ul id='professionDropdownList'>";
     for(var i=0; i < professionList.length; i++){
-        previewString += "<li onclick='selectProfession(" + '"' + professionList[i] + '");' + "'><div style='position:relative; height: 50px;'>"
+        previewString += "<li onclick='selectProfession(" + '"' + professionList[i] + '", "searchTextInput", "professionDropdown");' + "'><div style='position:relative; height: 30px;'>"
 
         /*// Add user picture if it exists
         previewString += "<img src='" + userList[i]["profilePicture"] + "' style='height: 40px; width:36px; position: absolute; top: 5px; left: 2px; border: 1px solid rgba(0,0,0,0.1); border-radius: 2px;' />";
