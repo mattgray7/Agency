@@ -19,7 +19,7 @@ function createSearchResultsDisplay(resultList){
     return {"html": displayString, "tableHeight": tableHeight}
 }
 
-var createBrowseListElementFunctionMap = {"jobs": createJobElement, "roles": createRoleElement, "projects": createProjectElement, "events": createEventElement}
+var createBrowseListElementFunctionMap = {"jobs": createJobElement, "roles": createRoleElement, "projects": createProjectElement, "events": createEventElement, "users": createUserElement}
 function createBrowseListElement(elementType, dataDict){
     var element = "<li style='height: " + browseTableElementHeight + "px; position: relative; overflow: hidden;'>"
     
@@ -115,13 +115,26 @@ function createEventElement(dataDict){
     element += "<h2 class='postInfoTitle'><a onclick='redirectToPost(" +'"' + dataDict["postID"] + '");' + "'>" + dataDict["title"] + "</a></h2>"
     element += "<div style='color: rgba(0,0,0,0.8);'>"
 
-    element += "<div>" + dataDict["status"] + "</div>"
-
     // Add dates
     element += getDateString(new Date(dataDict["startDate"]), new Date(dataDict["endDate"]));
 
     // Add description
     element += "<div style='height: 50px; color: rgba(0,0,0,0.5); position: absolute: right: 0; text-align: left;'>" + dataDict["description"] + "</div>"
+
+    return element
+}
+
+function createUserElement(dataDict){
+    var element = "";
+    // Add info content
+    element += "<h2 class='postInfoTitle'><a onclick='redirectToProfile(" +'"' + dataDict["username"] + '");' + "'>" + dataDict["cleanName"] + "</a></h2>"
+    element += "<div style='color: rgba(0,0,0,0.8);'>"
+
+    // Add dates
+    element += "<div>" + dataDict["profession"] + "</div>";
+
+    // Add bio
+    element += "<div style='height: 50px; color: rgba(0,0,0,0.5); position: absolute: right: 0; text-align: left;'>" + dataDict["bio"] + "</div>"
 
     return element
 }

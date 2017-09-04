@@ -374,5 +374,42 @@ def getEventSearchResults(searchValue, numResults):
 
     return results
 
+def getUserSearchResults(searchValue, numResults):
+    # Have to do differently as it is not a post
+    results = []
+    if searchValue and searchValue not in ["None", "null"]:
+        # Search pattern is to look through professions, titles, project titles, and then descriptions
+        requiredFields = ["username", "cleanName", "mainProfession", "description"]
+
+        # Get matching users
+        users = None
+        if " " in searchValue:
+            splitted = searchValue.split(" ")
+            if len(splitted) > 1:
+                users = models.UserAccount.objects.filter(firstName__startswith=splitted[0], lastName__startswith=splitted[1])
+        if not users:
+            users = models.UserAccount.objects.filter(firstName__startswith=searchValue)
+
+        # Format user data and add to results (if it doesn't already exist in results)
+        for user in users:
+            if(len(results) >= numResults):
+                break;
+
+            # Check if post already matches, add if it doesn't
+            existing = False
+            for existingUser in results:
+                if existingUser["username"] == user.username:
+                    existing = True
+                    break
+            if not existing:
+                newDict = {"username": user.username,
+                           "cleanName": user.cleanName,
+                           "profession": user.mainProfession,
+                           "bio": user.bio,
+                           "postPictureURL": user.profilePicture and user.profilePicture.url or constants.NO_PROFILE_PICTURE_PATH
+                           }
+                results.append(newDict)
+    return results
+
 def isBrowsePage(pageName):
     return pageName in [constants.BROWSE]
