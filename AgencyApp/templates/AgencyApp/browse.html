@@ -24,6 +24,7 @@
         }
     }
 
+    var firstSearch = true;
     function submitSearch(){
         var searchValue = ''
         var searchInput = document.getElementById("searchTextInput");
@@ -50,7 +51,14 @@
                             if(resultsPanel != null){
                                 var browseResultsTableInfo = createSearchResultsDisplay(data["results"])
                                 if(browseResultsTableInfo["html"] != null && browseResultsTableInfo["html"].length > 0){
+                                    if(firstSearch){
+                                        firstSearch = false;
+                                        $("#mainViewPanel").animate({marginTop: "0px"}, 500, function(){});
+                                    }
+
+
                                     resultsPanel.innerHTML = browseResultsTableInfo["html"];
+                                    resultsPanel.style.display = 'block';
                                     $("#searchResultsPanel").animate({marginTop: "10px", height: browseResultsTableInfo["tableHeight"] + "px"}, 500, function(){});
 
                                     var newMainViewHeight = (browseResultsTableInfo["tableHeight"] + 180) + "px";
@@ -68,8 +76,8 @@
 
 
 <div id='backgroundPanel' class='backgroundPanel' style='min-width: 600px; min-height: 100%;'>
-    <div id="mainViewPanel" class="mainViewPanel" style="position: relative; min-width: 600px; max-width: 600px; background: rgba(0,0,0,0.05); border: none;">
-        <div id='browseContent' style='margin-top: -10px; display: block; position: relative; height: 170px; width: 100%;'>
+    <div id="mainViewPanel" class="mainViewPanel" style="position: relative; min-width: 600px; max-width: 600px; background: rgba(0,0,0,0.05); border: none; margin-top: 10%;">
+        <div id='browseContent' style='display: block; position: relative; height: 170px; width: 100%;'>
             <div id='searchPanel' class='browseSearchPanel' style='position: absolute; height: 170px; left: 0; right: 0; z-index: 1;'>
                 <div id='searchPanelContent' style='position: relative; height: 100%; width: 100%;'>
                     <h1 style='margin-top: 10px;'>Explore</h1>
@@ -105,7 +113,7 @@
                     </div>
                 </div>
             </div>
-            <div id='searchResultsPanel' class='browseSearchResults' style='position: absolute; height: 0px; left: 0; right: -2px; margin-top: 10px; top: 170px;'></div>
+            <div id='searchResultsPanel' class='browseSearchResults' style='position: absolute; height: 0px; left: 0; right: -2px; margin-top: 10px; top: 170px; display: none;'></div>
         </div>
     </div>
 </div>
