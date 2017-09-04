@@ -422,18 +422,24 @@ def getSearchPreviewUsers(request):
 
 def getSearchSuggestions(request):
     searchValue = request.POST.get("text")
+    suggestions = {"Profession": []}
     if searchValue:
         # Get professions, projects, users
 
         # Get professions
         professionList = []
         for category in constants.PROFESSIONS:
-            if any([x.lower().startswith(searchValue.lower()) for x in constants.PROFESSIONS[category]]):
-                for profession in constants.PROFESSIONS[category]:
-                    if profession.lower().startswith(searchValue.lower()):
-                        professionList.append(profession)
-        professionList = list(set(professionList))      # Remove duplicates
-    return JsonResponse({"success": True, "suggestions": professionList})
+            for profession in constants.PROFESSIONS[category]:
+                if profession.lower().startswith(searchValue.lower()):
+                    professionList.append(profession)
+        suggestions["Profession"] = list(set(professionList))      # Remove duplicates
+
+        # Get projects
+        projects = ([x.title for x in models.ProjectPost.objects.filter(title__startswith=searchValue)] +
+                    [x.title for x in models.ProjectPost.objects.filter(title__startswith="The {0}".format(searchValue))])
+        if projects:
+            suggestions["Project"] = list(set(projects))
+    return JsonResponse({"success": True, "suggestions": suggestions})
 
 
 

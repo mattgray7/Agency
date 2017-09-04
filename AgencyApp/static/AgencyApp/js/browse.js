@@ -147,14 +147,16 @@ function previewTextInDropdown(textInputDivName, dropdownDivName, getDataFunctio
     }
 }
 
-function getPreviewBrowseSuggestionsString(professionList){
-    var previewString = "<ul id='professionDropdownList' style='margin-bottom: -20px;'>";
-    if(professionList.length > 0){
-	    for(var i=0; i < professionList.length; i++){
-	        previewString += "<li style='border: none;' onclick='selectBrowseSuggestion(" + '"' + professionList[i] + '", "searchTextInput", "browseDropdown");' + "'><div style='position:relative; height: 30px; text-align: left; margin-left: 4px;'>" + professionList[i] + "</div></li>";
-	    }
+function getPreviewBrowseSuggestionsString(suggestions){
+    var previewString = "<ul id='browseSuggestionDropdownList' style='margin-bottom: -20px;'>";
+    if(suggestions != null){
+    	for(type in suggestions){
+    		for(var i=0; i < suggestions[type].length; i++){
+    			previewString += "<li style='border: none;' onclick='selectBrowseSuggestion(" + '"' + suggestions[type][i] + '", "searchTextInput", "browseDropdown");' + "'><div style='position:relative; height: 30px; text-align: left; margin-left: 4px;'>" + suggestions[type][i] + " - " + type + "</div></li>";
+    		}
+    	}
 	}else{
-		previewString += "No matching professions"
+		previewString += "No suggestions"
 	}
     previewString += "</ul>";
     return previewString;
@@ -167,7 +169,7 @@ function searchPreviewBrowseSuggestions(textValue, container, extraInputs){
         
         if(textValue.length != 0){
             container.style.display = "block";
-            var professions = [];
+            var suggestions;
 			$.ajax({
                 url : "/ajax/getSearchSuggestions/",
                 data : {"text": textValue},
@@ -175,14 +177,14 @@ function searchPreviewBrowseSuggestions(textValue, container, extraInputs){
                 dataType: "json",
                 success : function(data) {
                     if(data["success"]){
-                        if(data["suggestions"].length > 0){
-                        	professions = data["suggestions"];
+                        if(data["suggestions"] != null){
+                        	suggestions = data["suggestions"];
                         }
                     }else{
                         container.innerHTML = "No user found with name " + textValue
                     }
-                    var professionString = getPreviewBrowseSuggestionsString(professions)
-	    			container.innerHTML = professionString;
+                    var suggestionsString = getPreviewBrowseSuggestionsString(suggestions)
+	    			container.innerHTML = suggestionsString;
                 }
             });
         }else{
