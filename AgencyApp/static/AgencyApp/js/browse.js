@@ -7,7 +7,7 @@ function createSearchResultsDisplay(resultList){
     var tableHeight = 17;
     for(section in resultList){
         displayString += "<h1 style='position: relative; width: 100%; height: 40px;'><div style='position: absolute; top: 0; left: 5px;'>" + section + " (" + resultList[section].length + ")</div></h1>";
-        tableHeight += 45
+        tableHeight += 48
 
         displayString += "<ul>"
         for(var i=0; i < resultList[section].length; i++){
@@ -19,7 +19,7 @@ function createSearchResultsDisplay(resultList){
     return {"html": displayString, "tableHeight": tableHeight}
 }
 
-var createBrowseListElementFunctionMap = {"jobs": createJobElement, "roles": createRoleElement, "projects": createProjectElement}
+var createBrowseListElementFunctionMap = {"jobs": createJobElement, "roles": createRoleElement, "projects": createProjectElement, "events": createEventElement}
 function createBrowseListElement(elementType, dataDict){
     var element = "<li style='height: " + browseTableElementHeight + "px; position: relative; overflow: hidden;'>"
     
@@ -102,6 +102,23 @@ function createProjectElement(dataDict){
     element += "<div>" + dataDict["projectType"] + "</div>"
     element += "<div>" + dataDict["status"] + "</div>"
 
+
+    // Add description
+    element += "<div style='height: 50px; color: rgba(0,0,0,0.5); position: absolute: right: 0; text-align: left;'>" + dataDict["description"] + "</div>"
+
+    return element
+}
+
+function createEventElement(dataDict){
+    var element = "";
+    // Add info content
+    element += "<h2 class='postInfoTitle'><a onclick='redirectToPost(" +'"' + dataDict["postID"] + '");' + "'>" + dataDict["title"] + "</a></h2>"
+    element += "<div style='color: rgba(0,0,0,0.8);'>"
+
+    element += "<div>" + dataDict["status"] + "</div>"
+
+    // Add dates
+    element += getDateString(new Date(dataDict["startDate"]), new Date(dataDict["endDate"]));
 
     // Add description
     element += "<div style='height: 50px; color: rgba(0,0,0,0.5); position: absolute: right: 0; text-align: left;'>" + dataDict["description"] + "</div>"

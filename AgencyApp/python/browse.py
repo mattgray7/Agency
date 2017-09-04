@@ -353,5 +353,26 @@ def getProjectSearchResults(searchValue, numResults):
                                            requiredFields=requiredFields)
     return results
 
+def getEventSearchResults(searchValue, numResults):
+    results = []
+    if searchValue and searchValue not in ["None", "null"]:
+        # Search pattern is to look through professions, titles, project titles, and then descriptions
+        requiredFields = ["startDate", "endDate", "startTime", "endTime", "description"]
+
+        # Look in title
+        results = _appendPostResultsByType(existingList=results,
+                                           filteredNewList=models.EventPost.objects.filter(title__startswith=searchValue),
+                                           numResults=numResults,
+                                           requiredFields=requiredFields)
+
+        # Look in project
+        projectIDs = [x.postID for x in models.ProjectPost.objects.filter(title__contains=searchValue)]
+        results = _appendPostResultsByType(existingList=results,
+                                           filteredNewList=models.EventPost.objects.filter(projectID__in=projectIDs),
+                                           numResults=numResults,
+                                           requiredFields=requiredFields)
+
+    return results
+
 def isBrowsePage(pageName):
     return pageName in [constants.BROWSE]
