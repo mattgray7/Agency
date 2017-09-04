@@ -422,7 +422,7 @@ def getSearchPreviewUsers(request):
 
 def getSearchSuggestions(request):
     searchValue = request.POST.get("text")
-    suggestions = {"Profession": []}
+    suggestions = {}
     if searchValue:
         # Get professions, projects, users
 
@@ -432,13 +432,26 @@ def getSearchSuggestions(request):
             for profession in constants.PROFESSIONS[category]:
                 if profession.lower().startswith(searchValue.lower()):
                     professionList.append(profession)
-        suggestions["Profession"] = list(set(professionList))      # Remove duplicates
+        if professionList:
+            suggestions["Profession"] = list(set(professionList))      # Remove duplicates
 
         # Get projects
         projects = ([x.title for x in models.ProjectPost.objects.filter(title__startswith=searchValue)] +
                     [x.title for x in models.ProjectPost.objects.filter(title__startswith="The {0}".format(searchValue))])
         if projects:
             suggestions["Project"] = list(set(projects))
+
+        # Get users
+        users = None
+        if " " in searchValue:
+            splitted = searchValue.split(" ")
+            if len(splitted) > 1:
+                users = models.UserAccount.objects.filter(firstName=splitted[0], lastName__startswith=splitted[1])
+        if not users:
+            users = models.UserAccount.objects.filter(firstName__startswith=searchValue)
+        if users:
+            suggestions["User"] = [{"username": x.username, "cleanName": x.cleanName,
+                                    "profession": x.mainProfession or "User"} for x in users]
     return JsonResponse({"success": True, "suggestions": suggestions})
 
 

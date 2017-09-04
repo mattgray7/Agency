@@ -152,7 +152,15 @@ function getPreviewBrowseSuggestionsString(suggestions){
     if(suggestions != null){
         for(type in suggestions){
             for(var i=0; i < suggestions[type].length; i++){
-                previewString += "<li style='border: none;' onclick='selectBrowseSuggestion(" + '"' + suggestions[type][i] + '", "searchTextInput", "browseDropdown");' + "'><div style='position:relative; height: 30px; text-align: left; margin-left: 4px;'>" + suggestions[type][i] + " - " + type + "</div></li>";
+                var functionInput = suggestions[type][i]
+                var displayString = suggestions[type][i] + "<div style='color: rgba(0,0,0,0.5); display: inline;'> - " + type + "</div>"
+
+                // User values are dict
+                if(type === "User"){
+                    functionInput = suggestions[type][i]["cleanName"]
+                    displayString = suggestions[type][i]["cleanName"] + "<div style='color: rgba(0,0,0,0.5); display: inline;'> - " + suggestions[type][i]["profession"] + "</div>"
+                }
+                previewString += "<li style='border: none;' onclick='selectBrowseSuggestion(" + '"' + functionInput + '", "searchTextInput", "browseDropdown");' + "'><div style='position:relative; height: 30px; text-align: left; margin-left: 4px;'>" + displayString + "</div></div></li>";
             }
         }
     }else{
