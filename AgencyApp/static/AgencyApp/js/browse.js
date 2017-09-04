@@ -15,20 +15,20 @@ function createSearchResultsDisplay(resultList){
 }
 
 function createJobElement(dataDict){
-	var element = "<li style='width: 100%; height: 150px; position: relative;'>"
+	var element = "<li style='width: 100%; height: 170px; position: relative;'>"
 	
 	// Add picture
-	element += "<div style='position: absolute; left: 0; right: 70%; height: 100%; text-align: left;'><img src='" + dataDict["postPictureURL"] + "' style='margin-top: 3.5px; margin-left: 3px; max-height: 95%; max-width: 100%;'/></div>"
+	element += "<div style='position: absolute; left: 0; right: 75%; height: 100%; text-align: left;'><img src='" + dataDict["postPictureURL"] + "' style='margin-top: 8px; margin-left: 10px; max-height: 90%; max-width: 100%;'/></div>"
 
 	// Add info container
-	element += "<div style='position: absolute; left: 30%; right: 8px; top: 5px; height: 95%; text-align: right; color: rgba(0,0,0,0.7);'>"
+	element += "<div style='position: absolute; left: 27%; right: 8px; top: 5px; height: 95%; text-align: left; color: rgba(0,0,0,0.7);'>"
 
 	// Add info content
 	element += "<h2 class='postInfoTitle'><a onclick='redirectToPost(" +'"' + dataDict["postID"] + '");' + "'>" + dataDict["title"] + "</a></h2>"
 	element += "<div style='color: rgba(0,0,0,0.5);'>" + dataDict["status"] + "</div>"
 
 	// Add dates
-	//element += getDateString(new Date(dataDict["startDate"]), new Date(dataDict["endDate"]));
+	element += getDateString(new Date(dataDict["startDate"]), new Date(dataDict["endDate"]));
 
 	// Add compensation
 	element += "<div style='color: rgba(0,0,0,0.7);'>"
