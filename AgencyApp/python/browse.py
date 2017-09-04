@@ -305,12 +305,6 @@ def getJobsSearchResults(searchValue, numResults):
                                            filteredNewList=models.WorkPost.objects.filter(projectID__in=projectIDs),
                                            numResults=numResults,
                                            requiredFields=requiredFields)
-
-        # Look in description
-        """results = _appendPostResultsByType(existingList=results,
-                                           filteredNewList=models.WorkPost.objects.filter(description__icontains=searchValue),
-                                           numResults=numResults,
-                                           requiredFields=requiredFields)"""
     return results
 
 def getRolesSearchResults(searchValue, numResults):
@@ -336,6 +330,25 @@ def getRolesSearchResults(searchValue, numResults):
         projectIDs = [x.postID for x in models.ProjectPost.objects.filter(title__contains=searchValue)]
         results = _appendPostResultsByType(existingList=results,
                                            filteredNewList=models.CastingPost.objects.filter(projectID__in=projectIDs),
+                                           numResults=numResults,
+                                           requiredFields=requiredFields)
+    return results
+
+def getProjectSearchResults(searchValue, numResults):
+    results = []
+    if searchValue and searchValue not in ["None", "null"]:
+        # Search pattern is to look through professions, titles, project titles, and then descriptions
+        requiredFields = ["projectType", "openRoles", "openJobs"]
+
+        # Look in title
+        results = _appendPostResultsByType(existingList=results,
+                                           filteredNewList=models.ProjectPost.objects.filter(title__startswith=searchValue),
+                                           numResults=numResults,
+                                           requiredFields=requiredFields)
+
+        # Check if starts with "The " + searchValue
+        results = _appendPostResultsByType(existingList=results,
+                                           filteredNewList=models.ProjectPost.objects.filter(title__startswith="The {0}".format(searchValue)),
                                            numResults=numResults,
                                            requiredFields=requiredFields)
     return results
