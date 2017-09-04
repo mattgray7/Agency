@@ -7,21 +7,63 @@ function createSearchResultsDisplay(resultList){
 		displayString += "<h1 style='position: relative; width: 100%; height: 40px;'><div style='position: absolute; top: 0; left: 5px;'>" + section + "</div></h1>";
 		displayString += "<ul>"
 		for(var i=0; i < resultList[section].length; i++){
-			displayString += createJobElement(resultList[section][i]);
+			displayString += createBrowseListElement(section, resultList[section][i]);
 		}
 		displayString += "</ul>"
 	}
 	return displayString
 }
 
-function createJobElement(dataDict){
-	var element = "<li style='width: 100%; height: 170px; position: relative;'>"
+var createBrowseListElementFunctionMap = {"jobs": createJobElement, "roles": createRoleElement}
+function createBrowseListElement(elementType, dataDict){
+	var element = "<li style='width: 100%; height: 170px; position: relative; overflow: hidden;'>"
 	
 	// Add picture
 	element += "<div style='position: absolute; left: 0; right: 75%; height: 100%; text-align: left;'><img src='" + dataDict["postPictureURL"] + "' style='margin-top: 8px; margin-left: 10px; max-height: 90%; max-width: 100%;'/></div>"
 
-	// Add info container
-	element += "<div style='position: absolute; left: 27%; right: 8px; top: 5px; height: 95%; text-align: left; color: rgba(0,0,0,0.7);'>"
+	if(elementType in createBrowseListElementFunctionMap){
+		element += createBrowseListElementFunctionMap[elementType](dataDict);
+	}else{
+		console.log("Could not find elementType " + elementType + " in function map")
+	}
+	element += "</li>";
+	return element;
+}
+
+function createRoleElement(dataDict){
+	var element = "<div style='position: absolute; left: 27%; right: 8px; top: 5px; height: 95%; text-align: left; color: rgba(0,0,0,0.7);'>"
+
+	// Add info content
+	element += "<h2 class='postInfoTitle'><a onclick='redirectToPost(" +'"' + dataDict["postID"] + '");' + "'>" + dataDict["title"] + "</a></h2>"
+	element += "<div style='color: rgba(0,0,0,0.5);'>" + dataDict["status"] + "</div>"
+
+	// Add characterName
+	element += "<div>" + dataDict["characterName"] + "</div>";
+
+	// Add dates
+	element += getDateString(new Date(dataDict["startDate"]), new Date(dataDict["endDate"]));
+
+	// Add compensation
+	element += "<div style='color: rgba(0,0,0,0.7);'>"
+	if(dataDict["compensationType"] != null && dataDict["compensationType"].length > 0){
+		element += dataDict["compensationType"]
+		if(dataDict["compensationDescription"] != null){
+			element += " - " + dataDict["compensationDescription"]
+		}
+	}else{
+		element += "Compensation unspecified";
+	}
+	element += "</div>"
+
+	// Add description
+	element += "<div style='height: 50px; position: absolute: right: 0; text-align: left;'>" + dataDict["description"] + "</div>"
+
+	element += "</div>";
+	return element
+}
+
+function createJobElement(dataDict){
+	var element = "<div style='position: absolute; left: 27%; right: 8px; top: 5px; height: 95%; text-align: left; color: rgba(0,0,0,0.7);'>"
 
 	// Add info content
 	element += "<h2 class='postInfoTitle'><a onclick='redirectToPost(" +'"' + dataDict["postID"] + '");' + "'>" + dataDict["title"] + "</a></h2>"
@@ -45,7 +87,7 @@ function createJobElement(dataDict){
 	// Add description
 	element += "<div style='height: 50px; position: absolute: right: 0; text-align: left;'>" + dataDict["description"] + "</div>"
 
-	element += "</li>";
+	element += "</div>";
 	return element
 }
 

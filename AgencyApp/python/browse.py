@@ -306,5 +306,25 @@ def getJobsSearchResults(searchValue, numResults):
                                            requiredFields=requiredFields)"""
     return results
 
+def getRolesSearchResults(searchValue, numResults):
+    results = []
+    if searchValue and searchValue not in ["None", "null"]:
+        # Search pattern is to look through professions, titles, project titles, and then descriptions
+        requiredFields = ["compensationType", "compensationDescription", "startDate",
+                          "endDate", "location", "characterName", "roleType"]
+
+        # Look in title
+        results = _appendPostResultsByType(existingList=results,
+                                           filteredNewList=models.CastingPost.objects.filter(title__startswith=searchValue),
+                                           numResults=numResults,
+                                           requiredFields=requiredFields)
+
+        # Look in character name
+        results = _appendPostResultsByType(existingList=results,
+                                           filteredNewList=models.CastingPost.objects.filter(characterName__startswith=searchValue),
+                                           numResults=numResults,
+                                           requiredFields=requiredFields)
+    return results
+
 def isBrowsePage(pageName):
     return pageName in [constants.BROWSE]
