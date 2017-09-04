@@ -299,10 +299,10 @@ def getJobsSearchResults(searchValue, numResults):
                                            requiredFields=requiredFields)
 
         # Look in description
-        results = _appendPostResultsByType(existingList=results,
+        """results = _appendPostResultsByType(existingList=results,
                                            filteredNewList=models.WorkPost.objects.filter(description__icontains=searchValue),
                                            numResults=numResults,
-                                           requiredFields=requiredFields)
+                                           requiredFields=requiredFields)"""
     return results
 
 def isBrowsePage(pageName):

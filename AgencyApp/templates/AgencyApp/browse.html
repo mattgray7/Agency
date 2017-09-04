@@ -29,6 +29,8 @@
         if(searchInput != null && searchInput.value != null && searchInput.value.length > 0){
             searchValue = searchInput.value;
         }
+
+        var resultsPanel = document.getElementById("searchResultsPanel")
         if(activeTabs.length != 0){
             $.ajax({
                 url : "/ajax/getSearchResults/",
@@ -36,7 +38,16 @@
                 type : 'POST',
                 dataType: "json",
                 success : function(data) {
-                    console.log(data)
+                    if(data["success"]){
+                        if(data["results"]){
+                            if(resultsPanel != null){
+                                var browseResultsTableString = createSearchResultsDisplay(data["results"])
+                                if(browseResultsTableString != null && browseResultsTableString.length > 0){
+                                    resultsPanel.innerHTML = browseResultsTableString;
+                                }
+                            }
+                        }
+                    }
                 }
             });
         }
@@ -77,7 +88,7 @@
                     </div>
                 </div>
             </div>
-            <div id='searchResults' class='browseSearchResults' style='position: absolute; height: 400px; width: 100%; margin-top: 10px;'></div>
+            <div id='searchResultsPanel' class='browseSearchResults' style='position: absolute; height: 400px; width: 100%; margin-top: 10px; top: 170px;'></div>
         </div>
     </div>
 </div>
