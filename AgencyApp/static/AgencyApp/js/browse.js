@@ -15,7 +15,37 @@ function createSearchResultsDisplay(resultList){
 }
 
 function createJobElement(dataDict){
-	var element = "<li>" + dataDict["title"] + "</li>";
+	var element = "<li style='width: 100%; height: 150px; position: relative;'>"
+	
+	// Add picture
+	element += "<div style='position: absolute; left: 0; right: 70%; height: 100%; text-align: left;'><img src='" + dataDict["postPictureURL"] + "' style='margin-top: 3.5px; margin-left: 3px; max-height: 95%; max-width: 100%;'/></div>"
+
+	// Add info container
+	element += "<div style='position: absolute; left: 30%; right: 8px; top: 5px; height: 95%; text-align: right; color: rgba(0,0,0,0.7);'>"
+
+	// Add info content
+	element += "<h2 class='postInfoTitle'><a onclick='redirectToPost(" +'"' + dataDict["postID"] + '");' + "'>" + dataDict["title"] + "</a></h2>"
+	element += "<div style='color: rgba(0,0,0,0.5);'>" + dataDict["status"] + "</div>"
+
+	// Add dates
+	//element += getDateString(new Date(dataDict["startDate"]), new Date(dataDict["endDate"]));
+
+	// Add compensation
+	element += "<div style='color: rgba(0,0,0,0.7);'>"
+	if(dataDict["compensationType"] != null && dataDict["compensationType"].length > 0){
+		element += dataDict["compensationType"]
+		if(dataDict["compensationDescription"] != null){
+			element += " - " + dataDict["compensationDescription"]
+		}
+	}else{
+		element += "Compensation unspecified";
+	}
+	element += "</div>"
+
+	// Add description
+	element += "<div style='height: 50px; position: absolute: right: 0; text-align: left;'>" + dataDict["description"] + "</div>"
+
+	element += "</li>";
 	return element
 }
 

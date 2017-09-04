@@ -246,7 +246,7 @@ def _formatSearchPostResult(dbObject, extraFields):
         formattedResult = {"title": dbObject.title,
                             "status": dbObject.status,
                             "postID": dbObject.postID,
-                            "postPictureURL": dbObject.postPicture and dbObject.postPicture.url or None,
+                            "postPictureURL": dbObject.postPicture and dbObject.postPicture.url or constants.NO_PICTURE_PATH,
                             "poster": dbObject.poster,
                             "description": dbObject.description}
         if dbObject.projectID:
