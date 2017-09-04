@@ -299,6 +299,13 @@ def getJobsSearchResults(searchValue, numResults):
                                            numResults=numResults,
                                            requiredFields=requiredFields)
 
+        # Look in project
+        projectIDs = [x.postID for x in models.ProjectPost.objects.filter(title__contains=searchValue)]
+        results = _appendPostResultsByType(existingList=results,
+                                           filteredNewList=models.WorkPost.objects.filter(projectID__in=projectIDs),
+                                           numResults=numResults,
+                                           requiredFields=requiredFields)
+
         # Look in description
         """results = _appendPostResultsByType(existingList=results,
                                            filteredNewList=models.WorkPost.objects.filter(description__icontains=searchValue),
@@ -322,6 +329,13 @@ def getRolesSearchResults(searchValue, numResults):
         # Look in character name
         results = _appendPostResultsByType(existingList=results,
                                            filteredNewList=models.CastingPost.objects.filter(characterName__startswith=searchValue),
+                                           numResults=numResults,
+                                           requiredFields=requiredFields)
+
+        # Look in project
+        projectIDs = [x.postID for x in models.ProjectPost.objects.filter(title__contains=searchValue)]
+        results = _appendPostResultsByType(existingList=results,
+                                           filteredNewList=models.CastingPost.objects.filter(projectID__in=projectIDs),
                                            numResults=numResults,
                                            requiredFields=requiredFields)
     return results
