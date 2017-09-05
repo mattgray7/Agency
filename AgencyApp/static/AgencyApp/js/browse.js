@@ -1,6 +1,32 @@
 
 //var categoryFunctionMap = {"jobs": createJobElemement, "roles": createRoleElement, "users": createUserElement,}
 
+function getSectionExpandButtonContent(direction){
+    if(direction === "expand"){
+        return "<div style='margin-top: -7px; margin-left: 1px;'>+</div>"
+    }else{
+        return "<div style='margin-top: -10px; margin-left: 1px; font-size: 1.2em;'>-</div>"
+    }
+}
+
+function toggleExpandBrowseSection(direction, section){
+    var resultsContainer = document.getElementById(section + "BrowseResultsContainer");
+    var expandButton = document.getElementById(section + "BrowseExpandButton");
+    if(direction === "expand"){
+        if(expandButton != null){
+            expandButton.innerHTML = getSectionExpandButtonContent("shrink")
+            expandButton.onclick = function(){toggleExpandBrowseSection("shrink", section)}
+        }
+    }else{
+        if(expandButton != null){
+            expandButton.innerHTML = getSectionExpandButtonContent("expand")
+            expandButton.onclick = function(){toggleExpandBrowseSection("expand", section)}
+
+        }
+    }
+}
+
+
 var browseTableElementHeight = 165;
 function createSearchResultsDisplay(resultList){
     var displayString = '';
@@ -10,7 +36,7 @@ function createSearchResultsDisplay(resultList){
         displayString += "<div style='position: realtive; width: 100%; height: 40px;'>"
 
         // Add shrink/expand section button
-        displayString += "<div class='browseTableExpandSectionButton' style='position: absolute; top: 20px; left: 5px;'><div style='margin-top: -7px; margin-left: 1px;'>+</div></div>";
+        displayString += "<div id='" + section + "BrowseExpandButton' class='browseTableExpandSectionButton' onclick='toggleExpandBrowseSection(" + '"shrink", "' + section + '");' + "' style='position: absolute; top: 20px; left: 5px;'><div style='margin-top: -10px; margin-left: 1px; font-size: 1.2em;'>-</div></div>";
 
         displayString += "<h1 style='position: absolute; top: 0; left: 25px;'>"
 
@@ -19,12 +45,15 @@ function createSearchResultsDisplay(resultList){
         displayString += "</div>"
         tableHeight += 48
 
+        // Add results container
+        displayString += "<div id='" + section + "BrowseResultsContainer'>";
         displayString += "<ul>"
         for(var i=0; i < resultList[section].length; i++){
             displayString += createBrowseListElement(section, resultList[section][i]);
             tableHeight += browseTableElementHeight + 5;
         }
         displayString += "</ul>"
+        displayString += "</div>"
     }
     return {"html": displayString, "tableHeight": tableHeight}
 }
