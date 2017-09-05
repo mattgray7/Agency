@@ -10,6 +10,7 @@ function getSectionExpandButtonContent(direction){
 }
 
 function toggleExpandBrowseSection(direction, section){
+    console.log("Toggling in direction " + direction)
     var resultsContainer = document.getElementById(section + "BrowseResultsContainer");
     var expandButton = document.getElementById(section + "BrowseExpandButton");
     if(direction === "expand"){
@@ -17,11 +18,16 @@ function toggleExpandBrowseSection(direction, section){
             expandButton.innerHTML = getSectionExpandButtonContent("shrink")
             expandButton.onclick = function(){toggleExpandBrowseSection("shrink", section)}
         }
+        if(resultsContainer != null){
+            $("[id='" + section + "BrowseResultsContainer']").animate({marginTop: "10px", height: "1000px"}, 500, function(){});
+        }
     }else{
         if(expandButton != null){
             expandButton.innerHTML = getSectionExpandButtonContent("expand")
             expandButton.onclick = function(){toggleExpandBrowseSection("expand", section)}
-
+        }
+        if(resultsContainer != null){
+            $("[id='" + section + "BrowseResultsContainer']").animate({marginTop: "10px", height: "0px"}, 500, function(){});
         }
     }
 }
@@ -33,20 +39,17 @@ function createSearchResultsDisplay(resultList){
     var tableHeight = 17;
     for(section in resultList){
         // Add section header container
-        displayString += "<div style='position: realtive; width: 100%; height: 40px;'>"
+        displayString += "<div style='position: relative; width: 100%; height: 40px;'>"
 
         // Add shrink/expand section button
         displayString += "<div id='" + section + "BrowseExpandButton' class='browseTableExpandSectionButton' onclick='toggleExpandBrowseSection(" + '"shrink", "' + section + '");' + "' style='position: absolute; top: 20px; left: 5px;'><div style='margin-top: -10px; margin-left: 1px; font-size: 1.2em;'>-</div></div>";
 
-        displayString += "<h1 style='position: absolute; top: 0; left: 25px;'>"
-
-        // Add section title
-        displayString += "" + section + " (" + resultList[section].length + ")</h1>";
+        displayString += "<h1 style='position: absolute; top: 0; left: 25px;'>" + section + " (" + resultList[section].length + ")</h1>";
         displayString += "</div>"
         tableHeight += 48
 
         // Add results container
-        displayString += "<div id='" + section + "BrowseResultsContainer'>";
+        displayString += "<div id='" + section + "BrowseResultsContainer' style='overflow: hidden;'>";
         displayString += "<ul>"
         for(var i=0; i < resultList[section].length; i++){
             displayString += createBrowseListElement(section, resultList[section][i]);
