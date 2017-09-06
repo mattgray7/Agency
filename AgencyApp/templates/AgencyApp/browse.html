@@ -50,8 +50,8 @@
                     if(data["success"]){
                         if(data["results"]){
                             if(resultsPanel != null){
-                                var browseResultsTableInfo = createSearchResultsDisplay(data["results"])
-                                if(browseResultsTableInfo["html"] != null && browseResultsTableInfo["html"].length > 0){
+                                var browseResultsTableString = createSearchResultsDisplay(data["results"])
+                                if(browseResultsTableString != null && browseResultsTableString.length > 0){
                                     if(firstSearch){
                                         firstSearch = false;
                                         $("#mainViewPanel").animate({marginTop: "0px"}, 500, function(){});
@@ -61,19 +61,19 @@
                                     expandedResultTabs = activeTabs.slice();
 
                                     // Add results content, can now access height of elements
-                                    resultsPanel.innerHTML = browseResultsTableInfo["html"];
+                                    resultsPanel.innerHTML = browseResultsTableString;
                                     resultsPanel.style.display = 'block';
                                     
-                                    // Expand container
-                                    updateSearchResultsPanelHeight();
-
                                     // Save expanded section heights
                                     saveExpandedBrowseSectionHeights();
 
+                                    /*var tableHeight = getBrowseResultsTableHeight();
+                                    $("#browseContent").animate({marginTop: "-10px", height: (tableHeight + 180) + "px"}, 500, function(){});*/
+                                    updateBrowseContentHeight();
                                     /*$("#searchResultsPanel").animate({marginTop: "10px", height: browseResultsTableInfo["tableHeight"] + "px"}, 500, function(){});*/
 
-                                    var newMainViewHeight = (browseResultsTableInfo["tableHeight"] + 180) + "px";
-                                    $("#browseContent").animate({marginTop: "-10px", height: newMainViewHeight}, 500, function(){});
+                                    /*var newMainViewHeight = (browseResultsTableInfo["tableHeight"] + 180) + "px";
+                                    $("#browseContent").animate({marginTop: "-10px", height: newMainViewHeight}, 500, function(){});*/
                                 }
                             }
                         }
@@ -124,7 +124,7 @@
                     </div>
                 </div>
             </div>
-            <div id='searchResultsPanel' class='browseSearchResults' style='position: absolute; height: 0px; left: 0; right: -2px; margin-top: 10px; top: 170px; display: none;'></div>
+            <div id='searchResultsPanel' class='browseSearchResults' style='position: absolute; left: 0; right: -2px; margin-top: 10px; top: 170px; display: none;'></div>
         </div>
     </div>
 </div>

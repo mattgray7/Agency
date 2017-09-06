@@ -10,11 +10,10 @@ function getSectionExpandButtonContent(direction){
 }
 
 function getBrowseResultsTableHeight(){
-    var tableHeight = activeTabs.length * 50;
+    var tableHeight = activeTabs.length * 45 + 5;
     for(var i=0; i < expandedResultTabs.length; i++){
         if(expandedResultTabs[i] in expandedSectionHeights && expandedSectionHeights[expandedResultTabs[i]] != 0){
             tableHeight += expandedSectionHeights[expandedResultTabs[i]];
-
         }else{
             var resultsContainer = document.getElementById(expandedResultTabs[i] + "BrowseResultsContainer");
             if(resultsContainer != null){
@@ -22,13 +21,12 @@ function getBrowseResultsTableHeight(){
             }
         }
     }
-    console.log("table height is " + tableHeight)
     return tableHeight
 }
 
-function updateSearchResultsPanelHeight(){
-    var newResultsHeight = getBrowseResultsTableHeight();
-    $("#searchResultsPanel").animate({marginTop: "10px", height: newResultsHeight + "px"}, browseAnimateSpeed, function(){console.log('finishedAnimating');});
+function updateBrowseContentHeight(){
+    var newBrowseContentHeight = getBrowseResultsTableHeight() + 180;   // 180 is for search panel height
+    $("#browseContent").animate({marginTop: "-10px", height: newBrowseContentHeight + "px"}, browseAnimateSpeed, function(){});
 }
 
 var expandedSectionHeights = {"jobs": 0, "roles": 0, "users": 0, "projects": 0, "events": 0}
@@ -57,7 +55,7 @@ function toggleExpandBrowseSection(direction, section){
         }
         if(resultsContainer != null){
             $("[id='" + section + "BrowseResultsContainer']").animate({marginTop: "0px", height: expandedSectionHeights[section] + "px"}, browseAnimateSpeed, function(){});
-            updateSearchResultsPanelHeight();
+            updateBrowseContentHeight();
         }
     }else{
         if(expandedTabIndex > -1){
@@ -71,7 +69,7 @@ function toggleExpandBrowseSection(direction, section){
             $("[id='" + section + "BrowseResultsContainer']").animate({marginTop: "0px", height: "0px"}, browseAnimateSpeed, function(){});
         }
         if(resultsContainer != null){
-            updateSearchResultsPanelHeight();
+            updateBrowseContentHeight();
         }
 
         //resultsContainer.style.display = "none";
@@ -82,17 +80,15 @@ function toggleExpandBrowseSection(direction, section){
 var browseTableElementHeight = 165;
 function createSearchResultsDisplay(resultList){
     var displayString = '';
-    var tableHeight = 17;
     for(section in resultList){
         // Add section header container
-        displayString += "<div style='position: relative; width: 100%; height: 40px;'>"
+        displayString += "<div style='position: relative; width: 100%; height: 45px;'>"
 
         // Add shrink/expand section button
         displayString += "<div id='" + section + "BrowseExpandButton' class='browseTableExpandSectionButton' onclick='toggleExpandBrowseSection(" + '"shrink", "' + section + '");' + "' style='position: absolute; top: 20px; left: 5px;'><div style='margin-top: -10px; margin-left: 1px; font-size: 1.2em;'>-</div></div>";
 
         displayString += "<h1 style='position: absolute; top: 0; left: 25px;'>" + section + " (" + resultList[section].length + ")</h1>";
         displayString += "</div>"
-        tableHeight += 48
 
         // Add results container
         if(resultList[section].length > 0){
@@ -100,15 +96,14 @@ function createSearchResultsDisplay(resultList){
             displayString += "<ul>"
             for(var i=0; i < resultList[section].length; i++){
                 displayString += createBrowseListElement(section, resultList[section][i]);
-                tableHeight += browseTableElementHeight + 5;
             }
             displayString += "</ul>"
             displayString += "</div>"
         }else{
-            displayString += "<div id='" + section + "BrowseResultsContainer' style='height: 10px;'></div>";
+            displayString += "<div id='" + section + "BrowseResultsContainer' style='height: 0px;'></div>";
         }
     }
-    return {"html": displayString, "tableHeight": tableHeight}
+    return displayString
 }
 
 var createBrowseListElementFunctionMap = {"jobs": createJobElement, "roles": createRoleElement, "projects": createProjectElement, "events": createEventElement, "users": createUserElement}
