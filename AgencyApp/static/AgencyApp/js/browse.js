@@ -11,11 +11,13 @@ function getSectionExpandButtonContent(direction){
 
 function getBrowseResultsTableHeight(){
     var tableHeight = activeTabs.length * 45 + 5;
-    for(var i=0; i < expandedResultTabs.length; i++){
-        if(expandedResultTabs[i] in expandedSectionHeights && expandedSectionHeights[expandedResultTabs[i]] != 0){
-            tableHeight += expandedSectionHeights[expandedResultTabs[i]];
+    for(section in expandedTabDict){
+        if(expandedTabDict[section]){
+            if(section in expandedSectionHeights && expandedSectionHeights[section] != 0){
+                tableHeight += expandedSectionHeights[section];
+            }
         }else{
-            var resultsContainer = document.getElementById(expandedResultTabs[i] + "BrowseResultsContainer");
+            var resultsContainer = document.getElementById(section + "BrowseResultsContainer");
             if(resultsContainer != null){
                 tableHeight += resultsContainer.offsetHeight;
             }
@@ -31,10 +33,12 @@ function updateBrowseContentHeight(){
 
 var expandedSectionHeights = {"jobs": 0, "roles": 0, "users": 0, "projects": 0, "events": 0}
 function saveExpandedBrowseSectionHeights(){
-    for(var i=0; i < expandedResultTabs.length; i++){
-        var container = document.getElementById(expandedResultTabs[i] + "BrowseResultsContainer")
-        if(container != null && container.offsetHeight != 0){
-            expandedSectionHeights[expandedResultTabs[i]] = container.offsetHeight;
+    for(section in expandedTabDict){
+        if(expandedTabDict[section]){
+            var container = document.getElementById(section + "BrowseResultsContainer")
+            if(container != null && container.offsetHeight != 0){
+                expandedSectionHeights[section] = container.offsetHeight;
+            }
         }
     }
 }
@@ -44,12 +48,8 @@ function toggleExpandBrowseSection(direction, section){
     var resultsContainer = document.getElementById(section + "BrowseResultsContainer");
     var expandButton = document.getElementById(section + "BrowseExpandButton");
 
-    var expandedTabIndex = expandedResultTabs.indexOf(section);
     if(direction === "expand"){
         expandedTabDict[section] = true;
-        if(expandedTabIndex < 0){
-            expandedResultTabs.push(section);
-        }
         if(expandButton != null){
             expandButton.innerHTML = getSectionExpandButtonContent("shrink")
             expandButton.onclick = function(){toggleExpandBrowseSection("shrink", section)}
@@ -60,9 +60,6 @@ function toggleExpandBrowseSection(direction, section){
         }
     }else{
         expandedTabDict[section] = false;
-        if(expandedTabIndex > -1){
-            expandedResultTabs.splice(expandedTabIndex, 1)
-        }
         if(expandButton != null){
             expandButton.innerHTML = getSectionExpandButtonContent("expand")
             expandButton.onclick = function(){toggleExpandBrowseSection("expand", section)}
