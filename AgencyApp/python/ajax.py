@@ -466,16 +466,14 @@ def getSearchResults(request):
             if category not in results:
                 results[category] = {"results": [], "morePosts": False}
             if category == "jobs":
-                resultsInfo = browse.getJobsSearchResults(searchValue, numResults)
-                results[category]["results"] = resultsInfo["results"]
-                results[category]["morePosts"] = resultsInfo["morePosts"]
-            """elif category == "roles":
-                results[category] += browse.getRolesSearchResults(searchValue, numResults)
+                results[category] = browse.getJobsSearchResults(searchValue, numResults)
+            elif category == "roles":
+                results[category] = browse.getRolesSearchResults(searchValue, numResults)
             elif category == "projects":
-                results[category] += browse.getProjectSearchResults(searchValue, numResults)
+                results[category] = browse.getProjectSearchResults(searchValue, numResults)
             elif category == "events":
-                results[category] += browse.getEventSearchResults(searchValue, numResults)
-            elif category == "users":
+                results[category] = browse.getEventSearchResults(searchValue, numResults)
+            """elif category == "users":
                 results[category] += browse.getUserSearchResults(searchValue, numResults)"""
     return JsonResponse({"success": True, "results": results})
 
