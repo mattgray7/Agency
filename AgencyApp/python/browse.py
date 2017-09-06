@@ -280,35 +280,42 @@ def _appendPostResultsByType(existingList, filteredNewList, numResults, required
                     existingList.append(_formatSearchPostResult(res, requiredFields))
     return existingList
 
+def getTotalNumberResults(filteredLists):
+    existingPostIDs = []
+    numResults = 0
+    for filteredList in filteredLists:
+        for instance in filteredList:
+            if instance.postID not in existingPostIDs:
+                existingPostIDs.append(instance.postID)
+                numResults += 1
+    return numResults
+
+
 def getJobsSearchResults(searchValue, numResults):
+    resultInfo = {"results": [], "morePosts": False}
     results = []
     requiredFields = ["compensationType", "compensationDescription", "startDate",
                       "endDate", "location", "profession", "hoursPerWeek"]
     if searchValue and searchValue not in ["None", "null"]:
-        # Look in profession
-        results = _appendPostResultsByType(existingList=results,
-                                           filteredNewList=models.WorkPost.objects.filter(profession__icontains=searchValue),
-                                           numResults=numResults,
-                                           requiredFields=requiredFields)
 
-        # Look in name
-        results = _appendPostResultsByType(existingList=results,
-                                           filteredNewList=models.WorkPost.objects.filter(title__icontains=searchValue),
-                                           numResults=numResults,
-                                           requiredFields=requiredFields)
-
-        # Look in project
         projectIDs = [x.postID for x in models.ProjectPost.objects.filter(title__contains=searchValue)]
-        results = _appendPostResultsByType(existingList=results,
-                                           filteredNewList=models.WorkPost.objects.filter(projectID__in=projectIDs),
-                                           numResults=numResults,
-                                           requiredFields=requiredFields)
+        searchLists = [models.WorkPost.objects.filter(profession__icontains=searchValue),
+                       models.WorkPost.objects.filter(title__icontains=searchValue),
+                       models.WorkPost.objects.filter(projectID__in=projectIDs)]
+        totalNumResults = getTotalNumberResults(searchLists)
+        resultInfo["morePosts"] = totalNumResults > numResults
+        for searchList in searchLists:
+            resultInfo["results"] = _appendPostResultsByType(existingList=results,
+                                                             filteredNewList=searchList,
+                                                             numResults=numResults,
+                                                             requiredFields=requiredFields)
     else:
-        results = _appendPostResultsByType(existingList=results,
+        resultInfo["results"] = _appendPostResultsByType(existingList=results,
                                            filteredNewList=models.WorkPost.objects.filter(status__in=["Open", "Opening soon"]).order_by("-updatedAt"),
                                            numResults=numResults,
                                            requiredFields=requiredFields)
-    return results
+        resultInfo["morePosts"] = True
+    return resultInfo
 
 def getRolesSearchResults(searchValue, numResults):
     results = []

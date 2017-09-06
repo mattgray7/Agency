@@ -459,21 +459,24 @@ def getSearchSuggestions(request):
 def getSearchResults(request):
     searchValue = request.POST.get("searchValue")
     categories = request.POST.getlist("categories[]")       # Need the brackets to convert js array to python list
+    numResults = 5
     results = {}
     if len(categories) > 0:
         for category in categories:
             if category not in results:
-                results[category] = []
+                results[category] = {"results": [], "morePosts": False}
             if category == "jobs":
-                results[category] += browse.getJobsSearchResults(searchValue, 10)
-            elif category == "roles":
-                results[category] += browse.getRolesSearchResults(searchValue, 10)
+                resultsInfo = browse.getJobsSearchResults(searchValue, numResults)
+                results[category]["results"] = resultsInfo["results"]
+                results[category]["morePosts"] = resultsInfo["morePosts"]
+            """elif category == "roles":
+                results[category] += browse.getRolesSearchResults(searchValue, numResults)
             elif category == "projects":
-                results[category] += browse.getProjectSearchResults(searchValue, 10)
+                results[category] += browse.getProjectSearchResults(searchValue, numResults)
             elif category == "events":
-                results[category] += browse.getEventSearchResults(searchValue, 10)
+                results[category] += browse.getEventSearchResults(searchValue, numResults)
             elif category == "users":
-                results[category] += browse.getUserSearchResults(searchValue, 10)
+                results[category] += browse.getUserSearchResults(searchValue, numResults)"""
     return JsonResponse({"success": True, "results": results})
 
 

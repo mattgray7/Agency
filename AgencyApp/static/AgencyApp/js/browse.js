@@ -87,15 +87,15 @@ function createSearchResultsDisplay(resultList){
         // Add shrink/expand section button
         displayString += "<div id='" + section + "BrowseExpandButton' class='browseTableExpandSectionButton' onclick='toggleExpandBrowseSection(" + '"shrink", "' + section + '");' + "' style='position: absolute; top: 20px; left: 5px;'><div style='margin-top: -10px; margin-left: 1px; font-size: 1.2em;'>-</div></div>";
 
-        displayString += "<h1 style='position: absolute; top: 0; left: 25px;'>" + section + " (" + resultList[section].length + ")</h1>";
+        displayString += "<h1 style='position: absolute; top: 0; left: 25px;'>" + section + " (" + resultList[section]["results"].length + ")</h1>";
         displayString += "</div>"
 
         // Add results container
-        if(resultList[section].length > 0){
+        if(resultList[section]["results"].length > 0){
             displayString += "<div id='" + section + "BrowseResultsContainer' style='overflow: hidden;'>";
             displayString += "<ul>"
-            for(var i=0; i < resultList[section].length; i++){
-                displayString += createBrowseListElement(section, resultList[section][i]);
+            for(var i=0; i < resultList[section]["results"].length; i++){
+                displayString += createBrowseListElement(section, resultList[section]["results"][i]);
             }
             displayString += "</ul>"
             displayString += "</div>"
