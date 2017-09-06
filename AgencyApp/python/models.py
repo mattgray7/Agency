@@ -132,6 +132,9 @@ class AbstractPost(models.Model):
     status = models.CharField(max_length=50, default="Open", blank=True, null=True)
     location = models.CharField(max_length=300, blank=True, null=True)
 
+    createdAt = models.DateTimeField(auto_now_add=True)
+    updatedAt = models.DateTimeField(auto_now=True)
+
 class PostParticipant(models.Model):
     postID = models.CharField(max_length=10)
     username = models.CharField(max_length=200)
