@@ -33,7 +33,7 @@ var expandedSectionHeights = {"jobs": 0, "roles": 0, "users": 0, "projects": 0, 
 function saveExpandedBrowseSectionHeights(){
     for(var i=0; i < expandedResultTabs.length; i++){
         var container = document.getElementById(expandedResultTabs[i] + "BrowseResultsContainer")
-        if(container != null){
+        if(container != null && container.offsetHeight != 0){
             expandedSectionHeights[expandedResultTabs[i]] = container.offsetHeight;
         }
     }
@@ -46,6 +46,7 @@ function toggleExpandBrowseSection(direction, section){
 
     var expandedTabIndex = expandedResultTabs.indexOf(section);
     if(direction === "expand"){
+        expandedTabDict[section] = true;
         if(expandedTabIndex < 0){
             expandedResultTabs.push(section);
         }
@@ -58,6 +59,7 @@ function toggleExpandBrowseSection(direction, section){
             updateBrowseContentHeight();
         }
     }else{
+        expandedTabDict[section] = false;
         if(expandedTabIndex > -1){
             expandedResultTabs.splice(expandedTabIndex, 1)
         }
@@ -74,7 +76,6 @@ function toggleExpandBrowseSection(direction, section){
 
         //resultsContainer.style.display = "none";
     }
-    
 }
 
 var browseTableElementHeight = 165;
@@ -84,24 +85,30 @@ function createSearchResultsDisplay(resultList){
         // Add section header container
         displayString += "<div style='position: relative; width: 100%; height: 45px;'>"
 
-        // Add shrink/expand section button
-        displayString += "<div id='" + section + "BrowseExpandButton' class='browseTableExpandSectionButton' onclick='toggleExpandBrowseSection(" + '"shrink", "' + section + '");' + "' style='position: absolute; top: 20px; left: 5px;'><div style='margin-top: -10px; margin-left: 1px; font-size: 1.2em;'>-</div></div>";
+        var onclickDirection;
+        if(expandedTabDict[section]){
+            onclickDirection = "shrink";
+        }else{
+            onclickDirection = "expand"
+        }
+
+        displayString += "<div id='" + section + "BrowseExpandButton' class='browseTableExpandSectionButton' onclick='toggleExpandBrowseSection(" + '"' + onclickDirection + '", "' + section + '");' + "' style='position: absolute; top: 20px; left: 5px;'>" + getSectionExpandButtonContent(onclickDirection) + "</div>";
 
         displayString += "<h1 style='position: absolute; top: 0; left: 25px;'>" + section + " (" + resultList[section]["results"].length + ")</h1>";
         displayString += "</div>"
 
         // Add results container
-        if(resultList[section]["results"].length > 0){
+        if(resultList[section]["results"].length > 0 && expandedTabDict[section]){
             displayString += "<div id='" + section + "BrowseResultsContainer' style='overflow: hidden;'>";
-            displayString += "<ul>"
-            for(var i=0; i < resultList[section]["results"].length; i++){
-                displayString += createBrowseListElement(section, resultList[section]["results"][i]);
-            }
-            displayString += "</ul>"
-            displayString += "</div>"
         }else{
-            displayString += "<div id='" + section + "BrowseResultsContainer' style='height: 0px;'></div>";
+            displayString += "<div id='" + section + "BrowseResultsContainer' style='height: 0px; overflow: hidden;'>";
         }
+        displayString += "<ul>"
+        for(var i=0; i < resultList[section]["results"].length; i++){
+            displayString += createBrowseListElement(section, resultList[section]["results"][i]);
+        }
+        displayString += "</ul>"
+        displayString += "</div>"
     }
     return displayString
 }

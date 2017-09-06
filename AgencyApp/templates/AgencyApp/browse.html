@@ -10,6 +10,7 @@
     var browseTabs = ["jobs", "roles", "users", "projects", "events"];
     var activeTabs = [browseTabs[0]];
     var expandedResultTabs = [];
+    var expandedTabDict = {"jobs": true, "roles": true, "users": true, "projects": true, "events": true};
     function selectBrowseTab(browseType){
         var browseButton = document.getElementById(browseType + "BrowseCategoryButton")
         if(browseButton != null){
