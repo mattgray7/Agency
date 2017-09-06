@@ -9,27 +9,49 @@ function getSectionExpandButtonContent(direction){
     }
 }
 
+function getBrowseResultsTableHeight(){
+    var tableHeight = activeTabs.length * 40;
+    for(var i=0; i < expandedResultTabs.length; i++){
+        var resultsContainer = document.getElementById(expandedResultTabs[i] + "BrowseResultsContainer");
+        tableHeight += resultsContainer.offsetHeight;
+        console.log(resultsContainer.offsetHeight)
+    }
+    console.log("table height is " + tableHeight)
+    console.log(activeTabs)
+    return tableHeight
+}
+
+var browseAnimateSpeed = 400;
 function toggleExpandBrowseSection(direction, section){
-    console.log("Toggling in direction " + direction)
     var resultsContainer = document.getElementById(section + "BrowseResultsContainer");
     var expandButton = document.getElementById(section + "BrowseExpandButton");
+
+    var expandedTabIndex = expandedResultTabs.indexOf(section);
     if(direction === "expand"){
+        if(expandedTabIndex < 0){
+            expandedResultTabs.push(section);
+        }
         if(expandButton != null){
             expandButton.innerHTML = getSectionExpandButtonContent("shrink")
             expandButton.onclick = function(){toggleExpandBrowseSection("shrink", section)}
         }
         if(resultsContainer != null){
-            $("[id='" + section + "BrowseResultsContainer']").animate({marginTop: "10px", height: "1000px"}, 500, function(){});
+            $("[id='" + section + "BrowseResultsContainer']").animate({marginTop: "10px", height: "1000px"}, browseAnimateSpeed, function(){});
         }
     }else{
+        if(expandedTabIndex > -1){
+            expandedResultTabs.splice(expandedTabIndex, 1)
+        }
         if(expandButton != null){
             expandButton.innerHTML = getSectionExpandButtonContent("expand")
             expandButton.onclick = function(){toggleExpandBrowseSection("expand", section)}
         }
         if(resultsContainer != null){
-            $("[id='" + section + "BrowseResultsContainer']").animate({marginTop: "10px", height: "0px"}, 500, function(){});
+            $("[id='" + section + "BrowseResultsContainer']").animate({marginTop: "10px", height: "0px"}, browseAnimateSpeed, function(){});
         }
     }
+    var newResultsHeight = getBrowseResultsTableHeight();
+    $("#searchResultsPanel").animate({marginTop: "10px", height: newResultsHeight + "px"}, browseAnimateSpeed, function(){console.log('finishedAnimating');});
 }
 
 
