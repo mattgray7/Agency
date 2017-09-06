@@ -16,23 +16,13 @@ function getBrowseResultsTableHeight(){
             if(section in expandedSectionHeights && expandedSectionHeights[section] != 0){
                 tableHeight += expandedSectionHeights[section];
             }
-        }else{
-            var resultsContainer = document.getElementById(section + "BrowseResultsContainer");
-            if(resultsContainer != null){
-                tableHeight += resultsContainer.offsetHeight;
-            }
         }
     }
     return tableHeight
 }
 
-function updateBrowseContentHeight(heightModifier){
+function updateBrowseContentHeight(){
     var newBrowseContentHeight = getBrowseResultsTableHeight() + 180;   // 180 is for search panel height
-
-    if(heightModifier != null){
-        newBrowseContentHeight += heightModifier;
-    }
-
     $("#browseContent").animate({marginTop: "-10px", height: newBrowseContentHeight + "px"}, browseAnimateSpeed, function(){});
 }
 
@@ -61,7 +51,7 @@ function toggleExpandBrowseSection(direction, section){
         }
         if(resultsContainer != null){
             $("[id='" + section + "BrowseResultsContainer']").animate({marginTop: "0px", height: expandedSectionHeights[section] + "px"}, browseAnimateSpeed, function(){});
-            updateBrowseContentHeight();
+            //updateBrowseContentHeight();
         }
     }else{
         expandedTabDict[section] = false;
@@ -72,15 +62,9 @@ function toggleExpandBrowseSection(direction, section){
         if(resultsContainer != null){
             $("[id='" + section + "BrowseResultsContainer']").animate({marginTop: "0px", height: "0px"}, browseAnimateSpeed, function(){});
         }
-        if(resultsContainer != null){
-
-            // Race condition of animate, need to subtract form height so browseContent knows end height to animate to.
-            var heightModifier;
-            if(expandedSectionHeights[section] != 0){
-                heightModifier = -1*expandedSectionHeights[section];
-            }
-            updateBrowseContentHeight(heightModifier);
-        }
+    }
+    if(resultsContainer != null){
+        updateBrowseContentHeight();
     }
 }
 
