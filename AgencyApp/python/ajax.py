@@ -464,7 +464,7 @@ def getSearchResults(request):
     if len(categories) > 0:
         for category in categories:
             if category not in results:
-                results[category] = {"results": [], "morePosts": False}
+                results[category] = {"results": [], "moreResults": False, "numResults": 0}
             if category == "jobs":
                 results[category] = browse.getJobsSearchResults(searchValue, numResults)
             elif category == "roles":

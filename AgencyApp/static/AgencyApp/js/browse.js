@@ -83,7 +83,7 @@ function createSearchResultsDisplay(resultList){
 
         displayString += "<div id='" + section + "BrowseExpandButton' class='browseTableExpandSectionButton' onclick='toggleExpandBrowseSection(" + '"' + onclickDirection + '", "' + section + '");' + "' style='position: absolute; top: 20px; left: 5px;'>" + getSectionExpandButtonContent(onclickDirection) + "</div>";
 
-        displayString += "<h1 style='position: absolute; top: 0; left: 25px;'>" + section + " (" + resultList[section]["results"].length + ")</h1>";
+        displayString += "<h1 style='position: absolute; top: 0; left: 25px;'>" + section + " (" + resultList[section]["numResults"] + ")</h1>";
         displayString += "</div>"
 
         // Add results container

@@ -296,20 +296,22 @@ def getTotalNumberResults(filteredLists):
 def getPostSearchResults(searchValue, maxNumResults, requiredFields, defaultList, searchLists):
     """ Common function to create the post search results, and add the 'morePosts' boolean determining
     if more posts can be shown """
-    resultInfo = {"results": [], "morePosts": False}
+    resultInfo = {"results": [], "moreResults": False, "numResults": 0}
     if searchValue and searchValue not in ["None", "null"]:
-        resultInfo["morePosts"] = getTotalNumberResults(searchLists) > maxNumResults
+        totalNumResults = getTotalNumberResults(searchLists)
         for searchList in searchLists:
             resultInfo["results"] = _appendPostResultsByType(existingList=resultInfo["results"],
                                                              filteredNewList=searchList,
                                                              numResults=maxNumResults,
                                                              requiredFields=requiredFields)
     else:
+        totalNumResults = getTotalNumberResults([defaultList])
         resultInfo["results"] = _appendPostResultsByType(existingList=resultInfo["results"],
                                                          filteredNewList=defaultList,
                                                          numResults=maxNumResults,
                                                          requiredFields=requiredFields)
-        resultInfo["morePosts"] = True
+    resultInfo["moreResults"] = totalNumResults > maxNumResults
+    resultInfo["numResults"] = totalNumResults
     return resultInfo
 
 def getJobsSearchResults(searchValue, numResults):
