@@ -13,7 +13,7 @@ function getBrowseResultsTableHeight(){
     var tableHeight = activeTabs.length * 45 + 5;
     for(section in expandedTabDict){
         if(expandedTabDict[section]){
-            if(section in expandedSectionHeights && expandedSectionHeights[section] != 0){
+            if(section in expandedSectionHeights && expandedSectionHeights[section] != 0 && activeTabs.indexOf(section) > -1){
                 tableHeight += expandedSectionHeights[section];
             }
         }
@@ -51,7 +51,6 @@ function toggleExpandBrowseSection(direction, section){
         }
         if(resultsContainer != null){
             $("[id='" + section + "BrowseResultsContainer']").animate({marginTop: "0px", height: expandedSectionHeights[section] + "px"}, browseAnimateSpeed, function(){});
-            //updateBrowseContentHeight();
         }
     }else{
         expandedTabDict[section] = false;
