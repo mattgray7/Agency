@@ -270,7 +270,7 @@ function addBrowseDropdownCallback(callbackFunctionName, secondaryEnterSubmitBut
             }else if(event.keyCode === 38){
                 moveDropdownFocus("up", "browseDropdown")
             }else if(event.keyCode === 13){
-                if(enterPressed){
+                if(enterPressed || dropdownFocusIndex === -1){
                     if(secondaryEnterSubmitButton != null){
                         $("[id='" + secondaryEnterSubmitButton + "']").click();
                     }
