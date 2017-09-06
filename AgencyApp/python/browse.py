@@ -390,6 +390,12 @@ def getUserSearchResults(searchValue, numResults):
         if not users:
             users = models.UserAccount.objects.filter(firstName__startswith=searchValue)
 
+        # Look at project participants
+        projectIDs = [x.postID for x in models.ProjectPost.objects.filter(title__contains=searchValue)]
+        postParticipants = [x.username for x in models.PostParticipant.objects.filter(postID__in=projectIDs)]
+        if not users:
+            users = models.UserAccount.objects.filter(username__in=postParticipants)
+
         # Format user data and add to results (if it doesn't already exist in results)
         for user in users:
             if(len(results) >= numResults):
