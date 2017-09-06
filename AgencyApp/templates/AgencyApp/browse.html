@@ -60,9 +60,17 @@
                                     // TODO remove if we want all sections to be minimized initially
                                     expandedResultTabs = activeTabs.slice();
 
+                                    // Add results content, can now access height of elements
                                     resultsPanel.innerHTML = browseResultsTableInfo["html"];
                                     resultsPanel.style.display = 'block';
-                                    $("#searchResultsPanel").animate({marginTop: "10px", height: browseResultsTableInfo["tableHeight"] + "px"}, 500, function(){});
+                                    
+                                    // Expand container
+                                    updateSearchResultsPanelHeight();
+
+                                    // Save expanded section heights
+                                    saveExpandedBrowseSectionHeights();
+
+                                    /*$("#searchResultsPanel").animate({marginTop: "10px", height: browseResultsTableInfo["tableHeight"] + "px"}, 500, function(){});*/
 
                                     var newMainViewHeight = (browseResultsTableInfo["tableHeight"] + 180) + "px";
                                     $("#browseContent").animate({marginTop: "-10px", height: newMainViewHeight}, 500, function(){});

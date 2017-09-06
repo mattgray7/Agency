@@ -10,15 +10,35 @@ function getSectionExpandButtonContent(direction){
 }
 
 function getBrowseResultsTableHeight(){
-    var tableHeight = activeTabs.length * 40;
+    var tableHeight = activeTabs.length * 50;
     for(var i=0; i < expandedResultTabs.length; i++){
-        var resultsContainer = document.getElementById(expandedResultTabs[i] + "BrowseResultsContainer");
-        tableHeight += resultsContainer.offsetHeight;
-        console.log(resultsContainer.offsetHeight)
+        if(expandedResultTabs[i] in expandedSectionHeights && expandedSectionHeights[expandedResultTabs[i]] != 0){
+            tableHeight += expandedSectionHeights[expandedResultTabs[i]];
+
+        }else{
+            var resultsContainer = document.getElementById(expandedResultTabs[i] + "BrowseResultsContainer");
+            if(resultsContainer != null){
+                tableHeight += resultsContainer.offsetHeight;
+            }
+        }
     }
     console.log("table height is " + tableHeight)
-    console.log(activeTabs)
     return tableHeight
+}
+
+function updateSearchResultsPanelHeight(){
+    var newResultsHeight = getBrowseResultsTableHeight();
+    $("#searchResultsPanel").animate({marginTop: "10px", height: newResultsHeight + "px"}, browseAnimateSpeed, function(){console.log('finishedAnimating');});
+}
+
+var expandedSectionHeights = {"jobs": 0, "roles": 0, "users": 0, "projects": 0, "events": 0}
+function saveExpandedBrowseSectionHeights(){
+    for(var i=0; i < expandedResultTabs.length; i++){
+        var container = document.getElementById(expandedResultTabs[i] + "BrowseResultsContainer")
+        if(container != null){
+            expandedSectionHeights[expandedResultTabs[i]] = container.offsetHeight;
+        }
+    }
 }
 
 var browseAnimateSpeed = 400;
@@ -36,7 +56,8 @@ function toggleExpandBrowseSection(direction, section){
             expandButton.onclick = function(){toggleExpandBrowseSection("shrink", section)}
         }
         if(resultsContainer != null){
-            $("[id='" + section + "BrowseResultsContainer']").animate({marginTop: "10px", height: "1000px"}, browseAnimateSpeed, function(){});
+            $("[id='" + section + "BrowseResultsContainer']").animate({marginTop: "0px", height: expandedSectionHeights[section] + "px"}, browseAnimateSpeed, function(){});
+            updateSearchResultsPanelHeight();
         }
     }else{
         if(expandedTabIndex > -1){
@@ -47,13 +68,16 @@ function toggleExpandBrowseSection(direction, section){
             expandButton.onclick = function(){toggleExpandBrowseSection("expand", section)}
         }
         if(resultsContainer != null){
-            $("[id='" + section + "BrowseResultsContainer']").animate({marginTop: "10px", height: "0px"}, browseAnimateSpeed, function(){});
+            $("[id='" + section + "BrowseResultsContainer']").animate({marginTop: "0px", height: "0px"}, browseAnimateSpeed, function(){});
         }
-    }
-    var newResultsHeight = getBrowseResultsTableHeight();
-    $("#searchResultsPanel").animate({marginTop: "10px", height: newResultsHeight + "px"}, browseAnimateSpeed, function(){console.log('finishedAnimating');});
-}
+        if(resultsContainer != null){
+            updateSearchResultsPanelHeight();
+        }
 
+        //resultsContainer.style.display = "none";
+    }
+    
+}
 
 var browseTableElementHeight = 165;
 function createSearchResultsDisplay(resultList){
@@ -71,14 +95,18 @@ function createSearchResultsDisplay(resultList){
         tableHeight += 48
 
         // Add results container
-        displayString += "<div id='" + section + "BrowseResultsContainer' style='overflow: hidden;'>";
-        displayString += "<ul>"
-        for(var i=0; i < resultList[section].length; i++){
-            displayString += createBrowseListElement(section, resultList[section][i]);
-            tableHeight += browseTableElementHeight + 5;
+        if(resultList[section].length > 0){
+            displayString += "<div id='" + section + "BrowseResultsContainer' style='overflow: hidden;'>";
+            displayString += "<ul>"
+            for(var i=0; i < resultList[section].length; i++){
+                displayString += createBrowseListElement(section, resultList[section][i]);
+                tableHeight += browseTableElementHeight + 5;
+            }
+            displayString += "</ul>"
+            displayString += "</div>"
+        }else{
+            displayString += "<div id='" + section + "BrowseResultsContainer' style='height: 10px;'></div>";
         }
-        displayString += "</ul>"
-        displayString += "</div>"
     }
     return {"html": displayString, "tableHeight": tableHeight}
 }
