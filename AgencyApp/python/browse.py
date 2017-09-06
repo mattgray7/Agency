@@ -282,11 +282,9 @@ def _appendPostResultsByType(existingList, filteredNewList, numResults, required
 
 def getJobsSearchResults(searchValue, numResults):
     results = []
+    requiredFields = ["compensationType", "compensationDescription", "startDate",
+                      "endDate", "location", "profession", "hoursPerWeek"]
     if searchValue and searchValue not in ["None", "null"]:
-        # Search pattern is to look through professions, titles, project titles, and then descriptions
-        requiredFields = ["compensationType", "compensationDescription", "startDate",
-                          "endDate", "location", "profession", "hoursPerWeek"]
-
         # Look in profession
         results = _appendPostResultsByType(existingList=results,
                                            filteredNewList=models.WorkPost.objects.filter(profession__icontains=searchValue),
@@ -305,15 +303,18 @@ def getJobsSearchResults(searchValue, numResults):
                                            filteredNewList=models.WorkPost.objects.filter(projectID__in=projectIDs),
                                            numResults=numResults,
                                            requiredFields=requiredFields)
+    else:
+        results = _appendPostResultsByType(existingList=results,
+                                           filteredNewList=models.WorkPost.objects.filter(status__in=["Open", "Opening soon"]).order_by("-updatedAt"),
+                                           numResults=numResults,
+                                           requiredFields=requiredFields)
     return results
 
 def getRolesSearchResults(searchValue, numResults):
     results = []
+    requiredFields = ["compensationType", "compensationDescription", "startDate",
+                      "endDate", "location", "characterName", "roleType"]
     if searchValue and searchValue not in ["None", "null"]:
-        # Search pattern is to look through professions, titles, project titles, and then descriptions
-        requiredFields = ["compensationType", "compensationDescription", "startDate",
-                          "endDate", "location", "characterName", "roleType"]
-
         # Look in title
         results = _appendPostResultsByType(existingList=results,
                                            filteredNewList=models.CastingPost.objects.filter(title__startswith=searchValue),
@@ -332,14 +333,17 @@ def getRolesSearchResults(searchValue, numResults):
                                            filteredNewList=models.CastingPost.objects.filter(projectID__in=projectIDs),
                                            numResults=numResults,
                                            requiredFields=requiredFields)
+    else:
+        results = _appendPostResultsByType(existingList=results,
+                                           filteredNewList=models.CastingPost.objects.filter(status__in=["Open", "Opening soon"]).order_by("-updatedAt"),
+                                           numResults=numResults,
+                                           requiredFields=requiredFields)
     return results
 
 def getProjectSearchResults(searchValue, numResults):
     results = []
+    requiredFields = ["projectType", "openRoles", "openJobs"]
     if searchValue and searchValue not in ["None", "null"]:
-        # Search pattern is to look through professions, titles, project titles, and then descriptions
-        requiredFields = ["projectType", "openRoles", "openJobs"]
-
         # Look in title
         results = _appendPostResultsByType(existingList=results,
                                            filteredNewList=models.ProjectPost.objects.filter(title__startswith=searchValue),
@@ -351,13 +355,17 @@ def getProjectSearchResults(searchValue, numResults):
                                            filteredNewList=models.ProjectPost.objects.filter(title__startswith="The {0}".format(searchValue)),
                                            numResults=numResults,
                                            requiredFields=requiredFields)
+    else:
+        results = _appendPostResultsByType(existingList=results,
+                                           filteredNewList=models.ProjectPost.objects.all().exclude(status="Completed").order_by("-updatedAt"),
+                                           numResults=numResults,
+                                           requiredFields=requiredFields)
     return results
 
 def getEventSearchResults(searchValue, numResults):
     results = []
+    requiredFields = ["startDate", "endDate", "startTime", "endTime", "description"]
     if searchValue and searchValue not in ["None", "null"]:
-        # Search pattern is to look through professions, titles, project titles, and then descriptions
-        requiredFields = ["startDate", "endDate", "startTime", "endTime", "description"]
         # Look in title
         results = _appendPostResultsByType(existingList=results,
                                            filteredNewList=models.EventPost.objects.filter(title__contains=searchValue),
@@ -368,6 +376,11 @@ def getEventSearchResults(searchValue, numResults):
         projectIDs = [x.postID for x in models.ProjectPost.objects.filter(title__contains=searchValue)]
         results = _appendPostResultsByType(existingList=results,
                                            filteredNewList=models.EventPost.objects.filter(projectID__in=projectIDs),
+                                           numResults=numResults,
+                                           requiredFields=requiredFields)
+    else:
+        results = _appendPostResultsByType(existingList=results,
+                                           filteredNewList=models.EventPost.objects.all().exclude(status="Past").order_by("-updatedAt"),
                                            numResults=numResults,
                                            requiredFields=requiredFields)
 
