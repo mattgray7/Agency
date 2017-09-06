@@ -358,10 +358,9 @@ def getEventSearchResults(searchValue, numResults):
     if searchValue and searchValue not in ["None", "null"]:
         # Search pattern is to look through professions, titles, project titles, and then descriptions
         requiredFields = ["startDate", "endDate", "startTime", "endTime", "description"]
-
         # Look in title
         results = _appendPostResultsByType(existingList=results,
-                                           filteredNewList=models.EventPost.objects.filter(title__startswith=searchValue),
+                                           filteredNewList=models.EventPost.objects.filter(title__contains=searchValue),
                                            numResults=numResults,
                                            requiredFields=requiredFields)
 
