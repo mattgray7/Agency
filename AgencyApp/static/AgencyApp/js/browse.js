@@ -67,6 +67,37 @@ function toggleExpandBrowseSection(direction, section){
     }
 }
 
+function addResultsToSection(section){
+    var searchValue = ''
+    var searchInput = document.getElementById("searchTextInput");
+    if(searchInput != null && searchInput.value != null && searchInput.value.length > 0){
+        searchValue = searchInput.value;
+    }
+    $.ajax({
+        url : "/ajax/getSearchResults/",
+        data : {"categories": [section], "searchValue": searchValue, "numResults": 10},
+        type : 'POST',
+        dataType: "json",
+        success : function(data) {
+            if(data["success"]){
+                var resultsList = document.getElementById(section + "BrowseResultsList");
+                if(resultsList != null){
+                    resultsList.innerHTML = getBrowseResultsList(section, data["results"][section]["results"])
+                }
+            }
+        }
+    });
+}
+
+function getBrowseResultsList(section, results){
+    var listString = "<ul id='" + section + "BrowseResultsList'>";
+    for(var i=0; i < results.length; i++){
+        listString += createBrowseListElement(section, results[i]);
+    }
+    listString += "</ul>";
+    return listString;
+}
+
 var browseTableElementHeight = 165;
 function createSearchResultsDisplay(resultList){
     var displayString = '';
@@ -92,11 +123,11 @@ function createSearchResultsDisplay(resultList){
         }else{
             displayString += "<div id='" + section + "BrowseResultsContainer' style='height: 0px; overflow: hidden;'>";
         }
-        displayString += "<ul>"
-        for(var i=0; i < resultList[section]["results"].length; i++){
-            displayString += createBrowseListElement(section, resultList[section]["results"][i]);
+        displayString += getBrowseResultsList(section, resultList[section]["results"])
+
+        if(resultList[section]["moreResults"]){
+            displayString += "<div style='text-align: center; height: 30px; margin-top: -4px;'><a style='font-weight: 300; font-size: 1.1em;' onclick='addResultsToSection(" + '"' + section + '");' + "'>Show More</a></div>"
         }
-        displayString += "</ul>"
         displayString += "</div>"
     }
     return displayString
