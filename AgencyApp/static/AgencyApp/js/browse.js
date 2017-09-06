@@ -131,6 +131,11 @@ function createRoleElement(dataDict){
     // Add characterName
     element += "<div>" + dataDict["characterName"] + "</div>";
 
+    // Add project link
+    if("projectName" in dataDict){
+        element += "<div>Project: <a onclick='redirectToPost(" + '"' + dataDict["projectID"] + '");' + "'>" + dataDict["projectName"] + "</a></div>";
+    }
+
     // Add dates
     element += getDateString(new Date(dataDict["startDate"]), new Date(dataDict["endDate"]));
 
@@ -147,7 +152,7 @@ function createRoleElement(dataDict){
     element += "</div>"
 
     // Add description
-    element += "<div style='height: 50px; position: absolute: right: 0; text-align: left;'>" + dataDict["description"] + "</div>"
+    //element += "<div style='height: 50px; position: absolute: right: 0; text-align: left;'>" + dataDict["description"] + "</div>"
 
     return element
 }
@@ -157,10 +162,17 @@ function createJobElement(dataDict){
 
     // Add info content
     element += "<h2 class='postInfoTitle'><a onclick='redirectToPost(" +'"' + dataDict["postID"] + '");' + "'>" + dataDict["title"] + "</a></h2>"
+
+    // Add status
     element += "<div style='color: rgba(0,0,0,0.5);'>" + dataDict["status"] + "</div>"
 
+    // Add project link
+    if("projectName" in dataDict){
+        element += "<div>Project: <a onclick='redirectToPost(" + '"' + dataDict["projectID"] + '");' + "'>" + dataDict["projectName"] + "</a></div>";
+    }
+
     // Add dates
-    element += getDateString(new Date(dataDict["startDate"]), new Date(dataDict["endDate"]));
+    element += "<div>" + getDateString(new Date(dataDict["startDate"]), new Date(dataDict["endDate"])) + "</div>";
 
     // Add compensation
     element += "<div style='color: rgba(0,0,0,0.7);'>"
@@ -201,6 +213,11 @@ function createEventElement(dataDict){
     // Add info content
     element += "<h2 class='postInfoTitle'><a onclick='redirectToPost(" +'"' + dataDict["postID"] + '");' + "'>" + dataDict["title"] + "</a></h2>"
     element += "<div style='color: rgba(0,0,0,0.8);'>"
+
+    // Add project link
+    if("projectName" in dataDict){
+        element += "<div>Project: <a onclick='redirectToPost(" + '"' + dataDict["projectID"] + '");' + "'>" + dataDict["projectName"] + "</a></div>";
+    }
 
     // Add dates
     element += getDateString(new Date(dataDict["startDate"]), new Date(dataDict["endDate"]));
