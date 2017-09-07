@@ -330,9 +330,12 @@ function previewTextInDropdown(textInputDivName, dropdownDivName, getDataFunctio
 
 function getPreviewBrowseSuggestionsString(suggestions){
     var previewString = "<ul id='browseSuggestionDropdownList' style='margin-bottom: -20px;'>";
-    if(suggestions != null){
+    var resultCount = 0
+    var suggestionHeight = 30
+    if(suggestions != null && !$.isEmptyObject(suggestions)){
         for(type in suggestions){
             for(var i=0; i < suggestions[type].length; i++){
+                resultCount += 1
                 var functionInput = suggestions[type][i]
                 var displayString = suggestions[type][i] + "<div style='color: rgba(0,0,0,0.5); display: inline;'> - " + type + "</div>"
 
@@ -341,13 +344,16 @@ function getPreviewBrowseSuggestionsString(suggestions){
                     functionInput = suggestions[type][i]["cleanName"]
                     displayString = suggestions[type][i]["cleanName"] + "<div style='color: rgba(0,0,0,0.5); display: inline;'> - " + suggestions[type][i]["profession"] + "</div>"
                 }
-                previewString += "<li style='border: none;' onclick='selectBrowseSuggestion(" + '"' + functionInput + '", "searchTextInput", "browseDropdown");' + "'><div style='position:relative; height: 30px; text-align: left; margin-left: 4px;'>" + displayString + "</div></div></li>";
+                previewString += "<li style='border: none;' onclick='selectBrowseSuggestion(" + '"' + functionInput + '", "searchTextInput", "browseDropdown");' + "'><div style='position:relative; height: " + suggestionHeight + "px; text-align: left; margin-left: 4px;'>" + displayString + "</div></li>";
             }
         }
     }else{
-        previewString += "No suggestions"
+        previewString += "<li style='height: " + suggestionHeight + "px; border: none;'>No suggestions</li>"
     }
     previewString += "</ul>";
+
+    // Add container around list with proper height of results
+    previewString = "<div style='height: " + resultCount*suggestionHeight + "px;'>" + previewString + "</div>"
     return previewString;
 }
 
