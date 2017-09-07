@@ -265,7 +265,7 @@ function createUserElement(dataDict){
     var element = "";
     // Add info content
     console.log(dataDict)
-    element += "<h2 class='postInfoTitle'><a onclick='redirectToProfile(" +'"' + dataDict["username"] + '");' + "'>" + dataDict["cleanName"] + "</a></h2>"
+    element += "<h2 class='postInfoTitle'><a onclick='redirectToUser(" +'"' + dataDict["username"] + '");' + "'>" + dataDict["cleanName"] + "</a></h2>"
     element += "<div style='color: rgba(0,0,0,0.8);'>"
 
     // Add dates

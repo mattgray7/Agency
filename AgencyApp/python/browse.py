@@ -314,8 +314,8 @@ def getPostSearchResults(searchValue, maxNumResults, requiredFields, defaultList
                                                                  maxNumResults=maxNumResults,
                                                                  uniqueID=uniqueID)
     else:
-        totalNumResults = getTotalNumberResults([defaultList])
-        appendBrowseResultsWithoutDiplicates(existingList=uniqueResults,
+        totalNumResults = getTotalNumberResults([defaultList], uniqueID)
+        appendBrowseResultsWithoutDuplicates(existingList=uniqueResults,
                                                              filteredNewList=defaultList,
                                                              maxNumResults=maxNumResults,
                                                              uniqueID=uniqueID)
