@@ -132,6 +132,25 @@
 </div>
 
 <script>
+// Replace the search result table on load.
+var mainView = document.getElementById("mainViewPanel")
+if (('localStorage' in window) && window['localStorage'] !== null) {
+    if ('loadSearch' in localStorage && localStorage.getItem('loadSearch') === "true") {
+        if(document.getElementById("searchTextInput").value != ''){
+            // Search value is filled when presseing back button, so can just resubmit
+            submitSearch()
+            localStorage.setItem('loadSearch', 'false')
+        }
+    }
+}
+
+// Save the search result table when leaving the page.
+$(window).on("unload", function (e) {
+    if (('localStorage' in window) && window['localStorage'] !== null) {
+        var storageContent = mainView.innerHTML
+        localStorage.setItem('loadSearch', 'true');
+    }
+});
 </script>
 
 <!--<script>
