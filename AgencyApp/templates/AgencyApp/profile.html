@@ -1,661 +1,448 @@
 {% extends "base.html" %}
 
 {% block content %}
+{% load static %}
+<link href="{% static "/AgencyApp/css/profile.css" %}" rel="stylesheet" type="text/css" media="all" />
+<!--<script type="text/javascript" src="{% static "/AgencyApp/js/post/post.js" %}"></script>-->
+<script type="text/javascript" src="{% static "/AgencyApp/js/profile.js" %}"></script>
 
-	<script>
-		function redirect(destination){
-			// Redirects to to destination
-			var form = createPageRedirectForm("{{next}}", "{{next}}", destination, "{{currentPageURL}}", null, null);
-			form.submit();
-		}
-		var activeInterest = "work";
-		function getProfessionList(){
-			var returnString = '';
-			{% if profileInterests.work %}
-				returnString += '<div class="profileProfessionList"><ul>';
-				{% for interest in profileInterests.work %}
-					returnString += '<li> {{interest.professionName}} </li>'
-				{% endfor %}
-				returnString += '</ul></div>';
-			{% endif %}
-			return returnString;
-		}
+    <script>
+        function redirect(destination){
+            // Redirects to to destination
+            var form = createPageRedirectForm("{{next}}", "{{next}}", destination, "{{currentPageURL}}", null, null);
+            form.submit();
+        }
+        var activeInterest = "work";
+        function getProfessionList(){
+            var returnString = '';
+            {% if profileInterests.work %}
+                returnString += '<div class="profileProfessionList"><ul>';
+                {% for interest in profileInterests.work %}
+                    returnString += '<li> {{interest.professionName}} </li>'
+                {% endfor %}
+                returnString += '</ul></div>';
+            {% endif %}
+            return returnString;
+        }
 
-		function getHiringList(){
-			var returnString = '';
-			{% if profileInterests.hire %}
-				returnString += '<div class="profileProfessionList"><ul>'
-				{% for interest in profileInterests.hire %}
-					{% if interest.subInterest == "hireProject" %}
-						returnString += "<li>Projects</li>";
-					{% elif interest.subInterest == "hirePermanent" %}
-						returnString += "<li>Permanent Positions</li>";
-					{% elif interest.subInterest == "casting" %}
-						returnString += "<li>Casting</li>";
-					{% elif interest.subInterest == "collaborating" %}
-						returnString += "<li>Collaborating</li>"
-					{% endif %}
-				{% endfor %}
-				returnString += "</ul></div>";
-			{% endif %}
-			return returnString;
-		}
+        function getHiringList(){
+            var returnString = '';
+            {% if profileInterests.hire %}
+                returnString += '<div class="profileProfessionList"><ul>'
+                {% for interest in profileInterests.hire %}
+                    {% if interest.subInterest == "hireProject" %}
+                        returnString += "<li>Projects</li>";
+                    {% elif interest.subInterest == "hirePermanent" %}
+                        returnString += "<li>Permanent Positions</li>";
+                    {% elif interest.subInterest == "casting" %}
+                        returnString += "<li>Casting</li>";
+                    {% elif interest.subInterest == "collaborating" %}
+                        returnString += "<li>Collaborating</li>"
+                    {% endif %}
+                {% endfor %}
+                returnString += "</ul></div>";
+            {% endif %}
+            return returnString;
+        }
 
-		function toggleInterest(buttonElement, interestType){
-			if(interestType != activeInterest){
-				// Set this button to active
-				var newActiveButtonId = interestType + "ToggleInterestButton";
-				var newActiveButton = document.getElementById(newActiveButtonId);
-				if(newActiveButton != null){
-					newActiveButton.className = "blackButton";
-				}
-				var oldActiveButtonId = activeInterest + "ToggleInterestButton";
-				var oldActiveButton = document.getElementById(oldActiveButtonId);
-				if(oldActiveButton != null){
-					oldActiveButton.className = "whiteButton";
-				}
-				activeInterest = interestType;
-				document.getElementById("interestTitle").innerHTML = getInterestTitle(interestType)
-				if(interestType === "work"){
-					document.getElementById("interestContent").innerHTML = getProfessionList();
-				}else if(interestType === "hire"){
-					document.getElementById("interestContent").innerHTML = getHiringList();
-				}
-			}
-		}
+        function toggleInterest(buttonElement, interestType){
+            if(interestType != activeInterest){
+                // Set this button to active
+                var newActiveButtonId = interestType + "ToggleInterestButton";
+                var newActiveButton = document.getElementById(newActiveButtonId);
+                if(newActiveButton != null){
+                    newActiveButton.className = "blackButton";
+                }
+                var oldActiveButtonId = activeInterest + "ToggleInterestButton";
+                var oldActiveButton = document.getElementById(oldActiveButtonId);
+                if(oldActiveButton != null){
+                    oldActiveButton.className = "whiteButton";
+                }
+                activeInterest = interestType;
+                document.getElementById("interestTitle").innerHTML = getInterestTitle(interestType)
+                if(interestType === "work"){
+                    document.getElementById("interestContent").innerHTML = getProfessionList();
+                }else if(interestType === "hire"){
+                    document.getElementById("interestContent").innerHTML = getHiringList();
+                }
+            }
+        }
 
-		function getInterestTitle(interestType){
-			var headerTag = "<h2>";
-			{% if profileUserAccount.workInterest and profileUserAccount.hireInterest %}
-				headerTag = "<h2 style='padding: 10px 0px 1px 0px;'>";
-			{% endif %}
+        function getInterestTitle(interestType){
+            var headerTag = "<h2>";
+            {% if profileUserAccount.workInterest and profileUserAccount.hireInterest %}
+                headerTag = "<h2 style='padding: 10px 0px 1px 0px;'>";
+            {% endif %}
 
-			var interestTitle = "";
-			if(interestType === "work"){
-				interestTitle = headerTag + "Seeking Work</h2>"
-			}else if(interestType === "hire"){
-				interestTitle = headerTag + "Hiring</h2>"
-			}else{
-				interestTitle = "<h3>No interests selected</h3>";
-			}
-			return interestTitle
-		}
+            var interestTitle = "";
+            if(interestType === "work"){
+                interestTitle = headerTag + "Seeking Work</h2>"
+            }else if(interestType === "hire"){
+                interestTitle = headerTag + "Hiring</h2>"
+            }else{
+                interestTitle = "<h3>No interests selected</h3>";
+            }
+            return interestTitle
+        }
 
-		var profileTabs = ["background", "posts", "events", "reviews"];
-		function selectProfileTab(tabType){
-			for(var i=0; i < profileTabs.length; i++){
-				var buttonId = profileTabs[i] + "ProfileButton";
-				var borderCoverId = profileTabs[i] + "BorderCover";
-				var profileButtonDiv = document.getElementById(buttonId);
-				var profileButtonBorderCoverDiv = document.getElementById(borderCoverId)
-				if(profileButtonDiv != null && profileButtonBorderCoverDiv != null){
-					if(profileTabs[i] === tabType){
-						profileButtonBorderCoverDiv.style.opacity = "1";
-						profileButtonBorderCoverDiv.style.background = "#FFF"
-						profileButtonDiv.className = "profileTabButtonActive";
-					}else{
-						profileButtonBorderCoverDiv.style.opacity = "0";
-						profileButtonDiv.className = "profileTabButtonInactive";
-					}
-				}
-			}
+        var profileTabs = ["background", "posts", "events", "reviews"];
+        function selectProfileTab(tabType){
+            for(var i=0; i < profileTabs.length; i++){
+                var buttonId = profileTabs[i] + "ProfileButton";
+                var borderCoverId = profileTabs[i] + "BorderCover";
+                var profileButtonDiv = document.getElementById(buttonId);
+                var profileButtonBorderCoverDiv = document.getElementById(borderCoverId)
+                if(profileButtonDiv != null && profileButtonBorderCoverDiv != null){
+                    if(profileTabs[i] === tabType){
+                        profileButtonBorderCoverDiv.style.opacity = "1";
+                        profileButtonBorderCoverDiv.style.background = "#FFF"
+                        profileButtonDiv.className = "profileTabButtonActive";
+                    }else{
+                        profileButtonBorderCoverDiv.style.opacity = "0";
+                        profileButtonDiv.className = "profileTabButtonInactive";
+                    }
+                }
+            }
 
-			if(tabType === "background"){
-				displayBackground();
-			}else if(tabType === "posts"){
-				displayPosts();
-			}else if(tabType === "events"){
-				displayEvents();
-			}else if(tabType === "reviews"){
-				displayReviews();
-			}
-		}
+            if(tabType === "background"){
+                displayBackground();
+            }else if(tabType === "posts"){
+                displayPosts();
+            }else if(tabType === "events"){
+                displayEvents();
+            }else if(tabType === "reviews"){
+                displayReviews();
+            }
+        }
 
-		function createProjectListElement(projectID, projectPictureURL, title, status, involvementString){
-			var projectString = "<li id='profileProjectListElement_" + projectID + "' class='profileProjectListElement' onclick='redirectToPost(" + '"' + projectID + '");' + "'>"
-			projectString += "<div class='profileProjectListElementImageContainer'>" + getPictureTag(projectPictureURL, "profileProjectListElementImage", "") + "</div>";
-			projectString += "<div class='profileProjectListElementText'><h3>" + title + "</h3><h5>" + status + "<br>" + involvementString + "<br>"
+        function createProjectListElement(projectID, projectPictureURL, title, status, involvementString){
+            var projectString = "<li id='profileProjectListElement_" + projectID + "' class='profileProjectListElement' onclick='redirectToPost(" + '"' + projectID + '");' + "'>"
+            projectString += "<div class='profileProjectListElementImageContainer'>" + getPictureTag(projectPictureURL, "profileProjectListElementImage", "") + "</div>";
+            projectString += "<div class='profileProjectListElementText'><h3>" + title + "</h3><h5>" + status + "<br>" + involvementString + "<br>"
 
-			/*if(numOpenRoles > 0){
-				projectString += parseInt(numOpenRoles) + " ";
-				if(numOpenRoles === 1){
-					projectString += "role";
-				}else{
-					projectString += "roles";
-				}
-				projectString += " available<br>"
-			}else{
-				projectString += "<br>";
-			}
-			if(numOpenJobs > 0){
-				projectString += "Hiring for " + parseInt(numOpenJobs) + " ";
-				if(numOpenJobs === 1){
-					projectString += "position";
-				}else{
-					projectString += "positions";
-				}
-			}else{
-				projectString += "<br>";
-			}*/
-			projectString += "</h5></div></li>";
-			return projectString
-		}
+            /*if(numOpenRoles > 0){
+                projectString += parseInt(numOpenRoles) + " ";
+                if(numOpenRoles === 1){
+                    projectString += "role";
+                }else{
+                    projectString += "roles";
+                }
+                projectString += " available<br>"
+            }else{
+                projectString += "<br>";
+            }
+            if(numOpenJobs > 0){
+                projectString += "Hiring for " + parseInt(numOpenJobs) + " ";
+                if(numOpenJobs === 1){
+                    projectString += "position";
+                }else{
+                    projectString += "positions";
+                }
+            }else{
+                projectString += "<br>";
+            }*/
+            projectString += "</h5></div></li>";
+            return projectString
+        }
 
-		function getInvolvementString(projectID, rolesString, jobsString, creator){
-			var jobs = JSON.parse(jobsString.replace(/&quot;/g, '"'));
-			var roles = JSON.parse(rolesString.replace(/&quot;/g, '"'));
-			var returnString = "";
-			var padCount = 0;
-			if(creator === "True"){
-				returnString += "Creator<br>";
-				padCount -= 1;
-			}else{
-				padCount += 1;
-			}
-			if(roles.length > 0){
-				if(roles.length === 1){
-					returnString += "Actor (<a onclick='redirectToPost(" + '"' + roles[0]["postID"] + '");' + "'>" + roles[0]["characterName"] + "</a>)<br>"
-				}else{
-					returnString += "Actor (<a onclick='redirectToPost(" + '"' + projectID + '");' + "'>" + roles.length + " roles</a>)<br>"
-				}
-			}else{
-				padCount += 1;
-			}
-			if(jobs.length > 0){
-				returnString += "Worked as ";
-				for(var i=0; i < jobs.length; i++){
-					returnString += "<a onclick='redirectToPost(" + '"' + jobs[i]["postID"] + '");' + "'>" +  jobs[i]["profession"] + "</a>";
-					if(i != jobs.length-1){
-						returnString += ", ";
-					}
-				}
-			}else{
-				padCount += 1
-			}
-			if(padCount > 0){
-				for(var i=0; i < padCount-1; i++){
-					returnString += "<br>";
-				}
-			}
-			return returnString
-		}
+        function getInvolvementString(projectID, rolesString, jobsString, creator){
+            var jobs = JSON.parse(jobsString.replace(/&quot;/g, '"'));
+            var roles = JSON.parse(rolesString.replace(/&quot;/g, '"'));
+            var returnString = "";
+            var padCount = 0;
+            if(creator === "True"){
+                returnString += "Creator<br>";
+                padCount -= 1;
+            }else{
+                padCount += 1;
+            }
+            if(roles.length > 0){
+                if(roles.length === 1){
+                    returnString += "Actor (<a onclick='redirectToPost(" + '"' + roles[0]["postID"] + '");' + "'>" + roles[0]["characterName"] + "</a>)<br>"
+                }else{
+                    returnString += "Actor (<a onclick='redirectToPost(" + '"' + projectID + '");' + "'>" + roles.length + " roles</a>)<br>"
+                }
+            }else{
+                padCount += 1;
+            }
+            if(jobs.length > 0){
+                returnString += "Worked as ";
+                for(var i=0; i < jobs.length; i++){
+                    returnString += "<a onclick='redirectToPost(" + '"' + jobs[i]["postID"] + '");' + "'>" +  jobs[i]["profession"] + "</a>";
+                    if(i != jobs.length-1){
+                        returnString += ", ";
+                    }
+                }
+            }else{
+                padCount += 1
+            }
+            if(padCount > 0){
+                for(var i=0; i < padCount-1; i++){
+                    returnString += "<br>";
+                }
+            }
+            return returnString
+        }
 
-		function createProjectsList(status){
-			var displayString = "";
-			{% if profilePosts.projects %}
-				displayString += "<div id='" + status + "ProjectPanel' class='projectListPanel'><ul class='profileProjectList'><li><h2>"
-				if(status === "current"){
-					displayString += "Current Projects";
-				}else{
-					displayString += "Past Projects";
-				}
-				displayString += "</h2></li>";
-				{% for projectPost in profilePosts.projects %}
-					
-					if("{{projectPost.status}}" === status){
-						var picURL = null
-						{% if projectPost.project.postPicture %}
-							picURL = "{{ projectPost.project.postPicture.url }}"
-						{% endif %}
+        function createProjectsList(status){
+            var displayString = "";
+            {% if profilePosts.projects %}
+                displayString += "<div id='" + status + "ProjectPanel' class='projectListPanel'><ul class='profileProjectList'><li><h2>"
+                if(status === "current"){
+                    displayString += "Current Projects";
+                }else{
+                    displayString += "Past Projects";
+                }
+                displayString += "</h2></li>";
+                {% for projectPost in profilePosts.projects %}
+                    
+                    if("{{projectPost.status}}" === status){
+                        var picURL = null
+                        {% if projectPost.project.postPicture %}
+                            picURL = "{{ projectPost.project.postPicture.url }}"
+                        {% endif %}
 
-						var involvementString = getInvolvementString("{{projectPost.project.postID}}", "{{projectPost.roles}}", "{{projectPost.jobs}}", "{{projectPost.creator}}")
-						displayString += createProjectListElement("{{projectPost.project.postID}}", picURL, "{{projectPost.project.title}}", "{{projectPost.project.status}}", involvementString)
-					}
-				{% endfor %}
-				displayString += "</ul></div>";
-			{% endif %}
-			return displayString;
-		}
+                        var involvementString = getInvolvementString("{{projectPost.project.postID}}", "{{projectPost.roles}}", "{{projectPost.jobs}}", "{{projectPost.creator}}")
+                        displayString += createProjectListElement("{{projectPost.project.postID}}", picURL, "{{projectPost.project.title}}", "{{projectPost.project.status}}", involvementString)
+                    }
+                {% endfor %}
+                displayString += "</ul></div>";
+            {% endif %}
+            return displayString;
+        }
 
-		function displayBackground(){
-			var profileDisplayPanelDiv = document.getElementById("profileDisplayPanel")
-			if(profileDisplayPanelDiv != null){
-				var backgroundString = "";
-				{% if hasCurrentProjects %}
-					backgroundString += createProjectsList("current")
-				{% endif %}
-				{% if hasPastProjects %}
-					backgroundString += createProjectsList("past")
-				{% endif %}
-				if(backgroundString === ""){
-					backgroundString = "{{profileUserAccount.firstName}} has not registered any projects."
-				}
-				profileDisplayPanelDiv.innerHTML = backgroundString;
-			}
-		}
+        function displayBackground(){
+            var profileDisplayPanelDiv = document.getElementById("profileDisplayPanel")
+            if(profileDisplayPanelDiv != null){
+                var backgroundString = "";
+                {% if hasCurrentProjects %}
+                    backgroundString += createProjectsList("current")
+                {% endif %}
+                {% if hasPastProjects %}
+                    backgroundString += createProjectsList("past")
+                {% endif %}
+                if(backgroundString === ""){
+                    backgroundString = "{{profileUserAccount.firstName}} has not registered any projects."
+                }
+                profileDisplayPanelDiv.innerHTML = backgroundString;
+            }
+        }
 
-		function displayPosts(){
-			var profileDisplayPanelDiv = document.getElementById("profileDisplayPanel")
-			if(profileDisplayPanelDiv != null){
-				var displayString = "displaying posts";
-				profileDisplayPanel.innerHTML = displayString;
-			}
-		}
+        function displayPosts(){
+            var profileDisplayPanelDiv = document.getElementById("profileDisplayPanel")
+            if(profileDisplayPanelDiv != null){
+                var displayString = "displaying posts";
+                profileDisplayPanel.innerHTML = displayString;
+            }
+        }
 
-		function displayEvents(){
-			var profileDisplayPanelDiv = document.getElementById("profileDisplayPanel")
-			if(profileDisplayPanelDiv != null){
-				var displayString = "displaying events";
-				profileDisplayPanel.innerHTML = displayString;
-			}
-		}
+        function displayEvents(){
+            var profileDisplayPanelDiv = document.getElementById("profileDisplayPanel")
+            if(profileDisplayPanelDiv != null){
+                var displayString = "displaying events";
+                profileDisplayPanel.innerHTML = displayString;
+            }
+        }
 
-		function displayReviews(){
-			var profileDisplayPanelDiv = document.getElementById("profileDisplayPanel")
-			if(profileDisplayPanelDiv != null){
-				var displayString = "displaying reviews";
-				profileDisplayPanel.innerHTML = displayString;
-			}
-		}
-	</script>
+        function displayReviews(){
+            var profileDisplayPanelDiv = document.getElementById("profileDisplayPanel")
+            if(profileDisplayPanelDiv != null){
+                var displayString = "displaying reviews";
+                profileDisplayPanel.innerHTML = displayString;
+            }
+        }
+    </script>
 
-	{% if profileUserAccount %}
-		<div id="profilePageDiv">
-			<table id="profilePageTable" class="profileTable">
-				<tr>
-					<td class="profileTableMainColumn">
-						<table style="height:100%; width:100%; border-spacing:0.2em; margin: 0px -5px 0px 5px;">
-							<tr>
-								<td class="profilePanel profilePicturePanel">
-									<div id="profilePictureBoundingBox" class="hoverContainer" style="width:250px; height:278px; background: #000; border: 2px solid #000; border-radius:6px;">
-										{% if profileUserAccount.profilePicture %}
-											<div id="profilePictureDiv">
-												<img src="{{ profileUserAccount.profilePicture.url }}" style="width:250px;"/>
-											</div>
-										{% else %}
-											<div id="profilePictureDiv">
-												<img src="{{ images.noProfilePicture }}" style="width:250px;"/>
-											</div>
-										{% endif %}
-										{% if viewingOwnProfile %}
-											<div class="grayAlphaOverlay"></div>
-	  										<div class="whiteHoverButton"><a onclick="redirect('{{ possibleDestinations.picture }}');"> Edit </a></div>
-	  									{% endif %}
-									</div>
-									<div id="profileBackgroundDiv" class="hoverContainer">
-										<div id="profileBackgroundTextDiv" style="width: 245px; word-wrap: break-word; padding: 0em 0.3em 0em 0.3em;">
-											<h1>{{ displayName }} </h1>
-											{% if profileUserAccount.mainProfession %}
-												<h3> {{profileUserAccount.mainProfession}} </h3>
-											{% endif %}
-											{% if profileUserAccount.bio %}
-												<p class="profileBioText"> {{ profileUserAccount.bio }} </p>
-											{% endif %}
-
-											{% if viewingOwnProfile %}
-												<!--<div class="grayOutlineOverlay"></div>-->
-		  										<div class="hoverButton">
-		  											<a onclick="redirect('{{ possibleDestinations.background }}');">Edit</a>
-		  										</div>
-		  									{% endif %}
-										</div>
-
-										{% if profileLinks %}
-											<div id="profileLinksDiv" style="height: 30px; padding: 0.5em 0em 0em 0em;">
-												<table style="border-width:6px;">
-													<tr>
-														{% for link in profileLinks %}
-															{% if link.url and link.label %}
-																<td>
-																	<div class="whiteButton blackHover" style="padding: 1px 4px 1px 4px; display:inline; z-index:2; position: relative;" onclick="window.location.href='{{link.url}}';">
-																		{{ link.label }}
-																	</div>
-																</td>
-															{% endif %}
-														{% endfor %}
-													</tr>
-												</table>
-											</div>
-										{% endif %}
-									</div>
-								</td>
-							</tr>
-							<tr>
-								<td class="profilePanel interestsPanel" style="width:259px">
-									<div id="interestsPanel" class="hoverContainer">
-										<table>
-											{% if profileUserAccount.workInterest and profileUserAccount.hireInterest %}
-												<tr>
-													<td style="display: inline;">
-														<div class="blackButton" id="workToggleInterestButton" onclick="toggleInterest(this, 'work');" style="padding: 1px 37px 1px 37px; display:inline; z-index:1; position: relative; border-radius: 1px;">
-															Work
-														</div>
-														<div class="whiteButton" id="hireToggleInterestButton" onclick="toggleInterest(this, 'hire');" style="padding: 1px 37px 1px 37px; display:inline; z-index:1; position: relative; border-radius: 1px;">
-															Hiring
-														</div>
-													</td>
-												</tr>
-											{% endif %}
-
-											<!-- Move the hover edit button lower if work/hire button exists -->
-											{% if viewingOwnProfile %}
-												{% if profileUserAccount.workInterest and profileUserAccount.hireInterest %}
-													<div class="hoverButton" style="z-index:2; top: 45px;">
-												{% elif profileUserAccount.workInterest or profileUserAccount.hireInterest%}
-													<div class="hoverButton" style="z-index:2; top: 9px;">
-												{% else %}
-													<div class="hoverButton" style="z-index:2; top: 5px;">
-												{% endif %}
-													<a onclick="redirect('{{ possibleDestinations.interests }}');">Edit</a>
-												</div>
-											{% endif %}
-											<tr>
-												<td>
-													<div id="interestTitle"></div>
-												</td>
-											</tr>
-											<tr>
-												<td>
-													<div id="interestContent"></div>
-												</td>
-											</tr>
-										</table>
-									</div>
-								</td>
-							</tr>
-						</table>
-					</td>
-					<td colspan="2" class="profileTableMainColumn" style="width:50%; max-width:50%: position:relative;">
-						<table style="height:100%; position:absolute; top: 100px;">
-							<tr style="height: 100%; margin: 0px;">
-								<td>
-									<div class="profilePanel postsPanel" style="min-width: 500px; width:100%; height: 100%; margin-top: -11px; margin-left: -12px; background:none; border:none;">
-										<table>
-											<tr>
-												<td style="text-align:center; min-width: 515px;">
-													<div class="profileTabButtonInactive" id="backgroundProfileButton" onclick="selectProfileTab('background')" style="margin-left: -3px;">
-														Background
-														<div id="backgroundBorderCover" class="profileTabBorderCover"></div>
-													</div>
-													<div class="profileTabButtonInactive" id="postsProfileButton" onclick="selectProfileTab('posts')" style="margin-left:2px;">
-														Posts
-														<div id="postsBorderCover" class="profileTabBorderCover"></div>
-													</div>
-													<div class="profileTabButtonInactive" id="eventsProfileButton" onclick="selectProfileTab('events')" style="margin-right: 1px">
-														Events
-														<div id="eventsBorderCover" class="profileTabBorderCover"></div>
-													</div>
-													<div class="profileTabButtonInactive" id="reviewsProfileButton" onclick="selectProfileTab('reviews')" style="margin-right: -3px;">
-														Reviews
-														<div id="reviewsBorderCover" class="profileTabBorderCover" style="width: 132%;"></div>
-													</div>
-												</td>
-											</tr>
-											<tr>
-												<td>
-													<div id="profileDisplayPanel" class="profileDisplayPanel"></div>
-												</td>
-											</tr>
-										</table>
-									</div>
-								</td>
-							</tr>
-							
-						</table>
-					</td>
-					<td class="profileTableMainColumn" style="width:20%">
-						
-					</td>
-				</tr>
-			</table>
-			<script>
-				// Have to do script outside of table, otherwise it affects formatting
-				var interestDiv = document.getElementById("interestContent");
-				var interestTitleDiv = document.getElementById("interestTitle")
-				if(interestDiv != null && interestTitleDiv != null){
-					var headerTag = "<h2>";
-					{% if profileUserAccount.workInterest and profileUserAccount.hireInterest %}
-						headerTag = "<h2 style='padding: 10px 0px 1px 0px;'>";
-					{% endif %}
-
-					{% if profileUserAccount.workInterest %}
-						interestDiv.innerHTML = getProfessionList();
-						interestTitleDiv.innerHTML = getInterestTitle("work")
-					{% elif profileUserAccount.hireInterest %}
-						interestDiv.innerHTML = getHiringList();
-						interestTitleDiv.innerHTML = getInterestTitle("hire")
-					{% else %}
-						interestDiv.innerHTML = ""
-						interestTitleDiv.innerHTML = getInterestTitle("other")
-					{% endif %}
-				}
-
-				selectProfileTab("background");
-				//selectProfileTab("posts")
-			</script>
-		</div>
+<div id='backgroundPanel' class='backgroundPanel' style='min-width: 600px; min-height: 100%;'>
+    <div id="mainViewPanel" class="mainViewPanel" style="position: relative; min-width: 600px; max-width: 600px; background: rgba(0,0,0,0.05); border: none; margin-top: 10%;">
+        {% if profileUserAccount %}
+            {{profileUserAccount.cleanName}}
+        {% else %}
+            No user Found
+        {% endif %}
+    </div>
+</div>
 
 
-		<!--{% if profileUserAccount.profilePicture %}
-			<div id="profilePic">
-				<img src="{{ profileUserAccount.profilePicture.url }}" height="150px" width="175px"/>
-			</div>
-		{% else %}
-			<div id="profilePic">
-				<img height="150px" width="175px"/>
-			</div>
-		{% endif %}
-		{% if viewingOwnProfile %}
-			<form action="{{ currentPageURL }}" method="post">
-				{% csrf_token %}
-				<input type="hidden" name="source" value="{{ next }}" />
-				<input type="hidden" name="current" value="{{ next }}" />
-				<input type="hidden" name="destination" value="{{ possibleDestinations.picture }}" />
-				<input type="submit" value="Edit profile picture" />
-			</form>
-		{% endif %}
-		<h1><u> {{ profileUserAccount.firstName }} {{ profileUserAccount.lastName }}</u></h1>
 
-		{% if profileUserAccount.bio %}
-			{{profileUserAccount.bio}}<br>
-		{% endif %}
+<!--
+    {% if profileUserAccount %}
+        <div id="profilePageDiv">
+            <table id="profilePageTable" class="profileTable">
+                <tr>
+                    <td class="profileTableMainColumn">
+                        <table style="height:100%; width:100%; border-spacing:0.2em; margin: 0px -5px 0px 5px;">
+                            <tr>
+                                <td class="profilePanel profilePicturePanel">
+                                    <div id="profilePictureBoundingBox" class="hoverContainer" style="width:250px; height:278px; background: #000; border: 2px solid #000; border-radius:6px;">
+                                        {% if profileUserAccount.profilePicture %}
+                                            <div id="profilePictureDiv">
+                                                <img src="{{ profileUserAccount.profilePicture.url }}" style="width:250px;"/>
+                                            </div>
+                                        {% else %}
+                                            <div id="profilePictureDiv">
+                                                <img src="{{ images.noProfilePicture }}" style="width:250px;"/>
+                                            </div>
+                                        {% endif %}
+                                        {% if viewingOwnProfile %}
+                                            <div class="grayAlphaOverlay"></div>
+                                            <div class="whiteHoverButton"><a onclick="redirect('{{ possibleDestinations.picture }}');"> Edit </a></div>
+                                        {% endif %}
+                                    </div>
+                                    <div id="profileBackgroundDiv" class="hoverContainer">
+                                        <div id="profileBackgroundTextDiv" style="width: 245px; word-wrap: break-word; padding: 0em 0.3em 0em 0.3em;">
+                                            <h1>{{ displayName }} </h1>
+                                            {% if profileUserAccount.mainProfession %}
+                                                <h3> {{profileUserAccount.mainProfession}} </h3>
+                                            {% endif %}
+                                            {% if profileUserAccount.bio %}
+                                                <p class="profileBioText"> {{ profileUserAccount.bio }} </p>
+                                            {% endif %}
 
-		{% if profileUserAccount.reelLink %}
-			<a href="{{profileUserAccount.reelLink}}">Reel</a>
-		{% endif %}
-		{% if profileUserAccount.imdbLink %}
-			<a href="{{profileUserAccount.imdbLink}}">IMDB</a>
-		{% endif %}
+                                            {% if viewingOwnProfile %}
+                                                <div class="hoverButton">
+                                                    <a onclick="redirect('{{ possibleDestinations.background }}');">Edit</a>
+                                                </div>
+                                            {% endif %}
+                                        </div>
 
-		{% if viewingOwnProfile %}
-			<form action="{{ currentPageURL }}" method="post">
-				{% csrf_token %}
-				<input type="hidden" name="source" value="{{ next }}" />
-				<input type="hidden" name="current" value="{{ next }}" />
-				<input type="hidden" name="destination" value="{{ possibleDestinations.background }}" />
-				<input type="submit" value="Edit background" />
-			</form>
-		{% endif %}
-		<br>
+                                        {% if profileLinks %}
+                                            <div id="profileLinksDiv" style="height: 30px; padding: 0.5em 0em 0em 0em;">
+                                                <table style="border-width:6px;">
+                                                    <tr>
+                                                        {% for link in profileLinks %}
+                                                            {% if link.url and link.label %}
+                                                                <td>
+                                                                    <div class="whiteButton blackHover" style="padding: 1px 4px 1px 4px; display:inline; z-index:2; position: relative;" onclick="window.location.href='{{link.url}}';">
+                                                                        {{ link.label }}
+                                                                    </div>
+                                                                </td>
+                                                            {% endif %}
+                                                        {% endfor %}
+                                                    </tr>
+                                                </table>
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="profilePanel interestsPanel" style="width:259px">
+                                    <div id="interestsPanel" class="hoverContainer">
+                                        <table>
+                                            {% if profileUserAccount.workInterest and profileUserAccount.hireInterest %}
+                                                <tr>
+                                                    <td style="display: inline;">
+                                                        <div class="blackButton" id="workToggleInterestButton" onclick="toggleInterest(this, 'work');" style="padding: 1px 37px 1px 37px; display:inline; z-index:1; position: relative; border-radius: 1px;">
+                                                            Work
+                                                        </div>
+                                                        <div class="whiteButton" id="hireToggleInterestButton" onclick="toggleInterest(this, 'hire');" style="padding: 1px 37px 1px 37px; display:inline; z-index:1; position: relative; border-radius: 1px;">
+                                                            Hiring
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            {% endif %}
 
-		<h3> Interests: </h3>
-		<ul>
-			{% if profileInterests.work %}
-				<li>
-					<script>
-						function getTruncatedProfessionList(){
-							var professionString = "";
-							{% if profileInterests.work %}
-								var addProfession = true;
-								{% for interest in profileInterests.work %}
-									if(professionString.length < 30){
-										professionString += "{{ interest.professionName }}"
-									}else{
-										if(addProfession){
-											professionString += " and " + ({{ profileInterests.work|length }} - {{ forloop.counter }} + 1) + " more jobs."
-											addProfession = false;
-										}
-									}
-									if(addProfession){
-										professionString += ", ";
-									}
-								{% endfor %}
-							{% endif %}
-							return professionString
-						}
-						document.write("Seeking work as a " + getTruncatedProfessionList());
-					</script>
+                                            {% if viewingOwnProfile %}
+                                                {% if profileUserAccount.workInterest and profileUserAccount.hireInterest %}
+                                                    <div class="hoverButton" style="z-index:2; top: 45px;">
+                                                {% elif profileUserAccount.workInterest or profileUserAccount.hireInterest%}
+                                                    <div class="hoverButton" style="z-index:2; top: 9px;">
+                                                {% else %}
+                                                    <div class="hoverButton" style="z-index:2; top: 5px;">
+                                                {% endif %}
+                                                    <a onclick="redirect('{{ possibleDestinations.interests }}');">Edit</a>
+                                                </div>
+                                            {% endif %}
+                                            <tr>
+                                                <td>
+                                                    <div id="interestTitle"></div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <div id="interestContent"></div>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td colspan="2" class="profileTableMainColumn" style="width:50%; max-width:50%: position:relative;">
+                        <table style="height:100%; position:absolute; top: 100px;">
+                            <tr style="height: 100%; margin: 0px;">
+                                <td>
+                                    <div class="profilePanel postsPanel" style="min-width: 500px; width:100%; height: 100%; margin-top: -11px; margin-left: -12px; background:none; border:none;">
+                                        <table>
+                                            <tr>
+                                                <td style="text-align:center; min-width: 515px;">
+                                                    <div class="profileTabButtonInactive" id="backgroundProfileButton" onclick="selectProfileTab('background')" style="margin-left: -3px;">
+                                                        Background
+                                                        <div id="backgroundBorderCover" class="profileTabBorderCover"></div>
+                                                    </div>
+                                                    <div class="profileTabButtonInactive" id="postsProfileButton" onclick="selectProfileTab('posts')" style="margin-left:2px;">
+                                                        Posts
+                                                        <div id="postsBorderCover" class="profileTabBorderCover"></div>
+                                                    </div>
+                                                    <div class="profileTabButtonInactive" id="eventsProfileButton" onclick="selectProfileTab('events')" style="margin-right: 1px">
+                                                        Events
+                                                        <div id="eventsBorderCover" class="profileTabBorderCover"></div>
+                                                    </div>
+                                                    <div class="profileTabButtonInactive" id="reviewsProfileButton" onclick="selectProfileTab('reviews')" style="margin-right: -3px;">
+                                                        Reviews
+                                                        <div id="reviewsBorderCover" class="profileTabBorderCover" style="width: 132%;"></div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <div id="profileDisplayPanel" class="profileDisplayPanel"></div>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </td>
+                            </tr>
+                            
+                        </table>
+                    </td>
+                    <td class="profileTableMainColumn" style="width:20%">
+                        
+                    </td>
+                </tr>
+            </table>
+            <script>
+                // Have to do script outside of table, otherwise it affects formatting
+                var interestDiv = document.getElementById("interestContent");
+                var interestTitleDiv = document.getElementById("interestTitle")
+                if(interestDiv != null && interestTitleDiv != null){
+                    var headerTag = "<h2>";
+                    {% if profileUserAccount.workInterest and profileUserAccount.hireInterest %}
+                        headerTag = "<h2 style='padding: 10px 0px 1px 0px;'>";
+                    {% endif %}
 
-				</li>
-			{% endif %}
-			{% if profileInterests.hire %}
-				{% for interest in profileInterests.hire %}
-					{% if interest.subInterest == "hireProject" %}
-						<li>Hiring for a project</li>
-					{% endif %}
-					{% if interest.subInterest == "hirePermanent" %}
-						<li>Hiring for a permanent position</li>
-					{% endif %}
-					{% if interest.subInterest == "casting" %}
-						<li>Casting roles for a project</li>
-					{% endif %}
-					{% if interest.subInterest == "collaborating" %}
-						<li>Looking for collaborators</li>
-					{% endif %}
-				{% endfor %}
-			{% endif %}
-			{% if profileInterests.other %}
-				<li>No interests registered.</li>
-			{% endif %}
-			{% if profileUserAccount.actingInterest %}
-				<li>
-					Acting and extra work
-					{% if viewingOwnProfile %}
-						<form style="display:inline" action="{{ currentPageURL }}" method="post">
-							{% csrf_token %}
-							<input type="hidden" name="source" value="{{ next }}" />
-							<input type="hidden" name="current" value="{{ next }}" />
-							<input type="hidden" name="destination" value="{{ possibleDestinations.actorDescription }}" /> 
-							{% if profileUserAccount.actorDescriptionEnabled %}
-								<input type="submit" value="Edit actor description" />
-							{% else %}
-								<input type="submit" value="Enable actor descriptions" />
-							{% endif %}
-						</form>
-					{% endif %}
-				</li>
-			{% endif %}
-		</ul>
-		{% if viewingOwnProfile %}
-			<form action="{{ currentPageURL }}" method="post">
-				{% csrf_token %}
-				<input type="hidden" name="source" value="{{ next }}" />
-				<input type="hidden" name="current" value="{{ next }}" />
-				<input type="hidden" name="destination" value="{{ possibleDestinations.interests }}" />
-				<input type="submit" value="Edit profile interests" />
-			</form>
-		{% endif %}
-		<br>
+                    {% if profileUserAccount.workInterest %}
+                        interestDiv.innerHTML = getProfessionList();
+                        interestTitleDiv.innerHTML = getInterestTitle("work")
+                    {% elif profileUserAccount.hireInterest %}
+                        interestDiv.innerHTML = getHiringList();
+                        interestTitleDiv.innerHTML = getInterestTitle("hire")
+                    {% else %}
+                        interestDiv.innerHTML = ""
+                        interestTitleDiv.innerHTML = getInterestTitle("other")
+                    {% endif %}
+                }
 
-		{% if profileProfessions %}
-			<h3> {{ profileUserAccount.firstName }}'s interested professions include...</h3>
-			<ul>
-				{% for profession in profileProfessions %}
-					<li>{{ profession }}</li>
-				{% endfor %}
-			</ul>
-		{% else %}
-			<h3> {{ profileUserAccount.firstName }} has not specified his interested professions </h3>
-		{% endif %}
-		{% if viewingOwnProfile %}
-			<form action="{{ currentPageURL }}" method="post">
-				{% csrf_token %}
-				<input type="hidden" name="source" value="{{ next }}" />
-				<input type="hidden" name="current" value="{{ next }}" />
-				<input type="hidden" name="destination" value="{{ possibleDestinations.professions }}" />
-				<input type="submit" value="Edit professions" />
-			</form>
-		{% endif %}
+                selectProfileTab("background");
+                //selectProfileTab("posts")
+            </script>
+        </div>
 
-		{% if profileEvents %}
-			<br><h3>Events {{ profileUserAccount.firstName }} has posted...</h3>
-				{% for event in profileEvents %}
-					<form method="post" action="{{ currentPageURL }}"> 
-						{% csrf_token %}
-						<input type="hidden" name="eventID" value="{{event.eventID}}" />
-						<input type="hidden" name="source" value="{{ next }}" />
-						<input type="hidden" name="next" value="{{ next }}" />
-						<input type="hidden" name="destination" value="{{ possibleDestinations.viewEvent }}" />
-						<input type="submit" Value="{{ event.title }}" />
-					</form>
-				{% endfor %}
-		{% endif %}
-
-		{% if profilePosts %}
-			{% if profilePosts.events %}
-		    	<br>
-		    	<h3>Events {{ profileUserAccount.firstName }} has posted...</h3>
-				{% for event in profilePosts.events %}
-					<form method="post" action="{{ currentPageURL }}"> 
-						{% csrf_token %}
-						<input type="hidden" name="postID" value="{{event.postID}}" />
-						<input type="hidden" name="source" value="{{ next }}" />
-						<input type="hidden" name="next" value="{{ next }}" />
-						<input type="hidden" name="destination" value="{{ possibleDestinations.viewPost }}" />
-						<input type="submit" Value="{{ event.title }}" />
-					</form>
-				{% endfor %}
-			{% endif %}
-			{% if profilePosts.projects %}
-				<br>
-				<h3>Projects {{ userAccount.firstName }} is involved in...</h3>
-				{% for projectPost in profilePosts.projects %}
-					<form method="post" action="{{ currentPageURL }}"> 
-						{% csrf_token %}
-						<input type="hidden" name="postID" value="{{projectPost.postID}}" />
-						<input type="hidden" name="source" value="{{ next }}" />
-						<input type="hidden" name="next" value="{{ next }}" />
-						<input type="hidden" name="destination" value="{{ possibleDestinations.viewPost }}" />
-						<input type="submit" Value="{{ projectPost.title }}" />
-					</form>
-				{% endfor %}
-			{% endif %}
-			{% if profilePosts.collaboration %}
-				<br>
-				<h3>Seeking collaborators posts...</h3>
-				{% for collabPost in profilePosts.collaboration %}
-					<form method="post" action="{{ currentPageURL }}"> 
-						{% csrf_token %}
-						<input type="hidden" name="postID" value="{{collabPost.postID}}" />
-						<input type="hidden" name="source" value="{{ next }}" />
-						<input type="hidden" name="next" value="{{ next }}" />
-						<input type="hidden" name="destination" value="{{ possibleDestinations.viewPost }}" />
-						<input type="submit" Value="{{ collabPost.title }}" />
-					</form>
-				{% endfor %}
-			{% endif %}
-			{% if profilePosts.work %}
-				<br>
-				<h3>Seeking crew posts...</h3>
-				{% for workPost in profilePosts.work %}
-					<form method="post" action="{{ currentPageURL }}"> 
-						{% csrf_token %}
-						<input type="hidden" name="postID" value="{{workPost.postID}}" />
-						<input type="hidden" name="source" value="{{ next }}" />
-						<input type="hidden" name="next" value="{{ next }}" />
-						<input type="hidden" name="destination" value="{{ possibleDestinations.viewPost }}" />
-						<input type="submit" Value="{{ workPost.title }}" />
-					</form>
-				{% endfor %}	
-			{% endif %}
-			{% if profilePosts.casting %}
-				<br>
-				<h3>Seeking actor posts...</h3>
-				{% for castingPost in profilePosts.casting %}
-					<form method="post" action="{{ currentPageURL }}">
-						{% csrf_token %}
-						<input type="hidden" name="postID" value="{{castingPost.postID}}" />
-						<input type="hidden" name="source" value="{{ next }}" />
-						<input type="hidden" name="next" value="{{ next }}" />
-						<input type="hidden" name="destination" value="{{ possibleDestinations.viewPost }}" />
-						<input type="submit" Value="{{ castingPost.title }}" />
-					</form>
-				{% endfor %}
-			{% endif %}
-		{% endif %}	
-	-->
-	{% else %}
-		No user with name {{ profileUsername }} found.
-	{% endif %}
+    {% else %}
+        No user with name {{ profileUsername }} found.
+    {% endif %}
+    -->
 
 {% endblock %}
