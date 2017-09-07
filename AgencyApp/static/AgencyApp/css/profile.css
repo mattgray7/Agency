@@ -1,4 +1,20 @@
-	.profileTable
+.profileHeaderPanel{
+	background: #FFF;
+	border: 1px solid rgba(0,0,0,0);
+	border-radius: 4px;
+	min-height: 250px;
+	width: 100%;
+}
+
+.profilePicture{
+	height: 250px;
+	border: 1px solid rgba(0,0,0,0.3);
+	border-radius: 2px;
+}
+
+
+
+	/*.profileTable
 	{
 		width: 100%;
 		min-width: 700px;
@@ -21,7 +37,6 @@
 	.profileTableMainColumn{
 		width: 25%;
 		border: 0px;
-		/*padding: 0em 0.3em 0em 0.3em;*/
 	}
 	.profilePanel
 	{
@@ -236,24 +251,6 @@
 	  background: rgba(0, 0, 0, 0);
 	  transition: background 0.5s ease;
 	}
-	/*
-	.grayOutlineOverlay {
-	  position: absolute;
-	  top: 0;
-	  left: 0;
-	  width: 100%;
-	  height: 100%;
-	  background: rgba(0, 0, 0, 0);
-	  transition: background 0.5s ease;
-	}
-
-	.hoverContainer:hover .grayOutlineOverlay {
-	  display: block;
-	  background: rgba(0, 0, 0, 0.0);
-	  border: 1px solid rgba(0, 0, 0, .2);
-	  border-radius: 6px;
-	  color: #000;
-	}*/
 	.hoverContainer:hover .grayAlphaOverlay {
 	  display: block;
 	  background: rgba(0, 0, 0, .3);
@@ -311,5 +308,5 @@
 	  opacity: 1;
 	  transition: opacity .25s ease;
 	}
-
+*/
 
