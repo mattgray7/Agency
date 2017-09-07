@@ -54,6 +54,8 @@ function toggleExpandBrowseSection(direction, section){
         }
     }else{
         expandedTabDict[section] = false;
+        currentMaxNumResults[section] = defaultNumResults;      // Why is it still showing 9 results after toggle?
+        console.log(currentMaxNumResults)
         if(expandButton != null){
             expandButton.innerHTML = getSectionExpandButtonContent("expand")
             expandButton.onclick = function(){toggleExpandBrowseSection("expand", section)}
@@ -68,7 +70,8 @@ function toggleExpandBrowseSection(direction, section){
 }
 
 // Number of results to display for each section
-var currentMaxNumResults = {"jobs": 3, "roles": 3, "users": 3, "projects": 3, "events": 3}
+var defaultNumResults = 3;
+var currentMaxNumResults = {"jobs": defaultNumResults, "roles": defaultNumResults, "users": defaultNumResults, "projects": defaultNumResults, "events": defaultNumResults}
 function addResultsToSection(section){
     var searchValue = ''
     var searchInput = document.getElementById("searchTextInput");
@@ -261,6 +264,7 @@ function createEventElement(dataDict){
 function createUserElement(dataDict){
     var element = "";
     // Add info content
+    console.log(dataDict)
     element += "<h2 class='postInfoTitle'><a onclick='redirectToProfile(" +'"' + dataDict["username"] + '");' + "'>" + dataDict["cleanName"] + "</a></h2>"
     element += "<div style='color: rgba(0,0,0,0.8);'>"
 

@@ -473,8 +473,8 @@ def getSearchResults(request):
                 results[category] = browse.getProjectSearchResults(searchValue, numResults)
             elif category == "events":
                 results[category] = browse.getEventSearchResults(searchValue, numResults)
-            """elif category == "users":
-                results[category] += browse.getUserSearchResults(searchValue, numResults)"""
+            elif category == "users":
+                results[category] = browse.getUserSearchResults(searchValue, numResults)
     return JsonResponse({"success": True, "results": results})
 
 

@@ -240,76 +240,88 @@ class BrowsePostsView(GenericBrowseView):
         return self._pageContext
 """
 
-def _formatSearchPostResult(dbObject, extraFields):
+def _formatSearchPostResult(dbObject, extraFields, uniqueID):
     """ Formats the dbobject into a python dict"""
     formattedResult = None
     if dbObject:
-        formattedResult = {"title": dbObject.title,
-                            "status": dbObject.status,
-                            "postID": dbObject.postID,
-                            "postPictureURL": dbObject.postPicture and dbObject.postPicture.url or constants.NO_PICTURE_PATH,
-                            "poster": dbObject.poster,
-                            "description": dbObject.description}
-        if dbObject.projectID:
-            try:
-                proj = models.ProjectPost.objects.get(postID=dbObject.projectID)
-            except models.ProjectPost.DoesNotExist:
-                pass
-            else:
-                formattedResult["projectID"] = dbObject.projectID
-                formattedResult["projectName"] = proj.title
+        if uniqueID == "postID":
+            formattedResult = {"title": dbObject.title,
+                                "status": dbObject.status,
+                                "postID": dbObject.postID,
+                                "postPictureURL": dbObject.postPicture and dbObject.postPicture.url or constants.NO_PICTURE_PATH,
+                                "poster": dbObject.poster,
+                                "description": dbObject.description}
+            if dbObject.projectID:
+                try:
+                    proj = models.ProjectPost.objects.get(postID=dbObject.projectID)
+                except models.ProjectPost.DoesNotExist:
+                    pass
+                else:
+                    formattedResult["projectID"] = dbObject.projectID
+                    formattedResult["projectName"] = proj.title
+        elif uniqueID == "username":
+            formattedResult = {"username": dbObject.username,
+                               "cleanName": dbObject.cleanName,
+                               "profession": dbObject.mainProfession,
+                               "bio": dbObject.bio,
+                               "postPictureURL": dbObject.profilePicture and dbObject.profilePicture.url or constants.NO_PROFILE_PICTURE_PATH
+                               }
+
         if extraFields:
             for fieldName in extraFields:
                 fieldValue = dbObject.__dict__.get(fieldName) or ""
                 formattedResult[fieldName] = fieldValue
     return formattedResult
 
-def _appendPostResultsByType(existingList, filteredNewList, numResults, requiredFields):
-    """ Checks if the element already exists in existing list, otherwise, format and add it to list"""
-    if existingList is not None and len(existingList) < numResults:
+def appendBrowseResultsWithoutDuplicates(existingList, filteredNewList, maxNumResults, uniqueID):
+    if existingList is not None and len(existingList) < maxNumResults:
         if filteredNewList:
             for i, res in enumerate(filteredNewList):
-                if(len(existingList) >= numResults):
+                if(len(existingList) >= maxNumResults):
                     break;
 
                 # Check if post already matches, add if it doesn't
                 existing = False
                 for existingPost in existingList:
-                    if existingPost["postID"] == res.postID:
+                    if existingPost.__dict__[uniqueID] == res.__dict__[uniqueID]:
                         existing = True
                         break
                 if not existing:
-                    existingList.append(_formatSearchPostResult(res, requiredFields))
-    return existingList
+                    existingList.append(res)
+    return True
 
-def getTotalNumberResults(filteredLists):
+def getTotalNumberResults(filteredLists, uniqueID):
     """ Returns the total number of unique items in the multiple search lists """
-    existingPostIDs = []
+    existingUniqueIDs = []
     numResults = 0
     for filteredList in filteredLists:
         for instance in filteredList:
-            if instance.postID not in existingPostIDs:
-                existingPostIDs.append(instance.postID)
+            if instance.__dict__[uniqueID] not in existingUniqueIDs:
+                existingUniqueIDs.append(instance.__dict__[uniqueID])
                 numResults += 1
     return numResults
 
-def getPostSearchResults(searchValue, maxNumResults, requiredFields, defaultList, searchLists):
+def getPostSearchResults(searchValue, maxNumResults, requiredFields, defaultList, searchLists, uniqueID="postID"):
     """ Common function to create the post search results, and add the 'morePosts' boolean determining
     if more posts can be shown """
+    uniqueResults = []
     resultInfo = {"results": [], "moreResults": False, "numResults": 0}
     if searchValue and searchValue not in ["None", "null"]:
-        totalNumResults = getTotalNumberResults(searchLists)
+        totalNumResults = getTotalNumberResults(searchLists, uniqueID)
         for searchList in searchLists:
-            resultInfo["results"] = _appendPostResultsByType(existingList=resultInfo["results"],
-                                                             filteredNewList=searchList,
-                                                             numResults=maxNumResults,
-                                                             requiredFields=requiredFields)
+            appendBrowseResultsWithoutDuplicates(existingList=uniqueResults,
+                                                                 filteredNewList=searchList,
+                                                                 maxNumResults=maxNumResults,
+                                                                 uniqueID=uniqueID)
     else:
         totalNumResults = getTotalNumberResults([defaultList])
-        resultInfo["results"] = _appendPostResultsByType(existingList=resultInfo["results"],
-                                                         filteredNewList=defaultList,
-                                                         numResults=maxNumResults,
-                                                         requiredFields=requiredFields)
+        appendBrowseResultsWithoutDiplicates(existingList=uniqueResults,
+                                                             filteredNewList=defaultList,
+                                                             maxNumResults=maxNumResults,
+                                                             uniqueID=uniqueID)
+    if uniqueResults:
+        for result in uniqueResults:
+            resultInfo["results"].append(_formatSearchPostResult(result, requiredFields, uniqueID))
     resultInfo["moreResults"] = totalNumResults > maxNumResults
     resultInfo["numResults"] = totalNumResults
     return resultInfo
@@ -358,48 +370,29 @@ def getEventSearchResults(searchValue, numResults):
                                              models.EventPost.objects.filter(projectID__in=projectIDs)]
                                 )
 
+
 def getUserSearchResults(searchValue, numResults):
-    # Have to do differently as it is not a post
-    results = []
-    if searchValue and searchValue not in ["None", "null"]:
-        # Search pattern is to look through professions, titles, project titles, and then descriptions
-        requiredFields = ["username", "cleanName", "mainProfession", "description"]
+    searchLists = []
+     # Get matching users
+    if " " in searchValue:
+        splitted = searchValue.split(" ")
+        if len(splitted) > 1:
+            searchLists.append(models.UserAccount.objects.filter(firstName__startswith=splitted[0], lastName__startswith=splitted[1]))
+    else:
+        searchLists.append(models.UserAccount.objects.filter(firstName__startswith=searchValue))
 
-        # Get matching users
-        users = None
-        if " " in searchValue:
-            splitted = searchValue.split(" ")
-            if len(splitted) > 1:
-                users = models.UserAccount.objects.filter(firstName__startswith=splitted[0], lastName__startswith=splitted[1])
-        if not users:
-            users = models.UserAccount.objects.filter(firstName__startswith=searchValue)
+    # Look at project participants
+    projectIDs = [x.postID for x in models.ProjectPost.objects.filter(title__contains=searchValue)]
+    postParticipants = [x.username for x in models.PostParticipant.objects.filter(postID__in=projectIDs)]
+    searchLists.append(models.UserAccount.objects.filter(username__in=postParticipants))
+    return getPostSearchResults(searchValue=searchValue,
+                                maxNumResults=numResults,
+                                requiredFields=[],  # handled in the format function
+                                defaultList=models.UserAccount.objects.all().order_by("mainProfession"),
+                                searchLists=searchLists,
+                                uniqueID="username"
+                                )
 
-        # Look at project participants
-        projectIDs = [x.postID for x in models.ProjectPost.objects.filter(title__contains=searchValue)]
-        postParticipants = [x.username for x in models.PostParticipant.objects.filter(postID__in=projectIDs)]
-        if not users:
-            users = models.UserAccount.objects.filter(username__in=postParticipants)
-
-        # Format user data and add to results (if it doesn't already exist in results)
-        for user in users:
-            if(len(results) >= numResults):
-                break;
-
-            # Check if post already matches, add if it doesn't
-            existing = False
-            for existingUser in results:
-                if existingUser["username"] == user.username:
-                    existing = True
-                    break
-            if not existing:
-                newDict = {"username": user.username,
-                           "cleanName": user.cleanName,
-                           "profession": user.mainProfession,
-                           "bio": user.bio,
-                           "postPictureURL": user.profilePicture and user.profilePicture.url or constants.NO_PROFILE_PICTURE_PATH
-                           }
-                results.append(newDict)
-    return {"results": results, "morePosts": True}
 
 def isBrowsePage(pageName):
     return pageName in [constants.BROWSE]
