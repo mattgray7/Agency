@@ -100,11 +100,10 @@
                 if(profileButtonDiv != null && profileButtonBorderCoverDiv != null){
                     if(profileTabs[i] === tabType){
                         profileButtonBorderCoverDiv.style.opacity = "1";
-                        profileButtonBorderCoverDiv.style.background = "#FFF"
-                        profileButtonDiv.className = "profileTabButtonActive";
+                        profileButtonDiv.className = "active";
                     }else{
                         profileButtonBorderCoverDiv.style.opacity = "0";
-                        profileButtonDiv.className = "profileTabButtonInactive";
+                        profileButtonDiv.className = "";
                     }
                 }
             }
@@ -258,8 +257,8 @@
         }
     </script>
 
-<div id='backgroundPanel' class='backgroundPanel' style='min-width: 600px; min-height: 100%;'>
-    <div id="mainViewPanel" class="mainViewPanel" style="position: relative; max-width: 800px; background: rgba(0,0,0,0.05); border: none;">
+<div id='backgroundPanel' class='backgroundPanel' style='min-width: 634px; min-height: 100%;'>
+    <div id="mainViewPanel" class="mainViewPanel" style="position: relative; min-width: 620px; max-width: 675px; background: rgba(0,0,0,0.05); border: none;">
         {% if profileUserAccount %}
             <div style='min-height: 350px; width: 100%;'>
                 <div id='profileHeaderPanel' class='profileHeaderPanel' style='position: absolute; right: 10px; left: 10px; margin: 0 auto;'>
@@ -279,14 +278,10 @@
                 </div>
             </div>
             <div id='profileContentPanel' style='position: relative; width: 100%; min-height: 100px; margin-top: 10px;'>
-                <ul class='profileTabButtonList' style='width: 100%; margin-left: -5px;'>
+                <ul class='profileTabButtonList' style='position: absolute; left: -2px; right: 0px; '>
                     <script>
                         for(var i=0; i < profileTabs.length; i++){
-                            var className = '';
-                            if(i === 0){
-                                className = 'active';
-                            }
-                            var tabButton = '<li style="width: 24%;" class="' + className + '"  id="' + profileTabs[i] + 'ProfileButton" onclick="selectProfileTab(' + "'" + profileTabs[i] + "');" + '" style="margin-left: -3px;"><div style="margin-top: 5px;">' + profileTabs[i] + '</div><div id="backgroundBorderCover" class="profileTabBorderCover"></div></li>';
+                            var tabButton = '<li style="width: 24%;" id="' + profileTabs[i] + 'ProfileButton" onclick="selectProfileTab(' + "'" + profileTabs[i] + "');" + '" style="margin-left: -3px;"><div style="margin-top: 5px;">' + profileTabs[i] + '</div><div id="' + profileTabs[i] + 'BorderCover" class="profileTabButtonBorderCover"></div></li>';
                             document.write(tabButton);
                         }
                     </script>
@@ -297,6 +292,10 @@
         {% endif %}
     </div>
 </div>
+
+<script>
+selectProfileTab("bio")
+</script>
 
 
 

@@ -66,16 +66,15 @@
 }
 
 
-.profileTabBorderCover
-	{
-		width: 132.5%;
-		background: #232323;
-		height: 2px;
-		margin: 7px 0px -15px -15px;
-		position: relative;
-		z-index: 3;
-		opacity: 0;
-		transition: background .2s ease;
+.profileTabButtonBorderCover
+{
+	width: 100%;
+	background: #FFF;
+	height: 2px;
+	margin-top: 14px;
+	z-index: 3;
+	opacity: 0;
+	transition: background .2s ease;
 	}
 
 	.profileContentDisplayPanel
