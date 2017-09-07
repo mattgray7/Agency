@@ -8,7 +8,7 @@
 
 <script>
     var browseTabs = ["jobs", "roles", "users", "projects", "events"];
-    var activeTabs = [browseTabs[0]];
+    var activeTabs = [];
     var expandedTabDict = {"jobs": true, "roles": true, "users": true, "projects": true, "events": true};
     function selectBrowseTab(browseType){
         var browseButton = document.getElementById(browseType + "BrowseCategoryButton")
@@ -115,9 +115,9 @@
                             <script>
                                 for(var i=0; i<browseTabs.length; i++){
                                     var categoryButtonString = "<li ";
-                                    if(i === 0){
+                                    /*if(i === 0){
                                         categoryButtonString += "class='active' "
-                                    }
+                                    }*/
                                     categoryButtonString += "id='" + browseTabs[i] + "BrowseCategoryButton' onclick='selectBrowseTab(" + '"' + browseTabs[i] + '");' + "'>" + browseTabs[i].toUpperCase() + "</li>";
                                     document.write(categoryButtonString)
                                 }
@@ -134,20 +134,39 @@
 <script>
 // Replace the search result table on load.
 var mainView = document.getElementById("mainViewPanel")
+var clickDefaultCategory = true;
 if (('localStorage' in window) && window['localStorage'] !== null) {
+    if('activeTabs' in localStorage && localStorage.getItem('activeTabs') != ''){
+        if(document.getElementById("searchTextInput").value != ''){
+            var previousActiveTabs = JSON.parse(localStorage.getItem('activeTabs'));
+            if(previousActiveTabs != null && previousActiveTabs.length > 0){
+                clickDefaultCategory = false;
+                for(var i=0; i < previousActiveTabs.length; i++){
+                    $('[id="' + previousActiveTabs[i] + 'BrowseCategoryButton"]').click()
+                }
+                localStorage.setItem("activeTabs", "")
+            }
+        }
+    }
+
     if ('loadSearch' in localStorage && localStorage.getItem('loadSearch') === "true") {
         if(document.getElementById("searchTextInput").value != ''){
             // Search value is filled when presseing back button, so can just resubmit
             submitSearch()
             localStorage.setItem('loadSearch', 'false')
         }
+
     }
+}
+
+if(clickDefaultCategory){
+    $("#jobsBrowseCategoryButton").click();
 }
 
 // Save the search result table when leaving the page.
 $(window).on("unload", function (e) {
     if (('localStorage' in window) && window['localStorage'] !== null) {
-        var storageContent = mainView.innerHTML
+        localStorage.setItem('activeTabs', JSON.stringify(activeTabs))
         localStorage.setItem('loadSearch', 'true');
     }
 });
