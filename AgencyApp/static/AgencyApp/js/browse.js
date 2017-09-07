@@ -67,23 +67,26 @@ function toggleExpandBrowseSection(direction, section){
     }
 }
 
+// Number of results to display for each section
+var currentMaxNumResults = {"jobs": 3, "roles": 3, "users": 3, "projects": 3, "events": 3}
 function addResultsToSection(section){
     var searchValue = ''
     var searchInput = document.getElementById("searchTextInput");
     if(searchInput != null && searchInput.value != null && searchInput.value.length > 0){
         searchValue = searchInput.value;
     }
+
+    currentMaxNumResults[section] += 3;
     $.ajax({
         url : "/ajax/getSearchResults/",
-        data : {"categories": [section], "searchValue": searchValue, "numResults": 10},
+        data : {"categories": [section], "searchValue": searchValue, "numResults": currentMaxNumResults[section]},
         type : 'POST',
         dataType: "json",
         success : function(data) {
             if(data["success"]){
-                var resultsList = document.getElementById(section + "BrowseResultsList");
-                if(resultsList != null){
-                    resultsList.innerHTML = getBrowseResultsList(section, data["results"][section]["results"])
-                }
+                // Update the search results just for this section
+                currentSearchResults[section] = data["results"][section]
+                updateBrowseResults(currentSearchResults)
             }
         }
     });

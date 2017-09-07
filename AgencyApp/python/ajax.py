@@ -459,7 +459,7 @@ def getSearchSuggestions(request):
 def getSearchResults(request):
     searchValue = request.POST.get("searchValue")
     categories = request.POST.getlist("categories[]")       # Need the brackets to convert js array to python list
-    numResults = request.POST.get("numResults", 5)
+    numResults = int(request.POST.get("numResults", 3))
     results = {}
     if len(categories) > 0:
         for category in categories:

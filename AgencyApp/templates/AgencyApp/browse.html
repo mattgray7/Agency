@@ -28,7 +28,24 @@
         }
     }
 
+    function updateBrowseResults(results){
+        var resultsPanel = document.getElementById("searchResultsPanel")
+        var browseResultsTableString = createSearchResultsDisplay(results)
+        if(browseResultsTableString != null && browseResultsTableString.length > 0){
+            // Add results content, can now access height of elements
+            resultsPanel.innerHTML = browseResultsTableString;
+            resultsPanel.style.display = 'block';
+
+            // Save expanded section heights
+            saveExpandedBrowseSectionHeights();
+
+            // Update browse content container
+            updateBrowseContentHeight();
+        }
+    }
+
     var firstSearch = true;
+    var currentSearchResults = {};
     function submitSearch(){
         var searchValue = ''
         var searchInput = document.getElementById("searchTextInput");
@@ -53,26 +70,12 @@
                     if(data["success"]){
                         if(data["results"]){
                             if(resultsPanel != null){
-                                var browseResultsTableString = createSearchResultsDisplay(data["results"])
-                                if(browseResultsTableString != null && browseResultsTableString.length > 0){
-                                    if(firstSearch){
-                                        firstSearch = false;
-                                        $("#mainViewPanel").animate({marginTop: "0px"}, 500, function(){});
-                                    }
-
-                                    // Add results content, can now access height of elements
-                                    resultsPanel.innerHTML = browseResultsTableString;
-                                    resultsPanel.style.display = 'block';
-                                    
-                                    // Save expanded section heights
-                                    saveExpandedBrowseSectionHeights();
-
-                                    // Update browse content container
-                                    updateBrowseContentHeight();
-                                    /*$("#searchResultsPanel").animate({marginTop: "10px", height: browseResultsTableInfo["tableHeight"] + "px"}, 500, function(){});*/
-
-                                    /*var newMainViewHeight = (browseResultsTableInfo["tableHeight"] + 180) + "px";
-                                    $("#browseContent").animate({marginTop: "-10px", height: newMainViewHeight}, 500, function(){});*/
+                                // Update global dict with new results
+                                currentSearchResults = data["results"]
+                                updateBrowseResults(data["results"])
+                                if(firstSearch){
+                                    firstSearch = false;
+                                    $("#mainViewPanel").animate({marginTop: "0px"}, 500, function(){});
                                 }
                             }
                         }
