@@ -5,6 +5,22 @@
 <link href="{% static "/AgencyApp/css/profile.css" %}" rel="stylesheet" type="text/css" media="all" />
 <!--<script type="text/javascript" src="{% static "/AgencyApp/js/post/post.js" %}"></script>-->
 <script type="text/javascript" src="{% static "/AgencyApp/js/profile.js" %}"></script>
+<script>
+    var activeInterest = "work";
+    function getProfessionList(){
+        // TODO use 'mainProfessionList' or whatever its called instead of interested work professions
+        var returnString = '';
+        {% if profileInterests.work %}
+            returnString += '<div class="profileProfessionList"><ul>';
+            {% for interest in profileInterests.work %}
+                returnString += '<li>| {{interest.professionName}} | </li>'
+            {% endfor %}
+            returnString += '</ul></div>';
+        {% endif %}
+        return returnString;
+    }
+</script>
+
 
     <script>
         function redirect(destination){
@@ -12,18 +28,7 @@
             var form = createPageRedirectForm("{{next}}", "{{next}}", destination, "{{currentPageURL}}", null, null);
             form.submit();
         }
-        var activeInterest = "work";
-        function getProfessionList(){
-            var returnString = '';
-            {% if profileInterests.work %}
-                returnString += '<div class="profileProfessionList"><ul>';
-                {% for interest in profileInterests.work %}
-                    returnString += '<li> {{interest.professionName}} </li>'
-                {% endfor %}
-                returnString += '</ul></div>';
-            {% endif %}
-            return returnString;
-        }
+
 
         function getHiringList(){
             var returnString = '';
@@ -85,7 +90,7 @@
             return interestTitle
         }
 
-        var profileTabs = ["background", "posts", "events", "reviews"];
+        var profileTabs = ["bio", "filmography", "media", "endorsements"];
         function selectProfileTab(tabType){
             for(var i=0; i < profileTabs.length; i++){
                 var buttonId = profileTabs[i] + "ProfileButton";
@@ -104,7 +109,7 @@
                 }
             }
 
-            if(tabType === "background"){
+            if(tabType === "filmography"){
                 displayBackground();
             }else if(tabType === "posts"){
                 displayPosts();
@@ -254,18 +259,38 @@
     </script>
 
 <div id='backgroundPanel' class='backgroundPanel' style='min-width: 600px; min-height: 100%;'>
-    <div id="mainViewPanel" class="mainViewPanel" style="position: relative; min-width: 600px; max-width: 800px; background: rgba(0,0,0,0.05); border: none;">
+    <div id="mainViewPanel" class="mainViewPanel" style="position: relative; max-width: 800px; background: rgba(0,0,0,0.05); border: none;">
         {% if profileUserAccount %}
-            <div id='profileHeaderPanel' class='profileHeaderPanel'>
-                <div style='position: relative; width: 100%; height: 100%;'>
-                    <div style='position: absolute; left: -1px; top: -1px;'>
-                        {% if profileUserAccount.profilePicture %}
-                            <img class="profilePicture" src="{{ profileUserAccount.profilePicture.url }}" />
-                        {% else %}
-                            <img class="profilePicture" src="{{ images.noProfilePicture }}"/>
-                        {% endif %}
+            <div style='min-height: 350px; width: 100%;'>
+                <div id='profileHeaderPanel' class='profileHeaderPanel' style='position: absolute; right: 10px; left: 10px; margin: 0 auto;'>
+                    <div style='position: relative; width: 100%; height: 100%;'>
+                        <div style='position: absolute; left: 15px; top: 15px;'>
+                            {% if profileUserAccount.profilePicture %}
+                                <img class="profilePicture" src="{{ profileUserAccount.profilePicture.url }}" />
+                            {% else %}
+                                <img class="profilePicture" src="{{ images.noProfilePicture }}"/>
+                            {% endif %}
+                        </div>
+                        <div style='position: absolute; left: 15px; top: 275px; text-align: left;'>
+                            <h1><a onclick='redirectToUser("{{profileUserAccount.username}}");' >{{profileUserAccount.cleanName}}</a></h1>
+                            <script>document.write(getProfessionList())</script>
+                        </div>
                     </div>
                 </div>
+            </div>
+            <div id='profileContentPanel' style='position: relative; width: 100%; min-height: 100px; margin-top: 10px;'>
+                <ul class='profileTabButtonList' style='width: 100%; margin-left: -5px;'>
+                    <script>
+                        for(var i=0; i < profileTabs.length; i++){
+                            var className = '';
+                            if(i === 0){
+                                className = 'active';
+                            }
+                            var tabButton = '<li style="width: 24%;" class="' + className + '"  id="' + profileTabs[i] + 'ProfileButton" onclick="selectProfileTab(' + "'" + profileTabs[i] + "');" + '" style="margin-left: -3px;"><div style="margin-top: 5px;">' + profileTabs[i] + '</div><div id="backgroundBorderCover" class="profileTabBorderCover"></div></li>';
+                            document.write(tabButton);
+                        }
+                    </script>
+                </ul>
             </div>
         {% else %}
             No user Found

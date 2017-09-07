@@ -2,15 +2,92 @@
 	background: #FFF;
 	border: 1px solid rgba(0,0,0,0);
 	border-radius: 4px;
-	min-height: 250px;
-	width: 100%;
+	min-height: 350px;
 }
 
 .profilePicture{
 	height: 250px;
-	border: 1px solid rgba(0,0,0,0.3);
+	border: 1px solid rgba(0,0,0,0.2);
 	border-radius: 2px;
 }
+
+.profileProfessionList{
+	display: inline-block;
+}
+.profileProfessionList li{
+	display: inline-block;
+	color: rgba(0,0,0,0.8);
+}
+.profileProfessionList li:hover{
+	color: rgba(0,0,0,1.0);
+	cursor: pointer;
+	font-weight: 1000;
+}
+
+.profileTabButtonList{
+	display: inline-block;
+}
+.profileTabButtonList li
+{
+	display: block;
+	float: left;
+	text-align: center;
+	height: 30px;
+	width: 80px;
+	border: 1px solid rgba(0,0,0,0);
+	border-radius: 3px;
+	background: rgba(0,0,0,0.1);
+	padding: 0.7em 0em 0.5em 0em;
+	margin-left: 4px;
+
+	letter-spacing: 1px;
+	text-decoration: none;
+	text-transform: uppercase;
+	font-size: 0.75em;
+	font-weight: 600;
+	/*color: rgba(255,255,255,0.80);
+	border: 1px solid rgba(255,255,255,0);*/
+	color: rgba(0,0,0,0.8);
+}
+
+.profileTabButtonList li:hover
+{
+	border: 1px solid rgba(0,0,0,0.8);
+	/*background: rgba(0,0,0,0.1);
+	color: rgba(0,0,0,1);*/
+	cursor: pointer;
+}
+.profileTabButtonList li.active
+{
+	border: 1px solid rgba(0,0,0,0.8);
+	background: #FFF;
+	color: rgba(0,0,0,0.8);
+	cursor: pointer;
+}
+
+
+.profileTabBorderCover
+	{
+		width: 132.5%;
+		background: #232323;
+		height: 2px;
+		margin: 7px 0px -15px -15px;
+		position: relative;
+		z-index: 3;
+		opacity: 0;
+		transition: background .2s ease;
+	}
+
+	.profileContentDisplayPanel
+	{
+		background: #FFF;
+		border: 2px solid #FFF;
+		border-radius: 2px;
+		margin-top: -13px;
+		position: relative;
+		z-index: 2;
+		padding: 0.3em;
+	}
 
 
 
