@@ -69,8 +69,7 @@
 .profileTabButtonBorderCover
 {
 	position: relative;
-	width: 99.5%;
-	margin-left: 0.5%;
+	width: 100%;
 	background: #FFF;
 	height: 3px;
 	margin-top: 12px;
