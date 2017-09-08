@@ -1735,7 +1735,7 @@ function createProjectFeed(projectDict){
             feedString += "<div style='position:absolute; height: 90%; left: 5px; top: 5%;'><img src='" + projectDict[projectID]['postPictureURL'] + "' style='max-height: 100%;' /></div>"
 
             // Add text container
-            feedString += "<div style='position: absolute; left: 17%; top: 0px;'>";
+            feedString += "<div style='position: absolute; left: 95px; top: 0px;'>";
 
             // Add title
             feedString += "<h2 style=''><a style='font-weight: 400; font-size: 0.9em' onclick='redirectToPost(" + '"' + projectID + '");' + "'>" + projectDict[projectID]["name"] + "</a></h2>"

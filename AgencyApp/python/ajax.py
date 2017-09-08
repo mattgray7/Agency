@@ -308,7 +308,29 @@ def savePostParticipant(request):
                     # Create it it if it doesn't exist (if it does, TODO update the label?)
                     existingParticipant = models.PostParticipant(postID=postID, username=matchingUser.username, status=statusLabel, publicParticipation=publicParticipation)
                     existingParticipant.save()
+
+                if statusLabel == "Cast":
+                    try:
+                        postInstance = models.CastingPost.objects.get(postID=postID)
+                    except models.CastingPost.DoesNotExist:
+                        pass
+                    else:
+                        postInstance.actorName = matchingUser.username;
+                        postInstance.save()
+                        print "saved {0} as actor name on post {1}".format(matchingUser.username, postID)
+                elif statusLabel == "Hired":
+                    try:
+                        postInstance = models.WorkPost.objects.get(postID=postID)
+                    except models.WorkPost.DoesNotExist:
+                        pass
+                    else:
+                        postInstance.workerName = matchingUser.username;
+                        postInstance.save()
+
+
                 success = True
+
+
     return JsonResponse({"success": success, "user": matchingUser and {"username": matchingUser.username,
                                                                        "cleanName": matchingUser.cleanName,
                                                                        "profilePictureURL": matchingUser.profilePicture and matchingUser.profilePicture.url or constants.NO_PROFILE_PICTURE_PATH,

@@ -116,7 +116,7 @@ class UserAccount(models.Model):
             roles = CastingPost.objects.filter(actorName=self.username)
             for role in roles:
                 if role.projectID:
-                    self._projects[role.projectID] = {"label": role.roleType, "display": True}
+                    self._projects[role.projectID] = {"label": role.characterType, "display": True}
 
             jobs = WorkPost.objects.filter(workerName=self.username)
             for job in jobs:
