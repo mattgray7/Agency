@@ -1729,7 +1729,25 @@ function createProjectFeed(projectDict){
         feedString += "<div id='projectFeedContainer'><ul class='projectFeed' id='projectFeed'>"
         for(projectID in projectDict){
             console.log(projectID)
-            feedString += "<li>" + projectDict[projectID]["name"] + "</li>";
+            feedString += "<li style='position: relative;'>"
+
+            // Add project picture
+            feedString += "<div style='position:absolute; height: 90%; left: 5px; top: 5%;'><img src='" + projectDict[projectID]['postPictureURL'] + "' style='max-height: 100%;' /></div>"
+
+            // Add text container
+            feedString += "<div style='position: absolute; left: 17%; top: 0px;'>";
+
+            // Add title
+            feedString += "<h2 style=''><a style='font-weight: 400; font-size: 0.9em' onclick='redirectToPost(" + '"' + projectID + '");' + "'>" + projectDict[projectID]["name"] + "</a></h2>"
+
+            // Add label
+            feedString += "<div style='color: rgba(0,0,0,0.8); font-size: 1.1em; font-style: italic; margin-top: -2px;'>" + projectDict[projectID]["label"] + "</div>"
+
+            // Add project type
+            feedString += "<div style='color: rgba(0,0,0,0.3);'>" + projectDict[projectID]["projectType"] + "</div>"
+            
+
+            feedString += "</div></li>";
         }
         feedString += "</ul></div>";
     }
