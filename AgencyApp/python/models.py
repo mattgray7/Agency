@@ -54,6 +54,7 @@ class UserAccount(models.Model):
         self._workInterest = None
         self._hireInterest = None
         self._otherInterest = None
+        self._projects = None
 
     def __str__(self):
         return self.username
@@ -103,6 +104,36 @@ class UserAccount(models.Model):
             else:
                 self._othernterest = True
         return self._otherInterest
+
+    @property
+    def projects(self):
+        if self._projects is None:
+            self._projects = {}
+            participants = PostParticipant.objects.filter(username=self.username)
+            for part in participants:
+                self._projects[part.postID] = {"label": part.status, "display": part.publicParticipation}
+
+            roles = CastingPost.objects.filter(actorName=self.username)
+            for role in roles:
+                if role.projectID:
+                    self._projects[role.projectID] = {"label": role.roleType, "display": True}
+
+            jobs = WorkPost.objects.filter(workerName=self.username)
+            for job in jobs:
+                if job.projectID:
+                    self._projects[job.projectID] = {"label": job.profession, "display": True}
+
+            for projectID in self._projects:
+                try:
+                    currentProject = ProjectPost.objects.get(postID=projectID)
+                except ProjectPost.DoesNotExist:
+                    del self._projects[projectID]
+                else:
+                    self._projects[projectID]["name"] = currentProject.title
+                    self._projects[projectID]["postPictureURL"] = currentProject.postPicture and currentProject.postPicture.url or constants.NO_PICTURE_PATH
+                    self._projects[projectID]["status"] = currentProject.status
+                    self._projects[projectID]["projectType"] = currentProject.projectType
+        return self._projects
 
 
 class Interest(models.Model):
