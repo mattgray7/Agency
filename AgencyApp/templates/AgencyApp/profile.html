@@ -7,6 +7,65 @@
 <script type="text/javascript" src="{% static "/AgencyApp/js/profile.js" %}"></script>
 <script>
     var activeInterest = "work";
+    var profileTabs = ["bio", "filmography", "media", "endorsements"];
+    var profileTabDisplayFunctions = {"bio": displayBio, "filmography": displayFilmography, "media": displayMedia,"endorsements": displayEndorsements};
+    function selectProfileTab(tabType){
+        for(var i=0; i < profileTabs.length; i++){
+            var buttonId = profileTabs[i] + "ProfileButton";
+            var borderCoverId = profileTabs[i] + "BorderCover";
+            var profileButtonDiv = document.getElementById(buttonId);
+            var profileButtonBorderCoverDiv = document.getElementById(borderCoverId)
+            if(profileButtonDiv != null && profileButtonBorderCoverDiv != null){
+                if(profileTabs[i] === tabType){
+                    profileButtonBorderCoverDiv.style.opacity = "1";
+                    profileButtonDiv.className = "active";
+                }else{
+                    profileButtonBorderCoverDiv.style.opacity = "0";
+                    profileButtonDiv.className = "";
+                }
+            }
+        }
+        if(tabType in profileTabDisplayFunctions){
+            profileTabDisplayFunctions[tabType]()
+        }
+    }
+
+    function displayBio(){
+        var tabContent = document.getElementById("profileTabContentPanel");
+        if(tabContent != null){
+            var contentString = "<div style='text-align: left; margin-left: 10px; margin-top: 10px;'><ul style='line-height: 26px;'>";
+
+            contentString += "<li>Contact: {{profileUserAccount.email}}"
+            {% if profileUserAccount.phoneNumber %}
+                contentString += ", {{profileUserAccount.phoneNumber}}";
+            {% endif %}
+            contentString += "</li>";
+
+            contentString += "<li>Bio: {{profileUserAccount.bio}}</li>"
+
+            {% if profileUserAccount.imdbLink %}
+                contentString += "<li><a href='{{profileUserAccount.imdbLink}}'>IMDB</a></li>";
+            {% endif %}
+
+            contentString += "<li><a href=''>Resume</a></li>"
+
+            contentString += "<ul></div>";
+            tabContent.innerHTML = contentString;
+        }
+    }
+
+    function displayFilmography(){
+        console.log("filmography")
+    }
+
+    function displayMedia(){
+        console.log("media")
+    }
+
+    function displayEndorsements(){
+        console.log("endorsements")
+    }
+
     function getProfessionList(){
         // TODO use 'mainProfessionList' or whatever its called instead of interested work professions
         var returnString = '';
@@ -90,34 +149,6 @@
             return interestTitle
         }
 
-        var profileTabs = ["bio", "filmography", "media", "endorsements"];
-        function selectProfileTab(tabType){
-            for(var i=0; i < profileTabs.length; i++){
-                var buttonId = profileTabs[i] + "ProfileButton";
-                var borderCoverId = profileTabs[i] + "BorderCover";
-                var profileButtonDiv = document.getElementById(buttonId);
-                var profileButtonBorderCoverDiv = document.getElementById(borderCoverId)
-                if(profileButtonDiv != null && profileButtonBorderCoverDiv != null){
-                    if(profileTabs[i] === tabType){
-                        profileButtonBorderCoverDiv.style.opacity = "1";
-                        profileButtonDiv.className = "active";
-                    }else{
-                        profileButtonBorderCoverDiv.style.opacity = "0";
-                        profileButtonDiv.className = "";
-                    }
-                }
-            }
-
-            if(tabType === "filmography"){
-                displayBackground();
-            }else if(tabType === "posts"){
-                displayPosts();
-            }else if(tabType === "events"){
-                displayEvents();
-            }else if(tabType === "reviews"){
-                displayReviews();
-            }
-        }
 
         function createProjectListElement(projectID, projectPictureURL, title, status, involvementString){
             var projectString = "<li id='profileProjectListElement_" + projectID + "' class='profileProjectListElement' onclick='redirectToPost(" + '"' + projectID + '");' + "'>"
@@ -231,30 +262,6 @@
                 profileDisplayPanelDiv.innerHTML = backgroundString;
             }
         }
-
-        function displayPosts(){
-            var profileDisplayPanelDiv = document.getElementById("profileDisplayPanel")
-            if(profileDisplayPanelDiv != null){
-                var displayString = "displaying posts";
-                profileDisplayPanel.innerHTML = displayString;
-            }
-        }
-
-        function displayEvents(){
-            var profileDisplayPanelDiv = document.getElementById("profileDisplayPanel")
-            if(profileDisplayPanelDiv != null){
-                var displayString = "displaying events";
-                profileDisplayPanel.innerHTML = displayString;
-            }
-        }
-
-        function displayReviews(){
-            var profileDisplayPanelDiv = document.getElementById("profileDisplayPanel")
-            if(profileDisplayPanelDiv != null){
-                var displayString = "displaying reviews";
-                profileDisplayPanel.innerHTML = displayString;
-            }
-        }
     </script>
 
 <div id='backgroundPanel' class='backgroundPanel' style='min-width: 634px; min-height: 100%;'>
@@ -286,7 +293,10 @@
                         }
                     </script>
                 </ul>
-                <div style='position: absolute; border: 1px solid #000; top: 50px; left: 2px; right: 4px; height: 100px; margin-top: -7px; background: #FFF; z-index: 0;'>
+                <div style='position: absolute; border: 1px solid #000; top: 50px; left: 2px; right: 4px; margin-top: -7px; background: #FFF; z-index: 0;'>
+                    <div id='profileTabContentPanel'>
+
+                    </div>
                 </div>
             </div>
         {% else %}
