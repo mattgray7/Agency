@@ -26,6 +26,8 @@ class ProfileView(views.GenericFormView):
         self._hasCurrentProjects = False
         self._hasPastProjects = False
 
+        self._profileUserFilmography = None
+
     @property
     def profileLinks(self):
         if self._profileLinks is None:
@@ -103,12 +105,11 @@ class ProfileView(views.GenericFormView):
         return self._profilePosts
 
     @property
-    def hasCurrentProjects(self):
-        return self._hasCurrentProjects
-
-    @property
-    def hasPastProjects(self):
-        return self._hasPastProjects
+    def profileUserFilmography(self):
+        if not self._profileUserFilmography:
+            self._profileUserFilmography = self.profileUserAccount.projects
+            print self._profileUserFilmography
+        return self._profileUserFilmography
 
     @property
     def profileProjects(self):
@@ -168,8 +169,9 @@ class ProfileView(views.GenericFormView):
         self._pageContext["profileInterests"] = self.profileInterests
         self._pageContext["profilePosts"] = self.profilePosts
         self._pageContext["profileLinks"] = self.profileLinks
-        self._pageContext["hasCurrentProjects"] = self.hasCurrentProjects
-        self._pageContext["hasPastProjects"] = self.hasPastProjects
+        
+        self._pageContext["filmography"] = json.dumps(self.profileUserFilmography)
+
         self._pageContext["possibleDestinations"] = {"picture": constants.EDIT_PROFILE_PICTURE,
                                                      "background": constants.EDIT_BACKGROUND,
                                                      "interests": constants.EDIT_INTERESTS,

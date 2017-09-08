@@ -171,6 +171,9 @@ project7ProjectPost = createProject(poster="johnstongray",
 									status="Completed",
 									picURL="/Users/MattGray/Projects/Agency/Agency/scripts/media/reelAdults.jpg")
 
+project2Admin = createProjectAdmin(project2ProjectPost.projectID, "mattgray")
+project3Admin = createProjectAdmin(project3ProjectPost.projectID, "mattgray")
+
 import datetime
 today = datetime.datetime.now()
 tomorrow = today + datetime.timedelta(days=1)

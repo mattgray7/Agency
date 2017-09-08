@@ -1723,3 +1723,16 @@ function getPostParticipantForm(postID, postType, formName, isSubForm, isNewForm
 }
 
 
+function createProjectFeed(projectDict){
+    var feedString = ''
+    if(projectDict != null && !$.isEmptyObject(projectDict)){
+        feedString += "<div id='projectFeedContainer'><ul class='projectFeed' id='projectFeed'>"
+        for(projectID in projectDict){
+            console.log(projectID)
+            feedString += "<li>" + projectDict[projectID]["name"] + "</li>";
+        }
+        feedString += "</ul></div>";
+    }
+    return feedString
+}
+

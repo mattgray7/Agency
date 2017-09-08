@@ -123,16 +123,21 @@ class UserAccount(models.Model):
                 if job.projectID:
                     self._projects[job.projectID] = {"label": job.profession, "display": True}
 
+            removeProjectIDList = []
             for projectID in self._projects:
                 try:
                     currentProject = ProjectPost.objects.get(postID=projectID)
                 except ProjectPost.DoesNotExist:
-                    del self._projects[projectID]
+                    removeProjectIDList.append(projectID)
                 else:
                     self._projects[projectID]["name"] = currentProject.title
                     self._projects[projectID]["postPictureURL"] = currentProject.postPicture and currentProject.postPicture.url or constants.NO_PICTURE_PATH
                     self._projects[projectID]["status"] = currentProject.status
                     self._projects[projectID]["projectType"] = currentProject.projectType
+
+            if removeProjectIDList:
+                for projectID in removeProjectIDList:
+                    del self._projects[projectID]
         return self._projects
 
 

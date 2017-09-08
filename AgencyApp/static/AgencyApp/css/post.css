@@ -416,3 +416,20 @@
 		border: 1px solid #000;
 	}
 
+	.projectFeed
+	{
+		background: rgba(158, 192, 247, 0.2);
+		border: 1px solid rgba(158, 192, 247, 0.2);
+	}
+
+	.projectFeed li
+	{
+		/*display: block;
+		float: left;*/
+		height: 100px;
+		border: 1px solid rgba(0,0,0,0.3);
+		border-radius: 3px;
+		background: #FFF;
+		margin-top: 5px;
+		text-align: left;
+	}
