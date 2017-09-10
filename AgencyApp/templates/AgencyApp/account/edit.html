@@ -1,6 +1,12 @@
 {% extends "base.html" %}
 
 {% block content %}
+{% load static %}
+<link href="{% static "/AgencyApp/css/browse.css" %}" rel="stylesheet" type="text/css" media="all" />
+<!--<script type="text/javascript" src="{% static "/AgencyApp/js/post/post.js" %}"></script>
+<script type="text/javascript" src="{% static "/AgencyApp/js/profile.js" %}"></script>-->
+
+
     {% if errors %}
         <ul>
             {% for error in errors %}
@@ -644,38 +650,55 @@
             </div>
         </div>
     {% elif next == possibleDestinations.background %}
-        <div class="whiteFormPanel">
-            <form class="form-style-7" id="editBackgroundForm" method="post" action="{{ currentPageURL }}">
-                {% csrf_token %}
-                {% if cancelDestination == possibleDestinations.profile %}
-                    <div id="backToProfileButton" style="width:170px; margin: -10px 0px 0px -10px;"><a onclick="returnToProfile();" class="profileButton blackHover" style="float:left">Back to profile</a></div><br><br>
-                {% endif %}
-                <h1>Edit Background</h1>
-                <ul>
-                    <script>
-                        {% for field in form %}
-                            var lineString = '';
-                            if(!('{{field}}'.includes("hidden"))){
-                                lineString = "<li><label for='name'>{{field.label}}</label>";
-                                if("{{field.name}}" != "bio"){
-                                    lineString += "<input type='text' name='{{field.name}}' maxlength='100' value='{{field.value}}'></li>";
-                                }else{
-                                    lineString += "<textarea cols='100' rows ='20' name='bio' form='editBackgroundForm' style='height:100px;'> {{ field.value }}</textarea></li>"
-                                }
-                            }else{
-                                lineString += '{{field}}';
-                            }
-                            document.write(lineString);
-                        {% endfor %}
-                    </script>
-                    <li style="position:relative; height:100px width:100%;">
-                        <div id="continueButton" class="whiteButton blackHover" style="width:75%; height:28px" onclick="submitForm('editBackgroundForm')">
-                            Continue<br><br>
-                        </div>
-                    </li>
+    <div id='backgroundPanel' class='backgroundPanel' style='min-width: 634px; min-height: 100%;'>
+        <div id="mainViewPanel" class="mainViewPanel" style="position: relative; min-width: 620px; max-width: 675px; background: rgba(0,0,0,0.05); border: none;">
+            <div id='editAccountTypeButtons' style='width: 100%; text-align: center; height: 50px; background: #FFF; position: relative;'>
+                <div id="backToProfileButton" style='position: absolute; left: 20px; top: 20px;'>
+                    <a onclick="redirectToUser('{{request.user.username}}');" class="profileButton blackHover" style="">Back</a>
+                </div>
+                <ul class='browseCategoriesList' style='position: absolute; left: 120px; top: 20px;'>
+                    <li class='active' style='width: 100px;'> Background </li>
+                    <li style='width: 100px;'> Filmography </li>
+                    <li style='width: 100px;' onclick='redirect("{{possibleDestinations.picture}}");'> Picture/Media </li>
+                    <li style='width: 100px;'> Interests </li>
                 </ul>
-            </form>
+            </div>
+
+                <form class="form-style-7" id="editBackgroundForm" method="post" action="{{ currentPageURL }}">
+                    {% csrf_token %}
+
+                    <br>
+
+
+
+                    <h1>Edit Background</h1>
+                    <ul>
+                        <script>
+                            {% for field in form %}
+                                var lineString = '';
+                                if(!('{{field}}'.includes("hidden"))){
+                                    lineString = "<li><label for='name'>{{field.label}}</label>";
+                                    if("{{field.name}}" != "bio"){
+                                        lineString += "<input type='text' name='{{field.name}}' maxlength='100' value='{{field.value}}'></li>";
+                                    }else{
+                                        lineString += "<textarea cols='100' rows ='20' name='bio' form='editBackgroundForm' style='height:100px;'> {{ field.value }}</textarea></li>"
+                                    }
+                                }else{
+                                    lineString += '{{field}}';
+                                }
+                                document.write(lineString);
+                            {% endfor %}
+                        </script>
+                        <li style="position:relative; height:100px width:100%;">
+                            <div id="continueButton" class="whiteButton blackHover" style="width:75%; height:28px" onclick="submitForm('editBackgroundForm')">
+                                Continue<br><br>
+                            </div>
+                        </li>
+                    </ul>
+                </form>
+
         </div>
+    </div>
     {% elif next == possibleDestinations.picture %}
         {% load static %}
         <link href="{% static "/AgencyApp/css/image.css" %}" rel="stylesheet" type="text/css" media="all" />

@@ -195,6 +195,10 @@ class GenericEditAccountView(views.GenericFormView):
     @property
     def pageContext(self):
         self._pageContext["nextButtonString"] = self.nextButtonString
+        self._pageContext["possibleDestinations"] = {"interests": constants.EDIT_INTERESTS,
+                                                     "picture": constants.EDIT_PROFILE_PICTURE,
+                                                     "profile": constants.PROFILE, 
+                                                     "background": constants.EDIT_BACKGROUND}
         return self._pageContext
 
 class EditInterestsView(GenericEditAccountView):
@@ -206,8 +210,6 @@ class EditInterestsView(GenericEditAccountView):
     @property
     def pageContext(self):
         self._pageContext = super(EditInterestsView, self).pageContext
-        self._pageContext["possibleDestinations"] = {"interests": constants.EDIT_INTERESTS,
-                                                     "profile": constants.PROFILE}
         self._pageContext["professions"] = constants.PROFESSIONS
         self._pageContext["existingProfessions"] = self.existingProfessions
         self._pageContext["existingHiringInterests"] = self.existingHiringInterests
@@ -357,8 +359,6 @@ class EditBackgroundView(GenericEditAccountView):
     @property
     def pageContext(self):
         self._pageContext = super(EditBackgroundView, self).pageContext
-        self._pageContext["possibleDestinations"] = {"profile": constants.PROFILE,
-                                                     "background": constants.EDIT_BACKGROUND}
         return self._pageContext
 
     @property
@@ -376,7 +376,7 @@ class EditBackgroundView(GenericEditAccountView):
             self._cancelSource = self.sourcePage
         return self._cancelSource
 
-    @property
+    """@property
     def destinationPage(self):
         if self._destinationPage is None:
             if self.userAccount.actorInterest:
@@ -386,7 +386,7 @@ class EditBackgroundView(GenericEditAccountView):
                     self._destinationPage = constants.EDIT_ACTOR_DESCRIPTION
             else:
                 self._destinationPage = constants.PROFILE
-        return self._destinationPage
+        return self._destinationPage"""
 
     @property
     def cancelDestination(self):
