@@ -9,17 +9,18 @@
 <script>
 var accountButtons = [{"label": "Background", "destination": "{{possibleDestinations.background}}"},
                       {"label": "Filmography", "destination": "{{possibleDestinations.background}}"},
-                      {"label": "Picture/Media", "destination": "{{possibleDestinations.picture}}"},
+                      {"label": "Media", "destination": "{{possibleDestinations.picture}}"},
                       {"label": "Interests", "destination": "{{possibleDestinations.interests}}"}
                      ]
 function createEditAccountButtonHeader(activeLabel){
     var headerString = "<div id='editAccountTypeButtons' style='width: 100%; text-align: center; height: 50px; background: #FFF; position: relative;'>";
 
     // Add back to profile button
-    headerString += "<div id='backToProfileButton' style='position: absolute; left: 20px; top: 20px;'><a onclick='redirectToUser(" + '"{{request.user.username}}");' + "' class='profileButton blackHover'>Back</a></div>";
+    /*headerString += "<div id='backToProfileButton' style='position: absolute; left: 20px; top: 20px;'><a onclick='redirectToUser(" + '"{{request.user.username}}");' + "' class='profileButton blackHover'>Back</a></div>";*/
 
     // Add edit account buttons
-    headerString += "<ul class='browseCategoriesList' style='position: absolute; left: 120px; top: 20px;'>";
+    headerString += "<div style='position: absolute; left: 0; right: 0; top: 20px;'>"
+    headerString += "<ul class='browseCategoriesList' style='margin: 0px auto 0px auto; width: 440px;'>";
     for(var i=0; i < accountButtons.length; i++){
         headerString += "<li ";
         if(accountButtons[i]["label"] === activeLabel){
@@ -27,7 +28,7 @@ function createEditAccountButtonHeader(activeLabel){
         }
         headerString += " style='width: 100px;' onclick='redirect(" +'"' + accountButtons[i]["destination"] +'");' + "'>" + accountButtons[i]["label"]  + "</li>";
     }
-    headerString += "</ul></div>";
+    headerString += "</ul></div></div>";
     return headerString;
 }
 
@@ -170,7 +171,7 @@ function createEditAccountButtonHeader(activeLabel){
 
         <div id="mainViewPanel" class="mainViewPanel" style="position: relative; min-width: 600px; max-width: 600px; background: rgba(0,0,0,0.05); border: none;">
             <script>
-            document.write(createEditAccountButtonHeader("Picture/Media"))
+            document.write(createEditAccountButtonHeader("Media"))
             </script>
 
         <center>
