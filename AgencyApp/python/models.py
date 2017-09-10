@@ -48,6 +48,10 @@ class UserAccount(models.Model):
     imdbLink = models.CharField(max_length=500, default='')
     bio = models.CharField(max_length=1000, default='')
     mainProfession = models.CharField(max_length=200, default='')
+    location = models.CharField(max_length=200, default='')
+    education = models.CharField(max_length=200, default='')
+    gender = models.CharField(max_length=200, default='')
+    dateOfBirth = models.DateField(default=None, blank=True, null=True)
 
     def __init__(self, *args, **kwargs):
         super(UserAccount, self).__init__(*args, **kwargs)

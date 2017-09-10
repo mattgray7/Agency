@@ -33,6 +33,10 @@ class EditBackgroundForm(BaseForm):
     reel = forms.CharField(label="Reel Link", required=False, max_length=500)
     imdb = forms.CharField(label="IMDB Link", required=False, max_length=500)
     bio = forms.CharField(label="Bio", required=False, max_length=1000)
+    location = forms.CharField(label="Location", required=False, max_length=200)
+    education = forms.CharField(label="Education", required=False, max_length=200)
+    gender = forms.CharField(label="Identified Gender", required=False, max_length=200)
+    dateOfBirth = forms.DateField(label="Date of Birth", required=False, widget=forms.DateInput(attrs={'class':'datepicker'}))
 
 class GenericCreatePostForm(BaseForm):
     postID = forms.CharField(widget=forms.HiddenInput, required=False, max_length=10)
