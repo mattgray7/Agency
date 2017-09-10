@@ -74,7 +74,7 @@ function createEditAccountButtonHeader(activeLabel){
 
 <div id='backgroundPanel' class='backgroundPanel' style='min-width: 634px; min-height: 100%;'>        
     {% if next == possibleDestinations.background %}
-        <div id="mainViewPanel" class="mainViewPanel" style="position: relative; min-width: 620px; max-width: 1000px; background: rgba(0,0,0,0.05); border: none;">
+        <div id="mainViewPanel" class="mainViewPanel" style="position: relative; min-width: 620px; max-width: 620px; background: rgba(0,0,0,0.05); border: none;">
             <script>
             document.write(createEditAccountButtonHeader("Background"))
             </script>
@@ -88,7 +88,18 @@ function createEditAccountButtonHeader(activeLabel){
                                 if(!('{{field}}'.includes("hidden"))){
                                     lineString = "<li><label for='name'>{{field.label}}</label>";
                                     if("{{field.name}}" != "bio"){
-                                        lineString += "<input type='text' name='{{field.name}}' maxlength='100' value='{{field.value}}'></li>";
+                                        {% if selectFields and field.name in selectFields %}
+                                            var selectFields = {{selectFields|safe}}
+                                            if("{{field.name}}" in selectFields){
+                                                lineString += "<select form='editBackgroundForm'>";
+                                                for(var i=0; i < selectFields["{{field.name}}"].length; i++){
+                                                    lineString += "<option value='" + selectFields["{{field.name}}"][i] + "'>" + selectFields["{{field.name}}"][i] + "</option>"
+                                                }
+                                                lineString += "</select>";
+                                            }
+                                        {% else %}
+                                            lineString += "<input type='text' name='{{field.name}}' maxlength='100' value='{{field.value}}'></li>";
+                                        {% endif %}
                                     }else{
                                         lineString += "<textarea cols='100' rows ='20' name='bio' form='editBackgroundForm' style='height:100px;'> {{ field.value }}</textarea></li>"
                                     }

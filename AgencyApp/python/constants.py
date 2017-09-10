@@ -86,6 +86,8 @@ PROFESSIONS = {"acting": ["Actor", "Dancer", "Extra", "Stand-in", "Model", "Voic
 HIRE_TYPES = ["hireProject", "hirePermanent", "casting", "collaborating"]
 COLLABORATOR_OPTIONS = ["Director", "Director of photography", "Musical artist", "Screenwriter", "Story writer", "Other"]
 
+
+GENDER_OPTIONS = ["-", "Male", "Female", "Non-binary", "Other", "Prefer not to specify"]	# used in other places than actor attribute
 ACTOR_ATTRIBUTE_DICT = [{"name": "hairColor",
 						 "options": ["-", "Black", "Blonde", "Brown", "Grey", "Red", "White", "Other"]},
 						{"name": "eyeColor",
@@ -95,7 +97,7 @@ ACTOR_ATTRIBUTE_DICT = [{"name": "hairColor",
 						{"name": "ageRange",
 						 "options": ["-", "0 - 6", "6 - 12", "12 - 16", "16 - 20", "20 - 25", "25 - 40", "40 - 55", "55 - 70", "70+"]},
 						{"name": "gender",
-						 "options": ["-", "Male", "Female", "Non-binary", "Other", "Prefer not to specify"]},
+						 "options": GENDER_OPTIONS},
 						{"name": "height"},
 						{"name": "build",
 						 "options": ["-", "Slim", "Medium", "Muscular", "Large"]},

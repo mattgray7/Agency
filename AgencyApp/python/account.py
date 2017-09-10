@@ -353,10 +353,12 @@ class EditPictureView(GenericEditAccountView, views.PictureFormView):
 class EditBackgroundView(GenericEditAccountView):
     def __init__(self, *args, **kwargs):
         super(EditBackgroundView, self).__init__(*args, **kwargs)
+        self._selectFields = None
 
     @property
     def pageContext(self):
         self._pageContext = super(EditBackgroundView, self).pageContext
+        self._pageContext["selectFields"] = json.dumps(self.selectFields)
         return self._pageContext
 
     @property
@@ -397,8 +399,17 @@ class EditBackgroundView(GenericEditAccountView):
         self._formInitialValues["imdb"] = self.userAccount.imdbLink
         self._formInitialValues["bio"] = self.userAccount.bio
         self._formInitialValues["mainProfession"] = self.userAccount.mainProfession
-
+        self._formInitialValues["location"] = self.userAccount.mainProfession
+        self._formInitialValues["dateOfBirth"] = self.userAccount.dateOfBirth
+        self._formInitialValues["education"] = self.userAccount.education
+        self._formInitialValues["gender"] = self.userAccount.gender
         return self._formInitialValues
+
+    @property
+    def selectFields(self):
+        if self._selectFields is None:
+            self._selectFields = {"gender": constants.GENDER_OPTIONS}
+        return self._selectFields
 
     def processForm(self):
         """Overriding asbtract method"""
