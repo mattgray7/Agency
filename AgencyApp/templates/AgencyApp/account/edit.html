@@ -98,10 +98,12 @@ function createEditAccountButtonHeader(activeLabel){
                                 document.write(lineString);
                             {% endfor %}
                         </script>
-                        <li style="position:relative; height:100px width:100%;">
-                            <div id="continueButton" class="whiteButton blackHover" style="width:75%; height:28px" onclick="submitForm('editBackgroundForm')">
-                                Continue<br><br>
+                        <li style="position:relative; height:70px;">
+                            <div id="cancel" class="whiteButton blackHover" style="position: absolute; left: 0; right: 51%; top: 0;" onclick='cancelPage();'>Cancel</div>
+                            <div id="continueButton" class="whiteButton blackHover" style="position: absolute; right: 0; left: 51%; top: 0;" onclick="submitForm('editBackgroundForm')">
+                                Continue
                             </div>
+
                         </li>
                     </ul>
                 </form>
