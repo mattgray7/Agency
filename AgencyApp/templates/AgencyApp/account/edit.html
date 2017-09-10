@@ -91,9 +91,13 @@ function createEditAccountButtonHeader(activeLabel){
                                         {% if selectFields and field.name in selectFields %}
                                             var selectFields = {{selectFields|safe}}
                                             if("{{field.name}}" in selectFields){
-                                                lineString += "<select form='editBackgroundForm'>";
+                                                lineString += "<select form='editBackgroundForm' name='{{field.name}}'>";
                                                 for(var i=0; i < selectFields["{{field.name}}"].length; i++){
-                                                    lineString += "<option value='" + selectFields["{{field.name}}"][i] + "'>" + selectFields["{{field.name}}"][i] + "</option>"
+                                                    lineString += "<option "
+                                                    if(selectFields["{{field.name}}"][i] === "{{field.value}}"){
+                                                        lineString += "selected ";
+                                                    }
+                                                    lineString += "'value='" + selectFields["{{field.name}}"][i] + "'>" + selectFields["{{field.name}}"][i] + "</option>"
                                                 }
                                                 lineString += "</select>";
                                             }

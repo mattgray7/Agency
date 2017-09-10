@@ -417,6 +417,10 @@ class EditBackgroundView(GenericEditAccountView):
         self.userAccount.imdbLink = self.formData.get('imdb')
         self.userAccount.bio = self.formData.get('bio')
         self.userAccount.mainProfession = self.formData.get("mainProfession")
+        self.userAccount.location = self.formData.get('location')
+        self.userAccount.dateOfBirth = self.formData.get('dateOfBirth')
+        self.userAccount.education = self.formData.get('education')
+        self.userAccount.gender = self.formData.get('gender')
         try:
             self.userAccount.save()
             return True
