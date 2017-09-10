@@ -111,17 +111,26 @@ class UserAccount(models.Model):
             self._projects = {}
             participants = PostParticipant.objects.filter(username=self.username)
             for part in participants:
-                self._projects[part.postID] = {"label": part.status, "display": part.publicParticipation}
+                if part.postID in self._projects:
+                    self._projects[part.postID]["label"] += ", {0}".format(part.status)
+                else:
+                    self._projects[part.postID] = {"label": part.status, "display": part.publicParticipation}
 
             roles = CastingPost.objects.filter(actorName=self.username)
             for role in roles:
                 if role.projectID:
-                    self._projects[role.projectID] = {"label": role.characterType, "display": True}
+                    if role.projectID in self._projects:
+                        self._projects[role.projectID]["label"] += ", {0} ({1})".format(role.characterType, role.characterName)
+                    else:
+                        self._projects[role.projectID] = {"label": "{0} ({1})".format(role.characterType, role.characterName), "display": True}
 
             jobs = WorkPost.objects.filter(workerName=self.username)
             for job in jobs:
                 if job.projectID:
-                    self._projects[job.projectID] = {"label": job.profession, "display": True}
+                    if job.projectID in self._projects:
+                        self._projects[job.projectID]["label"] += ", {0}".format(job.profession)
+                    else:
+                        self._projects[job.projectID] = {"label": job.profession, "display": True}
 
             removeProjectIDList = []
             for projectID in self._projects:
