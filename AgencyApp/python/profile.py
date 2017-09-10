@@ -108,7 +108,6 @@ class ProfileView(views.GenericFormView):
     def profileUserFilmography(self):
         if not self._profileUserFilmography:
             self._profileUserFilmography = self.profileUserAccount.projects
-            print self._profileUserFilmography
         return self._profileUserFilmography
 
     @property

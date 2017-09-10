@@ -6,6 +6,7 @@ from django.db import models
 from django.core.files.storage import FileSystemStorage
 import helpers
 import constants
+import post
 
 from django.conf import settings
 imageStorage = FileSystemStorage(
@@ -107,20 +108,40 @@ class UserAccount(models.Model):
 
     @property
     def projects(self):
+        """ Returns a dict of all projects the user is associated with. Searches project participants, project sub-post
+        participants, casting post actorNames, and work post workerNames.
+        """
         if self._projects is None:
             self._projects = {}
+
+            # Search post participants to find participating projects
             participants = PostParticipant.objects.filter(username=self.username)
             for part in participants:
-                if part.postID in self._projects:
-                    self._projects[part.postID]["label"] += ", {0}".format(part.status)
+                newProjectID = part.postID
+                label = part.status
+
+                # If participant post is not a project (ie is casting or work), check if there is a project associated
+                if not post.isProjectPost(part.postID):
+                    userPost = post.getPost(part.postID)
+                    if hasattr(userPost, "projectID") and userPost.projectID:
+                        newProjectID = userPost.projectID
+                        if post.isCastingPost(part.postID):
+                            label = "{0} ({1})".format(userPost.characterType, userPost.characterName)
+                        elif post.isWorkPost(part.postID):
+                            label = userPost.profession
+
+                if newProjectID in self._projects:
+                    self._projects[newProjectID]["label"] += ", {0}".format(label)
                 else:
-                    self._projects[part.postID] = {"label": part.status, "display": part.publicParticipation}
+                    self._projects[newProjectID] = {"label": label, "display": part.publicParticipation}
 
             roles = CastingPost.objects.filter(actorName=self.username)
             for role in roles:
                 if role.projectID:
                     if role.projectID in self._projects:
-                        self._projects[role.projectID]["label"] += ", {0} ({1})".format(role.characterType, role.characterName)
+                        newLabelAddition = "{0} ({1})".format(role.characterType, role.characterName)
+                        if not newLabelAddition in self._projects[role.projectID]["label"]:
+                            self._projects[role.projectID]["label"] += ", {0}".format(newLabelAddition)
                     else:
                         self._projects[role.projectID] = {"label": "{0} ({1})".format(role.characterType, role.characterName), "display": True}
 
