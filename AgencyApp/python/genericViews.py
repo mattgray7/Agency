@@ -149,7 +149,7 @@ class GenericView(object):
     @property
     def userAccount(self):
         if self._userAccount is None:
-            self._userAccount = UserAccount.objects.get(username=self.username)
+            self._userAccount = models.UserAccount.objects.get(username=self.username)
         return self._userAccount
 
     @property

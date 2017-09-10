@@ -147,6 +147,12 @@
             form.submit();
         }
 
+        function redirect(destination){
+            // Redirects to to destination
+            var form = createPageRedirectForm("{{next}}", "{{next}}", destination, "{{currentPageURL}}", null, null);
+            form.submit();
+        }
+
         function previewPicture(input, divName) {
             if (input.files && input.files[0]) {
                 var reader = new FileReader();

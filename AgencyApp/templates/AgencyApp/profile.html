@@ -9,6 +9,7 @@
     var activeInterest = "work";
     var profileTabs = ["bio", "filmography", "media", "endorsements"];
     var profileTabDisplayFunctions = {"bio": displayBio, "filmography": displayFilmography, "media": displayMedia,"endorsements": displayEndorsements};
+
     function selectProfileTab(tabType){
         for(var i=0; i < profileTabs.length; i++){
             var buttonId = profileTabs[i] + "ProfileButton";
@@ -41,7 +42,10 @@
     function displayBio(){
         var tabContent = document.getElementById("profileTabContentPanel");
         if(tabContent != null){
-            var contentString = "<div style='text-align: left; margin-left: 10px; margin-top: 10px;'><ul style='line-height: 26px;'>";
+            // Start with edit button
+            var contentString = "<div style='position: absolute; top: -3px; right: 15px;'><div class='hoverButton'><a onclick='redirect(" + '"{{ possibleDestinations.background }}");' + "'>Edit</a></div></div>";
+
+            contentString += "<div style='text-align: left; margin-left: 10px; margin-top: 10px;'><ul style='line-height: 26px;'>";
 
             contentString += "<li>Contact: {{profileUserAccount.email}}"
             {% if profileUserAccount.phoneNumber %}
@@ -58,6 +62,8 @@
             contentString += "<li><a href=''>Resume</a></li>"
 
             contentString += "<ul></div>";
+
+            // Add edit button
             tabContent.innerHTML = contentString;
         }
     }
@@ -94,15 +100,7 @@
     }
 </script>
 
-
     <script>
-        function redirect(destination){
-            // Redirects to to destination
-            var form = createPageRedirectForm("{{next}}", "{{next}}", destination, "{{currentPageURL}}", null, null);
-            form.submit();
-        }
-
-
         function getHiringList(){
             var returnString = '';
             {% if profileInterests.hire %}
@@ -320,7 +318,7 @@
 </div>
 
 <script>
-selectProfileTab("filmography")
+selectProfileTab("bio")
 </script>
 
 
