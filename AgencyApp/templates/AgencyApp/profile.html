@@ -42,26 +42,52 @@
     function displayBio(){
         var tabContent = document.getElementById("profileTabContentPanel");
         if(tabContent != null){
+            var bioData = [{"label": "Name", "value": "{{profileUserAccount.cleanName}}"},
+                           {"label": "Professions", value: getProfessionList()},
+                           {"label": "Email", "value": "{{profileUserAccount.email}}"},
+                           {"label": "Phone #", "value": "{{profileUserAccount.phoneNumber}}"},
+                           {"label": "Location", "value": "{{profileUserAccount.location}}"},
+                           {"label": "Date of Birth", "value": "{{profileUserAccount.dateOfBirth}}"},
+                           {"label": "Education", "value": "{{profileUserAccount.education}}"},
+                           {"label": "Bio", "value": "{{profileUserAccount.bio}}"}
+                           ]
+
+            // Have to add links separately because need to check if they exist before adding
+            {% if profileUserAccount.resume or profileUserAccount.imdbLink %}
+                var linksDict = {"label": "Links", "value": []};
+                {% if profileUserAccount.imdbLink %}
+                    linksDict["value"].push({"label": "IMDB", "href": "{{profileUserAccount.imdbLink}}"})
+                {% endif %}
+                {% if profileUserAccount.resume %}
+                    linksDict["value"].push({"label": "Resume", "href": "/media/{{profileUserAccount.resume}}"})
+                {% endif %}
+                bioData.push(linksDict)
+            {% endif %}
+
+
             // Start with edit button
             var contentString = "<div style='position: absolute; top: -3px; right: 15px;'><div class='hoverButton'><a onclick='redirect(" + '"{{ possibleDestinations.background }}");' + "'>Edit</a></div></div>";
 
             contentString += "<div style='text-align: left; margin-left: 10px; margin-top: 10px;'><ul style='line-height: 26px;'>";
 
-            contentString += "<li>Contact: {{profileUserAccount.email}}"
-            {% if profileUserAccount.phoneNumber %}
-                contentString += ", {{profileUserAccount.phoneNumber}}";
-            {% endif %}
-            contentString += "</li>";
+            for (record in bioData){
+                if(bioData[record]["value"].length > 0 && bioData[record]["value"] != "None"){
+                    contentString += "<li>" + bioData[record]["label"] + ": "
 
-            contentString += "<li>Bio: {{profileUserAccount.bio}}</li>"
-
-            {% if profileUserAccount.imdbLink %}
-                contentString += "<li><a href='{{profileUserAccount.imdbLink}}'>IMDB</a></li>";
-            {% endif %}
-
-            {% if profileUserAccount.resume and profileUserAccount.resume.path %}
-                contentString += "<li><a href='/media/{{profileUserAccount.resume}}'>Resume</a></li>"
-            {% endif %}
+                    // Check if value is a list
+                    if(Object.prototype.toString.call(bioData[record]["value"]) === '[object Array]'){
+                        for(var i=0; i < bioData[record]["value"].length; i++){
+                            if(bioData[record]["value"][i]["href"] != '')
+                            contentString += " <a href='" + bioData[record]["value"][i]["href"] + "'>" + bioData[record]["value"][i]["label"] + "</a> |"
+                        }
+                        // Remove last '|' character
+                        contentString = contentString.slice(0, -2)
+                    }else{
+                        contentString += bioData[record]["value"];
+                    }
+                    contentString += "</li>"
+                }
+            }
 
             contentString += "<ul></div>";
 
