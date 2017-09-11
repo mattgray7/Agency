@@ -72,8 +72,8 @@ function createEditAccountButtonHeader(activeLabel){
         }
     </script>
 
-<div id='backgroundPanel' class='backgroundPanel' style='min-width: 634px; min-height: 100%;'>        
-    {% if next == possibleDestinations.background %}
+{% if next == possibleDestinations.background %}
+    <div id='backgroundPanel' class='backgroundPanel' style='min-width: 634px; min-height: 100%;'>
         <div id="mainViewPanel" class="mainViewPanel" style="position: relative; min-width: 620px; max-width: 620px; background: rgba(0,0,0,0.05); border: none;">
             <script>
             document.write(createEditAccountButtonHeader("Background"))
@@ -128,6 +128,8 @@ function createEditAccountButtonHeader(activeLabel){
                         </li>
                     </ul>
                 </form>
+            </div>
+        </div>
     {% elif next == possibleDestinations.picture %}
         {% load static %}
         <link href="{% static "/AgencyApp/css/image.css" %}" rel="stylesheet" type="text/css" media="all" />
@@ -185,7 +187,7 @@ function createEditAccountButtonHeader(activeLabel){
             });
         }
         </script>
-
+        <div id='backgroundPanel' class='backgroundPanel' style='min-width: 634px; min-height: 100%;'>
         <div id="mainViewPanel" class="mainViewPanel" style="position: relative; min-width: 600px; max-width: 600px; background: rgba(0,0,0,0.05); border: none;">
             <script>
             document.write(createEditAccountButtonHeader("Media"))
@@ -235,9 +237,11 @@ function createEditAccountButtonHeader(activeLabel){
         <script>
             loadPictureCropTool();
         </script>
+        </div>
+    </div>
 
-
-    {% elif next == possibleDestinations.interests %}
+{% elif next == possibleDestinations.interests %}
+    <div id='backgroundPanel' class='backgroundPanel' style='min-width: 1020px; min-height: 100%;'>
      <div id="mainViewPanel" class="mainViewPanel" style="position: relative; min-width: 1000px; max-width: 1000px; background: rgba(0,0,0,0.05); border: none;">
         <script>
             document.write(createEditAccountButtonHeader("Interests"))
@@ -846,9 +850,10 @@ function createEditAccountButtonHeader(activeLabel){
                 </div>
             </div>
         </div>
-    {% endif %}
-        </div>
     </div>
+</div>
+{% endif %}
+
 
     <!--{% if userAccount %}
         {% if userAccount.profilePicture %}
