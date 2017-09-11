@@ -32,6 +32,20 @@ function createEditAccountButtonHeader(activeLabel){
     return headerString;
 }
 
+// Just for edit background
+function removeResume(){
+    var removeResumeInput = document.getElementById("removeResumeFileInput")
+    if(removeResumeInput != null){
+        removeResumeInput.value = "true";
+    }
+
+    var resumeContainer = document.getElementById("resumeContainer");
+    if(resumeContainer != null){
+        resumeContainer.innerHTML = "<input type='file' name='resume' />"
+    }
+
+}
+
 </script>
 
 
@@ -79,7 +93,7 @@ function createEditAccountButtonHeader(activeLabel){
             document.write(createEditAccountButtonHeader("Background"))
             </script>
 
-                <form class="form-style-7" id="editBackgroundForm" method="post" action="{{ currentPageURL }}">
+                <form class="form-style-7" id="editBackgroundForm" method="post" action="{{ currentPageURL }}" enctype="multipart/form-data">
                     {% csrf_token %}
                     <ul>
                         <script>
@@ -102,17 +116,25 @@ function createEditAccountButtonHeader(activeLabel){
                                                 lineString += "</select>";
                                             }
                                         {% else %}
-                                        if("{{field.name}}" === "dateOfBirth"){
-                                            var date = new Date('{{field.value}}');
-                                            var dateString = date.getFullYear() + "-" + ("0" + (date.getMonth() + 1)).slice(-2) + "-" + ("0" + date.getDate()).slice(-2)
-                                            lineString += "<input type='date' name='{{field.name}}' value='" + dateString + "'></li>";
-                                        }else{
-                                            lineString += "<input type='text' name='{{field.name}}' maxlength='100' value='{{field.value}}'></li>";
-                                        }
+                                            if("{{field.name}}" === "dateOfBirth"){
+                                                var date = new Date('{{field.value}}');
+                                                var dateString = date.getFullYear() + "-" + ("0" + (date.getMonth() + 1)).slice(-2) + "-" + ("0" + date.getDate()).slice(-2)
+                                                lineString += "<input type='date' name='{{field.name}}' value='" + dateString + "'>";
+                                            }else if("{{field.name}}" === "resume"){
+                                                if('{{field.value}}'.length > 0){
+                                                    lineString += '<input type="hidden" id="removeResumeFileInput" name="removeResumeFile" value="false" /><div id="resumeContainer" style="text-align: left; position: relative;"><a href="{{field.value}}">{{field.value}}</a><div style="position: absolute; right: 0; top: 0;"><a onclick="removeResume();">Clear</a></div></div>';
+                                                }else{
+                                                    lineString += '{{field}}'
+                                                }
+                                            }else{
+                                                //lineString += "<input type='text' name='{{field.name}}' maxlength='100' value='{{field.value}}'></li>";
+                                                lineString += '{{field}}';
+                                            }
                                         {% endif %}
                                     }else{
-                                        lineString += "<textarea cols='100' rows ='20' name='bio' form='editBackgroundForm' style='height:100px;'> {{ field.value }}</textarea></li>"
+                                        lineString += "<textarea cols='100' rows ='20' name='bio' form='editBackgroundForm' style='height:100px;'> {{ field.value }}</textarea>"
                                     }
+                                    lineString += "</li>";
                                 }else{
                                     lineString += '{{field}}';
                                 }

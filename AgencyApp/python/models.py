@@ -52,6 +52,7 @@ class UserAccount(models.Model):
     education = models.CharField(max_length=200, default='')
     gender = models.CharField(max_length=200, default='')
     dateOfBirth = models.DateField(default=None, blank=True, null=True)
+    resume = models.FileField(default=None, upload_to=image_directory_path, storage=imageStorage)
 
     def __init__(self, *args, **kwargs):
         super(UserAccount, self).__init__(*args, **kwargs)

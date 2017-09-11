@@ -31,6 +31,7 @@ class EditPictureForm(BaseForm):
 class EditBackgroundForm(BaseForm):
     mainProfession = forms.CharField(label="Primary Profession", required=False, max_length=200)
     reel = forms.CharField(label="Reel Link", required=False, max_length=500)
+    resume = forms.FileField(label="Resume", required=False)
     imdb = forms.CharField(label="IMDB Link", required=False, max_length=500)
     bio = forms.CharField(label="Bio", required=False, max_length=1000)
     location = forms.CharField(label="Location", required=False, max_length=200)
