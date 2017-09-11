@@ -59,7 +59,9 @@
                 contentString += "<li><a href='{{profileUserAccount.imdbLink}}'>IMDB</a></li>";
             {% endif %}
 
-            contentString += "<li><a href=''>Resume</a></li>"
+            {% if profileUserAccount.resume and profileUserAccount.resume.path %}
+                contentString += "<li><a href='/media/{{profileUserAccount.resume}}'>Resume</a></li>"
+            {% endif %}
 
             contentString += "<ul></div>";
 
