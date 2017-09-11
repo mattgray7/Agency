@@ -123,7 +123,11 @@ function removeResume(){
                                             }else if("{{field.name}}" === "resume"){
                                                 lineString += '<input type="hidden" id="removeResumeFileInput" name="removeResumeFile" value="false" /><div id="resumeContainer" style="text-align: left; position: relative;">'
                                                 if('{{field.value}}'.length > 0){
-                                                    lineString += '<a href="{{field.value}}">{{field.value}}</a><div style="position: absolute; right: 0; top: 0;"><a onclick="removeResume();">Clear</a></div>';
+                                                    lineString += '<a href="/media/{{field.value}}">'
+
+                                                    // Remove parent directory from resume link to just show filename
+                                                    lineString += '{{field.value}}'.replace('{{request.user.username}}/', '');
+                                                    lineString += '</a><div style="position: absolute; right: 0; top: 0;"><a onclick="removeResume();">Clear</a></div>';
                                                 }else{
                                                     lineString += '{{field}}'
                                                 }
