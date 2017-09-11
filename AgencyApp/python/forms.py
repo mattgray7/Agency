@@ -36,7 +36,7 @@ class EditBackgroundForm(BaseForm):
     location = forms.CharField(label="Location", required=False, max_length=200)
     education = forms.CharField(label="Education", required=False, max_length=200)
     gender = forms.CharField(label="Identified Gender", required=False, max_length=200)
-    #dateOfBirth = forms.DateField(label="Date of Birth", required=False, widget=forms.DateInput(attrs={'class':'datepicker'}))
+    dateOfBirth = forms.DateField(label="Date of Birth", required=False, widget=forms.DateInput(attrs={'class':'datepicker'}))
 
 class GenericCreatePostForm(BaseForm):
     postID = forms.CharField(widget=forms.HiddenInput, required=False, max_length=10)

@@ -102,7 +102,13 @@ function createEditAccountButtonHeader(activeLabel){
                                                 lineString += "</select>";
                                             }
                                         {% else %}
+                                        if("{{field.name}}" === "dateOfBirth"){
+                                            var date = new Date('{{field.value}}');
+                                            var dateString = date.getFullYear() + "-" + ("0" + (date.getMonth() + 1)).slice(-2) + "-" + ("0" + date.getDate()).slice(-2)
+                                            lineString += "<input type='date' name='{{field.name}}' value='" + dateString + "'></li>";
+                                        }else{
                                             lineString += "<input type='text' name='{{field.name}}' maxlength='100' value='{{field.value}}'></li>";
+                                        }
                                         {% endif %}
                                     }else{
                                         lineString += "<textarea cols='100' rows ='20' name='bio' form='editBackgroundForm' style='height:100px;'> {{ field.value }}</textarea></li>"
