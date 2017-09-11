@@ -121,11 +121,13 @@ function removeResume(){
                                                 var dateString = date.getFullYear() + "-" + ("0" + (date.getMonth() + 1)).slice(-2) + "-" + ("0" + date.getDate()).slice(-2)
                                                 lineString += "<input type='date' name='{{field.name}}' value='" + dateString + "'>";
                                             }else if("{{field.name}}" === "resume"){
+                                                lineString += '<input type="hidden" id="removeResumeFileInput" name="removeResumeFile" value="false" /><div id="resumeContainer" style="text-align: left; position: relative;">'
                                                 if('{{field.value}}'.length > 0){
-                                                    lineString += '<input type="hidden" id="removeResumeFileInput" name="removeResumeFile" value="false" /><div id="resumeContainer" style="text-align: left; position: relative;"><a href="{{field.value}}">{{field.value}}</a><div style="position: absolute; right: 0; top: 0;"><a onclick="removeResume();">Clear</a></div></div>';
+                                                    lineString += '<a href="{{field.value}}">{{field.value}}</a><div style="position: absolute; right: 0; top: 0;"><a onclick="removeResume();">Clear</a></div>';
                                                 }else{
                                                     lineString += '{{field}}'
                                                 }
+                                                lineString += "</div>"
                                             }else{
                                                 //lineString += "<input type='text' name='{{field.name}}' maxlength='100' value='{{field.value}}'></li>";
                                                 lineString += '{{field}}';
