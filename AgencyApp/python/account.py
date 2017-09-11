@@ -399,7 +399,7 @@ class EditBackgroundView(GenericEditAccountView):
         self._formInitialValues["imdb"] = self.userAccount.imdbLink
         self._formInitialValues["bio"] = self.userAccount.bio
         self._formInitialValues["mainProfession"] = self.userAccount.mainProfession
-        self._formInitialValues["location"] = self.userAccount.mainProfession
+        self._formInitialValues["location"] = self.userAccount.location
         self._formInitialValues["dateOfBirth"] = self.userAccount.dateOfBirth
         self._formInitialValues["education"] = self.userAccount.education
         self._formInitialValues["gender"] = self.userAccount.gender
@@ -422,11 +422,15 @@ class EditBackgroundView(GenericEditAccountView):
         self.userAccount.dateOfBirth = self.formData.get('dateOfBirth')
         self.userAccount.education = self.formData.get('education')
         self.userAccount.gender = self.formData.get('gender')
+
+        # Remove existing resume if it exists (can remove existing and add new in same form submission)
         if self.request.POST.get("removeResumeFile", "false") in ["true", "True", True]:
+            if self.userAccount.resume and self.userAccount.resume.path:
+                os.remove(self.userAccount.resume.path)
             self.userAccount.resume = None
-        else:
-            if self.request.FILES and self.request.FILES.get('resume'):
-                self.userAccount.resume = self.request.FILES.get('resume')
+
+        if self.request.FILES and self.request.FILES.get('resume'):
+            self.userAccount.resume = self.request.FILES.get('resume')
         try:
             self.userAccount.save()
             return True
