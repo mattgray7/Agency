@@ -55,7 +55,6 @@ function toggleExpandBrowseSection(direction, section){
     }else{
         expandedTabDict[section] = false;
         currentMaxNumResults[section] = defaultNumResults;      // Why is it still showing 9 results after toggle?
-        console.log(currentMaxNumResults)
         if(expandButton != null){
             expandButton.innerHTML = getSectionExpandButtonContent("expand")
             expandButton.onclick = function(){toggleExpandBrowseSection("expand", section)}
@@ -264,7 +263,6 @@ function createEventElement(dataDict){
 function createUserElement(dataDict){
     var element = "";
     // Add info content
-    console.log(dataDict)
     element += "<h2 class='postInfoTitle'><a onclick='redirectToUser(" +'"' + dataDict["username"] + '");' + "'>" + dataDict["cleanName"] + "</a></h2>"
     element += "<div style='color: rgba(0,0,0,0.8);'>"
 

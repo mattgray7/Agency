@@ -23,8 +23,12 @@
                 browseButton.className = "active";
             }
         }
-        if(document.getElementById("searchTextInput").value != ""){
-            submitSearch();
+        if(document.getElementById("searchTextInput").value === ""){
+            if(!firstSearch){
+                submitSearch()
+            }
+        }else{
+            submitSearch()
         }
     }
 
