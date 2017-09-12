@@ -46,6 +46,14 @@ function removeResume(){
 
 }
 
+function removeIMDBLink(){
+    console.log("here")
+    var container = document.getElementById("imdbLinkContainer")
+    if(container != null){
+        container.innerHTML = "<input type='text' name='imdb' value='' />"
+    }
+}
+
 </script>
 
 
@@ -132,8 +140,15 @@ function removeResume(){
                                                     lineString += '{{field}}'
                                                 }
                                                 lineString += "</div>"
+                                            }else if("{{field.name}}" === "imdb"){
+                                                lineString += "<div id='imdbLinkContainer' style='height: 25px; text-align: left; position: relative;'>";
+                                                console.log("{{field.value}}")
+                                                if("{{field.value}}".length > 0 && "{{field.value}}" != "None"){
+                                                    lineString += "<a href='{{field.value}}'>{{userAccount.cleanName}}</a><div style='position: absolute; right: 0; top: 0;'><a onclick='removeIMDBLink();'>Clear</a></div>";
+                                                }else{
+                                                    lineString += '{{field}}';
+                                                }
                                             }else{
-                                                //lineString += "<input type='text' name='{{field.name}}' maxlength='100' value='{{field.value}}'></li>";
                                                 lineString += '{{field}}';
                                             }
                                         {% endif %}

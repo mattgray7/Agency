@@ -199,6 +199,7 @@ class GenericEditAccountView(views.GenericFormView):
                                                      "picture": constants.EDIT_PROFILE_PICTURE,
                                                      "profile": constants.PROFILE, 
                                                      "background": constants.EDIT_BACKGROUND}
+        self._pageContext["userAccount"] = self.userAccount
         return self._pageContext
 
 class EditInterestsView(GenericEditAccountView):
@@ -326,7 +327,6 @@ class EditPictureView(GenericEditAccountView, views.PictureFormView):
     @property
     def pageContext(self):
         self._pageContext = super(EditPictureView, self).pageContext
-        self._pageContext["userAccount"] = self.userAccount
         return self._pageContext
 
     @property
