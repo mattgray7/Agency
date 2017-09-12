@@ -100,29 +100,36 @@
     }
 
     function getJobsFiltersString(){
-        var filterString = "<div style='height: 100%; text-align: left; position: relative;'>";
+        var filterString = '';
+        {% if browseFilters and browseFilters.jobs %}
+            filterString += "<div style='height: 100%; text-align: left; position: relative;'>";
 
-        // Add header
-        filterString += "<div style='position: absolute; top: 0; left: 10px;'><h3>Jobs</h3></div>"
+            // Add header
+            filterString += "<div style='position: absolute; top: 0; left: 10px;'><h3>Jobs</h3></div>"
 
-        // Add left list
-        filterString += "<div style='position: absolute; top: 27px; left: 10px; right: 50%;'><ul>"
+            // Add left list
+            filterString += "<div style='position: absolute; top: 27px; left: 10px; right: 50%;'><ul>"
 
-        // Add profession
-        filterString += "<li> Profession: "
-        {% if professionList %}
-            filterString += "<select>"
-            {% for profession in professionList %}
-                filterString += "<option value='{{profession}}'>{{profession}}</option>"
-            {% endfor %}
-            filterString += "<select>"
+            // Add profession
+            filterString += "<li> Profession: "
+            {% if browseFilters.jobs.professionList %}
+                var professions = {{browseFilters.jobs.professionList|safe}}
+                professions.unshift("All jobs")     // Add to front of list
+                filterString += createSelectForm("jobFiltersForm", "jobProfessionSelect", professions, "All jobs")
+            {% endif %}
+            filterString += "</li>";
+
+            // Add status
+            filterString += "<li> Status: "
+            {% if browseFilters.jobs.statusList %}
+                var statusList = {{browseFilters.jobs.statusList|safe}}
+                filterString += createSelectForm("jobFiltersForm", "jobStatusSelect", statusList, "Open")
+            {% endif %}
+            filterString += "</li>"
+
+            filterString += "</ul></div>"
+            filterString += "</div>"
         {% endif %}
-        filterString += "</li>";
-
-        filterString += "</ul></div>"
-        filterString += "</div>"
-
-
         return filterString
     }
 

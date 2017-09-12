@@ -35,6 +35,7 @@ class BrowseView(views.GenericFormView):
         self._followingPostIDs = None
         self._posterNameMap = None
         self._posterProfessionMap = None
+        self._browseFilters = None
  
     @property
     def nextPostID(self):
@@ -112,6 +113,19 @@ class BrowseView(views.GenericFormView):
         return self._posterProfessionMap
 
     @property
+    def browseFilters(self):
+        if self._browseFilters is None:
+            self._browseFilters = {"jobs": {"professionList": constants.PROFESSION_LIST,
+                                            "statusList": constants.WORK_STATUS_LIST,
+                                            "compensation": constants.COMPENSATION_TYPES
+                                            },
+                                   "roles": {"statusList": constants.CASTING_STATUS_LIST,
+                                             "compensation": constants.COMPENSATION_TYPES
+                                             }
+                                  }
+        return self._browseFilters
+
+    @property
     def pageContext(self):
         """self._pageContext["possibleViews"] = {"events": constants.BROWSE_EVENTS,
                                               "projects": constants.BROWSE_PROJECTS,
@@ -125,7 +139,7 @@ class BrowseView(views.GenericFormView):
         self._pageContext["posterProfessionMap"] = json.dumps(self.posterProfessionMap)
         self._pageContext["browseType"] = self.currentPage
         self._pageContext["professionDict"] = json.dumps(constants.PROFESSIONS)
-        self._pageContext["professionList"] = constants.PROFESSION_LIST
+        self._pageContext["browseFilters"] = self.browseFilters
         return self._pageContext
 
 """
