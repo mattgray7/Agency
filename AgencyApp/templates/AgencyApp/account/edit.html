@@ -125,7 +125,7 @@ function removeIMDBLink(){
                                         {% else %}
                                             if("{{field.name}}" === "dateOfBirth"){
                                                 var date = new Date('{{field.value}}');
-                                                var dateString = date.getFullYear() + "-" + ("0" + (date.getMonth() + 1)).slice(-2) + "-" + ("0" + date.getDate()).slice(-2)
+                                                var dateString = date.getFullYear() + "-" + ("0" + (date.getMonth() + 1)).slice(-2) + "-" + ("0" + date.getDate()).slice(-2);
                                                 lineString += "<input type='date' name='{{field.name}}' value='" + dateString + "'>";
                                             }else if("{{field.name}}" === "resume"){
                                                 lineString += '<input type="hidden" id="removeResumeFileInput" name="removeResumeFile" value="false" /><div id="resumeContainer" style="text-align: left; position: relative;">'

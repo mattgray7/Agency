@@ -89,11 +89,12 @@
         }
     }
 
+    var filterSectionHeight = 110;
     var filterPanelMap = {"jobs": getJobsFiltersString, "roles": getRolesFiltersString, "users": getUsersFiltersString, "projects": getProjectsFiltersString, "events": getEventsFiltersString}
     function createFilterPanel(){
         var panelString = "<ul>"
         for(var i=0; i < activeTabs.length; i++){
-            panelString += "<li style='height: 80px;'>" + filterPanelMap[activeTabs[i]]() + "</li>";
+            panelString += "<li style='height: " + filterSectionHeight + "px;'>" + filterPanelMap[activeTabs[i]]() + "</li>";
         }
         panelString += "</ul>"
         return panelString
@@ -141,6 +142,11 @@
             {% endif %}
             filterString += "</li>";
 
+            // Add dates
+            // Can use below list item that has 1 label of dates with the 2 inputs on separate lines
+            /*filterString += "<li style='height: 50px;'> Dates: <ul style='height: 50px;  width: 120px; margin-top: -20px; margin-left: 50px;'><li><input type='date' value='" + currentDateString + "' style=''></li><li><input type='date' value='" + tomorrowDateString + "'></li></ul></li>"*/
+            filterString += "<li> Start: <input type='date' value='" + currentDateString + "' style=''></li>"
+            filterString += "<li> End: <input type='date' value='" + tomorrowDateString + "' style=''></li>"
 
             filterString += "</div>"
         {% endif %}
@@ -170,7 +176,7 @@
             filterContent.style.display = "block";
             filterContent.innerHTML = createFilterPanel();
 
-            var filterPanelHeight = 80 * activeTabs.length;
+            var filterPanelHeight = filterSectionHeight * activeTabs.length;
 
             $("#browseContent").animate({marginTop: "0px", height: 180 + filterPanelHeight + "px"}, browseAnimateSpeed, function(){});
             $("#searchPanel").animate({marginTop: "0px", height: 180 + filterPanelHeight + "px"}, browseAnimateSpeed, function(){});
