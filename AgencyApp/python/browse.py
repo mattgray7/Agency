@@ -117,10 +117,10 @@ class BrowseView(views.GenericFormView):
         if self._browseFilters is None:
             self._browseFilters = {"jobs": {"professionList": constants.PROFESSION_LIST,
                                             "statusList": constants.WORK_STATUS_LIST,
-                                            "compensation": constants.COMPENSATION_TYPES
+                                            "compensationList": constants.COMPENSATION_TYPES
                                             },
                                    "roles": {"statusList": constants.CASTING_STATUS_LIST,
-                                             "compensation": constants.COMPENSATION_TYPES
+                                             "compensationList": constants.COMPENSATION_TYPES
                                              }
                                   }
         return self._browseFilters
