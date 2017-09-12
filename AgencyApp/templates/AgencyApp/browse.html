@@ -89,12 +89,81 @@
         }
     }
 
+    var filterPanelMap = {"jobs": getJobsFiltersString, "roles": getRolesFiltersString, "users": getUsersFiltersString, "projects": getProjectsFiltersString, "events": getEventsFiltersString}
+    function createFilterPanel(){
+        var panelString = "<ul>"
+        for(var i=0; i < activeTabs.length; i++){
+            panelString += "<li style='height: 80px;'>" + filterPanelMap[activeTabs[i]]() + "</li>";
+        }
+        panelString += "</ul>"
+        return panelString
+    }
+
+    function getJobsFiltersString(){
+        var filterString = "<div style='height: 100%; text-align: left; position: relative;'>";
+
+        // Add header
+        filterString += "<div style='position: absolute; top: 0; left: 10px;'><h3>Jobs</h3></div>"
+
+        // Add left list
+        filterString += "<div style='position: absolute; top: 27px; left: 10px; right: 50%;'><ul>"
+
+        // Add profession
+        filterString += "<li> Profession: "
+        {% if professionList %}
+            filterString += "<select>"
+            {% for profession in professionList %}
+                filterString += "<option value='{{profession}}'>{{profession}}</option>"
+            {% endfor %}
+            filterString += "<select>"
+        {% endif %}
+        filterString += "</li>";
+
+        filterString += "</ul></div>"
+        filterString += "</div>"
+
+
+        return filterString
+    }
+
+    function getRolesFiltersString(){
+        return "Role filters"
+    }
+
+    function getUsersFiltersString(){
+        return "User filters"
+    }
+
+    function getProjectsFiltersString(){
+        return "project filters"
+    }
+
+    function getEventsFiltersString(){
+        return "Event filters"
+    }
+
+    function toggleExpandBrowseFiltersPanel(){
+        var searchPanel = document.getElementById("searchPanel");
+        var filterContent = document.getElementById("browseFiltersPanelContent")
+        if(searchPanel != null && filterContent != null){
+            filterContent.style.display = "block";
+            filterContent.innerHTML = createFilterPanel();
+
+            var filterPanelHeight = 80 * activeTabs.length;
+
+            $("#browseContent").animate({marginTop: "0px", height: 180 + filterPanelHeight + "px"}, browseAnimateSpeed, function(){});
+            $("#searchPanel").animate({marginTop: "0px", height: 180 + filterPanelHeight + "px"}, browseAnimateSpeed, function(){});
+            $("#searchResultsPanel").animate({top: 180 + filterPanelHeight + "px"}, browseAnimateSpeed, function(){});
+            $("#browseFiltersPanel").animate({marginTop: "0px", height: filterPanelHeight + "px"}, browseAnimateSpeed, function(){});
+
+        }
+    }
 </script>
 
 
 <div id='backgroundPanel' class='backgroundPanel' style='min-width: 600px; min-height: 100%;'>
     <div id="mainViewPanel" class="mainViewPanel" style="position: relative; min-width: 600px; max-width: 600px; background: rgba(0,0,0,0.05); border: none; margin-top: 10%;">
-        <div id='browseContent' style='display: block; position: relative; height: 170px; width: 100%;'>
+        <div id='browseContent' style='display: block; position: relative; height: 180px; width: 100%;'>
             <div id='searchPanel' class='browseSearchPanel' style='position: absolute; height: 180px; left: 0; right: 0; z-index: 1;'>
                 <div id='searchPanelContent' style='position: relative; height: 100%; width: 100%;'>
                     <h1 style='margin-top: 10px;'>Explore</h1>
@@ -131,13 +200,13 @@
                     <div id='browseFilterButtonContainer' style='position: absolute; top: 140px; left: 10px;'>
                         <a onclick='toggleExpandBrowseFiltersPanel();'>Add filters +</a>
                     </div>
-                    <div id='browseFiltersPanel' style='position: absolute; bottom: 10px; left: 0; right: 0; height: 0px; margin-top: 0px; background: rgba(0,0,0,0.4); overflow: hidden;'>
+                    <div id='browseFiltersPanel' style='position: absolute; bottom: 10px; left: 0; right: 0; height: 0px; margin-top: 0px;; overflow: hidden;'>
                         <div id='browseFiltersPanelContent' style='display: none;'></div>
                     </div>
 
                 </div>
             </div>
-            <div id='searchResultsPanel' class='browseSearchResults' style='position: absolute; left: 0; right: -2px; margin-top: 10px; top: 170px; display: none;'></div>
+            <div id='searchResultsPanel' class='browseSearchResults' style='position: absolute; left: 0; right: -2px; margin-top: 10px; top: 180px; display: none;'></div>
         </div>
     </div>
 </div>

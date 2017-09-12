@@ -83,6 +83,13 @@ PROFESSIONS = {"acting": ["Actor", "Dancer", "Extra", "Stand-in", "Model", "Voic
 			   					  "Music Supervisor", "Music Editor", "Producer", "Sound Editor", "Sound Engineer",
 			   					  "VFX Artist", "VFX Supervisor"]}
 
+PROFESSION_LIST = []
+for category in PROFESSIONS:
+	for profession in PROFESSIONS[category]:
+		PROFESSION_LIST.append(profession)
+PROFESSION_LIST = sorted(list(set(PROFESSION_LIST)))
+
+
 HIRE_TYPES = ["hireProject", "hirePermanent", "casting", "collaborating"]
 COLLABORATOR_OPTIONS = ["Director", "Director of photography", "Musical artist", "Screenwriter", "Story writer", "Other"]
 
