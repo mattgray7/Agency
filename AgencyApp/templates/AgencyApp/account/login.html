@@ -3,95 +3,95 @@
 {% block content %}
 
 <script>
-	function enableLogin(){
-		if (document.getElementById("email").value.trim() != "" &&
-			document.getElementById("password").value.trim() != "") {
-			document.getElementById("loginButton").disabled="";
-		}
-	}
+    function enableLogin(){
+        if (document.getElementById("email").value.trim() != "" &&
+            document.getElementById("password").value.trim() != "") {
+            document.getElementById("loginButton").disabled="";
+        }
+    }
 </script>
 
 <div id='backgroundPanel' class='backgroundPanel' style='min-width: 700px;'>
     <div id="mainViewPanel" class="mainViewPanel" style="position: relative; min-width: 300px; max-width: 400px; min-height: 400px;">
-		<h1 style='margin-top: 10px;'>Login</h1>
-		<div class="form-style-7">
-				{% if errors %}
-					{% if errors|length != 1 %}
-						<ul>
-							{% for error in errors %}
-								<li>{{ error }}</li>
-							{% endfor %}
-						</ul>
-					{% else %}
-						<strong>{{errors.0}}</strong>
-					{% endif %}
-				{% endif %}
-				<ul>
-					<form id='loginForm' method='post' action="/login/">
-						{% csrf_token %}
-	                    <script>
-	                        {% for field in form %}
-	                            var lineString = '';
-	                            if(!('{{field}}'.includes("hidden"))){
-	                                lineString = "<li><label for='name'>{{field.label}}</label>";
-	                                if('{{field}}'.includes("password")){
-	                                	lineString += "<input id='{{field.name}}' type='password' name='password'>"
-	                                }else{
-	                                	lineString += "<input id='{{field.name}}' type='text' name='{{field.name}}' maxlength='100'>";
-	                            	}
-	                            	lineString += "</li>"
-	                            }else{
-	                                lineString += '{{field}}';
-	                            }
-	                            document.write(lineString);
-	                        {% endfor %}
-	                        var enterFunction = function(event){
-	                        	if(event.keyCode === 13){
-	                        		$("#continueButton").click();
-					            }
-	                        }
-	                        var passwordTextBox = document.getElementById("password");
-	                        if(passwordTextBox != null){
-	                        	passwordTextBox.onkeyup = function(event){enterFunction(event)};
-	                        }
-	                        var emailTextBox = document.getElementById("email");
-	                        if(emailTextBox != null){
-	                        	emailTextBox.onkeyup = function(event){enterFunction(event)};
-	                        }
+        <h1 style='margin-top: 10px;'>Login</h1>
+        <div class="form-style-7">
+                {% if errors %}
+                    {% if errors|length != 1 %}
+                        <ul>
+                            {% for error in errors %}
+                                <li>{{ error }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        <strong>{{errors.0}}</strong>
+                    {% endif %}
+                {% endif %}
+                <ul>
+                    <form id='loginForm' method='post' action="/login/">
+                        {% csrf_token %}
+                        <script>
+                            {% for field in form %}
+                                var lineString = '';
+                                if(!('{{field}}'.includes("hidden"))){
+                                    lineString = "<li><label for='name'>{{field.label}}</label>";
+                                    if('{{field}}'.includes("password")){
+                                        lineString += "<input id='{{field.name}}' type='password' name='password'>"
+                                    }else{
+                                        lineString += "<input id='{{field.name}}' type='text' name='{{field.name}}' maxlength='100'>";
+                                    }
+                                    lineString += "</li>"
+                                }else{
+                                    lineString += '{{field}}';
+                                }
+                                document.write(lineString);
+                            {% endfor %}
+                            var enterFunction = function(event){
+                                if(event.keyCode === 13){
+                                    $("#continueButton").click();
+                                }
+                            }
+                            var passwordTextBox = document.getElementById("password");
+                            if(passwordTextBox != null){
+                                passwordTextBox.onkeyup = function(event){enterFunction(event)};
+                            }
+                            var emailTextBox = document.getElementById("email");
+                            if(emailTextBox != null){
+                                emailTextBox.onkeyup = function(event){enterFunction(event)};
+                            }
 
-	                        
-	                    </script>
+                            
+                        </script>
 
-	                    <li style="position:relative; height: 50px; width:100%; border: none; padding: 0px; margin-top: 20px;">
-	                        <div id="continueButton" class="whiteButton blackHover" style="padding: 0.8em 3em; width: 72%; height:28px; position: absolute; bottom: -7px;left: 0;" onclick="document.getElementById('loginForm').submit();">
-	                            Continue<br><br>
-	                        </div>
-	                    </li>
-	                   </form>
+                        <li style="position:relative; height: 50px; width:100%; border: none; padding: 0px; margin-top: 20px;">
+                            <div id="continueButton" class="whiteButton blackHover" style="padding: 0.8em 3em; width: 72%; height:28px; position: absolute; bottom: -7px;left: 0;" onclick="document.getElementById('loginForm').submit();">
+                                Continue<br><br>
+                            </div>
+                        </li>
+                       </form>
                     <li>
-                    	<div style='position: relative; height: 28px; width: 100%;'>
-                    		<div style='position: absolute; left: 0; right: 55%;'>
-		                    	<form method='post' action='/account/create/basic/' id='createAccountForm'>
-									{% csrf_token %}
-									<input type='hidden' name='source' value='{{ source }}' />
-									<div id="createAccountButton" class="whiteButton blackHover" style="width: 72%; height:28px; padding: 1em 2em; font-size: 0.85em;" onclick="document.getElementById('createAccountForm').submit();"><div style='margin-top: 4px;'>Create Account</div></div>
-								</form>
-							</div>
-							<div style='position: absolute; left: 51%; right: 12px;'>
-		                    	<form method='post' action='/account/create/basic/' id='recoverAccountForm'>
-									{% csrf_token %}
-									<input type='hidden' name='source' value='{{ source }}' />
-									<div id="recoverAccountButton" class="whiteButton blackHover" style="width: 72%; height:28px; padding: 1em 2em; font-size: 0.85em;" onclick="document.getElementById('recoverAccountForm').submit();"><div style='margin-top: 4px;'>Recover Account</div></div>
-								</form>
-							</div>
-						</div>
+                        <div style='position: relative; height: 28px; width: 100%;'>
+                            <div style='position: absolute; left: 0; right: 55%;'>
+                                <form method='post' action='/account/create/basic/' id='createAccountForm'>
+                                    {% csrf_token %}
+                                    <input type='hidden' name='source' value='{{ source }}' />
+                                    <div id="createAccountButton" class="whiteButton blackHover" style="width: 72%; height:28px; padding: 1em 2em; font-size: 0.85em;" onclick="document.getElementById('createAccountForm').submit();"><div style='margin-top: 4px;'>Create Account</div></div>
+                                </form>
+                            </div>
+                            <div style='position: absolute; left: 51%; right: 12px;'>
+                                <form method='post' action='/account/create/basic/' id='recoverAccountForm'>
+                                    {% csrf_token %}
+                                    <input type='hidden' name='source' value='{{ source }}' />
+                                    <div id="recoverAccountButton" class="whiteButton blackHover" style="width: 72%; height:28px; padding: 1em 2em; font-size: 0.85em;" onclick="document.getElementById('recoverAccountForm').submit();"><div style='margin-top: 4px;'>Recover Account</div></div>
+                                </form>
+                            </div>
+                        </div>
                     </li>
                 </ul>
-			</form>
+            </form>
 
-			<br>
-			
-		</div>
-	</div>
+            <br>
+            
+        </div>
+    </div>
 </div>
 {% endblock %}
