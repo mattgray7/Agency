@@ -386,3 +386,48 @@ function searchPreviewBrowseSuggestions(textValue, container, extraInputs){
         
     }
 }
+
+var filterPanelMap = {"jobs": getJobsFiltersString, "roles": getRolesFiltersString, "users": getUsersFiltersString, "projects": getProjectsFiltersString, "events": getEventsFiltersString}
+function createFilterPanel(){
+    var panelString = "<ul>"
+    for(var i=0; i < activeTabs.length; i++){
+        panelString += "<li style='height: 80px;'>" + filterPanelMap[activeTabs[i]]() + "</li>";
+    }
+    panelString += "</ul>"
+    return panelString
+}
+
+function getJobsFiltersString(){
+    return "Job filters"
+}
+
+function getRolesFiltersString(){
+    return "Role filters"
+}
+
+function getUsersFiltersString(){
+    return "User filters"
+}
+
+function getProjectsFiltersString(){
+    return "project filters"
+}
+
+function getEventsFiltersString(){
+    return "Event filters"
+}
+
+function toggleExpandBrowseFiltersPanel(){
+    var searchPanel = document.getElementById("searchPanel");
+    var filterContent = document.getElementById("browseFiltersPanelContent")
+    if(searchPanel != null && filterContent != null){
+        filterContent.style.display = "block";
+        filterContent.innerHTML = createFilterPanel();
+
+        var filterPanelHeight = 80 * activeTabs.length;
+
+        $("#searchPanel").animate({marginTop: "0px", height: 180 + filterPanelHeight + "px"}, browseAnimateSpeed, function(){});
+        $("#browseFiltersPanel").animate({marginTop: "0px", height: filterPanelHeight + "px"}, browseAnimateSpeed, function(){});
+
+    }
+}

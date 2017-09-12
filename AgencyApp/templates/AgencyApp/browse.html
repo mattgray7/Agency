@@ -95,7 +95,7 @@
 <div id='backgroundPanel' class='backgroundPanel' style='min-width: 600px; min-height: 100%;'>
     <div id="mainViewPanel" class="mainViewPanel" style="position: relative; min-width: 600px; max-width: 600px; background: rgba(0,0,0,0.05); border: none; margin-top: 10%;">
         <div id='browseContent' style='display: block; position: relative; height: 170px; width: 100%;'>
-            <div id='searchPanel' class='browseSearchPanel' style='position: absolute; height: 170px; left: 0; right: 0; z-index: 1;'>
+            <div id='searchPanel' class='browseSearchPanel' style='position: absolute; height: 180px; left: 0; right: 0; z-index: 1;'>
                 <div id='searchPanelContent' style='position: relative; height: 100%; width: 100%;'>
                     <h1 style='margin-top: 10px;'>Explore</h1>
                     <div class='browseSearchTextBoxContainer' style='position:absolute; top: 50px; width: 420px; margin: 0 auto; left: 0; right: 0;'>
@@ -128,6 +128,13 @@
                             </script>
                         </ul>
                     </div>
+                    <div id='browseFilterButtonContainer' style='position: absolute; top: 140px; left: 10px;'>
+                        <a onclick='toggleExpandBrowseFiltersPanel();'>Add filters +</a>
+                    </div>
+                    <div id='browseFiltersPanel' style='position: absolute; bottom: 10px; left: 0; right: 0; height: 0px; margin-top: 0px; background: rgba(0,0,0,0.4); overflow: hidden;'>
+                        <div id='browseFiltersPanelContent' style='display: none;'></div>
+                    </div>
+
                 </div>
             </div>
             <div id='searchResultsPanel' class='browseSearchResults' style='position: absolute; left: 0; right: -2px; margin-top: 10px; top: 170px; display: none;'></div>
