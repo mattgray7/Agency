@@ -35,9 +35,9 @@
 	                            if(!('{{field}}'.includes("hidden"))){
 	                                lineString = "<li><label for='name'>{{field.label}}</label>";
 	                                if('{{field}}'.includes("password")){
-	                                	lineString += "<input type='password' name='password'>"
+	                                	lineString += "<input id='{{field.name}}' type='password' name='password'>"
 	                                }else{
-	                                	lineString += "<input type='text' name='{{field.name}}' maxlength='100'>";
+	                                	lineString += "<input id='{{field.name}}' type='text' name='{{field.name}}' maxlength='100'>";
 	                            	}
 	                            	lineString += "</li>"
 	                            }else{
@@ -45,6 +45,21 @@
 	                            }
 	                            document.write(lineString);
 	                        {% endfor %}
+	                        var enterFunction = function(event){
+	                        	if(event.keyCode === 13){
+	                        		$("#continueButton").click();
+					            }
+	                        }
+	                        var passwordTextBox = document.getElementById("password");
+	                        if(passwordTextBox != null){
+	                        	passwordTextBox.onkeyup = function(event){enterFunction(event)};
+	                        }
+	                        var emailTextBox = document.getElementById("email");
+	                        if(emailTextBox != null){
+	                        	emailTextBox.onkeyup = function(event){enterFunction(event)};
+	                        }
+
+	                        
 	                    </script>
 
 	                    <li style="position:relative; height: 50px; width:100%; border: none; padding: 0px; margin-top: 20px;">
