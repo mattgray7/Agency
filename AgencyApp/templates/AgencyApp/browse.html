@@ -172,6 +172,11 @@
     function toggleExpandBrowseFiltersPanel(expandType){
         var filterPanelHeight = filterSectionHeight * activeTabs.length;
         var browseResultsHeight = getBrowseResultsTableHeight()
+        if(firstSearch){
+            // Special case when first loading filters
+            browseResultsHeight -= 58;
+        }
+
         var searchPanel = document.getElementById("searchPanel");
         var filterContent = document.getElementById("browseFiltersPanelContent")
         var addFiltersButton = document.getElementById("addFiltersButton");
