@@ -154,7 +154,7 @@
 .browseFilterListLabel.left
 {
 	left: 0;
-	right: 190px;
+	right: 205px;
 	text-align: right;
 }
 .browseFilterListLabel.right
@@ -169,7 +169,7 @@
 }
 .browseFilterListElement.left
 {
-	left: 100px;
+	left: 80px;
 	right: 0;
 	text-align: left;
 }
