@@ -170,6 +170,8 @@
     }
 
     function toggleExpandBrowseFiltersPanel(expandType){
+        var filterPanelHeight = filterSectionHeight * activeTabs.length;
+        var browseResultsHeight = getBrowseResultsTableHeight()
         var searchPanel = document.getElementById("searchPanel");
         var filterContent = document.getElementById("browseFiltersPanelContent")
         var addFiltersButton = document.getElementById("addFiltersButton");
@@ -178,24 +180,20 @@
                 filterContent.style.display = "block";
                 filterContent.innerHTML = createFilterPanel();
 
-                addFiltersButton.innerHTML = "Hide filters -"
+                addFiltersButton.innerHTML = "Hide"
                 addFiltersButton.onclick = function(){toggleExpandBrowseFiltersPanel("shrink")}
 
-                var filterPanelHeight = filterSectionHeight * activeTabs.length;
-
-                $("#browseContent").animate({marginTop: "0px", height: 180 + filterPanelHeight + "px"}, browseAnimateSpeed, function(){});
+                $("#browseContent").animate({marginTop: "0px", height: 188 + browseResultsHeight + filterPanelHeight + "px"}, browseAnimateSpeed, function(){});
                 $("#searchPanel").animate({marginTop: "0px", height: 180 + filterPanelHeight + "px"}, browseAnimateSpeed, function(){});
                 $("#searchResultsPanel").animate({top: 180 + filterPanelHeight + "px"}, browseAnimateSpeed, function(){});
                 $("#browseFiltersPanel").animate({marginTop: "0px", height: filterPanelHeight + "px"}, browseAnimateSpeed, function(){});
-            }else{
-                
-
-                addFiltersButton.innerHTML = "Add filters +"
+            }else if(expandType === "shrink"){
+                addFiltersButton.innerHTML = "Advanced search"
                 addFiltersButton.onclick = function(){toggleExpandBrowseFiltersPanel("expand")}
 
-                var filterPanelHeight = filterSectionHeight * activeTabs.length;
 
-                $("#browseContent").animate({marginTop: "0px", height: 180 + "px"}, browseAnimateSpeed, function(){});
+
+                $("#browseContent").animate({marginTop: "0px", height: 188 + browseResultsHeight + "px"}, browseAnimateSpeed, function(){});
                 $("#searchPanel").animate({marginTop: "0px", height: 180 + "px"}, browseAnimateSpeed, function(){});
                 $("#searchResultsPanel").animate({top: 180 + "px"}, browseAnimateSpeed, function(){});
                 $("#browseFiltersPanel").animate({marginTop: "0px", height: "0px"}, browseAnimateSpeed, function(){filterContent.style.display = "none";
@@ -243,7 +241,7 @@
                         </ul>
                     </div>
                     <div id='browseFilterButtonContainer' style='position: absolute; top: 140px; left: 10px;'>
-                        <a id='addFiltersButton' onclick='toggleExpandBrowseFiltersPanel("expand");'>Add filters +</a>
+                        <a id='addFiltersButton' onclick='toggleExpandBrowseFiltersPanel("expand");'>Advanced search</a>
                     </div>
                     <div id='browseFiltersPanel' style='position: absolute; bottom: 10px; left: 0; right: 0; height: 0px; margin-top: 0px;; overflow: hidden;'>
                         <div id='browseFiltersPanelContent' style='display: none;'></div>
