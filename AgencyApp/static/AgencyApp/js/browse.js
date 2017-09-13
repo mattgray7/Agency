@@ -21,9 +21,20 @@ function getBrowseResultsTableHeight(){
     return tableHeight
 }
 
+function getSearchPanelHeight(){
+    var height = 5;
+    var searchPanel = document.getElementById("searchPanel");
+    if(searchPanel != null){
+        height += searchPanel.offsetHeight ;
+    }else{
+        height += 180;      // No filter height of searchPanel
+    }
+    return height;
+}
+
 function updateBrowseContentHeight(){
-    var newBrowseContentHeight = getBrowseResultsTableHeight() + 180;   // 180 is for search panel height
-    $("#browseContent").animate({marginTop: "-10px", height: newBrowseContentHeight + "px"}, browseAnimateSpeed, function(){});
+    var newBrowseContentHeight = getBrowseResultsTableHeight() + getSearchPanelHeight();   // 180 is for search panel height
+    $("#browseContent").animate({marginTop: "0px", height: newBrowseContentHeight + "px"}, browseAnimateSpeed, function(){});
 }
 
 var expandedSectionHeights = {"jobs": 0, "roles": 0, "users": 0, "projects": 0, "events": 0}
