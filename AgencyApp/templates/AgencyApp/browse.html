@@ -89,7 +89,7 @@
         }
     }
 
-    var filterSectionHeight = 110;
+    var filterSectionHeight = 125;
     var filterPanelMap = {"jobs": getJobsFiltersString, "roles": getRolesFiltersString, "users": getUsersFiltersString, "projects": getProjectsFiltersString, "events": getEventsFiltersString}
     function createFilterPanel(){
         var panelString = "<ul>"
@@ -110,43 +110,43 @@
 
 
             // Add left list
-            filterString += "<div style='position: absolute; top: 27px; left: 10px; right: 50%;'><ul>"
+            filterString += "<div style='position: absolute; top: 27px; left: 10px; right: 50%;'><ul class='browseFilterList'>"
 
             // Add profession
-            filterString += "<li> Profession: "
+            filterString += "<li><div class='browseFilterListLabel left'>Profession: </div>";
             {% if browseFilters.jobs.professionList %}
                 var professions = {{browseFilters.jobs.professionList|safe}}
                 professions.unshift("All jobs")     // Add to front of list
-                filterString += createSelectForm("jobFiltersForm", "jobProfessionSelect", professions, "All jobs")
+                filterString += "<div class='browseFilterListElement left'>" + createSelectForm("jobFiltersForm", "jobProfessionSelect", professions, "All jobs") + "</div>"
             {% endif %}
             filterString += "</li>";
 
             // Add status
-            filterString += "<li> Status: "
+            filterString += "<li><div class='browseFilterListLabel left'>Status: </div>"
             {% if browseFilters.jobs.statusList %}
                 var statusList = {{browseFilters.jobs.statusList|safe}}
-                filterString += createSelectForm("jobFiltersForm", "jobStatusSelect", statusList, "Open")
+                filterString += "<div class='browseFilterListElement left'>" + createSelectForm("jobFiltersForm", "jobStatusSelect", statusList, "Open") + "</div>"
             {% endif %}
             filterString += "</li>"
             filterString += "</ul></div>"
 
 
             // Add right list
-            filterString += "<div style='position: absolute; top: 27px; left: 50%; right: 0;'><ul>"
+            filterString += "<div style='position: absolute; top: 27px; left: 50%; right: 0;'><ul class='browseFilterList'>"
 
             // Add compensation
-            filterString += "<li>Compensation: "
+            filterString += "<li><div class='browseFilterListLabel right'>Compensation: </div>"
             {% if browseFilters.jobs.compensationList %}
                 var compensationTypes = {{browseFilters.jobs.compensationList|safe}};
-                filterString += createSelectForm("jobFiltersForm", "jobStatusSelect", compensationTypes, "Paid");
+                filterString += "<div class='browseFilterListElement right'>" + createSelectForm("jobFiltersForm", "jobStatusSelect", compensationTypes, "Paid") + "</div>";
             {% endif %}
             filterString += "</li>";
 
             // Add dates
             // Can use below list item that has 1 label of dates with the 2 inputs on separate lines
             /*filterString += "<li style='height: 50px;'> Dates: <ul style='height: 50px;  width: 120px; margin-top: -20px; margin-left: 50px;'><li><input type='date' value='" + currentDateString + "' style=''></li><li><input type='date' value='" + tomorrowDateString + "'></li></ul></li>"*/
-            filterString += "<li> Start: <input type='date' value='" + currentDateString + "' style=''></li>"
-            filterString += "<li> End: <input type='date' value='" + tomorrowDateString + "' style=''></li>"
+            filterString += "<li><div class='browseFilterListLabel right'>Start date: </div><div class='browseFilterListElement right'><input type='date' value='" + currentDateString + "' style=''></div></li>"
+            filterString += "<li><div class='browseFilterListLabel right'>End date: </div><div class='browseFilterListElement right'><input type='date' value='" + tomorrowDateString + "' style=''></div></li>"
 
             filterString += "</div>"
         {% endif %}

@@ -121,3 +121,61 @@
 .browseTableExpandSectionButton:hover{
 	cursor: pointer;
 }
+
+.browseFilterList
+{
+
+}
+.browseFilterList li
+{
+	position: relative;
+	height: 30px;
+	width: 280px;
+}
+.browseFilterList select,
+.browseFilterList input[type="date"]{
+	box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    width: 90%;
+    outline: none;
+    border: none;
+    font-size: 1.0em;
+    font-family: 'Didact Gothic', sans-serif;
+    display: inline;
+}
+.browseFilterList select{
+	background: rgba(0,0,0,0.05);
+}
+.browseFilterListLabel{
+	position: absolute;]
+	top: 0;
+}
+.browseFilterListLabel.left
+{
+	left: 0;
+	right: 190px;
+	text-align: right;
+}
+.browseFilterListLabel.right
+{
+	left: 0;
+	right: 170px;
+	text-align: right;
+}
+.browseFilterListElement{
+	position: absolute;
+	top: 0;
+}
+.browseFilterListElement.left
+{
+	left: 100px;
+	right: 0;
+	text-align: left;
+}
+.browseFilterListElement.right
+{
+	left: 120px;
+	right: -20px;
+	text-align: left;
+}

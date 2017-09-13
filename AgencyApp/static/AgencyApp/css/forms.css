@@ -163,6 +163,7 @@
     font-size: 1.2em;
 }
 
+.formInputElement,
 .form-style-7 input[type="text"],
 .form-style-7 input[type="date"],
 .form-style-7 input[type="datetime"],
