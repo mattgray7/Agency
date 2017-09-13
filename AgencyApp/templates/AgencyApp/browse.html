@@ -116,6 +116,18 @@
         }
     }
 
+    function displayFilteredProfessions(filterType){
+        var row = document.getElementById(filterType + "ProfessionChoiceRow");
+        if(row != null){
+            var professionString = "<ul class='filteredProfessionList' style=''>"
+            for(var i=0; i < filteredProfessions.length; i++){
+                professionString += "<li style=''>" + filteredProfessions[i] + "</li>";
+            }
+            professionString += "</ul>"
+            row.innerHTML = professionString;
+        }
+    }
+
     var filteredProfessions = []
     function getJobsFilters(){
         var filterString = '';
@@ -149,6 +161,7 @@
                             toggleProfessionChoiceRow("expand", "jobs");
                         }
                         filteredProfessions.push(professionSelect.value)
+                        displayFilteredProfessions("jobs")
                         
                     })
                 }
