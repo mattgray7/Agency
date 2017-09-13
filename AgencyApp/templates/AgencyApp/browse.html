@@ -90,18 +90,36 @@
     }
 
     var filterSectionHeight = 125;
-    var filterPanelMap = {"jobs": getJobsFiltersString, "roles": getRolesFiltersString, "users": getUsersFiltersString, "projects": getProjectsFiltersString, "events": getEventsFiltersString}
+    var filterPanelMap = {"jobs": getJobsFilters, "roles": getRolesFiltersString, "users": getUsersFiltersString, "projects": getProjectsFiltersString, "events": getEventsFiltersString}
     function createFilterPanel(){
         var panelString = "<ul>"
+        var callbacks = []
         for(var i=0; i < activeTabs.length; i++){
-            panelString += "<li style='height: " + filterSectionHeight + "px;'>" + filterPanelMap[activeTabs[i]]() + "</li>";
+            var filterPanel = filterPanelMap[activeTabs[i]]()
+            panelString += "<li style='height: " + filterSectionHeight + "px;'>" + filterPanel["html"] + "</li>";
+            if(filterPanel["callbacks"].length > 0){
+                callbacks = callbacks.concat(filterPanel["callbacks"])
+            }
         }
         panelString += "</ul>"
-        return panelString
+        return {"html": panelString, "callbacks": callbacks}
     }
 
-    function getJobsFiltersString(){
+    function toggleProfessionChoiceRow(toggleType, filterType){
+        var row = document.getElementById(filterType + "ProfessionChoiceRow");
+        if(row != null){
+            if(toggleType === "expand"){
+                $("[id='" + filterType + "ProfessionChoiceRow']").animate({marginTop: "0px", height: "28px"}, browseAnimateSpeed, function(){});
+            }else if(toggleType === "shrink"){
+                $("[id='" + filterType + "ProfessionChoiceRow']").animate({marginTop: "0px", height: "0px"}, browseAnimateSpeed, function(){});
+            }
+        }
+    }
+
+    var filteredProfessions = []
+    function getJobsFilters(){
         var filterString = '';
+        var filterCallbacks = [];
         {% if browseFilters and browseFilters.jobs %}
             filterString += "<div style='height: 100%; text-align: left; position: relative;'>";
 
@@ -117,9 +135,24 @@
             {% if browseFilters.jobs.professionList %}
                 var professions = {{browseFilters.jobs.professionList|safe}}
                 professions.unshift("All jobs")     // Add to front of list
-                filterString += "<div class='browseFilterListElement left'>" + createSelectForm("jobFiltersForm", "jobProfessionSelect", professions, "All jobs") + "</div>"
+                filterString += "<div class='browseFilterListElement left'>" + createSelectForm("jobsFiltersForm", "jobsProfessionSelect", professions, "All jobs") + "</div>"
             {% endif %}
             filterString += "</li>";
+
+            // Add profession choices
+            filterString += "<li id='jobsProfessionChoiceRow' style='height: 0px;'></li>";
+            filterCallbacks.push(function(){
+                var professionSelect = document.getElementById("jobsProfessionSelect");
+                if(professionSelect != null){
+                    $("#jobsProfessionSelect").change(function(){
+                        if(filteredProfessions.length === 0){
+                            toggleProfessionChoiceRow("expand", "jobs");
+                        }
+                        filteredProfessions.push(professionSelect.value)
+                        
+                    })
+                }
+            })
 
             // Add status
             filterString += "<li><div class='browseFilterListLabel left'>Status: </div>"
@@ -150,7 +183,7 @@
 
             filterString += "</div>"
         {% endif %}
-        return filterString
+        return {"html": filterString, "callbacks": filterCallbacks}
     }
 
     function getRolesFiltersString(){
@@ -183,7 +216,13 @@
         if(searchPanel != null && filterContent != null && addFiltersButton != null){
             if(expandType === "expand"){
                 filterContent.style.display = "block";
-                filterContent.innerHTML = createFilterPanel();
+                var filterPanelInfo = createFilterPanel();
+                filterContent.innerHTML = filterPanelInfo["html"]
+                if(filterPanelInfo["callbacks"].length > 0){
+                    for(var i=0; i < filterPanelInfo["callbacks"].length; i++){
+                        filterPanelInfo["callbacks"][i]();
+                    }
+                }
 
                 addFiltersButton.innerHTML = "Hide"
                 addFiltersButton.onclick = function(){toggleExpandBrowseFiltersPanel("shrink")}
