@@ -48,8 +48,8 @@
         }
     }
 
-    var getFiltersMap = {"jobs": getJobFilters, "roles": getRoleFilters, "users": getUserFilters, "projects": getProjectFilters, "events": getEventFilters}
-    function getSearchFilters(){
+    var getFiltersMap = {"jobs": getJobsFilterValues, "roles": getJobsFilterValues, "users": getJobsFilterValues, "projects": getJobsFilterValues, "events": getJobsFilterValues}
+    function getSearchFilterValues(){
         var filterDict = {}
         for(var i=0; i < activeTabs.length; i++){
             if(activeTabs[i] in getFiltersMap){
@@ -60,16 +60,16 @@
         return filterDict
     }
 
-    function getJobFilters(){
+    function getJobsFilterValues(){
         var filters = {"professions": filteredProfessions, "status": null, "compensation": null, "dates": {"start": null, "end": null}}
         
         var statusSelect = document.getElementById("jobStatusSelect");
-        if(statusSelect != null){
+        if(statusSelect != null && statusSelect.value != defaultSelectValues["status"]){
             filters["status"] = statusSelect.value;
         }
 
         var compensationSelect = document.getElementById("jobCompensationSelect");
-        if(statusSelect != null){
+        if(compensationSelect != null && compensationSelect.value != defaultSelectValues["compensation"]){
             filters["compensation"] = compensationSelect.value;
         }
         
@@ -113,7 +113,7 @@
         if(activeTabs.length != 0){
             $.ajax({
                 url : "/ajax/getSearchResults/",
-                data : {"categories": activeTabs, "searchValue": searchValue, "filters": JSON.stringify(getSearchFilters())},
+                data : {"categories": activeTabs, "searchValue": searchValue, "filters": JSON.stringify(getSearchFilterValues())},
                 type : 'POST',
                 dataType: "json",
                 success : function(data) {
@@ -267,6 +267,7 @@
         }
         displayFilteredProfessions("jobs", forceUpdate)
     }
+    var defaultSelectValues = {"professions": "-", "status": "-", "compensation": "-"}
     function getJobsFilters(){
         var filterString = '';
         var filterCallbacks = [];
@@ -284,8 +285,8 @@
             filterString += "<li><div class='browseFilterListLabel left'>Profession: </div>";
             {% if browseFilters.jobs.professionList %}
                 var professions = {{browseFilters.jobs.professionList|safe}}
-                professions.unshift("All jobs")     // Add to front of list
-                filterString += "<div class='browseFilterListElement left'>" + createSelectForm("jobsFiltersForm", "jobsProfessionSelect", professions, "All jobs") + "</div>"
+                professions.unshift(defaultSelectValues["professions"])     // Add to front of list
+                filterString += "<div class='browseFilterListElement left'>" + createSelectForm("jobsFiltersForm", "jobsProfessionSelect", professions, defaultSelectValues["professions"]) + "</div>"
             {% endif %}
             filterString += "</li>";
 
@@ -298,9 +299,10 @@
                         /*if(filteredProfessions.length === 0){
                             toggleProfessionChoiceRow("expand", "jobs");
                         }*/
-                        filteredProfessions.push(professionSelect.value)
-                        displayFilteredProfessions("jobs")
-                        
+                        if(professionSelect.value != defaultSelectValues["professions"]){
+                            filteredProfessions.push(professionSelect.value)
+                            displayFilteredProfessions("jobs")
+                        }
                     })
                 }
             })
@@ -309,7 +311,8 @@
             filterString += "<li><div class='browseFilterListLabel left'>Status: </div>"
             {% if browseFilters.jobs.statusList %}
                 var statusList = {{browseFilters.jobs.statusList|safe}}
-                filterString += "<div class='browseFilterListElement left'>" + createSelectForm("jobFiltersForm", "jobStatusSelect", statusList, "Open") + "</div>"
+                statusList.unshift(defaultSelectValues["status"])
+                filterString += "<div class='browseFilterListElement left'>" + createSelectForm("jobFiltersForm", "jobStatusSelect", statusList, defaultSelectValues["status"]) + "</div>"
             {% endif %}
             filterString += "</li>"
             filterString += "</ul></div>"
@@ -322,7 +325,8 @@
             filterString += "<li><div class='browseFilterListLabel right'>Compensation: </div>"
             {% if browseFilters.jobs.compensationList %}
                 var compensationTypes = {{browseFilters.jobs.compensationList|safe}};
-                filterString += "<div class='browseFilterListElement right'>" + createSelectForm("jobFiltersForm", "jobCompensationSelect", compensationTypes, "Paid") + "</div>";
+                compensationTypes.unshift(defaultSelectValues["compensation"])
+                filterString += "<div class='browseFilterListElement right'>" + createSelectForm("jobFiltersForm", "jobCompensationSelect", compensationTypes, defaultSelectValues["compensation"]) + "</div>";
             {% endif %}
             filterString += "</li>";
 
