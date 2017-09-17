@@ -130,16 +130,19 @@
 
             // Special case: single profession needs to moved up 3px to look properly centered
             var rowMarginTop = -1;
+            var expandParentContainers = true;
             if(filteredProfessions.length === 1){
                 rowMarginTop = -4;
+                expandParentContainers = false
             }
             $("[id='" + filterType + "ProfessionChoiceRow']").animate({marginTop: rowMarginTop + "px", height: filteredProfessions.length * professionRowHeight + "px"}, browseAnimateSpeed, function(){});
-            $("#browseFiltersPanel").animate({marginTop: "0px", height: $("#browseFiltersPanel").height() + professionRowHeight + "px"}, browseAnimateSpeed, function(){});
-            $("#searchPanel").animate({marginTop: "0px", height: $("#searchPanel").height() + professionRowHeight + "px"}, browseAnimateSpeed, function(){});
-            $("#browseContent").animate({marginTop: "0px", height: $("#browseContent").height() + professionRowHeight + "px"}, browseAnimateSpeed, function(){});
-            $("#browseContent").css("overflow", "visible")
-            $("#searchResultsPanel").animate({top: $("#searchResults").css("top") + professionRowHeight + "px"}, browseAnimateSpeed, function(){});
-            
+            if(expandParentContainers){
+                $("#browseFiltersPanel").animate({marginTop: "0px", height: $("#browseFiltersPanel").height() + professionRowHeight + "px"}, browseAnimateSpeed, function(){});
+                $("#searchPanel").animate({marginTop: "0px", height: $("#searchPanel").height() + professionRowHeight + "px"}, browseAnimateSpeed, function(){});
+                $("#browseContent").animate({marginTop: "0px", height: $("#browseContent").height() + professionRowHeight + "px"}, browseAnimateSpeed, function(){});
+                $("#browseContent").css("overflow", "visible")
+                $("#searchResultsPanel").animate({top: $("#searchResults").css("top") + professionRowHeight + "px"}, browseAnimateSpeed, function(){});
+            }
             //row.style.height = filteredProfessions.length * 28 + "px";
         }
     }
