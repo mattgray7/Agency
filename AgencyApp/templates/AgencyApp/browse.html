@@ -116,6 +116,36 @@
         }
     }
 
+    function getAnimationHeights(addFilterPanelHeight, addFilteredProfessions){
+        var heightsDict = {}
+        var searchPanelBaseHeight = 180;
+        var filterPanelHeight = filterSectionHeight * activeTabs.length;
+        var browseResultsHeight = getBrowseResultsTableHeight()
+
+        // Browse content is search panel + search results
+        heightsDict["browseContent"] = searchPanelBaseHeight + browseResultsHeight + 8; // 8 is for the padding
+        if(firstSearch){
+            heightsDict["browseContent"] -= 58;
+        }
+
+        heightsDict["searchPanel"] = searchPanelBaseHeight;
+
+        heightsDict["searchResultsPanel"] = searchPanelBaseHeight;  // Top, not height
+
+        heightsDict["browseFiltersPanel"] = 0;
+
+        for(divID in heightsDict){
+            if(addFilterPanelHeight){
+                heightsDict[divID] += filterPanelHeight;
+            }
+            if(addFilteredProfessions){
+                heightsDict[divID] += (filteredProfessions.length - 1) * professionRowHeight;
+            }
+        }
+        return heightsDict
+    }
+
+    var professionRowHeight = 29;
     function displayFilteredProfessions(filterType){
         var row = document.getElementById(filterType + "ProfessionChoiceRow");
         if(row != null){
@@ -125,7 +155,6 @@
             }
             professionString += "</ul>"
 
-            var professionRowHeight = 29;
             row.innerHTML = professionString;
 
             // Special case: single profession needs to moved up 3px to look properly centered
@@ -137,11 +166,15 @@
             }
             $("[id='" + filterType + "ProfessionChoiceRow']").animate({marginTop: rowMarginTop + "px", height: filteredProfessions.length * professionRowHeight + "px"}, browseAnimateSpeed, function(){});
             if(expandParentContainers){
-                $("#browseFiltersPanel").animate({marginTop: "0px", height: $("#browseFiltersPanel").height() + professionRowHeight + "px"}, browseAnimateSpeed, function(){});
-                $("#searchPanel").animate({marginTop: "0px", height: $("#searchPanel").height() + professionRowHeight + "px"}, browseAnimateSpeed, function(){});
-                $("#browseContent").animate({marginTop: "0px", height: $("#browseContent").height() + professionRowHeight + "px"}, browseAnimateSpeed, function(){});
+                var heightsDict = getAnimationHeights(true, true);
+
+
+
+                $("#browseFiltersPanel").animate({marginTop: "0px", height: heightsDict["browseFiltersPanel"] + "px"}, browseAnimateSpeed, function(){});
+                $("#searchPanel").animate({marginTop: "0px", height: heightsDict["searchPanel"] + "px"}, browseAnimateSpeed, function(){});
+                $("#browseContent").animate({marginTop: "0px", height: heightsDict["browseContent"] + "px"}, browseAnimateSpeed, function(){});
                 $("#browseContent").css("overflow", "visible")
-                $("#searchResultsPanel").animate({top: $("#searchResults").css("top") + professionRowHeight + "px"}, browseAnimateSpeed, function(){});
+                $("#searchResultsPanel").animate({top: heightsDict["searchResultsPanel"] + "px"}, browseAnimateSpeed, function(){});
             }
             //row.style.height = filteredProfessions.length * 28 + "px";
         }
@@ -266,20 +299,20 @@
                 addFiltersButton.innerHTML = "Hide"
                 addFiltersButton.onclick = function(){toggleExpandBrowseFiltersPanel("shrink")}
 
-                $("#browseContent").animate({marginTop: "0px", height: 188 + browseResultsHeight + filterPanelHeight + "px"}, browseAnimateSpeed, function(){});
-                $("#searchPanel").animate({marginTop: "0px", height: 180 + filterPanelHeight + "px"}, browseAnimateSpeed, function(){});
-                $("#searchResultsPanel").animate({top: 180 + filterPanelHeight + "px"}, browseAnimateSpeed, function(){});
-                $("#browseFiltersPanel").animate({marginTop: "0px", height: filterPanelHeight + "px"}, browseAnimateSpeed, function(){});
+                var heightsDict = getAnimationHeights(true, false);
+                $("#browseContent").animate({marginTop: "0px", height: heightsDict["browseContent"] + "px"}, browseAnimateSpeed, function(){});
+                $("#searchPanel").animate({marginTop: "0px", height: heightsDict["searchPanel"] + "px"}, browseAnimateSpeed, function(){});
+                $("#searchResultsPanel").animate({top: heightsDict["searchResultsPanel"] + "px"}, browseAnimateSpeed, function(){});
+                $("#browseFiltersPanel").animate({marginTop: "0px", height: heightsDict["browseFiltersPanel"] + "px"}, browseAnimateSpeed, function(){});
             }else if(expandType === "shrink"){
                 addFiltersButton.innerHTML = "Advanced search"
-                addFiltersButton.onclick = function(){toggleExpandBrowseFiltersPanel("expand")}
+                addFiltersButton.onclick = function(){toggleExpandBrowseFiltersPanel("expand");}
 
-
-
-                $("#browseContent").animate({marginTop: "0px", height: 188 + browseResultsHeight + "px"}, browseAnimateSpeed, function(){});
-                $("#searchPanel").animate({marginTop: "0px", height: 180 + "px"}, browseAnimateSpeed, function(){});
-                $("#searchResultsPanel").animate({top: 180 + "px"}, browseAnimateSpeed, function(){});
-                $("#browseFiltersPanel").animate({marginTop: "0px", height: "0px"}, browseAnimateSpeed, function(){filterContent.style.display = "none";
+                var heightsDict = getAnimationHeights(false, false);
+                $("#browseContent").animate({marginTop: "0px", height: heightsDict["browseContent"] + "px"}, browseAnimateSpeed, function(){});
+                $("#searchPanel").animate({marginTop: "0px", height: heightsDict["searchPanel"] + "px"}, browseAnimateSpeed, function(){});
+                $("#searchResultsPanel").animate({top: heightsDict["searchResultsPanel"] + "px"}, browseAnimateSpeed, function(){});
+                $("#browseFiltersPanel").animate({marginTop: "0px", height: heightsDict["browseFiltersPanel"] + "px"}, browseAnimateSpeed, function(){filterContent.style.display = "none";
                     filterContent.innerHTML = '';});
             }
         }
