@@ -121,14 +121,29 @@
         if(row != null){
             var professionString = "<ul class='filteredProfessionList' style=''>"
             for(var i=0; i < filteredProfessions.length; i++){
-                professionString += "<li style=''>" + filteredProfessions[i] + "</li>";
+                professionString += "<li style=''>" + filteredProfessions[i] + "<a onclick='removeFilteredProfession(" + '"' + filteredProfessions[i] + '");' + "' style='margin-left: 15px; font-size: 1em; font-weight: 800;'>X</a></li>";
             }
             professionString += "</ul>"
             row.innerHTML = professionString;
+            $("[id='" + filterType + "ProfessionChoiceRow']").animate({marginTop: "0px", height: filteredProfessions.length * 28 + "px"}, browseAnimateSpeed, function(){});
+            $("#browseFiltersPanel").animate({marginTop: "0px", height: $("#browseFiltersPanel").height() + 28 + "px"}, browseAnimateSpeed, function(){});
+            $("#searchPanel").animate({marginTop: "0px", height: $("#searchPanel").height() + 28 + "px"}, browseAnimateSpeed, function(){});
+            $("#browseContent").animate({marginTop: "0px", height: $("#browseContent").height() + 28 + "px"}, browseAnimateSpeed, function(){});
+            $("#browseContent").css("overflow", "visible")
+            $("#searchResultsPanel").animate({top: 180 + $("#searchResults").css("top") + 28 + "px"}, browseAnimateSpeed, function(){});
+            
+            //row.style.height = filteredProfessions.length * 28 + "px";
         }
     }
 
     var filteredProfessions = []
+    function removeFilteredProfession(profession){
+        var professionIndex = filteredProfessions.indexOf(profession)
+        if(professionIndex > -1){
+            filteredProfessions.splice(professionIndex, 1)
+        }
+        displayFilteredProfessions("jobs")
+    }
     function getJobsFilters(){
         var filterString = '';
         var filterCallbacks = [];
@@ -300,7 +315,7 @@
                     <div id='browseFilterButtonContainer' style='position: absolute; top: 140px; left: 10px;'>
                         <a id='addFiltersButton' onclick='toggleExpandBrowseFiltersPanel("expand");'>Advanced search</a>
                     </div>
-                    <div id='browseFiltersPanel' style='position: absolute; bottom: 10px; left: 0; right: 0; height: 0px; margin-top: 0px;; overflow: hidden;'>
+                    <div id='browseFiltersPanel' style='position: absolute; top: 170px; left: 0; right: 0; height: 0px; margin-top: 0px;; overflow: hidden;'>
                         <div id='browseFiltersPanelContent' style='display: none;'></div>
                     </div>
 
