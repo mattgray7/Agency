@@ -348,7 +348,7 @@ def getJobsSearchResults(searchValue, numResults, filters):
                    models.WorkPost.objects.filter(projectID__in=projectIDs)]
 
     # Add default list to end of search lists so it can be filtered the same
-    defaultList = models.WorkPost.objects.filter(status__in=["Open", "Opening soon"]).order_by("-updatedAt")
+    defaultList = models.WorkPost.objects.filter(status__in=["Open", "Opening soon", "Filled"]).order_by("-status", "-updatedAt")
     searchLists.append(defaultList)
     if filters:
         for i, searchList in enumerate(searchLists):
