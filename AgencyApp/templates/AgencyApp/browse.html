@@ -213,6 +213,16 @@
             filteredProfessions.splice(professionIndex, 1)
         }
 
+        // Update the select value if its current value is being removed (either to default or last chosen)
+        var professionSelect = document.getElementById("jobsProfessionSelect")
+        if(professionSelect != null){
+            if(filteredProfessions.length > 0){
+                professionSelect.value = filteredProfessions[filteredProfessions.length - 1];
+            }else{
+                professionSelect.value = defaultSelectValues["professions"];
+            }
+        }
+
         // Special case, want to force panel to shrink if there were 2 professions and 1 was removed,
         // normally wouldn't update if there was only 1 element
         var forceUpdate = true;
