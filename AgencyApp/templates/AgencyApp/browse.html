@@ -105,7 +105,7 @@
         return {"html": panelString, "callbacks": callbacks}
     }
 
-    function toggleProfessionChoiceRow(toggleType, filterType){
+    /*function toggleProfessionChoiceRow(toggleType, filterType){
         var row = document.getElementById(filterType + "ProfessionChoiceRow");
         if(row != null){
             if(toggleType === "expand"){
@@ -114,7 +114,7 @@
                 $("[id='" + filterType + "ProfessionChoiceRow']").animate({marginTop: "0px", height: "0px"}, browseAnimateSpeed, function(){});
             }
         }
-    }
+    }*/
 
     function getAnimationHeights(addFilterPanelHeight, addFilteredProfessions){
         var heightsDict = {}
@@ -139,7 +139,7 @@
                 heightsDict[divID] += filterPanelHeight;
             }
             if(addFilteredProfessions){
-                heightsDict[divID] += (filteredProfessions.length - 1) * professionRowHeight;
+                heightsDict[divID] += Math.max((filteredProfessions.length - 1), 0) * professionRowHeight;
             }
         }
         return heightsDict
@@ -163,7 +163,7 @@
     }
 
     var professionRowHeight = 29;
-    function displayFilteredProfessions(filterType){
+    function displayFilteredProfessions(filterType, forceUpdate){
         var row = document.getElementById(filterType + "ProfessionChoiceRow");
         if(row != null){
             var professionString = "<ul class='filteredProfessionList' style='margin-right: 20px;'>"
@@ -177,12 +177,12 @@
             // Special case: single profession needs to moved up 3px to look properly centered
             var rowMarginTop = -1;
             var expandParentContainers = true;
-            if(filteredProfessions.length === 1){
+            if(filteredProfessions.length <= 1){
                 rowMarginTop = -4;
                 expandParentContainers = false
             }
             $("[id='" + filterType + "ProfessionChoiceRow']").animate({marginTop: rowMarginTop + "px", height: filteredProfessions.length * professionRowHeight + "px"}, browseAnimateSpeed, function(){});
-            if(expandParentContainers){
+            if(expandParentContainers || forceUpdate){
                 animateBrowsePanelHeights(true, true)
             }
         }
@@ -194,7 +194,14 @@
         if(professionIndex > -1){
             filteredProfessions.splice(professionIndex, 1)
         }
-        displayFilteredProfessions("jobs")
+
+        // Special case, want to force panel to shrink if there were 2 professions and 1 was removed,
+        // normally wouldn't update if there was only 1 element
+        var forceUpdate = true;
+        if(filteredProfessions.length === 0){
+            forceUpdate = false;
+        }
+        displayFilteredProfessions("jobs", forceUpdate)
     }
     function getJobsFilters(){
         var filterString = '';
