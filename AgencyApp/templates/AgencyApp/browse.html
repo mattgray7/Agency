@@ -145,6 +145,23 @@
         return heightsDict
     }
 
+    function animateBrowsePanelHeights(addFilterPanelHeight, addFilteredProfessions, animationFinishCallbacks){
+        if(animationFinishCallbacks == null){
+            animationFinishCallbacks = {};
+        }
+
+        var heights = getAnimationHeights(addFilterPanelHeight, addFilteredProfessions)
+        var panelList = ["browseFiltersPanel", "searchPanel", "browseContent", "searchResultsPanel"];
+        for(var i=0; i < panelList.length; i++){
+            $("[id='" + panelList[i] + "']").animate({marginTop: "0px", height: heights[panelList[i]] + "px"}, browseAnimateSpeed, function(){
+                var panelName = $(this).attr('id')
+                if(panelName in animationFinishCallbacks && animationFinishCallbacks[panelName] != null){
+                    animationFinishCallbacks[panelName]();
+                }
+            });
+        }
+    }
+
     var professionRowHeight = 29;
     function displayFilteredProfessions(filterType){
         var row = document.getElementById(filterType + "ProfessionChoiceRow");
@@ -166,17 +183,8 @@
             }
             $("[id='" + filterType + "ProfessionChoiceRow']").animate({marginTop: rowMarginTop + "px", height: filteredProfessions.length * professionRowHeight + "px"}, browseAnimateSpeed, function(){});
             if(expandParentContainers){
-                var heightsDict = getAnimationHeights(true, true);
-
-
-
-                $("#browseFiltersPanel").animate({marginTop: "0px", height: heightsDict["browseFiltersPanel"] + "px"}, browseAnimateSpeed, function(){});
-                $("#searchPanel").animate({marginTop: "0px", height: heightsDict["searchPanel"] + "px"}, browseAnimateSpeed, function(){});
-                $("#browseContent").animate({marginTop: "0px", height: heightsDict["browseContent"] + "px"}, browseAnimateSpeed, function(){});
-                $("#browseContent").css("overflow", "visible")
-                $("#searchResultsPanel").animate({top: heightsDict["searchResultsPanel"] + "px"}, browseAnimateSpeed, function(){});
+                animateBrowsePanelHeights(true, true)
             }
-            //row.style.height = filteredProfessions.length * 28 + "px";
         }
     }
 
@@ -295,25 +303,19 @@
                         filterPanelInfo["callbacks"][i]();
                     }
                 }
-
                 addFiltersButton.innerHTML = "Hide"
                 addFiltersButton.onclick = function(){toggleExpandBrowseFiltersPanel("shrink")}
-
-                var heightsDict = getAnimationHeights(true, false);
-                $("#browseContent").animate({marginTop: "0px", height: heightsDict["browseContent"] + "px"}, browseAnimateSpeed, function(){});
-                $("#searchPanel").animate({marginTop: "0px", height: heightsDict["searchPanel"] + "px"}, browseAnimateSpeed, function(){});
-                $("#searchResultsPanel").animate({top: heightsDict["searchResultsPanel"] + "px"}, browseAnimateSpeed, function(){});
-                $("#browseFiltersPanel").animate({marginTop: "0px", height: heightsDict["browseFiltersPanel"] + "px"}, browseAnimateSpeed, function(){});
+                animateBrowsePanelHeights(true, false, {});
             }else if(expandType === "shrink"){
                 addFiltersButton.innerHTML = "Advanced search"
                 addFiltersButton.onclick = function(){toggleExpandBrowseFiltersPanel("expand");}
-
-                var heightsDict = getAnimationHeights(false, false);
-                $("#browseContent").animate({marginTop: "0px", height: heightsDict["browseContent"] + "px"}, browseAnimateSpeed, function(){});
-                $("#searchPanel").animate({marginTop: "0px", height: heightsDict["searchPanel"] + "px"}, browseAnimateSpeed, function(){});
-                $("#searchResultsPanel").animate({top: heightsDict["searchResultsPanel"] + "px"}, browseAnimateSpeed, function(){});
-                $("#browseFiltersPanel").animate({marginTop: "0px", height: heightsDict["browseFiltersPanel"] + "px"}, browseAnimateSpeed, function(){filterContent.style.display = "none";
-                    filterContent.innerHTML = '';});
+                var finishCallback = function(){
+                    filterContent.style.display = "none";
+                    filterContent.innerHTML = '';
+                    filteredProfessions = [];
+                }
+                animateBrowsePanelHeights(false, false, {"browseFiltersPanel": finishCallback})
+                
             }
         }
     }
