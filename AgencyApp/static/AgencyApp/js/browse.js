@@ -42,7 +42,7 @@ function saveExpandedBrowseSectionHeights(){
     for(section in expandedTabDict){
         if(expandedTabDict[section]){
             var container = document.getElementById(section + "BrowseResultsContainer")
-            if(container != null && container.offsetHeight != 0){
+            if(container != null){
                 expandedSectionHeights[section] = container.offsetHeight;
             }
         }
