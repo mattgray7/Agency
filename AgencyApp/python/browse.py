@@ -341,16 +341,22 @@ def getPostSearchResults(searchValue, maxNumResults, requiredFields, defaultList
     resultInfo["numResults"] = totalNumResults
     return resultInfo
 
-def getJobsSearchResults(searchValue, numResults):
+def getJobsSearchResults(searchValue, numResults, filters):
     projectIDs = [x.postID for x in models.ProjectPost.objects.filter(title__contains=searchValue)]
+    startingLists = [models.WorkPost.objects.filter(profession__icontains=searchValue),
+                     models.WorkPost.objects.filter(title__icontains=searchValue),
+                    models.WorkPost.objects.filter(projectID__in=projectIDs)]
+    searchLists = []
+    if filters:
+        for searchList in startingLists:
+            if filters.get("status"):
+                searchLists.append(searchList.filter(status=filters.get("status")))
     return getPostSearchResults(searchValue=searchValue,
                                 maxNumResults=numResults,
                                 requiredFields=["compensationType", "compensationDescription", "startDate",
                                                 "endDate", "location", "profession", "hoursPerWeek"],
                                 defaultList=models.WorkPost.objects.filter(status__in=["Open", "Opening soon"]).order_by("-updatedAt"),
-                                searchLists=[models.WorkPost.objects.filter(profession__icontains=searchValue),
-                                             models.WorkPost.objects.filter(title__icontains=searchValue),
-                                             models.WorkPost.objects.filter(projectID__in=projectIDs)]
+                                searchLists=searchLists
                                 )
 
 def getRolesSearchResults(searchValue, numResults):

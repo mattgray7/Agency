@@ -48,6 +48,52 @@
         }
     }
 
+    var getFiltersMap = {"jobs": getJobFilters, "roles": getRoleFilters, "users": getUserFilters, "projects": getProjectFilters, "events": getEventFilters}
+    function getSearchFilters(){
+        var filterDict = {}
+        for(var i=0; i < activeTabs.length; i++){
+            if(activeTabs[i] in getFiltersMap){
+                filterDict[activeTabs[i]] = getFiltersMap[activeTabs[i]]();
+            }
+        }
+        console.log(filterDict)
+        return filterDict
+    }
+
+    function getJobFilters(){
+        var filters = {"professions": filteredProfessions, "status": null, "compensation": null, "dates": {"start": null, "end": null}}
+        
+        var statusSelect = document.getElementById("jobStatusSelect");
+        if(statusSelect != null){
+            filters["status"] = statusSelect.value;
+        }
+
+        var compensationSelect = document.getElementById("jobCompensationSelect");
+        if(statusSelect != null){
+            filters["compensation"] = compensationSelect.value;
+        }
+        
+        var startDate = document.getElementById("jobStartDate");
+        var endDate = document.getElementById("jobEndDate");
+        if(startDate != null && endDate != null){
+            if(startDate.value != null && startDate.value.length > 0){
+                filters["dates"]["start"] = startDate.value;
+            }
+            if(endDate.value != null && endDate.value.length > 0){
+                filters["dates"]["end"] = endDate.value;
+            }
+        }
+        return filters
+    }
+
+    function getRoleFilters(){}
+
+    function getUserFilters(){}
+
+    function getProjectFilters(){}
+
+    function getEventFilters(){}
+
     var firstSearch = true;
     var currentSearchResults = {};
     function submitSearch(){
@@ -67,7 +113,7 @@
         if(activeTabs.length != 0){
             $.ajax({
                 url : "/ajax/getSearchResults/",
-                data : {"categories": activeTabs, "searchValue": searchValue},
+                data : {"categories": activeTabs, "searchValue": searchValue, "filters": JSON.stringify(getSearchFilters())},
                 type : 'POST',
                 dataType: "json",
                 success : function(data) {
@@ -276,15 +322,15 @@
             filterString += "<li><div class='browseFilterListLabel right'>Compensation: </div>"
             {% if browseFilters.jobs.compensationList %}
                 var compensationTypes = {{browseFilters.jobs.compensationList|safe}};
-                filterString += "<div class='browseFilterListElement right'>" + createSelectForm("jobFiltersForm", "jobStatusSelect", compensationTypes, "Paid") + "</div>";
+                filterString += "<div class='browseFilterListElement right'>" + createSelectForm("jobFiltersForm", "jobCompensationSelect", compensationTypes, "Paid") + "</div>";
             {% endif %}
             filterString += "</li>";
 
             // Add dates
             // Can use below list item that has 1 label of dates with the 2 inputs on separate lines
             /*filterString += "<li style='height: 50px;'> Dates: <ul style='height: 50px;  width: 120px; margin-top: -20px; margin-left: 50px;'><li><input type='date' value='" + currentDateString + "' style=''></li><li><input type='date' value='" + tomorrowDateString + "'></li></ul></li>"*/
-            filterString += "<li><div class='browseFilterListLabel right'>Start date: </div><div class='browseFilterListElement right'><input type='date' value='" + currentDateString + "' style=''></div></li>"
-            filterString += "<li><div class='browseFilterListLabel right'>End date: </div><div class='browseFilterListElement right'><input type='date' value='" + tomorrowDateString + "' style=''></div></li>"
+            filterString += "<li><div class='browseFilterListLabel right'>Start date: </div><div class='browseFilterListElement right'><input type='date' id='jobStartDate' value='" + currentDateString + "' style=''></div></li>"
+            filterString += "<li><div class='browseFilterListLabel right'>End date: </div><div class='browseFilterListElement right'><input type='date' id='jobEndDate' value='" + tomorrowDateString + "' style=''></div></li>"
 
             filterString += "</div>"
         {% endif %}

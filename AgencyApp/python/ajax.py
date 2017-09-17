@@ -1,4 +1,5 @@
 import os
+import json
 from django.http import JsonResponse
 
 import post
@@ -482,13 +483,14 @@ def getSearchResults(request):
     searchValue = request.POST.get("searchValue")
     categories = request.POST.getlist("categories[]")       # Need the brackets to convert js array to python list
     numResults = int(request.POST.get("numResults", 3))
+    filters = json.loads(request.POST.get("filters"))
     results = {}
     if len(categories) > 0:
         for category in categories:
             if category not in results:
                 results[category] = {"results": [], "moreResults": False, "numResults": 0}
             if category == "jobs":
-                results[category] = browse.getJobsSearchResults(searchValue, numResults)
+                results[category] = browse.getJobsSearchResults(searchValue, numResults, filters.get("jobs"))
             elif category == "roles":
                 results[category] = browse.getRolesSearchResults(searchValue, numResults)
             elif category == "projects":
