@@ -356,6 +356,8 @@ def getJobsSearchResults(searchValue, numResults, filters):
                 searchLists[i] = searchLists[i].filter(status=filters.get("status"))
             if filters.get("compensation"):
                 searchLists[i] = searchLists[i].filter(compensationType=filters.get("compensation"))
+            if filters.get("professions"):
+                searchLists[i] = searchLists[i].filter(profession__in=filters.get("professions"))
 
     # Remove the default list from the end of the searchLists
     defaultList = searchLists.pop()

@@ -207,7 +207,7 @@ function createJobElement(dataDict){
     element += "<h2 class='postInfoTitle'><a onclick='redirectToPost(" +'"' + dataDict["postID"] + '");' + "'>" + dataDict["title"] + "</a></h2>"
 
     // Add status
-    element += "<div style='color: rgba(0,0,0,0.5);'>" + dataDict["status"] + "</div>"
+    element += "<div style='color: rgba(0,0,0,0.5);'>" + dataDict["profession"] + " - " + dataDict["status"] + "</div>"
 
     // Add project link
     if("projectName" in dataDict){
