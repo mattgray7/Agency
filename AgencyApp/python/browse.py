@@ -343,19 +343,27 @@ def getPostSearchResults(searchValue, maxNumResults, requiredFields, defaultList
 
 def getJobsSearchResults(searchValue, numResults, filters):
     projectIDs = [x.postID for x in models.ProjectPost.objects.filter(title__contains=searchValue)]
-    startingLists = [models.WorkPost.objects.filter(profession__icontains=searchValue),
-                     models.WorkPost.objects.filter(title__icontains=searchValue),
-                    models.WorkPost.objects.filter(projectID__in=projectIDs)]
-    searchLists = []
+    searchLists = [models.WorkPost.objects.filter(profession__icontains=searchValue),
+                   models.WorkPost.objects.filter(title__icontains=searchValue),
+                   models.WorkPost.objects.filter(projectID__in=projectIDs)]
+
+    # Add default list to end of search lists so it can be filtered the same
+    defaultList = models.WorkPost.objects.filter(status__in=["Open", "Opening soon"]).order_by("-updatedAt")
+    searchLists.append(defaultList)
     if filters:
-        for searchList in startingLists:
+        for i, searchList in enumerate(searchLists):
             if filters.get("status"):
-                searchLists.append(searchList.filter(status=filters.get("status")))
+                searchLists[i] = searchLists[i].filter(status=filters.get("status"))
+            if filters.get("compensation"):
+                searchLists[i] = searchLists[i].filter(compensationType=filters.get("compensation"))
+
+    # Remove the default list from the end of the searchLists
+    defaultList = searchLists.pop()
     return getPostSearchResults(searchValue=searchValue,
                                 maxNumResults=numResults,
                                 requiredFields=["compensationType", "compensationDescription", "startDate",
                                                 "endDate", "location", "profession", "hoursPerWeek"],
-                                defaultList=models.WorkPost.objects.filter(status__in=["Open", "Opening soon"]).order_by("-updatedAt"),
+                                defaultList=defaultList,
                                 searchLists=searchLists
                                 )
 
