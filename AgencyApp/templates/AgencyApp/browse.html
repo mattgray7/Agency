@@ -151,7 +151,7 @@
         }
 
         var heights = getAnimationHeights(addFilterPanelHeight, addFilteredProfessions)
-        var panelList = ["browseFiltersPanel", "searchPanel", "browseContent", "searchResultsPanel"];
+        var panelList = ["browseContent", "searchPanel", "browseFiltersPanel"];
         for(var i=0; i < panelList.length; i++){
             $("[id='" + panelList[i] + "']").animate({marginTop: "0px", height: heights[panelList[i]] + "px"}, browseAnimateSpeed, function(){
                 var panelName = $(this).attr('id')
@@ -159,18 +159,36 @@
                     animationFinishCallbacks[panelName]();
                 }
             });
+
+            // Animating sets overflow to hidden during animation, so set it manually to fix
+            if(panelList[i] === "browseContent"){
+                document.getElementById("browseContent").style.overflow = "visible"
+            }
         }
+
+        // Special case: need to modify top of search results panel, not height
+        $("#searchResultsPanel").animate({top: heights["searchResultsPanel"] + "px"}, browseAnimateSpeed, function(){
+                var panelName = $(this).attr('id')
+                if(panelName in animationFinishCallbacks && animationFinishCallbacks[panelName] != null){
+                    animationFinishCallbacks[panelName]();
+                }
+        });
     }
 
     var professionRowHeight = 29;
     function displayFilteredProfessions(filterType, forceUpdate){
         var row = document.getElementById(filterType + "ProfessionChoiceRow");
         if(row != null){
-            var professionString = "<ul class='filteredProfessionList' style='margin-right: 20px;'>"
-            for(var i=0; i < filteredProfessions.length; i++){
-                professionString += "<li style='margin-bottom: 3px; text-align: left;'>" + filteredProfessions[i] + "<a onclick='removeFilteredProfession(" + '"' + filteredProfessions[i] + '");' + "' style='margin-left: 15px; font-size: 1em; font-weight: 800;'>X</a></li>";
+            var professionString = ''
+            if(filteredProfessions.length > 0){
+                professionString = "<ul class='filteredProfessionList' style='margin-right: 20px;'>"
+                for(var i=0; i < filteredProfessions.length; i++){
+                    professionString += "<li style='margin-bottom: 3px; text-align: left;'>" + filteredProfessions[i] + "<a onclick='removeFilteredProfession(" + '"' + filteredProfessions[i] + '");' + "' style='margin-left: 15px; font-size: 1em; font-weight: 800;'>X</a></li>";
+                }
+                professionString += "</ul>"
+            }else{
+                professionString += ""
             }
-            professionString += "</ul>"
 
             row.innerHTML = professionString;
 
@@ -181,7 +199,7 @@
                 rowMarginTop = -4;
                 expandParentContainers = false
             }
-            $("[id='" + filterType + "ProfessionChoiceRow']").animate({marginTop: rowMarginTop + "px", height: filteredProfessions.length * professionRowHeight + "px"}, browseAnimateSpeed, function(){});
+            $("[id='" + filterType + "ProfessionChoiceRow']").animate({marginTop: rowMarginTop + "px", height: Math.max(filteredProfessions.length * professionRowHeight, 4) + "px"}, browseAnimateSpeed, function(){});
             if(expandParentContainers || forceUpdate){
                 animateBrowsePanelHeights(true, true)
             }
