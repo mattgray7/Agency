@@ -231,7 +231,7 @@
         }
         displayFilteredProfessions("jobs", forceUpdate)
     }
-    var defaultSelectValues = {"professions": "-", "status": "-", "compensation": "-"}
+    var defaultSelectValues = {"professions": "-", "status": "-", "compensation": "-", "roleType": "Actor"}
     function getJobsFilters(){
         var filterString = '';
         var filterCallbacks = [];
@@ -244,6 +244,15 @@
 
             // Add left list
             filterString += "<div style='position: absolute; top: 27px; left: 10px; right: 50%;'><ul class='browseFilterList'>"
+
+            // Add status
+            filterString += "<li><div class='browseFilterListLabel left'>Status: </div>"
+            {% if browseFilters.jobs.statusList %}
+                var statusList = {{browseFilters.jobs.statusList|safe}}
+                statusList.unshift(defaultSelectValues["status"])
+                filterString += "<div class='browseFilterListElement left'>" + createSelectForm("jobFiltersForm", "jobStatusSelect", statusList, defaultSelectValues["status"]) + "</div>"
+            {% endif %}
+            filterString += "</li>"
 
             // Add profession
             filterString += "<li><div class='browseFilterListLabel left'>Profession: </div>";
@@ -270,15 +279,6 @@
                     })
                 }
             })
-
-            // Add status
-            filterString += "<li><div class='browseFilterListLabel left'>Status: </div>"
-            {% if browseFilters.jobs.statusList %}
-                var statusList = {{browseFilters.jobs.statusList|safe}}
-                statusList.unshift(defaultSelectValues["status"])
-                filterString += "<div class='browseFilterListElement left'>" + createSelectForm("jobFiltersForm", "jobStatusSelect", statusList, defaultSelectValues["status"]) + "</div>"
-            {% endif %}
-            filterString += "</li>"
             filterString += "</ul></div>"
 
 
@@ -306,7 +306,84 @@
     }
 
     function getRolesFiltersString(){
-        return "Role filters"
+        var filterString = '';
+        var filterCallbacks = [];
+        {% if browseFilters and browseFilters.roles %}
+            filterString += "<div style='height: 100%; text-align: left; position: relative;'>";
+
+            // Add header
+            filterString += "<div style='position: absolute; top: 0; left: 10px;'><h3>Roles</h3></div>"
+
+
+            // Add left list
+            filterString += "<div style='position: absolute; top: 27px; left: 10px; right: 50%;'><ul class='browseFilterList'>"
+
+            /*// Add profession
+            filterString += "<li><div class='browseFilterListLabel left'>Profession: </div>";
+            {% if browseFilters.roles.professionList %}
+                var professions = {{browseFilters.roles.professionList|safe}}
+                professions.unshift(defaultSelectValues["professions"])     // Add to front of list
+                filterString += "<div class='browseFilterListElement left'>" + createSelectForm("rolesFiltersForm", "rolesProfessionSelect", professions, defaultSelectValues["professions"]) + "</div>"
+            {% endif %}
+            filterString += "</li>";
+
+            // Add profession choices
+            filterString += "<li id='jobsProfessionChoiceRow' style='height: 0px;'></li>";
+            filterCallbacks.push(function(){
+                var professionSelect = document.getElementById("jobsProfessionSelect");
+                if(professionSelect != null){
+                    $("#jobsProfessionSelect").change(function(){
+                        if(professionSelect.value != defaultSelectValues["professions"]){
+                            filteredProfessions.push(professionSelect.value)
+                            displayFilteredProfessions("jobs")
+                        }
+                    })
+                }
+            })*/
+
+            // Add status
+            filterString += "<li><div class='browseFilterListLabel left'>Status: </div>"
+            {% if browseFilters.roles.statusList %}
+                var statusList = {{browseFilters.roles.statusList|safe}}
+                statusList.unshift(defaultSelectValues["status"])
+                filterString += "<div class='browseFilterListElement left'>" + createSelectForm("rolesFiltersForm", "rolesStatusSelect", statusList, defaultSelectValues["status"]) + "</div>"
+            {% endif %}
+            filterString += "</li>"
+
+            // Add role type
+            filterString += "<li><div class='browseFilterListLabel left'>Type: </div>"
+            {% if browseFilters.roles.roleTypeList %}
+                var roleTypeList = {{browseFilters.roles.roleTypeList|safe}}
+                //roleTypeList.unshift(defaultSelectValues["roleType"])
+                filterString += "<div class='browseFilterListElement left'>" + createSelectForm("rolesFiltersForm", "rolesTypeSelect", roleTypeList, defaultSelectValues["roleType"]) + "</div>"
+            {% endif %}
+            filterString += "</li>"
+
+
+            filterString += "</ul></div>"
+
+
+            // Add right list
+            filterString += "<div style='position: absolute; top: 27px; left: 48%; right: 0;'><ul class='browseFilterList'>"
+
+            // Add compensation
+            filterString += "<li><div class='browseFilterListLabel right'>Compensation: </div>"
+            {% if browseFilters.roles.compensationList %}
+                var compensationTypes = {{browseFilters.roles.compensationList|safe}};
+                compensationTypes.unshift(defaultSelectValues["compensation"])
+                filterString += "<div class='browseFilterListElement right'>" + createSelectForm("rolesFiltersForm", "rolesCompensationSelect", compensationTypes, defaultSelectValues["compensation"]) + "</div>";
+            {% endif %}
+            filterString += "</li>";
+
+            // Add dates
+            // Can use below list item that has 1 label of dates with the 2 inputs on separate lines
+            /*filterString += "<li style='height: 50px;'> Dates: <ul style='height: 50px;  width: 120px; margin-top: -20px; margin-left: 50px;'><li><input type='date' value='" + currentDateString + "' style=''></li><li><input type='date' value='" + tomorrowDateString + "'></li></ul></li>"*/
+            filterString += "<li><div class='browseFilterListLabel right'>Start date: </div><div class='browseFilterListElement right'><input type='date' id='jobStartDate' value='' style=''></div></li>"
+            filterString += "<li><div class='browseFilterListLabel right'>End date: </div><div class='browseFilterListElement right'><input type='date' id='jobEndDate' value='' style=''></div></li>"
+
+            filterString += "</div>"
+        {% endif %}
+        return {"html": filterString, "callbacks": filterCallbacks}
     }
 
     function getUsersFiltersString(){

@@ -95,6 +95,7 @@ COLLABORATOR_OPTIONS = ["Director", "Director of photography", "Musical artist",
 
 
 GENDER_OPTIONS = ["-", "Male", "Female", "Non-binary", "Other", "Prefer not to specify"]	# used in other places than actor attribute
+CHARACTER_TYPE_OPTIONS = ["Actor", "Extra", "Model", "Chorus member", "Dancer", "Other"]
 ACTOR_ATTRIBUTE_DICT = [{"name": "hairColor",
 						 "options": ["-", "Black", "Blonde", "Brown", "Grey", "Red", "White", "Other"]},
 						{"name": "eyeColor",
@@ -109,7 +110,7 @@ ACTOR_ATTRIBUTE_DICT = [{"name": "hairColor",
 						{"name": "build",
 						 "options": ["-", "Slim", "Medium", "Muscular", "Large"]},
 						{"name": "characterType",
-						 "options": ["Actor", "Extra", "Model", "Chorus member", "Dancer", "Other"]}
+						 "options": CHARACTER_TYPE_OPTIONS}
 						 ]
 
 ACTOR_DESCRIPTION_PAGE_TYPES = {"castingPost": CASTING_POST,

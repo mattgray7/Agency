@@ -121,7 +121,8 @@ class BrowseView(views.GenericFormView):
                                             "compensationList": constants.COMPENSATION_TYPES
                                             },
                                    "roles": {"statusList": constants.CASTING_STATUS_LIST,
-                                             "compensationList": constants.COMPENSATION_TYPES
+                                             "compensationList": constants.COMPENSATION_TYPES,
+                                             "roleTypeList": constants.CHARACTER_TYPE_OPTIONS
                                              }
                                   }
         return self._browseFilters
