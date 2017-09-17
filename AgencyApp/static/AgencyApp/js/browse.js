@@ -79,6 +79,51 @@ function toggleExpandBrowseSection(direction, section){
     }
 }
 
+var getFiltersMap = {"jobs": getJobsFilterValues, "roles": getJobsFilterValues, "users": getJobsFilterValues, "projects": getJobsFilterValues, "events": getJobsFilterValues}
+function getSearchFilterValues(){
+    var filterDict = {}
+    for(var i=0; i < activeTabs.length; i++){
+        if(activeTabs[i] in getFiltersMap){
+            filterDict[activeTabs[i]] = getFiltersMap[activeTabs[i]]();
+        }
+    }
+    return filterDict
+}
+
+function getJobsFilterValues(){
+    var filters = {"professions": filteredProfessions, "status": null, "compensation": null, "dates": {"start": null, "end": null}}
+
+    var statusSelect = document.getElementById("jobStatusSelect");
+    if(statusSelect != null && statusSelect.value != defaultSelectValues["status"]){
+        filters["status"] = statusSelect.value;
+    }
+
+    var compensationSelect = document.getElementById("jobCompensationSelect");
+    if(compensationSelect != null && compensationSelect.value != defaultSelectValues["compensation"]){
+        filters["compensation"] = compensationSelect.value;
+    }
+
+    var startDate = document.getElementById("jobStartDate");
+    var endDate = document.getElementById("jobEndDate");
+    if(startDate != null && endDate != null){
+        if(startDate.value != null && startDate.value.length > 0){
+            filters["dates"]["start"] = startDate.value;
+        }
+        if(endDate.value != null && endDate.value.length > 0){
+            filters["dates"]["end"] = endDate.value;
+        }
+    }
+    return filters
+}
+
+function getRoleFilters(){}
+
+function getUserFilters(){}
+
+function getProjectFilters(){}
+
+function getEventFilters(){}
+
 // Number of results to display for each section
 var defaultNumResults = 3;
 var currentMaxNumResults = {"jobs": defaultNumResults, "roles": defaultNumResults, "users": defaultNumResults, "projects": defaultNumResults, "events": defaultNumResults}
@@ -92,7 +137,7 @@ function addResultsToSection(section){
     currentMaxNumResults[section] += 3;
     $.ajax({
         url : "/ajax/getSearchResults/",
-        data : {"categories": [section], "searchValue": searchValue, "numResults": currentMaxNumResults[section]},
+        data : {"categories": [section], "searchValue": searchValue, "numResults": currentMaxNumResults[section], "filters": JSON.stringify(getSearchFilterValues())},
         type : 'POST',
         dataType: "json",
         success : function(data) {
