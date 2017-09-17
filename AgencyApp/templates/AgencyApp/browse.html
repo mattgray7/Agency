@@ -109,7 +109,7 @@
         var row = document.getElementById(filterType + "ProfessionChoiceRow");
         if(row != null){
             if(toggleType === "expand"){
-                $("[id='" + filterType + "ProfessionChoiceRow']").animate({marginTop: "0px", height: "28px"}, browseAnimateSpeed, function(){});
+                $("[id='" + filterType + "ProfessionChoiceRow']").animate({marginTop: "0px", height: "30px"}, browseAnimateSpeed, function(){});
             }else if(toggleType === "shrink"){
                 $("[id='" + filterType + "ProfessionChoiceRow']").animate({marginTop: "0px", height: "0px"}, browseAnimateSpeed, function(){});
             }
@@ -119,18 +119,26 @@
     function displayFilteredProfessions(filterType){
         var row = document.getElementById(filterType + "ProfessionChoiceRow");
         if(row != null){
-            var professionString = "<ul class='filteredProfessionList' style=''>"
+            var professionString = "<ul class='filteredProfessionList' style='margin-right: 20px;'>"
             for(var i=0; i < filteredProfessions.length; i++){
-                professionString += "<li style=''>" + filteredProfessions[i] + "<a onclick='removeFilteredProfession(" + '"' + filteredProfessions[i] + '");' + "' style='margin-left: 15px; font-size: 1em; font-weight: 800;'>X</a></li>";
+                professionString += "<li style='margin-bottom: 3px; text-align: left;'>" + filteredProfessions[i] + "<a onclick='removeFilteredProfession(" + '"' + filteredProfessions[i] + '");' + "' style='margin-left: 15px; font-size: 1em; font-weight: 800;'>X</a></li>";
             }
             professionString += "</ul>"
+
+            var professionRowHeight = 29;
             row.innerHTML = professionString;
-            $("[id='" + filterType + "ProfessionChoiceRow']").animate({marginTop: "0px", height: filteredProfessions.length * 28 + "px"}, browseAnimateSpeed, function(){});
-            $("#browseFiltersPanel").animate({marginTop: "0px", height: $("#browseFiltersPanel").height() + 28 + "px"}, browseAnimateSpeed, function(){});
-            $("#searchPanel").animate({marginTop: "0px", height: $("#searchPanel").height() + 28 + "px"}, browseAnimateSpeed, function(){});
-            $("#browseContent").animate({marginTop: "0px", height: $("#browseContent").height() + 28 + "px"}, browseAnimateSpeed, function(){});
+
+            // Special case: single profession needs to moved up 3px to look properly centered
+            var rowMarginTop = -1;
+            if(filteredProfessions.length === 1){
+                rowMarginTop = -4;
+            }
+            $("[id='" + filterType + "ProfessionChoiceRow']").animate({marginTop: rowMarginTop + "px", height: filteredProfessions.length * professionRowHeight + "px"}, browseAnimateSpeed, function(){});
+            $("#browseFiltersPanel").animate({marginTop: "0px", height: $("#browseFiltersPanel").height() + professionRowHeight + "px"}, browseAnimateSpeed, function(){});
+            $("#searchPanel").animate({marginTop: "0px", height: $("#searchPanel").height() + professionRowHeight + "px"}, browseAnimateSpeed, function(){});
+            $("#browseContent").animate({marginTop: "0px", height: $("#browseContent").height() + professionRowHeight + "px"}, browseAnimateSpeed, function(){});
             $("#browseContent").css("overflow", "visible")
-            $("#searchResultsPanel").animate({top: 180 + $("#searchResults").css("top") + 28 + "px"}, browseAnimateSpeed, function(){});
+            $("#searchResultsPanel").animate({top: $("#searchResults").css("top") + professionRowHeight + "px"}, browseAnimateSpeed, function(){});
             
             //row.style.height = filteredProfessions.length * 28 + "px";
         }
@@ -172,9 +180,9 @@
                 var professionSelect = document.getElementById("jobsProfessionSelect");
                 if(professionSelect != null){
                     $("#jobsProfessionSelect").change(function(){
-                        if(filteredProfessions.length === 0){
+                        /*if(filteredProfessions.length === 0){
                             toggleProfessionChoiceRow("expand", "jobs");
-                        }
+                        }*/
                         filteredProfessions.push(professionSelect.value)
                         displayFilteredProfessions("jobs")
                         
