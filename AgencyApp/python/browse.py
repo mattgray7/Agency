@@ -12,6 +12,7 @@ import genericViews as views
 import models
 
 import json
+import datetime
 
 
 """class BrowseChoiceView(views.GenericFormView):
@@ -358,6 +359,17 @@ def getJobsSearchResults(searchValue, numResults, filters):
                 searchLists[i] = searchLists[i].filter(compensationType=filters.get("compensation"))
             if filters.get("professions"):
                 searchLists[i] = searchLists[i].filter(profession__in=filters.get("professions"))
+            if filters.get("dates"):
+                start = filters.get("dates").get("start")
+                end = filters.get("dates").get("end")
+                if start:
+                    startSplitted = start.split("-")
+                    startDate = datetime.date(int(startSplitted[0]), int(startSplitted[1]), int(startSplitted[2]))
+                    searchLists[i] = searchLists[i].filter(startDate__gte=startDate)
+                if end:
+                    endSplitted = end.split("-")
+                    endDate = datetime.date(int(endSplitted[0]), int(endSplitted[1]), int(endSplitted[2]))
+                    searchLists[i] = searchLists[i].filter(endDate__lte=endDate)
 
     # Remove the default list from the end of the searchLists
     defaultList = searchLists.pop()
