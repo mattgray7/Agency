@@ -181,9 +181,9 @@
         if(row != null){
             var professionString = ''
             if(filteredProfessions.length > 0){
-                professionString = "<ul class='filteredProfessionList' style='margin-right: 20px;'>"
+                professionString = "<ul class='filteredProfessionList browseFilterListElement left'>"
                 for(var i=0; i < filteredProfessions.length; i++){
-                    professionString += "<li style='margin-bottom: 3px; text-align: left;'>" + filteredProfessions[i] + "<a onclick='removeFilteredProfession(" + '"' + filteredProfessions[i] + '");' + "' style='margin-left: 15px; font-size: 1em; font-weight: 800;'>X</a></li>";
+                    professionString += "<li style='margin-bottom: 3px; text-align: left; position: relative;'><div style='position: absolute; left: 5px;'>" + filteredProfessions[i] + "</div><a onclick='removeFilteredProfession(" + '"' + filteredProfessions[i] + '");' + "' style='font-size: 1em; font-weight: 800; position: absolute; right: 5px;'>X</a></li>";
                 }
                 professionString += "</ul>"
             }else{
