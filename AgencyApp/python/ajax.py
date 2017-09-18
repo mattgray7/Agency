@@ -492,7 +492,7 @@ def getSearchResults(request):
             if category == "jobs":
                 results[category] = browse.getJobsSearchResults(searchValue, numResults, filters.get("jobs"))
             elif category == "roles":
-                results[category] = browse.getRolesSearchResults(searchValue, numResults)
+                results[category] = browse.getRolesSearchResults(searchValue, numResults, filters.get("roles"))
             elif category == "projects":
                 results[category] = browse.getProjectSearchResults(searchValue, numResults)
             elif category == "events":
