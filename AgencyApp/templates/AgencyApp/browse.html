@@ -132,9 +132,9 @@
         }
 
         // Browse content is search panel + search results
-        heightsDict["browseContent"] = searchPanelBaseHeight + browseResultsHeight + 8; // 8 is for the padding
-        if(firstSearch){
-            heightsDict["browseContent"] -= 58;
+        heightsDict["browseContent"] = searchPanelBaseHeight;
+        if(!firstSearch){
+            heightsDict["browseContent"] += browseResultsHeight;
         }
 
         heightsDict["searchPanel"] = searchPanelBaseHeight;
