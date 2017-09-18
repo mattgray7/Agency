@@ -90,29 +90,35 @@ function getSearchFilterValues(){
     return filterDict
 }
 
+function _getDatesFilterValues(filterType){
+    var dateFilters = {"start": null, "end": null}
+    var startDate = document.getElementById(filterType + "StartDate");
+    var endDate = document.getElementById(filterType + "EndDate");
+    if(startDate != null && endDate != null){
+        if(startDate.value != null && startDate.value.length > 0){
+            dateFilters["start"] = startDate.value;
+        }
+        if(endDate.value != null && endDate.value.length > 0){
+            dateFilters["end"] = endDate.value;
+        }
+    }
+    return dateFilters
+}
+
 function getJobsFilterValues(){
     var filters = {"professions": filteredProfessions, "status": null, "compensation": null, "dates": {"start": null, "end": null}}
 
-    var statusSelect = document.getElementById("jobStatusSelect");
+    var statusSelect = document.getElementById("jobsStatusSelect");
     if(statusSelect != null && statusSelect.value != defaultSelectValues["status"]){
         filters["status"] = statusSelect.value;
     }
 
-    var compensationSelect = document.getElementById("jobCompensationSelect");
+    var compensationSelect = document.getElementById("jobsCompensationSelect");
     if(compensationSelect != null && compensationSelect.value != defaultSelectValues["compensation"]){
         filters["compensation"] = compensationSelect.value;
     }
 
-    var startDate = document.getElementById("jobStartDate");
-    var endDate = document.getElementById("jobEndDate");
-    if(startDate != null && endDate != null){
-        if(startDate.value != null && startDate.value.length > 0){
-            filters["dates"]["start"] = startDate.value;
-        }
-        if(endDate.value != null && endDate.value.length > 0){
-            filters["dates"]["end"] = endDate.value;
-        }
-    }
+    filters["dates"] = _getDatesFilterValues("jobs")
     return filters
 }
 
