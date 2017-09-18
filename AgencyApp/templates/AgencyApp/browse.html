@@ -23,6 +23,15 @@
                 browseButton.className = "active";
             }
         }
+
+        // If filters are expanded, add filters for new browse tab
+        if(filtersExpanded){
+            if(activeTabs.length > 0){
+                toggleExpandBrowseFiltersPanel("expand")
+            }else{
+                toggleExpandBrowseFiltersPanel("shrink")
+            }
+        }
         if(document.getElementById("searchTextInput").value === ""){
             if(!firstSearch){
                 submitSearch()
@@ -459,6 +468,7 @@
         return "Event filters"
     }
 
+    var filtersExpanded = false
     function toggleExpandBrowseFiltersPanel(expandType){
         var filterPanelHeight = filterSectionHeights[expandType] * activeTabs.length;
         var browseResultsHeight = getBrowseResultsTableHeight()
@@ -485,6 +495,7 @@
                 addFiltersButton.innerHTML = "Hide"
                 addFiltersButton.onclick = function(){toggleExpandBrowseFiltersPanel("shrink")}
                 animateBrowsePanelHeights(true, false, {});
+                filtersExpanded = true;
             }else if(expandType === "shrink"){
                 addFiltersButton.innerHTML = "Advanced search"
                 addFiltersButton.onclick = function(){toggleExpandBrowseFiltersPanel("expand");}
@@ -495,7 +506,7 @@
                     filteredProfessions = [];
                 }
                 animateBrowsePanelHeights(false, false, {"browseFiltersPanel": finishCallback})
-                
+                filtersExpanded = false;
             }
         }
     }
