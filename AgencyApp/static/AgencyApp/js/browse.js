@@ -79,7 +79,7 @@ function toggleExpandBrowseSection(direction, section){
     }
 }
 
-var getFiltersMap = {"jobs": getJobsFilterValues, "roles": getJobsFilterValues, "users": getJobsFilterValues, "projects": getJobsFilterValues, "events": getJobsFilterValues}
+var getFiltersMap = {"jobs": getJobsFilterValues, "roles": getRolesFilterValues, "users": getJobsFilterValues, "projects": getJobsFilterValues, "events": getJobsFilterValues}
 function getSearchFilterValues(){
     var filterDict = {}
     for(var i=0; i < activeTabs.length; i++){
@@ -105,24 +105,37 @@ function _getDatesFilterValues(filterType){
     return dateFilters
 }
 
+function _addSelectFilterValues(existingFilters, selectID, filterName){
+    var select = document.getElementById(selectID);
+    if(select != null && select.value != defaultSelectValues[filterName]){
+        existingFilters[filterName] = select.value;
+    }
+    return existingFilters;
+}
+
 function getJobsFilterValues(){
     var filters = {"professions": filteredProfessions, "status": null, "compensation": null, "dates": {"start": null, "end": null}}
-
-    var statusSelect = document.getElementById("jobsStatusSelect");
-    if(statusSelect != null && statusSelect.value != defaultSelectValues["status"]){
-        filters["status"] = statusSelect.value;
-    }
-
-    var compensationSelect = document.getElementById("jobsCompensationSelect");
-    if(compensationSelect != null && compensationSelect.value != defaultSelectValues["compensation"]){
-        filters["compensation"] = compensationSelect.value;
-    }
-
+    filters = _addSelectFilterValues(filters, "jobsStatusSelect", "status")
+    filters = _addSelectFilterValues(filters, "jobsCompensationSelect", "compensation")
     filters["dates"] = _getDatesFilterValues("jobs")
     return filters
 }
 
-function getRoleFilters(){}
+function getRolesFilterValues(){
+    var filters = {"status": null, "roleType": null, "gender": null, "ageRange": null, "build": null, "hairColor": null, "eyeColor": null, "ethnicity": null, "compensation": null, "dates": {"start": null, "end": null}}
+
+    filters = _addSelectFilterValues(filters, "rolesStatusSelect", "status")
+    filters = _addSelectFilterValues(filters, "rolesTypeSelect", "roleType")
+    filters = _addSelectFilterValues(filters, "rolesGenderSelect", "gender")
+    filters = _addSelectFilterValues(filters, "rolesAgeRangeSelect", "ageRange")
+    filters = _addSelectFilterValues(filters, "rolesCompensationSelect", "compensation")
+    filters = _addSelectFilterValues(filters, "rolesBuildSelect", "build")
+    filters = _addSelectFilterValues(filters, "rolesHairColorSelect", "hairColor")
+    filters = _addSelectFilterValues(filters, "rolesEyeColorSelect", "eyeColor")
+    filters = _addSelectFilterValues(filters, "rolesEthnicitySelect", "ethnicity")
+    filters["dates"] = _getDatesFilterValues("roles")
+    return filters
+}
 
 function getUserFilters(){}
 

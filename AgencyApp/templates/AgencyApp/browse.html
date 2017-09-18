@@ -242,7 +242,7 @@
         }
         displayFilteredProfessions("jobs", forceUpdate)
     }
-    var defaultSelectValues = {"professions": "-", "status": "-", "compensation": "-", "roleType": "Actor", "gender": "-", "ageRange": "-", "build": "-", "hairColor": "-", "eyeColor": "-", "ethnicity": "-"}
+    var defaultSelectValues = {"professions": "-", "status": "-", "compensation": "-", "roleType": "-", "gender": "-", "ageRange": "-", "build": "-", "hairColor": "-", "eyeColor": "-", "ethnicity": "-"}
     function getJobsFilters(){
         var filterString = '';
         var filterCallbacks = [];
@@ -368,6 +368,8 @@
             filterString += "<li><div class='browseFilterListLabel left'>Type: </div>"
             {% if browseFilters.roles.roleTypeList %}
                 var roleTypeList = {{browseFilters.roles.roleTypeList|safe}}
+                roleTypeList.unshift(defaultSelectValues["roleType"])       // have to add default status '-' as it is not in roleTypeList
+
                 filterString += "<div class='browseFilterListElement left'>" + createSelectForm("rolesFiltersForm", "rolesTypeSelect", roleTypeList, defaultSelectValues["roleType"]) + "</div>"
             {% endif %}
             filterString += "</li>"
@@ -414,8 +416,8 @@
             // Add dates
             // Can use below list item that has 1 label of dates with the 2 inputs on separate lines
             /*filterString += "<li style='height: 50px;'> Dates: <ul style='height: 50px;  width: 120px; margin-top: -20px; margin-left: 50px;'><li><input type='date' value='" + currentDateString + "' style=''></li><li><input type='date' value='" + tomorrowDateString + "'></li></ul></li>"*/
-            filterString += "<li><div class='browseFilterListLabel right'>Start date: </div><div class='browseFilterListElement right'><input type='date' id='jobStartDate' value='' style=''></div></li>"
-            filterString += "<li><div class='browseFilterListLabel right'>End date: </div><div class='browseFilterListElement right'><input type='date' id='jobEndDate' value='' style=''></div></li>"
+            filterString += "<li><div class='browseFilterListLabel right'>Start date: </div><div class='browseFilterListElement right'><input type='date' id='rolesStartDate' value='' style=''></div></li>"
+            filterString += "<li><div class='browseFilterListLabel right'>End date: </div><div class='browseFilterListElement right'><input type='date' id='rolesEndDate' value='' style=''></div></li>"
 
             // Add hair color
             filterString += "<li><div class='browseFilterListLabel right'>Hair color: </div>"
