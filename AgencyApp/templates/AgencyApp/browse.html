@@ -96,7 +96,7 @@
         var callbacks = []
         for(var i=0; i < activeTabs.length; i++){
             var filterPanel = filterPanelMap[activeTabs[i]]()
-            panelString += "<li style='height: " + filterSectionHeights[activeTabs[i]] + "px;'>" + filterPanel["html"] + "</li>";
+            panelString += "<li id='" + activeTabs[i] + "FilterRow' style='height: " + filterSectionHeights[activeTabs[i]] + "px;'>" + filterPanel["html"] + "</li>";
             if(filterPanel["callbacks"].length > 0){
                 callbacks = callbacks.concat(filterPanel["callbacks"])
             }
@@ -205,6 +205,8 @@
             }
             $("[id='" + filterType + "ProfessionChoiceRow']").animate({marginTop: rowMarginTop + "px", height: Math.max(filteredProfessions.length * professionRowHeight, 4) + "px"}, browseAnimateSpeed, function(){});
             if(expandParentContainers || forceUpdate){
+                // Update the height of the container row so filter panels below this one will expand
+                $("[id='" + filterType + "FilterRow']").animate({marginTop: "0px", height: filterSectionHeights[filterType] + ((filteredProfessions.length-1) * professionRowHeight) + "px"}, browseAnimateSpeed, function(){});
                 animateBrowsePanelHeights(true, true)
             }
         }
