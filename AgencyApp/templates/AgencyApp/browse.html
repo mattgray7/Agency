@@ -89,14 +89,14 @@
         }
     }
 
-    var filterSectionHeight = 125;
+    var filterSectionHeights = {"jobs": 165, "roles": 190};
     var filterPanelMap = {"jobs": getJobsFilters, "roles": getRolesFiltersString, "users": getUsersFiltersString, "projects": getProjectsFiltersString, "events": getEventsFiltersString}
     function createFilterPanel(){
         var panelString = "<ul>"
         var callbacks = []
         for(var i=0; i < activeTabs.length; i++){
             var filterPanel = filterPanelMap[activeTabs[i]]()
-            panelString += "<li style='height: " + filterSectionHeight + "px;'>" + filterPanel["html"] + "</li>";
+            panelString += "<li style='height: " + filterSectionHeights[activeTabs[i]] + "px;'>" + filterPanel["html"] + "</li>";
             if(filterPanel["callbacks"].length > 0){
                 callbacks = callbacks.concat(filterPanel["callbacks"])
             }
@@ -119,8 +119,12 @@
     function getAnimationHeights(addFilterPanelHeight, addFilteredProfessions){
         var heightsDict = {}
         var searchPanelBaseHeight = 180;
-        var filterPanelHeight = filterSectionHeight * activeTabs.length;
         var browseResultsHeight = getBrowseResultsTableHeight()
+
+        var filterPanelHeight = 0;
+        for(var i=0; i < activeTabs.length; i++){
+            filterPanelHeight += filterSectionHeights[activeTabs[i]];
+        }
 
         // Browse content is search panel + search results
         heightsDict["browseContent"] = searchPanelBaseHeight + browseResultsHeight + 8; // 8 is for the padding
@@ -300,7 +304,10 @@
             filterString += "<li><div class='browseFilterListLabel right'>Start date: </div><div class='browseFilterListElement right'><input type='date' id='jobStartDate' value='' style=''></div></li>"
             filterString += "<li><div class='browseFilterListLabel right'>End date: </div><div class='browseFilterListElement right'><input type='date' id='jobEndDate' value='' style=''></div></li>"
 
-            filterString += "</div>"
+            filterString += "</ul></div>"
+
+            // Add search button
+            filterString += ""
         {% endif %}
         return {"html": filterString, "callbacks": filterCallbacks}
     }
@@ -417,7 +424,7 @@
     }
 
     function toggleExpandBrowseFiltersPanel(expandType){
-        var filterPanelHeight = filterSectionHeight * activeTabs.length;
+        var filterPanelHeight = filterSectionHeights[expandType] * activeTabs.length;
         var browseResultsHeight = getBrowseResultsTableHeight()
         if(firstSearch){
             // Special case when first loading filters
@@ -496,8 +503,13 @@
                         <a id='addFiltersButton' onclick='toggleExpandBrowseFiltersPanel("expand");'>Advanced search</a>
                     </div>
                     <div id='browseFiltersPanel' style='position: absolute; top: 170px; left: 0; right: 0; height: 0px; margin-top: 0px;; overflow: hidden;'>
-                        <div id='browseFiltersPanelContent' style='display: none;'></div>
+                        <div style='position: relative;'>
+                            <div id='browseFiltersPanelContent' style='display: none;'>
+                            </div>
+                            <div style='position: absolute; right: 10px; bottom: 10px; padding: 5px 10px; font-size: 0.85em;' class='whiteButton blackHover' onclick='submitSearch();'>Update search</div>
+                        </div>
                     </div>
+
 
                 </div>
             </div>
