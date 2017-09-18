@@ -96,6 +96,7 @@ COLLABORATOR_OPTIONS = ["Director", "Director of photography", "Musical artist",
 
 GENDER_OPTIONS = ["-", "Male", "Female", "Non-binary", "Other", "Prefer not to specify"]	# used in other places than actor attribute
 CHARACTER_TYPE_OPTIONS = ["Actor", "Extra", "Model", "Chorus member", "Dancer", "Other"]
+AGE_RANGE_OPTIONS = ["-", "0 - 6", "6 - 12", "12 - 16", "16 - 20", "20 - 25", "25 - 40", "40 - 55", "55 - 70", "70+"]
 ACTOR_ATTRIBUTE_DICT = [{"name": "hairColor",
 						 "options": ["-", "Black", "Blonde", "Brown", "Grey", "Red", "White", "Other"]},
 						{"name": "eyeColor",
@@ -103,7 +104,7 @@ ACTOR_ATTRIBUTE_DICT = [{"name": "hairColor",
 						{"name": "ethnicity",
 						 "options": ["-", "Caucasian", "Latino", "African", "East Asian", "Middle Eastern", "Indian"]},
 						{"name": "ageRange",
-						 "options": ["-", "0 - 6", "6 - 12", "12 - 16", "16 - 20", "20 - 25", "25 - 40", "40 - 55", "55 - 70", "70+"]},
+						 "options": AGE_RANGE_OPTIONS},
 						{"name": "gender",
 						 "options": GENDER_OPTIONS},
 						{"name": "height"},

@@ -122,7 +122,9 @@ class BrowseView(views.GenericFormView):
                                             },
                                    "roles": {"statusList": constants.CASTING_STATUS_LIST,
                                              "compensationList": constants.COMPENSATION_TYPES,
-                                             "roleTypeList": constants.CHARACTER_TYPE_OPTIONS
+                                             "roleTypeList": constants.CHARACTER_TYPE_OPTIONS,
+                                             "genderList": constants.GENDER_OPTIONS,
+                                             "ageRangeList": constants.AGE_RANGE_OPTIONS,
                                              }
                                   }
         return self._browseFilters

@@ -231,7 +231,7 @@
         }
         displayFilteredProfessions("jobs", forceUpdate)
     }
-    var defaultSelectValues = {"professions": "-", "status": "-", "compensation": "-", "roleType": "Actor"}
+    var defaultSelectValues = {"professions": "-", "status": "-", "compensation": "-", "roleType": "Actor", "gender": "-", "ageRange": "-"}
     function getJobsFilters(){
         var filterString = '';
         var filterCallbacks = [];
@@ -356,6 +356,24 @@
                 var roleTypeList = {{browseFilters.roles.roleTypeList|safe}}
                 //roleTypeList.unshift(defaultSelectValues["roleType"])
                 filterString += "<div class='browseFilterListElement left'>" + createSelectForm("rolesFiltersForm", "rolesTypeSelect", roleTypeList, defaultSelectValues["roleType"]) + "</div>"
+            {% endif %}
+            filterString += "</li>"
+
+            // Add gender
+            filterString += "<li><div class='browseFilterListLabel left'>Gender: </div>"
+            {% if browseFilters.roles.genderList %}
+                var genderList = {{browseFilters.roles.genderList|safe}}
+                //roleTypeList.unshift(defaultSelectValues["roleType"])
+                filterString += "<div class='browseFilterListElement left'>" + createSelectForm("rolesFiltersForm", "rolesGenderSelect", genderList, defaultSelectValues["gender"]) + "</div>"
+            {% endif %}
+            filterString += "</li>"
+
+            // Add age range
+            filterString += "<li><div class='browseFilterListLabel left'>Age range: </div>"
+            {% if browseFilters.roles.ageRangeList %}
+                var ageRangeList = {{browseFilters.roles.ageRangeList|safe}}
+                //roleTypeList.unshift(defaultSelectValues["roleType"])
+                filterString += "<div class='browseFilterListElement left'>" + createSelectForm("rolesFiltersForm", "rolesAgeRangeSelect", ageRangeList, defaultSelectValues["ageRange"]) + "</div>"
             {% endif %}
             filterString += "</li>"
 
