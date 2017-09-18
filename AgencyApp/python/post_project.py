@@ -29,8 +29,9 @@ class ProjectPostInstance(post.GenericPostInstance):
             self.record.endDate = self.request.POST.get("endDate")
             self.record.compensation = self.request.POST.get("compensation", "Unspecified")
             self.record.union = self.request.POST.get("union")
+            self.record.companyName = self.request.POST.get("companyName")
             self.record.projectType = self.request.POST.get("projectType")
-            self.record.projectType = self.request.POST.get("productionNotes")
+            self.record.productionNotes = self.request.POST.get("productionNotes")
             self.record.projectID = self.projectID
             self.record.save()
         return True
