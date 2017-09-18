@@ -125,6 +125,10 @@ class BrowseView(views.GenericFormView):
                                              "roleTypeList": constants.CHARACTER_TYPE_OPTIONS,
                                              "genderList": constants.GENDER_OPTIONS,
                                              "ageRangeList": constants.AGE_RANGE_OPTIONS,
+                                             "hairColorList": constants.HAIR_COLOR_OPTIONS,
+                                             "eyeColorList": constants.EYE_COLOR_OPTIONS,
+                                             "buildList": constants.BUILD_OPTIONS,
+                                             "ethnicityList": constants.ETHNICITY_OPTIONS
                                              }
                                   }
         return self._browseFilters

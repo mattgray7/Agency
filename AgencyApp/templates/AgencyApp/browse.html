@@ -89,7 +89,7 @@
         }
     }
 
-    var filterSectionHeights = {"jobs": 125, "roles": 160};
+    var filterSectionHeights = {"jobs": 125, "roles": 210};
     var filterPanelMap = {"jobs": getJobsFilters, "roles": getRolesFiltersString, "users": getUsersFiltersString, "projects": getProjectsFiltersString, "events": getEventsFiltersString}
     function createFilterPanel(){
         var panelString = "<ul>"
@@ -242,7 +242,7 @@
         }
         displayFilteredProfessions("jobs", forceUpdate)
     }
-    var defaultSelectValues = {"professions": "-", "status": "-", "compensation": "-", "roleType": "Actor", "gender": "-", "ageRange": "-"}
+    var defaultSelectValues = {"professions": "-", "status": "-", "compensation": "-", "roleType": "Actor", "gender": "-", "ageRange": "-", "build": "-", "hairColor": "-", "eyeColor": "-", "ethnicity": "-"}
     function getJobsFilters(){
         var filterString = '';
         var filterCallbacks = [];
@@ -359,7 +359,7 @@
             filterString += "<li><div class='browseFilterListLabel left'>Status: </div>"
             {% if browseFilters.roles.statusList %}
                 var statusList = {{browseFilters.roles.statusList|safe}}
-                statusList.unshift(defaultSelectValues["status"])
+                statusList.unshift(defaultSelectValues["status"])       // have to add default status '-' as it is not in statusList
                 filterString += "<div class='browseFilterListElement left'>" + createSelectForm("rolesFiltersForm", "rolesStatusSelect", statusList, defaultSelectValues["status"]) + "</div>"
             {% endif %}
             filterString += "</li>"
@@ -368,7 +368,6 @@
             filterString += "<li><div class='browseFilterListLabel left'>Type: </div>"
             {% if browseFilters.roles.roleTypeList %}
                 var roleTypeList = {{browseFilters.roles.roleTypeList|safe}}
-                //roleTypeList.unshift(defaultSelectValues["roleType"])
                 filterString += "<div class='browseFilterListElement left'>" + createSelectForm("rolesFiltersForm", "rolesTypeSelect", roleTypeList, defaultSelectValues["roleType"]) + "</div>"
             {% endif %}
             filterString += "</li>"
@@ -377,7 +376,6 @@
             filterString += "<li><div class='browseFilterListLabel left'>Gender: </div>"
             {% if browseFilters.roles.genderList %}
                 var genderList = {{browseFilters.roles.genderList|safe}}
-                //roleTypeList.unshift(defaultSelectValues["roleType"])
                 filterString += "<div class='browseFilterListElement left'>" + createSelectForm("rolesFiltersForm", "rolesGenderSelect", genderList, defaultSelectValues["gender"]) + "</div>"
             {% endif %}
             filterString += "</li>"
@@ -386,8 +384,14 @@
             filterString += "<li><div class='browseFilterListLabel left'>Age range: </div>"
             {% if browseFilters.roles.ageRangeList %}
                 var ageRangeList = {{browseFilters.roles.ageRangeList|safe}}
-                //roleTypeList.unshift(defaultSelectValues["roleType"])
                 filterString += "<div class='browseFilterListElement left'>" + createSelectForm("rolesFiltersForm", "rolesAgeRangeSelect", ageRangeList, defaultSelectValues["ageRange"]) + "</div>"
+            {% endif %}
+
+            // Add build
+            filterString += "<li><div class='browseFilterListLabel left'>Build: </div>"
+            {% if browseFilters.roles.ageRangeList %}
+                var buildList = {{browseFilters.roles.buildList|safe}}
+                filterString += "<div class='browseFilterListElement left'>" + createSelectForm("rolesFiltersForm", "rolesBuildSelect", buildList, defaultSelectValues["build"]) + "</div>"
             {% endif %}
             filterString += "</li>"
 
@@ -412,6 +416,29 @@
             /*filterString += "<li style='height: 50px;'> Dates: <ul style='height: 50px;  width: 120px; margin-top: -20px; margin-left: 50px;'><li><input type='date' value='" + currentDateString + "' style=''></li><li><input type='date' value='" + tomorrowDateString + "'></li></ul></li>"*/
             filterString += "<li><div class='browseFilterListLabel right'>Start date: </div><div class='browseFilterListElement right'><input type='date' id='jobStartDate' value='' style=''></div></li>"
             filterString += "<li><div class='browseFilterListLabel right'>End date: </div><div class='browseFilterListElement right'><input type='date' id='jobEndDate' value='' style=''></div></li>"
+
+            // Add hair color
+            filterString += "<li><div class='browseFilterListLabel right'>Hair color: </div>"
+            {% if browseFilters.roles.hairColorList %}
+                var hairColorTypes = {{browseFilters.roles.hairColorList|safe}};
+                filterString += "<div class='browseFilterListElement right'>" + createSelectForm("rolesFiltersForm", "rolesHairColorSelect", hairColorTypes, defaultSelectValues["hairColor"]) + "</div>";
+            {% endif %}
+
+            // Add eye color
+            filterString += "<li><div class='browseFilterListLabel right'>Eye color: </div>"
+            {% if browseFilters.roles.eyeColorList %}
+                var eyeColorTypes = {{browseFilters.roles.eyeColorList|safe}};
+                filterString += "<div class='browseFilterListElement right'>" + createSelectForm("rolesFiltersForm", "rolesEyeColorSelect", eyeColorTypes, defaultSelectValues["eyeColor"]) + "</div>";
+            {% endif %}
+            filterString += "</li>";
+
+            // Add ethnicity
+            filterString += "<li><div class='browseFilterListLabel right'>Ethnicity: </div>"
+            {% if browseFilters.roles.ethnicityList %}
+                var ethnicityTypes = {{browseFilters.roles.ethnicityList|safe}};
+                filterString += "<div class='browseFilterListElement right'>" + createSelectForm("rolesFiltersForm", "rolesEthnicitySelect", ethnicityTypes, defaultSelectValues["ethnicity"]) + "</div>";
+            {% endif %}
+            filterString += "</li>";
 
             filterString += "</div>"
         {% endif %}

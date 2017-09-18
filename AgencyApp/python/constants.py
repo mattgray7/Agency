@@ -97,19 +97,24 @@ COLLABORATOR_OPTIONS = ["Director", "Director of photography", "Musical artist",
 GENDER_OPTIONS = ["-", "Male", "Female", "Non-binary", "Other", "Prefer not to specify"]	# used in other places than actor attribute
 CHARACTER_TYPE_OPTIONS = ["Actor", "Extra", "Model", "Chorus member", "Dancer", "Other"]
 AGE_RANGE_OPTIONS = ["-", "0 - 6", "6 - 12", "12 - 16", "16 - 20", "20 - 25", "25 - 40", "40 - 55", "55 - 70", "70+"]
+HAIR_COLOR_OPTIONS = ["-", "Black", "Blonde", "Brown", "Grey", "Red", "White", "Other"]
+EYE_COLOR_OPTIONS = ["-", "Blue", "Brown", "Green", "Grey", "Other"]
+ETHNICITY_OPTIONS = ["-", "Caucasian", "Latino", "African", "East Asian", "Middle Eastern", "Indian"]
+BUILD_OPTIONS = ["-", "Slim", "Medium", "Muscular", "Large"]
+
 ACTOR_ATTRIBUTE_DICT = [{"name": "hairColor",
-						 "options": ["-", "Black", "Blonde", "Brown", "Grey", "Red", "White", "Other"]},
+						 "options": HAIR_COLOR_OPTIONS},
 						{"name": "eyeColor",
-						 "options": ["-", "Blue", "Brown", "Green", "Grey", "Other"]},
+						 "options": EYE_COLOR_OPTIONS},
 						{"name": "ethnicity",
-						 "options": ["-", "Caucasian", "Latino", "African", "East Asian", "Middle Eastern", "Indian"]},
+						 "options": ETHNICITY_OPTIONS},
 						{"name": "ageRange",
 						 "options": AGE_RANGE_OPTIONS},
 						{"name": "gender",
 						 "options": GENDER_OPTIONS},
 						{"name": "height"},
 						{"name": "build",
-						 "options": ["-", "Slim", "Medium", "Muscular", "Large"]},
+						 "options": BUILD_OPTIONS},
 						{"name": "characterType",
 						 "options": CHARACTER_TYPE_OPTIONS}
 						 ]
