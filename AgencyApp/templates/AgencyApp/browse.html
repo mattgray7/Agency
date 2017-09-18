@@ -89,7 +89,7 @@
         }
     }
 
-    var filterSectionHeights = {"jobs": 165, "roles": 190};
+    var filterSectionHeights = {"jobs": 125, "roles": 160};
     var filterPanelMap = {"jobs": getJobsFilters, "roles": getRolesFiltersString, "users": getUsersFiltersString, "projects": getProjectsFiltersString, "events": getEventsFiltersString}
     function createFilterPanel(){
         var panelString = "<ul>"
@@ -101,7 +101,7 @@
                 callbacks = callbacks.concat(filterPanel["callbacks"])
             }
         }
-        panelString += "</ul>"
+        panelString += "</ul>";
         return {"html": panelString, "callbacks": callbacks}
     }
 
@@ -119,6 +119,11 @@
     function getAnimationHeights(addFilterPanelHeight, addFilteredProfessions){
         var heightsDict = {}
         var searchPanelBaseHeight = 180;
+        if(addFilterPanelHeight){
+            searchPanelBaseHeight += 40;
+        }
+
+
         var browseResultsHeight = getBrowseResultsTableHeight()
 
         var filterPanelHeight = 0;
@@ -136,7 +141,7 @@
 
         heightsDict["searchResultsPanel"] = searchPanelBaseHeight;  // Top, not height
 
-        heightsDict["browseFiltersPanel"] = 0;
+        heightsDict["browseFiltersPanel"] = 40;
 
         for(divID in heightsDict){
             if(addFilterPanelHeight){
@@ -436,9 +441,11 @@
         var searchPanel = document.getElementById("searchPanel");
         var filterContent = document.getElementById("browseFiltersPanelContent")
         var addFiltersButton = document.getElementById("addFiltersButton");
-        if(searchPanel != null && filterContent != null && addFiltersButton != null){
+        var updateSearchButton = document.getElementById("updateSearchButton");
+        if(searchPanel != null && filterContent != null && addFiltersButton != null && updateSearchButton != null){
             if(expandType === "expand"){
                 filterContent.style.display = "block";
+                updateSearchButton.style.display = "block";
                 var filterPanelInfo = createFilterPanel();
                 filterContent.innerHTML = filterPanelInfo["html"]
                 if(filterPanelInfo["callbacks"].length > 0){
@@ -453,6 +460,7 @@
                 addFiltersButton.innerHTML = "Advanced search"
                 addFiltersButton.onclick = function(){toggleExpandBrowseFiltersPanel("expand");}
                 var finishCallback = function(){
+                    updateSearchButton.style.display = "none";
                     filterContent.style.display = "none";
                     filterContent.innerHTML = '';
                     filteredProfessions = [];
@@ -504,11 +512,11 @@
                     <div id='browseFilterButtonContainer' style='position: absolute; top: 140px; left: 10px;'>
                         <a id='addFiltersButton' onclick='toggleExpandBrowseFiltersPanel("expand");'>Advanced search</a>
                     </div>
-                    <div id='browseFiltersPanel' style='position: absolute; top: 170px; left: 0; right: 0; height: 0px; margin-top: 0px;; overflow: hidden;'>
+                    <div id='browseFiltersPanel' style='position: absolute; top: 170px; left: 0; right: 0; height: 0px; margin-top: 0px; overflow: hidden;'>
                         <div style='position: relative; height: 100%;'>
                             <div id='browseFiltersPanelContent' style='display: none;'>
                             </div>
-                            <div style='position: absolute; right: 10px; bottom: 10px; padding: 5px 10px; font-size: 0.85em;' class='whiteButton blackHover' onclick='submitSearch();'>Update search</div>
+                            <div id='updateSearchButton' style='position: absolute; right: 10px; bottom: 10px; padding: 5px 10px; font-size: 0.85em; display: none;' class='whiteButton blackHover' onclick='submitSearch();'>Update search</div>
                         </div>
                     </div>
 
