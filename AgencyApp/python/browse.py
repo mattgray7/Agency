@@ -129,6 +129,10 @@ class BrowseView(views.GenericFormView):
                                              "eyeColorList": constants.EYE_COLOR_OPTIONS,
                                              "buildList": constants.BUILD_OPTIONS,
                                              "ethnicityList": constants.ETHNICITY_OPTIONS
+                                             },
+                                   "projects": {"statusList": constants.PROJECT_STATUS_LIST,
+                                                "projectTypeList": constants.PROJECT_TYPE_LIST,
+                                                "union": constants.UNIONS
                                              }
                                   }
         return self._browseFilters

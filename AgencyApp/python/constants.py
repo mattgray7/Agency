@@ -83,6 +83,7 @@ PROFESSIONS = {"acting": ["Actor", "Dancer", "Extra", "Stand-in", "Model", "Voic
 			   					  "Music Supervisor", "Music Editor", "Producer", "Sound Editor", "Sound Engineer",
 			   					  "VFX Artist", "VFX Supervisor"]}
 
+UNIONS = ["ACTRA", "IATSE", "UBCP"]
 PROFESSION_LIST = []
 for category in PROFESSIONS:
 	for profession in PROFESSIONS[category]:
