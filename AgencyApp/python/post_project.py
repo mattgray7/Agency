@@ -25,9 +25,12 @@ class ProjectPostInstance(post.GenericPostInstance):
 
         if self.record:
             self.record.location = self.request.POST.get("location")
-            self.record.length = self.request.POST.get("length")
-            self.record.union = self.request.POST.get("union", False) and True
+            self.record.startDate = self.request.POST.get("startDate")
+            self.record.endDate = self.request.POST.get("endDate")
+            self.record.compensation = self.request.POST.get("compensation", "Unspecified")
+            self.record.union = self.request.POST.get("union")
             self.record.projectType = self.request.POST.get("projectType")
+            self.record.projectType = self.request.POST.get("productionNotes")
             self.record.projectID = self.projectID
             self.record.save()
         return True
@@ -125,11 +128,15 @@ class CreateProjectPostView(post.GenericCreatePostView):
     def formInitialValues(self):
         self._formInitialValues = super(CreateProjectPostView, self).formInitialValues
         if self.post.record:
+            self._formInitialValues["compensation"] = self.post.record.compensation
+            self._formInitialValues["companyName"] = self.post.record.companyName
             self._formInitialValues["status"] = self.post.record.status
             self._formInitialValues["location"] = self.post.record.location
-            self._formInitialValues["length"] = self.post.record.length
+            self._formInitialValues["startDate"] = self.post.record.startDate
+            self._formInitialValues["endDate"] = self.post.record.startDate
             self._formInitialValues["union"] = self.post.record.union
             self._formInitialValues["projectType"] = self.post.record.projectType
+            self._formInitialValues["productionNotes"] = self.post.record.productionNotes
         return self._formInitialValues
 
     @property
