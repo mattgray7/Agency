@@ -79,7 +79,7 @@ function toggleExpandBrowseSection(direction, section){
     }
 }
 
-var getFiltersMap = {"jobs": getJobsFilterValues, "roles": getRolesFilterValues, "users": getJobsFilterValues, "projects": getProjectsFilterValues, "events": getEventsFilterValues}
+var getFiltersMap = {"jobs": getJobsFilterValues, "roles": getRolesFilterValues, "users": getUsersFilterValues, "projects": getProjectsFilterValues, "events": getEventsFilterValues}
 function getSearchFilterValues(){
     var filterDict = {}
     for(var i=0; i < activeTabs.length; i++){
@@ -136,7 +136,20 @@ function getRolesFilterValues(){
     return filters
 }
 
-function getUserFilters(){}
+function getUsersFilterValues(){
+    var filters = {"profession": null, "interest": null, "imdb": null, "resume": null, "gender": null, "ageRange": null, "build": null, "hairColor": null, "eyeColor": null, "ethnicity": null, "dates": {"start": null, "end": null}}
+    filters = _addSelectFilterValues(filters, "usersProfessionSelect", "profession")
+    filters = _addSelectFilterValues(filters, "usersInterestSelect", "interest")
+    filters = _addSelectFilterValues(filters, "usersIMDBSelect", "imdb")
+    filters = _addSelectFilterValues(filters, "usersResumeSelect", "resume")
+    filters = _addSelectFilterValues(filters, "usersGenderSelect", "gender")
+    filters = _addSelectFilterValues(filters, "usersBuildSelect", "build")
+    filters = _addSelectFilterValues(filters, "usersHairColorSelect", "hairColor")
+    filters = _addSelectFilterValues(filters, "usersEyeColorSelect", "eyeColor")
+    filters = _addSelectFilterValues(filters, "usersEthnicitySelect", "ethnicity")
+    filters["dates"] = _getDatesFilterValues("users")
+    return filters
+}
 
 function getProjectsFilterValues(){
     var filters = {"status": null, "projectType": null, "union": null, "compensation": null, "dates": {"start": null, "end": null}}

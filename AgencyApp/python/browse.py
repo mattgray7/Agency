@@ -520,7 +520,7 @@ def getEventSearchResults(searchValue, numResults, filters):
                                 )
 
 
-def getUserSearchResults(searchValue, numResults):
+def getUserSearchResults(searchValue, numResults, filters):
     searchLists = []
      # Get matching users
     if " " in searchValue:
