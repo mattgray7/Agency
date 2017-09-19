@@ -430,13 +430,27 @@
 
     function toggleBrowseUserPhysicalAttributes(toggleType){
         var attributeSelectBars = ["usersGenderSelect", "usersHairColorSelect", "usersAgeRangeSelect", "usersEyeColorSelect", "usersBuildSelect", "usersEthnicitySelect"];
-        for(var i=0; i < attributeSelectBars.length; i++){
-            var selectBar = document.getElementById(attributeSelectBars[i])
-            if(selectBar != null){
+        var physicalAttributesList = document.getElementById("physicalAttributesFilterList");
+        if(physicalAttributesList != null){
+            // Disable select bars
+            for(var i=0; i < attributeSelectBars.length; i++){
+                var selectBar = document.getElementById(attributeSelectBars[i])
+                if(selectBar != null){
+                    if(toggleType === "enable"){
+                        $("[id='" + attributeSelectBars[i] + "']").prop('disabled', false)
+                    }else{
+                        $("[id='" + attributeSelectBars[i] + "']").prop('disabled', true)
+                    }
+                }
+            }
+
+            // Grey out labels
+            var labels = physicalAttributesList.getElementsByClassName("browseFilterListLabel")
+            for(var i=0; i < labels.length; i++){
                 if(toggleType === "enable"){
-                    $("[id='" + attributeSelectBars[i] + "']").prop('disabled', false)
+                    labels[i].style.color = "#000";
                 }else{
-                    $("[id='" + attributeSelectBars[i] + "']").prop('disabled', true)
+                    labels[i].style.color = "rgba(0,0,0,0.5)"
                 }
             }
         }
@@ -523,7 +537,7 @@
 
 
             // Add right list
-            filterString += "<div style='position: absolute; top: 27px; left: 48%; right: 0;'><ul class='browseFilterList'>"
+            filterString += "<div style='position: absolute; top: 27px; left: 48%; right: 0;'><ul class='browseFilterList' id='physicalAttributesFilterList'>"
 
             // Add gender
             filterString += "<li><div class='browseFilterListLabel right'>Gender: </div>"
