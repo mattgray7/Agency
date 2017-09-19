@@ -144,7 +144,8 @@ class BrowseView(views.GenericFormView):
                                              "hairColorList": constants.HAIR_COLOR_OPTIONS,
                                              "eyeColorList": constants.EYE_COLOR_OPTIONS,
                                              "buildList": constants.BUILD_OPTIONS,
-                                             "ethnicityList": constants.ETHNICITY_OPTIONS
+                                             "ethnicityList": constants.ETHNICITY_OPTIONS,
+                                             "performerProfessionsList": constants.PROFESSIONS.get("acting")
                                             }
                                   }
         return self._browseFilters

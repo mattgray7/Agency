@@ -239,6 +239,12 @@
             forceUpdate = false;
         }
         displayFilteredProfessions(filterType, forceUpdate)
+
+        if(filterType === "users"){
+            if(!isPerformerProfessionSelected()){
+                toggleBrowseUserPhysicalAttributes("disable");
+            }
+        }
     }
     var defaultSelectValues = {"professions": "-", "status": "-", "compensation": "-", "roleType": "-", "gender": "-", "ageRange": "-", "build": "-", "hairColor": "-", "eyeColor": "-", "ethnicity": "-", "projectType": "-", "union": "-", "eventType": "-", "resume": "-", "imdb": "-", "interest": "-"}
     function getJobsFilters(){
@@ -422,6 +428,33 @@
         return {"html": filterString, "callbacks": filterCallbacks}
     }
 
+    function toggleBrowseUserPhysicalAttributes(toggleType){
+        var attributeSelectBars = ["usersGenderSelect", "usersHairColorSelect", "usersAgeRangeSelect", "usersEyeColorSelect", "usersBuildSelect", "usersEthnicitySelect"];
+        for(var i=0; i < attributeSelectBars.length; i++){
+            var selectBar = document.getElementById(attributeSelectBars[i])
+            if(selectBar != null){
+                if(toggleType === "enable"){
+                    $("[id='" + attributeSelectBars[i] + "']").prop('disabled', false)
+                }else{
+                    $("[id='" + attributeSelectBars[i] + "']").prop('disabled', true)
+                }
+            }
+        }
+    }
+
+    var performerProfessions = ["Actor"];
+    {% if performerProfessionsList %}
+        performerProfessions = {{ performerProfessionsList|safe }};
+    {% endif %}
+    function isPerformerProfessionSelected(){
+        var performerSelected = false;
+        for(var i=0; i < performerProfessions.length; i++){
+            if(filteredProfessions["users"].indexOf(performerProfessions[i]) > -1){
+                performerSelected = true;
+            }
+        }
+        return performerSelected
+    }
     function getUsersFiltersString(){
         var filterString = '';
         var filterCallbacks = [];
@@ -454,9 +487,13 @@
                             filteredProfessions["users"].push(professionSelect.value)
                             displayFilteredProfessions("users")
                         }
+                        if(performerProfessions.indexOf(professionSelect.value) > -1){
+                            toggleBrowseUserPhysicalAttributes("enable");
+                        }
                     })
                 }
             })
+            filterCallbacks.push(function(){toggleBrowseUserPhysicalAttributes("disable");});
 
             // Add interest
             filterString += "<li><div class='browseFilterListLabel left'>Interest: </div>"
@@ -490,47 +527,47 @@
 
             // Add gender
             filterString += "<li><div class='browseFilterListLabel right'>Gender: </div>"
-            {% if browseFilters.roles.genderList %}
+            {% if browseFilters.users.genderList %}
                 var genderList = {{browseFilters.roles.genderList|safe}}
-                filterString += "<div class='browseFilterListElement right'>" + createSelectForm("rolesFiltersForm", "rolesGenderSelect", genderList, defaultSelectValues["gender"]) + "</div>"
+                filterString += "<div class='browseFilterListElement right'>" + createSelectForm("usersFiltersForm", "usersGenderSelect", genderList, defaultSelectValues["gender"]) + "</div>"
             {% endif %}
             filterString += "</li>"
 
             // Add age range
             filterString += "<li><div class='browseFilterListLabel right'>Age range: </div>"
-            {% if browseFilters.roles.ageRangeList %}
-                var ageRangeList = {{browseFilters.roles.ageRangeList|safe}}
-                filterString += "<div class='browseFilterListElement right'>" + createSelectForm("rolesFiltersForm", "rolesAgeRangeSelect", ageRangeList, defaultSelectValues["ageRange"]) + "</div>"
+            {% if browseFilters.users.ageRangeList %}
+                var ageRangeList = {{browseFilters.users.ageRangeList|safe}}
+                filterString += "<div class='browseFilterListElement right'>" + createSelectForm("usersFiltersForm", "usersAgeRangeSelect", ageRangeList, defaultSelectValues["ageRange"]) + "</div>"
             {% endif %}
 
             // Add build
             filterString += "<li><div class='browseFilterListLabel right'>Build: </div>"
-            {% if browseFilters.roles.ageRangeList %}
-                var buildList = {{browseFilters.roles.buildList|safe}}
-                filterString += "<div class='browseFilterListElement right'>" + createSelectForm("rolesFiltersForm", "rolesBuildSelect", buildList, defaultSelectValues["build"]) + "</div>"
+            {% if browseFilters.users.ageRangeList %}
+                var buildList = {{browseFilters.users.buildList|safe}}
+                filterString += "<div class='browseFilterListElement right'>" + createSelectForm("usersFiltersForm", "usersBuildSelect", buildList, defaultSelectValues["build"]) + "</div>"
             {% endif %}
             filterString += "</li>"
 
             // Add hair color
             filterString += "<li><div class='browseFilterListLabel right'>Hair color: </div>"
-            {% if browseFilters.roles.hairColorList %}
-                var hairColorTypes = {{browseFilters.roles.hairColorList|safe}};
-                filterString += "<div class='browseFilterListElement right'>" + createSelectForm("rolesFiltersForm", "rolesHairColorSelect", hairColorTypes, defaultSelectValues["hairColor"]) + "</div>";
+            {% if browseFilters.users.hairColorList %}
+                var hairColorTypes = {{browseFilters.users.hairColorList|safe}};
+                filterString += "<div class='browseFilterListElement right'>" + createSelectForm("usersFiltersForm", "usersHairColorSelect", hairColorTypes, defaultSelectValues["hairColor"]) + "</div>";
             {% endif %}
 
             // Add eye color
             filterString += "<li><div class='browseFilterListLabel right'>Eye color: </div>"
-            {% if browseFilters.roles.eyeColorList %}
-                var eyeColorTypes = {{browseFilters.roles.eyeColorList|safe}};
-                filterString += "<div class='browseFilterListElement right'>" + createSelectForm("rolesFiltersForm", "rolesEyeColorSelect", eyeColorTypes, defaultSelectValues["eyeColor"]) + "</div>";
+            {% if browseFilters.users.eyeColorList %}
+                var eyeColorTypes = {{browseFilters.users.eyeColorList|safe}};
+                filterString += "<div class='browseFilterListElement right'>" + createSelectForm("usersFiltersForm", "usersEyeColorSelect", eyeColorTypes, defaultSelectValues["eyeColor"]) + "</div>";
             {% endif %}
             filterString += "</li>";
 
             // Add ethnicity
             filterString += "<li><div class='browseFilterListLabel right'>Ethnicity: </div>"
-            {% if browseFilters.roles.ethnicityList %}
-                var ethnicityTypes = {{browseFilters.roles.ethnicityList|safe}};
-                filterString += "<div class='browseFilterListElement right'>" + createSelectForm("rolesFiltersForm", "rolesEthnicitySelect", ethnicityTypes, defaultSelectValues["ethnicity"]) + "</div>";
+            {% if browseFilters.users.ethnicityList %}
+                var ethnicityTypes = {{browseFilters.users.ethnicityList|safe}};
+                filterString += "<div class='browseFilterListElement right'>" + createSelectForm("usersFiltersForm", "usersEthnicitySelect", ethnicityTypes, defaultSelectValues["ethnicity"]) + "</div>";
             {% endif %}
             filterString += "</li>";
 
