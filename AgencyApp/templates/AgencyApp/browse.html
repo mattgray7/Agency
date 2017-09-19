@@ -473,7 +473,7 @@
             {% if browseFilters.projects.unionList %}
                 var unionList = {{browseFilters.projects.unionList|safe}}
                 unionList.unshift(defaultSelectValues["union"])
-                filterString += "<div class='browseFilterListElement left'>" + createSelectForm("projectsFiltersForm", "unionSelect", unionList, defaultSelectValues["union"]) + "</div>"
+                filterString += "<div class='browseFilterListElement left'>" + createSelectForm("projectsFiltersForm", "projectsUnionSelect", unionList, defaultSelectValues["union"]) + "</div>"
             {% endif %}
             filterString += "</li>"
 
@@ -488,7 +488,7 @@
             {% if browseFilters.jobs.compensationList %}
                 var compensationTypes = {{browseFilters.jobs.compensationList|safe}};
                 compensationTypes.unshift(defaultSelectValues["compensation"])
-                filterString += "<div class='browseFilterListElement right'>" + createSelectForm("jobsFiltersForm", "jobsCompensationSelect", compensationTypes, defaultSelectValues["compensation"]) + "</div>";
+                filterString += "<div class='browseFilterListElement right'>" + createSelectForm("projectsFiltersForm", "projectsCompensationSelect", compensationTypes, defaultSelectValues["compensation"]) + "</div>";
             {% endif %}
             filterString += "</li>";
 

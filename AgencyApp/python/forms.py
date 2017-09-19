@@ -63,7 +63,7 @@ class CreateProjectPostForm(GenericCreatePostForm):
     startDate = forms.DateField(label="Start Date*", required=False, widget=forms.DateInput(attrs={'class':'datepicker'}))
     endDate = forms.DateField(label="End Date*", required=False, widget=forms.DateInput(attrs={'class':'datepicker'}))
     description = forms.CharField(label="Description*", widget=forms.TextInput(attrs={'placeholder': 'The hiree must be able to handle all camera operations for all set days. They will be compensated at an hourly rate, with potential for reshoots after primary production.'}), required=True, max_length=5000)
-    productionNotes = forms.CharField(label="Production Notes", widget=forms.TextInput(attrs={'placeholder': 'Keep people updated on the status of production.'}), required=True, max_length=5000)
+    productionNotes = forms.CharField(label="Production Notes", widget=forms.TextInput(attrs={'placeholder': 'Keep people updated on the status of production.'}), required=False, max_length=5000)
     companyName = forms.CharField(label="Company", max_length=300, required=False, widget=forms.TextInput(attrs={'placeholder': '(Optional)'}))
 
 class CreateCollaborationPostForm(GenericCreatePostForm):

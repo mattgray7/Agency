@@ -79,7 +79,7 @@ function toggleExpandBrowseSection(direction, section){
     }
 }
 
-var getFiltersMap = {"jobs": getJobsFilterValues, "roles": getRolesFilterValues, "users": getJobsFilterValues, "projects": getJobsFilterValues, "events": getJobsFilterValues}
+var getFiltersMap = {"jobs": getJobsFilterValues, "roles": getRolesFilterValues, "users": getJobsFilterValues, "projects": getProjectsFilterValues, "events": getJobsFilterValues}
 function getSearchFilterValues(){
     var filterDict = {}
     for(var i=0; i < activeTabs.length; i++){
@@ -139,7 +139,17 @@ function getRolesFilterValues(){
 
 function getUserFilters(){}
 
-function getProjectFilters(){}
+function getProjectsFilterValues(){
+    var filters = {"status": null, "projectType": null, "union": null, "compensation": null, "dates": {"start": null, "end": null}}
+
+    filters = _addSelectFilterValues(filters, "projectsStatusSelect", "status")
+    filters = _addSelectFilterValues(filters, "projectsTypeSelect", "projectType")
+    filters = _addSelectFilterValues(filters, "projectsUnionSelect", "union")
+    filters = _addSelectFilterValues(filters, "projectsCompensationSelect", "compensation")
+    filters["dates"] = _getDatesFilterValues("projects")
+    console.log(filters)
+    return filters
+}
 
 function getEventFilters(){}
 

@@ -440,13 +440,40 @@ def getRolesSearchResults(searchValue, numResults, filters):
                                 searchLists=searchLists
                                 )
 
-def getProjectSearchResults(searchValue, numResults):
+def getProjectSearchResults(searchValue, numResults, filters):
+    searchLists = [models.ProjectPost.objects.filter(title__startswith=searchValue),
+                   models.ProjectPost.objects.filter(title__startswith="The {0}".format(searchValue))]
+    defaultList = models.ProjectPost.objects.all().order_by("-status", "-updatedAt")
+    searchLists.append(defaultList)
+    print filters
+    if filters:
+        for i, searchList in enumerate(searchLists):
+            if filters.get("status"):
+                searchLists[i] = searchLists[i].filter(status=filters.get("status"))
+            if filters.get("projectType"):
+                searchLists[i] = searchLists[i].filter(projectType=filters.get("projectType"))
+            if filters.get("union"):
+                searchLists[i] = searchLists[i].filter(union=filters.get("union"))
+            if filters.get("compensation"):
+                searchLists[i] = searchLists[i].filter(compensation=filters.get("compensation"))
+            if filters.get("dates"):
+                start = filters.get("dates").get("start")
+                end = filters.get("dates").get("end")
+                if start:
+                    startSplitted = start.split("-")
+                    startDate = datetime.date(int(startSplitted[0]), int(startSplitted[1]), int(startSplitted[2]))
+                    searchLists[i] = searchLists[i].filter(startDate__gte=startDate)
+                if end:
+                    endSplitted = end.split("-")
+                    endDate = datetime.date(int(endSplitted[0]), int(endSplitted[1]), int(endSplitted[2]))
+                    searchLists[i] = searchLists[i].filter(endDate__lte=endDate)
+    defaultList = searchLists.pop()
+
     return getPostSearchResults(searchValue=searchValue,
                                 maxNumResults=numResults,
                                 requiredFields=["projectType", "openRoles", "openJobs"],
-                                defaultList=models.ProjectPost.objects.all().exclude(status="Completed").order_by("-updatedAt"),
-                                searchLists=[models.ProjectPost.objects.filter(title__startswith=searchValue),
-                                             models.ProjectPost.objects.filter(title__startswith="The {0}".format(searchValue))]
+                                defaultList=defaultList,
+                                searchLists=searchLists
                                 )
 
 
