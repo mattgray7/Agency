@@ -114,7 +114,7 @@ function _addSelectFilterValues(existingFilters, selectID, filterName){
 }
 
 function getJobsFilterValues(){
-    var filters = {"professions": filteredProfessions, "status": null, "compensation": null, "dates": {"start": null, "end": null}}
+    var filters = {"professions": filteredProfessions["jobs"], "status": null, "compensation": null, "dates": {"start": null, "end": null}}
     filters = _addSelectFilterValues(filters, "jobsStatusSelect", "status")
     filters = _addSelectFilterValues(filters, "jobsCompensationSelect", "compensation")
     filters["dates"] = _getDatesFilterValues("jobs")

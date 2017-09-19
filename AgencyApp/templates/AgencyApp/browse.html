@@ -98,7 +98,7 @@
         }
     }
 
-    var filterSectionHeights = {"jobs": 125, "roles": 210, "projects": 125, "events": 100, "users": 210};
+    var filterSectionHeights = {"jobs": 125, "roles": 210, "projects": 125, "events": 100, "users": 230};
     var filterPanelMap = {"jobs": getJobsFilters, "roles": getRolesFiltersString, "users": getUsersFiltersString, "projects": getProjectsFiltersString, "events": getEventsFiltersString}
     function createFilterPanel(){
         var panelString = "<ul>"
@@ -146,7 +146,7 @@
                 heightsDict[divID] += filterPanelHeight;
             }
             if(addFilteredProfessions){
-                heightsDict[divID] += Math.max((filteredProfessions.length - 1), 0) * professionRowHeight;
+                heightsDict[divID] += (Math.max((filteredProfessions["jobs"].length - 1), 0) + filteredProfessions["users"].length) * professionRowHeight;
             }
         }
         return heightsDict
@@ -187,10 +187,10 @@
         var row = document.getElementById(filterType + "ProfessionChoiceRow");
         if(row != null){
             var professionString = ''
-            if(filteredProfessions.length > 0){
+            if(filteredProfessions[filterType].length > 0){
                 professionString = "<ul class='filteredProfessionList browseFilterListElement left'>"
-                for(var i=0; i < filteredProfessions.length; i++){
-                    professionString += "<li style='margin-bottom: 3px; text-align: left; position: relative;'><div style='position: absolute; left: 5px;'>" + filteredProfessions[i] + "</div><a onclick='removeFilteredProfession(" + '"' + filteredProfessions[i] + '");' + "' style='font-size: 1em; font-weight: 800; position: absolute; right: 5px;'>X</a></li>";
+                for(var i=0; i < filteredProfessions[filterType].length; i++){
+                    professionString += "<li style='margin-bottom: 3px; text-align: left; position: relative;'><div style='position: absolute; left: 5px;'>" + filteredProfessions[filterType][i] + "</div><a onclick='removeFilteredProfession(" + '"' + filteredProfessions[filterType][i] + '", "' + filterType + '");' + "' style='font-size: 1em; font-weight: 800; position: absolute; right: 5px;'>X</a></li>";
                 }
                 professionString += "</ul>"
             }else{
@@ -202,31 +202,31 @@
             // Special case: single profession needs to moved up 3px to look properly centered
             var rowMarginTop = -1;
             var expandParentContainers = true;
-            if(filteredProfessions.length <= 1){
+            if(filteredProfessions[filterType].length <= 1){
                 rowMarginTop = -4;
                 expandParentContainers = false
             }
-            $("[id='" + filterType + "ProfessionChoiceRow']").animate({marginTop: rowMarginTop + "px", height: Math.max(filteredProfessions.length * professionRowHeight, 4) + "px"}, browseAnimateSpeed, function(){});
-            if(expandParentContainers || forceUpdate){
+            $("[id='" + filterType + "ProfessionChoiceRow']").animate({marginTop: rowMarginTop + "px", height: Math.max(filteredProfessions[filterType].length * professionRowHeight, 4) + "px"}, browseAnimateSpeed, function(){});
+            if(expandParentContainers || forceUpdate || filterType === "users"){
                 // Update the height of the container row so filter panels below this one will expand
-                $("[id='" + filterType + "FilterRow']").animate({marginTop: "0px", height: filterSectionHeights[filterType] + ((filteredProfessions.length-1) * professionRowHeight) + "px"}, browseAnimateSpeed, function(){});
+                $("[id='" + filterType + "FilterRow']").animate({marginTop: "0px", height: filterSectionHeights[filterType] + ((filteredProfessions[filterType].length-1) * professionRowHeight) + "px"}, browseAnimateSpeed, function(){});
                 animateBrowsePanelHeights(true, true)
             }
         }
     }
 
-    var filteredProfessions = []
-    function removeFilteredProfession(profession){
-        var professionIndex = filteredProfessions.indexOf(profession)
+    var filteredProfessions = {"jobs": [], "users": []}
+    function removeFilteredProfession(profession, filterType){
+        var professionIndex = filteredProfessions[filterType].indexOf(profession)
         if(professionIndex > -1){
-            filteredProfessions.splice(professionIndex, 1)
+            filteredProfessions[filterType].splice(professionIndex, 1)
         }
 
         // Update the select value if its current value is being removed (either to default or last chosen)
-        var professionSelect = document.getElementById("jobsProfessionSelect")
+        var professionSelect = document.getElementById(filterType + "ProfessionSelect")
         if(professionSelect != null){
-            if(filteredProfessions.length > 0){
-                professionSelect.value = filteredProfessions[filteredProfessions.length - 1];
+            if(filteredProfessions[filterType].length > 0){
+                professionSelect.value = filteredProfessions[filterType][filteredProfessions[filterType].length - 1];
             }else{
                 professionSelect.value = defaultSelectValues["professions"];
             }
@@ -235,10 +235,10 @@
         // Special case, want to force panel to shrink if there were 2 professions and 1 was removed,
         // normally wouldn't update if there was only 1 element
         var forceUpdate = true;
-        if(filteredProfessions.length === 0){
+        if(filteredProfessions[filterType].length === 0){
             forceUpdate = false;
         }
-        displayFilteredProfessions("jobs", forceUpdate)
+        displayFilteredProfessions(filterType, forceUpdate)
     }
     var defaultSelectValues = {"professions": "-", "status": "-", "compensation": "-", "roleType": "-", "gender": "-", "ageRange": "-", "build": "-", "hairColor": "-", "eyeColor": "-", "ethnicity": "-", "projectType": "-", "union": "-", "eventType": "-", "resume": "-", "imdb": "-", "interest": "-"}
     function getJobsFilters(){
@@ -282,7 +282,7 @@
                             toggleProfessionChoiceRow("expand", "jobs");
                         }*/
                         if(professionSelect.value != defaultSelectValues["professions"]){
-                            filteredProfessions.push(professionSelect.value)
+                            filteredProfessions["jobs"].push(professionSelect.value)
                             displayFilteredProfessions("jobs")
                         }
                     })
@@ -443,6 +443,20 @@
                 filterString += "<div class='browseFilterListElement left'>" + createSelectForm("usersFiltersForm", "usersProfessionSelect", professionList, defaultSelectValues["profession"]) + "</div>"
             {% endif %}
             filterString += "</li>"
+
+            // Add profession choices
+            filterString += "<li id='usersProfessionChoiceRow' style='height: 0px;'></li>";
+            filterCallbacks.push(function(){
+                var professionSelect = document.getElementById("usersProfessionSelect");
+                if(professionSelect != null){
+                    $("#usersProfessionSelect").change(function(){
+                        if(professionSelect.value != defaultSelectValues["professions"]){
+                            filteredProfessions["users"].push(professionSelect.value)
+                            displayFilteredProfessions("users")
+                        }
+                    })
+                }
+            })
 
             // Add interest
             filterString += "<li><div class='browseFilterListLabel left'>Interest: </div>"
@@ -669,7 +683,7 @@
                     updateSearchButton.style.display = "none";
                     filterContent.style.display = "none";
                     filterContent.innerHTML = '';
-                    filteredProfessions = [];
+                    filteredProfessions = {"jobs": [], "users": []};
                 }
                 animateBrowsePanelHeights(false, false, {"browseFiltersPanel": finishCallback})
                 filtersExpanded = false;
