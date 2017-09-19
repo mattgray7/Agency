@@ -151,6 +151,7 @@ class CreateProjectPostView(post.GenericCreatePostView):
                                       "job": forms.CreateWorkPostForm,
                                       "event": forms.CreateEventPostForm,
                                       "project": self.form}
+        self._pageContext["unionOptions"] = constants.UNIONS
         self._pageContext["isProject"] = True
         return self._pageContext
 

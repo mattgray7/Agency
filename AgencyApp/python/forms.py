@@ -59,7 +59,7 @@ class CreateProjectPostForm(GenericCreatePostForm):
     compensation = forms.CharField(label="Compensation", required=False, widget=forms.TextInput(attrs={'placeholder': "Paid - Tier 1 Rate"}))
     location = forms.CharField(label="Location", max_length=300, required=False, widget=forms.TextInput(attrs={'placeholder': 'UBC Campus'}))
     status = forms.CharField(label="Project Status*", widget=forms.HiddenInput, max_length=50, required=False)
-    union = forms.CharField(label="Union", widget=forms.HiddenInput, max_length=500, required=False)
+    union = forms.CharField(label="Union", max_length=500, required=False)
     startDate = forms.DateField(label="Start Date*", required=False, widget=forms.DateInput(attrs={'class':'datepicker'}))
     endDate = forms.DateField(label="End Date*", required=False, widget=forms.DateInput(attrs={'class':'datepicker'}))
     description = forms.CharField(label="Description*", widget=forms.TextInput(attrs={'placeholder': 'The hiree must be able to handle all camera operations for all set days. They will be compensated at an hourly rate, with potential for reshoots after primary production.'}), required=True, max_length=5000)
