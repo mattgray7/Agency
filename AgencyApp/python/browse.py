@@ -134,8 +134,18 @@ class BrowseView(views.GenericFormView):
                                                 "projectTypeList": constants.PROJECT_TYPE_LIST,
                                                 "unionList": constants.UNIONS
                                              },
-                                    "events": {"statusList": constants.EVENT_STATUS_LIST,
-                                               "eventTypeList": constants.EVENT_TYPES}
+                                   "events": {"statusList": constants.EVENT_STATUS_LIST,
+                                              "eventTypeList": constants.EVENT_TYPES
+                                             },
+                                   "users": {"professionList": constants.PROFESSION_LIST,
+                                             "interestList": constants.INTEREST_TYPES,
+                                             "genderList": constants.GENDER_OPTIONS,
+                                             "ageRangeList": constants.AGE_RANGE_OPTIONS,
+                                             "hairColorList": constants.HAIR_COLOR_OPTIONS,
+                                             "eyeColorList": constants.EYE_COLOR_OPTIONS,
+                                             "buildList": constants.BUILD_OPTIONS,
+                                             "ethnicityList": constants.ETHNICITY_OPTIONS
+                                            }
                                   }
         return self._browseFilters
 

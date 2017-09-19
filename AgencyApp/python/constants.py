@@ -94,6 +94,7 @@ PROFESSION_LIST = sorted(list(set(PROFESSION_LIST)))
 HIRE_TYPES = ["hireProject", "hirePermanent", "casting", "collaborating"]
 COLLABORATOR_OPTIONS = ["Director", "Director of photography", "Musical artist", "Screenwriter", "Story writer", "Other"]
 EVENT_TYPES = ["-", "Open Audition", "Closed Audition", "Screening", "Table Read", "Panel", "Other"]
+INTEREST_TYPES = ["Hiring", "Casting", "Looking for work", "Looking for collaborators"]
 
 GENDER_OPTIONS = ["-", "Male", "Female", "Non-binary", "Other", "Prefer not to specify"]	# used in other places than actor attribute
 CHARACTER_TYPE_OPTIONS = ["Actor", "Extra", "Model", "Chorus member", "Dancer", "Other"]

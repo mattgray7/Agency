@@ -98,7 +98,7 @@
         }
     }
 
-    var filterSectionHeights = {"jobs": 125, "roles": 210, "projects": 125, "events": 100};
+    var filterSectionHeights = {"jobs": 125, "roles": 210, "projects": 125, "events": 100, "users": 210};
     var filterPanelMap = {"jobs": getJobsFilters, "roles": getRolesFiltersString, "users": getUsersFiltersString, "projects": getProjectsFiltersString, "events": getEventsFiltersString}
     function createFilterPanel(){
         var panelString = "<ul>"
@@ -113,17 +113,6 @@
         panelString += "</ul>";
         return {"html": panelString, "callbacks": callbacks}
     }
-
-    /*function toggleProfessionChoiceRow(toggleType, filterType){
-        var row = document.getElementById(filterType + "ProfessionChoiceRow");
-        if(row != null){
-            if(toggleType === "expand"){
-                $("[id='" + filterType + "ProfessionChoiceRow']").animate({marginTop: "0px", height: "30px"}, browseAnimateSpeed, function(){});
-            }else if(toggleType === "shrink"){
-                $("[id='" + filterType + "ProfessionChoiceRow']").animate({marginTop: "0px", height: "0px"}, browseAnimateSpeed, function(){});
-            }
-        }
-    }*/
 
     function getAnimationHeights(addFilterPanelHeight, addFilteredProfessions){
         var heightsDict = {}
@@ -251,7 +240,7 @@
         }
         displayFilteredProfessions("jobs", forceUpdate)
     }
-    var defaultSelectValues = {"professions": "-", "status": "-", "compensation": "-", "roleType": "-", "gender": "-", "ageRange": "-", "build": "-", "hairColor": "-", "eyeColor": "-", "ethnicity": "-", "projectType": "-", "union": "-", "eventType": "-"}
+    var defaultSelectValues = {"professions": "-", "status": "-", "compensation": "-", "roleType": "-", "gender": "-", "ageRange": "-", "build": "-", "hairColor": "-", "eyeColor": "-", "ethnicity": "-", "projectType": "-", "union": "-", "eventType": "-", "resume": "-", "imdb": "-", "interest": "-"}
     function getJobsFilters(){
         var filterString = '';
         var filterCallbacks = [];
@@ -434,7 +423,106 @@
     }
 
     function getUsersFiltersString(){
-        return "User filters"
+        var filterString = '';
+        var filterCallbacks = [];
+        {% if browseFilters and browseFilters.users %}
+            filterString += "<div style='height: 100%; text-align: left; position: relative;'>";
+
+            // Add header
+            filterString += "<div style='position: absolute; top: 0; left: 10px;'><h3>Users</h3></div>"
+
+
+            // Add left list
+            filterString += "<div style='position: absolute; top: 27px; left: 10px; right: 50%;'><ul class='browseFilterList'>"
+
+            // Add profession
+            filterString += "<li><div class='browseFilterListLabel left'>Profession: </div>"
+            {% if browseFilters.users.professionList %}
+                var professionList = {{browseFilters.users.professionList|safe}}
+                professionList.unshift(defaultSelectValues["professions"])       // have to add default status '-' as it is not in statusList
+                filterString += "<div class='browseFilterListElement left'>" + createSelectForm("usersFiltersForm", "usersProfessionSelect", professionList, defaultSelectValues["profession"]) + "</div>"
+            {% endif %}
+            filterString += "</li>"
+
+            // Add interest
+            filterString += "<li><div class='browseFilterListLabel left'>Interest: </div>"
+            {% if browseFilters.users.interestList %}
+                var interestTypes = {{browseFilters.users.interestList|safe}};
+                interestTypes.unshift(defaultSelectValues["interest"])
+                filterString += "<div class='browseFilterListElement left'>" + createSelectForm("usersFiltersForm", "usersInterestSelect", interestTypes, defaultSelectValues["interest"]) + "</div>";
+            {% endif %}
+            filterString += "</li>";
+
+            // Add imdb
+            var booleanOptions = ["-", "Yes", "No"];
+            filterString += "<li><div class='browseFilterListLabel left'>IMDB: </div>"
+            filterString += "<div class='browseFilterListElement left'>" + createSelectForm("usersFiltersForm", "usersIMDBSelect", booleanOptions, defaultSelectValues["imdb"]) + "</div>"
+            filterString += "</li>"
+
+            // Add Resume
+            filterString += "<li><div class='browseFilterListLabel left'>Resume: </div>"
+            filterString += "<div class='browseFilterListElement left'>" + createSelectForm("usersFiltersForm", "usersResumeSelect", booleanOptions, defaultSelectValues["resume"]) + "</div>"
+            filterString += "</li>"
+
+            // Add dates
+            filterString += "<li><div class='browseFilterListLabel left'>Availability: </div><div class='browseFilterListElement left'><input type='date' id='usersStartDate' value='' style=''></div></li>"
+            filterString += "<li><div class='browseFilterListLabel left'></div><div class='browseFilterListElement left'><input type='date' id='usersEndDate' value='' style=''></div></li>"
+
+            filterString += "</ul></div>"
+
+
+            // Add right list
+            filterString += "<div style='position: absolute; top: 27px; left: 48%; right: 0;'><ul class='browseFilterList'>"
+
+            // Add gender
+            filterString += "<li><div class='browseFilterListLabel right'>Gender: </div>"
+            {% if browseFilters.roles.genderList %}
+                var genderList = {{browseFilters.roles.genderList|safe}}
+                filterString += "<div class='browseFilterListElement right'>" + createSelectForm("rolesFiltersForm", "rolesGenderSelect", genderList, defaultSelectValues["gender"]) + "</div>"
+            {% endif %}
+            filterString += "</li>"
+
+            // Add age range
+            filterString += "<li><div class='browseFilterListLabel right'>Age range: </div>"
+            {% if browseFilters.roles.ageRangeList %}
+                var ageRangeList = {{browseFilters.roles.ageRangeList|safe}}
+                filterString += "<div class='browseFilterListElement right'>" + createSelectForm("rolesFiltersForm", "rolesAgeRangeSelect", ageRangeList, defaultSelectValues["ageRange"]) + "</div>"
+            {% endif %}
+
+            // Add build
+            filterString += "<li><div class='browseFilterListLabel right'>Build: </div>"
+            {% if browseFilters.roles.ageRangeList %}
+                var buildList = {{browseFilters.roles.buildList|safe}}
+                filterString += "<div class='browseFilterListElement right'>" + createSelectForm("rolesFiltersForm", "rolesBuildSelect", buildList, defaultSelectValues["build"]) + "</div>"
+            {% endif %}
+            filterString += "</li>"
+
+            // Add hair color
+            filterString += "<li><div class='browseFilterListLabel right'>Hair color: </div>"
+            {% if browseFilters.roles.hairColorList %}
+                var hairColorTypes = {{browseFilters.roles.hairColorList|safe}};
+                filterString += "<div class='browseFilterListElement right'>" + createSelectForm("rolesFiltersForm", "rolesHairColorSelect", hairColorTypes, defaultSelectValues["hairColor"]) + "</div>";
+            {% endif %}
+
+            // Add eye color
+            filterString += "<li><div class='browseFilterListLabel right'>Eye color: </div>"
+            {% if browseFilters.roles.eyeColorList %}
+                var eyeColorTypes = {{browseFilters.roles.eyeColorList|safe}};
+                filterString += "<div class='browseFilterListElement right'>" + createSelectForm("rolesFiltersForm", "rolesEyeColorSelect", eyeColorTypes, defaultSelectValues["eyeColor"]) + "</div>";
+            {% endif %}
+            filterString += "</li>";
+
+            // Add ethnicity
+            filterString += "<li><div class='browseFilterListLabel right'>Ethnicity: </div>"
+            {% if browseFilters.roles.ethnicityList %}
+                var ethnicityTypes = {{browseFilters.roles.ethnicityList|safe}};
+                filterString += "<div class='browseFilterListElement right'>" + createSelectForm("rolesFiltersForm", "rolesEthnicitySelect", ethnicityTypes, defaultSelectValues["ethnicity"]) + "</div>";
+            {% endif %}
+            filterString += "</li>";
+
+            filterString += "</div>"
+        {% endif %}
+        return {"html": filterString, "callbacks": filterCallbacks}
     }
 
     function getProjectsFiltersString(){
