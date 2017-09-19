@@ -360,6 +360,7 @@ class EventPost(AbstractPost):
     endTime = models.TimeField(default=None, blank=True, null=True)
     host = models.CharField(max_length=200, default=None, blank=True, null=True)
     admissionInfo = models.CharField(max_length=200, default=None, blank=True, null=True)
+    eventType = models.CharField(max_length=200, default="Other", blank=True, null=True)
 
     @property
     def postType(self):

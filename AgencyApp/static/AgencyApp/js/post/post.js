@@ -475,7 +475,7 @@ function addCreateEventPost(formDict, formURL, formName, isProjectSubForm){
     var pictureColumn = getPostPicturePanel("td", "postPicturePanel", pictureField.value, pictureField.editOnclick, "postPictureImg", true, pictureField.input, "mainPostPictureInput", formPictureMarginInfo);
 
     // Fill text content
-    var sectionMap = {"Details": ["title", "project", "host","location", "startDate", "startTime", "endDate", "endTime"],
+    var sectionMap = {"Details": ["title", "project", "eventType", "host","location", "startDate", "startTime", "endDate", "endTime"],
                       "The Event": ["admissionInfo", "description"],
                       "hidden": ["csrf_token", "postID", "source", "next", "destination", "projectID", "poster"]}
     var mainLabelsColumn = "<td class='editPostLabelPanel' style='width: 20%; position:relative; line-height: 38.2px;'><ul style='margin-bottom: -14px; margin-top: -40px;'>";
@@ -1432,7 +1432,7 @@ function removeUserFromPostParticipants(username, postType){
     }
 }
 
-var formHeights = {"casting": 1565, "jobs": 1305, "events": 830}
+var formHeights = {"casting": 1565, "jobs": 1335, "events": 860}
 function getSubFormHeight(formType){
     var baseHeight = formHeights[formType];
     if(currentPostParticipants[formType].length > 0){

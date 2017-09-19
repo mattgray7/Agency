@@ -19,6 +19,7 @@
                     document.getElementById("statusSelectInput").value = statusDiv.value;
                 }
                 {% if selectFields.roles.names %}
+                    setCompensationInputs()
                     {% for name in selectFields.roles.names %}
                         var selectDiv = document.getElementById('{{name}}SelectBar')
                         if(selectDiv != null){
@@ -27,6 +28,7 @@
                     {% endfor %}
                 {% endif %}
                 {% if selectFields.jobs.names %}
+                    setCompensationInputs()
                     {% for name in selectFields.jobs.names %}
                         var selectDiv = document.getElementById('{{name}}SelectBar')                    
                         if(selectDiv != null){
@@ -34,8 +36,14 @@
                         }
                     {% endfor %}
                 {% endif %}
-
-                setCompensationInputs()
+                {% if selectFields.events.names %}
+                    {% for name in selectFields.events.names %}
+                        var selectDiv = document.getElementById('{{name}}SelectBar')
+                        if(selectDiv != null){
+                            document.getElementById('{{name}}SelectInput').value = selectDiv.value;
+                        }
+                    {% endfor %}
+                {% endif %}
                 return form.submit()
             }
         }
@@ -66,6 +74,12 @@
                     {% elif field.name == "compensationDescription" %}
                         // Paid description will be on same line as paid
                         save = false;
+                    {% elif field.name == "eventType" %}
+                        var options = [];
+                        {% if eventTypes %}
+                            options = {{ eventTypes|safe }};
+                        {% endif %}
+                        postField.options = options
                     {% elif field.name == "status" %}
                         var options = [];
                         {% if statusOptions.roles and isCasting %}
@@ -102,12 +116,12 @@
                         {% endif %}
                     {% elif field.name == "startTime" or field.name == "endTime" %}
                         postField.input = postField.input.replace('type="text"', 'type="time"')
-                        if(postField.value == null || postField.value.length === 0){
-                            {% if field.name == "startTime" %}
+                        if(postField.value == null || postField.value.length === 0 || postField.value === "None"){
+                            if(postField.name === "startTime"){
                                 postField.value = defaultStartTime;
-                            {% else %}
+                            }else{
                                 postField.value = defaultEndTime;
-                            {% endif %}
+                            }
                         }
                     {% elif field.name in selectFields.roles.names and isCasting %}
                         {% if selectFields.roles.options %}

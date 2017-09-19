@@ -122,6 +122,7 @@ class CreateEventPostForm(BaseForm):
     postID = forms.CharField(widget=forms.HiddenInput, max_length=10)
     projectID = forms.CharField(widget=forms.HiddenInput, required=False, max_length=10)
     poster = forms.CharField(widget=forms.HiddenInput, max_length=200)
+    eventType = forms.CharField(label="Type", max_length=200, required=False)
     postPicture = forms.ImageField(label="Picture", required=False)
     title = forms.CharField(label="Event Name*", max_length=500, required=True, widget=forms.TextInput(attrs={'placeholder': 'Open Casting Call'}))
     status = forms.CharField(widget=forms.HiddenInput, max_length=50, required=False)

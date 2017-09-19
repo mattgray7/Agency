@@ -12,6 +12,7 @@ import genericViews as views
 import browse
 import string, random
 import json
+import copy
 
 
 
@@ -223,6 +224,7 @@ class GenericCreatePostView(views.PictureFormView):
         self._currentPageURL = None
         self._roleSelectFields = None
         self._jobSelectFields = None
+        self._eventSelectFields = None
         self._projectSelectFields = None
         self._postParticipants = None
         self._postParticipantsFormatted = None
@@ -310,6 +312,13 @@ class GenericCreatePostView(views.PictureFormView):
         return self._jobSelectFields
 
     @property
+    def eventSelectFields(self):
+        if self._eventSelectFields is None:
+            typeList = copy.copy(constants.EVENT_TYPES)
+            self._eventSelectFields = {"names": ["eventType"], "options": {"eventType": typeList}, "defaults": {"eventType": "-"}}
+        return self._eventSelectFields
+
+    @property
     def projectSelectFields(self):
         if self._projectSelectFields is None:
             self._projectSelectFields = {"names": ["projectType"], "options": {"projectType": constants.PROJECT_TYPE_LIST}, "defaults": {"projectType": "-"}}
@@ -356,6 +365,7 @@ class GenericCreatePostView(views.PictureFormView):
         self._pageContext["possibleDestinations"] = {"viewPost": constants.VIEW_POST}
         self._pageContext["selectFields"] = {"roles": self.roleSelectFields,
                                              "jobs": self.jobSelectFields,
+                                             "events": self.eventSelectFields,
                                              "projects": self.projectSelectFields}
         self._pageContext["participationSelectFields"] = constants.PARTICIPATION_LABEL_SELECT_FIELDS
         self._pageContext['statusOptions'] = {"roles": constants.CASTING_STATUS_LIST,

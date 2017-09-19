@@ -1144,6 +1144,7 @@
             }else if(selectFields != null){
                 var castingelectFields = {{ selectFields.roles.names|safe }};
                 var jobSelectFields = {{ selectFields.jobs.names|safe }}
+                var eventSelectFields = {{ selectFields.events.names|safe }}
                 if(castingelectFields.indexOf(name) >= 0 && activeTab == "casting"){
                     {% if selectFields.roles.options %}
                         var options = {{ selectFields.roles.options|safe }}
@@ -1152,6 +1153,11 @@
                 }else if(jobSelectFields.indexOf(name) >= 0 && activeTab == "jobs"){
                     {% if selectFields.jobs.options %}
                         var options = {{ selectFields.jobs.options|safe }}
+                        postField.options = options[postField.name]
+                    {% endif %}
+                }else if(eventSelectFields.indexOf(name) >= 0 && activeTab == "events"){
+                    {% if selectFields.events.options %}
+                        var options = {{ selectFields.events.options|safe }}
                         postField.options = options[postField.name]
                     {% endif %}
                 }else{
@@ -1247,6 +1253,14 @@
         }else if(activeTab === "events"){
             // Events currently has no select bars, so dont need to update any inputs
             ajaxURL = "/ajax/createNewEventPost/"
+            {% if selectFields.events.names %}
+                {% for name in selectFields.events.names %}
+                    var selectDiv = document.getElementById('{{name}}SelectBar')
+                    if(selectDiv != null){
+                        document.getElementById('{{name}}SelectInput').value = selectDiv.value;
+                    }
+                {% endfor %}
+            {% endif %}
         }
         if(edit){
             ajaxURL = "/ajax/editExistingPost/";

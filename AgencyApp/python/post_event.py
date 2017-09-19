@@ -24,6 +24,7 @@ class EventPostInstance(post.GenericPostInstance):
             self.record.startTime = self.request.POST.get("startTime")
             self.record.endTime = self.request.POST.get("endTime")
             self.record.host = self.request.POST.get("host")
+            self.record.eventType = self.request.POST.get("eventType", "Other")
             self.record.save()
             return True
         return False
@@ -40,6 +41,7 @@ class CreateEventPostView(post.GenericCreatePostView):
         self._pageContext["hideStatus"] = True
         self._pageContext["defaultStatus"] = "Upcoming"
         self._pageContext["isEvent"] = True
+        self._pageContext["eventTypes"] = constants.EVENT_TYPES
         return self._pageContext
 
     def cancelPage(self):
@@ -64,6 +66,7 @@ class CreateEventPostView(post.GenericCreatePostView):
             self._formInitialValues["host"] = self.post.record.host
             self._formInitialValues["admissionInfo"] = self.post.record.admissionInfo
             self._formInitialValues["projectID"] = self.projectID
+            self._formInitialValues["eventType"] = self.post.record.eventType
         return self._formInitialValues
 
 
