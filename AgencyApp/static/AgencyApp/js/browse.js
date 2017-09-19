@@ -79,7 +79,7 @@ function toggleExpandBrowseSection(direction, section){
     }
 }
 
-var getFiltersMap = {"jobs": getJobsFilterValues, "roles": getRolesFilterValues, "users": getJobsFilterValues, "projects": getProjectsFilterValues, "events": getJobsFilterValues}
+var getFiltersMap = {"jobs": getJobsFilterValues, "roles": getRolesFilterValues, "users": getJobsFilterValues, "projects": getProjectsFilterValues, "events": getEventsFilterValues}
 function getSearchFilterValues(){
     var filterDict = {}
     for(var i=0; i < activeTabs.length; i++){
@@ -123,7 +123,6 @@ function getJobsFilterValues(){
 
 function getRolesFilterValues(){
     var filters = {"status": null, "roleType": null, "gender": null, "ageRange": null, "build": null, "hairColor": null, "eyeColor": null, "ethnicity": null, "compensation": null, "dates": {"start": null, "end": null}}
-
     filters = _addSelectFilterValues(filters, "rolesStatusSelect", "status")
     filters = _addSelectFilterValues(filters, "rolesTypeSelect", "roleType")
     filters = _addSelectFilterValues(filters, "rolesGenderSelect", "gender")
@@ -141,17 +140,21 @@ function getUserFilters(){}
 
 function getProjectsFilterValues(){
     var filters = {"status": null, "projectType": null, "union": null, "compensation": null, "dates": {"start": null, "end": null}}
-
     filters = _addSelectFilterValues(filters, "projectsStatusSelect", "status")
     filters = _addSelectFilterValues(filters, "projectsTypeSelect", "projectType")
     filters = _addSelectFilterValues(filters, "projectsUnionSelect", "union")
     filters = _addSelectFilterValues(filters, "projectsCompensationSelect", "compensation")
     filters["dates"] = _getDatesFilterValues("projects")
-    console.log(filters)
     return filters
 }
 
-function getEventFilters(){}
+function getEventsFilterValues(){
+    var filters = {"status": null, "eventType": null, "dates": {"start": null, "end": null}}
+    //filters = _addSelectFilterValues(filters, "eventsStatusSelect", "status")
+    filters = _addSelectFilterValues(filters, "eventsTypeSelect", "eventType")
+    filters["dates"] = _getDatesFilterValues("events")
+    return filters
+}
 
 // Number of results to display for each section
 var defaultNumResults = 3;

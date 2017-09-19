@@ -447,7 +447,6 @@ def getProjectSearchResults(searchValue, numResults, filters):
                    models.ProjectPost.objects.filter(title__startswith="The {0}".format(searchValue))]
     defaultList = models.ProjectPost.objects.all().order_by("-status", "-updatedAt")
     searchLists.append(defaultList)
-    print filters
     if filters:
         for i, searchList in enumerate(searchLists):
             if filters.get("status"):
@@ -479,14 +478,34 @@ def getProjectSearchResults(searchValue, numResults, filters):
                                 )
 
 
-def getEventSearchResults(searchValue, numResults):
+def getEventSearchResults(searchValue, numResults, filters):
     projectIDs = [x.postID for x in models.ProjectPost.objects.filter(title__contains=searchValue)]
+    searchLists = [models.EventPost.objects.filter(title__contains=searchValue),
+                   models.EventPost.objects.filter(projectID__in=projectIDs)]
+    defaultList = models.EventPost.objects.all().exclude(status="Past").order_by("-updatedAt")
+    searchLists.append(defaultList)
+    if filters:
+        for i, searchList in enumerate(searchLists):
+            if filters.get("eventType"):
+                searchLists[i] = searchLists[i].filter(eventType=filters.get("eventType"))
+            if filters.get("dates"):
+                start = filters.get("dates").get("start")
+                end = filters.get("dates").get("end")
+                if start:
+                    startSplitted = start.split("-")
+                    startDate = datetime.date(int(startSplitted[0]), int(startSplitted[1]), int(startSplitted[2]))
+                    searchLists[i] = searchLists[i].filter(startDate__gte=startDate)
+                if end:
+                    endSplitted = end.split("-")
+                    endDate = datetime.date(int(endSplitted[0]), int(endSplitted[1]), int(endSplitted[2]))
+                    searchLists[i] = searchLists[i].filter(endDate__lte=endDate)
+    defaultList = searchLists.pop()
+
     return getPostSearchResults(searchValue=searchValue,
                                 maxNumResults=numResults,
                                 requiredFields=["startDate", "endDate", "startTime", "endTime", "description"],
-                                defaultList=models.EventPost.objects.all().exclude(status="Past").order_by("-updatedAt"),
-                                searchLists=[models.EventPost.objects.filter(title__contains=searchValue),
-                                             models.EventPost.objects.filter(projectID__in=projectIDs)]
+                                defaultList=defaultList,
+                                searchLists=searchLists
                                 )
 
 

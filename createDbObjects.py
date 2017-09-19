@@ -214,7 +214,7 @@ def createProjectRole(projectID, status, title, characterName, compensationType=
 		rolePost.save()
 	return roleID
 
-def createProjectEvent(projectID, title, location, startDate, endDate, startTime, endTime, description, poster="mattgray", host=None, admissionInfo=None, picURL=None):
+def createProjectEvent(projectID, title, location, startDate, endDate, startTime, endTime, description, poster="mattgray", host=None, admissionInfo=None, picURL=None, eventType="Other"):
 	postID = helpers.createUniqueID(models.EventPost, "postID")
 	post = models.EventPost(postID=postID,
 								 projectID=projectID,
@@ -227,7 +227,8 @@ def createProjectEvent(projectID, title, location, startDate, endDate, startTime
 								 startTime=startTime,
 								 endTime=endTime,
 								 startDate=startDate,
-								 endDate=endDate)
+								 endDate=endDate,
+								 eventType=eventType)
 	post.save()
 	if picURL:
 		picResult = urllib.urlretrieve(picURL)
@@ -375,6 +376,7 @@ project1EventPostID = createProjectEvent(projectID=project1ProjectID,
 								 startTime=eightPM,
 								 endTime=tenPM,
 								 admissionInfo="Open to public",
+								 eventType="Open Audition",
 								 picURL="/Users/MattGray/Projects/Agency/Agency/scripts/media/castingCall.jpeg")
 project1EventPostID2 = createProjectEvent(projectID=project1ProjectID,
 								 poster="mattgray",
@@ -386,6 +388,7 @@ project1EventPostID2 = createProjectEvent(projectID=project1ProjectID,
 								 endDate=datetime.datetime(2017, 9, 10),
 								 startTime=eightPM,
 								 endTime=tenPM,
+								 eventType="Screening",
 								 admissionInfo="Entrance is by donation")
 
 # Add some professions

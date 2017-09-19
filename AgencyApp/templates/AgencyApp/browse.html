@@ -519,15 +519,6 @@
             // Add left list
             filterString += "<div style='position: absolute; top: 27px; left: 10px; right: 50%;'><ul class='browseFilterList'>"
 
-            // Add status
-            filterString += "<li><div class='browseFilterListLabel left'>Status: </div>"
-            {% if browseFilters.events.statusList %}
-                var statusList = {{browseFilters.events.statusList|safe}}
-                statusList.unshift(defaultSelectValues["status"])
-                filterString += "<div class='browseFilterListElement left'>" + createSelectForm("eventsFiltersForm", "eventsStatusSelect", statusList, defaultSelectValues["status"]) + "</div>"
-            {% endif %}
-            filterString += "</li>"
-
             // Add project type
             filterString += "<li><div class='browseFilterListLabel left'>Type: </div>"
             {% if browseFilters.events.eventTypeList %}
@@ -544,8 +535,8 @@
             // Add dates
             // Can use below list item that has 1 label of dates with the 2 inputs on separate lines
             /*filterString += "<li style='height: 50px;'> Dates: <ul style='height: 50px;  width: 120px; margin-top: -20px; margin-left: 50px;'><li><input type='date' value='" + currentDateString + "' style=''></li><li><input type='date' value='" + tomorrowDateString + "'></li></ul></li>"*/
-            filterString += "<li><div class='browseFilterListLabel right'>Start date: </div><div class='browseFilterListElement right'><input type='date' id='projectsStartDate' value='' style=''></div></li>"
-            filterString += "<li><div class='browseFilterListLabel right'>End date: </div><div class='browseFilterListElement right'><input type='date' id='projectsEndDate' value='' style=''></div></li>"
+            filterString += "<li><div class='browseFilterListLabel right'>Start date: </div><div class='browseFilterListElement right'><input type='date' id='eventsStartDate' value='' style=''></div></li>"
+            filterString += "<li><div class='browseFilterListLabel right'>End date: </div><div class='browseFilterListElement right'><input type='date' id='eventsEndDate' value='' style=''></div></li>"
 
             filterString += "</ul></div>"
 
