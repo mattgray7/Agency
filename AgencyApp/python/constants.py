@@ -83,7 +83,7 @@ PROFESSIONS = {"acting": ["Actor", "Dancer", "Extra", "Stand-in", "Model", "Voic
 			   					  "Music Supervisor", "Music Editor", "Producer", "Sound Editor", "Sound Engineer",
 			   					  "VFX Artist", "VFX Supervisor"]}
 
-UNIONS = ["ACTRA", "IATSE", "UBCP"]
+UNIONS = ["None", "ACTRA", "IATSE", "UBCP"]
 PROFESSION_LIST = []
 for category in PROFESSIONS:
 	for profession in PROFESSIONS[category]:
@@ -127,7 +127,7 @@ PROJECT_TYPE_LIST = ["Film - Feature", "Film - Short", "Television", "Competitio
 PROJECT_STATUS_LIST = ["Pre-production", "In production", "Post production", "Screening", "Completed"]
 CASTING_STATUS_LIST = ["Opening soon", "Open", "Cast"]
 WORK_STATUS_LIST = ["Opening soon", "Open", "Filled"]
-EVENT_STATUS_LIST = ["Today", "Upcoming", "Past", "Announced", "Cancelled"]
+EVENT_STATUS_LIST = ["Today", "Upcoming", "Past", "Happening Now"]
 PROFILE_STATUS_LIST = ["Currently available", "Currently unavailable"]
 COMPENSATION_TYPES = ["Paid", "Negotiable", "Unpaid"]
 

@@ -133,7 +133,8 @@ class BrowseView(views.GenericFormView):
                                    "projects": {"statusList": constants.PROJECT_STATUS_LIST,
                                                 "projectTypeList": constants.PROJECT_TYPE_LIST,
                                                 "unionList": constants.UNIONS
-                                             }
+                                             },
+                                    "events": {"statusList": constants.EVENT_STATUS_LIST}
                                   }
         return self._browseFilters
 

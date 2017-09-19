@@ -98,7 +98,7 @@
         }
     }
 
-    var filterSectionHeights = {"jobs": 125, "roles": 210, "projects": 125};
+    var filterSectionHeights = {"jobs": 125, "roles": 210, "projects": 125, "events": 100};
     var filterPanelMap = {"jobs": getJobsFilters, "roles": getRolesFiltersString, "users": getUsersFiltersString, "projects": getProjectsFiltersString, "events": getEventsFiltersString}
     function createFilterPanel(){
         var panelString = "<ul>"
@@ -440,7 +440,7 @@
     function getProjectsFiltersString(){
         var filterString = '';
         var filterCallbacks = [];
-        {% if browseFilters and browseFilters.jobs %}
+        {% if browseFilters and browseFilters.projects %}
             filterString += "<div style='height: 100%; text-align: left; position: relative;'>";
 
             // Add header
@@ -507,7 +507,53 @@
     }
 
     function getEventsFiltersString(){
-        return "Event filters"
+        var filterString = '';
+        var filterCallbacks = [];
+        {% if browseFilters and browseFilters.events %}
+            filterString += "<div style='height: 100%; text-align: left; position: relative;'>";
+
+            // Add header
+            filterString += "<div style='position: absolute; top: 0; left: 10px;'><h3>Events</h3></div>"
+
+
+            // Add left list
+            filterString += "<div style='position: absolute; top: 27px; left: 10px; right: 50%;'><ul class='browseFilterList'>"
+
+            // Add status
+            filterString += "<li><div class='browseFilterListLabel left'>Status: </div>"
+            {% if browseFilters.events.statusList %}
+                var statusList = {{browseFilters.events.statusList|safe}}
+                statusList.unshift(defaultSelectValues["status"])
+                filterString += "<div class='browseFilterListElement left'>" + createSelectForm("eventsFiltersForm", "eventsStatusSelect", statusList, defaultSelectValues["status"]) + "</div>"
+            {% endif %}
+            filterString += "</li>"
+
+            /*// Add project type
+            filterString += "<li><div class='browseFilterListLabel left'>Type: </div>"
+            {% if browseFilters.projects.projectTypeList %}
+                var projectTypeList = {{browseFilters.projects.projectTypeList|safe}}
+                projectTypeList.unshift(defaultSelectValues["projectType"])
+                filterString += "<div class='browseFilterListElement left'>" + createSelectForm("projectsFiltersForm", "projectsTypeSelect", projectTypeList, defaultSelectValues["projectType"]) + "</div>"
+            {% endif %}
+            filterString += "</li>"*/
+            filterString += "</ul></div>"
+
+
+            // Add right list
+            filterString += "<div style='position: absolute; top: 27px; left: 48%; right: 0;'><ul class='browseFilterList'>"
+
+            // Add dates
+            // Can use below list item that has 1 label of dates with the 2 inputs on separate lines
+            /*filterString += "<li style='height: 50px;'> Dates: <ul style='height: 50px;  width: 120px; margin-top: -20px; margin-left: 50px;'><li><input type='date' value='" + currentDateString + "' style=''></li><li><input type='date' value='" + tomorrowDateString + "'></li></ul></li>"*/
+            filterString += "<li><div class='browseFilterListLabel right'>Start date: </div><div class='browseFilterListElement right'><input type='date' id='projectsStartDate' value='' style=''></div></li>"
+            filterString += "<li><div class='browseFilterListLabel right'>End date: </div><div class='browseFilterListElement right'><input type='date' id='projectsEndDate' value='' style=''></div></li>"
+
+            filterString += "</ul></div>"
+
+            // Add search button
+            filterString += ""
+        {% endif %}
+        return {"html": filterString, "callbacks": filterCallbacks}
     }
 
     var filtersExpanded = false
