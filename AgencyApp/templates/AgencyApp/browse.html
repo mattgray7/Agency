@@ -251,7 +251,7 @@
         }
         displayFilteredProfessions("jobs", forceUpdate)
     }
-    var defaultSelectValues = {"professions": "-", "status": "-", "compensation": "-", "roleType": "-", "gender": "-", "ageRange": "-", "build": "-", "hairColor": "-", "eyeColor": "-", "ethnicity": "-"}
+    var defaultSelectValues = {"professions": "-", "status": "-", "compensation": "-", "roleType": "-", "gender": "-", "ageRange": "-", "build": "-", "hairColor": "-", "eyeColor": "-", "ethnicity": "-", "projectType": "-", "union": "-"}
     function getJobsFilters(){
         var filterString = '';
         var filterCallbacks = [];
@@ -458,6 +458,25 @@
                 filterString += "<div class='browseFilterListElement left'>" + createSelectForm("projectsFiltersForm", "projectsStatusSelect", statusList, defaultSelectValues["status"]) + "</div>"
             {% endif %}
             filterString += "</li>"
+
+            // Add project type
+            filterString += "<li><div class='browseFilterListLabel left'>Type: </div>"
+            {% if browseFilters.projects.projectTypeList %}
+                var projectTypeList = {{browseFilters.projects.projectTypeList|safe}}
+                projectTypeList.unshift(defaultSelectValues["projectType"])
+                filterString += "<div class='browseFilterListElement left'>" + createSelectForm("projectsFiltersForm", "projectsTypeSelect", projectTypeList, defaultSelectValues["projectType"]) + "</div>"
+            {% endif %}
+            filterString += "</li>"
+
+            // Add union
+            filterString += "<li><div class='browseFilterListLabel left'>Union: </div>"
+            {% if browseFilters.projects.unionList %}
+                var unionList = {{browseFilters.projects.unionList|safe}}
+                unionList.unshift(defaultSelectValues["union"])
+                filterString += "<div class='browseFilterListElement left'>" + createSelectForm("projectsFiltersForm", "unionSelect", unionList, defaultSelectValues["union"]) + "</div>"
+            {% endif %}
+            filterString += "</li>"
+
             filterString += "</ul></div>"
 
 
