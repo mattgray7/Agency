@@ -251,7 +251,7 @@
         }
         displayFilteredProfessions("jobs", forceUpdate)
     }
-    var defaultSelectValues = {"professions": "-", "status": "-", "compensation": "-", "roleType": "-", "gender": "-", "ageRange": "-", "build": "-", "hairColor": "-", "eyeColor": "-", "ethnicity": "-", "projectType": "-", "union": "-"}
+    var defaultSelectValues = {"professions": "-", "status": "-", "compensation": "-", "roleType": "-", "gender": "-", "ageRange": "-", "build": "-", "hairColor": "-", "eyeColor": "-", "ethnicity": "-", "projectType": "-", "union": "-", "eventType": "-"}
     function getJobsFilters(){
         var filterString = '';
         var filterCallbacks = [];
@@ -528,14 +528,13 @@
             {% endif %}
             filterString += "</li>"
 
-            /*// Add project type
+            // Add project type
             filterString += "<li><div class='browseFilterListLabel left'>Type: </div>"
-            {% if browseFilters.projects.projectTypeList %}
-                var projectTypeList = {{browseFilters.projects.projectTypeList|safe}}
-                projectTypeList.unshift(defaultSelectValues["projectType"])
-                filterString += "<div class='browseFilterListElement left'>" + createSelectForm("projectsFiltersForm", "projectsTypeSelect", projectTypeList, defaultSelectValues["projectType"]) + "</div>"
+            {% if browseFilters.events.eventTypeList %}
+                var eventTypeList = {{browseFilters.events.eventTypeList|safe}}
+                filterString += "<div class='browseFilterListElement left'>" + createSelectForm("eventsFiltersForm", "eventsTypeSelect", eventTypeList, defaultSelectValues["eventType"]) + "</div>"
             {% endif %}
-            filterString += "</li>"*/
+            filterString += "</li>"
             filterString += "</ul></div>"
 
 
