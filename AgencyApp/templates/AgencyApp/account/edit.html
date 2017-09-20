@@ -153,16 +153,14 @@ function removeIMDBLink(){
                                                 lineString += '<div style="position: relative; height: 28px;">'
 
                                                 // Add text field as normal
-                                                lineString += '<div style="position: absolute; top: 0; left: 0; z-index: 3; right: 0;"><input type="text" id="searchTextInput">';
+                                                lineString += '<div style="position: absolute; top: 0; left: 0; z-index: 0; right: 0; background: rgba(255,255,255,0); z-index: 3"><input type="text" id="profileProfessionTextInput">';
                                                 // Add dropdown
-                                                lineString += '<div id="browseDropdown" class="previewDropdownPanel" style="position: absolute; left: 0; right: 0; margin-right: -5px; top: 35px; border: 1px solid #86898e; display: none;"></div>'
-
-                                                lineString += '</div>'
+                                                lineString += '<div id="profileProfessionDropdown" class="previewDropdownPanel" style="position: absolute; left: 0; right: 0; margin-right: -5px; margin-left: -6px; top: 36px; border: 1px solid #86898e; display: none; ;"></div>'
 
                                                 // Add profession container
-                                                lineString += '<div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.2);">hi</div>';
+                                                lineString += '<div id="profileProfessionContainer" style="position: absolute; top: 0; left: 0; bottom: 0; background: rgba(0,0,0,0);">hi</div>';
 
-                                                lineString += '</div>';
+                                                lineString += '</div></div>';
                                             }else{
                                                 lineString += '{{field}}';
                                             }
@@ -175,7 +173,7 @@ function removeIMDBLink(){
                                     lineString += '{{field}}';
                                 }
                                 document.write(lineString);
-                                addBrowseDropdownCallback("searchPreviewProfessions", null, {})
+                                addDropdownCallback("searchPreviewProfessions", null, {}, "profileProfessionTextInput", "profileProfessionDropdown")
                             {% endfor %}
                         </script>
                         <li style="position:relative; height:70px;">

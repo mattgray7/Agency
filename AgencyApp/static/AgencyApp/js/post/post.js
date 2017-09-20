@@ -1291,6 +1291,35 @@ function addParticipantDropdownCallback(postType, callbackFunctionName, secondar
     }
 }
 
+function addDropdownCallback(callbackFunctionName, secondaryEnterSubmitButton, extraInputs, textInput, dropdownDivName){
+    // Add participant dropdown
+    var inputDiv = document.getElementById(textInput);
+    if(inputDiv != null){
+        inputDiv.onkeyup = function(event){
+            if(event.keyCode != 13){
+                enterPressed = false;
+            }
+            //40 is down, 38 is up
+            if(event.keyCode === 40){
+                moveDropdownFocus("down", dropdownDivName)
+            }else if(event.keyCode === 38){
+                moveDropdownFocus("up", dropdownDivName)
+            }else if(event.keyCode === 13){
+                if(enterPressed || dropdownFocusIndex === -1){
+                    if(secondaryEnterSubmitButton != null){
+                        $("[id='" + secondaryEnterSubmitButton + "']").click();
+                    }
+                }else{
+                    selectDropdownFocusElement(dropdownDivName);
+                }
+                enterPressed = true;
+            }else{
+                previewTextInDropdown(textInput, dropdownDivName, callbackFunctionName, extraInputs);
+            }
+        }
+    }
+}
+
 var dropdownFocusIndex = -1
 function moveDropdownFocus(direction, dropdownListID){
     var dropdownList = document.getElementById(dropdownListID)
@@ -1364,12 +1393,46 @@ function searchPreviewProfessions(textValue, container, extraInputs){
     }
 }
 
+function displayProfileProfessionList(chosenContainer){
+    var container = document.getElementById(chosenContainer);
+    if(container != null){
+        var containerString = "<ul style='display: inline;' class='filteredProfessionList'>"
+        if(profileProfessionList.length > 0){
+            for(var i=0; i < profileProfessionList.length; i++){
+                containerString += "<li style='margin-bottom: 3px; float: left; margin-top: 0px; text-align: left; position: relative; min-width: 70px; max-width: 150px; width: 100px;'><div style='position: absolute; left: 5px;'>" + profileProfessionList[i] + "</div><a onclick='removeFilteredProfession(" + '"' + profileProfessionList[i] + '");' + "' style='font-size: 1em; font-weight: 800; position: absolute; right: 5px;'>X</a></li>";
+            }
+        }
+        containerString += "<li style='display: none;'></li></ul>"
+        container.innerHTML = containerString;
+    }
+}
+
+var profileProfessionList = []
+function selectProfession(profession, chosenContainer, textInputName, dropdownName){
+    var textInput = document.getElementById(textInputName);
+    if(textInput != null){
+        textInput.value = "";
+    }
+
+    console.log(dropdownName)
+    var dropdown = document.getElementById(dropdownName);
+    if(dropdown != null){
+        dropdown.style.display = "none";
+        dropdown.innerHTML = "";
+    }
+
+    if(profileProfessionList.indexOf(profession) == -1){
+        profileProfessionList.push(profession);
+        displayProfileProfessionList(chosenContainer);
+    }
+}
+
 function getPreviewProfessionsString(professionList){
     var previewString = "<ul id='professionDropdownList'>";
     for(var i=0; i < professionList.length; i++){
-        previewString += "<li style='margin-top: 0px; border: none; padding: 5px;' onclick='selectProfession(" + '"' + professionList[i] + '");' + "'><div style='position:relative; height: 20px;'>"
+        previewString += "<li style='margin-top: 0px; border: none; padding: 5px;' onclick='selectProfession(" + '"' + professionList[i] + '", "profileProfessionContainer", "profileProfessionTextInput", "profileProfessionDropdown");' + "'><div style='position:relative; height: 20px;'>"
         // Add name
-        previewString += "<div style='position: absolute; left: 5px; top: 0; font-weight: 500; '>" + professionList[i] + "</div>";
+        previewString += "<div style='position: absolute; left: 2px; top: 0; font-weight: 500; '>" + professionList[i] + "</div>";
 
         previewString += "</div></li>";
     }
@@ -1772,7 +1835,6 @@ function createProjectFeed(projectDict){
     if(projectDict != null && !$.isEmptyObject(projectDict)){
         feedString += "<div id='projectFeedContainer'><ul class='projectFeed' id='projectFeed'>"
         for(projectID in projectDict){
-            console.log(projectID)
             feedString += "<li style='position: relative;'>"
 
             // Add project picture

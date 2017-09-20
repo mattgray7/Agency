@@ -416,7 +416,7 @@ function selectBrowseSuggestion(value, textDivName, dropdownDivName){
     }
 }
 
-function previewTextInDropdown(textInputDivName, dropdownDivName, getDataFunctionName, extraInputs){
+/*function previewTextInDropdown(textInputDivName, dropdownDivName, getDataFunctionName, extraInputs){
     var textInput = document.getElementById(textInputDivName);
     var dropdownDiv = document.getElementById(dropdownDivName);
     if(textInput != null && dropdownDiv != null){
@@ -424,7 +424,7 @@ function previewTextInDropdown(textInputDivName, dropdownDivName, getDataFunctio
             window[getDataFunctionName](textInput.value, dropdownDiv, extraInputs)
         }
     }
-}
+}*/
 
 function getPreviewBrowseSuggestionsString(suggestions){
     var previewString = "<ul id='browseSuggestionDropdownList' style='margin-bottom: -20px;'>";
