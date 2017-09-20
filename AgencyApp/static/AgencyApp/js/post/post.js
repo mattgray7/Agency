@@ -1399,7 +1399,7 @@ function displayProfileProfessionList(chosenContainer, textInputName){
         var containerString = "<ul style='display: inline;' class='filteredProfessionList'>"
         if(profileProfessionList.length > 0){
             for(var i=0; i < profileProfessionList.length; i++){
-                containerString += "<li style='margin-bottom: 3px; float: left; margin-top: 0px; text-align: left; position: relative; min-width: 70px; max-width: 150px; width: 100px;'><div style='position: absolute; left: 5px;'>" + profileProfessionList[i] + "</div><a onclick='removeProfileProfession(" + '"' + profileProfessionList[i] + '", "' + chosenContainer + '", "' + textInputName + '");' + "' style='font-size: 1em; font-weight: 800; position: absolute; right: 5px;'>X</a></li>";
+                containerString += "<li style='margin-bottom: 3px; float: left; margin-top: 0px; text-align: left; position: relative; padding-right: 20px;'>" + profileProfessionList[i] + "<a onclick='removeProfileProfession(" + '"' + profileProfessionList[i] + '", "' + chosenContainer + '", "' + textInputName + '");' + "' style='font-size: 1em; font-weight: 800; position: absolute; right: 5px; '>X</a></li>";
             }
         }
         containerString += "<li style='display: none;'></li></ul>"
