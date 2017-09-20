@@ -442,6 +442,13 @@ def getSearchPreviewUsers(request):
                            "profilePicture": x.profilePicture and x.profilePicture.url or constants.NO_PROFILE_PICTURE_PATH} for x in matchingUsers]
     return JsonResponse({"success": success, "users": returnList})
 
+def getSearchPreviewProfessions(request):
+    text = request.POST.get("text")
+    returnList = []
+    for profession in constants.PROFESSION_LIST:
+        if profession.lower().startswith(text.lower()):
+            returnList.append(profession)
+    return JsonResponse({"success": True, "professions": sorted(returnList)})
 
 def getSearchSuggestions(request):
     searchValue = request.POST.get("text")

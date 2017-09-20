@@ -53,6 +53,7 @@ urlpatterns = [
 
     url(r'^ajax/getSearchResults/$', ajax.getSearchResults, name='getSearchResults'),  #TODO find a way to secure this link
     url(r'^ajax/getSearchPreviewUsers/$', ajax.getSearchPreviewUsers, name='getSearchPreviewUsers'),  #TODO find a way to secure this link
+    url(r'^ajax/getSearchPreviewProfessions/$', ajax.getSearchPreviewProfessions, name='getSearchPreviewProfessions'),
     url(r'^ajax/getSearchSuggestions/$', ajax.getSearchSuggestions, name='getSearchSuggestions'),  #TODO find a way to secure this link
 
 

@@ -61,9 +61,15 @@ class UserAccount(models.Model):
         self._hireInterest = None
         self._otherInterest = None
         self._projects = None
+        self._profileProfessions = None
 
     def __str__(self):
         return self.username
+
+    def profileProfessions(self):
+        if self._profileProfessions is None:
+            self._profileProfessions = [x.profession for x in ProfileProfession.objects.filter(username=self.username)]
+        return self._profileProfessions
 
     @property
     def cleanName(self):
@@ -175,7 +181,12 @@ class UserAccount(models.Model):
                     del self._projects[projectID]
         return self._projects
 
+# Chosen as primary (has filmography, has worked in the past)
+class ProfileProfession(models.Model):
+    username = models.CharField(max_length=100)
+    profession = models.CharField(max_length=100)
 
+# Interest in being considered for roles in this position
 class Interest(models.Model):
     username = models.CharField(max_length=100)
     mainInterest = models.CharField(max_length=100) #work/hire/other

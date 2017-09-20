@@ -1334,25 +1334,49 @@ function selectDropdownFocusElement(dropdownListID){
     }
 }
 
-function getPreviewUsersString(userList, postType){
-    var previewString = "<ul id='" + postType + "ParticipationDropdownList'>";
-    for(var i=0; i < userList.length; i++){
-        previewString += "<li onclick='selectPostParticipant(" + '"' + userList[i]["username"] + '", "' + userList[i]["cleanName"] + '", "' + postType + 'ParticipantSearchTextInput", "' + postType + 'ParticipantDropdown");' + "'><div style='position:relative; height: 50px;'>"
+function searchPreviewProfessions(textValue, container, extraInputs){
+    if(container != null){
+        // TODO get the data
+        //container.innerHTML = "<img src='" + buttonLoadingGifURL + "' style='height: 100px; width: 100px;'>";
 
-        // Add user picture if it exists
-        previewString += "<img src='" + userList[i]["profilePicture"] + "' style='height: 40px; width:36px; position: absolute; top: 5px; left: 2px; border: 1px solid rgba(0,0,0,0.1); border-radius: 2px;' />";
+        if(textValue.length === 0){
+            container.style.display = "none";
+        }else{
+            container.style.display = "block";
+        }
 
+        $.ajax({
+                url : "/ajax/getSearchPreviewProfessions/",
+                data : {"text": textValue},
+                type : 'POST',
+                dataType: "json",
+                success : function(data) {
+                    if(data["success"]){
+                        if(data["professions"]){
+                            var contentString = getPreviewProfessionsString(data["professions"]);
+                            container.innerHTML = contentString;
+                        }
+                    }else{
+                        container.innerHTML = "No professions found"
+                    }
+                }
+            });
+    }
+}
+
+function getPreviewProfessionsString(professionList){
+    var previewString = "<ul id='professionDropdownList'>";
+    for(var i=0; i < professionList.length; i++){
+        previewString += "<li style='margin-top: 0px; border: none; padding: 5px;' onclick='selectProfession(" + '"' + professionList[i] + '");' + "'><div style='position:relative; height: 20px;'>"
         // Add name
-        previewString += "<div style='position: absolute; left: 45px; top: 0; margin-top: -2px; font-weight: 500;'>" + userList[i]["cleanName"] + "</div>";
-
-        // Add profession
-        previewString += "<div style='position: absolute; left: 45px; top: 17px; color: rgba(0,0,0,0.7); font-size: 0.9em;'>" + userList[i]["profession"] + "</div>";
+        previewString += "<div style='position: absolute; left: 5px; top: 0; font-weight: 500; '>" + professionList[i] + "</div>";
 
         previewString += "</div></li>";
     }
-    previewString += "</ul>";
+    previewString += "<li style='display: none;'></li></ul>";
     return previewString;
 }
+
 
 function searchPreviewUsers(textValue, container, extraInputs){
     if(container != null){
@@ -1384,6 +1408,26 @@ function searchPreviewUsers(textValue, container, extraInputs){
                 }
             });
     }
+}
+
+function getPreviewUsersString(userList, postType){
+    var previewString = "<ul id='" + postType + "ParticipationDropdownList'>";
+    for(var i=0; i < userList.length; i++){
+        previewString += "<li onclick='selectPostParticipant(" + '"' + userList[i]["username"] + '", "' + userList[i]["cleanName"] + '", "' + postType + 'ParticipantSearchTextInput", "' + postType + 'ParticipantDropdown");' + "'><div style='position:relative; height: 50px;'>"
+
+        // Add user picture if it exists
+        previewString += "<img src='" + userList[i]["profilePicture"] + "' style='height: 40px; width:36px; position: absolute; top: 5px; left: 2px; border: 1px solid rgba(0,0,0,0.1); border-radius: 2px;' />";
+
+        // Add name
+        previewString += "<div style='position: absolute; left: 45px; top: 0; margin-top: -2px; font-weight: 500;'>" + userList[i]["cleanName"] + "</div>";
+
+        // Add profession
+        previewString += "<div style='position: absolute; left: 45px; top: 17px; color: rgba(0,0,0,0.7); font-size: 0.9em;'>" + userList[i]["profession"] + "</div>";
+
+        previewString += "</div></li>";
+    }
+    previewString += "</ul>";
+    return previewString;
 }
 
 function selectPostParticipant(username, cleanName, textDivName, dropdownDivName){
