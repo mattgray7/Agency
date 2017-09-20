@@ -45,14 +45,14 @@ class UserAccount(models.Model):
     actorDescriptionEnabled = models.BooleanField(default=False)        # enabled physical description
 
     reelLink = models.CharField(max_length=500, default='')
-    imdbLink = models.CharField(max_length=500, default='')
+    imdbLink = models.CharField(max_length=500, default=None, blank=True, null=True)
     bio = models.CharField(max_length=1000, default='')
     mainProfession = models.CharField(max_length=200, default='')
     location = models.CharField(max_length=200, default='')
     education = models.CharField(max_length=200, default='')
     gender = models.CharField(max_length=200, default='')
     dateOfBirth = models.DateField(default=None, blank=True, null=True)
-    resume = models.FileField(default=None, upload_to=image_directory_path, storage=imageStorage)
+    resume = models.FileField(default=None, blank=True, null=True, upload_to=image_directory_path, storage=imageStorage)
 
     def __init__(self, *args, **kwargs):
         super(UserAccount, self).__init__(*args, **kwargs)

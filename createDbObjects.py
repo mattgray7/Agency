@@ -30,7 +30,7 @@ daisyBuchananDescription = """Daisy is The Great Gatsby's most enigmatic, and pe
 directorDescription = """Our vision is to change the way the world views productivity. We want Function Point to be a place where everyone feels respected, where they are doing important work and where everyone contributes to the growth and direction of our company, our customers and our community. Function Point is looking for a hands on, curious technology leader who wants to keep their technical skills sharp and apply their passion and smarts to lead engineering and devops towards delivering customer and business value. As Director of Engineering, you will work closely with our Director of Products to drive the development of Function Points products and services. You will lead the continued growth of engineering and devops with an emphasis on championing a strong engineering culture, measuring and increasing delivery velocity, ensuring high quality, and achieving schedule predictability."""
 #=================== Project 1
 # User 1
-def createUser(username, email, password, firstName, lastName, picURL=None, mainProfession="Actor", imdbLink='None', bio="None"):
+def createUser(username, email, password, firstName, lastName, picURL=None, mainProfession="Actor", imdbLink=None, bio="None"):
 	user = User.objects.create_user(username=username,
                                    	email=email,
                                    	password=password,

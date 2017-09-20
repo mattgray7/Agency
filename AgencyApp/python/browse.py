@@ -534,10 +534,49 @@ def getUserSearchResults(searchValue, numResults, filters):
     projectIDs = [x.postID for x in models.ProjectPost.objects.filter(title__contains=searchValue)]
     postParticipants = [x.username for x in models.PostParticipant.objects.filter(postID__in=projectIDs)]
     searchLists.append(models.UserAccount.objects.filter(username__in=postParticipants))
+
+    defaultList = models.UserAccount.objects.all().order_by("mainProfession")
+    searchLists.append(defaultList)
+    if filters:
+        for i, searchList in enumerate(searchLists):
+            if filters.get("professions"):
+                searchLists[i] = searchLists[i].filter(mainProfession__in=filters.get("professions"))
+            if filters.get("imdb") == "Yes":
+                searchLists[i] = searchLists[i].exclude(imdbLink=None)
+            if filters.get("resume") == "Yes":
+                searchLists[i] = searchLists[i].exclude(resume="")
+            """To be added when actor attributes and availability are better defined
+            if filters.get("interest"):
+                searchLists[i] = searchLists[i].filter(interest=filters.get("interest"))
+            if filters.get("ageRange"):
+                searchLists[i] = searchLists[i].filter(ageRange=filters.get("ageRange"))
+            if filters.get("build"):
+                searchLists[i] = searchLists[i].filter(build=filters.get("build"))
+            if filters.get("compensation"):
+                searchLists[i] = searchLists[i].filter(compensationType=filters.get("compensation"))
+            if filters.get("hairColor"):
+                searchLists[i] = searchLists[i].filter(hairColor=filters.get("hairColor"))
+            if filters.get("eyeColor"):
+                searchLists[i] = searchLists[i].filter(eyeColor=filters.get("eyeColor"))
+            if filters.get("ethnicity"):
+                searchLists[i] = searchLists[i].filter(ethnicity=filters.get("ethnicity"))
+            if filters.get("dates"):
+                start = filters.get("dates").get("start")
+                end = filters.get("dates").get("end")
+                if start:
+                    startSplitted = start.split("-")
+                    startDate = datetime.date(int(startSplitted[0]), int(startSplitted[1]), int(startSplitted[2]))
+                    searchLists[i] = searchLists[i].filter(startDate__gte=startDate)
+                if end:
+                    endSplitted = end.split("-")
+                    endDate = datetime.date(int(endSplitted[0]), int(endSplitted[1]), int(endSplitted[2]))
+                    searchLists[i] = searchLists[i].filter(endDate__lte=endDate)"""
+
+    defaultList = searchLists.pop()
     return getPostSearchResults(searchValue=searchValue,
                                 maxNumResults=numResults,
                                 requiredFields=[],  # handled in the format function
-                                defaultList=models.UserAccount.objects.all().order_by("mainProfession"),
+                                defaultList=defaultList,
                                 searchLists=searchLists,
                                 uniqueID="username"
                                 )

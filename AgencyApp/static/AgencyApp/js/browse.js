@@ -137,8 +137,7 @@ function getRolesFilterValues(){
 }
 
 function getUsersFilterValues(){
-    var filters = {"profession": null, "interest": null, "imdb": null, "resume": null, "gender": null, "ageRange": null, "build": null, "hairColor": null, "eyeColor": null, "ethnicity": null, "dates": {"start": null, "end": null}}
-    filters = _addSelectFilterValues(filters, "usersProfessionSelect", "profession")
+    var filters = {"professions": filteredProfessions["users"], "interest": null, "imdb": null, "resume": null, "gender": null, "ageRange": null, "build": null, "hairColor": null, "eyeColor": null, "ethnicity": null, "dates": {"start": null, "end": null}}
     filters = _addSelectFilterValues(filters, "usersInterestSelect", "interest")
     filters = _addSelectFilterValues(filters, "usersIMDBSelect", "imdb")
     filters = _addSelectFilterValues(filters, "usersResumeSelect", "resume")
