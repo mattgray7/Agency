@@ -424,10 +424,16 @@ class EditBackgroundView(GenericEditAccountView):
         self.userAccount.education = self.formData.get('education')
         self.userAccount.gender = self.formData.get('gender')
 
-        if self.request.POST.get("professionList"):
+        # Want to delete all professions if profession list is an empty list, so continue as long as field name is present in request
+        if self.request.POST.get("professionList", "None") != "None":
             # Delete existing professions
             models.ProfileProfession.objects.filter(username=self.userAccount.username).delete()
-            for profession in json.loads(self.request.POST.get("professionList")):
+            if self.request.POST.get("professionList"):
+                professionList = json.loads(self.request.POST.get("professionList"))
+            else:
+                professionList = []
+
+            for profession in professionList:
                 # Add new profession
                 profileProfession = models.ProfileProfession(username=self.userAccount.username,
                                                              profession=profession)
