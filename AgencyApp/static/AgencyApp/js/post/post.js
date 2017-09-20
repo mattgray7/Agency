@@ -1393,50 +1393,63 @@ function searchPreviewProfessions(textValue, container, extraInputs){
     }
 }
 
-function displayProfileProfessionList(chosenContainer){
+function displayProfileProfessionList(chosenContainer, textInputName){
     var container = document.getElementById(chosenContainer);
     if(container != null){
         var containerString = "<ul style='display: inline;' class='filteredProfessionList'>"
         if(profileProfessionList.length > 0){
             for(var i=0; i < profileProfessionList.length; i++){
-                containerString += "<li style='margin-bottom: 3px; float: left; margin-top: 0px; text-align: left; position: relative; min-width: 70px; max-width: 150px; width: 100px;'><div style='position: absolute; left: 5px;'>" + profileProfessionList[i] + "</div><a onclick='removeFilteredProfession(" + '"' + profileProfessionList[i] + '");' + "' style='font-size: 1em; font-weight: 800; position: absolute; right: 5px;'>X</a></li>";
+                containerString += "<li style='margin-bottom: 3px; float: left; margin-top: 0px; text-align: left; position: relative; min-width: 70px; max-width: 150px; width: 100px;'><div style='position: absolute; left: 5px;'>" + profileProfessionList[i] + "</div><a onclick='removeProfileProfession(" + '"' + profileProfessionList[i] + '", "' + chosenContainer + '", "' + textInputName + '");' + "' style='font-size: 1em; font-weight: 800; position: absolute; right: 5px;'>X</a></li>";
             }
         }
         containerString += "<li style='display: none;'></li></ul>"
         container.innerHTML = containerString;
+
+        var textInput = document.getElementById(textInputName);
+        if(textInput != null){
+            textInput.style.left = document.getElementById(chosenContainer).offsetWidth + 5 + "px";
+            if(profileProfessionList.length > 2){
+                $("[id='" + textInputName + "']").prop('disabled', true)
+            }else{
+                $("[id='" + textInputName + "']").prop('disabled', false)
+                $("[id='" + textInputName + "']").focus();
+            }
+        }
     }
 }
 
 var profileProfessionList = []
-function selectProfession(profession, chosenContainer, textInputName, dropdownName){
+function selectProfileProfession(profession, chosenContainer, textInputName, dropdownName){
     var dropdown = document.getElementById(dropdownName);
     if(dropdown != null){
         dropdown.style.display = "none";
         dropdown.innerHTML = "";
     }
 
-    if(profileProfessionList.indexOf(profession) == -1){
-        profileProfessionList.push(profession);
-        displayProfileProfessionList(chosenContainer);
-    }
-
     var textInput = document.getElementById(textInputName);
     if(textInput != null){
         // Reset value and move cursor
         textInput.value = "";
-        textInput.style.left = document.getElementById(chosenContainer).offsetWidth + 5 + "px";
-        if(profileProfessionList.length === 3){
-            $("[id='" + textInputName + "']").prop('disabled', true)
-        }else if(profileProfessionList < 3){
-            $("[id='" + textInputName + "']").prop('disabled', false)
-        }
     }
+
+    if(profileProfessionList.indexOf(profession) == -1){
+        profileProfessionList.push(profession);
+        displayProfileProfessionList(chosenContainer, textInputName);
+    }
+}
+
+function removeProfileProfession(profession, chosenContainer, textInputName){
+    var professionIndex = profileProfessionList.indexOf(profession)
+    if(professionIndex > -1){
+        profileProfessionList.splice(professionIndex, 1)
+    }
+    displayProfileProfessionList(chosenContainer, textInputName);
 }
 
 function getPreviewProfessionsString(professionList){
     var previewString = "<ul id='professionDropdownList'>";
     for(var i=0; i < professionList.length; i++){
-        previewString += "<li style='margin-top: 0px; border: none; padding: 5px;' onclick='selectProfession(" + '"' + professionList[i] + '", "profileProfessionContainer", "profileProfessionTextInput", "profileProfessionDropdown");' + "'><div style='position:relative; height: 20px;'>"
+        previewString += "<li style='margin-top: 0px; border: none; padding: 5px;' onclick='selectProfileProfession(" + '"' + professionList[i] + '", "profileProfessionContainer", "profileProfessionTextInput", "profileProfessionDropdown");' + "'><div style='position:relative; height: 20px;'>"
         // Add name
         previewString += "<div style='position: absolute; left: 2px; top: 0; font-weight: 500; '>" + professionList[i] + "</div>";
 
