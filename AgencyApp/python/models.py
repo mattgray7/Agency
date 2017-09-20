@@ -66,6 +66,7 @@ class UserAccount(models.Model):
     def __str__(self):
         return self.username
 
+    @property
     def profileProfessions(self):
         if self._profileProfessions is None:
             self._profileProfessions = [x.profession for x in ProfileProfession.objects.filter(username=self.username)]

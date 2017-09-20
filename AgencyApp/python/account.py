@@ -359,6 +359,7 @@ class EditBackgroundView(GenericEditAccountView):
     def pageContext(self):
         self._pageContext = super(EditBackgroundView, self).pageContext
         self._pageContext["selectFields"] = json.dumps(self.selectFields)
+        self._pageContext["profileProfessions"] = json.dumps(self.userAccount.profileProfessions)
         return self._pageContext
 
     @property
@@ -422,6 +423,15 @@ class EditBackgroundView(GenericEditAccountView):
         self.userAccount.dateOfBirth = self.formData.get('dateOfBirth')
         self.userAccount.education = self.formData.get('education')
         self.userAccount.gender = self.formData.get('gender')
+
+        if self.request.POST.get("professionList"):
+            # Delete existing professions
+            models.ProfileProfession.objects.filter(username=self.userAccount.username).delete()
+            for profession in json.loads(self.request.POST.get("professionList")):
+                # Add new profession
+                profileProfession = models.ProfileProfession(username=self.userAccount.username,
+                                                             profession=profession)
+                profileProfession.save()
 
         # Remove existing resume if it exists (can remove existing and add new in same form submission)
         if self.request.POST.get("removeResumeFile", "false") in ["true", "True", True]:

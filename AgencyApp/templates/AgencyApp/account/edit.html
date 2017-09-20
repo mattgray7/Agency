@@ -55,6 +55,18 @@ function removeIMDBLink(){
     }
 }
 
+function submitForm(formName){
+    var form = document.getElementById(formName)
+    if(formName === "editBackgroundForm"){
+        // Need to add chosen professions
+        if(profileProfessionList.length > 0){
+            var professionListInput = document.getElementById("profileProfessionListInput");
+            professionListInput.value = JSON.stringify(profileProfessionList)
+        }
+    }
+    return form.submit();
+}
+
 </script>
 
 
@@ -67,10 +79,7 @@ function removeIMDBLink(){
     {% endif %}
 
     <script>
-        function submitForm(formName){
-            var form = document.getElementById(formName)
-            return form.submit();
-        }
+
 
         function submitFormWithExtraParameters(formType){
             // Submits the submit profession button
@@ -155,6 +164,9 @@ function removeIMDBLink(){
                                                 // Add text field
                                                 lineString += '<input style="position: absolute; top: 0; left: 7px; right: 0; background: rgba(255,255,255,0); width: auto;" type="text" id="profileProfessionTextInput">';
 
+                                                // Add hidden input
+                                                lineString += '<input type="hidden" name="professionList" id="profileProfessionListInput">';
+
                                                 // Add dropdown
                                                 lineString += '<div id="profileProfessionDropdown" class="previewDropdownPanel" style="position: absolute; left: 0; right: 0; margin-right: -5px; margin-left: -6px; top: 36px; border: 1px solid #86898e; display: none; ;"></div>'
 
@@ -175,6 +187,10 @@ function removeIMDBLink(){
                                 }
                                 document.write(lineString);
                                 addDropdownCallback("searchPreviewProfessions", null, {}, "profileProfessionTextInput", "profileProfessionDropdown")
+                                {% if profileProfessions %}
+                                    profileProfessionList = {{ profileProfessions|safe }};
+                                {% endif %}
+                                displayProfileProfessionList("profileProfessionContainer", "profileProfessionTextInput")
                             {% endfor %}
                         </script>
                         <li style="position:relative; height:70px;">
