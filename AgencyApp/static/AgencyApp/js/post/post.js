@@ -1409,12 +1409,6 @@ function displayProfileProfessionList(chosenContainer){
 
 var profileProfessionList = []
 function selectProfession(profession, chosenContainer, textInputName, dropdownName){
-    var textInput = document.getElementById(textInputName);
-    if(textInput != null){
-        textInput.value = "";
-    }
-
-    console.log(dropdownName)
     var dropdown = document.getElementById(dropdownName);
     if(dropdown != null){
         dropdown.style.display = "none";
@@ -1424,6 +1418,18 @@ function selectProfession(profession, chosenContainer, textInputName, dropdownNa
     if(profileProfessionList.indexOf(profession) == -1){
         profileProfessionList.push(profession);
         displayProfileProfessionList(chosenContainer);
+    }
+
+    var textInput = document.getElementById(textInputName);
+    if(textInput != null){
+        // Reset value and move cursor
+        textInput.value = "";
+        textInput.style.left = document.getElementById(chosenContainer).offsetWidth + 5 + "px";
+        if(profileProfessionList.length === 3){
+            $("[id='" + textInputName + "']").prop('disabled', true)
+        }else if(profileProfessionList < 3){
+            $("[id='" + textInputName + "']").prop('disabled', false)
+        }
     }
 }
 
