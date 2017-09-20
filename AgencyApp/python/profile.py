@@ -84,12 +84,7 @@ class ProfileView(views.GenericFormView):
     def profileProfessions(self):
         if self._profileProfessions is None:
             if self.profileUserAccount:
-                try:
-                    professions = models.Interest.objects.filter(username=self.profileUserAccount.username)
-                except Interest.DoesNotExist:
-                    pass
-                else:
-                    self._profileProfessions = [x.professionName for x in professions]
+                self._profileProfessions = self.profileUserAccount.profileProfessions
         return self._profileProfessions
 
     @property

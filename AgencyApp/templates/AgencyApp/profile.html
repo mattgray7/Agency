@@ -117,10 +117,10 @@
     function getProfessionList(){
         // TODO use 'mainProfessionList' or whatever its called instead of interested work professions
         var returnString = '';
-        {% if profileInterests.work %}
+        {% if profileProfessions %}
             returnString += '<div class="profileProfessionList"><ul>';
-            {% for interest in profileInterests.work %}
-                returnString += '<li>| {{interest.professionName}} | </li>'
+            {% for profession in profileProfessions %}
+                returnString += '<li>| {{profession}} | </li>'
             {% endfor %}
             returnString += '</ul></div>';
         {% endif %}
