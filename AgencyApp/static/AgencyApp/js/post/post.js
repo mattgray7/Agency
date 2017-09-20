@@ -1393,7 +1393,7 @@ function searchPreviewProfessions(textValue, container, extraInputs){
     }
 }
 
-function displayProfileProfessionList(chosenContainer, textInputName){
+function displayProfileProfessionList(chosenContainer, textInputName, pageLoad){
     var container = document.getElementById(chosenContainer);
     if(container != null){
         var containerString = "<ul style='display: inline;' class='filteredProfessionList'>"
@@ -1407,7 +1407,12 @@ function displayProfileProfessionList(chosenContainer, textInputName){
 
         var textInput = document.getElementById(textInputName);
         if(textInput != null){
-            textInput.style.left = document.getElementById(chosenContainer).offsetWidth + 5 + "px";
+            var textMargin =  document.getElementById(chosenContainer).offsetWidth + 5;
+            if(pageLoad){
+                // Stupid hack: chosenContainer offset width isn't accurate when this is first called on page load
+                textMargin -= 11 * profileProfessionList.length;
+            }
+            textInput.style.left = textMargin + "px";
             if(profileProfessionList.length > 2){
                 $("[id='" + textInputName + "']").prop('disabled', true)
             }else{

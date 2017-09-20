@@ -187,10 +187,7 @@ function submitForm(formName){
                                 }
                                 document.write(lineString);
                                 addDropdownCallback("searchPreviewProfessions", null, {}, "profileProfessionTextInput", "profileProfessionDropdown")
-                                {% if profileProfessions %}
-                                    profileProfessionList = {{ profileProfessions|safe }};
-                                {% endif %}
-                                displayProfileProfessionList("profileProfessionContainer", "profileProfessionTextInput")
+
                             {% endfor %}
                         </script>
                         <li style="position:relative; height:70px;">
@@ -204,6 +201,14 @@ function submitForm(formName){
                 </form>
             </div>
         </div>
+        <script>
+            $(document).ready(function (){
+                {% if profileProfessions %}
+                    profileProfessionList = {{ profileProfessions|safe }};
+                {% endif %}
+                displayProfileProfessionList("profileProfessionContainer", "profileProfessionTextInput", true)
+            });
+        </script>
     {% elif next == possibleDestinations.picture %}
         {% load static %}
         <link href="{% static "/AgencyApp/css/image.css" %}" rel="stylesheet" type="text/css" media="all" />
