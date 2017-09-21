@@ -186,7 +186,7 @@ function submitForm(formName){
                                     lineString += '{{field}}';
                                 }
                                 document.write(lineString);
-                                addDropdownCallback("searchPreviewProfessions", null, {}, "profileProfessionTextInput", "profileProfessionDropdown")
+                                addProfileProfessionDropdownCallback("searchPreviewProfessions", {}, "profileProfessionTextInput", "profileProfessionDropdown")
 
                             {% endfor %}
                         </script>

@@ -1320,6 +1320,35 @@ function addDropdownCallback(callbackFunctionName, secondaryEnterSubmitButton, e
     }
 }
 
+function addProfileProfessionDropdownCallback(callbackFunctionName, extraInputs, textInput, dropdownDivName){
+    // Add participant dropdown
+    var inputDiv = document.getElementById(textInput);
+    if(inputDiv != null){
+        inputDiv.onkeyup = function(event){
+            if(event.keyCode != 13){
+                enterPressed = false;
+            }
+            //40 is down, 38 is up
+            if(event.keyCode === 40){
+                moveDropdownFocus("down", dropdownDivName)
+            }else if(event.keyCode === 38){
+                moveDropdownFocus("up", dropdownDivName)
+            }else if(event.keyCode === 13){
+                if(enterPressed || dropdownFocusIndex === -1){
+                    if(inputDiv.value.length > 0){
+                        selectProfileProfession(inputDiv.value, "profileProfessionContainer", textInput, dropdownDivName)
+                    }
+                }else{
+                    selectDropdownFocusElement(dropdownDivName);
+                }
+                enterPressed = true;
+            }else{
+                previewTextInDropdown(textInput, dropdownDivName, callbackFunctionName, extraInputs);
+            }
+        }
+    }
+}
+
 var dropdownFocusIndex = -1
 function moveDropdownFocus(direction, dropdownListID){
     var dropdownList = document.getElementById(dropdownListID)
@@ -1440,6 +1469,10 @@ function selectProfileProfession(profession, chosenContainer, textInputName, dro
         profileProfessionList.push(profession);
         displayProfileProfessionList(chosenContainer, textInputName);
     }
+}
+
+function addProfileProfessionText(){
+
 }
 
 function removeProfileProfession(profession, chosenContainer, textInputName){
