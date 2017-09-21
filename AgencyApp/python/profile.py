@@ -31,8 +31,7 @@ class ProfileView(views.GenericFormView):
     @property
     def profileLinks(self):
         if self._profileLinks is None:
-            self._profileLinks = [{"url": self.profileUserAccount.imdbLink, "label": "IMDB"},
-                                  {"url": self.profileUserAccount.reelLink, "label": "Reel"}]
+            self._profileLinks = [{"url": self.profileUserAccount.imdbLink, "label": "IMDB"}]
         return self._profileLinks
 
     @property

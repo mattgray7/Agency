@@ -30,14 +30,13 @@ class EditPictureForm(BaseForm):
 
 class EditBackgroundForm(BaseForm):
     profileProfessions = forms.CharField(label="Profession(s)", required=False, max_length=200)
-    reel = forms.CharField(label="Reel Link", required=False, max_length=500)
+    education = forms.CharField(label="Education", required=False, max_length=200)
+    location = forms.CharField(label="Location", required=False, max_length=200)
+    dateOfBirth = forms.DateField(label="Date of Birth", required=False, widget=forms.DateInput(attrs={'class':'datepicker'}))
+    phoneNumber = forms.CharField(label="Phone #", required=False, max_length=30)
     resume = forms.FileField(label="Resume", required=False)
     imdb = forms.CharField(label="IMDB Link", required=False, max_length=500)
     bio = forms.CharField(label="Bio", required=False, max_length=1000)
-    location = forms.CharField(label="Location", required=False, max_length=200)
-    education = forms.CharField(label="Education", required=False, max_length=200)
-    gender = forms.CharField(label="Identified Gender", required=False, max_length=200)
-    dateOfBirth = forms.DateField(label="Date of Birth", required=False, widget=forms.DateInput(attrs={'class':'datepicker'}))
 
 class GenericCreatePostForm(BaseForm):
     postID = forms.CharField(widget=forms.HiddenInput, required=False, max_length=10)

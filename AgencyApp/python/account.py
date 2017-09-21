@@ -370,7 +370,7 @@ class EditBackgroundView(GenericEditAccountView):
     def physicalAttributeData(self):
         if self._physicalAttributeData is None:
             self._physicalAttributeData = []
-            omitFields = ["gender", "ageRange", "characterType"]
+            omitFields = ["ageRange", "characterType"]
             for attribute in constants.ACTOR_ATTRIBUTE_DICT:
                 if attribute["name"] not in omitFields:
                     newAttribute = copy.deepcopy(attribute)
@@ -413,10 +413,9 @@ class EditBackgroundView(GenericEditAccountView):
 
     @property
     def formInitialValues(self):
-        self._formInitialValues["reel"] = self.userAccount.reelLink
         self._formInitialValues["imdb"] = self.userAccount.imdbLink
         self._formInitialValues["bio"] = self.userAccount.bio
-        self._formInitialValues["mainProfession"] = self.userAccount.mainProfession
+        #self._formInitialValues["mainProfession"] = self.userAccount.mainProfession
         self._formInitialValues["location"] = self.userAccount.location
         self._formInitialValues["dateOfBirth"] = self.userAccount.dateOfBirth
         self._formInitialValues["education"] = self.userAccount.education
@@ -427,6 +426,7 @@ class EditBackgroundView(GenericEditAccountView):
         self._formInitialValues["ethnicity"] = self.userAccount.ethnicity
         self._formInitialValues["build"] = self.userAccount.build
         self._formInitialValues["height"] = self.userAccount.height
+        self._formInitialValues["phoneNumber"] = self.userAccount.phoneNumber
         return self._formInitialValues
 
     @property
@@ -437,18 +437,18 @@ class EditBackgroundView(GenericEditAccountView):
 
     def processForm(self):
         """Overriding asbtract method"""
-        self.userAccount.reelLink = self.formData.get('reel')
         self.userAccount.imdbLink = self.formData.get('imdb')
         self.userAccount.bio = self.formData.get('bio')
         self.userAccount.location = self.formData.get('location')
         self.userAccount.dateOfBirth = self.formData.get('dateOfBirth')
         self.userAccount.education = self.formData.get('education')
-        self.userAccount.gender = self.formData.get('gender')
+        self.userAccount.gender = self.request.POST.get('gender')
         self.userAccount.hairColor = self.request.POST.get("hairColor") # Have to use request.POST cause physical attributes not included in FormClass
         self.userAccount.eyeColor = self.request.POST.get("eyeColor")
         self.userAccount.ethnicity = self.request.POST.get("ethnicity")
         self.userAccount.build = self.request.POST.get("build")
         self.userAccount.height = self.request.POST.get("height")
+        self.userAccount.phoneNumber = self.request.POST.get("phoneNumber")
 
         # Want to delete all professions if profession list is an empty list, so continue as long as field name is present in request
         if self.request.POST.get("professionList", "None") != "None":
@@ -476,8 +476,9 @@ class EditBackgroundView(GenericEditAccountView):
         try:
             self.userAccount.save()
             return True
-        except:
-            self.errors.append("Could not connect to UserAccount database")
+        except Exception as e:
+            print e
+            self._pageErrors.append("Could not connect to UserAccount database")
         return False
 
 

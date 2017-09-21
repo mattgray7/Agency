@@ -96,7 +96,7 @@ COLLABORATOR_OPTIONS = ["Director", "Director of photography", "Musical artist",
 EVENT_TYPES = ["-", "Open Audition", "Closed Audition", "Screening", "Table Read", "Panel", "Other"]
 INTEREST_TYPES = ["Hiring", "Casting", "Looking for work", "Looking for collaborators"]
 
-GENDER_OPTIONS = ["-", "Male", "Female", "Non-binary", "Other", "Prefer not to specify"]	# used in other places than actor attribute
+GENDER_OPTIONS = ["-", "Female", "Male", "Non-binary", "Other", "Prefer not to specify"]	# used in other places than actor attribute
 CHARACTER_TYPE_OPTIONS = ["Actor", "Extra", "Model", "Chorus member", "Dancer", "Other"]
 AGE_RANGE_OPTIONS = ["-", "0 - 6", "6 - 12", "12 - 16", "16 - 20", "20 - 25", "25 - 40", "40 - 55", "55 - 70", "70+"]
 HAIR_COLOR_OPTIONS = ["-", "Black", "Blonde", "Brown", "Grey", "Red", "White", "Other"]
@@ -104,7 +104,10 @@ EYE_COLOR_OPTIONS = ["-", "Blue", "Brown", "Green", "Grey", "Other"]
 ETHNICITY_OPTIONS = ["-", "Caucasian", "Latino", "African", "East Asian", "Middle Eastern", "Indian"]
 BUILD_OPTIONS = ["-", "Slim", "Medium", "Muscular", "Large"]
 
-ACTOR_ATTRIBUTE_DICT = [{"name": "hairColor",
+ACTOR_ATTRIBUTE_DICT = [{"name": "gender",
+						 "options": GENDER_OPTIONS,
+						 "label": "Gender"},
+						{"name": "hairColor",
 						 "options": HAIR_COLOR_OPTIONS,
 						 "label": "Hair Color"},
 						{"name": "eyeColor",
@@ -116,9 +119,6 @@ ACTOR_ATTRIBUTE_DICT = [{"name": "hairColor",
 						{"name": "ageRange",
 						 "options": AGE_RANGE_OPTIONS,
 						 "label": "Age Range"},
-						{"name": "gender",
-						 "options": GENDER_OPTIONS,
-						 "label": "Identified Gender"},
 						{"name": "build",
 						 "options": BUILD_OPTIONS,
 						 "label": "Build"},
