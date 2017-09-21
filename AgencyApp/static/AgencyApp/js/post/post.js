@@ -1412,7 +1412,10 @@ function displayProfileProfessionList(chosenContainer, textInputName, pageLoad){
                 // Stupid hack: chosenContainer offset width isn't accurate when this is first called on page load
                 textMargin -= 11 * profileProfessionList.length;
             }
+
+            // Set width of text input to parent width minus container width
             textInput.style.left = textMargin + "px";
+            textInput.style.width = $("[id='" + textInputName + "']").parent().width() - textMargin + "px"
             if(profileProfessionList.length > 2){
                 $("[id='" + textInputName + "']").prop('disabled', true)
             }else{
