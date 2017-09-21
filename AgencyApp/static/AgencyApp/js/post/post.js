@@ -1377,9 +1377,12 @@ function addProfileProfessionDropdownCallback(callbackFunctionName, extraInputs,
                         removeProfileProfession(profileProfessionList[profileProfessionList.length-1], "profileProfessionContainer", textInput)
                         professionHighlighted = false
                     }else{
-                        highlightProfileProfession()
+                        toggleProfileProfessionHighlight("highlight")
                     }
                 }
+            }else if(professionHighlighted){
+                // If highlighted, and anything else is typed, remove highlight
+                toggleProfileProfessionHighlight("remove")
             }
         }
         inputDiv.onkeyup = function(event){
@@ -1438,16 +1441,23 @@ function searchPreviewProfessions(textValue, container, extraInputs){
     }
 }
 
-function highlightProfileProfession(){
+function toggleProfileProfessionHighlight(toggleType){
     if(profileProfessionList.length > 0){
         var lastProfession = profileProfessionList[profileProfessionList.length-1];
         var lastProfessionElementID = "profileProfession_" + lastProfession
         var lastProfessionElement = document.getElementById(lastProfessionElementID);
         if(lastProfessionElement != null){
-            lastProfessionElement.style.background = "rgba(0,0,0,0.8)";
-            lastProfessionElement.style.color = "#FFF";
-            $("[id='" + lastProfessionElementID + "']").find("a").css("color", "#FFF")
-            professionHighlighted = true;
+            if(toggleType === "highlight"){
+                lastProfessionElement.style.background = "rgba(0,0,0,0.8)";
+                lastProfessionElement.style.color = "#FFF";
+                $("[id='" + lastProfessionElementID + "']").find("a").css("color", "#FFF")
+                professionHighlighted = true;
+            }else{
+                lastProfessionElement.style.background = "rgba(0,0,0,0.1)";
+                lastProfessionElement.style.color = "rgba(0,0,0,0.8)";
+                $("[id='" + lastProfessionElementID + "']").find("a").css("color", "#1e1e1e")
+                professionHighlighted = false;
+            }
         }
     }
 }
