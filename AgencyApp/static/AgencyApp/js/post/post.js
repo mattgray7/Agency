@@ -1393,7 +1393,7 @@ function searchPreviewProfessions(textValue, container, extraInputs){
     }
 }
 
-function displayProfileProfessionList(chosenContainer, textInputName, pageLoad){
+function displayProfileProfessionList(chosenContainer, textInputName){
     var container = document.getElementById(chosenContainer);
     if(container != null){
         var containerString = "<ul style='display: inline;' class='filteredProfessionList'>"
@@ -1408,10 +1408,6 @@ function displayProfileProfessionList(chosenContainer, textInputName, pageLoad){
         var textInput = document.getElementById(textInputName);
         if(textInput != null){
             var textMargin =  document.getElementById(chosenContainer).offsetWidth + 5;
-            if(pageLoad){
-                // Stupid hack: chosenContainer offset width isn't accurate when this is first called on page load
-                textMargin -= 11 * profileProfessionList.length;
-            }
 
             // Set width of text input to parent width minus container width
             textInput.style.left = textMargin + "px";

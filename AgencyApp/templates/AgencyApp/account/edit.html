@@ -202,12 +202,13 @@ function submitForm(formName){
             </div>
         </div>
         <script>
-            $(document).ready(function (){
+            $(window).on("load", function (){
                 {% if profileProfessions %}
                     profileProfessionList = {{ profileProfessions|safe }};
                 {% endif %}
-                displayProfileProfessionList("profileProfessionContainer", "profileProfessionTextInput", true)
+                displayProfileProfessionList("profileProfessionContainer", "profileProfessionTextInput")
             });
+
         </script>
     {% elif next == possibleDestinations.picture %}
         {% load static %}
