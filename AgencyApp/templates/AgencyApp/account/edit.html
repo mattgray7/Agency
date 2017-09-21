@@ -76,17 +76,21 @@ function getPhysicalAttributeFields(){
             fieldString += "<li><label for='name'>{{attributeDict.label}}</label>";
             {% if attributeDict.options %}
                 var options = {{ attributeDict.options|safe }};
-                fieldString += "<select form='editBackgroundForm' name='{{field.name}}'>";
+                fieldString += "<select form='editBackgroundForm' name='{{attributeDict.name}}'>";
                 for(var i=0; i < options.length; i++){
                     fieldString += "<option "
-                    /*if(selectFields["{{field.name}}"][i] === "{{field.value}}"){
-                        lineString += "selected ";
-                    }*/
+                    if(options[i] === "{{attributeDict.value}}"){
+                        fieldString += "selected ";
+                    }
                     fieldString += "'value='" + options[i] + "'>" + options[i] + "</option>"
                 }
                 fieldString += "</select>";
             {% else %}
-                fieldString += "<input type='text' name='{{attributeDict.name}}' />"
+            var textValue = "{{attributeDict.value}}";
+            if(textValue === "None"){
+                textValue = "";
+            }
+            fieldString += "<input type='text' name='{{attributeDict.name}}' /value='" + textValue + "'>"
             {% endif %}
             fieldString += "</li>"
         {% endfor %}

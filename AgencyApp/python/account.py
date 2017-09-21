@@ -15,6 +15,7 @@ import genericViews as views
 
 import post_casting as castingPost
 import os
+import copy
 from itertools import chain
 
 import actorDescription
@@ -372,7 +373,10 @@ class EditBackgroundView(GenericEditAccountView):
             omitFields = ["gender", "ageRange", "characterType"]
             for attribute in constants.ACTOR_ATTRIBUTE_DICT:
                 if attribute["name"] not in omitFields:
-                    self._physicalAttributeData.append(attribute)
+                    newAttribute = copy.deepcopy(attribute)
+                    newAttribute["value"] = self.formInitialValues.get(attribute["name"])
+                    self._physicalAttributeData.append(newAttribute)
+
         return self._physicalAttributeData
 
     @property
@@ -418,6 +422,11 @@ class EditBackgroundView(GenericEditAccountView):
         self._formInitialValues["education"] = self.userAccount.education
         self._formInitialValues["gender"] = self.userAccount.gender
         self._formInitialValues["resume"] = self.userAccount.resume
+        self._formInitialValues["hairColor"] = self.userAccount.hairColor
+        self._formInitialValues["eyeColor"] = self.userAccount.eyeColor
+        self._formInitialValues["ethnicity"] = self.userAccount.ethnicity
+        self._formInitialValues["build"] = self.userAccount.build
+        self._formInitialValues["height"] = self.userAccount.height
         return self._formInitialValues
 
     @property
@@ -435,6 +444,11 @@ class EditBackgroundView(GenericEditAccountView):
         self.userAccount.dateOfBirth = self.formData.get('dateOfBirth')
         self.userAccount.education = self.formData.get('education')
         self.userAccount.gender = self.formData.get('gender')
+        self.userAccount.hairColor = self.request.POST.get("hairColor") # Have to use request.POST cause physical attributes not included in FormClass
+        self.userAccount.eyeColor = self.request.POST.get("eyeColor")
+        self.userAccount.ethnicity = self.request.POST.get("ethnicity")
+        self.userAccount.build = self.request.POST.get("build")
+        self.userAccount.height = self.request.POST.get("height")
 
         # Want to delete all professions if profession list is an empty list, so continue as long as field name is present in request
         if self.request.POST.get("professionList", "None") != "None":

@@ -119,14 +119,14 @@ ACTOR_ATTRIBUTE_DICT = [{"name": "hairColor",
 						{"name": "gender",
 						 "options": GENDER_OPTIONS,
 						 "label": "Identified Gender"},
-						{"name": "height",
-						"label": "Height"},
 						{"name": "build",
 						 "options": BUILD_OPTIONS,
 						 "label": "Build"},
 						{"name": "characterType",
 						 "options": CHARACTER_TYPE_OPTIONS,
-						 "label": "Character Type"}
+						 "label": "Character Type"},
+						{"name": "height",
+						"label": "Height"},
 						 ]
 
 ACTOR_DESCRIPTION_PAGE_TYPES = {"castingPost": CASTING_POST,
