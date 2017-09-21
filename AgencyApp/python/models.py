@@ -47,7 +47,6 @@ class UserAccount(models.Model):
     reelLink = models.CharField(max_length=500, default='')
     imdbLink = models.CharField(max_length=500, default=None, blank=True, null=True)
     bio = models.CharField(max_length=1000, default='')
-    mainProfession = models.CharField(max_length=200, default='')
     location = models.CharField(max_length=200, default='')
     education = models.CharField(max_length=200, default='')
     gender = models.CharField(max_length=200, default='')
@@ -62,6 +61,7 @@ class UserAccount(models.Model):
         self._otherInterest = None
         self._projects = None
         self._profileProfessions = None
+        self._mainProfession = None
 
     def __str__(self):
         return self.username
@@ -71,6 +71,17 @@ class UserAccount(models.Model):
         if self._profileProfessions is None:
             self._profileProfessions = [x.profession for x in ProfileProfession.objects.filter(username=self.username)]
         return self._profileProfessions
+
+    @property
+    def mainProfession(self):
+        # More legacy than anything
+        if self._mainProfession is None:
+            if self.profileProfessions:
+                professionString = '|'.join(self.profileProfessions)
+            else:
+                professionString = ''
+            self._mainProfession = professionString
+        return self._mainProfession
 
     @property
     def cleanName(self):

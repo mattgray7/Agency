@@ -29,7 +29,7 @@ class EditPictureForm(BaseForm):
     profilePicture = forms.FileField(label="Add picture", required=False)
 
 class EditBackgroundForm(BaseForm):
-    mainProfession = forms.CharField(label="Primary Profession", required=False, max_length=200)
+    profileProfessions = forms.CharField(label="Profession(s)", required=False, max_length=200)
     reel = forms.CharField(label="Reel Link", required=False, max_length=500)
     resume = forms.FileField(label="Resume", required=False)
     imdb = forms.CharField(label="IMDB Link", required=False, max_length=500)

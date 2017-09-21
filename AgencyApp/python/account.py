@@ -418,7 +418,6 @@ class EditBackgroundView(GenericEditAccountView):
         self.userAccount.reelLink = self.formData.get('reel')
         self.userAccount.imdbLink = self.formData.get('imdb')
         self.userAccount.bio = self.formData.get('bio')
-        self.userAccount.mainProfession = self.formData.get("mainProfession")
         self.userAccount.location = self.formData.get('location')
         self.userAccount.dateOfBirth = self.formData.get('dateOfBirth')
         self.userAccount.education = self.formData.get('education')

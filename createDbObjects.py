@@ -43,8 +43,7 @@ def createUser(username, email, password, firstName, lastName, picURL=None, main
 	                             		lastName=lastName,
 	                             		setupComplete=True,
 	                             		imdbLink=imdbLink,
-	                             		bio=bio,
-	                             		mainProfession=mainProfession)
+	                             		bio=bio)
 	userAccount.save()
 	userMediaDir = "/Users/MattGray/Projects/Agency/Agency/media/{0}/".format(username)
 	if not os.path.exists(userMediaDir):
@@ -54,6 +53,9 @@ def createUser(username, email, password, firstName, lastName, picURL=None, main
 		userAccount.profilePicture = File(open(picResult[0]))
 		userAccount.profilePicture.name = "/profile.jpg"
 		userAccount.save()
+
+	profession = models.ProfileProfession(username=username, profession=mainProfession)
+	profession.save()
 
 project1UserAccount = createUser("mattgray", "matt.gray.1993@gmail.com", "m", "matt", "gray",
 				   picURL="/Users/MattGray/Projects/Agency/Agency/scripts/media/mattGrayProfile.jpg",
