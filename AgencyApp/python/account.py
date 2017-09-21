@@ -444,14 +444,18 @@ class EditBackgroundView(GenericEditAccountView):
         self.userAccount.location = self.formData.get('location')
         self.userAccount.education = self.formData.get('education')
 
-        self.userAccount.dateOfBirth = self.request.POST.get('dateOfBirth')
-        self.userAccount.gender = self.request.POST.get('gender')
-        self.userAccount.hairColor = self.request.POST.get("hairColor") # Have to use request.POST cause physical attributes not included in FormClass
-        self.userAccount.eyeColor = self.request.POST.get("eyeColor")
-        self.userAccount.ethnicity = self.request.POST.get("ethnicity")
-        self.userAccount.build = self.request.POST.get("build")
+        # Have to use request.POST cause physical attributes not included in FormClass
+        defaultSelectValue = "-"
+        self.userAccount.gender = self.request.POST.get('gender') != defaultSelectValue and self.request.POST.get("gender") or None
+        self.userAccount.hairColor = self.request.POST.get("hairColor") != defaultSelectValue and self.request.POST.get("hairColor") or None
+        self.userAccount.eyeColor = self.request.POST.get("eyeColor") != defaultSelectValue and self.request.POST.get("eyeColor") or None
+        self.userAccount.ethnicity = self.request.POST.get("ethnicity") != defaultSelectValue and self.request.POST.get("ethnicityr") or None
+        self.userAccount.build = self.request.POST.get("build") != defaultSelectValue and self.request.POST.get("build") or None
         self.userAccount.height = self.request.POST.get("height")
         self.userAccount.phoneNumber = self.request.POST.get("phoneNumber")
+
+        if self.request.POST.get("dateOfBirth"):
+            self.userAccount.dateOfBirth = self.request.POST.get('dateOfBirth')
 
         # Want to delete all professions if profession list is an empty list, so continue as long as field name is present in request
         if self.request.POST.get("professionList", "None") != "None":
