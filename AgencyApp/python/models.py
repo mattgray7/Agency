@@ -42,7 +42,6 @@ class UserAccount(models.Model):
 
     profilePicture = models.ImageField(default=None, upload_to=image_directory_path, storage=imageStorage)
     
-    #actorDescriptionEnabled = models.BooleanField(default=False)        # enabled physical description
 
     #reelLink = models.CharField(max_length=500, default='')
     imdbLink = models.CharField(max_length=500, default=None, blank=True, null=True)
@@ -67,9 +66,31 @@ class UserAccount(models.Model):
         self._projects = None
         self._profileProfessions = None
         self._mainProfession = None
+        self._actorDescriptionEnabled = None
 
     def __str__(self):
         return self.username
+
+    @property
+    def actorDescriptionEnabled(self):
+        if self._actorDescriptionEnabled is None:
+            self._actorDescriptionEnabled = False
+
+            # Check if actor profession chosen
+            actorProfession = False
+            for profile in self.profileProfessions:
+                if profile in constants.PROFESSIONS.get("acting"):
+                    actorProfession = True
+                    break
+
+            # If actor profession chosen, check if there is a non-None value in the actor description fields
+            if actorProfession:
+                # Check to see if any physical values are not None
+                for field in [self.gender, self.dateOfBirth, self.hairColor, self.eyeColor, self.ethnicity, self.build, self.height]:
+                    if field:
+                        self._actorDescriptionEnabled = True
+                        break
+        return self._actorDescriptionEnabled
 
     @property
     def profileProfessions(self):

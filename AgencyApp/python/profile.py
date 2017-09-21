@@ -163,6 +163,7 @@ class ProfileView(views.GenericFormView):
         self._pageContext["profilePosts"] = self.profilePosts
         self._pageContext["profileLinks"] = self.profileLinks
         self._pageContext["filmography"] = json.dumps(self.profileUserFilmography)
+        self._pageContext["actorDescriptionEnabled"] = self.profileUserAccount.actorDescriptionEnabled
 
         self._pageContext["possibleDestinations"] = {"picture": constants.EDIT_PROFILE_PICTURE,
                                                      "background": constants.EDIT_BACKGROUND,
