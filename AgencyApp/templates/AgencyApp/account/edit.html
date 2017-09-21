@@ -71,6 +71,7 @@ function submitForm(formName){
 function getPhysicalAttributeFields(){
     var fieldString = '';
     {% if physicalAttributeData %}
+        fieldString += "<li style='border:none; text-align: left; margin-bottom: -10px; margin-left: -8px;'><h2>Physical Attributes</h2><h4 style='margin: 4px 0px; font-weight: 200;'>By selecting a front-of-camera profession, you can specify some physical attributes increasing your exposure to casting agents!</h4></li>"
         {% for attributeDict in physicalAttributeData %}
             fieldString += "<li><label for='name'>{{attributeDict.label}}</label>";
             {% if attributeDict.options %}
@@ -99,7 +100,7 @@ function toggleDisplayPhysicalAttributesRow(toggleType){
     if(container != null){
         if(toggleType === "expand"){
             container.innerHTML = getPhysicalAttributeFields();
-            $("#physicalAttributesRow").animate({marginTop: "0px", height: "315px"}, 500, function(){});
+            $("#physicalAttributesRow").animate({marginTop: "0px", height: "425px"}, 500, function(){});
         }else{
             container.innerHTML = "";
             $("#physicalAttributesRow").animate({marginTop: "0px", height: "0px"}, 500, function(){});
