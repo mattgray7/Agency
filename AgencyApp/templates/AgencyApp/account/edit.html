@@ -68,10 +68,35 @@ function submitForm(formName){
     return form.submit();
 }
 
+function getPhysicalAttributeFields(){
+    var fieldString = '';
+    {% if physicalAttributeData %}
+        {% for attributeDict in physicalAttributeData %}
+            fieldString += "<li><label for='name'>{{attributeDict.label}}</label>";
+            {% if attributeDict.options %}
+                var options = {{ attributeDict.options|safe }};
+                fieldString += "<select form='editBackgroundForm' name='{{field.name}}'>";
+                for(var i=0; i < options.length; i++){
+                    fieldString += "<option "
+                    /*if(selectFields["{{field.name}}"][i] === "{{field.value}}"){
+                        lineString += "selected ";
+                    }*/
+                    fieldString += "'value='" + options[i] + "'>" + options[i] + "</option>"
+                }
+                fieldString += "</select>";
+            {% endif %}
+            fieldString += "</li>"
+        {% endfor %}
+        fieldString += "<li style='display:none;'></li>"    //blank row so last attribute isn't flagged as last
+    {% endif %}
+    return fieldString;
+}
+
 function toggleDisplayPhysicalAttributesRow(toggleType){
     var container = document.getElementById("physicalAttributesRow");
     if(container != null){
         if(toggleType === "expand"){
+            container.innerHTML = getPhysicalAttributeFields();
             $("#physicalAttributesRow").animate({marginTop: "0px", height: "500px"}, 500, function(){});
         }else{
             $("#physicalAttributesRow").animate({marginTop: "0px", height: "0px"}, 500, function(){});
@@ -204,7 +229,7 @@ function toggleDisplayPhysicalAttributesRow(toggleType){
 
 
                         </script>
-                        <li id="physicalAttributesRow" style="height: 0px; border: none;"></li>
+                        <div id="physicalAttributesRow" style="height: 0px; border: none;"></div>
                         <li style="position:relative; height:70px;">
                             <div id="cancel" class="whiteButton blackHover" style="position: absolute; left: 0; right: 51%; top: 0;" onclick='cancelPage();'>Cancel</div>
                             <div id="continueButton" class="whiteButton blackHover" style="position: absolute; right: 0; left: 51%; top: 0;" onclick="submitForm('editBackgroundForm')">

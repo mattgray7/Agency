@@ -354,6 +354,7 @@ class EditBackgroundView(GenericEditAccountView):
     def __init__(self, *args, **kwargs):
         super(EditBackgroundView, self).__init__(*args, **kwargs)
         self._selectFields = None
+        self._physicalAttributeData = None
 
     @property
     def pageContext(self):
@@ -361,7 +362,18 @@ class EditBackgroundView(GenericEditAccountView):
         self._pageContext["selectFields"] = json.dumps(self.selectFields)
         self._pageContext["profileProfessions"] = json.dumps(self.userAccount.profileProfessions)
         self._pageContext["physicalAttributeProfessions"] = constants.PROFESSIONS.get("acting")
+        self._pageContext["physicalAttributeData"] = self.physicalAttributeData
         return self._pageContext
+
+    @property
+    def physicalAttributeData(self):
+        if self._physicalAttributeData is None:
+            self._physicalAttributeData = []
+            omitFields = ["gender", "ageRange", "characterType"]
+            for attribute in constants.ACTOR_ATTRIBUTE_DICT:
+                if attribute["name"] not in omitFields:
+                    self._physicalAttributeData.append(attribute)
+        return self._physicalAttributeData
 
     @property
     def nextButtonString(self):

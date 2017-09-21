@@ -105,20 +105,28 @@ ETHNICITY_OPTIONS = ["-", "Caucasian", "Latino", "African", "East Asian", "Middl
 BUILD_OPTIONS = ["-", "Slim", "Medium", "Muscular", "Large"]
 
 ACTOR_ATTRIBUTE_DICT = [{"name": "hairColor",
-						 "options": HAIR_COLOR_OPTIONS},
+						 "options": HAIR_COLOR_OPTIONS,
+						 "label": "Hair Color"},
 						{"name": "eyeColor",
-						 "options": EYE_COLOR_OPTIONS},
+						 "options": EYE_COLOR_OPTIONS,
+						 "label": "Eye Color"},
 						{"name": "ethnicity",
-						 "options": ETHNICITY_OPTIONS},
+						 "options": ETHNICITY_OPTIONS,
+						 "label": "Ethnicity"},
 						{"name": "ageRange",
-						 "options": AGE_RANGE_OPTIONS},
+						 "options": AGE_RANGE_OPTIONS,
+						 "label": "Age Range"},
 						{"name": "gender",
-						 "options": GENDER_OPTIONS},
-						{"name": "height"},
+						 "options": GENDER_OPTIONS,
+						 "label": "Identified Gender"},
+						{"name": "height",
+						"label": "Height"},
 						{"name": "build",
-						 "options": BUILD_OPTIONS},
+						 "options": BUILD_OPTIONS,
+						 "label": "Build"},
 						{"name": "characterType",
-						 "options": CHARACTER_TYPE_OPTIONS}
+						 "options": CHARACTER_TYPE_OPTIONS,
+						 "label": "Character Type"}
 						 ]
 
 ACTOR_DESCRIPTION_PAGE_TYPES = {"castingPost": CASTING_POST,
