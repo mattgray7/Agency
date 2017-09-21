@@ -1320,35 +1320,6 @@ function addDropdownCallback(callbackFunctionName, secondaryEnterSubmitButton, e
     }
 }
 
-function addProfileProfessionDropdownCallback(callbackFunctionName, extraInputs, textInput, dropdownDivName){
-    // Add participant dropdown
-    var inputDiv = document.getElementById(textInput);
-    if(inputDiv != null){
-        inputDiv.onkeyup = function(event){
-            if(event.keyCode != 13){
-                enterPressed = false;
-            }
-            //40 is down, 38 is up
-            if(event.keyCode === 40){
-                moveDropdownFocus("down", dropdownDivName)
-            }else if(event.keyCode === 38){
-                moveDropdownFocus("up", dropdownDivName)
-            }else if(event.keyCode === 13){
-                if(enterPressed || dropdownFocusIndex === -1){
-                    if(inputDiv.value.length > 0){
-                        selectProfileProfession(inputDiv.value, "profileProfessionContainer", textInput, dropdownDivName)
-                    }
-                }else{
-                    selectDropdownFocusElement(dropdownDivName);
-                }
-                enterPressed = true;
-            }else{
-                previewTextInDropdown(textInput, dropdownDivName, callbackFunctionName, extraInputs);
-            }
-        }
-    }
-}
-
 var dropdownFocusIndex = -1
 function moveDropdownFocus(direction, dropdownListID){
     var dropdownList = document.getElementById(dropdownListID)
@@ -1392,6 +1363,51 @@ function selectDropdownFocusElement(dropdownListID){
     }
 }
 
+var professionHighlighted = false
+function addProfileProfessionDropdownCallback(callbackFunctionName, extraInputs, textInput, dropdownDivName){
+    // Add participant dropdown
+    var inputDiv = document.getElementById(textInput);
+    if(inputDiv != null){
+        // Need to put backspace on key down so that it runs before text is removed (otherwise inputDiv.value.length is meaningless)
+        inputDiv.onkeydown = function(event){
+            if(event.keyCode === 8){
+                // backspace
+                if(inputDiv.value.length === 0){
+                    if(professionHighlighted){
+                        removeProfileProfession(profileProfessionList[profileProfessionList.length-1], "profileProfessionContainer", textInput)
+                        professionHighlighted = false
+                    }else{
+                        highlightProfileProfession()
+                    }
+                }
+            }
+        }
+        inputDiv.onkeyup = function(event){
+            if(event.keyCode != 13){
+                enterPressed = false;
+            }
+
+            //40 is down, 38 is up
+            if(event.keyCode === 40){
+                moveDropdownFocus("down", dropdownDivName)
+            }else if(event.keyCode === 38){
+                moveDropdownFocus("up", dropdownDivName)
+            }else if(event.keyCode === 13){
+                if(enterPressed || dropdownFocusIndex === -1){
+                    if(inputDiv.value.length > 0){
+                        selectProfileProfession(inputDiv.value, "profileProfessionContainer", textInput, dropdownDivName)
+                    }
+                }else{
+                    selectDropdownFocusElement(dropdownDivName);
+                }
+                enterPressed = true;
+            }else{
+                previewTextInDropdown(textInput, dropdownDivName, callbackFunctionName, extraInputs);
+            }
+        }
+    }
+}
+
 function searchPreviewProfessions(textValue, container, extraInputs){
     if(container != null){
         // TODO get the data
@@ -1422,13 +1438,27 @@ function searchPreviewProfessions(textValue, container, extraInputs){
     }
 }
 
+function highlightProfileProfession(){
+    if(profileProfessionList.length > 0){
+        var lastProfession = profileProfessionList[profileProfessionList.length-1];
+        var lastProfessionElementID = "profileProfession_" + lastProfession
+        var lastProfessionElement = document.getElementById(lastProfessionElementID);
+        if(lastProfessionElement != null){
+            lastProfessionElement.style.background = "rgba(0,0,0,0.8)";
+            lastProfessionElement.style.color = "#FFF";
+            $("[id='" + lastProfessionElementID + "']").find("a").css("color", "#FFF")
+            professionHighlighted = true;
+        }
+    }
+}
+
 function displayProfileProfessionList(chosenContainer, textInputName){
     var container = document.getElementById(chosenContainer);
     if(container != null){
         var containerString = "<ul style='display: inline;' class='filteredProfessionList'>"
         if(profileProfessionList.length > 0){
             for(var i=0; i < profileProfessionList.length; i++){
-                containerString += "<li style='margin-bottom: 3px; float: left; margin-top: 0px; text-align: left; position: relative; padding-right: 20px;'>" + profileProfessionList[i] + "<a onclick='removeProfileProfession(" + '"' + profileProfessionList[i] + '", "' + chosenContainer + '", "' + textInputName + '");' + "' style='font-size: 1em; font-weight: 800; position: absolute; right: 5px; '>X</a></li>";
+                containerString += "<li id='profileProfession_" + profileProfessionList[i] + "' style='margin-bottom: 3px; float: left; margin-top: 0px; text-align: left; position: relative; padding-right: 20px;'>" + profileProfessionList[i] + "<a onclick='removeProfileProfession(" + '"' + profileProfessionList[i] + '", "' + chosenContainer + '", "' + textInputName + '");' + "' style='font-size: 1em; font-weight: 800; position: absolute; right: 5px; '>X</a></li>";
             }
         }
         containerString += "<li style='display: none;'></li></ul>"
@@ -1469,10 +1499,6 @@ function selectProfileProfession(profession, chosenContainer, textInputName, dro
         profileProfessionList.push(profession);
         displayProfileProfessionList(chosenContainer, textInputName);
     }
-}
-
-function addProfileProfessionText(){
-
 }
 
 function removeProfileProfession(profession, chosenContainer, textInputName){
