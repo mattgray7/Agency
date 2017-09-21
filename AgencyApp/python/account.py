@@ -360,6 +360,7 @@ class EditBackgroundView(GenericEditAccountView):
         self._pageContext = super(EditBackgroundView, self).pageContext
         self._pageContext["selectFields"] = json.dumps(self.selectFields)
         self._pageContext["profileProfessions"] = json.dumps(self.userAccount.profileProfessions)
+        self._pageContext["physicalAttributeProfessions"] = constants.PROFESSIONS.get("acting")
         return self._pageContext
 
     @property

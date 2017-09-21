@@ -1489,7 +1489,8 @@ function displayProfileProfessionList(chosenContainer, textInputName){
     }
 }
 
-var profileProfessionList = []
+var performerProfessions = [];
+var profileProfessionList = [];
 function selectProfileProfession(profession, chosenContainer, textInputName, dropdownName){
     var dropdown = document.getElementById(dropdownName);
     if(dropdown != null){
@@ -1507,6 +1508,21 @@ function selectProfileProfession(profession, chosenContainer, textInputName, dro
         profileProfessionList.push(profession);
         displayProfileProfessionList(chosenContainer, textInputName);
     }
+
+    if(performerProfessions.length > 0 && performerProfessions.indexOf(profession) > -1){
+        toggleDisplayPhysicalAttributesRow("expand");
+    }
+}
+
+function toggleDisplayPhysicalAttributesRow(toggleType){
+    var container = document.getElementById("physicalAttributesRow");
+    if(container != null){
+        if(toggleType === "expand"){
+            $("#physicalAttributesRow").animate({marginTop: "0px", height: "500px"}, 500, function(){});
+        }else{
+            $("#physicalAttributesRow").animate({marginTop: "0px", height: "0px"}, 500, function(){});
+        }
+    }
 }
 
 function removeProfileProfession(profession, chosenContainer, textInputName){
@@ -1515,6 +1531,18 @@ function removeProfileProfession(profession, chosenContainer, textInputName){
         profileProfessionList.splice(professionIndex, 1)
     }
     displayProfileProfessionList(chosenContainer, textInputName);
+    if(performerProfessions.length > 0 && performerProfessions.indexOf(profession) > -1){
+        // Removing performer profession, check all other chosen to see if physical attribute row needs to be hidden
+        var shrinkPhysicalAttributeRow = true;
+        for(var i=0; i < profileProfessionList; i++){
+            if(performerProfessions.indexOf(profileProfessionList[i]) > -1){
+                shrinkPhysicalAttributeRow = false;
+            }
+        }
+        if(shrinkPhysicalAttributeRow){
+            toggleDisplayPhysicalAttributesRow("shrink")
+        }
+    }
 }
 
 function getPreviewProfessionsString(professionList){

@@ -77,7 +77,7 @@ class UserAccount(models.Model):
         # More legacy than anything
         if self._mainProfession is None:
             if self.profileProfessions:
-                professionString = '|'.join(self.profileProfessions)
+                professionString = ' | '.join(self.profileProfessions)
             else:
                 professionString = ''
             self._mainProfession = professionString

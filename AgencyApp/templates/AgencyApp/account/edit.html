@@ -187,9 +187,12 @@ function submitForm(formName){
                                 }
                                 document.write(lineString);
                                 addProfileProfessionDropdownCallback("searchPreviewProfessions", {}, "profileProfessionTextInput", "profileProfessionDropdown")
-
                             {% endfor %}
+
+
+
                         </script>
+                        <li id="physicalAttributesRow" style="height: 0px; border: none;"></li>
                         <li style="position:relative; height:70px;">
                             <div id="cancel" class="whiteButton blackHover" style="position: absolute; left: 0; right: 51%; top: 0;" onclick='cancelPage();'>Cancel</div>
                             <div id="continueButton" class="whiteButton blackHover" style="position: absolute; right: 0; left: 51%; top: 0;" onclick="submitForm('editBackgroundForm')">
@@ -207,6 +210,21 @@ function submitForm(formName){
                     profileProfessionList = {{ profileProfessions|safe }};
                 {% endif %}
                 displayProfileProfessionList("profileProfessionContainer", "profileProfessionTextInput")
+
+                if(profileProfessionList.length > 0){
+                    var displayPhysicalAttributes = false;
+                    {% if physicalAttributeProfessions %}
+                        performerProfessions = {{ physicalAttributeProfessions|safe }};
+                        {% for profession in physicalAttributeProfessions %}
+                            if(profileProfessionList.indexOf("{{profession}}") > -1){
+                                displayPhysicalAttributes = true;
+                            }
+                        {% endfor %}
+                    {% endif %}
+                    if(displayPhysicalAttributes){
+                        toggleDisplayPhysicalAttributesRow("expand");
+                    }
+                }
             });
 
         </script>
