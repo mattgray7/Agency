@@ -1404,7 +1404,7 @@ function addProfileProfessionDropdownCallback(callbackFunctionName, extraInputs,
                     selectDropdownFocusElement(dropdownDivName);
                 }
                 enterPressed = true;
-            }else{
+            }else if(event.keyCode != 39 && event.keyCode != 37){
                 previewTextInDropdown(textInput, dropdownDivName, callbackFunctionName, extraInputs);
             }
         }
