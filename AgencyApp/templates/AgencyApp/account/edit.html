@@ -85,12 +85,16 @@ function getPhysicalAttributeFields(){
                     fieldString += "'value='" + options[i] + "'>" + options[i] + "</option>"
                 }
                 fieldString += "</select>";
+            {% elif attributeDict.name == "dateOfBirth" %}
+                var date = new Date('{{attributeDict.value}}');
+                var dateString = date.getFullYear() + "-" + ("0" + (date.getMonth() + 1)).slice(-2) + "-" + ("0" + date.getDate()).slice(-2);
+                fieldString += "<input type='date' name='{{attributeDict.name}}' value='" + dateString + "'>";
             {% else %}
-            var textValue = "{{attributeDict.value}}";
-            if(textValue === "None"){
-                textValue = "";
-            }
-            fieldString += "<input type='text' name='{{attributeDict.name}}' /value='" + textValue + "'>"
+                var textValue = "{{attributeDict.value}}";
+                if(textValue === "None"){
+                    textValue = "";
+                }
+                fieldString += "<input type='text' name='{{attributeDict.name}}' /value='" + textValue + "'>"
             {% endif %}
             fieldString += "</li>"
         {% endfor %}
@@ -99,12 +103,13 @@ function getPhysicalAttributeFields(){
     return fieldString;
 }
 
+var physicalAttributesRowHeight = 550;
 function toggleDisplayPhysicalAttributesRow(toggleType){
     var container = document.getElementById("physicalAttributesRow");
     if(container != null){
         if(toggleType === "expand"){
             container.innerHTML = getPhysicalAttributeFields();
-            $("#physicalAttributesRow").animate({marginTop: "0px", height: "490px"}, 500, function(){});
+            $("#physicalAttributesRow").animate({marginTop: "0px", height: physicalAttributesRowHeight + "px"}, 500, function(){});
         }else{
             container.innerHTML = "";
             $("#physicalAttributesRow").animate({marginTop: "0px", height: "0px"}, 500, function(){});
@@ -159,7 +164,9 @@ function toggleDisplayPhysicalAttributesRow(toggleType){
                 <form class="form-style-7" id="editBackgroundForm" method="post" action="{{ currentPageURL }}" enctype="multipart/form-data">
                     {% csrf_token %}
                     <ul>
+                        <li style='border: none; padding: 0px; margin: 0px; text-align: left;'><h2>Basic Info</h2><h4 style='margin: 4px 0px; font-weight: 200;'>Add details about your past career history.</h4></li>
                         <script>
+
                             {% for field in form %}
                                 var lineString = '';
                                 if(!('{{field}}'.includes("hidden"))){
@@ -179,11 +186,7 @@ function toggleDisplayPhysicalAttributesRow(toggleType){
                                                 lineString += "</select>";
                                             }
                                         {% else %}
-                                            if("{{field.name}}" === "dateOfBirth"){
-                                                var date = new Date('{{field.value}}');
-                                                var dateString = date.getFullYear() + "-" + ("0" + (date.getMonth() + 1)).slice(-2) + "-" + ("0" + date.getDate()).slice(-2);
-                                                lineString += "<input type='date' name='{{field.name}}' value='" + dateString + "'>";
-                                            }else if("{{field.name}}" === "resume"){
+                                            if("{{field.name}}" === "resume"){
                                                 lineString += '<input type="hidden" id="removeResumeFileInput" name="removeResumeFile" value="false" /><div id="resumeContainer" style="text-align: left; position: relative;">'
                                                 if('{{field.value}}'.length > 0){
                                                     lineString += '<a href="/media/{{field.value}}">'

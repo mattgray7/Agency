@@ -376,7 +376,9 @@ class EditBackgroundView(GenericEditAccountView):
                     newAttribute = copy.deepcopy(attribute)
                     newAttribute["value"] = self.formInitialValues.get(attribute["name"])
                     self._physicalAttributeData.append(newAttribute)
-
+            self._physicalAttributeData = [{"name": "dateOfBirth",
+                                            "label": "Date of Birth",
+                                            "value": self.formInitialValues.get("dateOfBirth")}] + self._physicalAttributeData
         return self._physicalAttributeData
 
     @property
@@ -440,8 +442,9 @@ class EditBackgroundView(GenericEditAccountView):
         self.userAccount.imdbLink = self.formData.get('imdb')
         self.userAccount.bio = self.formData.get('bio')
         self.userAccount.location = self.formData.get('location')
-        self.userAccount.dateOfBirth = self.formData.get('dateOfBirth')
         self.userAccount.education = self.formData.get('education')
+
+        self.userAccount.dateOfBirth = self.request.POST.get('dateOfBirth')
         self.userAccount.gender = self.request.POST.get('gender')
         self.userAccount.hairColor = self.request.POST.get("hairColor") # Have to use request.POST cause physical attributes not included in FormClass
         self.userAccount.eyeColor = self.request.POST.get("eyeColor")

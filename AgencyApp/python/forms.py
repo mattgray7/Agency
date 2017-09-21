@@ -32,7 +32,6 @@ class EditBackgroundForm(BaseForm):
     profileProfessions = forms.CharField(label="Profession(s)", required=False, max_length=200)
     education = forms.CharField(label="Education", required=False, max_length=200)
     location = forms.CharField(label="Location", required=False, max_length=200)
-    dateOfBirth = forms.DateField(label="Date of Birth", required=False, widget=forms.DateInput(attrs={'class':'datepicker'}))
     phoneNumber = forms.CharField(label="Phone #", required=False, max_length=30)
     resume = forms.FileField(label="Resume", required=False)
     imdb = forms.CharField(label="IMDB Link", required=False, max_length=500)
