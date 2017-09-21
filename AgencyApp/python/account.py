@@ -405,7 +405,7 @@ class EditBackgroundView(GenericEditAccountView):
     @property
     def cancelDestination(self):
         """Override to continue the profile setup process"""
-        return self.destinationPage
+        return constants.PROFILE
 
     @property
     def formInitialValues(self):

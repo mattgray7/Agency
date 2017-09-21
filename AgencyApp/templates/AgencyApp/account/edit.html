@@ -84,6 +84,8 @@ function getPhysicalAttributeFields(){
                     fieldString += "'value='" + options[i] + "'>" + options[i] + "</option>"
                 }
                 fieldString += "</select>";
+            {% else %}
+                fieldString += "<input type='text' name='{{attributeDict.name}}' />"
             {% endif %}
             fieldString += "</li>"
         {% endfor %}
@@ -97,8 +99,9 @@ function toggleDisplayPhysicalAttributesRow(toggleType){
     if(container != null){
         if(toggleType === "expand"){
             container.innerHTML = getPhysicalAttributeFields();
-            $("#physicalAttributesRow").animate({marginTop: "0px", height: "500px"}, 500, function(){});
+            $("#physicalAttributesRow").animate({marginTop: "0px", height: "315px"}, 500, function(){});
         }else{
+            container.innerHTML = "";
             $("#physicalAttributesRow").animate({marginTop: "0px", height: "0px"}, 500, function(){});
         }
     }
