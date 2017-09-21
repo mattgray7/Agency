@@ -1415,13 +1415,6 @@ function searchPreviewProfessions(textValue, container, extraInputs){
     if(container != null){
         // TODO get the data
         //container.innerHTML = "<img src='" + buttonLoadingGifURL + "' style='height: 100px; width: 100px;'>";
-
-        if(textValue.length === 0){
-            container.style.display = "none";
-        }else{
-            container.style.display = "block";
-        }
-
         $.ajax({
                 url : "/ajax/getSearchPreviewProfessions/",
                 data : {"text": textValue},
@@ -1432,6 +1425,11 @@ function searchPreviewProfessions(textValue, container, extraInputs){
                         if(data["professions"]){
                             var contentString = getPreviewProfessionsString(data["professions"]);
                             container.innerHTML = contentString;
+                            if(contentString.length > 0 && textValue.length > 0){
+                                container.style.display = "block";
+                            }else{
+                                container.style.display = "none";
+                            }
                         }
                     }else{
                         container.innerHTML = "No professions found"
@@ -1520,15 +1518,19 @@ function removeProfileProfession(profession, chosenContainer, textInputName){
 }
 
 function getPreviewProfessionsString(professionList){
-    var previewString = "<ul id='professionDropdownList'>";
-    for(var i=0; i < professionList.length; i++){
-        previewString += "<li style='margin-top: 0px; border: none; padding: 5px;' onclick='selectProfileProfession(" + '"' + professionList[i] + '", "profileProfessionContainer", "profileProfessionTextInput", "profileProfessionDropdown");' + "'><div style='position:relative; height: 20px;'>"
-        // Add name
-        previewString += "<div style='position: absolute; left: 2px; top: 0; font-weight: 500; '>" + professionList[i] + "</div>";
+    var previewString = '';
+    if(professionList.length > 0){
+        previewString += "<ul id='professionDropdownList'>";
+        if(professionList)
+        for(var i=0; i < professionList.length; i++){
+            previewString += "<li style='margin-top: 0px; border: none; padding: 5px;' onclick='selectProfileProfession(" + '"' + professionList[i] + '", "profileProfessionContainer", "profileProfessionTextInput", "profileProfessionDropdown");' + "'><div style='position:relative; height: 20px;'>"
+            // Add name
+            previewString += "<div style='position: absolute; left: 2px; top: 0; font-weight: 500; '>" + professionList[i] + "</div>";
 
-        previewString += "</div></li>";
+            previewString += "</div></li>";
+        }
+        previewString += "<li style='display: none;'></li></ul>";
     }
-    previewString += "<li style='display: none;'></li></ul>";
     return previewString;
 }
 
