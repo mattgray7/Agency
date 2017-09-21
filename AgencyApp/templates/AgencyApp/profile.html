@@ -49,7 +49,13 @@
                            {"label": "Location", "value": "{{profileUserAccount.location}}"},
                            {"label": "Date of Birth", "value": "{{profileUserAccount.dateOfBirth}}"},
                            {"label": "Education", "value": "{{profileUserAccount.education}}"},
-                           {"label": "Bio", "value": "{{profileUserAccount.bio}}"}
+                           {"label": "Bio", "value": "{{profileUserAccount.bio}}"},
+                           {"label": "Idendified Gender", "value": "{{profileUserAccount.gender}}"},
+                           {"label": "Hair Color", "value": "{{profileUserAccount.hairColor}}"},
+                           {"label": "Eye Color", "value": "{{profileUserAccount.eyeColor}}"},
+                           {"label": "Ethnicity", "value": "{{profileUserAccount.ethnicity}}"},
+                           {"label": "Build", "value": "{{profileUserAccount.build}}"},
+                           {"label": "Height", "value": "{{profileUserAccount.height}}"}
                            ]
 
             // Have to add links separately because need to check if they exist before adding
@@ -72,7 +78,7 @@
 
             for (record in bioData){
                 if(bioData[record]["value"].length > 0 && bioData[record]["value"] != "None"){
-                    contentString += "<li>" + bioData[record]["label"] + ": "
+                    contentString += "<li><strong>" + bioData[record]["label"] + "</strong>: "
 
                     // Check if value is a list
                     if(Object.prototype.toString.call(bioData[record]["value"]) === '[object Array]'){
