@@ -164,6 +164,8 @@ class ProfileView(views.GenericFormView):
         self._pageContext["profileLinks"] = self.profileLinks
         self._pageContext["filmography"] = json.dumps(self.profileUserFilmography)
         self._pageContext["actorDescriptionEnabled"] = self.profileUserAccount.actorDescriptionEnabled
+        self._pageContext["icons"] = {"imdb": constants.IMDB_LOGO_PATH,
+                                      "resume": constants.RESUME_ICON_PATH}
 
         self._pageContext["possibleDestinations"] = {"picture": constants.EDIT_PROFILE_PICTURE,
                                                      "background": constants.EDIT_BACKGROUND,

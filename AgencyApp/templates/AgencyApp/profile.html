@@ -58,31 +58,15 @@
                                         {"label": "Height", "value": "{{profileUserAccount.height}}"}]
                           }
 
-            // Have to add links separately because need to check if they exist before adding
-            {% if profileUserAccount.resume or profileUserAccount.imdbLink %}
-                var linksDict = {"label": "Links", "value": []};
-                {% if profileUserAccount.imdbLink %}
-                    linksDict["value"].push({"label": "IMDB", "href": "{{profileUserAccount.imdbLink}}"})
-                {% endif %}
-                {% if profileUserAccount.resume %}
-                    linksDict["value"].push({"label": "Resume", "href": "/media/{{profileUserAccount.resume}}"})
-                {% endif %}
-                bioData["Contact"].push(linksDict)
-            {% endif %}
-
-
-            // Start with edit button
-            var contentString = "<div style='position: absolute; top: -3px; right: 15px;'><div class='hoverButton'><a onclick='redirect(" + '"{{ possibleDestinations.background }}");' + "'>Edit</a></div></div>";
-
-            contentString += "<div style='text-align: left; margin-left: 10px; margin-top: 10px;'><ul style='line-height: 26px;'>";
-
+            // Add text
+            var contentString = "<div style='text-align: left; margin-left: 10px; margin-top: 10px;'><ul style='line-height: 26px;'>";
             for(section in bioData){
                 if(section === "Physical"){
                     {% if not actorDescriptionEnabled %}
                         continue;
                     {% endif %}
                 }
-                contentString += "<h2>" + section + "</h2>";
+                contentString += "<h2>" + section + "</h2><div style='height: 0px; width: 88%; border-top: 1px solid rgba(0,0,0,0.3);'></div>";
                 for(record in bioData[section]){
                     if(bioData[section][record]["value"].length > 0 && bioData[section][record]["value"] != "None"){
                         contentString += "<li><strong>" + bioData[section][record]["label"] + "</strong>: "
@@ -105,6 +89,29 @@
             }
 
             contentString += "<ul></div>";
+
+            {% if profileUserAccount.imdbLink or profileUserAccount.resume %}
+            // Have to add links separately because need to check if they exist before adding
+                contentString += "<div style='position: relative; height: 100px;'>"
+                {% if profileUserAccount.imdbLink %}
+                    contentString += "<a href='{{profileUserAccount.imdbLink}}'><div class='profileSquareButton'  style='position: absolute; left: 5px; bottom: 10px;'><img src='{{icons.imdb}}' style='margin-top: 28px;width: 80px;'></div>"
+                {% endif %}
+
+                {% if profileUserAccount.resume %}
+                    contentString += "<a href='/media/{{profileUserAccount.resume}}'><div class='profileSquareButton' style='position: absolute; left: 115px; bottom: 10px;'><img src='{{icons.resume}}' style='margin-top: 8px;width: 60px;'><div style='font-size: 0.9em;'>Resume</div></div>"
+                {% endif %}
+                contentString += "</div>"
+            {% endif %}
+            /*
+                var linksDict = {"label": "Links", "value": []};
+                    linksDict["value"].push({"label": "IMDB", "href": "{{profileUserAccount.imdbLink}}"})
+                
+                    linksDict["value"].push({"label": "Resume", "href": "/media/{{profileUserAccount.resume}}"})
+                */
+
+
+            // Start with edit button
+            contentString += "<div style='position: absolute; top: -3px; right: 15px;'><div class='hoverButton'><a onclick='redirect(" + '"{{ possibleDestinations.background }}");' + "'>Edit</a></div></div>";
 
             // Add edit button
             tabContent.innerHTML = contentString;

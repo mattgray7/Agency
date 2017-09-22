@@ -17,6 +17,8 @@ NO_PICTURE_PATH = "/media/default/noPicture.jpg"
 NO_PROFILE_PICTURE_PATH = "/media/default/noProfilePicture.jpg"
 LOADING_GIF = "/media/default/loading.gif"
 PLUS_SIGN_PATH = "/media/default/plus.png"
+IMDB_LOGO_PATH = "/media/default/imdbLogo.png"
+RESUME_ICON_PATH = "/media/default/resume.png"
 
 # Source page enums:
 HOME = "HOME"

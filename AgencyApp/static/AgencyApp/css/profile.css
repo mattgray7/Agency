@@ -89,6 +89,22 @@
 	padding: 0.3em;
 }
 
+.profileSquareButton
+{
+	width: 100px;
+	height: 100px;
+	border: 1px solid rgba(0,0,0,0.1);
+	border-radius: 6px;	
+	color: rgba(0,0,0,0.7);
+}
+
+.profileSquareButton:hover{
+	border: 1px solid rgba(0,0,0,0.2);
+	cursor: pointer;
+	color: rgba(0,0,0,0.9);
+	font-weight: 400;
+}
+
 
 
 	/*.profileTable
