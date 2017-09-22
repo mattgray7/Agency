@@ -11,7 +11,7 @@
 
 <script>
 var accountButtons = [{"label": "Background", "destination": "{{possibleDestinations.background}}"},
-                      {"label": "Filmography", "destination": "{{possibleDestinations.background}}"},
+                      {"label": "Filmography", "destination": "{{possibleDestinations.filmography}}"},
                       {"label": "Media", "destination": "{{possibleDestinations.picture}}"},
                       {"label": "Interests", "destination": "{{possibleDestinations.interests}}"}
                      ]
@@ -35,7 +35,8 @@ function createEditAccountButtonHeader(activeLabel){
     return headerString;
 }
 
-// Just for edit background
+/************************ EDIT_BACKGROUND ***************************/
+
 function removeResume(){
     var removeResumeInput = document.getElementById("removeResumeFileInput")
     if(removeResumeInput != null){
@@ -117,6 +118,64 @@ function toggleDisplayPhysicalAttributesRow(toggleType){
     }
 }
 
+/*******************************************************************/
+
+
+/************************ EDIT_FILMOGRAPHY ***************************/
+
+function getFormFieldString(fieldDict){
+    var fieldString = '';
+    if("label" in fieldDict && "name" in fieldDict){
+        /*fieldString += "<div style='position: relative; height: 100%; width: 100%; text-align: right; '>"
+        fieldString += "<div style='position: absolute; left: 0; right: 60%;'>" + fieldDict["label"] + "</div>"
+        if("options" in fieldDict){
+            // Do select field
+        }else{
+            fieldString += "<input type='text' style='position: absolute; left: 40%; right: 0;' />"
+        }*/
+        fieldString += "<label for='name'>" + fieldDict["label"] + "</label>"
+    }
+    return fieldString;
+}
+function getNewRecordFormString(recordData){
+    if(recordData == null){
+        recordData = {};
+    }
+    var formDict = [{"name": "projectName", "label": "Production name", 'value': recordData["projectName"]},
+                    {"name": "projectType", "label": "Type", "value": recordData["projectType"]},
+                    {"name": "profession", "label": "Profession", "value": recordData["profession"]},
+                    {"name": "year", "label": "Year", "value": recordData["year"]},
+                    ]
+
+    var formString = "<div style='position: relative; height: 235px; width: 100%'>"
+
+    // Add title
+    formString += "<div style='position: absolute; left: 0px; top: -10px'><h2 style='margin-bottom: 5px;'>Add Production</h2></div>"
+
+    // Add left list
+    formString += "<ul style='position: absolute; left: 0; right: 51%; top: 20px; bottom: 0;'>";
+    for(var i=0; i < (formDict.length/2); i++){
+        formString += "<li style='height: 30px;'>" + getFormFieldString(formDict[i]) + "</li>";
+    }
+    // Add button
+    formString += "<li style='margin-top: 15px;'><div class='whiteButton blackHover' style='padding: 6px; padding-top: 15px; width: 94%; height: 35px;'>Cancel</div></li></ul>";
+
+    // Add right list
+    formString += "<ul style='position: absolute; left: 51%; right: 0; top: 20px; bottom: 0;'>";
+    for(var i=(formDict.length/2); i <formDict.length ; i++){
+        formString += "<li style='height: 30px;'>" + getFormFieldString(formDict[i]) + "</li>";
+    }
+    // Add button
+    formString += "<li style='margin-top: 15px;'><div class='whiteButton blackHover' style='padding: 6px; padding-top: 15px; width: 94%; height: 35px;'>Add Project</div></li></ul>";
+
+    formString += "</div>"
+    return formString
+}
+
+
+
+
+/*******************************************************************/
 </script>
 
 
@@ -153,8 +212,27 @@ function toggleDisplayPhysicalAttributesRow(toggleType){
             form.submit()
         }
     </script>
+{% if next == possibleDestinations.filmography %}
+     <div id='backgroundPanel' class='backgroundPanel' style='min-width: 634px; min-height: 100%;'>
+        <div id="mainViewPanel" class="mainViewPanel" style="position: relative; min-width: 620px; max-width: 620px; background: rgba(0,0,0,0.05); border: none;">
+            <script>
+            document.write(createEditAccountButtonHeader("Filmography"))
+            </script>
 
-{% if next == possibleDestinations.background %}
+            <div id='editFilmographyContainer' style='text-align: center; background: #FFF; padding: 10px 0px;'>
+                <h2> Edit Filmography </h2>
+                <div id='addNewRecordContainer' class='form-style-7' style='width: 80%; margin: 10px auto; border: 1px solid rgba(0,0,0,0.3); border-radius: 3px;'>
+                    <script>
+                        document.write(getNewRecordFormString(null));
+                    </script>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+
+{% elif next == possibleDestinations.background %}
     <div id='backgroundPanel' class='backgroundPanel' style='min-width: 634px; min-height: 100%;'>
         <div id="mainViewPanel" class="mainViewPanel" style="position: relative; min-width: 620px; max-width: 620px; background: rgba(0,0,0,0.05); border: none;">
             <script>
