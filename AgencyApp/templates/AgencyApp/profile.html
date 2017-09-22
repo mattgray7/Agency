@@ -87,7 +87,6 @@
                 }
                 contentString += "<div style='height: 20px'></div>"
             }
-
             contentString += "</ul>";
 
             // Have to add links separately because need to check if they exist before adding
@@ -120,8 +119,26 @@
         var tabContent = document.getElementById("profileTabContentPanel")
         if(tabContent != null){
             {% if filmography %}
-                var filmography = {{filmography|safe}}
-                tabContent.innerHTML = "<div style='width: 80%; margin: 10px auto;'>" + createProjectFeed(filmography) + "</div>"
+                var tabString = ""
+
+                // Add left panel listing professions
+                tabString += "<div style='position: absolute; left: 5px; top: 0px; bottom: 0px; background: rgba(0,0,0,0.05); border: 1px solid rgba(0,0,0,0.1); width: 215px; margin-left: 5px; text-align: left;'>"
+                {% if profileProfessions %}
+                    tabString += "<h2 style='margin-left: 7px'>Professions</h2><div style='height: 0px; margin-left: 3px;width: 95%; border-top: 1px solid #000;'></div><ul>"
+                    {% for profession in profileProfessions %}
+                        tabString += "<li style='position: relative; height: 35px; margin: 1px 3px; border-bottom: 1px solid rgba(0,0,0,0.3);'><div style='position: absolute; left: 5px; top: 18px; text-transform: uppercase; font-size: 0.8em;'>{{profession}}</div><input  style='position: absolute; right: 5px; top: 18px;' type='checkbox' /></li>"
+                    {% endfor %}
+                    tabString += "</ul>"
+                {% else %}
+                    tabString += "No filmography registered."
+                {% endif %}
+
+                tabString += "</div>";
+
+                var filmography = {{filmography|safe}};
+                tabString += "<div style='margin-left: 235px; margin-right: auto; margin-top: 10px;'>" + createProjectFeed(filmography) + "</div>"
+                console.log(tabString)
+                tabContent.innerHTML = tabString;
             {% endif %}
         }
     }
