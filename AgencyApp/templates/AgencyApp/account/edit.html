@@ -134,6 +134,19 @@ function getFormFieldString(fieldDict){
             fieldString += "<input type='text' style='position: absolute; left: 40%; right: 0;' />"
         }*/
         fieldString += "<label for='name'>" + fieldDict["label"] + "</label>"
+        if("options" in fieldDict){
+            fieldString += "<select name='" + fieldDict["name"] + "'>"
+            for(var i=0; i < fieldDict['options'].length; i++){
+                fieldString += '<option name="' + fieldDict['options'][i] + '">' + fieldDict['options'][i] + '</option>';
+            }
+            fieldString += "</select>"
+        }else{
+            fieldString += "<input type='text' name='" + fieldDict["name"] + "' "
+            if('placeholder' in fieldDict){
+                fieldString += 'placeholder="' + fieldDict["placeholder"] + '" ';
+            }
+            fieldString += " />";
+        }
     }
     return fieldString;
 }
@@ -141,10 +154,10 @@ function getNewRecordFormString(recordData){
     if(recordData == null){
         recordData = {};
     }
-    var formDict = [{"name": "projectName", "label": "Production name", 'value': recordData["projectName"]},
-                    {"name": "projectType", "label": "Type", "value": recordData["projectType"]},
-                    {"name": "profession", "label": "Profession", "value": recordData["profession"]},
-                    {"name": "year", "label": "Year", "value": recordData["year"]},
+    var formDict = [{"name": "projectName", "label": "Production name", 'value': recordData["projectName"], 'placeholder': 'Star Wars'},
+                    {"name": "projectType", "label": "Type", "value": recordData["projectType"], "options": {{projectTypes|safe}}},
+                    {"name": "profession", "label": "Profession", "value": recordData["profession"], 'placeholder': 'Camera Operator'},
+                    {"name": "year", "label": "Year", "value": recordData["year"], 'placeholder': '2017'},
                     ]
 
     var formString = "<div style='position: relative; height: 235px; width: 100%'>"
@@ -220,7 +233,7 @@ function getNewRecordFormString(recordData){
             </script>
 
             <div id='editFilmographyContainer' style='text-align: center; background: #FFF; padding: 10px 0px;'>
-                <h2> Edit Filmography </h2>
+                <h2> Filmography </h2>
                 <div id='addNewRecordContainer' class='form-style-7' style='width: 80%; margin: 10px auto; border: 1px solid rgba(0,0,0,0.3); border-radius: 3px;'>
                     <script>
                         document.write(getNewRecordFormString(null));

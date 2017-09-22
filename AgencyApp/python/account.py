@@ -496,6 +496,7 @@ class EditFilmographyView(GenericEditAccountView):
     @property
     def pageContext(self):
         self._pageContext = super(EditFilmographyView, self).pageContext
+        self._pageContext["projectTypes"] = constants.PROJECT_TYPE_LIST
         return self._pageContext
 
     @property
