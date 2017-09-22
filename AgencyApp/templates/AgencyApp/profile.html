@@ -33,7 +33,7 @@
         // Update main view panel height after tab content is changed
         var projectContentPanel = document.getElementById("profileContentPanel")
         if(projectContentPanel != null){
-            var tabButtonsHeight = document.getElementById("profileTabButtonList").offsetHeight;
+            var tabButtonsHeight = document.getElementById("bioProfileButton").offsetHeight;
             var projectContentHeight = document.getElementById("profileTabContentPanelContainer").offsetHeight;
             projectContentPanel.style.height = tabButtonsHeight + projectContentHeight + "px";
         }
@@ -107,13 +107,6 @@
                 contentString += "</div>"
             {% endif %}
             contentString += "</div>";
-            /*
-                var linksDict = {"label": "Links", "value": []};
-                    linksDict["value"].push({"label": "IMDB", "href": "{{profileUserAccount.imdbLink}}"})
-                
-                    linksDict["value"].push({"label": "Resume", "href": "/media/{{profileUserAccount.resume}}"})
-                */
-
 
             // Start with edit button
             contentString += "<div style='position: absolute; top: -3px; right: 15px;'><div class='hoverButton'><a onclick='redirect(" + '"{{ possibleDestinations.background }}");' + "'>Edit</a></div></div>";

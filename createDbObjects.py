@@ -25,26 +25,40 @@ os.system("cp /Users/MattGray/Projects/Agency/Agency/AgencyApp/static/AgencyApp/
 
 print "\nCreating new user network.\n"
 
+import datetime
+today = datetime.datetime.now()
+tomorrow = today + datetime.timedelta(days=1)
 
 daisyBuchananDescription = """Daisy is The Great Gatsby's most enigmatic, and perhaps most disappointing, character. Although Fitzgerald does much to make her a character worthy of Gatsby's unlimited devotion, in the end she reveals herself for what she really is. Despite her beauty and charm, Daisy is merely a selfish, shallow, and in fact, hurtful, woman. Gatsby loves her (or at least the idea of her) with such vitality and determination that readers would like, in many senses, to see her be worthy of his devotion. Although Fitzgerald carefully builds Daisy's character with associations of light, purity, and innocence, when all is said and done, she is the opposite from what she presents herself to be. From Nick's first visit, Daisy is associated with otherworldliness. Nick calls on her at her house and initially finds her (and Jordan Baker, who is in many ways an unmarried version of Daisy) dressed all in white, sitting on an "enormous couch . . . buoyed up as though upon an anchored balloon . . . [her dress] rippling and fluttering as if [she] had just been blown back in after a short flight around the house." From this moment, Daisy becomes like an angel on earth. She is routinely linked with the color white (a white dress, white flowers, white car, and so on), always at the height of fashion and addressing people with only the most endearing terms. She appears pure in a world of cheats and liars. Given Gatsby's obsession with Daisy and the lengths to which he has gone to win her, she seems a worthy paramour."""
 directorDescription = """Our vision is to change the way the world views productivity. We want Function Point to be a place where everyone feels respected, where they are doing important work and where everyone contributes to the growth and direction of our company, our customers and our community. Function Point is looking for a hands on, curious technology leader who wants to keep their technical skills sharp and apply their passion and smarts to lead engineering and devops towards delivering customer and business value. As Director of Engineering, you will work closely with our Director of Products to drive the development of Function Points products and services. You will lead the continued growth of engineering and devops with an emphasis on championing a strong engineering culture, measuring and increasing delivery velocity, ensuring high quality, and achieving schedule predictability."""
 #=================== Project 1
 # User 1
-def createUser(username, email, password, firstName, lastName, picURL=None, mainProfession="Actor", imdbLink=None, bio="None"):
+def createUser(username, email, password, firstName, lastName, picURL=None, mainProfession="Actor", imdbLink=None,
+			   bio="None", location="Vancouver", education="B.A. from UBC", gender=None, hairColor=None, eyeColor=None,
+			   ethnicity=None, build=None, height=None, dateOfBirth=None):
 	user = User.objects.create_user(username=username,
-                                   	email=email,
-                                   	password=password,
-                                   	first_name=firstName,
-                                   	last_name=lastName)
-	user.save()
-	userAccount = models.UserAccount(username=username,
-								 		email=email,
-	                             		firstName=firstName,
-	                             		lastName=lastName,
-	                             		setupComplete=True,
-	                             		imdbLink=imdbLink,
-	                             		bio=bio)
-	userAccount.save()
+                                    email=email,
+                                    password=password,
+                                    first_name=firstName,
+                                    last_name=lastName)
+        user.save()
+        userAccount = models.UserAccount(username=username,
+                                         email=email,
+                                         firstName=firstName,
+                                         lastName=lastName,
+                                         setupComplete=True,
+                                         imdbLink=imdbLink,
+                                         bio=bio,
+                                         location=location,
+                                         education=education,
+                                         gender=gender,
+                                         hairColor=hairColor,
+                                         eyeColor=eyeColor,
+                                         ethnicity=ethnicity,
+                                         build=build,
+                                         height=height,
+                                         dateOfBirth=None)
+        userAccount.save()
 	userMediaDir = "/Users/MattGray/Projects/Agency/Agency/media/{0}/".format(username)
 	if not os.path.exists(userMediaDir):
 		os.makedirs(userMediaDir)
@@ -177,10 +191,6 @@ project7ProjectPost = createProject(poster="johnstongray",
 
 project2Admin = createProjectAdmin(project2ProjectPost.projectID, "mattgray")
 project3Admin = createProjectAdmin(project3ProjectPost.projectID, "mattgray")
-
-import datetime
-today = datetime.datetime.now()
-tomorrow = today + datetime.timedelta(days=1)
 
 def createProjectJob(projectID, status, profession, title, compensationType="Paid", compensationDescription="$100/day", username=None,description=None, picURL=None, poster="mattgray", startDate=None, endDate=None):
 	jobID = helpers.createUniqueID(models.WorkPost, "postID")
