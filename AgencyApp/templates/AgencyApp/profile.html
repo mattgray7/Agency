@@ -357,15 +357,26 @@
                 </div>
             </div>
             <div id='profileContentPanel' style='position: relative; width: 100%; min-height: 100px; margin-top: 10px;'>
-                <ul class='profileTabButtonList' id='profileTabButtonList' style='position: absolute; left: -2px; right: 0px; '>
+                <ul class='profileTabButtonList' id='profileTabButtonList' style=''>
                     <script>
                         for(var i=0; i < profileTabs.length; i++){
-                            var tabButton = '<li style="width: 24%;" id="' + profileTabs[i] + 'ProfileButton" onclick="selectProfileTab(' + "'" + profileTabs[i] + "');" + '" style="margin-left: -3px;"><div style="margin-top: 5px;">' + profileTabs[i] + '</div><div id="' + profileTabs[i] + 'BorderCover" class="profileTabButtonBorderCover"></div></li>';
+                            // Specify margin for each button in order (TODO create a functino to create a 4 tab list)
+                            var styleString = "position: absolute;"
+                            if(i === 0){
+                                styleString += "left: -4px;"
+                            }else if(i === 1){
+                                styleString += "left: 24.7%;"
+                            }else if(i === 2){
+                                styleString += "left: 49.7%;"
+                            }else if(i === 3){
+                                styleString += "right: 2px;"
+                            }
+                            var tabButton = '<li style="width: 24%; ' + styleString + '" id="' + profileTabs[i] + 'ProfileButton" onclick="selectProfileTab(' + "'" + profileTabs[i] + "');" + '"><div style="margin-top: 5px;">' + profileTabs[i] + '</div><div id="' + profileTabs[i] + 'BorderCover" class="profileTabButtonBorderCover"></div></li>';
                             document.write(tabButton);
                         }
                     </script>
                 </ul>
-                <div id='profileTabContentPanelContainer' style='position: absolute; border: 1px solid #000; top: 50px; left: 2px; right: 4px; margin-top: -7px; background: #FFF; z-index: 0; min-height: 50px;'>
+                <div id='profileTabContentPanelContainer' style='position: absolute; border: 1px solid #000; top: 50px; left: 0px; right: 2px; margin-top: -7px; background: #FFF; z-index: 0; min-height: 50px;'>
                     <div id='profileTabContentPanel' style='position: relative;'>
 
                     </div>
@@ -378,7 +389,7 @@
 </div>
 
 <script>
-selectProfileTab("bio")
+selectProfileTab("filmography")
 </script>
 
 
