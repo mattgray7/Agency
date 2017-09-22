@@ -155,10 +155,13 @@ function getNewRecordFormString(recordData){
         recordData = {};
     }
     var formDict = [{"name": "projectName", "label": "Name", 'value': recordData["projectName"], 'placeholder': 'Star Wars'},
-                    {"name": "projectType", "label": "Type", "value": recordData["projectType"], "options": {{projectTypes|safe}}},
+                    {"name": "projectType", "label": "Type", "value": recordData["projectType"], 'placeholder': 'Film - Feature'},
                     {"name": "profession", "label": "Profession", "value": recordData["profession"], 'placeholder': 'Camera Operator'},
                     {"name": "year", "label": "Year", "value": recordData["year"], 'placeholder': '2017'},
                     ]
+    {% if projectTypes %}
+        formDict[1]["options"] = {{projectTypes|safe}};
+    {% endif %}
 
     var formString = "<div style='position: relative; height: 260px; width: 100%'>"
 
