@@ -154,19 +154,19 @@ function getNewRecordFormString(recordData){
     if(recordData == null){
         recordData = {};
     }
-    var formDict = [{"name": "projectName", "label": "Production name", 'value': recordData["projectName"], 'placeholder': 'Star Wars'},
+    var formDict = [{"name": "projectName", "label": "Name", 'value': recordData["projectName"], 'placeholder': 'Star Wars'},
                     {"name": "projectType", "label": "Type", "value": recordData["projectType"], "options": {{projectTypes|safe}}},
                     {"name": "profession", "label": "Profession", "value": recordData["profession"], 'placeholder': 'Camera Operator'},
                     {"name": "year", "label": "Year", "value": recordData["year"], 'placeholder': '2017'},
                     ]
 
-    var formString = "<div style='position: relative; height: 235px; width: 100%'>"
+    var formString = "<div style='position: relative; height: 260px; width: 100%'>"
 
     // Add title
-    formString += "<div style='position: absolute; left: 0px; top: -10px'><h2 style='margin-bottom: 5px;'>Add Production</h2></div>"
+    formString += "<div style='position: absolute; left: 0px; top: -10px; text-align: left;'><h2 style='margin-bottom: 5px;'>New Production</h2><h4 style='margin: 5px 0px; font-weight: 300;'>Add a simple record to your filmography, or register a new project <a onclick='redirect(" +'"{{possibleDestinations.createProject}}");' + "'>here</a>.</h4></div>"
 
     // Add left list
-    formString += "<ul style='position: absolute; left: 0; right: 51%; top: 20px; bottom: 0;'>";
+    formString += "<ul style='position: absolute; left: 0; right: 51%; top: 50px; bottom: 0;'>";
     for(var i=0; i < (formDict.length/2); i++){
         formString += "<li style='height: 30px;'>" + getFormFieldString(formDict[i]) + "</li>";
     }
@@ -174,7 +174,7 @@ function getNewRecordFormString(recordData){
     formString += "<li style='margin-top: 15px;'><div class='whiteButton blackHover' style='padding: 6px; padding-top: 15px; width: 94%; height: 35px;'>Cancel</div></li></ul>";
 
     // Add right list
-    formString += "<ul style='position: absolute; left: 51%; right: 0; top: 20px; bottom: 0;'>";
+    formString += "<ul style='position: absolute; left: 51%; right: 0; top: 50px; bottom: 0;'>";
     for(var i=(formDict.length/2); i <formDict.length ; i++){
         formString += "<li style='height: 30px;'>" + getFormFieldString(formDict[i]) + "</li>";
     }
