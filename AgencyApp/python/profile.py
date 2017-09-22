@@ -170,6 +170,7 @@ class ProfileView(views.GenericFormView):
         self._pageContext["possibleDestinations"] = {"picture": constants.EDIT_PROFILE_PICTURE,
                                                      "background": constants.EDIT_BACKGROUND,
                                                      "interests": constants.EDIT_INTERESTS,
+                                                     "filmography": constants.EDIT_FILMOGRAPHY,
                                                      "viewPost": constants.VIEW_POST,
                                                      "actorDescription": constants.EDIT_ACTOR_DESCRIPTION
                                                      }

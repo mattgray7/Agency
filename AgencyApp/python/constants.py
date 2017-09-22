@@ -65,6 +65,7 @@ SETUP_ACCOUNT_FINISH = "SETUP_ACCOUNT_FINISH"
 EDIT_INTERESTS = "EDIT_INTERESTS"
 EDIT_PROFILE_PICTURE = "EDIT_PROFILE_PICTURE"
 EDIT_BACKGROUND = "EDIT_BACKGROUND"
+EDIT_FILMOGRAPHY = "EDIT_FILMOGRAPHY"
 EDIT_ACTOR_DESCRIPTION = "EDIT_ACTOR_DESCRIPTION"
 
 PROFESSIONS = {"acting": ["Actor", "Dancer", "Extra", "Stand-in", "Model", "Voice Actor"],
@@ -158,6 +159,7 @@ URL_MAP = {HOME: "/",
 		   EDIT_INTERESTS: "/account/edit/interests/",
 		   EDIT_PROFILE_PICTURE: "/account/edit/picture/",
 		   EDIT_BACKGROUND: "/account/edit/background/",
+		   EDIT_FILMOGRAPHY: "/account/edit/filmography/",
 		   EDIT_ACTOR_DESCRIPTION: "/account/edit/description/",
 
 		   # Post creation
@@ -187,7 +189,8 @@ DEFAULT_PAGE_MAP = {HOME: HOME,
 					CREATE_BASIC_ACCOUNT_FINISH: EDIT_INTERESTS,
 					EDIT_INTERESTS: EDIT_PROFILE_PICTURE,
 					EDIT_PROFILE_PICTURE: EDIT_BACKGROUND,
-					EDIT_BACKGROUND: HOME,
+					EDIT_BACKGROUND: PROFILE,
+					EDIT_FILMOGRAPHY: PROFILE,
 					EDIT_ACTOR_DESCRIPTION: HOME,
 					SETUP_ACCOUNT_FINISH: HOME,
 
@@ -252,6 +255,7 @@ VIEW_CLASS_MAP = {HOME: home.HomeView,
 			   	  EDIT_INTERESTS: account.EditInterestsView,
 			   	  EDIT_PROFILE_PICTURE: account.EditPictureView,
 			   	  EDIT_BACKGROUND: account.EditBackgroundView,
+			   	  EDIT_FILMOGRAPHY: account.EditFilmographyView,
 			   	  EDIT_ACTOR_DESCRIPTION: account.EditActorDescriptionView
 			   	  }
 
@@ -269,6 +273,7 @@ HTML_MAP = {HOME: 'AgencyApp/home.html',
 			EDIT_INTERESTS: 'AgencyApp/account/edit.html',
 			EDIT_PROFILE_PICTURE: 'AgencyApp/account/edit.html',
 			EDIT_BACKGROUND: 'AgencyApp/account/edit.html',
+			EDIT_FILMOGRAPHY: 'AgencyApp/account/edit.html',
 			EDIT_ACTOR_DESCRIPTION: 'AgencyApp/account/actorDescription.html',
 
 			# Post creation

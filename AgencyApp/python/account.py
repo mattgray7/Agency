@@ -199,7 +199,8 @@ class GenericEditAccountView(views.GenericFormView):
         self._pageContext["possibleDestinations"] = {"interests": constants.EDIT_INTERESTS,
                                                      "picture": constants.EDIT_PROFILE_PICTURE,
                                                      "profile": constants.PROFILE, 
-                                                     "background": constants.EDIT_BACKGROUND}
+                                                     "background": constants.EDIT_BACKGROUND,
+                                                     "filmography": constants.EDIT_FILMOGRAPHY}
         self._pageContext["userAccount"] = self.userAccount
         return self._pageContext
 
@@ -487,6 +488,51 @@ class EditBackgroundView(GenericEditAccountView):
             print e
             self._pageErrors.append("Could not connect to UserAccount database")
         return False
+
+
+class EditFilmographyView(GenericEditAccountView):
+    def __init__(self, *args, **kwargs):
+        super(EditFilmographyView, self).__init__(*args, **kwargs)
+    @property
+    def pageContext(self):
+        self._pageContext = super(EditFilmographyView, self).pageContext
+        return self._pageContext
+
+    @property
+    def nextButtonString(self):
+        if self._nextButtonString is None:
+            if self.sourcePage == constants.PROFILE:
+                self._nextButtonString = "Update Filmography"
+            else:
+                self._nextButtonString = "Add Filmography"
+        return self._nextButtonString
+
+    @property
+    def cancelSource(self):
+        if self._cancelSource is None:
+            self._cancelSource = self.sourcePage
+        return self._cancelSource
+
+    """@property
+    def destinationPage(self):
+        if self._destinationPage is None:
+            if self.userAccount.actorInterest:
+                if constants.PROFILE in [self.sourcePage, self.request.POST.get("destination")]:
+                    self._destinationPage = constants.PROFILE
+                else:
+                    self._destinationPage = constants.EDIT_ACTOR_DESCRIPTION
+            else:
+                self._destinationPage = constants.PROFILE
+        return self._destinationPage"""
+
+    @property
+    def cancelDestination(self):
+        """Override to continue the profile setup process"""
+        return constants.PROFILE
+
+    def processForm(self):
+        """Overriding asbtract method"""
+        return True
 
 
 class EditActorDescriptionView(GenericEditAccountView):
