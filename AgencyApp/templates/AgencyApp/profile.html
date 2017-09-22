@@ -59,14 +59,14 @@
                           }
 
             // Add text
-            var contentString = "<div style='text-align: left; margin-left: 10px; margin-top: 10px;'><ul style='line-height: 26px;'>";
+            var contentString = "<div style='text-align: left; margin-left: 10px; margin-top: 10px;'><ul style='line-height: 26px; margin-bottom: 0px; width: 98%;'>";
             for(section in bioData){
                 if(section === "Physical"){
                     {% if not actorDescriptionEnabled %}
                         continue;
                     {% endif %}
                 }
-                contentString += "<h2>" + section + "</h2><div style='height: 0px; width: 88%; border-top: 1px solid rgba(0,0,0,0.3);'></div>";
+                contentString += "<h2>" + section + "</h2><div style='height: 0px; width: 88%; border-top: 1px solid rgba(0,0,0,0.3); margin-top: 3px;'></div>";
                 for(record in bioData[section]){
                     if(bioData[section][record]["value"].length > 0 && bioData[section][record]["value"] != "None"){
                         contentString += "<li><strong>" + bioData[section][record]["label"] + "</strong>: "
@@ -88,20 +88,25 @@
                 contentString += "<div style='height: 20px'></div>"
             }
 
-            contentString += "<ul></div>";
+            contentString += "</ul>";
 
-            {% if profileUserAccount.imdbLink or profileUserAccount.resume %}
             // Have to add links separately because need to check if they exist before adding
-                contentString += "<div style='position: relative; height: 100px;'>"
+            {% if profileUserAccount.imdbLink or profileUserAccount.resume %}
+                // Depending on what links exist, just need to update left margin of each link
+                currentLeftMargin = 0;
+                contentString += "<div style='position: relative; margin-top: -5px; height: 152px;'><h2>Links</h2><div style='height: 0px; width: 88%; border-top: 1px solid rgba(0,0,0,0.3);'></div>";
                 {% if profileUserAccount.imdbLink %}
-                    contentString += "<a href='{{profileUserAccount.imdbLink}}'><div class='profileSquareButton'  style='position: absolute; left: 5px; bottom: 10px;'><img src='{{icons.imdb}}' style='margin-top: 28px;width: 80px;'></div>"
+                    contentString += "<a href='{{profileUserAccount.imdbLink}}'><div class='profileSquareButton'  style='position: absolute; left: " + currentLeftMargin + "px; bottom: 10px;'><img src='{{icons.imdb}}' style='margin-top: 28px;width: 80px;'></div>"
+                    currentLeftMargin += 110;
                 {% endif %}
 
                 {% if profileUserAccount.resume %}
-                    contentString += "<a href='/media/{{profileUserAccount.resume}}'><div class='profileSquareButton' style='position: absolute; left: 115px; bottom: 10px;'><img src='{{icons.resume}}' style='margin-top: 8px;width: 60px;'><div style='font-size: 0.9em;'>Resume</div></div>"
+                    contentString += "<a href='/media/{{profileUserAccount.resume}}'><div class='profileSquareButton' style='position: absolute; left: " + currentLeftMargin + "px; bottom: 10px;'><img src='{{icons.resume}}' style='margin-top: 8px;width: 60px;'><div style='font-size: 0.9em;'>Resume</div></div>"
+                    currentLeftMargin += 110;
                 {% endif %}
                 contentString += "</div>"
             {% endif %}
+            contentString += "</div>";
             /*
                 var linksDict = {"label": "Links", "value": []};
                     linksDict["value"].push({"label": "IMDB", "href": "{{profileUserAccount.imdbLink}}"})
