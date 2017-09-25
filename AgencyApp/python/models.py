@@ -167,7 +167,7 @@ class UserAccount(models.Model):
             participants = PostParticipant.objects.filter(username=self.username)
             for part in participants:
                 newProjectID = part.postID
-                label = part.status
+                labels = []
 
                 # If participant post is not a project (ie is casting or work), check if there is a project associated
                 if not post.isProjectPost(part.postID):
@@ -175,32 +175,36 @@ class UserAccount(models.Model):
                     if hasattr(userPost, "projectID") and userPost.projectID:
                         newProjectID = userPost.projectID
                         if post.isCastingPost(part.postID):
-                            label = "{0} ({1})".format(userPost.characterType, userPost.characterName)
+                            labels.append({"label": userPost.characterType, "extra": userPost.characterName})
                         elif post.isWorkPost(part.postID):
-                            label = userPost.profession
+                            labels.append({"label": userPost.profession})
+                else:
+                    labels.append({"label": part.status})
 
                 if newProjectID in self._projects:
-                    self._projects[newProjectID]["label"] += ", {0}".format(label)
+                    self._projects[newProjectID]["labels"] += labels
                 else:
-                    self._projects[newProjectID] = {"label": label, "display": part.publicParticipation}
+                    self._projects[newProjectID] = {"labels": labels, "display": part.publicParticipation}
 
             roles = CastingPost.objects.filter(actorName=self.username)
             for role in roles:
                 if role.projectID:
+                    newLabelAddition = {"label": role.characterType, "extra": role.characterName}
                     if role.projectID in self._projects:
-                        newLabelAddition = "{0} ({1})".format(role.characterType, role.characterName)
-                        if not newLabelAddition in self._projects[role.projectID]["label"]:
-                            self._projects[role.projectID]["label"] += ", {0}".format(newLabelAddition)
+                        """if any(newLabelAddition["label"] == x["label"] for x in self._projects[role.projectID]["labels"]):
+                        #    self._projects[role.projectID]["labels"].append(newLabelAddition)
+                            print "adding {0}".format(newLabelAddition)
+                            #self._projects[role.projectID]["labels"].append(newLabelAddition)"""
                     else:
-                        self._projects[role.projectID] = {"label": "{0} ({1})".format(role.characterType, role.characterName), "display": True}
+                        self._projects[role.projectID] = {"labels": [newLabelAddition], "display": True}
 
             jobs = WorkPost.objects.filter(workerName=self.username)
             for job in jobs:
                 if job.projectID:
                     if job.projectID in self._projects:
-                        self._projects[job.projectID]["label"] += ", {0}".format(job.profession)
+                        self._projects[job.projectID]["labels"].append({"label": job.profession})
                     else:
-                        self._projects[job.projectID] = {"label": job.profession, "display": True}
+                        self._projects[job.projectID] = {"labels": [{"label": job.profession}], "display": True}
 
             removeProjectIDList = []
             for projectID in self._projects:

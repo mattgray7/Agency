@@ -1766,10 +1766,27 @@ function createProjectFeed(projectDict){
             feedString += "<div style='position: absolute; left: 95px; top: 0px;'>";
 
             // Add title
-            feedString += "<h2 style=''><a style='font-weight: 400; font-size: 0.9em' onclick='redirectToPost(" + '"' + projectID + '");' + "'>" + projectDict[projectID]["name"] + "</a></h2>"
+            feedString += "<h2 style=''><a style='font-weight: 400; font-size: 0.9em' onclick='redirectToPost(" + '"' + projectID + '");' + "'>" + projectDict[projectID]["name"] + "</a>"
+            if("year" in projectDict[projectID]){
+                feedString += "(" + projectDict[projectID]["year"] + ")";
+            }
+            feedString += "</h2>";
 
             // Add label
-            feedString += "<div style='color: rgba(0,0,0,0.8); font-size: 1.1em; font-style: italic; margin-top: -2px;'>" + projectDict[projectID]["label"] + "</div>"
+            if(projectDict[projectID]["labels"]){
+                feedString += "<div style='color: rgba(0,0,0,0.8); font-size: 1.1em; font-style: italic; margin-top: -2px;'>"
+                var labelString = '';
+                for(var i=0; i < projectDict[projectID]["labels"].length; i++){
+                    labelString += projectDict[projectID]["labels"][i]["label"]
+                    if(projectDict[projectID]["labels"][i]["extra"]){
+                        labelString += " (" + projectDict[projectID]["labels"][i]["extra"] + ")";
+                    }
+                    labelString += ', '
+                }
+                labelString = labelString.substring(0, labelString.length - 2);
+                feedString += labelString;
+                feedString += "</div>"
+            }
 
             // Add project type
             feedString += "<div style='color: rgba(0,0,0,0.3);'>" + projectDict[projectID]["projectType"] + "</div>"
