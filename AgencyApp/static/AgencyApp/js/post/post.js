@@ -1768,7 +1768,7 @@ function createProjectFeed(projectDict){
             // Add title
             feedString += "<h2 style=''><a style='font-weight: 400; font-size: 0.9em' onclick='redirectToPost(" + '"' + projectID + '");' + "'>" + projectDict[projectID]["name"] + "</a>"
             if("year" in projectDict[projectID]){
-                feedString += "(" + projectDict[projectID]["year"] + ")";
+                feedString += "<font style='font-weight: 400; font-size: 0.9em'> (" + projectDict[projectID]["year"] + ")</font>";
             }
             feedString += "</h2>";
 

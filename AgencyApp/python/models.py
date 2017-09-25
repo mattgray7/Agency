@@ -224,7 +224,8 @@ class UserAccount(models.Model):
                     except UnregisteredProject.DoesNotExist:
                         removeProjectIDList.append(projectID)
                         continue
-                self._projects[projectID]["name"] = currentProject.title + " ({0})".format(currentProject.year)
+                self._projects[projectID]["name"] = currentProject.title
+                self._projects[projectID]["year"] = currentProject.year
                 self._projects[projectID]["postPictureURL"] = pictureURL
                 self._projects[projectID]["status"] = currentProject.status
                 self._projects[projectID]["projectType"] = currentProject.projectType
