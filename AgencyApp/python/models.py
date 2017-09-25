@@ -7,6 +7,7 @@ from django.core.files.storage import FileSystemStorage
 import helpers
 import constants
 import post
+import datetime
 
 from django.conf import settings
 imageStorage = FileSystemStorage(
@@ -213,7 +214,7 @@ class UserAccount(models.Model):
                 except ProjectPost.DoesNotExist:
                     removeProjectIDList.append(projectID)
                 else:
-                    self._projects[projectID]["name"] = currentProject.title
+                    self._projects[projectID]["name"] = currentProject.title + " ({0})".format(currentProject.year)
                     self._projects[projectID]["postPictureURL"] = currentProject.postPicture and currentProject.postPicture.url or constants.NO_PICTURE_PATH
                     self._projects[projectID]["status"] = currentProject.status
                     self._projects[projectID]["projectType"] = currentProject.projectType
@@ -284,6 +285,18 @@ class ProjectPost(AbstractPost):
         self._writers = None
         self._actors = None
         self._producers = None
+        self._year = None
+
+    @property
+    def year(self):
+        if self._year is None:
+            if self.endDate:
+                self._year = self.endDate.getYear()
+            elif self.startDate:
+                self._year = self.startDate.getYear()
+            else:
+                self._year = datetime.datetime.now().year
+        return self._year
 
     @property
     def directors(self):
