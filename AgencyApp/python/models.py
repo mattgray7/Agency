@@ -229,6 +229,7 @@ class UserAccount(models.Model):
                 self._projects[projectID]["postPictureURL"] = pictureURL
                 self._projects[projectID]["status"] = currentProject.status
                 self._projects[projectID]["projectType"] = currentProject.projectType
+                self._projects[projectID]["projectID"] = projectID
             if removeProjectIDList:
                 for projectID in removeProjectIDList:
                     del self._projects[projectID]

@@ -1751,35 +1751,53 @@ function getPostParticipantForm(postID, postType, formName, isSubForm, isNewForm
     return formString;
 }
 
-
 function createProjectFeed(projectDict){
     var feedString = ''
     if(projectDict != null && !$.isEmptyObject(projectDict)){
         feedString += "<div id='projectFeedContainer'><ul class='projectFeed' id='projectFeed'>"
-        for(projectID in projectDict){
+
+        // Sort projects by year
+        // Create list of tuples of projectID, year
+        var sortedProjectIDs = Object.keys(projectDict).map(function(key){
+            return [key, parseInt(projectDict[key]["year"])];
+        });
+
+        // Sort the tuple list
+        sortedProjectIDs.sort(function(first, second){
+            return second[1] - first[1];
+        });
+
+        // Create sorted project list from tuple list
+        sortedProjectList = [];
+        for(var i=0; i < sortedProjectIDs.length; i++){
+            sortedProjectList.push(projectDict[sortedProjectIDs[i][0]]);
+        }
+
+        for(var i=0; i < sortedProjectList.length; i++){
+            project = sortedProjectList[i]
             feedString += "<li style='position: relative;'>"
 
             // Add project picture
-            feedString += "<div style='position:absolute; height: 90%; left: 5px; top: 5%;'><img src='" + projectDict[projectID]['postPictureURL'] + "' style='max-height: 100%;' /></div>"
+            feedString += "<div style='position:absolute; height: 90%; left: 5px; top: 5%;'><img src='" + project['postPictureURL'] + "' style='max-height: 100%;' /></div>"
 
             // Add text container
             feedString += "<div style='position: absolute; left: 95px; top: 0px;'>";
 
             // Add title
-            feedString += "<h2 style=''><a style='font-weight: 400; font-size: 0.9em' onclick='redirectToPost(" + '"' + projectID + '");' + "'>" + projectDict[projectID]["name"] + "</a>"
-            if("year" in projectDict[projectID]){
-                feedString += "<font style='font-weight: 400; font-size: 0.9em'> (" + projectDict[projectID]["year"] + ")</font>";
+            feedString += "<h2 style=''><a style='font-weight: 400; font-size: 0.9em' onclick='redirectToPost(" + '"' + project["projectID"] + '");' + "'>" + project["name"] + "</a>"
+            if("year" in project){
+                feedString += "<font style='font-weight: 400; font-size: 0.9em'> (" + project["year"] + ")</font>";
             }
             feedString += "</h2>";
 
             // Add label
-            if(projectDict[projectID]["labels"]){
+            if(project["labels"]){
                 feedString += "<div style='color: rgba(0,0,0,0.8); font-size: 1.1em; font-style: italic; margin-top: -2px;'>"
                 var labelString = '';
-                for(var i=0; i < projectDict[projectID]["labels"].length; i++){
-                    labelString += projectDict[projectID]["labels"][i]["label"]
-                    if(projectDict[projectID]["labels"][i]["extra"]){
-                        labelString += " (" + projectDict[projectID]["labels"][i]["extra"] + ")";
+                for(var j=0; j < project["labels"].length; j++){
+                    labelString += project["labels"][j]["label"]
+                    if(project["labels"][j]["extra"]){
+                        labelString += " (" + project["labels"][j]["extra"] + ")";
                     }
                     labelString += ', '
                 }
@@ -1789,9 +1807,7 @@ function createProjectFeed(projectDict){
             }
 
             // Add project type
-            feedString += "<div style='color: rgba(0,0,0,0.3);'>" + projectDict[projectID]["projectType"] + "</div>"
-            
-
+            feedString += "<div style='color: rgba(0,0,0,0.3);'>" + project["projectType"] + "</div>"
             feedString += "</div></li>";
         }
         feedString += "</ul></div>";
