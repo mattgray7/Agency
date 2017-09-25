@@ -156,14 +156,19 @@ function getNewRecordFormString(recordData){
     }
     var formDict = [{"name": "projectName", "label": "Name", 'value': recordData["projectName"], 'placeholder': 'Star Wars', "id": "newProjectName"},
                     {"name": "projectType", "label": "Type", "value": recordData["projectType"], 'placeholder': 'Film - Feature', "id": "newProjectType"},
+                    {"name": "projectStatus", "label": "Status", "value": recordData["projectStatus"], 'placeholder': 'Post-production', "id": "newProjectStatus"},
                     {"name": "profession", "label": "Profession", "value": recordData["profession"], 'placeholder': 'Camera Operator', "id": "newProjectProfession"},
                     {"name": "year", "label": "Year", "value": recordData["year"], 'placeholder': '2017', "id": "newProjectYear"},
+                    {},
                     ]
     {% if projectTypes %}
         formDict[1]["options"] = {{projectTypes|safe}};
     {% endif %}
+    {% if projectStatusList %}
+        formDict[2]["options"] = {{projectStatusList|safe}};
+    {% endif %}
 
-    var formString = "<div style='position: relative; height: 260px; width: 100%'>"
+    var formString = "<div style='position: relative; height: 330px; width: 100%'>"
 
     // Add title
     formString += "<div style='position: absolute; left: 0px; top: -10px; text-align: left;'><h2 style='margin-bottom: 5px;'>New Production</h2><h4 style='margin: 5px 0px; font-weight: 300;'>Add a simple record to your filmography, or register a new project <a onclick='redirect(" +'"{{possibleDestinations.createProject}}");' + "'>here</a>.</h4></div>"
@@ -178,8 +183,12 @@ function getNewRecordFormString(recordData){
 
     // Add right list
     formString += "<ul style='position: absolute; left: 51%; right: 0; top: 50px; bottom: 0;'>";
-    for(var i=(formDict.length/2); i <formDict.length ; i++){
-        formString += "<li style='height: 30px;'>" + getFormFieldString(formDict[i]) + "</li>";
+    for(var i=(formDict.length/2); i < formDict.length ; i++){
+        if(formDict[i]["name"] != null){
+            formString += "<li style='height: 30px;'>" + getFormFieldString(formDict[i]) + "</li>";
+        }else{
+            formString += "<li style='height: 30px; border: none;'></li>"
+        }
     }
     // Add button
     formString += "<li style='margin-top: 15px;'><div class='whiteButton blackHover' style='padding: 6px; padding-top: 15px; width: 94%; height: 35px;' onclick='addNewRecord(" + '"new"' + ");'>Add Project</div></li></ul>";
@@ -191,10 +200,11 @@ function getNewRecordFormString(recordData){
 function addNewRecord(recordType){
     var name = document.getElementById(recordType + "ProjectName");
     var type = document.getElementById(recordType + "ProjectType");
+    var status = document.getElementById(recordType + "ProjectStatus");
     var profession = document.getElementById(recordType + "ProjectProfession");
     var year = document.getElementById(recordType + "ProjectYear");
 
-    if([name, type, profession, year].indexOf(null) === -1){
+    if([name, type, status, profession, year].indexOf(null) === -1){
         var newProjectDict = {}
         if(name.value != null){
             newProjectDict["name"] = name.value;
@@ -203,7 +213,7 @@ function addNewRecord(recordType){
             }
 
             newProjectDict["postPictureURL"] = "{{images.noPicture}}";
-            newProjectDict["status"] = "Completed"
+            newProjectDict["status"] = status.value
             newProjectDict["projectType"] = type.value;
             newProjectDict["labels"] = [{"label": profession.value}]
             

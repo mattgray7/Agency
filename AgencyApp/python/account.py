@@ -499,6 +499,7 @@ class EditFilmographyView(GenericEditAccountView):
     def pageContext(self):
         self._pageContext = super(EditFilmographyView, self).pageContext
         self._pageContext["projectTypes"] = constants.PROJECT_TYPE_LIST
+        self._pageContext["projectStatusList"] = json.dumps(constants.PROJECT_STATUS_LIST)
         self._pageContext["profileProjects"] = json.dumps(self.userAccount.projects)
         self._pageContext["possibleDestinations"]["createProject"] = constants.CREATE_PROJECT_POST
         return self._pageContext
