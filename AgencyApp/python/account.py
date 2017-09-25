@@ -196,12 +196,18 @@ class GenericEditAccountView(views.GenericFormView):
 
     @property
     def pageContext(self):
+        self._pageContext = super(views.GenericFormView, self).pageContext
         self._pageContext["nextButtonString"] = self.nextButtonString
-        self._pageContext["possibleDestinations"] = {"interests": constants.EDIT_INTERESTS,
-                                                     "picture": constants.EDIT_PROFILE_PICTURE,
-                                                     "profile": constants.PROFILE, 
-                                                     "background": constants.EDIT_BACKGROUND,
-                                                     "filmography": constants.EDIT_FILMOGRAPHY}
+
+        newDestinations = {"interests": constants.EDIT_INTERESTS,
+                           "picture": constants.EDIT_PROFILE_PICTURE,
+                           "profile": constants.PROFILE, 
+                           "background": constants.EDIT_BACKGROUND,
+                           "filmography": constants.EDIT_FILMOGRAPHY}
+        if "possibleDestinations" in self._pageContext:
+            self._pageContext["possibleDestinations"].update(newDestinations)
+        else:
+            self._pageContext["possibleDestinations"] = newDestinations
         self._pageContext["userAccount"] = self.userAccount
         return self._pageContext
 
@@ -502,6 +508,7 @@ class EditFilmographyView(GenericEditAccountView):
         self._pageContext["projectStatusList"] = json.dumps(constants.PROJECT_STATUS_LIST)
         self._pageContext["profileProjects"] = json.dumps(self.userAccount.projects)
         self._pageContext["possibleDestinations"]["createProject"] = constants.CREATE_PROJECT_POST
+        self._pageContext["possibleDestinations"]["viewPost"] = constants.VIEW_POST
         return self._pageContext
 
     @property
