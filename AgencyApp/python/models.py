@@ -207,18 +207,27 @@ class UserAccount(models.Model):
                     else:
                         self._projects[job.projectID] = {"labels": [{"label": job.profession}], "display": True}
 
+            unregProjects = UnregisteredProject.objects.filter(poster=self.username)
+            for project in unregProjects:
+                self._projects[project.postID] = {"labels": [{"label": project.profession}], "display": True}
+
             removeProjectIDList = []
             for projectID in self._projects:
+                pictureURL = None
                 try:
                     currentProject = ProjectPost.objects.get(postID=projectID)
+                    pictureURL = currentProject.postPicture and currentProject.postPicture.url or constants.NO_PICTURE_PATH
                 except ProjectPost.DoesNotExist:
-                    removeProjectIDList.append(projectID)
-                else:
-                    self._projects[projectID]["name"] = currentProject.title + " ({0})".format(currentProject.year)
-                    self._projects[projectID]["postPictureURL"] = currentProject.postPicture and currentProject.postPicture.url or constants.NO_PICTURE_PATH
-                    self._projects[projectID]["status"] = currentProject.status
-                    self._projects[projectID]["projectType"] = currentProject.projectType
-
+                    try:
+                        currentProject = UnregisteredProject.objects.get(postID=projectID)
+                        pictureURL = constants.NO_PICTURE_PATH
+                    except UnregisteredProject.DoesNotExist:
+                        removeProjectIDList.append(projectID)
+                        continue
+                self._projects[projectID]["name"] = currentProject.title + " ({0})".format(currentProject.year)
+                self._projects[projectID]["postPictureURL"] = pictureURL
+                self._projects[projectID]["status"] = currentProject.status
+                self._projects[projectID]["projectType"] = currentProject.projectType
             if removeProjectIDList:
                 for projectID in removeProjectIDList:
                     del self._projects[projectID]
