@@ -111,7 +111,6 @@ def createNewEventPost(request):
     newPost = eventPost.EventPostInstance(request=request, postID=request.POST.get("postID"), projectID=request.POST.get("projectID"), postType=constants.CREATE_EVENT_POST, formSubmitted=True)
     return _createNewPost(request, newPost)
 
-
 def _createNewPost(request, postTypeInstance):
     createSuccess = postTypeInstance.formIsValid()
     pictureSuccess = False
@@ -128,6 +127,23 @@ def _createNewPost(request, postTypeInstance):
     return JsonResponse({"success": createSuccess and pictureSuccess, "errors": postTypeInstance.formErrors,
                          "pictureURL": postInstance and postInstance.postPicture and postInstance.postPicture.url or "",
                          "postID": request.POST.get("postID")})
+
+def createUnregisteredProject(request):
+    success = False
+    newPostID = None
+    if request.POST.get("name") and request.user.username:
+        newPostID = helpers.createUniqueID(destDatabase=models.UnregisteredProject,
+                                           idKey="postID")
+        newProject = models.UnregisteredProject(postID=newPostID,
+                                                title=request.POST.get("name"),
+                                                poster=request.user.username,
+                                                projectType=request.POST.get("type"),
+                                                status=request.POST.get("status"),
+                                                profession=request.POST.get("profession"),
+                                                year=request.POST.get("year"))
+        newProject.save()
+        success = True
+    return JsonResponse({"success": success, "postID": newPostID})
 
 
 def _uploadTempPictureToPostDatabase(request):

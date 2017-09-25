@@ -205,23 +205,33 @@ function addNewRecord(recordType){
     var year = document.getElementById(recordType + "ProjectYear");
 
     if([name, type, status, profession, year].indexOf(null) === -1){
-        var newProjectDict = {}
+        var newProjectDict = {};
         if(name.value != null){
-            newProjectDict["name"] = name.value;
-            if(year.value != null){
-                newProjectDict["name"] += " (" + year.value + ")";
-            }
+            $.ajax({
+                url : "/ajax/createUnregisteredProject/",
+                data : {"name": name.value, "type": type.value, "status": status.value, "profession": profession.value, "year": year.value},
+                type : 'POST',
+                dataType: "json",
+                success : function(data) {
+                    if(data["success"]){
+                        newProjectDict["name"] = name.value;
+                        if(year.value != null){
+                            newProjectDict["name"] += " (" + year.value + ")";
+                        }
 
-            newProjectDict["postPictureURL"] = "{{images.noPicture}}";
-            newProjectDict["status"] = status.value
-            newProjectDict["projectType"] = type.value;
-            newProjectDict["labels"] = [{"label": profession.value}]
-            
-            profileProjects['abcdef'] = newProjectDict;
-            var listContent = document.getElementById("profileProjectsListContent");
-            if(listContent != null){
-                listContent.innerHTML = createProjectFeed(profileProjects)
-            }
+                        newProjectDict["postPictureURL"] = "{{images.noPicture}}";
+                        newProjectDict["status"] = status.value
+                        newProjectDict["projectType"] = type.value;
+                        newProjectDict["labels"] = [{"label": profession.value}]
+
+                        profileProjects[data["postID"]] = newProjectDict;
+                        var listContent = document.getElementById("profileProjectsListContent");
+                        if(listContent != null){
+                            listContent.innerHTML = createProjectFeed(profileProjects)
+                        }
+                    }
+                }
+            });
         }
     }
 }

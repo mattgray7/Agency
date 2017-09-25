@@ -224,6 +224,15 @@ class UserAccount(models.Model):
                     del self._projects[projectID]
         return self._projects
 
+class UnregisteredProject(models.Model):
+    postID = models.CharField(max_length=10)
+    poster = models.CharField(max_length=200)
+    title = models.CharField(max_length=500, default=None, blank=True, null=True)
+    projectType = models.CharField(max_length=50, default=None, blank=True, null=True)
+    status = models.CharField(max_length=50, default=None, blank=True, null=True)
+    profession = models.CharField(max_length=300, default=None, blank=True, null=True)
+    year = models.CharField(max_length=300, blank=True, null=True)
+
 # Chosen as primary (has filmography, has worked in the past)
 class ProfileProfession(models.Model):
     username = models.CharField(max_length=100)
