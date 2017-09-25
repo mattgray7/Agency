@@ -94,6 +94,9 @@ def getNewPostID(request):
     elif postType == "event":
         ret["postID"] = helpers.createUniqueID(destDatabase=models.EventPost,
                                                             idKey="postID")
+    elif postType == "project":
+        ret["postID"] = helpers.createUniqueID(destDatabase=models.ProjectPost,
+                                                            idKey="postID")
     return JsonResponse(ret)
 
 def createNewCastingPost(request):

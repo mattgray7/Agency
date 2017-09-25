@@ -125,7 +125,7 @@ function toggleDisplayPhysicalAttributesRow(toggleType){
 
 function getFormFieldString(fieldDict){
     var fieldString = '';
-    if("label" in fieldDict && "name" in fieldDict){
+    if("label" in fieldDict && "name" in fieldDict && "id" in fieldDict){
         /*fieldString += "<div style='position: relative; height: 100%; width: 100%; text-align: right; '>"
         fieldString += "<div style='position: absolute; left: 0; right: 60%;'>" + fieldDict["label"] + "</div>"
         if("options" in fieldDict){
@@ -135,13 +135,13 @@ function getFormFieldString(fieldDict){
         }*/
         fieldString += "<label style='background: #f2f2f2;' for='name'>" + fieldDict["label"] + "</label>"
         if("options" in fieldDict){
-            fieldString += "<select name='" + fieldDict["name"] + "'>"
+            fieldString += "<select name='" + fieldDict["name"] + "' id='" + fieldDict["id"] + "'>"
             for(var i=0; i < fieldDict['options'].length; i++){
                 fieldString += '<option name="' + fieldDict['options'][i] + '">' + fieldDict['options'][i] + '</option>';
             }
             fieldString += "</select>"
         }else{
-            fieldString += "<input type='text' name='" + fieldDict["name"] + "' "
+            fieldString += "<input type='text' id='" + fieldDict["id"] + "' name='" + fieldDict["name"] + "' "
             if('placeholder' in fieldDict){
                 fieldString += 'placeholder="' + fieldDict["placeholder"] + '" ';
             }
@@ -154,10 +154,10 @@ function getNewRecordFormString(recordData){
     if(recordData == null){
         recordData = {};
     }
-    var formDict = [{"name": "projectName", "label": "Name", 'value': recordData["projectName"], 'placeholder': 'Star Wars'},
-                    {"name": "projectType", "label": "Type", "value": recordData["projectType"], 'placeholder': 'Film - Feature'},
-                    {"name": "profession", "label": "Profession", "value": recordData["profession"], 'placeholder': 'Camera Operator'},
-                    {"name": "year", "label": "Year", "value": recordData["year"], 'placeholder': '2017'},
+    var formDict = [{"name": "projectName", "label": "Name", 'value': recordData["projectName"], 'placeholder': 'Star Wars', "id": "newProjectName"},
+                    {"name": "projectType", "label": "Type", "value": recordData["projectType"], 'placeholder': 'Film - Feature', "id": "newProjectType"},
+                    {"name": "profession", "label": "Profession", "value": recordData["profession"], 'placeholder': 'Camera Operator', "id": "newProjectProfession"},
+                    {"name": "year", "label": "Year", "value": recordData["year"], 'placeholder': '2017', "id": "newProjectYear"},
                     ]
     {% if projectTypes %}
         formDict[1]["options"] = {{projectTypes|safe}};
@@ -182,10 +182,38 @@ function getNewRecordFormString(recordData){
         formString += "<li style='height: 30px;'>" + getFormFieldString(formDict[i]) + "</li>";
     }
     // Add button
-    formString += "<li style='margin-top: 15px;'><div class='whiteButton blackHover' style='padding: 6px; padding-top: 15px; width: 94%; height: 35px;'>Add Project</div></li></ul>";
+    formString += "<li style='margin-top: 15px;'><div class='whiteButton blackHover' style='padding: 6px; padding-top: 15px; width: 94%; height: 35px;' onclick='addNewRecord(" + '"new"' + ");'>Add Project</div></li></ul>";
 
     formString += "</div>"
     return formString
+}
+
+function addNewRecord(recordType){
+    var name = document.getElementById(recordType + "ProjectName");
+    var type = document.getElementById(recordType + "ProjectType");
+    var profession = document.getElementById(recordType + "ProjectProfession");
+    var year = document.getElementById(recordType + "ProjectYear");
+
+    if([name, type, profession, year].indexOf(null) === -1){
+        var newProjectDict = {}
+        if(name.value != null){
+            newProjectDict["name"] = name.value;
+            if(year.value != null){
+                newProjectDict["name"] += " (" + year.value + ")";
+            }
+
+            newProjectDict["postPictureURL"] = "{{images.noPicture}}";
+            newProjectDict["status"] = "Completed"
+            newProjectDict["projectType"] = type.value;
+            newProjectDict["labels"] = [{"label": profession.value}]
+            
+            profileProjects['abcdef'] = newProjectDict;
+            var listContent = document.getElementById("profileProjectsListContent");
+            if(listContent != null){
+                listContent.innerHTML = createProjectFeed(profileProjects)
+            }
+        }
+    }
 }
 
 
@@ -232,6 +260,7 @@ function getNewRecordFormString(recordData){
      <div id='backgroundPanel' class='backgroundPanel' style='min-width: 634px; min-height: 100%;'>
         <div id="mainViewPanel" class="mainViewPanel" style="position: relative; min-width: 620px; max-width: 620px; background: rgba(0,0,0,0.05); border: none;">
             <script>
+            var profileProjects = {};
             document.write(createEditAccountButtonHeader("Filmography"))
             </script>
 
@@ -248,9 +277,10 @@ function getNewRecordFormString(recordData){
                     <div id='profileProjectsList' style='width: 80%; margin: 10px auto; border: 1px solid rgba(0,0,0,0.3); border-radius: 3px; padding: 20px; position: relative; background: #f2f2f2;'>
                         <div style='position: absolute; top: 10px; left: 20px;'><h2>Filmography</h2></div>
 
-                        <div style='margin-top: 30px;'>
+                        <div id='profileProjectsListContent' style='margin-top: 30px;'>
                             <script>
-                                document.write(createProjectFeed({{profileProjects|safe}}))
+                                profileProjects = {{profileProjects|safe}};
+                                document.write(createProjectFeed(profileProjects))
                             </script>
                         </div>
                     </div>
