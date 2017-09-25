@@ -133,7 +133,7 @@ function getFormFieldString(fieldDict){
         }else{
             fieldString += "<input type='text' style='position: absolute; left: 40%; right: 0;' />"
         }*/
-        fieldString += "<label for='name'>" + fieldDict["label"] + "</label>"
+        fieldString += "<label style='background: #f2f2f2;' for='name'>" + fieldDict["label"] + "</label>"
         if("options" in fieldDict){
             fieldString += "<select name='" + fieldDict["name"] + "'>"
             for(var i=0; i < fieldDict['options'].length; i++){
@@ -237,7 +237,7 @@ function getNewRecordFormString(recordData){
 
             <div id='editFilmographyContainer' style='text-align: center; background: #FFF; padding: 10px 0px;'>
                 <!--<h2> Filmography </h2>-->
-                <div id='addNewRecordContainer' class='form-style-7' style='width: 80%; margin: 10px auto; border: 1px solid rgba(0,0,0,0.3); border-radius: 3px;'>
+                <div id='addNewRecordContainer' class='form-style-7' style='width: 80%; margin: 10px auto; border: 1px solid rgba(0,0,0,0.3); background: #f2f2f2; border-radius: 3px;'>
                     <script>
                         document.write(getNewRecordFormString(null));
                     </script>
@@ -245,7 +245,7 @@ function getNewRecordFormString(recordData){
 
                 {% if profileProjects %}
                     <div style='height: 20px;'></div>
-                    <div id='profileProjectsList' style='width: 80%; margin: 10px auto; border: 1px solid rgba(0,0,0,0.3); border-radius: 3px; padding: 20px; position: relative;'>
+                    <div id='profileProjectsList' style='width: 80%; margin: 10px auto; border: 1px solid rgba(0,0,0,0.3); border-radius: 3px; padding: 20px; position: relative; background: #f2f2f2;'>
                         <div style='position: absolute; top: 10px; left: 20px;'><h2>Filmography</h2></div>
 
                         <div style='margin-top: 30px;'>
