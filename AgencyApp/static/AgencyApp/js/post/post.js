@@ -1780,6 +1780,11 @@ function createProjectFeed(projectDict){
             // Add project picture
             feedString += "<div style='position:absolute; height: 90%; left: 5px; top: 5%;'><img src='" + project['postPictureURL'] + "' style='max-height: 100%;' /></div>"
 
+            // Add edit button
+            if(!project["registered"]){
+                feedString += "<div style='position: absolute; right: 5px; top: 3px;'><a>Edit</a></div>"
+            }
+
             // Add text container
             feedString += "<div style='position: absolute; left: 95px; top: 0px;'>";
 

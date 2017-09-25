@@ -214,9 +214,11 @@ class UserAccount(models.Model):
             removeProjectIDList = []
             for projectID in self._projects:
                 pictureURL = None
+                registeredProject = False
                 try:
                     currentProject = ProjectPost.objects.get(postID=projectID)
                     pictureURL = currentProject.postPicture and currentProject.postPicture.url or constants.NO_PICTURE_PATH
+                    registeredProject = True
                 except ProjectPost.DoesNotExist:
                     try:
                         currentProject = UnregisteredProject.objects.get(postID=projectID)
@@ -230,6 +232,7 @@ class UserAccount(models.Model):
                 self._projects[projectID]["status"] = currentProject.status
                 self._projects[projectID]["projectType"] = currentProject.projectType
                 self._projects[projectID]["projectID"] = projectID
+                self._projects[projectID]["registered"] = registeredProject
             if removeProjectIDList:
                 for projectID in removeProjectIDList:
                     del self._projects[projectID]
