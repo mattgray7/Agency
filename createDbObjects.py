@@ -249,6 +249,12 @@ def createProjectEvent(projectID, title, location, startDate, endDate, startTime
 		post.save()
 	return postID
 
+project6WorkPost1JobId = createProjectJob(projectID=project6ProjectPost.postID,
+								 		  username="mattgray",
+								 		  title="Looking for Director",
+								 		  description=directorDescription,
+								 		  profession="Director",
+								 		  status="Filled")
 project1WorkPost2JobId = createProjectJob(projectID=project1ProjectID,
 								 		  username="mattgray",
 								 		  title="Director Needed",

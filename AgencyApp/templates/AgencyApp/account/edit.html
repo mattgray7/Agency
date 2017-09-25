@@ -236,13 +236,25 @@ function getNewRecordFormString(recordData){
             </script>
 
             <div id='editFilmographyContainer' style='text-align: center; background: #FFF; padding: 10px 0px;'>
-                <h2> Filmography </h2>
+                <!--<h2> Filmography </h2>-->
                 <div id='addNewRecordContainer' class='form-style-7' style='width: 80%; margin: 10px auto; border: 1px solid rgba(0,0,0,0.3); border-radius: 3px;'>
                     <script>
                         document.write(getNewRecordFormString(null));
                     </script>
                 </div>
 
+                {% if profileProjects %}
+                    <div style='height: 20px;'></div>
+                    <div id='profileProjectsList' style='width: 80%; margin: 10px auto; border: 1px solid rgba(0,0,0,0.3); border-radius: 3px; padding: 20px; position: relative;'>
+                        <div style='position: absolute; top: 10px; left: 20px;'><h2>Filmography</h2></div>
+
+                        <div style='margin-top: 30px;'>
+                            <script>
+                                document.write(createProjectFeed({{profileProjects|safe}}))
+                            </script>
+                        </div>
+                    </div>
+                {% endif %}
 
             </div>
         </div>

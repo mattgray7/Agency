@@ -21,11 +21,6 @@ class ProfileView(views.GenericFormView):
         self._profileInterests = None
         self._profileLinks = None
         self._displayName = None
-
-        self._profileProjects = None
-        self._hasCurrentProjects = False
-        self._hasPastProjects = False
-
         self._profileUserFilmography = None
 
     @property
@@ -94,7 +89,7 @@ class ProfileView(views.GenericFormView):
                 self._profilePosts["events"] = models.EventPost.objects.filter(poster=self.profileUserAccount.username)
                 self._profilePosts["collaboration"] = models.CollaborationPost.objects.filter(poster=self.profileUserAccount.username)
                 self._profilePosts["work"] = models.WorkPost.objects.filter(poster=self.profileUserAccount.username)
-                self._profilePosts["projects"] = self.profileProjects
+                self._profilePosts["projects"] = self.profileUserFilmography
                 self._profilePosts["casting"] = models.CastingPost.objects.filter(poster=self.profileUserAccount.username)
         return self._profilePosts
 
@@ -103,55 +98,6 @@ class ProfileView(views.GenericFormView):
         if not self._profileUserFilmography:
             self._profileUserFilmography = self.profileUserAccount.projects
         return self._profileUserFilmography
-
-    @property
-    def profileProjects(self):
-        if not self._profileProjects:
-            self._profileProjects = []
-            existingProjects = {}
-            for role in models.CastingPost.objects.filter(actorName=self.profileUserAccount.username, status="Cast"):
-                project = projectPost.getProjectObject(role.projectID)
-                if project:
-                    roleObj = {"postID": role.postID, "characterName": role.characterName}
-                    if project.postID in existingProjects.keys():
-                        existingProjectObjects[project.postID]["roles"].append(roleObj)
-                    else:
-                        existingProjects[project.postID] = {"project": project, "roles": [roleObj], "jobs": [],
-                                                            "status": self._getProjectDisplayStatus(project), "creator": False}
-
-            for job in models.WorkPost.objects.filter(workerName=self.profileUserAccount.username, status="Filled"):
-                project = projectPost.getProjectObject(job.projectID)
-                if project:
-                    jobObj = {"postID": job.postID, "profession": job.profession}
-                    if project.postID in existingProjects.keys():
-                        existingProjects[project.postID]["jobs"].append(jobObj)
-                    else:
-                        existingProjects[project.postID] = {"project": project, "roles": [], "jobs": [jobObj],
-                                                            "status": self._getProjectDisplayStatus(project), "creator": False}
-
-            for project in models.ProjectPost.objects.filter(poster=self.profileUserAccount.username):
-                if project.postID in existingProjects.keys():
-                    existingProjects[project.postID]["creator"] = True
-                else:
-                    existingProjects[project.postID] = {"project": project, "roles": [], "jobs": [],
-                                                       "status": self._getProjectDisplayStatus(project), "creator": True}
-            for projectID in existingProjects.keys():
-                existingProjects[projectID]["roles"] = json.dumps(existingProjects[projectID]["roles"])
-                existingProjects[projectID]["jobs"] = json.dumps(existingProjects[projectID]["jobs"])
-                if existingProjects[projectID]["status"] == "current":
-                    self._hasCurrentProjects = True
-                elif existingProjects[projectID]["status"] == "past":
-                    self._hasPastProjects = True
-                self._profileProjects.append(existingProjects[projectID])
-        return self._profileProjects
-
-    def _getProjectDisplayStatus(self, project):
-        status = None
-        if project.status in ["Pre-production", "In production", "Post production", "Screening"]:
-            status = "current"
-        elif project.status in ["Completed"]:
-            status = "past"
-        return status
 
     @property
     def pageContext(self):
