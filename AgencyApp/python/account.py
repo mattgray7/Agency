@@ -423,7 +423,7 @@ class EditBackgroundView(GenericEditAccountView):
 
     @property
     def formInitialValues(self):
-        self._formInitialValues["imdb"] = self.userAccount.imdbLink
+        self._formInitialValues["imdbLink"] = self.userAccount.imdbLink
         self._formInitialValues["bio"] = self.userAccount.bio
         #self._formInitialValues["mainProfession"] = self.userAccount.mainProfession
         self._formInitialValues["location"] = self.userAccount.location
@@ -447,7 +447,7 @@ class EditBackgroundView(GenericEditAccountView):
 
     def processForm(self):
         """Overriding asbtract method"""
-        self.userAccount.imdbLink = self.formData.get('imdb')
+        self.userAccount.imdbLink = self.request.POST.get('imdbLink')
         self.userAccount.bio = self.formData.get('bio')
         self.userAccount.location = self.formData.get('location')
         self.userAccount.education = self.formData.get('education')

@@ -34,7 +34,7 @@ class EditBackgroundForm(BaseForm):
     location = forms.CharField(label="Location", required=False, max_length=200)
     phoneNumber = forms.CharField(label="Phone #", required=False, max_length=30)
     resume = forms.FileField(label="Resume", required=False)
-    imdb = forms.CharField(label="IMDB Link", required=False, max_length=500)
+    imdbLink = forms.CharField(label="IMDB Link", required=False, max_length=500)
     bio = forms.CharField(label="Bio", required=False, max_length=1000)
 
 class GenericCreatePostForm(BaseForm):

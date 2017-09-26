@@ -526,10 +526,10 @@ function removeRecord(projectID){
                                                     lineString += '{{field}}'
                                                 }
                                                 lineString += "</div>"
-                                            }else if("{{field.name}}" === "imdb"){
+                                            }else if("{{field.name}}" === "imdbLink"){
                                                 lineString += "<div id='imdbLinkContainer' style='height: 25px; text-align: left; position: relative;'>";
                                                 if("{{field.value}}".length > 0 && "{{field.value}}" != "None"){
-                                                    lineString += "<a href='{{field.value}}'>{{userAccount.cleanName}}</a><div style='position: absolute; right: 0; top: 0;'><a onclick='removeIMDBLink();'>Clear</a></div>";
+                                                    lineString += "<a href='{{field.value}}'>{{userAccount.cleanName}}</a><div style='position: absolute; right: 0; top: 0;'><a onclick='removeIMDBLink();'>Clear</a></div><input type='hidden' name='imdbLink' value='{{field.value}}' />";
                                                 }else{
                                                     lineString += '{{field}}';
                                                 }
