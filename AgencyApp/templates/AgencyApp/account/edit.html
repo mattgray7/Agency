@@ -223,6 +223,23 @@ function getNewRecordFormString(recordData){
     return formString
 }
 
+function clearAddNewRecordForm(){
+    var name = document.getElementById("newProjectName");
+    var type = document.getElementById("newProjectType");
+    var status = document.getElementById("newProjectStatus");
+    var profession = document.getElementById("newProjectProfession");
+    var year = document.getElementById("newProjectYear");
+    var errorPanel = document.getElementById("newErrorListContainer");
+    if([name, type, status, profession, year, errorPanel].indexOf(null) === -1){
+        name.value = '';
+        profession.value = '';
+        year.value = '';
+        status.value = 'Pre-production';
+        type = 'Film - Feature';
+        errorPanel.innerHTML = '';
+    }
+}
+
 function addNewRecord(recordType, projectID){
     var name = document.getElementById(recordType + "ProjectName");
     var type = document.getElementById(recordType + "ProjectType");
@@ -284,6 +301,7 @@ function addNewRecord(recordType, projectID){
                                     }
                                 })
                             }else{
+                                clearAddNewRecordForm();
                                 listContent.innerHTML = createProjectFeed(profileProjects)
                             }
                         }
@@ -291,7 +309,6 @@ function addNewRecord(recordType, projectID){
                 }
             });
         }else{
-            console.log(errorList)
             var errorListContainer = document.getElementById(recordType + "ErrorListContainer");
             if(errorListContainer != null){
                 var errorString = "<ul class='errorPanel' style='height: 93%; width: 98%; border-radius: 5px;'>"
