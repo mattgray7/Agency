@@ -213,7 +213,7 @@ function getNewRecordFormString(recordData){
         if(formDict[i]["name"] != null){
             formString += "<li style='height: 30px; background: #f2f2f2;'>" + getFormFieldString(formDict[i]) + "</li>";
         }else{
-            formString += "<li id='" + updateRecordType + "ErrorListContainer' style='height: 51px; border: none; background: none; padding: 0;'></li>"
+            formString += "<li id='" + updateRecordType + "ErrorListContainer' style='height: 50px; border: none; background: none; padding: 0;'></li>"
         }
     }
     // Add button
@@ -313,9 +313,9 @@ function addNewRecord(recordType, projectID){
             if(errorListContainer != null){
                 var errorString = "<ul class='errorPanel' style='height: 93%; width: 98%; border-radius: 5px;'>"
                 for(var i=0; i < errorList.length; i++){
-                    errorString += "<li style='border: none; margin: 0px 3px; padding: 0; text-align: left;'>" + errorList[i] + "</li>";
+                    errorString += "<li style='border: none; margin: 0px 3px; padding: 0; text-align: left; background: none; height: auto;'>" + errorList[i] + "</li>";
                 }
-                errorString += "</ul>";
+                errorString += "<li style='display:none;'></li></ul>";
                 errorListContainer.innerHTML = errorString;
             }
         }
