@@ -1788,42 +1788,51 @@ function createProjectFeedElement(project, showEdit){
 
     // Add edit button
     if(!project["registered"] && showEdit){
-        feedString += "<div style='position: absolute; right: 5px; top: 3px;'><a onclick='toggleExpandEditRecord(" + '"expand", "' + project["projectID"] + '");' + "'>Edit</a></div>"
+        feedString += "<div style='position: absolute; right: 5px; top: 72px;' class='editButton' onclick='toggleExpandEditRecord(" + '"expand", "' + project["projectID"] + '");' + "'>Edit</div>"
     }
+    // Add year top right
+    feedString += "<div style='position: absolute; right: 5px; top: 7px; color: rgba(0,0,0,0.7); font-size: 1.1em'>" + project["year"] + "</div>"
+
 
     // Add text container
-    feedString += "<div style='position: absolute; left: 95px; top: 0px;'>";
+    feedString += "<div style='position: absolute; left: 95px; top: 0px; right: 40px; overflow: hidden;'>";
 
     // Add title
-    feedString += "<h2 style=''><a style='font-weight: 400; font-size: 0.9em' "
+    feedString += "<h2 style='white-space: nowrap;'><a style='font-weight: 400; font-size: 0.9em' "
     if(project["registered"]){
         // Don't add link to unregistered project
          feedString += " onclick='redirectToPost(" + '"' + project["projectID"] + '");' + "' "
     }
-    feedString += ">" + project["name"] + "</a>"
-    if("year" in project){
-        feedString += "<font style='font-weight: 400; font-size: 0.9em'> (" + project["year"] + ")</font>";
+    feedString += ">";
+    if(project["name"].length > 32){
+        var splittedWords = project["name"].split(" ");
+        project["name"] = project["name"].substring(0, project["name"].length - splittedWords[splittedWords.length-1].length-1) + "...";
     }
+    feedString += project["name"] + "</a>"
+    /*if("year" in project){
+        feedString += "<font style='font-weight: 400; font-size: 0.9em'> (" + project["year"] + ")</font>";
+    }*/
     feedString += "</h2>";
 
     // Add label
     if(project["labels"]){
-        feedString += "<div style='color: rgba(0,0,0,0.8); font-size: 1.1em; font-style: italic; margin-top: -2px;'>"
+        feedString += "<div style='color: rgba(0,0,0,0.8); font-size: 1em; margin-top: -2px;'>"
         var labelString = '';
         for(var j=0; j < project["labels"].length; j++){
             labelString += project["labels"][j]["label"]
             if(project["labels"][j]["extra"]){
                 labelString += " (" + project["labels"][j]["extra"] + ")";
             }
-            labelString += ', '
+            labelString += ' | '
         }
-        labelString = labelString.substring(0, labelString.length - 2);
+        labelString = labelString.substring(0, labelString.length - 3);
         feedString += labelString;
         feedString += "</div>"
     }
 
     // Add project type
-    feedString += "<div style='color: rgba(0,0,0,0.3);'>" + project["projectType"] + "</div>"
+    feedString += "<div style='color: rgba(0,0,0,0.35);'>" + project["projectType"] + "</div>"
+    feedString += "<div style='color: rgba(0,0,0,0.35);'>" + project["status"] + "</div>"
     feedString += "</div>";
 
     // Add edit form container

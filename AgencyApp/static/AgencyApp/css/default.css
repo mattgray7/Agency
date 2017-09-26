@@ -44,10 +44,45 @@
 	{
 		color: #ee0000;
 	}
-	
+
 	a:hover
 	{
 		text-decoration: none;
+	}
+	
+	.backgroundPanel
+	{
+		background: #efefef;
+		text-align: center;
+		padding: 10px 0px;
+		min-width: 580px;
+	}
+
+	.mainViewPanel
+	{
+		/*width: 90%;*/
+		/*min-width: 850px;*/
+		/*background: #FFF;*/
+		width: 80%;
+		max-width: 700px;
+		min-width: 580px;
+		color: #000;
+		margin: auto;
+		text-align: center;
+		border: 1px solid #000;
+		border-radius: 2px;
+		padding: .5em;
+		background: #FFF;
+	}
+	.mainViewPanel a
+	{
+		color: #1e1e1e;
+		font-weight: 900;
+	}
+	.mainViewPanel a:hover
+	{
+		cursor: pointer;
+		color: #b7b7b7;
 	}
 	
 	.container
@@ -445,6 +480,24 @@
 		color: #000;
 		cursor: pointer;
 		background: #FFF;
+	}
+
+	.editButton
+	{
+		background: rgba(0,0,0,0.05);
+		font-size: 0.9em;
+		padding: 1px 5px 1px 5px;
+		border: 1px solid rgba(0,0,0,0.1);
+		border-radius: 3px;
+		color: rgba(0,0,0,0.7);
+		box-shadow: 0.5px 0.5px 0px 0px #888888;
+	}
+
+	.editButton:hover
+	{
+		background: rgba(0,0,0,0.08);
+		color: #000;
+		cursor: pointer;
 	}
 
 	.noBorderButton

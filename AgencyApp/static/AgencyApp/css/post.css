@@ -1,37 +1,3 @@
-	.backgroundPanel
-	{
-		background: #efefef;
-		text-align: center;
-		padding: 10px 0px;
-		min-width: 580px;
-	}
-
-	.mainViewPanel
-	{
-		/*width: 90%;*/
-		/*min-width: 850px;*/
-		/*background: #FFF;*/
-		width: 80%;
-		max-width: 700px;
-		min-width: 580px;
-		color: #000;
-		margin: auto;
-		text-align: center;
-		border: 1px solid #000;
-		border-radius: 2px;
-		padding: .5em;
-		background: #FFF;
-	}
-	.mainViewPanel a
-	{
-		color: #1e1e1e;
-		font-weight: 900;
-	}
-	.mainViewPanel a:hover
-	{
-		cursor: pointer;
-		color: #b7b7b7;
-	}
 	.createPanel
 	{
 		width: 100%;
