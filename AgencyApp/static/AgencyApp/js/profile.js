@@ -86,9 +86,9 @@ function selectProfileProfessionSingle(profession, textInputName, dropdownName){
         textInput.value = profession;
     }
 
-    if(profileProfessionList.indexOf(profession) == -1){
+    /*if(profileProfessionList.indexOf(profession) == -1){
         profileProfessionList.push(profession);
-    }
+    }*/
 }
 
 function removeProfileProfession(profession, chosenContainer, textInputName){
@@ -115,7 +115,11 @@ var professionHighlighted = false
 function addProfileProfessionDropdownCallback(callbackFunctionName, extraInputs, textInput, dropdownDivName, multipleEntries){
     // Add participant dropdown
     var inputDiv = document.getElementById(textInput);
-    extraInputs["multipleEntries"] = multipleEntries
+
+    // To support multiple profession dropdowns on 1 page, need to pass div info to the previewFunction (for the onclick)
+    extraInputs["multipleEntries"] = multipleEntries;
+    extraInputs["textInput"] = textInput;
+    extraInputs["dropdownDivName"] = dropdownDivName;
     if(inputDiv != null){
         // Need to put backspace on key down so that it runs before text is removed (otherwise inputDiv.value.length is meaningless)
         if(multipleEntries){
@@ -178,7 +182,7 @@ function searchPreviewProfessions(textValue, container, extraInputs){
                 success : function(data) {
                     if(data["success"]){
                         if(data["professions"]){
-                            var contentString = getPreviewProfessionsString(data["professions"], extraInputs["multipleEntries"]);
+                            var contentString = getPreviewProfessionsString(data["professions"], extraInputs["multipleEntries"], extraInputs["textInput"], extraInputs["dropdownDivName"]);
                             container.innerHTML = contentString;
                             if(contentString.length > 0 && textValue.length > 0){
                                 container.style.display = "block";
@@ -195,17 +199,16 @@ function searchPreviewProfessions(textValue, container, extraInputs){
 }
 
 
-function getPreviewProfessionsString(professionList, multipleEntries){
+function getPreviewProfessionsString(professionList, multipleEntries, textInput, dropdownDivName){
     var previewString = '';
     if(professionList.length > 0){
         previewString += "<ul id='professionDropdownList'>";
-        if(professionList)
         for(var i=0; i < professionList.length; i++){
             previewString += "<li style='margin-top: 0px; border: none; padding: 5px;' onclick='"
             if(multipleEntries){
                 previewString += "selectProfileProfession(" + '"' + professionList[i] + '", "profileProfessionContainer", "profileProfessionTextInput", "profileProfessionDropdown");'
             }else{
-                previewString += "selectProfileProfessionSingle(" + '"' + professionList[i] + '", "newProjectProfession", "profileProfessionDropdown");'
+                previewString += "selectProfileProfessionSingle(" + '"' + professionList[i] + '", "' + textInput + '", "' + dropdownDivName + '");'
             }
             previewString += "'><div style='position:relative; height: 20px;'>"
             // Add name

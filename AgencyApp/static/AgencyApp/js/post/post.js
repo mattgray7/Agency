@@ -1774,7 +1774,7 @@ function createProjectFeed(projectDict, showEdit){
         }
 
         for(var i=0; i < sortedProjectList.length; i++){
-            feedString += "<li id='projectFeedRow_" + sortedProjectList[i]["projectID"] + "' style='position: relative;'>" + createProjectFeedElement(sortedProjectList[i], showEdit) + "</li>";
+            feedString += "<li id='projectFeedRow_" + sortedProjectList[i]["projectID"] + "' style='position: relative;' class='projectFeedElement'>" + createProjectFeedElement(sortedProjectList[i], showEdit) + "</li>";
         }
         feedString += "</ul></div>";
     }

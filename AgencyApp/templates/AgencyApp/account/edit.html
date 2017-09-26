@@ -214,7 +214,7 @@ function getNewRecordFormString(recordData){
             formString += "<li style='height: 30px; background: #f2f2f2;'>" + getFormFieldString(formDict[i]);
             if(formDict[i]["name"] === "profession"){
                 // Add dropdown
-                formString += '<div id="profileProfessionDropdown" class="previewDropdownPanel" style="position: absolute; left: 5px; right: 6px; top: 69px; border: 1px solid #86898e; display: none;"></div>'
+                formString += '<div id="' + updateRecordType + 'ProjectProfessionDropdown" class="previewDropdownPanel" style="position: absolute; left: 5px; right: 6px; top: 69px; border: 1px solid #86898e; display: none; height: auto;"></div>'
             }
             formString += "</li>";
         }else{
@@ -351,7 +351,7 @@ function toggleExpandEditRecord(toggleType, projectID, animationFinishCallback){
             }
 
             // Need to add dropdown callback
-            //addProfileProfessionDropdownCallback("searchPreviewProfessions", {}, "newProjectProfession", "profileProfessionDropdown")
+            addProfileProfessionDropdownCallback("searchPreviewProfessions", {}, "existingProjectProfession", "existingProjectProfessionDropdown", false)
         }else{
             $("[id='projectFeedRow_" + projectID + "']").animate({marginTop: "0px", height: "100px"}, toggleSpeed, function(){
                 editContainer.style.display = "none";
@@ -441,7 +441,7 @@ function removeRecord(projectID){
                 <div id='addNewRecordContainer' style='width: 87%; margin: 10px auto;'>
                     <script>
                         document.write(getNewRecordFormString(null));
-                        addProfileProfessionDropdownCallback("searchPreviewProfessions", {}, "newProjectProfession", "profileProfessionDropdown", false)
+                        addProfileProfessionDropdownCallback("searchPreviewProfessions", {}, "newProjectProfession", "newProjectProfessionDropdown", false)
                     </script>
                 </div>
 
