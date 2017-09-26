@@ -1775,14 +1775,14 @@ function createProjectFeed(projectDict){
 
         for(var i=0; i < sortedProjectList.length; i++){
             project = sortedProjectList[i]
-            feedString += "<li style='position: relative;'>"
+            feedString += "<li id='projectFeedRow_" + project["projectID"] + "' style='position: relative;'>"
 
             // Add project picture
-            feedString += "<div style='position:absolute; height: 90%; left: 5px; top: 5%;'><img src='" + project['postPictureURL'] + "' style='max-height: 100%;' /></div>"
+            feedString += "<div style='position:absolute; left: 5px; top: 5px;'><img src='" + project['postPictureURL'] + "' style='height: 90px;' /></div>"
 
             // Add edit button
             if(!project["registered"]){
-                feedString += "<div style='position: absolute; right: 5px; top: 3px;'><a>Edit</a></div>"
+                feedString += "<div style='position: absolute; right: 5px; top: 3px;'><a onclick='toggleExpandEditRecord(" + '"expand", "' + project["projectID"] + '");' + "'>Edit</a></div>"
             }
 
             // Add text container
@@ -1813,7 +1813,14 @@ function createProjectFeed(projectDict){
 
             // Add project type
             feedString += "<div style='color: rgba(0,0,0,0.3);'>" + project["projectType"] + "</div>"
-            feedString += "</div></li>";
+            feedString += "</div>";
+
+            // Add edit form container
+            if(!project["registered"]){
+                feedString += "<div id='editRecordContainer_" + project["projectID"] + "' style='position: absolute; top: 100px; left: 5px; bottom: 5px; right: 5px;' display: none;'></div>"
+            }
+
+            feedString += "</li>";
         }
         feedString += "</ul></div>";
     }

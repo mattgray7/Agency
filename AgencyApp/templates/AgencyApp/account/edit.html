@@ -150,6 +150,8 @@ function getFormFieldString(fieldDict){
     }
     return fieldString;
 }
+
+var addNewRecordFormHeight = 350;
 function getNewRecordFormString(recordData){
     if(recordData == null){
         recordData = {};
@@ -168,32 +170,33 @@ function getNewRecordFormString(recordData){
         formDict[2]["options"] = {{projectStatusList|safe}};
     {% endif %}
 
-    var formString = "<div style='position: relative; height: 330px; width: 100%'>"
+//
+    var formString = "<div class='form-style-7' style='border: 1px solid rgba(0,0,0,0.3); background: #f2f2f2; border-radius: 3px;'><div style='position: relative; height: " + addNewRecordFormHeight + "px; width: 100%'>"
 
     // Add title
     formString += "<div style='position: absolute; left: 0px; top: -10px; text-align: left;'><h2 style='margin-bottom: 5px;'>New Production</h2><h4 style='margin: 5px 0px; font-weight: 300;'>Add a simple record to your filmography, or register a new project <a onclick='redirect(" +'"{{possibleDestinations.createProject}}");' + "'>here</a>.</h4></div>"
 
     // Add left list
-    formString += "<ul style='position: absolute; left: 0; right: 51%; top: 50px; bottom: 0;'>";
+    formString += "<ul style='position: absolute; left: 0; right: 51%; top: 70px; bottom: 0;'>";
     for(var i=0; i < (formDict.length/2); i++){
-        formString += "<li style='height: 30px;'>" + getFormFieldString(formDict[i]) + "</li>";
+        formString += "<li style='height: 30px; background: #f2f2f2;'>" + getFormFieldString(formDict[i]) + "</li>";
     }
     // Add button
-    formString += "<li style='margin-top: 15px;'><div class='whiteButton blackHover' style='padding: 6px; padding-top: 15px; width: 94%; height: 35px;'>Cancel</div></li></ul>";
+    formString += "<li style='margin-top: 15px; border: none; background: none; text-align: center; padding: 0;'><div class='whiteButton blackHover' style='padding: 6px; padding-top: 15px; width: 94%; height: 35px;'>Cancel</div></li><li style='display: none;'></li></ul>";
 
     // Add right list
-    formString += "<ul style='position: absolute; left: 51%; right: 0; top: 50px; bottom: 0;'>";
+    formString += "<ul style='position: absolute; left: 51%; right: 0; top: 70px; bottom: 0;'>";
     for(var i=(formDict.length/2); i < formDict.length ; i++){
         if(formDict[i]["name"] != null){
-            formString += "<li style='height: 30px;'>" + getFormFieldString(formDict[i]) + "</li>";
+            formString += "<li style='height: 30px; background: #f2f2f2;'>" + getFormFieldString(formDict[i]) + "</li>";
         }else{
-            formString += "<li style='height: 30px; border: none;'></li>"
+            formString += "<li style='height: 32px; border: none; background: none;'></li>"
         }
     }
     // Add button
-    formString += "<li style='margin-top: 15px;'><div class='whiteButton blackHover' style='padding: 6px; padding-top: 15px; width: 94%; height: 35px;' onclick='addNewRecord(" + '"new"' + ");'>Add Project</div></li></ul>";
+    formString += "<li style='margin-top: 15px; border: none; background: none; text-align: center; padding: 0;'><div class='whiteButton blackHover' style='padding: 6px; padding-top: 15px; width: 94%; height: 35px;' onclick='addNewRecord(" + '"new"' + ");'>Add Project</div></li><li style='display: none;'></li></ul>";
 
-    formString += "</div>"
+    formString += "</div></div>"
     return formString
 }
 
@@ -215,14 +218,11 @@ function addNewRecord(recordType){
                 success : function(data) {
                     if(data["success"]){
                         newProjectDict["name"] = name.value;
-                        if(year.value != null){
-                            newProjectDict["name"] += " (" + year.value + ")";
-                        }
-
                         newProjectDict["postPictureURL"] = "{{images.noPicture}}";
                         newProjectDict["status"] = status.value
                         newProjectDict["projectType"] = type.value;
                         newProjectDict["labels"] = [{"label": profession.value}]
+                        newProjectDict["year"] = year.value;
 
                         profileProjects[data["postID"]] = newProjectDict;
                         var listContent = document.getElementById("profileProjectsListContent");
@@ -233,6 +233,17 @@ function addNewRecord(recordType){
                 }
             });
         }
+    }
+}
+
+function toggleExpandEditRecord(toggleType, projectID){
+    var row = document.getElementById("projectFeedRow_" + projectID);
+    var editContainer = document.getElementById("editRecordContainer_" + projectID)
+
+    if(row != null && editContainer != null){
+        $("[id='projectFeedRow_" + projectID + "']").animate({marginTop: "0px", height: "497px"}, 500, function(){});
+        editContainer.style.display = "block";
+        editContainer.innerHTML = getNewRecordFormString(null)
     }
 }
 
@@ -286,7 +297,7 @@ function addNewRecord(recordType){
 
             <div id='editFilmographyContainer' style='text-align: center; background: #FFF; padding: 10px 0px;'>
                 <!--<h2> Filmography </h2>-->
-                <div id='addNewRecordContainer' class='form-style-7' style='width: 80%; margin: 10px auto; border: 1px solid rgba(0,0,0,0.3); background: #f2f2f2; border-radius: 3px;'>
+                <div id='addNewRecordContainer' style='width: 80%; margin: 10px auto;'>
                     <script>
                         document.write(getNewRecordFormString(null));
                     </script>
