@@ -160,9 +160,15 @@ function getFormFieldString(fieldDict){
 var addNewRecordFormHeight = 350;
 function getNewRecordFormString(recordData){
     var updateRecordType = "existing";
+    var updateButtonText = "Update Project"
+    var cancelButtonText = "Remove"
+    var cancelButtonOnclickFunctionName = "removeRecord"
     if(recordData == null){
         recordData = {};
         updateRecordType = "new"
+        updateButtonText = "Add Project"
+        cancelButtonText = "Cancel"
+        cancelButtonOnclickFunctionName = "cancel"
     }
     var formDict = [{"name": "name", "label": "Name", 'value': recordData["name"], 'placeholder': 'Star Wars', "id": updateRecordType + "ProjectName"},
                     {"name": "projectType", "label": "Type", "value": recordData["projectType"], 'placeholder': 'Film - Feature', "id": updateRecordType + "ProjectType"},
@@ -192,8 +198,8 @@ function getNewRecordFormString(recordData){
     for(var i=0; i < (formDict.length/2); i++){
         formString += "<li style='height: 30px; background: #f2f2f2;'>" + getFormFieldString(formDict[i]) + "</li>";
     }
-    // Add button
-    formString += "<li style='margin-top: 15px; border: none; background: none; text-align: center; padding: 0;'><div class='whiteButton blackHover' style='padding: 6px; padding-top: 15px; width: 94%; height: 35px;'>Cancel</div></li><li style='display: none;'></li></ul>";
+    // Add cancel button
+    formString += "<li style='margin-top: 15px; border: none; background: none; text-align: center; padding: 0;'><div id='" + updateRecordType + "CancelButton' onclick='returnToProfile();' class='whiteButton blackHover' style='padding: 6px; padding-top: 15px; width: 94%; height: 35px;'>" + cancelButtonText + "</div></li><li style='display: none;'></li></ul>";
 
     // Add right list
     formString += "<ul style='position: absolute; left: 51%; right: 0; top: 70px; bottom: 0;'>";
@@ -205,7 +211,7 @@ function getNewRecordFormString(recordData){
         }
     }
     // Add button
-    formString += "<li style='margin-top: 15px; border: none; background: none; text-align: center; padding: 0;'><div class='whiteButton blackHover' style='padding: 6px; padding-top: 15px; width: 94%; height: 35px;' onclick='addNewRecord(" + '"' + updateRecordType + '", "' + recordData["projectID"] + '"' + ");'>Add Project</div></li><li style='display: none;'></li></ul>";
+    formString += "<li style='margin-top: 15px; border: none; background: none; text-align: center; padding: 0;'><div id='" + updateRecordType + "UpdateButton' class='whiteButton blackHover' style='padding: 6px; padding-top: 15px; width: 94%; height: 35px;' onclick='addNewRecord(" + '"' + updateRecordType + '", "' + recordData["projectID"] + '"' + ");'>" + updateButtonText + "</div></li><li style='display: none;'></li></ul>";
 
     formString += "</div></div>"
     return formString
@@ -217,7 +223,6 @@ function addNewRecord(recordType, projectID){
     var status = document.getElementById(recordType + "ProjectStatus");
     var profession = document.getElementById(recordType + "ProjectProfession");
     var year = document.getElementById(recordType + "ProjectYear");
-    //console.log(projectID)
     if([name, type, status, profession, year].indexOf(null) === -1){
         var newProjectDict = {};
         if(name.value != null){
@@ -239,7 +244,11 @@ function addNewRecord(recordType, projectID){
                         profileProjects[data["postID"]] = newProjectDict;
                         var listContent = document.getElementById("profileProjectsListContent");
                         if(listContent != null){
-                            listContent.innerHTML = createProjectFeed(profileProjects)
+                            if(projectID != null){
+                                toggleExpandEditRecord("shrink", projectID)
+                            }else{
+                                listContent.innerHTML = createProjectFeed(profileProjects)
+                            }
                         }
                     }
                 }
@@ -253,10 +262,26 @@ function toggleExpandEditRecord(toggleType, projectID){
     var editContainer = document.getElementById("editRecordContainer_" + projectID)
 
     if(row != null && editContainer != null){
-        $("[id='projectFeedRow_" + projectID + "']").animate({marginTop: "0px", height: "497px"}, 500, function(){});
-        editContainer.style.display = "block";
-        editContainer.innerHTML = getNewRecordFormString(profileProjects[projectID])
+        if(toggleType === "expand"){
+            $("[id='projectFeedRow_" + projectID + "']").animate({marginTop: "0px", height: "497px"}, 500, function(){});
+            editContainer.style.display = "block";
+            editContainer.innerHTML = getNewRecordFormString(profileProjects[projectID])
+            
+            // Need to add cancel function after button is written
+            var cancelButton = document.getElementById("existingCancelButton");
+            if(cancelButton != null){
+                cancelButton.onclick = function(){
+                    removeRecord(projectID);
+                }
+            }
+        }else{
+            $("[id='projectFeedRow_" + projectID + "']").animate({marginTop: "0px", height: "100px"}, 500, function(){editContainer.style.display = "none";});
+        }
     }
+}
+
+function removeRecord(recordID){
+    console.log("Removing record " + recordID)
 }
 
 
@@ -309,7 +334,7 @@ function toggleExpandEditRecord(toggleType, projectID){
 
             <div id='editFilmographyContainer' style='text-align: center; background: #FFF; padding: 10px 0px;'>
                 <!--<h2> Filmography </h2>-->
-                <div id='addNewRecordContainer' style='width: 80%; margin: 10px auto;'>
+                <div id='addNewRecordContainer' style='width: 87%; margin: 10px auto;'>
                     <script>
                         document.write(getNewRecordFormString(null));
                     </script>
