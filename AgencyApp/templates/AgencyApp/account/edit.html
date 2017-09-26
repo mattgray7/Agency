@@ -191,11 +191,6 @@ function getNewRecordFormString(recordData){
 
     var formString = "<div class='form-style-7' style='border: 1px solid rgba(0,0,0,0.3); background: #f2f2f2; border-radius: 3px;'><div style='position: relative; height: " + addNewRecordFormHeight + "px; width: 100%'>"
 
-    // Add hide button
-    if(edit){
-        formString += "<div style='position: absolute; top: -13px; right: -5px;'><a style='font-size: 1.5em; font-weight: 100;' onclick='toggleExpandEditRecord(" + '"shrink", "' + recordData["projectID"] + '");' + "'>X</a></div>"
-    }
-
     // Add title
     formString += "<div style='position: absolute; left: 0px; top: -10px; text-align: left;'><h2 style='margin-bottom: 5px;'>New Production</h2><h4 style='margin: 5px 0px; font-weight: 300;'>Add a simple record to your filmography, or register a new project <a onclick='redirect(" +'"{{possibleDestinations.createProject}}");' + "'>here</a>.</h4></div>"
 
@@ -331,8 +326,9 @@ var toggleSpeed = 300;
 function toggleExpandEditRecord(toggleType, projectID, animationFinishCallback){
     var row = document.getElementById("projectFeedRow_" + projectID);
     var editContainer = document.getElementById("editRecordContainer_" + projectID)
+    var editButton = document.getElementById("editButton_" + projectID)
 
-    if(row != null && editContainer != null){
+    if(row != null && editContainer != null && editButton != null){
         if(toggleType === "expand"){
             $("[id='projectFeedRow_" + projectID + "']").animate({marginTop: "0px", height: "497px"}, toggleSpeed, function(){
                  if(animationFinishCallback != null){
@@ -350,6 +346,12 @@ function toggleExpandEditRecord(toggleType, projectID, animationFinishCallback){
                 }
             }
 
+            // Need to update edit button
+            editButton.innerHTML = "Hide"
+            editButton.onclick = function(){
+                toggleExpandEditRecord("shrink", projectID)
+            }
+
             // Need to add dropdown callback
             addProfileProfessionDropdownCallback("searchPreviewProfessions", {}, "existingProjectProfession", "existingProjectProfessionDropdown", false)
         }else{
@@ -359,6 +361,11 @@ function toggleExpandEditRecord(toggleType, projectID, animationFinishCallback){
                     animationFinishCallback();
                 }
             });
+
+            editButton.innerHTML = "Edit"
+            editButton.onclick = function(){
+                toggleExpandEditRecord("expand", projectID)
+            }
         }
     }
 }

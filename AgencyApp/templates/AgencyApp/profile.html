@@ -140,9 +140,9 @@
 
                 
                 // Start with edit button
-                if("{{request.user.username}}" === "{{profileUserAccount.username}}"){
+                {% if viewingOwnProfile %}
                     tabString += "<div style='position: absolute; top: 5px; right: 12px;'><div class='editButton'  onclick='redirect(" + '"{{ possibleDestinations.filmography }}");' + "'>Edit</div></div>";
-                }
+                {% endif %}
 
                 tabContent.innerHTML = tabString;
             {% endif %}

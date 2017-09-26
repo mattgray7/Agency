@@ -1788,7 +1788,7 @@ function createProjectFeedElement(project, showEdit){
 
     // Add edit button
     if(!project["registered"] && showEdit){
-        feedString += "<div style='position: absolute; right: 5px; top: 72px;' class='editButton' onclick='toggleExpandEditRecord(" + '"expand", "' + project["projectID"] + '");' + "'>Edit</div>"
+        feedString += "<div id='editButton_" + project["projectID"] + "' style='position: absolute; right: 5px; top: 72px;' class='editButton' onclick='toggleExpandEditRecord(" + '"expand", "' + project["projectID"] + '");' + "'>Edit</div>"
     }
     // Add year top right
     feedString += "<div style='position: absolute; right: 5px; top: 7px; color: rgba(0,0,0,0.7); font-size: 1.1em'>" + project["year"] + "</div>"
