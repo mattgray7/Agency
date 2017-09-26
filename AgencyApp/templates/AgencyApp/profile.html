@@ -405,7 +405,11 @@
 </div>
 
 <script>
-selectProfileTab("filmography")
+var defaultTab = "bio";
+if("{{source}}" === "EDIT_FILMOGRAPHY"){
+    defaultTab = "filmography";
+}
+selectProfileTab(defaultTab)
 </script>
 
 
