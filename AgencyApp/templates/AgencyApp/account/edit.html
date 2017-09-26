@@ -16,10 +16,10 @@ var accountButtons = [{"label": "Background", "destination": "{{possibleDestinat
                       {"label": "Interests", "destination": "{{possibleDestinations.interests}}"}
                      ]
 function createEditAccountButtonHeader(activeLabel){
-    var headerString = "<div id='editAccountTypeButtons' style='width: 100%; text-align: center; height: 120px; background: #FFF; position: relative;'>";
+    var headerString = "<div id='editAccountTypeButtons' style='width: 100%; text-align: center; height: 120px; background: #FFF; position: relative; margin-bottom: -5px;'>";
 
     // Add back to profile button
-    /*headerString += "<div id='backToProfileButton' style='position: absolute; left: 20px; top: 20px;'><a onclick='redirectToUser(" + '"{{request.user.username}}");' + "' class='profileButton blackHover'>Back</a></div>";*/
+    headerString += "<div class='editButton' style='position: absolute; left: 10px; top: 10px; z-index: 5;' onclick='redirectToUser(" + '"{{request.user.username}}");' + "'>&lt; {{userAccount.cleanName}}</div>";
 
     // Add edit account buttons
     headerString += "<div style='position: absolute; left: 0; right: 0; top: 20px;'><div style=''><h1 style='margin-bottom: 10px;'>Edit Account</h1></div>"
