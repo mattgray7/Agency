@@ -164,6 +164,8 @@ function getNewRecordFormString(recordData){
     var cancelButtonText = "Remove"
     var cancelButtonOnclickFunctionName = "removeRecord"
     var edit = true;
+    var topHeight = 70;
+    var formHeight = addNewRecordFormHeight;
     if(recordData == null){
         edit = false;
         recordData = {};
@@ -171,6 +173,8 @@ function getNewRecordFormString(recordData){
         updateButtonText = "Add Project"
         cancelButtonText = "Cancel"
         cancelButtonOnclickFunctionName = "cancel"
+        topHeight = 50;
+        formHeight -= 20;
     }
     var formDict = [{"name": "name", "label": "Name", 'value': recordData["name"], 'placeholder': 'Star Wars', "id": updateRecordType + "ProjectName"},
                     {"name": "projectType", "label": "Type", "value": recordData["projectType"], 'placeholder': 'Film - Feature', "id": updateRecordType + "ProjectType"},
@@ -189,13 +193,21 @@ function getNewRecordFormString(recordData){
         formDict[3]["value"] = recordData["labels"][0]["label"];
     }
 
-    var formString = "<div class='form-style-7' style='border: 1px solid rgba(0,0,0,0.3); background: #f2f2f2; border-radius: 3px;'><div style='position: relative; height: " + addNewRecordFormHeight + "px; width: 100%'>"
+    var formString = "<div class='form-style-7' style='border: 1px solid rgba(0,0,0,0.3); background: #f2f2f2; border-radius: 3px;'><div style='position: relative; height: " + formHeight + "px; width: 100%'>"
 
     // Add title
-    formString += "<div style='position: absolute; left: 0px; top: -10px; text-align: left;'><h2 style='margin-bottom: 5px;'>New Production</h2><h4 style='margin: 5px 0px; font-weight: 300;'>Add a simple record to your filmography, or register a new project <a onclick='redirect(" +'"{{possibleDestinations.createProject}}");' + "'>here</a>.</h4></div>"
+    formString += "<div style='position: absolute; left: 0px; top: -10px; text-align: left;'><h2 style='margin-bottom: 5px;'>"
+    if(edit){
+        formString += "Edit Project";
+    }else{
+        formString += "Add Project"
+    }
+
+    formString += "</h2><h4 style='margin: 5px 0px; font-weight: 300;'>Add a simple record to your filmography, or register a new project <a onclick='redirect(" +'"{{possibleDestinations.createProject}}");' + "'>here</a>.</h4></div>"
 
     // Add left list
-    formString += "<ul style='position: absolute; left: 0; right: 51%; top: 70px; bottom: 0;'>";
+    // Special case: form sub-title fits on 1 line in new project panel, but not in edit panel
+    formString += "<ul style='position: absolute; left: 0; right: 51%; top: " + topHeight + "px; bottom: 0;'>";
     for(var i=0; i < (formDict.length/2); i++){
         formString += "<li style='height: 30px; background: #f2f2f2;'>" + getFormFieldString(formDict[i]) + "</li>";
     }
@@ -203,7 +215,7 @@ function getNewRecordFormString(recordData){
     formString += "<li style='margin-top: 15px; border: none; background: none; text-align: center; padding: 0;'><div id='" + updateRecordType + "CancelButton' onclick='returnToProfile();' class='whiteButton blackHover' style='padding: 6px; padding-top: 15px; width: 94%; height: 35px;'>" + cancelButtonText + "</div></li><li style='display: none;'></li></ul>";
 
     // Add right list
-    formString += "<ul style='position: absolute; left: 51%; right: 0; top: 70px; bottom: 0;'>";
+    formString += "<ul style='position: absolute; left: 51%; right: 0; top: " + topHeight + "px; bottom: 0;'>";
     for(var i=(formDict.length/2); i < formDict.length ; i++){
         if(formDict[i]["name"] != null){
             formString += "<li style='height: 30px; background: #f2f2f2;'>" + getFormFieldString(formDict[i]);
