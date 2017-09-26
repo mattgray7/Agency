@@ -457,7 +457,7 @@ class EditBackgroundView(GenericEditAccountView):
         self.userAccount.gender = self.request.POST.get('gender') != defaultSelectValue and self.request.POST.get("gender") or None
         self.userAccount.hairColor = self.request.POST.get("hairColor") != defaultSelectValue and self.request.POST.get("hairColor") or None
         self.userAccount.eyeColor = self.request.POST.get("eyeColor") != defaultSelectValue and self.request.POST.get("eyeColor") or None
-        self.userAccount.ethnicity = self.request.POST.get("ethnicity") != defaultSelectValue and self.request.POST.get("ethnicityr") or None
+        self.userAccount.ethnicity = self.request.POST.get("ethnicity") != defaultSelectValue and self.request.POST.get("ethnicity") or None
         self.userAccount.build = self.request.POST.get("build") != defaultSelectValue and self.request.POST.get("build") or None
         self.userAccount.height = self.request.POST.get("height")
         self.userAccount.phoneNumber = self.request.POST.get("phoneNumber")
