@@ -130,20 +130,25 @@ def _createNewPost(request, postTypeInstance):
 
 def createUnregisteredProject(request):
     success = False
-    newPostID = None
+    postID = request.POST.get("projectID")
     if request.POST.get("name") and request.user.username:
-        newPostID = helpers.createUniqueID(destDatabase=models.UnregisteredProject,
-                                           idKey="postID")
-        newProject = models.UnregisteredProject(postID=newPostID,
-                                                title=request.POST.get("name"),
-                                                poster=request.user.username,
-                                                projectType=request.POST.get("type"),
-                                                status=request.POST.get("status"),
-                                                profession=request.POST.get("profession"),
-                                                year=request.POST.get("year"))
-        newProject.save()
+        try:
+            projectInstance = models.UnregisteredProject.objects.get(postID=request.POST.get("projectID"))
+        except models.UnregisteredProject.DoesNotExist:
+            postID = helpers.createUniqueID(destDatabase=models.UnregisteredProject,
+                                               idKey="postID")
+            projectInstance = models.UnregisteredProject(postID=postID)
+            projectInstance.save()
+
+        projectInstance.title = request.POST.get("name")
+        projectInstance.poster = request.user.username
+        projectInstance.projectType = request.POST.get("type")
+        projectInstance.status = request.POST.get("status")
+        projectInstance.profession = request.POST.get("profession")
+        projectInstance.year = request.POST.get("year")
+        projectInstance.save();
         success = True
-    return JsonResponse({"success": success, "postID": newPostID})
+    return JsonResponse({"success": success, "postID": postID})
 
 
 def _uploadTempPictureToPostDatabase(request):

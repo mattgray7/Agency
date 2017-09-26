@@ -159,14 +159,16 @@ function getFormFieldString(fieldDict){
 
 var addNewRecordFormHeight = 350;
 function getNewRecordFormString(recordData){
+    var updateRecordType = "existing";
     if(recordData == null){
         recordData = {};
+        updateRecordType = "new"
     }
-    var formDict = [{"name": "name", "label": "Name", 'value': recordData["name"], 'placeholder': 'Star Wars', "id": "newProjectName"},
-                    {"name": "projectType", "label": "Type", "value": recordData["projectType"], 'placeholder': 'Film - Feature', "id": "newProjectType"},
-                    {"name": "status", "label": "Status", "value": recordData["status"], 'placeholder': 'Post-production', "id": "newProjectStatus"},
-                    {"name": "profession", "label": "Profession", 'placeholder': 'Camera Operator', "id": "newProjectProfession"},
-                    {"name": "year", "label": "Year", "value": recordData["year"], 'placeholder': '2017', "id": "newProjectYear"},
+    var formDict = [{"name": "name", "label": "Name", 'value': recordData["name"], 'placeholder': 'Star Wars', "id": updateRecordType + "ProjectName"},
+                    {"name": "projectType", "label": "Type", "value": recordData["projectType"], 'placeholder': 'Film - Feature', "id": updateRecordType + "ProjectType"},
+                    {"name": "status", "label": "Status", "value": recordData["status"], 'placeholder': 'Post-production', "id": updateRecordType + "ProjectStatus"},
+                    {"name": "profession", "label": "Profession", 'placeholder': 'Camera Operator', "id": updateRecordType + "ProjectProfession"},
+                    {"name": "year", "label": "Year", "value": recordData["year"], 'placeholder': '2017', "id": updateRecordType + "ProjectYear"},
                     {},
                     ]
     {% if projectTypes %}
@@ -203,25 +205,25 @@ function getNewRecordFormString(recordData){
         }
     }
     // Add button
-    formString += "<li style='margin-top: 15px; border: none; background: none; text-align: center; padding: 0;'><div class='whiteButton blackHover' style='padding: 6px; padding-top: 15px; width: 94%; height: 35px;' onclick='addNewRecord(" + '"new"' + ");'>Add Project</div></li><li style='display: none;'></li></ul>";
+    formString += "<li style='margin-top: 15px; border: none; background: none; text-align: center; padding: 0;'><div class='whiteButton blackHover' style='padding: 6px; padding-top: 15px; width: 94%; height: 35px;' onclick='addNewRecord(" + '"' + updateRecordType + '", "' + recordData["projectID"] + '"' + ");'>Add Project</div></li><li style='display: none;'></li></ul>";
 
     formString += "</div></div>"
     return formString
 }
 
-function addNewRecord(recordType){
+function addNewRecord(recordType, projectID){
     var name = document.getElementById(recordType + "ProjectName");
     var type = document.getElementById(recordType + "ProjectType");
     var status = document.getElementById(recordType + "ProjectStatus");
     var profession = document.getElementById(recordType + "ProjectProfession");
     var year = document.getElementById(recordType + "ProjectYear");
-
+    //console.log(projectID)
     if([name, type, status, profession, year].indexOf(null) === -1){
         var newProjectDict = {};
         if(name.value != null){
             $.ajax({
                 url : "/ajax/createUnregisteredProject/",
-                data : {"name": name.value, "type": type.value, "status": status.value, "profession": profession.value, "year": year.value},
+                data : {"name": name.value, "type": type.value, "status": status.value, "profession": profession.value, "year": year.value, "projectID": projectID},
                 type : 'POST',
                 dataType: "json",
                 success : function(data) {
@@ -232,6 +234,7 @@ function addNewRecord(recordType){
                         newProjectDict["projectType"] = type.value;
                         newProjectDict["labels"] = [{"label": profession.value}];
                         newProjectDict["year"] = year.value;
+                        newProjectDict["projectID"] = data["postID"];
 
                         profileProjects[data["postID"]] = newProjectDict;
                         var listContent = document.getElementById("profileProjectsListContent");
