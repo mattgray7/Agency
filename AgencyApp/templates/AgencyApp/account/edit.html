@@ -297,12 +297,12 @@ function addNewRecord(recordType, projectID){
                                 toggleExpandEditRecord("shrink", projectID, function(){
                                     var existingRow = document.getElementById("projectFeedRow_" + projectID);
                                     if(existingRow != null){
-                                        existingRow.innerHTML = createProjectFeedElement(newProjectDict);
+                                        existingRow.innerHTML = createProjectFeedElement(newProjectDict, true);
                                     }
                                 })
                             }else{
                                 clearAddNewRecordForm();
-                                listContent.innerHTML = createProjectFeed(profileProjects)
+                                listContent.innerHTML = createProjectFeed(profileProjects, true)
                             }
                         }
                     }
@@ -370,7 +370,7 @@ function removeRecord(projectID){
                             toggleExpandEditRecord("shrink", projectID, function(){
                                 var listContent = document.getElementById("profileProjectsListContent");
                                 if(listContent != null){
-                                    listContent.innerHTML = createProjectFeed(profileProjects)
+                                    listContent.innerHTML = createProjectFeed(profileProjects, true)
                                 }
                             });
                         }
@@ -444,7 +444,7 @@ function removeRecord(projectID){
                         <div id='profileProjectsListContent' style='margin-top: 30px;'>
                             <script>
                                 profileProjects = {{profileProjects|safe}};
-                                document.write(createProjectFeed(profileProjects))
+                                document.write(createProjectFeed(profileProjects, true))
                             </script>
                         </div>
                     </div>

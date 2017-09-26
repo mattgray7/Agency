@@ -1751,7 +1751,7 @@ function getPostParticipantForm(postID, postType, formName, isSubForm, isNewForm
     return formString;
 }
 
-function createProjectFeed(projectDict){
+function createProjectFeed(projectDict, showEdit){
     var feedString = ''
     if(projectDict != null && !$.isEmptyObject(projectDict)){
         feedString += "<div id='projectFeedContainer'><ul class='projectFeed' id='projectFeed'>"
@@ -1774,20 +1774,20 @@ function createProjectFeed(projectDict){
         }
 
         for(var i=0; i < sortedProjectList.length; i++){
-            feedString += "<li id='projectFeedRow_" + sortedProjectList[i]["projectID"] + "' style='position: relative;'>" +createProjectFeedElement(sortedProjectList[i]) + "</li>";
+            feedString += "<li id='projectFeedRow_" + sortedProjectList[i]["projectID"] + "' style='position: relative;'>" + createProjectFeedElement(sortedProjectList[i], showEdit) + "</li>";
         }
         feedString += "</ul></div>";
     }
     return feedString
 }
 
-function createProjectFeedElement(project){
+function createProjectFeedElement(project, showEdit){
     var feedString = '';
     // Add project picture
     feedString += "<div style='position:absolute; left: 5px; top: 5px;'><img src='" + project['postPictureURL'] + "' style='height: 90px;' /></div>"
 
     // Add edit button
-    if(!project["registered"]){
+    if(!project["registered"] && showEdit){
         feedString += "<div style='position: absolute; right: 5px; top: 3px;'><a onclick='toggleExpandEditRecord(" + '"expand", "' + project["projectID"] + '");' + "'>Edit</a></div>"
     }
 
@@ -1822,7 +1822,7 @@ function createProjectFeedElement(project){
     feedString += "</div>";
 
     // Add edit form container
-    if(!project["registered"]){
+    if(!project["registered"] && showEdit){
         feedString += "<div id='editRecordContainer_" + project["projectID"] + "' style='position: absolute; top: 100px; left: 5px; bottom: 5px; right: 5px;' display: none;'></div>"
     }
     return feedString;
