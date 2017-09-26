@@ -213,7 +213,7 @@ function getNewRecordFormString(recordData){
         if(formDict[i]["name"] != null){
             formString += "<li style='height: 30px; background: #f2f2f2;'>" + getFormFieldString(formDict[i]) + "</li>";
         }else{
-            formString += "<li style='height: 32px; border: none; background: none;'></li>"
+            formString += "<li id='" + updateRecordType + "ErrorListContainer' style='height: 51px; border: none; background: none; padding: 0;'></li>"
         }
     }
     // Add button
@@ -236,7 +236,27 @@ function addNewRecord(recordType, projectID){
     }
     if([name, type, status, profession, year].indexOf(null) === -1){
         var newProjectDict = {};
-        if(name.value != null){
+        var errorList = [];
+        var invalidList = []
+        if(name.value == null || name.value.length === 0){
+            invalidList.push("project name")
+        }
+        if(isNaN(year.value) || year.value.length != 4){
+            invalidList.push("year")
+        }
+        if(profession.value == null || profession.value.length === 0){
+            invalidList.push("profession")
+        }
+        if(invalidList.length > 0){
+            var error = "Invalid inputs: ";
+            for(var i=0; i < invalidList.length; i++){
+                error += invalidList[i] + ", "
+            }
+            error = error.substring(0, error.length-2) + ".";
+            errorList.push(error)
+        }
+
+        if(errorList.length === 0){
             $.ajax({
                 url : "/ajax/createUnregisteredProject/",
                 data : {"name": name.value, "type": type.value, "status": status.value, "profession": profession.value, "year": year.value, "projectID": projectID},
@@ -270,6 +290,17 @@ function addNewRecord(recordType, projectID){
                     }
                 }
             });
+        }else{
+            console.log(errorList)
+            var errorListContainer = document.getElementById(recordType + "ErrorListContainer");
+            if(errorListContainer != null){
+                var errorString = "<ul class='errorPanel' style='height: 93%; width: 98%; border-radius: 5px;'>"
+                for(var i=0; i < errorList.length; i++){
+                    errorString += "<li style='border: none; margin: 0px 3px; padding: 0; text-align: left;'>" + errorList[i] + "</li>";
+                }
+                errorString += "</ul>";
+                errorListContainer.innerHTML = errorString;
+            }
         }
     }
 }
