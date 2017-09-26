@@ -122,7 +122,7 @@
                 var tabString = ""
 
                 // Add left panel listing professions
-                tabString += "<div style='position: absolute; left: 5px; top: 0px; bottom: 0px; background: rgba(0,0,0,0.05); border: 1px solid rgba(0,0,0,0.1); width: 215px; margin-left: 5px; text-align: left;'>"
+                /*tabString += "<div style='position: absolute; left: 5px; top: 0px; bottom: 0px; background: rgba(0,0,0,0.05); border: 1px solid rgba(0,0,0,0.1); width: 215px; margin-left: 5px; text-align: left;'>"
                 {% if profileProfessions %}
                     tabString += "<h2 style='margin-left: 7px'>Professions</h2><div style='height: 0px; margin-left: 3px;width: 95%; border-top: 1px solid #000;'></div><ul>"
                     {% for profession in profileProfessions %}
@@ -131,17 +131,16 @@
                     tabString += "</ul>"
                 {% else %}
                     tabString += "No filmography registered."
-                {% endif %}
+                {% endif %}*/
 
                 tabString += "</div>";
 
                 var filmography = {{filmography|safe}};
-                tabString += "<div style='margin-left: 235px; margin-right: 10px; margin-top: 10px;'><h2 style='text-align: left; margin-bottom: 1px;'>Filmography</h2><div style='height: 0px;width: 100%; border-top: 1px solid #000; margin-bottom: 5px;'></div>" + createProjectFeed(filmography, false) + "</div>"
+                tabString += "<div style='margin-left: 10px; margin-right: 10px; margin-top: 10px;'><h2 style='text-align: left; margin-bottom: 1px;'>Filmography</h2><div style='height: 0px;width: 100%; border-top: 1px solid #000; margin-bottom: 5px;'></div>" + createProjectFeed(filmography, false) + "</div>"
 
-                // Add edit button
-                tabString += "<div style='position: absolute; right: 10px; top: 10px;"
+                
                 // Start with edit button
-                tabString += "<div style='position: absolute; top: -3px; right: 15px;'><div class='hoverButton'><a onclick='redirect(" + '"{{ possibleDestinations.filmography }}");' + "'>Edit</a></div></div>";
+                tabString += "<div style='position: absolute; top: 5px; right: 12px;'><div class='editButton'  onclick='redirect(" + '"{{ possibleDestinations.filmography }}");' + "'>Edit</div></div>";
 
                 tabContent.innerHTML = tabString;
             {% endif %}
@@ -404,7 +403,7 @@
 </div>
 
 <script>
-selectProfileTab("bio")
+selectProfileTab("filmography")
 </script>
 
 
