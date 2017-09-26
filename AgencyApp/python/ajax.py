@@ -133,10 +133,10 @@ def createUnregisteredProject(request):
     postID = request.POST.get("projectID")
     if request.POST.get("name") and request.user.username:
         try:
-            projectInstance = models.UnregisteredProject.objects.get(postID=request.POST.get("projectID"))
+            projectInstance = models.UnregisteredProject.objects.get(postID=postID)
         except models.UnregisteredProject.DoesNotExist:
             postID = helpers.createUniqueID(destDatabase=models.UnregisteredProject,
-                                               idKey="postID")
+                                            idKey="postID")
             projectInstance = models.UnregisteredProject(postID=postID)
             projectInstance.save()
 

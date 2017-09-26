@@ -229,6 +229,11 @@ function addNewRecord(recordType, projectID){
     var status = document.getElementById(recordType + "ProjectStatus");
     var profession = document.getElementById(recordType + "ProjectProfession");
     var year = document.getElementById(recordType + "ProjectYear");
+
+    if(projectID === "undefined"){
+        // Special case when passing null dict values through js as strings
+        projectID = null;
+    }
     if([name, type, status, profession, year].indexOf(null) === -1){
         var newProjectDict = {};
         if(name.value != null){
