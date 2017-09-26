@@ -50,7 +50,6 @@ function removeResume(){
 }
 
 function removeIMDBLink(){
-    console.log("here")
     var container = document.getElementById("imdbLinkContainer")
     if(container != null){
         container.innerHTML = "<input type='text' name='imdb' value='' />"
@@ -137,13 +136,20 @@ function getFormFieldString(fieldDict){
         if("options" in fieldDict){
             fieldString += "<select name='" + fieldDict["name"] + "' id='" + fieldDict["id"] + "'>"
             for(var i=0; i < fieldDict['options'].length; i++){
-                fieldString += '<option name="' + fieldDict['options'][i] + '">' + fieldDict['options'][i] + '</option>';
+                fieldString += '<option name="' + fieldDict['options'][i] + '" ';
+                if(fieldDict["value"] != null && fieldDict["value"] === fieldDict["options"][i]){
+                    fieldString += 'selected ';
+                }
+                fieldString += '>' + fieldDict['options'][i] + '</option>';
             }
             fieldString += "</select>"
         }else{
             fieldString += "<input type='text' id='" + fieldDict["id"] + "' name='" + fieldDict["name"] + "' "
             if('placeholder' in fieldDict){
                 fieldString += 'placeholder="' + fieldDict["placeholder"] + '" ';
+            }
+            if(fieldDict['value'] != null){
+                fieldString += 'value="' + fieldDict['value'] + '" '
             }
             fieldString += " />";
         }
@@ -156,10 +162,10 @@ function getNewRecordFormString(recordData){
     if(recordData == null){
         recordData = {};
     }
-    var formDict = [{"name": "projectName", "label": "Name", 'value': recordData["projectName"], 'placeholder': 'Star Wars', "id": "newProjectName"},
+    var formDict = [{"name": "name", "label": "Name", 'value': recordData["name"], 'placeholder': 'Star Wars', "id": "newProjectName"},
                     {"name": "projectType", "label": "Type", "value": recordData["projectType"], 'placeholder': 'Film - Feature', "id": "newProjectType"},
-                    {"name": "projectStatus", "label": "Status", "value": recordData["projectStatus"], 'placeholder': 'Post-production', "id": "newProjectStatus"},
-                    {"name": "profession", "label": "Profession", "value": recordData["profession"], 'placeholder': 'Camera Operator', "id": "newProjectProfession"},
+                    {"name": "status", "label": "Status", "value": recordData["status"], 'placeholder': 'Post-production', "id": "newProjectStatus"},
+                    {"name": "profession", "label": "Profession", 'placeholder': 'Camera Operator', "id": "newProjectProfession"},
                     {"name": "year", "label": "Year", "value": recordData["year"], 'placeholder': '2017', "id": "newProjectYear"},
                     {},
                     ]
@@ -169,6 +175,9 @@ function getNewRecordFormString(recordData){
     {% if projectStatusList %}
         formDict[2]["options"] = {{projectStatusList|safe}};
     {% endif %}
+    if(recordData["labels"] != null && recordData["labels"].length > 0){
+        formDict[3]["value"] = recordData["labels"][0]["label"];
+    }
 
 //
     var formString = "<div class='form-style-7' style='border: 1px solid rgba(0,0,0,0.3); background: #f2f2f2; border-radius: 3px;'><div style='position: relative; height: " + addNewRecordFormHeight + "px; width: 100%'>"
@@ -221,7 +230,7 @@ function addNewRecord(recordType){
                         newProjectDict["postPictureURL"] = "{{images.noPicture}}";
                         newProjectDict["status"] = status.value
                         newProjectDict["projectType"] = type.value;
-                        newProjectDict["labels"] = [{"label": profession.value}]
+                        newProjectDict["labels"] = [{"label": profession.value}];
                         newProjectDict["year"] = year.value;
 
                         profileProjects[data["postID"]] = newProjectDict;
@@ -243,7 +252,7 @@ function toggleExpandEditRecord(toggleType, projectID){
     if(row != null && editContainer != null){
         $("[id='projectFeedRow_" + projectID + "']").animate({marginTop: "0px", height: "497px"}, 500, function(){});
         editContainer.style.display = "block";
-        editContainer.innerHTML = getNewRecordFormString(null)
+        editContainer.innerHTML = getNewRecordFormString(profileProjects[projectID])
     }
 }
 
