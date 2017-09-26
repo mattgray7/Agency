@@ -150,6 +150,14 @@ def createUnregisteredProject(request):
         success = True
     return JsonResponse({"success": success, "postID": postID})
 
+def deleteUnregisteredProject(request):
+    success = False
+    postID = request.POST.get("projectID")
+    if postID:
+        models.UnregisteredProject.objects.filter(postID=postID).delete()
+        success = True;
+    return JsonResponse({"success": success})
+
 
 def _uploadTempPictureToPostDatabase(request):
     success = False

@@ -355,8 +355,29 @@ function toggleExpandEditRecord(toggleType, projectID, animationFinishCallback){
     }
 }
 
-function removeRecord(recordID){
-    console.log("Removing record " + recordID)
+function removeRecord(projectID){
+    if(projectID in profileProjects){
+        delete profileProjects[projectID];
+
+        $.ajax({
+            url : "/ajax/deleteUnregisteredProject/",
+                data : {"projectID": projectID},
+                type : 'POST',
+                dataType: "json",
+                success : function(data) {
+                    if(data["success"]){
+                        if(projectID != null){
+                            toggleExpandEditRecord("shrink", projectID, function(){
+                                var listContent = document.getElementById("profileProjectsListContent");
+                                if(listContent != null){
+                                    listContent.innerHTML = createProjectFeed(profileProjects)
+                                }
+                            });
+                        }
+                    }
+                }
+            });
+    }
 }
 
 
