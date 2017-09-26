@@ -535,7 +535,7 @@ def getUserSearchResults(searchValue, numResults, filters):
     postParticipants = [x.username for x in models.PostParticipant.objects.filter(postID__in=projectIDs)]
     searchLists.append(models.UserAccount.objects.filter(username__in=postParticipants))
 
-    defaultList = models.UserAccount.objects.all().order_by("mainProfession")
+    defaultList = models.UserAccount.objects.all()
     searchLists.append(defaultList)
     if filters:
         for i, searchList in enumerate(searchLists):

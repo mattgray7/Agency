@@ -149,7 +149,9 @@
 
         function redirect(destination){
             // Redirects to to destination
-            var form = createPageRedirectForm("{{next}}", "{{next}}", destination, "{{currentPageURL}}", null, null);
+            var extraInputs = [];
+            extraInputs.push({key: "redirect", value: "True"})
+            var form = createPageRedirectForm("{{next}}", "{{next}}", destination, "{{currentPageURL}}", extraInputs, null);
             form.submit();
         }
 
