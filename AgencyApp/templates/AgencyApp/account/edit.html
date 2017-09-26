@@ -163,7 +163,9 @@ function getNewRecordFormString(recordData){
     var updateButtonText = "Update Project"
     var cancelButtonText = "Remove"
     var cancelButtonOnclickFunctionName = "removeRecord"
+    var edit = true;
     if(recordData == null){
+        edit = false;
         recordData = {};
         updateRecordType = "new"
         updateButtonText = "Add Project"
@@ -187,8 +189,12 @@ function getNewRecordFormString(recordData){
         formDict[3]["value"] = recordData["labels"][0]["label"];
     }
 
-//
     var formString = "<div class='form-style-7' style='border: 1px solid rgba(0,0,0,0.3); background: #f2f2f2; border-radius: 3px;'><div style='position: relative; height: " + addNewRecordFormHeight + "px; width: 100%'>"
+
+    // Add hide button
+    if(edit){
+        formString += "<div style='position: absolute; top: -13px; right: -5px;'><a style='font-size: 1.5em; font-weight: 100;' onclick='toggleExpandEditRecord(" + '"shrink", "' + recordData["projectID"] + '");' + "'>X</a></div>"
+    }
 
     // Add title
     formString += "<div style='position: absolute; left: 0px; top: -10px; text-align: left;'><h2 style='margin-bottom: 5px;'>New Production</h2><h4 style='margin: 5px 0px; font-weight: 300;'>Add a simple record to your filmography, or register a new project <a onclick='redirect(" +'"{{possibleDestinations.createProject}}");' + "'>here</a>.</h4></div>"
@@ -257,13 +263,14 @@ function addNewRecord(recordType, projectID){
     }
 }
 
+var toggleSpeed = 300;
 function toggleExpandEditRecord(toggleType, projectID){
     var row = document.getElementById("projectFeedRow_" + projectID);
     var editContainer = document.getElementById("editRecordContainer_" + projectID)
 
     if(row != null && editContainer != null){
         if(toggleType === "expand"){
-            $("[id='projectFeedRow_" + projectID + "']").animate({marginTop: "0px", height: "497px"}, 500, function(){});
+            $("[id='projectFeedRow_" + projectID + "']").animate({marginTop: "0px", height: "497px"}, toggleSpeed, function(){});
             editContainer.style.display = "block";
             editContainer.innerHTML = getNewRecordFormString(profileProjects[projectID])
             
@@ -275,7 +282,7 @@ function toggleExpandEditRecord(toggleType, projectID){
                 }
             }
         }else{
-            $("[id='projectFeedRow_" + projectID + "']").animate({marginTop: "0px", height: "100px"}, 500, function(){editContainer.style.display = "none";});
+            $("[id='projectFeedRow_" + projectID + "']").animate({marginTop: "0px", height: "100px"}, toggleSpeed, function(){editContainer.style.display = "none";});
         }
     }
 }
