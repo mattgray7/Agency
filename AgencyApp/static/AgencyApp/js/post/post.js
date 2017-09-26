@@ -1795,7 +1795,12 @@ function createProjectFeedElement(project, showEdit){
     feedString += "<div style='position: absolute; left: 95px; top: 0px;'>";
 
     // Add title
-    feedString += "<h2 style=''><a style='font-weight: 400; font-size: 0.9em' onclick='redirectToPost(" + '"' + project["projectID"] + '");' + "'>" + project["name"] + "</a>"
+    feedString += "<h2 style=''><a style='font-weight: 400; font-size: 0.9em' "
+    if(project["registered"]){
+        // Don't add link to unregistered project
+         feedString += " onclick='redirectToPost(" + '"' + project["projectID"] + '");' + "' "
+    }
+    feedString += ">" + project["name"] + "</a>"
     if("year" in project){
         feedString += "<font style='font-weight: 400; font-size: 0.9em'> (" + project["year"] + ")</font>";
     }

@@ -211,7 +211,12 @@ function getNewRecordFormString(recordData){
     formString += "<ul style='position: absolute; left: 51%; right: 0; top: 70px; bottom: 0;'>";
     for(var i=(formDict.length/2); i < formDict.length ; i++){
         if(formDict[i]["name"] != null){
-            formString += "<li style='height: 30px; background: #f2f2f2;'>" + getFormFieldString(formDict[i]) + "</li>";
+            formString += "<li style='height: 30px; background: #f2f2f2;'>" + getFormFieldString(formDict[i]);
+            if(formDict[i]["name"] === "profession"){
+                // Add dropdown
+                formString += '<div id="profileProfessionDropdown" class="previewDropdownPanel" style="position: absolute; left: 5px; right: 6px; top: 69px; border: 1px solid #86898e; display: none;"></div>'
+            }
+            formString += "</li>";
         }else{
             formString += "<li id='" + updateRecordType + "ErrorListContainer' style='height: 50px; border: none; background: none; padding: 0;'></li>"
         }
@@ -344,6 +349,9 @@ function toggleExpandEditRecord(toggleType, projectID, animationFinishCallback){
                     removeRecord(projectID);
                 }
             }
+
+            // Need to add dropdown callback
+            //addProfileProfessionDropdownCallback("searchPreviewProfessions", {}, "newProjectProfession", "profileProfessionDropdown")
         }else{
             $("[id='projectFeedRow_" + projectID + "']").animate({marginTop: "0px", height: "100px"}, toggleSpeed, function(){
                 editContainer.style.display = "none";
@@ -433,6 +441,7 @@ function removeRecord(projectID){
                 <div id='addNewRecordContainer' style='width: 87%; margin: 10px auto;'>
                     <script>
                         document.write(getNewRecordFormString(null));
+                        addProfileProfessionDropdownCallback("searchPreviewProfessions", {}, "newProjectProfession", "profileProfessionDropdown", false)
                     </script>
                 </div>
 
@@ -534,7 +543,7 @@ function removeRecord(projectID){
                                     lineString += '{{field}}';
                                 }
                                 document.write(lineString);
-                                addProfileProfessionDropdownCallback("searchPreviewProfessions", {}, "profileProfessionTextInput", "profileProfessionDropdown")
+                                addProfileProfessionDropdownCallback("searchPreviewProfessions", {}, "profileProfessionTextInput", "profileProfessionDropdown", true)
                             {% endfor %}
 
 
