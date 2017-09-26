@@ -1774,56 +1774,57 @@ function createProjectFeed(projectDict){
         }
 
         for(var i=0; i < sortedProjectList.length; i++){
-            project = sortedProjectList[i]
-            feedString += "<li id='projectFeedRow_" + project["projectID"] + "' style='position: relative;'>"
-
-            // Add project picture
-            feedString += "<div style='position:absolute; left: 5px; top: 5px;'><img src='" + project['postPictureURL'] + "' style='height: 90px;' /></div>"
-
-            // Add edit button
-            if(!project["registered"]){
-                feedString += "<div style='position: absolute; right: 5px; top: 3px;'><a onclick='toggleExpandEditRecord(" + '"expand", "' + project["projectID"] + '");' + "'>Edit</a></div>"
-            }
-
-            // Add text container
-            feedString += "<div style='position: absolute; left: 95px; top: 0px;'>";
-
-            // Add title
-            feedString += "<h2 style=''><a style='font-weight: 400; font-size: 0.9em' onclick='redirectToPost(" + '"' + project["projectID"] + '");' + "'>" + project["name"] + "</a>"
-            if("year" in project){
-                feedString += "<font style='font-weight: 400; font-size: 0.9em'> (" + project["year"] + ")</font>";
-            }
-            feedString += "</h2>";
-
-            // Add label
-            if(project["labels"]){
-                feedString += "<div style='color: rgba(0,0,0,0.8); font-size: 1.1em; font-style: italic; margin-top: -2px;'>"
-                var labelString = '';
-                for(var j=0; j < project["labels"].length; j++){
-                    labelString += project["labels"][j]["label"]
-                    if(project["labels"][j]["extra"]){
-                        labelString += " (" + project["labels"][j]["extra"] + ")";
-                    }
-                    labelString += ', '
-                }
-                labelString = labelString.substring(0, labelString.length - 2);
-                feedString += labelString;
-                feedString += "</div>"
-            }
-
-            // Add project type
-            feedString += "<div style='color: rgba(0,0,0,0.3);'>" + project["projectType"] + "</div>"
-            feedString += "</div>";
-
-            // Add edit form container
-            if(!project["registered"]){
-                feedString += "<div id='editRecordContainer_" + project["projectID"] + "' style='position: absolute; top: 100px; left: 5px; bottom: 5px; right: 5px;' display: none;'></div>"
-            }
-
-            feedString += "</li>";
+            feedString += "<li id='projectFeedRow_" + sortedProjectList[i]["projectID"] + "' style='position: relative;'>" +createProjectFeedElement(sortedProjectList[i]) + "</li>";
         }
         feedString += "</ul></div>";
     }
     return feedString
+}
+
+function createProjectFeedElement(project){
+    var feedString = '';
+    // Add project picture
+    feedString += "<div style='position:absolute; left: 5px; top: 5px;'><img src='" + project['postPictureURL'] + "' style='height: 90px;' /></div>"
+
+    // Add edit button
+    if(!project["registered"]){
+        feedString += "<div style='position: absolute; right: 5px; top: 3px;'><a onclick='toggleExpandEditRecord(" + '"expand", "' + project["projectID"] + '");' + "'>Edit</a></div>"
+    }
+
+    // Add text container
+    feedString += "<div style='position: absolute; left: 95px; top: 0px;'>";
+
+    // Add title
+    feedString += "<h2 style=''><a style='font-weight: 400; font-size: 0.9em' onclick='redirectToPost(" + '"' + project["projectID"] + '");' + "'>" + project["name"] + "</a>"
+    if("year" in project){
+        feedString += "<font style='font-weight: 400; font-size: 0.9em'> (" + project["year"] + ")</font>";
+    }
+    feedString += "</h2>";
+
+    // Add label
+    if(project["labels"]){
+        feedString += "<div style='color: rgba(0,0,0,0.8); font-size: 1.1em; font-style: italic; margin-top: -2px;'>"
+        var labelString = '';
+        for(var j=0; j < project["labels"].length; j++){
+            labelString += project["labels"][j]["label"]
+            if(project["labels"][j]["extra"]){
+                labelString += " (" + project["labels"][j]["extra"] + ")";
+            }
+            labelString += ', '
+        }
+        labelString = labelString.substring(0, labelString.length - 2);
+        feedString += labelString;
+        feedString += "</div>"
+    }
+
+    // Add project type
+    feedString += "<div style='color: rgba(0,0,0,0.3);'>" + project["projectType"] + "</div>"
+    feedString += "</div>";
+
+    // Add edit form container
+    if(!project["registered"]){
+        feedString += "<div id='editRecordContainer_" + project["projectID"] + "' style='position: absolute; top: 100px; left: 5px; bottom: 5px; right: 5px;' display: none;'></div>"
+    }
+    return feedString;
 }
 

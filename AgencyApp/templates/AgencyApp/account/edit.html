@@ -256,7 +256,13 @@ function addNewRecord(recordType, projectID){
                         var listContent = document.getElementById("profileProjectsListContent");
                         if(listContent != null){
                             if(projectID != null){
-                                toggleExpandEditRecord("shrink", projectID)
+                                // Editing
+                                toggleExpandEditRecord("shrink", projectID, function(){
+                                    var existingRow = document.getElementById("projectFeedRow_" + projectID);
+                                    if(existingRow != null){
+                                        existingRow.innerHTML = createProjectFeedElement(newProjectDict);
+                                    }
+                                })
                             }else{
                                 listContent.innerHTML = createProjectFeed(profileProjects)
                             }
@@ -269,13 +275,17 @@ function addNewRecord(recordType, projectID){
 }
 
 var toggleSpeed = 300;
-function toggleExpandEditRecord(toggleType, projectID){
+function toggleExpandEditRecord(toggleType, projectID, animationFinishCallback){
     var row = document.getElementById("projectFeedRow_" + projectID);
     var editContainer = document.getElementById("editRecordContainer_" + projectID)
 
     if(row != null && editContainer != null){
         if(toggleType === "expand"){
-            $("[id='projectFeedRow_" + projectID + "']").animate({marginTop: "0px", height: "497px"}, toggleSpeed, function(){});
+            $("[id='projectFeedRow_" + projectID + "']").animate({marginTop: "0px", height: "497px"}, toggleSpeed, function(){
+                 if(animationFinishCallback != null){
+                    animationFinishCallback();
+                }
+            });
             editContainer.style.display = "block";
             editContainer.innerHTML = getNewRecordFormString(profileProjects[projectID])
             
@@ -287,7 +297,12 @@ function toggleExpandEditRecord(toggleType, projectID){
                 }
             }
         }else{
-            $("[id='projectFeedRow_" + projectID + "']").animate({marginTop: "0px", height: "100px"}, toggleSpeed, function(){editContainer.style.display = "none";});
+            $("[id='projectFeedRow_" + projectID + "']").animate({marginTop: "0px", height: "100px"}, toggleSpeed, function(){
+                editContainer.style.display = "none";
+                if(animationFinishCallback != null){
+                    animationFinishCallback();
+                }
+            });
         }
     }
 }
