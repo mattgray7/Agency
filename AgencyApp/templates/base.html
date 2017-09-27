@@ -340,7 +340,7 @@
                                 {% csrf_token %}
                                 <input type="hidden" name="source" value="{{ next }}">
                                 <input type="hidden" name="next" value="{{ toolbarDestinations.home }}">
-                                <a>Van Film Collective</a>
+                                <img src='{{images.logo}}' style='max-height: 70px;'>
                             </form>
                         </h1>
                     </div>
@@ -392,6 +392,15 @@
                                 </li>
                             {% endif %}
                         </ul>
+                    </div>
+                    <div id='menuAlt' style='display: none; margin-right: 10px; margin-top: -10px;'>
+                        <div id='menuAltButton' style='border: 2px solid #FFF; border-radius: 4px; height: 30px; width: 45px; text-align: center;'>
+                            <ul style='width: 50%; margin-top: 16%; margin-left: 25%;'>
+                                <li style='border-bottom: 1px solid #FFF; margin-top: 6px;'></li>
+                                <li style='border-bottom: 1px solid #FFF; margin-top: 6px;'></li>
+                                <li style='border-bottom: 1px solid #FFF; margin-top: 6px;'></li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -543,7 +552,44 @@
                 }
             }
 
+            function toggleHeaderType(toggleType){
+                var largeMenu = document.getElementById("menu");
+                var smallMenu = document.getElementById("menuAlt");
+                if(largeMenu != null && smallMenu != null){
+                    if(toggleType === "expand"){
+                        console.log("expanding")
+                        smallMenu.style.display = "none";
+                        largeMenu.style.display = "block";
+                        headerType = "expanded"
+                    }else{
+                        smallMenu.style.display = "block";
+                        largeMenu.style.display = "none";
+                        headerType = "shrunk"
+                    }
+                }
+            }
+
+            var headerType = "expanded"
+            function resizeHeader(){
+                var header = document.getElementById("header")
+                if(header != null){
+                    if(header.offsetWidth < 538){
+                        if(headerType === "expanded"){
+                            toggleHeaderType("shrink")
+                        }
+                    }else{
+                        if(headerType === "shrunk"){
+                            toggleHeaderType("expand")
+                        }
+                    }
+                }
+            }
+
             $(document).ready(function(){
+                resizeHeader();
+                $(window).resize(function(){
+                    resizeHeader();
+                });
                 $(document).find('div').each(function(){
                     var divID = $(this).attr('id');
                     if(divID != null){
@@ -556,6 +602,8 @@
                     }
                 });
             });
+
+            
 
         </script>
         

@@ -843,7 +843,7 @@
 	#header
 	{
 		position: relative;
-		padding: 3em 0em;
+		padding: 2.5em 0em;
 	}
 
 /*********************************************************************************/
@@ -853,8 +853,8 @@
 	#logo
 	{
 		position: absolute;
-		top: 1.2em;
-		left: 1.0em;
+		top: 5px;
+		left: 5px;
 	}
 	
 	#logo h1
@@ -881,11 +881,22 @@
 /* Menu                                                                          */
 /*********************************************************************************/
 
-	#menu
+	#menu,
+	#menuAlt
 	{
 		position: absolute;
-		top: 2.6em;
+		top: 2.0em;
 		right: 0;
+	}
+
+	#menuAltButton
+	{
+
+	}
+
+	#menuAltButton:hover
+	{
+		cursor: pointer;
 	}
 	
 	#menu ul

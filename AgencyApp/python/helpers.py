@@ -125,6 +125,7 @@ def getBaseContext(request):
                            "noPicture": constants.NO_PICTURE_PATH,
                            "loadingGif": constants.LOADING_GIF,
                            "plus": constants.PLUS_SIGN_PATH,
+                           "logo": constants.LOGO_PATH,
                            "loading": {"light": constants.LOADING_GIF.replace("loading.gif", "loading_light.gif"),
                                        "mid": constants.LOADING_GIF.replace("loading.gif", "loading_mid.gif"),
                                        "dark": constants.LOADING_GIF.replace("loading.gif", "loading_dark.gif")}}
