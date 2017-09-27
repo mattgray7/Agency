@@ -114,6 +114,7 @@ class ProfileView(views.GenericFormView):
                                       "resume": constants.RESUME_ICON_PATH}
 
         self._pageContext["possibleDestinations"] = {"picture": constants.EDIT_PROFILE_PICTURE,
+                                                     "media": constants.EDIT_PROFILE_PICTURE,
                                                      "background": constants.EDIT_BACKGROUND,
                                                      "interests": constants.EDIT_INTERESTS,
                                                      "filmography": constants.EDIT_FILMOGRAPHY,

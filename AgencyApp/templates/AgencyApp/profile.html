@@ -131,9 +131,9 @@
                     tabString += "</ul>"
                 {% else %}
                     tabString += "No filmography registered."
-                {% endif %}*/
+                {% endif %}
 
-                tabString += "</div>";
+                tabString += "</div>";*/
 
                 var filmography = {{filmography|safe}};
                 tabString += "<div style='margin-left: 10px; margin-right: 10px; margin-top: 10px;'><h2 style='text-align: left; margin-bottom: 1px;'>Filmography</h2><div style='height: 0px;width: 100%; border-top: 1px solid #000; margin-bottom: 5px;'></div>" + createProjectFeed(filmography, false) + "</div>"
@@ -150,7 +150,20 @@
     }
 
     function displayMedia(){
-        console.log("media")
+        var tabContent = document.getElementById("profileTabContentPanel")
+        if(tabContent != null){
+            var tabString = "<div style='position: relative; min-height: 100px; width: 100%;'>";
+
+            // Start with edit button
+            {% if viewingOwnProfile %}
+                tabString += "<div style='position: absolute; top: 5px; right: 12px;'><div class='editButton'  onclick='redirect(" + '"{{ possibleDestinations.media }}");' + "'>Edit</div></div>";
+            {% endif %}
+
+            tabString += "</div>"
+
+
+            tabContent.innerHTML = tabString;
+        }
     }
 
     function displayEndorsements(){
@@ -409,6 +422,9 @@ var defaultTab = "bio";
 if("{{source}}" === "EDIT_FILMOGRAPHY"){
     defaultTab = "filmography";
 }
+
+//for testing
+defaultTab = "media";
 selectProfileTab(defaultTab)
 </script>
 

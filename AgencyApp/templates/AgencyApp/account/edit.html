@@ -403,9 +403,14 @@ function removeRecord(projectID){
                         }
                     }
                 }
-            });
+        });
     }
 }
+
+/*******************************************************************/
+
+
+/************************ EDIT_MEDIA ***************************/
 
 
 
@@ -604,14 +609,14 @@ function removeRecord(projectID){
             });
 
         </script>
-    {% elif next == possibleDestinations.picture %}
-        {% load static %}
-        <link href="{% static "/AgencyApp/css/image.css" %}" rel="stylesheet" type="text/css" media="all" />
-        <link href="{% static "/AgencyApp/js/image/resources/jquery.selectareas.css" %}" media="screen" rel="stylesheet" type="text/css" />
-        <script src="{% static "/AgencyApp/js/image/jquery.selectareas.js" %}"></script>
-        <script type="text/javascript" src="{% static "/AgencyApp/js/image/image.js" %}"></script>
+{% elif next == possibleDestinations.picture %}
+    {% load static %}
+    <link href="{% static "/AgencyApp/css/image.css" %}" rel="stylesheet" type="text/css" media="all" />
+    <link href="{% static "/AgencyApp/js/image/resources/jquery.selectareas.css" %}" media="screen" rel="stylesheet" type="text/css" />
+    <script src="{% static "/AgencyApp/js/image/jquery.selectareas.js" %}"></script>
+    <script type="text/javascript" src="{% static "/AgencyApp/js/image/image.js" %}"></script>
 
-        <script>
+    <script>
         function skipProfilePicture(){
             var extraInputs = []
             extraInputs.push({key: "{{ cancel }}", value: "True"});
@@ -660,60 +665,100 @@ function removeRecord(projectID){
                 }
             });
         }
-        </script>
-        <div id='backgroundPanel' class='backgroundPanel' style='min-width: 634px; min-height: 100%;'>
+    </script>
+    <div id='backgroundPanel' class='backgroundPanel' style='min-width: 634px; min-height: 100%;'>
         <div id="mainViewPanel" class="mainViewPanel" style="position: relative; min-width: 600px; max-width: 600px; background: rgba(0,0,0,0.05); border: none;">
             <script>
             document.write(createEditAccountButtonHeader("Media"))
             </script>
 
-        <center>
-            <div id="profilePicturePanel" class="editProfilePicturePanel" style="height: 600px;">
-                {% if userAccount and userAccount.profilePicture %}
-                    <h2> Edit Profile Picture </h2>
-                {% else %}
-                    <h2> Add Profile Picture </h2>
-                {% endif %}
-                <br>
-                
-                <center>
-                    <div style='position: relative; width: 300px;'>
-                        <div id="loadingPictureGrayOverlay" class="hiddenGrayPopupOverlay" style="background: rgba(0,0,0,0); height:0%; width:0%; position: absolute; margin-left: 0px; margin-top: 11px; top:0; z-index: 3">
-                            <img id='loadingGif' src='{{images.loading.light}}' style='height: 40px; width: 40px; display: none; margin-top: 52%; margin-left: 2%;'></div>
-                    </div>
-                    <div id="profilePictureDiv" class="profilePictureDiv" style='width: 300px;'>
-                        <!-- Image div created in loadImage() -->
-                    </div>
-                </center>
-                <br>
-
-                <form method="post" id="editPictureForm" action="{{ currentPageURL }}" enctype="multipart/form-data" style="text-slign: center;">
-                    {% csrf_token %} 
-                    {{ form.as_p }}
-
+            <center>
+                <div id="profilePicturePanel" class="editProfilePicturePanel" style="height: 400px;">
                     {% if userAccount and userAccount.profilePicture %}
-                        <div id="removeButton" class="whiteButton blackHover" style="width:24.1%; height:28px;" onclick="removeProfilePicture();">
-                            Remove
-                        </div>
+                        <h2> Edit Profile Picture </h2>
                     {% else %}
-                        <div id="skipButton" class="whiteButton blackHover" style="width:24.1%; height:28px;" onclick="skipProfilePicture();">
-                            Skip
-                        </div>
+                        <h2> Add Profile Picture </h2>
                     {% endif %}
-                    <div id="continueButton" class="whiteButton blackHover" style="width:24.1%; height:28px" onclick="submitPictureFormWithCrop('editPictureForm')">
-                        Update
-                    </div>
-                    <div id="cropInfoInputs"></div>
-                </form>
-            </div>
-        </center>
+                    <br>
+                    
+                    <center>
+                        <div style='position: relative; width: 300px;'>
+                            <div id="loadingPictureGrayOverlay" class="hiddenGrayPopupOverlay" style="background: rgba(0,0,0,0); height:0%; width:0%; position: absolute; margin-left: 0px; margin-top: 11px; top:0; z-index: 3">
+                                <img id='loadingGif' src='{{images.loading.light}}' style='height: 40px; width: 40px; display: none; margin-top: 52%; margin-left: 2%;'></div>
+                        </div>
+                        <div id="profilePictureDiv" class="profilePictureDiv" style='width: 300px;'>
+                            <!-- Image div created in loadImage() -->
+                        </div>
+                    </center>
+                    <br>
 
-        <script>
-            loadPictureCropTool();
-        </script>
+                    <form method="post" id="editPictureForm" action="{{ currentPageURL }}" enctype="multipart/form-data" style="text-aslign: center; margin-top: -10px;">
+                        {% csrf_token %} 
+                        {{ form.as_p }}
+
+                        <!--{% if userAccount and userAccount.profilePicture %}
+                            <div id="removeButton" class="whiteButton blackHover" style="width:24.1%; height:28px;" onclick="removeProfilePicture();">
+                                Remove
+                            </div>
+                        {% else %}
+                            <div id="skipButton" class="whiteButton blackHover" style="width:24.1%; height:28px;" onclick="skipProfilePicture();">
+                                Skip
+                            </div>
+                        {% endif %}
+                        <div id="continueButton" class="whiteButton blackHover" style="width:24.1%; height:28px" onclick="submitPictureFormWithCrop('editPictureForm')">
+                            Update
+                        </div>-->
+                        <div id="cropInfoInputs"></div>
+                    </form>
+                </div>
+            </center>
+            <div style='height: 20px; background: #FFF;'></div>
+            <div id='otherMediaPanel' style='background: #FFF; position: relative; height: 600px;'>
+                <h2> Other Media</h2>
+                <div id='photosPanel' style='position: absolute; left: 20px; right: 20px; top: 50px; height:500px; border: 1px solid rgba(0,0,0,0.1); border-radius: 3px; background: rgba(0,0,0,0.03'>
+                    <div style='position: relative; height: 100%; width: 100%;'>
+                        <h3 style='position: absolute; left: 5px; top: 5px; margin: 0;'>
+                            Photos
+                        </h3>
+
+                        <div id='photosListPanel' style='position: absolute; left: 0; right: 0; top: 40px; height: 200px; background: #FFF'>
+                        </div>
+
+                        <div id='newPhotoPanel' style='position: absolute; left: 0; right: 0; top: 250px; bottom: 0; text-align: left; background: #FFF; border: 1px solid rgba(0,0,0,0.1);'>
+                            <div style='position: relative; height: 100%;'>
+                                <div class='form-style-7' style='width: 53%; margin-left: 0px; display:'>
+                                    <ul>
+                                        <script>
+                                            var newPhotoFields = [{"label": "New File", "type": "file", "name": "newPhotoFile"},
+                                                                  {"label": "Description", "type": "text", "name": "newDescription"}]
+                                            for(var i=0; i < newPhotoFields.length; i++){
+                                                var newString = "<li style='height: 30px;'><label for='name'>" + newPhotoFields[i]["label"] + "</label><input type='" + newPhotoFields[i]["type"] + "' name='" + newPhotoFields[i]["name"] + "'></li>"
+                                                document.write(newString)
+                                            }
+                                        </script>
+                                        <li style='border: none; margin-top: 15px; padding: 0px 0px;'>
+                                            <div id="continueButton" class="whiteButton blackHover" style="display: block; height:28px; text-align: center; padding: 0.7em 3em;" onclick="submitPictureFormWithCrop('editPictureForm')">
+                                                Add photo
+                                            </div>
+                                        </li>
+                                    </ul>
+                                    
+                                </div>
+                                <div style='position: absolute; left: 60%; right: 10px; top: 10px; bottom: 10px; border: 1px solid #000;'>
+                                </div>
+
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <script>
+                loadPictureCropTool();
+            </script>
         </div>
     </div>
-
 {% elif next == possibleDestinations.interests %}
     <div id='backgroundPanel' class='backgroundPanel' style='min-width: 1020px; min-height: 100%;'>
      <div id="mainViewPanel" class="mainViewPanel" style="position: relative; min-width: 1000px; max-width: 1000px; background: rgba(0,0,0,0.05); border: none;">
