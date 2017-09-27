@@ -843,7 +843,7 @@
 	#header
 	{
 		position: relative;
-		padding: 2.5em 0em;
+		padding: 2.0em 0em;
 	}
 
 /*********************************************************************************/
@@ -885,18 +885,25 @@
 	#menuAlt
 	{
 		position: absolute;
-		top: 2.0em;
+		top: 1.2em;
 		right: 0;
 	}
 
 	#menuAltButton
 	{
-
+		border: 2px solid rgba(255,255,255,0.80);
 	}
 
 	#menuAltButton:hover
 	{
 		cursor: pointer;
+		border: 2px solid #FFF;
+	}
+
+	#menuAltButton li
+	{
+		border-bottom: 1px solid rgba(255,255,255,0.80);
+		margin-top: 6px;
 	}
 	
 	#menu ul

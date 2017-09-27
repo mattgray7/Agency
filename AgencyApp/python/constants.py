@@ -19,7 +19,8 @@ LOADING_GIF = "/media/default/loading.gif"
 PLUS_SIGN_PATH = "/media/default/plus.png"
 IMDB_LOGO_PATH = "/media/default/imdbLogo.png"
 RESUME_ICON_PATH = "/media/default/resume.png"
-LOGO_PATH = "/media/default/logo.png"
+#LOGO_PATH = "/media/default/logo.png"
+LOGO_PATH = "/media/default/logo2.png"
 
 # Source page enums:
 HOME = "HOME"
