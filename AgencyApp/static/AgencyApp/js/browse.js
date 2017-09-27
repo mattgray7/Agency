@@ -142,6 +142,7 @@ function getUsersFilterValues(){
     filters = _addSelectFilterValues(filters, "usersIMDBSelect", "imdb")
     filters = _addSelectFilterValues(filters, "usersResumeSelect", "resume")
     filters = _addSelectFilterValues(filters, "usersGenderSelect", "gender")
+    filters = _addSelectFilterValues(filters, "usersAgeRangeSelect", "ageRange")
     filters = _addSelectFilterValues(filters, "usersBuildSelect", "build")
     filters = _addSelectFilterValues(filters, "usersHairColorSelect", "hairColor")
     filters = _addSelectFilterValues(filters, "usersEyeColorSelect", "eyeColor")

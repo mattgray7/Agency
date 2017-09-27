@@ -548,7 +548,17 @@ def getUserSearchResults(searchValue, numResults, filters):
             if filters.get("interest"):
                 searchLists[i] = searchLists[i].filter(interest=filters.get("interest"))"""
             if filters.get("ageRange"):
-                searchLists[i] = searchLists[i].filter(ageRange=filters.get("ageRange"))
+                splitted = filters.get("ageRange").split(" - ")
+                startAge = int(splitted[0])
+                endAge = int(splitted[1])
+
+                # Get birthdate of start and end dates, which can be used to filter user DOBs
+                today = datetime.date.today()
+                startBirthDate = today - datetime.timedelta(days=startAge * 365)
+                endBirthDate = today - datetime.timedelta(days=endAge * 365)
+
+                # DOB should be endBirthDate <= DOB <= startBirthDate, since start is younger than end
+                searchLists[i] = searchLists[i].filter(dateOfBirth__lte=startBirthDate, dateOfBirth__gte=endBirthDate)
             if filters.get("build"):
                 searchLists[i] = searchLists[i].filter(build=filters.get("build"))
             if filters.get("gender"):
