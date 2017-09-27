@@ -12,6 +12,7 @@ import genericViews as views
 import models
 
 import json
+import copy
 import datetime
 
 
@@ -540,7 +541,16 @@ def getUserSearchResults(searchValue, numResults, filters):
     if filters:
         for i, searchList in enumerate(searchLists):
             if filters.get("professions"):
-                searchLists[i] = searchLists[i].filter(mainProfession__in=filters.get("professions"))
+                newList = []
+
+                # Since professions are a property and not attribute of user, need to scan the ProfileProfession
+                # db for each user in the current search list
+                for user in searchLists[i]:
+                    profileProfessions = [x.profession for x in models.ProfileProfession.objects.filter(username=user.username)]
+                    for filteredProfession in filters.get("professions"):
+                        if filteredProfession in profileProfessions:
+                            newList.append(user)
+                searchLists[i] = copy.deepcopy(newList)
             if filters.get("imdb") == "Yes":
                 searchLists[i] = searchLists[i].exclude(imdbLink=None)
             if filters.get("resume") == "Yes":
