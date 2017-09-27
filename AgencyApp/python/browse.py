@@ -540,37 +540,26 @@ def getUserSearchResults(searchValue, numResults, filters):
     searchLists.append(defaultList)
     if filters:
         for i, searchList in enumerate(searchLists):
-            if filters.get("professions"):
-                newList = []
-
-                # Since professions are a property and not attribute of user, need to scan the ProfileProfession
-                # db for each user in the current search list
-                for user in searchLists[i]:
-                    profileProfessions = [x.profession for x in models.ProfileProfession.objects.filter(username=user.username)]
-                    for filteredProfession in filters.get("professions"):
-                        if filteredProfession in profileProfessions:
-                            newList.append(user)
-                searchLists[i] = copy.deepcopy(newList)
             if filters.get("imdb") == "Yes":
                 searchLists[i] = searchLists[i].exclude(imdbLink=None)
             if filters.get("resume") == "Yes":
                 searchLists[i] = searchLists[i].exclude(resume="")
             """To be added when actor attributes and availability are better defined
             if filters.get("interest"):
-                searchLists[i] = searchLists[i].filter(interest=filters.get("interest"))
+                searchLists[i] = searchLists[i].filter(interest=filters.get("interest"))"""
             if filters.get("ageRange"):
                 searchLists[i] = searchLists[i].filter(ageRange=filters.get("ageRange"))
             if filters.get("build"):
                 searchLists[i] = searchLists[i].filter(build=filters.get("build"))
-            if filters.get("compensation"):
-                searchLists[i] = searchLists[i].filter(compensationType=filters.get("compensation"))
+            if filters.get("gender"):
+                searchLists[i] = searchLists[i].filter(gender=filters.get("gender"))
             if filters.get("hairColor"):
                 searchLists[i] = searchLists[i].filter(hairColor=filters.get("hairColor"))
             if filters.get("eyeColor"):
                 searchLists[i] = searchLists[i].filter(eyeColor=filters.get("eyeColor"))
             if filters.get("ethnicity"):
                 searchLists[i] = searchLists[i].filter(ethnicity=filters.get("ethnicity"))
-            if filters.get("dates"):
+            """if filters.get("dates"):
                 start = filters.get("dates").get("start")
                 end = filters.get("dates").get("end")
                 if start:
@@ -581,6 +570,18 @@ def getUserSearchResults(searchValue, numResults, filters):
                     endSplitted = end.split("-")
                     endDate = datetime.date(int(endSplitted[0]), int(endSplitted[1]), int(endSplitted[2]))
                     searchLists[i] = searchLists[i].filter(endDate__lte=endDate)"""
+            if filters.get("professions"):
+                # Professions has to be last as it changes searchList format from queryset to list
+                newList = []
+
+                # Since professions are a property and not attribute of user, need to scan the ProfileProfession
+                # db for each user in the current search list
+                for user in searchLists[i]:
+                    profileProfessions = [x.profession for x in models.ProfileProfession.objects.filter(username=user.username)]
+                    for filteredProfession in filters.get("professions"):
+                        if filteredProfession in profileProfessions:
+                            newList.append(user)
+                searchLists[i] = copy.deepcopy(newList)
 
     defaultList = searchLists.pop()
     return getPostSearchResults(searchValue=searchValue,
