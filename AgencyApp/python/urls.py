@@ -42,11 +42,13 @@ urlpatterns = [
     url(r'^ajax/createNewCastingPost/$', ajax.createNewCastingPost, name='createNewCastingPost'),  #TODO find a way to secure this link
     url(r'^ajax/createNewWorkPost/$', ajax.createNewWorkPost, name='createNewWorkPost'),  #TODO find a way to secure this link
     url(r'^ajax/createNewEventPost/$', ajax.createNewEventPost, name='createNewEventPost'),  #TODO find a way to secure this link
+    
     url(r'^ajax/createUnregisteredProject/$', ajax.createUnregisteredProject, name='createUnregisteredProject'),  #TODO find a way to secure this link
     url(r'^ajax/deleteUnregisteredProject/$', ajax.deleteUnregisteredProject, name='deleteUnregisteredProject'),
     url(r'^ajax/editExistingPost/$', ajax.editExistingPost, name='editExistingPost'),
     url(r'^ajax/updatePostPicture/$', ajax.updatePostPicture, name='updatePostPicture'),  #TODO find a way to secure this link
     url(r'^ajax/saveTempPostPicture/$', ajax.saveTempPostPicture, name='saveTempPostPicture'),  #TODO find a way to secure this link
+    url(r'^ajax/saveProfileMediaPicture/$', ajax.saveProfileMediaPicture, name='saveProfileMediaPicture'),
     url(r'^ajax/savePostParticipant/$', ajax.savePostParticipant, name='savePostParticipant'),  #TODO find a way to secure this link
     url(r'^ajax/saveProjectAdmin/$', ajax.saveProjectAdmin, name='saveProjectAdmin'),  #TODO find a way to secure this link
     url(r'^ajax/deleteProjectAdmin/$', ajax.deleteProjectAdmin, name='deleteProjectAdmin'),  #TODO find a way to secure this link

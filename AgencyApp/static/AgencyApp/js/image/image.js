@@ -146,11 +146,12 @@ function createPictureContainer(includeCropHandler, addCrop){
     return pictureHTML
 }
 
+var defaultAspectRatio = 0.9;
 function loadImage(imageURL, addCrop){
     //Load the image into html and display the crop select area
     var imageString = "";
     var newArea = {};
-    var aspectRatio = 0.9;
+    var aspectRatio = defaultAspectRatio;
     var pictureDimension = 290;
     if(addCrop == null){
         addCrop = true;

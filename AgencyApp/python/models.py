@@ -252,6 +252,12 @@ class ProfileProfession(models.Model):
     username = models.CharField(max_length=100)
     profession = models.CharField(max_length=100)
 
+class ProfileMediaPicture(models.Model):
+    pictureID = models.CharField(max_length=10)
+    username = models.CharField(max_length=100)
+    description = models.CharField(max_length=500, default=None, blank=True, null=True)
+    postPicture = models.ImageField(default=None, upload_to=image_directory_path, storage=imageStorage, blank=True, null=True)
+
 # Interest in being considered for roles in this position
 class Interest(models.Model):
     username = models.CharField(max_length=100)

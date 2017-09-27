@@ -412,11 +412,26 @@ function removeRecord(projectID){
 
 /************************ EDIT_MEDIA ***************************/
 function addOtherMediaPhoto(){
+    var newPhotoForm = document.getElementById("otherMediaPictureForm")
     var newPhoto = document.getElementById("newPhotoFile");
     var newPhotoDescription = document.getElementById("newPhotoDescription");
-    if(newPhoto != null && newPhotoDescription != null){
+    if(newPhoto != null && newPhotoDescription != null && newPhotoForm != null){
         if(newPhoto.value != null && newPhoto.value != ""){
-            console.log("submitting file " + newPhoto.value)
+            var formData = new FormData(newPhotoForm)
+            if(newPhotoForm != null){
+                $.ajax({
+                    url : "/ajax/saveProfileMediaPicture/",
+                    data : formData,
+                    type : 'POST',
+                    dataType: "json",
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    success : function(data) {
+                        console.log(data)
+                    }
+                });
+            }
         }else{
             console.log("no photo added")
         }
@@ -424,7 +439,8 @@ function addOtherMediaPhoto(){
 }
 
 function addOtherMediaPhotoFileCallback(){
-    var height = 230;
+    var photoHeight = 230;
+    var photoWidth = photoHeight * defaultAspectRatio;
     $("#newPhotoFile").change(function(){
         if(this.value != null && this.value.length > 0){
             pictureExists = true;
@@ -433,7 +449,7 @@ function addOtherMediaPhotoFileCallback(){
                 if(displayImage != null){
                     displayImage.src = newPicture.src;
                     if(newPictureWidth > newPictureHeight){
-                        var marginTop = (230 - ((230 / newPictureWidth) * newPictureHeight))/2;
+                        var marginTop = (photoHeight - (photoHeight  * (newPictureHeight / newPictureWidth)))/2;
                         displayImage.style.marginTop = marginTop + "px";
                     }
                 }
@@ -755,7 +771,7 @@ function addOtherMediaPhotoFileCallback(){
 
                         <div id='newPhotoPanel' style='position: absolute; left: 0; right: 0; top: 250px; bottom: 0; text-align: left; background: #FFF; border: 1px solid rgba(0,0,0,0.1);'>
                             <div style='position: relative; height: 100%;'>
-                                <div class='form-style-7' style='width: 53%; margin-left: 0px; display:'>
+                                <form id='otherMediaPictureForm' method='post' enctype="multipart/form-data" class='form-style-7' style='width: 53%; margin-left: 0px; display:'>
                                     <ul>
                                         <script>
                                             var newPhotoFields = [{"label": "New File", "type": "file", "name": "newPhotoFile"},
@@ -773,7 +789,7 @@ function addOtherMediaPhotoFileCallback(){
                                     </ul>
                                     
                                 </div>
-                                <div style='position: absolute; left: 61.3%; right: 10px; top: 10px; bottom: 10px; border: 1px solid #000; background: #000; display: table; width: 207px; height: 230px;'>
+                                <div style='position: absolute; left: 61.3%; right: 10px; top: 10px; border: 1px solid rgba(0,0,0,0.1); background: #000; width: 207px; height: 230px; text-align: center;'>
                                     <img src='{{images.noPicture}}' id='otherMediaPhotoDisplayImg' style='max-height: 230px; max-width: 207px; margin: 0 auto;'>
                                 </div>
 

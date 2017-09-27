@@ -312,6 +312,15 @@ def getPostData(request):
                 dataDict["participants"] = participantList
     return JsonResponse({"success": success, "postData": dataDict})
 
+def saveProfileMediaPicture(request):
+    success = False
+    username = request.user.username
+    if username and request.FILES:
+        pictureID = helpers.createUniqueID(models.ProfileMediaPicture, "pictureID")
+        mediaPicture = models.ProfileMediaPicture(pictureID=pictureID, username=username, description=request.POST.get("newPhotoDescription"))
+        success = helpers.savePostPictureInDatabase(request, "newPhotoFile", mediaPicture, {}, "mediaPicture_{0}.jpg".format(pictureID))
+    return JsonResponse({"success": success, "pictureID": pictureID})
+
 def savePostParticipant(request):
     postID = request.POST.get("postID")
     statusLabel = request.POST.get("status") or "Involved"
