@@ -411,7 +411,36 @@ function removeRecord(projectID){
 
 
 /************************ EDIT_MEDIA ***************************/
+function addOtherMediaPhoto(){
+    var newPhoto = document.getElementById("newPhotoFile");
+    var newPhotoDescription = document.getElementById("newPhotoDescription");
+    if(newPhoto != null && newPhotoDescription != null){
+        if(newPhoto.value != null && newPhoto.value != ""){
+            console.log("submitting file " + newPhoto.value)
+        }else{
+            console.log("no photo added")
+        }
+    }
+}
 
+function addOtherMediaPhotoFileCallback(){
+    var height = 230;
+    $("#newPhotoFile").change(function(){
+        if(this.value != null && this.value.length > 0){
+            pictureExists = true;
+            previewEditPicture(this, function(){
+                var displayImage = document.getElementById("otherMediaPhotoDisplayImg");
+                if(displayImage != null){
+                    displayImage.src = newPicture.src;
+                    if(newPictureWidth > newPictureHeight){
+                        var marginTop = (230 - ((230 / newPictureWidth) * newPictureHeight))/2;
+                        displayImage.style.marginTop = marginTop + "px";
+                    }
+                }
+            });
+        }
+    });
+}
 
 
 
@@ -730,21 +759,22 @@ function removeRecord(projectID){
                                     <ul>
                                         <script>
                                             var newPhotoFields = [{"label": "New File", "type": "file", "name": "newPhotoFile"},
-                                                                  {"label": "Description", "type": "text", "name": "newDescription"}]
+                                                                  {"label": "Description", "type": "text", "name": "newPhotoDescription"}]
                                             for(var i=0; i < newPhotoFields.length; i++){
-                                                var newString = "<li style='height: 30px;'><label for='name'>" + newPhotoFields[i]["label"] + "</label><input type='" + newPhotoFields[i]["type"] + "' name='" + newPhotoFields[i]["name"] + "'></li>"
+                                                var newString = "<li style='height: 30px;'><label for='name'>" + newPhotoFields[i]["label"] + "</label><input type='" + newPhotoFields[i]["type"] + "' name='" + newPhotoFields[i]["name"] + "' id='" + newPhotoFields[i]["name"] + "'></li>"
                                                 document.write(newString)
                                             }
                                         </script>
                                         <li style='border: none; margin-top: 15px; padding: 0px 0px;'>
-                                            <div id="continueButton" class="whiteButton blackHover" style="display: block; height:28px; text-align: center; padding: 0.7em 3em;" onclick="submitPictureFormWithCrop('editPictureForm')">
+                                            <div id="continueButton" class="whiteButton blackHover" style="display: block; height:28px; text-align: center; padding: 0.7em 3em;" onclick="addOtherMediaPhoto();">
                                                 Add photo
                                             </div>
                                         </li>
                                     </ul>
                                     
                                 </div>
-                                <div style='position: absolute; left: 60%; right: 10px; top: 10px; bottom: 10px; border: 1px solid #000;'>
+                                <div style='position: absolute; left: 61.3%; right: 10px; top: 10px; bottom: 10px; border: 1px solid #000; background: #000; display: table; width: 207px; height: 230px;'>
+                                    <img src='{{images.noPicture}}' id='otherMediaPhotoDisplayImg' style='max-height: 230px; max-width: 207px; margin: 0 auto;'>
                                 </div>
 
 
@@ -756,6 +786,7 @@ function removeRecord(projectID){
 
             <script>
                 loadPictureCropTool();
+                addOtherMediaPhotoFileCallback();
             </script>
         </div>
     </div>
