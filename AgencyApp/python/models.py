@@ -66,6 +66,7 @@ class UserAccount(models.Model):
         self._otherInterest = None
         self._projects = None
         self._profileProfessions = None
+        self._profileMediaPictures = None
         self._mainProfession = None
         self._actorDescriptionEnabled = None
 
@@ -92,6 +93,16 @@ class UserAccount(models.Model):
                         self._actorDescriptionEnabled = True
                         break
         return self._actorDescriptionEnabled
+
+    @property
+    def profileMediaPictures(self):
+        if self._profileMediaPictures is None:
+            self._profileMediaPictures = []
+            for picture in ProfileMediaPicture.objects.filter(username=self.username):
+                self._profileMediaPictures.append({"url": picture.postPicture and picture.postPicture.url or "",
+                                                   "id": picture.pictureID,
+                                                   "description": picture.description})
+        return self._profileMediaPictures
 
     @property
     def profileProfessions(self):

@@ -336,6 +336,7 @@ class EditPictureView(GenericEditAccountView, views.PictureFormView):
     @property
     def pageContext(self):
         self._pageContext = super(EditPictureView, self).pageContext
+        self._pageContext["profileMediaPictures"] = self.userAccount.profileMediaPictures
         return self._pageContext
 
     @property
