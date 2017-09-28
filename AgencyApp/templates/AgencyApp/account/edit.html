@@ -411,6 +411,8 @@ function removeRecord(projectID){
 
 
 /************************ EDIT_MEDIA ***************************/
+var existingOtherMediaPictures = [];
+
 function addOtherMediaPhoto(){
     var newPhotoForm = document.getElementById("otherMediaPictureForm")
     var newPhoto = document.getElementById("newPhotoFile");
@@ -428,7 +430,14 @@ function addOtherMediaPhoto(){
                     contentType: false,
                     processData: false,
                     success : function(data) {
-                        console.log(data)
+                        if(data["success"]){
+                            var displayImage = document.getElementById("otherMediaPhotoDisplayImg")
+                            existingOtherMediaPictures.unshift({"id": data["pictureID"], "pictureURL": displayImage.src, "description": newPhotoDescription.value})
+                            var photoList = document.getElementById("photosList");
+                            if(photoList != null){
+                                photoList.innerHTML = getOtherMediaPhotosList();
+                            }
+                        }
                     }
                 });
             }
@@ -458,7 +467,7 @@ function addOtherMediaPhotoFileCallback(){
     });
 }
 
-function getOtherMediaPhoto(pictureURL, description){
+function getOtherMediaPhoto(pictureID, pictureURL, description){
     var listString = "<div class='profileMediaPicturePanel'>"
 
     // Add picture panel
@@ -488,9 +497,11 @@ function getOtherMediaPhotosList(){
     var listString = "";
     var leftMargin = 0;
     var picturePanelWidth = 150;
-    {% for picture in profileMediaPictures %}
-        listString += getOtherMediaPhoto("{{picture.url}}", "{{picture.description}}")
-    {% endfor %}
+    if(existingOtherMediaPictures.length > 0){
+        for(var i=0; i < existingOtherMediaPictures.length; i++){
+            listString += getOtherMediaPhoto(existingOtherMediaPictures[i]["id"], existingOtherMediaPictures[i]["pictureURL"], existingOtherMediaPictures[i]["description"]);
+        }
+    }
     return listString;
 }
 
@@ -804,12 +815,13 @@ function getOtherMediaPhotosList(){
                             {% if profileMediaPictures %}
                                 <div id='photosList' style='text-align: left; max-height: 230px; overflow-x: scroll; overflow-y: hidden; white-space: nowrap;'>
                                     <script>
+                                        {% for picture in profileMediaPictures %}
+                                            existingOtherMediaPictures.push({"pictureURL": "{{picture.url}}", "id": "{{picture.id}}", "description": "{{picture.description}}"})
+                                        {% endfor %}
                                         document.write(getOtherMediaPhotosList())
                                     </script>
                                 </div>
                             {% endif %}
-
-
                         </div>
 
                         <div id='newPhotoPanel' style='position: absolute; left: 0; right: 0; top: 260px; bottom: 0; text-align: left; background: #FFF; border: 1px solid rgba(0,0,0,0.1);'>
