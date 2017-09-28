@@ -437,6 +437,7 @@ function addOtherMediaPhoto(){
                             if(photoList != null){
                                 photoList.innerHTML = getOtherMediaPhotosList();
                             }
+                            resetOtherMediaPictureForm();
                         }
                     }
                 });
@@ -445,6 +446,16 @@ function addOtherMediaPhoto(){
             console.log("no photo added")
         }
     }
+}
+
+function resetOtherMediaPictureForm(){
+    var newPhoto = document.getElementById("newPhotoFile");
+    var newPhotoDescription = document.getElementById("newPhotoDescription");
+    var displayImage = document.getElementById("otherMediaPhotoDisplayImg");
+    newPhoto.value = '';
+    newPhotoDescription.value = '';
+    displayImage.src = "{{images.noPicture}}";
+    displayImage.style.marginTop = "0px";
 }
 
 function addOtherMediaPhotoFileCallback(){
