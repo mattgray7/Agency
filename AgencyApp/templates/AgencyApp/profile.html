@@ -163,13 +163,13 @@
             tabString += "<div style='margin-left: 10px; margin-right: 10px; margin-top: 10px;'>";
 
             // Photos container
-            tabString += "<div style='height: 270px;'><h2 style='text-align: left; margin-bottom: 1px;'>Photos</h2><div style='height: 0px; width: 100%; border-top: 1px solid #000; margin-bottom: 5px;'></div>";
+            tabString += "<div style='height: 299px;'><h2 style='text-align: left; margin-bottom: 1px;'>Photos</h2><div style='height: 0px; width: 100%; border-top: 1px solid #000; margin-bottom: 5px;'></div>";
 
             // Add picture list
             {% if profileUserAccount.profileMediaPictures %}
-                tabString += "<div id='mediaPicturesListPanel' style='position: absolute; left: 10px; right: 10px; top: 40px; height: 230px; background: #FFF; overflow: scroll; '><div id='mediaPicturesList' style='text-align: left; max-height: 212px; overflow-x: scroll; overflow-y: hidden; white-space: nowrap; background: rgba(0,0,0,0.1);background: rgba(158, 192, 247, 0.2); border: 1px solid rgba(158, 192, 247, 0.2);'>";
+                tabString += "<div id='mediaPicturesListPanel' style='position: absolute; left: 10px; right: 10px; top: 40px; height: 255px; background: #FFF; overflow: hidden; '><div id='mediaPicturesList' style='text-align: left; max-height: 255px; overflow-x: scroll; overflow-y: hidden; white-space: nowrap; background: rgba(0,0,0,0.1);background: rgba(0,0,0,0.05); border: 1px solid rgba(158, 192, 247, 0.2);'>";
                 {% for picture in profileUserAccount.profileMediaPictures %}
-                    tabString += getOtherMediaPhotoString("{{picture.id}}", "{{picture.url}}", "{{picture.description}}");
+                    tabString += getProfileMediaPictureString("{{picture.id}}", "{{picture.url}}", "{{picture.description}}");
                 {% endfor %}
                 tabString += "</div></div>";
             {% endif %}
