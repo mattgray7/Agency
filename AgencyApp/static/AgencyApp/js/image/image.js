@@ -8,6 +8,7 @@ var pictureExists = false;
 var pictureID = "";
 var defaultImageURL = "";
 var imageLoaded = false;
+var defaultAspectRatio = 0.9;
 
 function checkIfPictureCanBeLoaded(){
     // imageLoaded set in previewEditPicture
@@ -146,7 +147,6 @@ function createPictureContainer(includeCropHandler, addCrop){
     return pictureHTML
 }
 
-var defaultAspectRatio = 0.9;
 function loadImage(imageURL, addCrop){
     //Load the image into html and display the crop select area
     var imageString = "";
