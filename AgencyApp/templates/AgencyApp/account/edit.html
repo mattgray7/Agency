@@ -758,23 +758,45 @@ function addOtherMediaPhotoFileCallback(){
                 </div>
             </center>
             <div style='height: 20px; background: #FFF;'></div>
-            <div id='otherMediaPanel' style='background: #FFF; position: relative; height: 600px;'>
+            <div id='otherMediaPanel' style='background: #FFF; position: relative; height: 650px;'>
                 <h2> Other Media</h2>
-                <div id='photosPanel' style='position: absolute; left: 20px; right: 20px; top: 50px; height:500px; border: 1px solid rgba(0,0,0,0.1); border-radius: 3px; background: rgba(0,0,0,0.03'>
+                <div id='photosPanel' style='position: absolute; left: 20px; right: 20px; top: 50px; height:550px; border: 1px solid rgba(0,0,0,0.1); border-radius: 3px; background: rgba(0,0,0,0.03'>
                     <div style='position: relative; height: 100%; width: 100%;'>
                         <h3 style='position: absolute; left: 5px; top: 5px; margin: 0;'>
                             Photos
                         </h3>
 
-                        <div id='photosListPanel' style='position: absolute; left: 0; right: 0; top: 40px; height: 200px; background: #FFF; overflow: scroll;'>
+                        <div id='photosListPanel' style='position: absolute; left: 0; right: 0; top: 40px; height: 230px; background: #FFF; overflow: scroll;'>
                             {% if profileMediaPictures %}
-                                <div id='photosList' style='text-align: left; max-height: 200px; overflow-x: scroll; overflow-y: hidden; white-space: nowrap;'>
+                                <div id='photosList' style='text-align: left; max-height: 230px; overflow-x: scroll; overflow-y: hidden; white-space: nowrap;'>
                                     <script>
                                         var listString = "";
                                         var leftMargin = 0;
                                         var picturePanelWidth = 150;
                                         {% for picture in profileMediaPictures %}
-                                            listString += "<div class='profileMediaPicturePanel'><div style='display: table; position: absolute; top: 10px; left: 0; right: 0; margin: 0 auto; background: rgba(0,0,0,0.1); overflow: hidden; height: 130px; max-height: 130px; width: 117px;'><div style='display: table-cell; vertical-align: middle;'><img src='{{picture.url}}' style='max-height: 128px; max-width: 117px; margin-bottom: -5px;' /></div></div></div>"
+                                            listString += "<div class='profileMediaPicturePanel'>"
+
+                                            // Add picture panel
+                                            listString += "<div style='display: table; position: absolute; top: 10px; left: 0; right: 0; margin: 0 auto; background: rgba(0,0,0,0.0); border: 1px solid rgba(0,0,0,0.05); overflow: hidden; height: 130px; max-height: 130px; width: 117px;'><div style='display: table-cell; vertical-align: middle;'><img src='{{picture.url}}' style='max-height: 128px; max-width: 117px; margin-bottom: -5px;' /></div></div>"
+
+                                            // Add description
+                                            listString += "<div style='position: absolute; top: 147px; left: 15px; text-align: left; right: 0; margin: 0 auto; border: 0px solid #000; white-space: nowrap; overflow: hidden;'>"
+                                            {% if picture.description %}
+                                                var description = "{{picture.description}}"
+                                                if(description.length > 15){
+                                                    description = description.substring(0, 15) + "..."
+                                                }
+                                                listString += description
+                                            {% else %}
+                                                listString += "<font style='color: rgba(0,0,0,0.5); font-style: italic;font-size: 0.9em;'>No description</font>"
+                                            {% endif %}
+                                            listString += "</div>"
+
+
+                                            // Add buttons
+                                            listString += "<div style='position: absolute; bottom: 10px; height: 22px; left: 15px; right: 53%;'><div class='editButton'>Delete</div></div>"
+                                            listString += "<div style='position: absolute; bottom: 10px; height: 22px; left: 53%; right: 15px; padding-right: 2px;'><div class='editButton'>Edit</div></div>"
+                                            listString += "</div>"
                                             //leftMargin += picturePanelWidth;
                                         {% endfor %}
                                         document.write(listString)
@@ -785,7 +807,7 @@ function addOtherMediaPhotoFileCallback(){
 
                         </div>
 
-                        <div id='newPhotoPanel' style='position: absolute; left: 0; right: 0; top: 250px; bottom: 0; text-align: left; background: #FFF; border: 1px solid rgba(0,0,0,0.1);'>
+                        <div id='newPhotoPanel' style='position: absolute; left: 0; right: 0; top: 260px; bottom: 0; text-align: left; background: #FFF; border: 1px solid rgba(0,0,0,0.1);'>
                             <div style='position: relative; height: 100%;'>
                                 <form id='otherMediaPictureForm' method='post' enctype="multipart/form-data" class='form-style-7' style='width: 53%; margin-left: 0px; display:'>
                                     <ul>
