@@ -766,7 +766,23 @@ function addOtherMediaPhotoFileCallback(){
                             Photos
                         </h3>
 
-                        <div id='photosListPanel' style='position: absolute; left: 0; right: 0; top: 40px; height: 200px; background: #FFF'>
+                        <div id='photosListPanel' style='position: absolute; left: 0; right: 0; top: 40px; height: 200px; background: #FFF; overflow: scroll;'>
+                            {% if profileMediaPictures %}
+                                <div id='photosList' style='text-align: left; max-height: 200px; overflow-x: scroll; overflow-y: hidden; white-space: nowrap;'>
+                                    <script>
+                                        var listString = "";
+                                        var leftMargin = 0;
+                                        var picturePanelWidth = 150;
+                                        {% for picture in profileMediaPictures %}
+                                            listString += "<div class='profileMediaPicturePanel'><div style='display: table; position: absolute; top: 10px; left: 0; right: 0; margin: 0 auto; background: rgba(0,0,0,0.1); overflow: hidden; height: 130px; max-height: 130px; width: 117px;'><div style='display: table-cell; vertical-align: middle;'><img src='{{picture.url}}' style='max-height: 128px; max-width: 117px; margin-bottom: -5px;' /></div></div></div>"
+                                            //leftMargin += picturePanelWidth;
+                                        {% endfor %}
+                                        document.write(listString)
+                                    </script>
+                                </div>
+                            {% endif %}
+
+
                         </div>
 
                         <div id='newPhotoPanel' style='position: absolute; left: 0; right: 0; top: 250px; bottom: 0; text-align: left; background: #FFF; border: 1px solid rgba(0,0,0,0.1);'>
@@ -775,7 +791,7 @@ function addOtherMediaPhotoFileCallback(){
                                     <ul>
                                         <script>
                                             var newPhotoFields = [{"label": "New File", "type": "file", "name": "newPhotoFile"},
-                                                                  {"label": "Description", "type": "text", "name": "newPhotoDescription"}]
+                                                                  {"label": "Caption", "type": "text", "name": "newPhotoDescription"}]
                                             for(var i=0; i < newPhotoFields.length; i++){
                                                 var newString = "<li style='height: 30px;'><label for='name'>" + newPhotoFields[i]["label"] + "</label><input type='" + newPhotoFields[i]["type"] + "' name='" + newPhotoFields[i]["name"] + "' id='" + newPhotoFields[i]["name"] + "'></li>"
                                                 document.write(newString)
