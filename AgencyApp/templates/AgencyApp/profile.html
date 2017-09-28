@@ -167,7 +167,7 @@
 
             // Add picture list
             {% if profileUserAccount.profileMediaPictures %}
-                tabString += "<div id='mediaPicturesListPanel' style='position: absolute; left: 0; right: 0; top: 40px; height: 230px; background: #FFF; overflow: scroll;'><div id='mediaPicturesList' style='text-align: left; max-height: 230px; overflow-x: scroll; overflow-y: hidden; white-space: nowrap;'>";
+                tabString += "<div id='mediaPicturesListPanel' style='position: absolute; left: 10px; right: 10px; top: 40px; height: 230px; background: #FFF; overflow: scroll; '><div id='mediaPicturesList' style='text-align: left; max-height: 212px; overflow-x: scroll; overflow-y: hidden; white-space: nowrap; background: rgba(0,0,0,0.1);background: rgba(158, 192, 247, 0.2); border: 1px solid rgba(158, 192, 247, 0.2);'>";
                 {% for picture in profileUserAccount.profileMediaPictures %}
                     tabString += getOtherMediaPhotoString("{{picture.id}}", "{{picture.url}}", "{{picture.description}}");
                 {% endfor %}

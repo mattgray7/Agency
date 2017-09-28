@@ -112,7 +112,8 @@
 	height: 210px;
 	width: 150px;
 	border: 1px solid #000;
-	margin-left: 5px;
+	background: #FFF;
+	margin-right: 5px;
 	text-align: center;
 	position: relative;
 }
