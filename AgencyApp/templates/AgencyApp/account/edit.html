@@ -554,42 +554,7 @@ function addOtherMediaPhotoFileCallback(){
     });
 }
 
-function getOtherMediaPhoto(pictureID, pictureURL, description){
-    var listString = "<div class='profileMediaPicturePanel'>"
 
-    // Add picture panel
-    listString += "<div style='display: table; position: absolute; top: 10px; left: 0; right: 0; margin: 0 auto; background: rgba(0,0,0,0.0); border: 1px solid rgba(0,0,0,0.05); overflow: hidden; height: 130px; max-height: 130px; width: 117px;'><div style='display: table-cell; vertical-align: middle;'><img src='" + pictureURL + "' style='max-height: 128px; max-width: 117px; margin-bottom: -5px;' /></div></div>"
-
-    // Add description
-    listString += "<div style='position: absolute; top: 147px; left: 15px; text-align: left; right: 0; margin: 0 auto; border: 0px solid #000; white-space: nowrap; overflow: hidden;'>"
-    if(description != null && description.length > 0){
-        if(description.length > 15){
-            description = description.substring(0, 15) + "..."
-        }
-        listString += description
-    }else{
-        listString += "<font style='color: rgba(0,0,0,0.5); font-style: italic;font-size: 0.9em;'>No description</font>"
-    }
-    listString += "</div>"
-
-    // Add buttons
-    listString += "<div style='position: absolute; bottom: 10px; height: 22px; left: 15px; right: 15px;'><div class='editButton' onclick='deleteOtherMediaPicture(" + '"' + pictureID + '");' + "'>Delete</div></div>"
-    listString += "</div>"
-
-    return listString;
-}
-
-function getOtherMediaPhotosList(){
-    var listString = "";
-    var leftMargin = 0;
-    var picturePanelWidth = 150;
-    if(existingOtherMediaPictures.length > 0){
-        for(var i=0; i < existingOtherMediaPictures.length; i++){
-            listString += getOtherMediaPhoto(existingOtherMediaPictures[i]["id"], existingOtherMediaPictures[i]["pictureURL"], existingOtherMediaPictures[i]["description"]);
-        }
-    }
-    return listString;
-}
 
 /*******************************************************************/
 </script>

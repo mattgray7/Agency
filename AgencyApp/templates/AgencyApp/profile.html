@@ -159,6 +159,22 @@
                 tabString += "<div style='position: absolute; top: 5px; right: 12px;'><div class='editButton'  onclick='redirect(" + '"{{ possibleDestinations.media }}");' + "'>Edit</div></div>";
             {% endif %}
 
+            // Content container
+            tabString += "<div style='margin-left: 10px; margin-right: 10px; margin-top: 10px;'>";
+
+            // Photos container
+            tabString += "<div style='height: 270px;'><h2 style='text-align: left; margin-bottom: 1px;'>Photos</h2><div style='height: 0px; width: 100%; border-top: 1px solid #000; margin-bottom: 5px;'></div>";
+
+            // Add picture list
+            {% if profileUserAccount.profileMediaPictures %}
+                tabString += "<div id='mediaPicturesListPanel' style='position: absolute; left: 0; right: 0; top: 40px; height: 230px; background: #FFF; overflow: scroll;'><div id='mediaPicturesList' style='text-align: left; max-height: 230px; overflow-x: scroll; overflow-y: hidden; white-space: nowrap;'>";
+                {% for picture in profileUserAccount.profileMediaPictures %}
+                    tabString += getOtherMediaPhotoString("{{picture.id}}", "{{picture.url}}", "{{picture.description}}");
+                {% endfor %}
+                tabString += "</div></div>";
+            {% endif %}
+            
+            tabString += "</div>"
             tabString += "</div>"
 
 
