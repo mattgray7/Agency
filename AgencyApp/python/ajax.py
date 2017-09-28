@@ -321,6 +321,14 @@ def saveProfileMediaPicture(request):
         success = helpers.savePostPictureInDatabase(request, "newPhotoFile", mediaPicture, {}, "mediaPicture_{0}.jpg".format(pictureID))
     return JsonResponse({"success": success, "pictureID": pictureID})
 
+def deleteProfileMediaPicture(request):
+    pictureID = request.POST.get("pictureID")
+    success = False
+    if pictureID and request.user.username:
+        models.ProfileMediaPicture.objects.filter(pictureID=pictureID).delete()
+        success = True
+    return JsonResponse({"success": success})
+
 def savePostParticipant(request):
     postID = request.POST.get("postID")
     statusLabel = request.POST.get("status") or "Involved"

@@ -448,6 +448,31 @@ function addOtherMediaPhoto(){
     }
 }
 
+function deleteOtherMediaPicture(pictureID){
+    $.ajax({
+        url : "/ajax/deleteProfileMediaPicture/",
+                data : {"pictureID": pictureID},
+                type : 'POST',
+                dataType: "json",
+                success : function(data) {
+                    if(data["success"]){
+                        for(var i=0; i < existingOtherMediaPictures.length; i++){
+                            if(existingOtherMediaPictures[i]["id"] === pictureID){
+                                existingOtherMediaPictures.splice(i, 1);
+                                break;
+                            }
+                        }
+                        var photoList = document.getElementById("photosList");
+                        if(photoList != null){
+                            photoList.innerHTML = getOtherMediaPhotosList();
+                        }
+                    }
+                }
+        });
+
+    
+}
+
 function resetOtherMediaPictureForm(){
     var newPhoto = document.getElementById("newPhotoFile");
     var newPhotoDescription = document.getElementById("newPhotoDescription");
@@ -497,7 +522,7 @@ function getOtherMediaPhoto(pictureID, pictureURL, description){
     listString += "</div>"
 
     // Add buttons
-    listString += "<div style='position: absolute; bottom: 10px; height: 22px; left: 15px; right: 53%;'><div class='editButton'>Delete</div></div>"
+    listString += "<div style='position: absolute; bottom: 10px; height: 22px; left: 15px; right: 53%;'><div class='editButton' onclick='deleteOtherMediaPicture(" + '"' + pictureID + '");' + "'>Delete</div></div>"
     listString += "<div style='position: absolute; bottom: 10px; height: 22px; left: 53%; right: 15px; padding-right: 2px;'><div class='editButton'>Edit</div></div>"
     listString += "</div>"
 
