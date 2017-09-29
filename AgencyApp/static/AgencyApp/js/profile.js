@@ -255,7 +255,7 @@ function getOtherMediaPictureString(pictureID, pictureURL, description, featured
     // Add buttons
     listString += "<div style='position: absolute; bottom: 10px; height: 22px; left: 15px; right: 35px;'><div class='editButton' onclick='deleteOtherMediaPicture(" + '"' + pictureID + '");' + "'>Delete</div></div>"
     listString += "<div style='position: absolute; bottom: 10px; height: 22px; right: 10px;'><input type='checkbox' name='featuredCheckbox_" + pictureID + "' onclick='updateFeaturedPhotoStatus(this);' "
-    if(featured === "True"){
+    if(featured == true || featured === "True"){
         listString += "checked "
     }
     listString += "/></div>"
