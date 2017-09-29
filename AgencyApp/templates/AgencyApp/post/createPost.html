@@ -236,34 +236,33 @@
         var pictureID = "editPostPicture";
         var pictureURL = "";
         setButtonLoadingGifURL("{{images.loading.mid}}")
-        setDoesPictureExist("{{post.postPicture}}")
-        setPictureID(pictureID);
         setDefaultImageURL("{{images.loading.light}}")
+        setDoesPictureExist(pictureID, "{{post.postPicture}}")
 
-        if(!newPicture){
+        if(!newPictures[pictureID]){
             {% if post and post.postPicture and post.postPicture.url %}
                 pictureURL = "{{post.postPicture.url}}"
             {% else %}
                 pictureURL = "{{images.noPicture}}"
             {% endif %}
         }else{
-            pictureURL = newPicture.src;
+            pictureURL = newPictures[pictureID].src;
         }
-        setNewPictureObject(pictureURL)
+        setNewPictureObject(pictureID, pictureURL)
 
         $("#editPostPictureImage").change(function(){
             if(this.value != null && this.value.length > 0){
-                pictureExists = true;
-                previewEditPicture(this);
+                pictureExistsMap[pictureID] = true;
+                previewEditPicture(pictureID, this, function(){});
             }else{
                 var fallbackPictureURL = "";
                {% if not post or not post.postPicture or not post.postPicture.url %}
-                    pictureExists = false;
+                    pictureExistsMap[pictureID] = false;
                 {% endif %}
                 if(pictureURL.length > 0){
-                    setNewPictureObject(pictureURL)
-                    loadImage(pictureURL)
-                    selectMainArea()
+                    setNewPictureObject(pictureID, pictureURL, false)
+                    loadImage(pictureID, pictureURL)
+                    selectMainArea(pictureID)
                 }
             }
         });
@@ -306,8 +305,8 @@
 
                         <center>
                         <div style='position: relative; width: 300px;'>
-                            <div id="loadingPictureGrayOverlay" class="hiddenGrayPopupOverlay" style="background: rgba(0,0,0,0); height:0%; width:0%; position: absolute; margin-top: 6px; margin-left: 6px;top:0; z-index: 1000">
-                                <img id='loadingGif' src='{{images.loading.light}}' style='height: 70px; width: 70px; display: none; margin-top: 50%; margin-left: 5%; z-index: 1001'></div>
+                            <div id="editPostPictureLoadingPictureGrayOverlay" class="hiddenGrayPopupOverlay" style="background: rgba(0,0,0,0); height:0%; width:0%; position: absolute; margin-top: 6px; margin-left: 6px;top:0; z-index: 1000">
+                                <img id='editPostPictureLoadingGif' src='{{images.loading.light}}' style='height: 70px; width: 70px; display: none; margin-top: 50%; margin-left: 5%; z-index: 1001'></div>
                         </div>
                         <div id="editPostPictureDiv" class="editPostPictureDiv" style='width: 300px;'></div>
 
@@ -333,13 +332,13 @@
                                         </td>
                                     {% endif %}
                                     <td>
-                                        <div id="updatePictureButton" class="whiteButton blackHover" style="width: 70px; height:28px; position: relative; display: block;" onclick="submitPictureForm('editPostPictureForm')">
+                                        <div id="updatePictureButton" class="whiteButton blackHover" style="width: 70px; height:28px; position: relative; display: block;" onclick="submitPictureForm('editPostPicture', 'editPostPictureForm')">
                                             <div style="margin-left: 5px; margin-top: 2px;">Update</div>
                                         </div>
                                     </td>
                                 </tr>
                             </table>
-                            <div id="cropInfoInputs"></div>
+                            <div id="editPostPictureCropInfoInputs"></div>
                         </form>
                         </center>
                     </div>

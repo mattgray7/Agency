@@ -18,7 +18,7 @@ var newPictureWidths = {}
 var displayedPictures = {};
 var cropAreas = {};
 var areas = {}
-var pictureMaxDimension = {"profilePicture": 290, "otherMediaPicture": 200}
+var pictureMaxDimension = {"profilePicture": 290, "otherMediaPicture": 200, "editPostPicture": 290}
 
 var pictureExistsMap = {}
 var imageLoadedMap = {}

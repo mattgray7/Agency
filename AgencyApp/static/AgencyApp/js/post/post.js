@@ -109,11 +109,11 @@ function setDefaultPicture(pictureURL){
     defaultPictureURL = pictureURL;
 }
 
-function submitPictureForm(formName, isProject){
+function submitPictureForm(pictureID, formName, isProject){
         // If button was pressed with no input changed, just close the window
-        var editPictureInput = document.getElementById("editPostPictureImage");
+        var editPictureInput = document.getElementById(pictureID + "Image");
         if(editPictureInput != null){
-            if(!pictureExists){
+            if(!pictureExistsMap[pictureID]){
                 toggleEditPicturePopup("hide")
                 return;
             }
@@ -121,9 +121,9 @@ function submitPictureForm(formName, isProject){
 
         var updateButton = document.getElementById("updatePictureButton")
         var updateButtonHTML = updateButton.innerHTML;
-        updateButton.innerHTML = "<img id='loadingGif' src='" + buttonLoadingGifURL + "' style='position: absolute; height: 60px; width: 60px; margin-top: -15px;'>"
+        updateButton.innerHTML = "<img id='" + pictureID + "LoadingGif' src='" + buttonLoadingGifURL + "' style='position: absolute; height: 60px; width: 60px; margin-top: -15px;'>"
 
-        var form = addCropToPictureForm(formName, "cropInfoInputs")
+        var form = addCropToPictureForm(formName, pictureID, pictureID + "CropInfoInputs")
         var formData = new FormData(form)
         if(form != null){
             $.ajax({
