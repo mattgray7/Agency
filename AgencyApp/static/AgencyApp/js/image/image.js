@@ -105,11 +105,6 @@ function setDoesPictureExist(pictureID, pictureURL){
     }
 }
 
-/*function setPictureID(newPicID){
-    pictureID = newPicID;
-}*/
-
-
 function setNewPictureObject(imageID, imageURL, addCrop){
     if(addCrop == null){
         addCrop = true;
@@ -121,7 +116,6 @@ function setNewPictureObject(imageID, imageURL, addCrop){
         newPictureWidths[imageID] = this.width;
 
         // Once the js object is loaded, we can load the image into the page
-        console.log("About to load image " + imageID)
         loadImage(imageID, imageURL, addCrop)
         return true;
         }
@@ -271,8 +265,8 @@ function addCropToPictureForm(formName, pictureID, cropInputDivID){
             var sourceWidth = cropArea.width * scaleFactorWidth;
             var sourceHeight = cropArea.height * scaleFactorHeight;
             var cropInfoDiv = document.getElementById(cropInputDivID)
-            cropInfoDiv.innerHTML = "";
             if(cropInfoDiv != null){
+                cropInfoDiv.innerHTML = "";
                 cropInfoDiv.innerHTML += "<input type='hidden' name='crop_x' value='" + sourceX + "'>";
                 cropInfoDiv.innerHTML += "<input type='hidden' name='crop_y' value='" + sourceY + "'>";
                 cropInfoDiv.innerHTML += "<input type='hidden' name='crop_width' value='" + sourceWidth + "'>";
@@ -284,6 +278,6 @@ function addCropToPictureForm(formName, pictureID, cropInputDivID){
 }
 
 function submitPictureFormWithCrop(formName, pictureID){
-    var form = addCropToPictureForm(formName, pictureID, "cropInfoInputs")
+    var form = addCropToPictureForm(formName, pictureID, pictureID + "CropInfoInputs")
     return form.submit();
 }

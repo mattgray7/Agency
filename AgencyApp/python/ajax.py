@@ -218,6 +218,16 @@ def editExistingPost(request):
     return JsonResponse({"success": editSuccess and pictureSuccess, "pictureURL": pictureURL, "postID": postID,
                          "removedPicture": removedPicture, "errors": postInstance and postInstance.formErrors})
 
+def _getCropInfo(request):
+    cropInfo = {}
+    if request:
+        cropInfo = {"x": request.POST.get("crop_x"),
+                    "y": request.POST.get("crop_y"),
+                    "width": request.POST.get("crop_width"),
+                    "height": request.POST.get("crop_height")
+                    }
+    return cropInfo
+
 def _getPostPictureRequestData(request):
     data = {}
     postID = request.POST.get("postID")
@@ -231,11 +241,7 @@ def _getPostPictureRequestData(request):
         data = {"postID": postID,
                 "database": post.getPostDatabase(postID),
                 "filename": constants.MEDIA_FILE_NAME_MAP.get(postType, "tempfile_{0}").format(postID),
-                "cropInfo": {"x": request.POST.get("crop_x"),
-                             "y": request.POST.get("crop_y"),
-                             "width": request.POST.get("crop_width"),
-                             "height": request.POST.get("crop_height")
-                             }
+                "cropInfo": _getCropInfo(request),
                 }
         if None in data["cropInfo"].values():
             data["cropInfo"] = {}
@@ -318,7 +324,7 @@ def saveProfileMediaPicture(request):
     if username and request.FILES:
         pictureID = helpers.createUniqueID(models.ProfileMediaPicture, "pictureID")
         mediaPicture = models.ProfileMediaPicture(pictureID=pictureID, username=username, description=request.POST.get("newPhotoDescription"))
-        success = helpers.savePostPictureInDatabase(request, "newPhotoFile", mediaPicture, {}, "mediaPicture_{0}.jpg".format(pictureID))
+        success = helpers.savePostPictureInDatabase(request, "newPhotoFile", mediaPicture, _getCropInfo(request), "mediaPicture_{0}.jpg".format(pictureID))
     return JsonResponse({"success": success, "pictureID": pictureID})
 
 def deleteProfileMediaPicture(request):

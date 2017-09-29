@@ -419,11 +419,14 @@ function removeRecord(projectID){
 var existingOtherMediaPictures = [];
 
 function addOtherMediaPhoto(){
-    var newPhotoForm = document.getElementById("otherMediaPictureForm")
+    var pictureID = "otherMediaPicture";
+    var formName = "otherMediaPictureForm";
+    var newPhotoForm = document.getElementById(formName)
     var newPhoto = document.getElementById("newPhotoFile");
     var newPhotoDescription = document.getElementById("newPhotoDescription");
     if(newPhoto != null && newPhotoDescription != null && newPhotoForm != null){
         if(newPhoto.value != null && newPhoto.value != ""){
+            newPhotoForm = addCropToPictureForm(formName, pictureID, pictureID + "CropInfoInputs");
             var formData = new FormData(newPhotoForm)
             if(newPhotoForm != null){
                 $.ajax({
@@ -436,7 +439,7 @@ function addOtherMediaPhoto(){
                     processData: false,
                     success : function(data) {
                         if(data["success"]){
-                            var displayImage = document.getElementById("otherMediaPicture")
+                            var displayImage = document.getElementById(pictureID)
                             existingOtherMediaPictures.unshift({"id": data["pictureID"], "pictureURL": displayImage.src, "description": newPhotoDescription.value})
                             var photoList = document.getElementById("photosList");
                             if(photoList != null){
@@ -494,8 +497,8 @@ function resetOtherMediaPictureForm(){
     var displayImage = document.getElementById("otherMediaPhotoDisplayImg");
     newPhoto.value = '';
     newPhotoDescription.value = '';
-    displayImage.src = "{{images.noPicture}}";
-    displayImage.style.marginTop = "0px";
+    //displayImage.src = "{{images.noPicture}}";
+    //displayImage.style.marginTop = "0px";
 }
 
 var mediaPhotoHeight = 230;
@@ -871,7 +874,7 @@ function loadPictureCropTool(){
                         <div id="continueButton" class="whiteButton blackHover" style="width:24.1%; height:28px" onclick="submitPictureFormWithCrop('editPictureForm', 'profilePicture')">
                             Update
                         </div>
-                        <div id="cropInfoInputs"></div>
+                        <div id="profilePictureCropInfoInputs"></div>
                     </form>
                 </div>
             </center>
@@ -915,6 +918,8 @@ function loadPictureCropTool(){
                                             </div>
                                         </li>
                                     </ul>
+                                    <div id="otherMediaPictureCropInfoInputs"></div>
+                                </form>
                                     
                                 </div>
                                 <div style='position: absolute; left: 60%; right: 10px; top: 10px; border: 1px solid rgba(0,0,0,0.0); background: none; width: 207px; height: 230px; text-align: center; display: table;'>
