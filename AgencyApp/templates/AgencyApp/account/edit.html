@@ -492,13 +492,20 @@ function editOtherMediaPicture(pictureID){
 }
 
 function resetOtherMediaPictureForm(){
+    var pictureID = "otherMediaPicture";
+    var pictureURL = "{{images.noPicture}}";
+
+    // Reset form values
     var newPhoto = document.getElementById("newPhotoFile");
     var newPhotoDescription = document.getElementById("newPhotoDescription");
-    var displayImage = document.getElementById("otherMediaPhotoDisplayImg");
     newPhoto.value = '';
     newPhotoDescription.value = '';
-    //displayImage.src = "{{images.noPicture}}";
-    //displayImage.style.marginTop = "0px";
+
+    // Reset crop photo window
+    pictureExistsMap[pictureID] = false;
+    setNewPictureObject(pictureID, pictureURL, false)
+    loadImage(pictureID, pictureURL)
+    selectMainArea(pictureID)
 }
 
 var mediaPhotoHeight = 230;
