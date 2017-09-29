@@ -458,7 +458,7 @@
 
     function addEditImageContent(containerID, isProject, pictureURL){
         var pictureID = "editPostPicture";
-        setPictureID(pictureID);
+        //setPictureID(pictureID);
         setButtonLoadingGifURL("{{images.loading.mid}}");
         setDefaultImageURL("{{images.loading.light}}")
         setDefaultPicture("{{images.noPicture}}")
@@ -467,7 +467,7 @@
         var updatePictureButton = document.getElementById("updatePictureButton");
         if(updatePictureButton != null){
             updatePictureButton.onclick = function(){
-                submitPictureForm('editPostPictureForm', isProject)
+                submitPictureForm(pictureID, 'editPostPictureForm', isProject)
             };
         }
 
@@ -500,7 +500,7 @@
         }
 
         // Set newPicture to pictureURL and update projectPicture/projectSubFormPicture
-        setNewPictureObject(pictureURL, addCrop)
+        setNewPictureObject(pictureID, pictureURL, addCrop)
         updatePictureObjects(isProject);
 
         imageInputDivID = pictureID + "Image";
@@ -525,20 +525,20 @@
         // Add new callback for this window
         $("[id='" + imageInputDivID + "']").change(function(){
             if(this.value != null && this.value.length > 0){
-                pictureExists = true;
-                previewEditPicture(this, function(){
+                pictureExistsMap[pictureID] = true;
+                previewEditPicture(pictureID, this, function(){
                     updatePictureObjects(isProject)
                 });
             }else{
                 var fallbackPictureURL = "";
                {% if not post or not post.postPicture or not post.postPicture.url %}
-                    pictureExists = false;
+                    pictureExistsMap[pictureID] = false;
                 {% endif %}
                 if(pictureURL.length > 0){
-                    setNewPictureObject(pictureURL, addCrop)
+                    setNewPictureObject(pictureID, pictureURL, addCrop)
                     updatePictureObjects(isProject);
-                    loadImage(pictureURL, addCrop)
-                    selectMainArea()
+                    loadImage(pictureID, pictureURL, addCrop)
+                    selectMainArea(pictureID)
                 }
             }
         });
@@ -1328,8 +1328,8 @@
                         <br>
                         <center>
                             <div style='position: relative; width: 300px;'>
-                                <div id="loadingPictureGrayOverlay" class="hiddenGrayPopupOverlay" style="background: rgba(0,0,0,0); height:0%; width:0%; position: absolute; margin-top: 6px; margin-left: 6px;top:0; z-index: 1000">
-                                    <img id='loadingGif' src='{{images.loading.light}}' style='height: 70px; width: 70px; display: none; margin-top: 50%; margin-left: 5%; z-index: 1001'></div>
+                                <div id="editPostPictureLoadingPictureGrayOverlay" class="hiddenGrayPopupOverlay" style="background: rgba(0,0,0,0); height:0%; width:0%; position: absolute; margin-top: 6px; margin-left: 6px;top:0; z-index: 1000">
+                                    <img id='editPostPictureLoadingGif' src='{{images.loading.light}}' style='height: 70px; width: 70px; display: none; margin-top: 50%; margin-left: 5%; z-index: 1001'></div>
                             </div>
                             <div id="editPostPictureDiv" class="editPostPictureDiv" style='width: 300px;'>
                             </div>
@@ -1354,7 +1354,7 @@
                                     </td>
                                 </tr>
                             </table>
-                            <div id="cropInfoInputs"></div>
+                            <div id="editPostPictureCropInfoInputs"></div>
                         </form>
                     </center>
                     </div>
