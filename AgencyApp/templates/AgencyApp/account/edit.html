@@ -479,7 +479,7 @@ function deleteOtherMediaPicture(pictureID){
         });
 }
 
-function editOtherMediaPicture(pictureID){
+/*function editOtherMediaPicture(pictureID){
     var newPhotoDescription = document.getElementById("otherMediaPictureDescription");
     for(var i=0; i < existingOtherMediaPictures.length; i++){
         if(existingOtherMediaPictures[i]["id"] === pictureID){
@@ -487,7 +487,7 @@ function editOtherMediaPicture(pictureID){
             newPhotoDescription.value = existingOtherMediaPictures[i]["description"]
         }
     }
-}
+}*/
 
 function resetOtherMediaPictureForm(){
     var pictureID = "otherMediaPicture";
@@ -908,10 +908,9 @@ function loadPictureCropTool(){
                                         document.write(getOtherMediaPictureList())
                                     </script>
                                 {% else %}
-                                    <div style='height: 50px; width: 100%;'>
-                                        Add pictures to your profile
-                                    </div>
-
+                                    <script>
+                                        document.write(getEmptyMediaPictureList());
+                                    </script>
                                 {% endif %}
                             </div>
                         </div>

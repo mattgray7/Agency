@@ -259,12 +259,19 @@ function getOtherMediaPictureString(pictureID, pictureURL, description){
     return listString;
 }
 
+function getEmptyMediaPictureList(){
+    var listString = "<div style='text-align: left; height: 30px; margin: 5px;'> No media added.</div>";
+    return listString;
+}
+
 function getOtherMediaPictureList(){
     var listString = "";
     if(existingOtherMediaPictures.length > 0){
         for(var i=0; i < existingOtherMediaPictures.length; i++){
             listString += getOtherMediaPictureString(existingOtherMediaPictures[i]["id"], existingOtherMediaPictures[i]["pictureURL"], existingOtherMediaPictures[i]["description"]);
         }
+    }else{
+        listString = getEmptyMediaPictureList();
     }
     return listString;
 }
