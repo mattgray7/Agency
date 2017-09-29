@@ -62,8 +62,8 @@ function previewEditPicture(pictureID, input, onload) {
 }
 
 function togglePictureLoadingGif(pictureID, toggleType){
-    var loadingGif = document.getElementById("loadingGif")
-    var overlay = document.getElementById("loadingPictureGrayOverlay")
+    var loadingGif = document.getElementById(pictureID + "LoadingGif")
+    var overlay = document.getElementById(pictureID + "LoadingPictureGrayOverlay")
     if(overlay != null && loadingGif != null){
         if(toggleType === "show"){
             overlay.style.height = displayedPictures[pictureID].height + "px";
@@ -75,13 +75,16 @@ function togglePictureLoadingGif(pictureID, toggleType){
             loadingGif.style.marginTop = (displayedPictures[pictureID].height - gifHeight)/2 + "px";
 
             // Reset left margin of overlay, as it could change if new pic has diff dimensions
+            var newLeftMargin = 6;
             if(displayedPictures[pictureID].height > displayedPictures[pictureID].width){
-                var newLeftMargin =((pictureMaxDimension[pictureID] - displayedPictures[pictureID].width)/2 + 5) +"px";
-                overlay.style.marginLeft = newLeftMargin;
-            }else{
-                // 6px accounts for the wrapper border width
-                overlay.style.marginLeft = "6px";
+                newLeftMargin = ((pictureMaxDimension[pictureID] - displayedPictures[pictureID].width)/2 + 5);
+                if(pictureID === "otherMediaPicture"){
+                    // Special case, otherMediaPicture always fits to edge
+                    newLeftMargin = 5;
+                }
             }
+
+            overlay.style.marginLeft = newLeftMargin + "px";
             loadingGif.style.display = "block";
         }else{
             overlay.style.background = "rgba(0,0,0,0)"

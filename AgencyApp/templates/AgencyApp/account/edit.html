@@ -854,8 +854,8 @@ function loadPictureCropTool(){
                     
                     <center>
                         <div style='position: relative; width: 300px;'>
-                            <div id="loadingPictureGrayOverlay" class="hiddenGrayPopupOverlay" style="background: rgba(0,0,0,0); height:0%; width:0%; position: absolute; margin-left: 0px; margin-top: 11px; top:0; z-index: 3">
-                                <img id='loadingGif' src='{{images.loading.light}}' style='height: 40px; width: 40px; display: none; margin-top: 52%; margin-left: 2%;'></div>
+                            <div id="profilePictureLoadingPictureGrayOverlay" class="hiddenGrayPopupOverlay" style="background: rgba(0,0,0,0); height:0%; width:0%; position: absolute; margin-left: 0px; margin-top: 11px; top:0; z-index: 3">
+                                <img id='profilePictureLoadingGif' src='{{images.loading.light}}' style='height: 40px; width: 40px; display: none; margin-top: 52%; margin-left: 2%;'></div>
                         </div>
                         <div id="profilePictureDiv" class="profilePictureDiv" style='width: 300px;'>
                             <!-- Image div created in loadImage() -->
@@ -929,6 +929,11 @@ function loadPictureCropTool(){
                             </div>
                             <div style='position: absolute; left: 60%; right: 10px; top: 10px; border: 1px solid rgba(0,0,0,0.0); background: none; width: 207px; height: 230px; text-align: center; display: table;'>
                                 <div style='display: table-cell; vertical-align: middle;'>
+                                    <div style='position: relative; width: 300px;'>
+                                        <div id="otherMediaPictureLoadingPictureGrayOverlay" class="hiddenGrayPopupOverlay" style="background: rgba(0,0,0,0); height:0%; width:0%; position: absolute; margin-left: -10px; margin-top: 11px; top:0; z-index: 3; text-align: center;">
+                                            <img id='otherMediaPictureLoadingGif' src='{{images.loading.light}}' style='height: 40px; width: 40px; display: none; margin-top: 52%; margin-left: 42%;'>
+                                        </div>
+                                </div>
                                     <div id="otherMediaPictureDiv" class="profilePictureDiv" style='width: 200px; max-width: 200px; text-align: left;'>
                                         <!-- Image div created in loadImage() -->
                                     </div>
