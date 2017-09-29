@@ -449,6 +449,7 @@ function addOtherMediaPicture(){
                             if(existingOtherMediaPictures.length === 0){
                                 $("#otherMediaPictureList").animate({marginTop: "0px", height: "218px"}, 300, function(){});
                             }
+                            console.log(data["featured"])
                             existingOtherMediaPictures.unshift({"id": data["pictureID"], "pictureURL": data["pictureURL"], "description": newPhotoDescription.value, "featured": data["featured"]})
                             var photoList = document.getElementById("otherMediaPictureList");
                             if(photoList != null){

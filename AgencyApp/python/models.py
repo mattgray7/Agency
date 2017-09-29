@@ -107,6 +107,13 @@ class UserAccount(models.Model):
         return self._profileMediaPictures
 
     @property
+    def hasFeaturedMediaPictures(self):
+        # Have to check each time, cause list could have changed between calls
+        if self.profileMediaPictures:
+            return any(x["featured"] for x in self.profileMediaPictures)
+        return False
+
+    @property
     def profileProfessions(self):
         if self._profileProfessions is None:
             self._profileProfessions = [x.profession for x in ProfileProfession.objects.filter(username=self.username)]
