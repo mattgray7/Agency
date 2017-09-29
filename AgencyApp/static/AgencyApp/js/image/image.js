@@ -140,7 +140,7 @@ function selectMainArea(pictureID){
     updateCropArea(pictureID);
     var elems;
 
-    var picture = document.getElementById(pictureID)
+    var picture = document.getElementById(pictureID + "Image")
     if(picture != null){
         elems = picture.getElementsByClassName("select-areas-resize-handler")
         if(elems == null || elems.length === 0){
