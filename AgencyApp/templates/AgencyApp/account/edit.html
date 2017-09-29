@@ -511,69 +511,6 @@ function resetOtherMediaPictureForm(){
     selectMainArea(pictureID)
 }
 
-var mediaPhotoHeight = 230;
-var mediaPhotoWidth = mediaPhotoHeight * defaultAspectRatio;
-/*function displayFittedMediaPicture(pictureURL){
-    if(pictureURL == null || pictureURL.length === 0){
-        pictureURL = newMediaPicture.src
-    }
-    var displayImage = document.getElementById("otherMediaPhotoDisplayImg");
-    if(displayImage != null){
-        displayImage.src = pictureURL;
-        if(newMediaPictureWidth > newMediaPictureHeight){
-            var marginTop = (mediaPhotoHeight - (mediaPhotoHeight  * (newMediaPictureHeight / newMediaPictureWidth)))/2;
-            displayImage.style.marginTop = marginTop + "px";
-        }
-    }
-}*/
-
-var newMediaPicture;
-var newMediaPictureHeight;
-var newMediaPictureWidth;
-/*function previewMediaPicture(input, onload) {
-    if (input.files && input.files[0]) {
-        // Add the loading gif
-        togglePictureLoadingGif("show")
-
-        // In min 1 second, check if the image can be loaded (need min 1s so that gif doesn't load for a split second)
-        setTimeout(function(){checkIfPictureCanBeLoaded()}, 1000);
-
-        var reader = new FileReader();
-        reader.onload = function (e) {
-            newMediaPicture = new Image()
-            // Let the gif start before loading the image, as it lags the gif
-            setTimeout(function(){newMediaPicture.src = e.target.result}, 500);
-            newMediaPicture.onload = function(){
-                // Need to set width variables once the image is loaded into the js object
-                newMediaPictureHeight = this.height;
-                newMediaPictureWidth = this.width;
-                // Image is loaded and ready to be displayed
-                imageLoaded = true;
-                if(onload != null){
-                    onload()
-                }
-            }
-        }
-        reader.readAsDataURL(input.files[0]);
-    }
-}*/
-
-/*function addOtherMediaPhotoFileCallback(){
-    $("#newPhotoFile").change(function(){
-        if(this.value != null && this.value.length > 0){
-            pictureExists = true;
-            previewMediaPicture(this, function(){displayFittedMediaPicture(newMediaPicture.src)});
-        }else{
-            pictureExists = false;
-            if(pictureURL.length > 0){
-                setNewPictureObject(pictureURL)
-                loadImage(pictureURL)
-                selectMainArea()
-            }
-        }
-    });
-}*/
-
 function loadMediaPictureCropTool(){
     var pictureID = "otherMediaPicture";
     var pictureURL = "{{images.noPicture}}";
