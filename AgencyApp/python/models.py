@@ -42,7 +42,8 @@ class UserAccount(models.Model):
     setupComplete = models.BooleanField(default=False)
 
     profilePicture = models.ImageField(default=None, upload_to=image_directory_path, storage=imageStorage)
-    
+    createdAt = models.DateTimeField(auto_now_add=True)
+    updatedAt = models.DateTimeField(auto_now=True)
 
     #reelLink = models.CharField(max_length=500, default='')
     imdbLink = models.CharField(max_length=500, default=None, blank=True, null=True)
@@ -268,6 +269,7 @@ class ProfileMediaPicture(models.Model):
     username = models.CharField(max_length=100)
     description = models.CharField(max_length=500, default=None, blank=True, null=True)
     postPicture = models.ImageField(default=None, upload_to=image_directory_path, storage=imageStorage, blank=True, null=True)
+    createdAt = models.DateTimeField(auto_now_add=True)
 
 # Interest in being considered for roles in this position
 class Interest(models.Model):
