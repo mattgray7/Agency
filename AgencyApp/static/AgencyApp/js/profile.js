@@ -234,7 +234,7 @@ function getProfileMediaPictureString(pictureID, pictureURL, description){
 }
 
 // On edit media page
-function getOtherMediaPictureString(pictureID, pictureURL, description){
+function getOtherMediaPictureString(pictureID, pictureURL, description, featured){
     var listString = "<div class='profileMediaPicturePanel'>"
 
     // Add picture panel
@@ -254,7 +254,11 @@ function getOtherMediaPictureString(pictureID, pictureURL, description){
 
     // Add buttons
     listString += "<div style='position: absolute; bottom: 10px; height: 22px; left: 15px; right: 35px;'><div class='editButton' onclick='deleteOtherMediaPicture(" + '"' + pictureID + '");' + "'>Delete</div></div>"
-    listString += "<div style='position: absolute; bottom: 10px; height: 22px; right: 10px;'><input type='checkbox' name='featuredCheckbox_" + pictureID + "' onclick='updateFeaturedPhotoStatus(this);' /></div>"
+    listString += "<div style='position: absolute; bottom: 10px; height: 22px; right: 10px;'><input type='checkbox' name='featuredCheckbox_" + pictureID + "' onclick='updateFeaturedPhotoStatus(this);' "
+    if(featured === "True"){
+        listString += "checked "
+    }
+    listString += "/></div>"
     listString += "</div>"
 
     return listString;
@@ -269,7 +273,7 @@ function getOtherMediaPictureList(){
     var listString = "";
     if(existingOtherMediaPictures.length > 0){
         for(var i=0; i < existingOtherMediaPictures.length; i++){
-            listString += getOtherMediaPictureString(existingOtherMediaPictures[i]["id"], existingOtherMediaPictures[i]["pictureURL"], existingOtherMediaPictures[i]["description"]);
+            listString += getOtherMediaPictureString(existingOtherMediaPictures[i]["id"], existingOtherMediaPictures[i]["pictureURL"], existingOtherMediaPictures[i]["description"], existingOtherMediaPictures[i]["featured"]);
         }
     }else{
         listString = getEmptyMediaPictureList();

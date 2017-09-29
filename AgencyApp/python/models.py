@@ -102,7 +102,8 @@ class UserAccount(models.Model):
             for picture in ProfileMediaPicture.objects.filter(username=self.username):
                 self._profileMediaPictures.append({"url": picture.postPicture and picture.postPicture.url or "",
                                                    "id": picture.pictureID,
-                                                   "description": picture.description})
+                                                   "description": picture.description,
+                                                   "featured": picture.featured})
         return self._profileMediaPictures
 
     @property
@@ -270,6 +271,7 @@ class ProfileMediaPicture(models.Model):
     description = models.CharField(max_length=500, default=None, blank=True, null=True)
     postPicture = models.ImageField(default=None, upload_to=image_directory_path, storage=imageStorage, blank=True, null=True)
     createdAt = models.DateTimeField(auto_now_add=True)
+    featured = models.BooleanField(default=False)
 
 # Interest in being considered for roles in this position
 class Interest(models.Model):
