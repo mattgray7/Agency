@@ -550,11 +550,107 @@ function addOtherMediaPhotoFileCallback(){
         if(this.value != null && this.value.length > 0){
             pictureExists = true;
             previewMediaPicture(this, function(){displayFittedMediaPicture(newMediaPicture.src)});
+        }else{
+            pictureExists = false;
+            if(pictureURL.length > 0){
+                setNewPictureObject(pictureURL)
+                loadImage(pictureURL)
+                selectMainArea()
+            }
         }
     });
 }
 
+function loadMediaPictureCropTool(){
+    var pictureID = "newMediaPhoto";
+    var pictureURL = "{{images.noPicture}}";
+    /*setDoesPictureExist("")
+    setPictureID(pictureID);
+    setNewPictureObject(pictureURL)
+    addOtherMediaPhotoFileCallback();*/
+}
 
+/*function addEditMediaPictureContent(containerID, isProject, pictureURL){
+        var pictureID = "editPostPicture";
+        setPictureID(pictureID);
+        setButtonLoadingGifURL("{{images.loading.mid}}");
+        setDefaultImageURL("{{images.loading.light}}")
+        setDefaultPicture("{{images.noPicture}}")
+
+        // Set the onclick to include isProject
+
+        // Set the pictureURL to display
+        var addCrop = true;
+        if(pictureURL == null || pictureURL.length === 0){
+            pictureURL = getPictureURL(isProject);
+        }
+
+        // Dont add crop on post picture
+        {% if post and post.postPicture and post.postPicture.url %}
+            // Do endswith as well as pictureURL may not be relative path (ie inludes localhost:8000)
+            if(pictureURL === "{{post.postPicture.url}}" || pictureURL.endsWith("{{post.postPicture.url}}")){
+                addCrop = false;
+            }
+        {% endif %}
+
+        // Dont add crop on noPicture image
+        var disableRemoveButton = false;
+        if(pictureURL === "{{images.noPicture}}"){
+            addCrop = false;
+            disableRemoveButton = true;
+        }else{
+            // Don't add crop for newly added photos
+            for(var postID in newPostPictureURLs){
+                if(pictureURL === newPostPictureURLs[postID]){
+                    addCrop = false;
+                }
+            }
+        }
+
+        // Set newPicture to pictureURL and update projectPicture/projectSubFormPicture
+        setNewPictureObject(pictureURL, addCrop)
+        updatePictureObjects(isProject);
+
+        imageInputDivID = pictureID + "Image";
+
+        // Reset picture input value and remove previous change callbacks
+        $("[id='" + imageInputDivID + "']").val("");
+        $("[id='" + imageInputDivID + "']").off('change');
+
+        var removeButton = document.getElementById("removeButton")
+        if(removeButton != null){
+            if(disableRemoveButton){
+                removeButton.className = "whiteButton disabledButton";
+                removeButton.onclick = "";
+            }else{
+                removeButton.className = "whiteButton blackHover";
+                removeButton.onclick = function(){
+                    removePicture(isProject);
+                }
+            }
+        }
+
+        // Add new callback for this window
+        $("[id='" + imageInputDivID + "']").change(function(){
+            if(this.value != null && this.value.length > 0){
+                pictureExists = true;
+                previewEditPicture(this, function(){
+                    updatePictureObjects(isProject)
+                });
+            }else{
+                var fallbackPictureURL = "";
+               {% if not post or not post.postPicture or not post.postPicture.url %}
+                    pictureExists = false;
+                {% endif %}
+                if(pictureURL.length > 0){
+                    setNewPictureObject(pictureURL, addCrop)
+                    updatePictureObjects(isProject);
+                    loadImage(pictureURL, addCrop)
+                    selectMainArea()
+                }
+            }
+        });
+    }*/
 
 /*******************************************************************/
 </script>
@@ -800,6 +896,38 @@ function addOtherMediaPhotoFileCallback(){
                 }
             });
         }
+
+        function loadPictureCropTool(){
+            var pictureID = "profilePicture";
+            var pictureURL = "";
+            setDoesPictureExist(pictureID, "{{userAccount.profilePicture}}")
+            //setPictureID(pictureID);
+
+            {% if userAccount.profilePicture and userAccount.profilePicture.url %}
+                pictureURL = "{{userAccount.profilePicture.url}}"
+            {% else %}
+                pictureURL = "{{images.noProfilePicture}}"
+            {% endif %}
+            setNewPictureObject(pictureID, pictureURL)
+
+            $("#id_profilePicture").change(function(){
+                if(this.value != null && this.value.length > 0){
+                    console.log("previewing profile picture")
+                    pictureExistsMap[pictureID] = true;
+                    previewEditPicture(pictureID, this, function(){});
+                }else{
+                   {% if not userAccount or not userAccount.profilePicture or not userAccount.profilePicture.url %}
+                        pictureExistsMap[pictureID] = false;
+                    {% endif %}
+                    if(pictureURL.length > 0){
+                        console.log("Falling back casue empty")
+                        setNewPictureObject(pictureID, pictureURL, true)
+                        loadImage(pictureID, pictureURL)
+                        selectMainArea(pictureID)//todo
+                    }
+                }
+            });
+        }
     </script>
     <div id='backgroundPanel' class='backgroundPanel' style='min-width: 634px; min-height: 100%;'>
         <div id="mainViewPanel" class="mainViewPanel" style="position: relative; min-width: 600px; max-width: 600px; background: rgba(0,0,0,0.05); border: none;">
@@ -831,7 +959,7 @@ function addOtherMediaPhotoFileCallback(){
                         {% csrf_token %} 
                         {{ form.as_p }}
 
-                        <!--{% if userAccount and userAccount.profilePicture %}
+                        {% if userAccount and userAccount.profilePicture %}
                             <div id="removeButton" class="whiteButton blackHover" style="width:24.1%; height:28px;" onclick="removeProfilePicture();">
                                 Remove
                             </div>
@@ -840,14 +968,14 @@ function addOtherMediaPhotoFileCallback(){
                                 Skip
                             </div>
                         {% endif %}
-                        <div id="continueButton" class="whiteButton blackHover" style="width:24.1%; height:28px" onclick="submitPictureFormWithCrop('editPictureForm')">
+                        <div id="continueButton" class="whiteButton blackHover" style="width:24.1%; height:28px" onclick="submitPictureFormWithCrop('editPictureForm', 'profilePicture')">
                             Update
-                        </div>-->
+                        </div>
                         <div id="cropInfoInputs"></div>
                     </form>
                 </div>
             </center>
-            <div style='height: 20px; background: #FFF;'></div>
+            <div style='height: 80px; background: #FFF;'></div>
             <div id='otherMediaPanel' style='background: #FFF; position: relative; height: 650px;'>
                 <h2> Other Media</h2>
                 <div id='photosPanel' style='position: absolute; left: 20px; right: 20px; top: 50px; height:550px; border: 1px solid rgba(0,0,0,0.1); border-radius: 3px; background: rgba(0,0,0,0.03'>
@@ -902,7 +1030,8 @@ function addOtherMediaPhotoFileCallback(){
 
             <script>
                 loadPictureCropTool();
-                addOtherMediaPhotoFileCallback();
+                //addOtherMediaPhotoFileCallback();
+                loadMediaPictureCropTool();
             </script>
         </div>
     </div>

@@ -3,40 +3,54 @@ var newPictureHeight;
 var newPictureWidth;
 var displayedPicture = {};
 var areas;
-var cropArea;
+//var cropArea;
 var pictureExists = false;
 var pictureID = "";
 var defaultImageURL = "";
 var imageLoaded = false;
 var defaultAspectRatio = 0.9;
 
-function checkIfPictureCanBeLoaded(){
+
+var newPictures = {}
+var newPictureHeights = {}
+var newPictureWidths = {}
+
+var displayedPictures = {};
+var cropAreas = {};
+var areas = {}
+
+var pictureExistsMap = {}
+var imageLoadedMap = {}
+
+
+function checkIfPictureCanBeLoaded(pictureID){
     // imageLoaded set in previewEditPicture
-    if(imageLoaded){
-        loadImage(newPicture.src)
-        togglePictureLoadingGif("hide")
+    if(imageLoadedMap[pictureID]){
+        loadImage(pictureID, newPictures[pictureID].src)
+        togglePictureLoadingGif(pictureID, "hide")
     }
 }
 
-function previewEditPicture(input, onload) {
+function previewEditPicture(pictureID, input, onload) {
     if (input.files && input.files[0]) {
         // Add the loading gif
-        togglePictureLoadingGif("show")
+        togglePictureLoadingGif(pictureID, "show")
 
         // In min 1 second, check if the image can be loaded (need min 1s so that gif doesn't load for a split second)
-        setTimeout(function(){checkIfPictureCanBeLoaded()}, 1000);
+        setTimeout(function(){checkIfPictureCanBeLoaded(pictureID)}, 1000);
 
         var reader = new FileReader();
         reader.onload = function (e) {
-            newPicture = new Image()
+            newPictures[pictureID] = new Image()
             // Let the gif start before loading the image, as it lags the gif
-            setTimeout(function(){newPicture.src = e.target.result}, 500);
-            newPicture.onload = function(){
+            setTimeout(function(){newPictures[pictureID].src = e.target.result}, 500);
+            newPictures[pictureID].onload = function(){
                 // Need to set width variables once the image is loaded into the js object
-                newPictureHeight = this.height;
-                newPictureWidth = this.width;
+                newPictureHeights[pictureID] = this.height;
+                newPictureWidths[pictureID] = this.width;
+                
                 // Image is loaded and ready to be displayed
-                imageLoaded = true;
+                imageLoadedMap[pictureID] = true;
                 if(onload != null){
                     onload()
                 }
@@ -46,22 +60,22 @@ function previewEditPicture(input, onload) {
     }
 }
 
-function togglePictureLoadingGif(toggleType){
+function togglePictureLoadingGif(pictureID, toggleType){
     var loadingGif = document.getElementById("loadingGif")
     var overlay = document.getElementById("loadingPictureGrayOverlay")
     if(overlay != null && loadingGif != null){
         if(toggleType === "show"){
-            overlay.style.height = displayedPicture.height + "px";
-            overlay.style.width = displayedPicture.width + "px";
+            overlay.style.height = displayedPictures[pictureID].height + "px";
+            overlay.style.width = displayedPictures[pictureID].width + "px";
             overlay.style.background = "rgba(0,0,0,0.7)"
 
             // Reset top margin of loading gif as height of displayed picture may have changed
             var gifHeight = loadingGif.style.height.substring(0, loadingGif.style.height.length-2);
-            loadingGif.style.marginTop = (displayedPicture.height - gifHeight)/2 + "px";
+            loadingGif.style.marginTop = (displayedPictures[pictureID].height - gifHeight)/2 + "px";
 
             // Reset left margin of overlay, as it could change if new pic has diff dimensions
-            if(displayedPicture.height > displayedPicture.width){
-                var newLeftMargin =((290 - displayedPicture.width)/2 + 5) +"px";
+            if(displayedPictures[pictureID].height > displayedPictures[pictureID].width){
+                var newLeftMargin =((290 - displayedPictures[pictureID].width)/2 + 5) +"px";
                 overlay.style.marginLeft = newLeftMargin;
             }else{
                 // 6px accounts for the wrapper border width
@@ -81,48 +95,61 @@ function setDefaultImageURL(imageURL){
     defaultImageURL = imageURL
 }
 
-function setDoesPictureExist(picture){
+function setDoesPictureExist(pictureID, pictureURL){
     // Can't set using Django variables in separate file, so need a setter function
-    if(picture.length > 0){
-        pictureExists = true;
+    if(pictureURL.length > 0){
+        pictureExistsMap[pictureID] = true;
     }else{
-        pictureExists = false;
+        pictureExistsMap[pictureID] = false;
     }
 }
 
-function setPictureID(newPicID){
+/*function setPictureID(newPicID){
     pictureID = newPicID;
-}
+}*/
 
-function setNewPictureObject(imageURL, addCrop){
+
+function setNewPictureObject(imageID, imageURL, addCrop){
     if(addCrop == null){
         addCrop = true;
     }
-    newPicture = new Image();
-    newPicture.onload = function(){
+    newPictures[imageID] = new Image();
+    newPictures[imageID].onload = function(){
         // Need to set width variables once the image is loaded into the js object
-        newPictureHeight = this.height;
-        newPictureWidth = this.width;
+        newPictureHeights[imageID] = this.height;
+        newPictureWidths[imageID] = this.width;
 
         // Once the js object is loaded, we can load the image into the page
-        loadImage(imageURL, addCrop)
+        loadImage(imageID, imageURL, addCrop)
         return true;
         }
-    newPicture.src = imageURL;
+    newPictures[imageID].src = imageURL;
 }
 
-function updateCropArea(){
+function updateCropArea(pictureID){
     // Updates the crop values taken from whatever the user set the crop window to
-    areas = $("[id='" + pictureID + "']").selectAreas('areas');
-    if(areas.length > 0){
-        cropArea = areas[0];
+    areas[pictureID] = $("[id='" + pictureID + "']").selectAreas('areas');
+    if(areas[pictureID].length > 0){
+        cropAreas[pictureID] = areas[pictureID][0];
     }
 }
 
-function selectMainArea(){
+function selectMainArea(pictureID){
     // By default, the select area isn't selected, so show the resize buttons
-    updateCropArea();
-    var elems = document.getElementsByClassName("select-areas-resize-handler")
+    //pictureID = "profilePicture"
+    updateCropArea(pictureID);
+    var elems;
+
+    var picture = document.getElementById(pictureID)
+    if(picture != null){
+        elems = picture.getElementsByClassName("select-areas-resize-handler")
+        if(elems == null || elems.length === 0){
+            console.log("Warning: getting all resize handlers")
+            elems = document.getElementsByClassName("select-areas-resize-handler")
+        }
+    }
+
+    //var elems = document.getElementsByClassName("select-areas-resize-handler")
     for(var i=0; i < elems.length; i++){
         var elem = elems[i];
         elem.style.display = "block";
@@ -133,7 +160,7 @@ function selectMainArea(){
     canDisplayImage = true;
 }
 
-function createPictureContainer(includeCropHandler, addCrop){
+function createPictureContainer(pictureID, includeCropHandler, addCrop){
     pictureHTML = "";
     if(includeCropHandler){
         pictureHTML += '<div class="imageCrop"><div class="wrapper"><div class="image-decorator"'
@@ -147,7 +174,7 @@ function createPictureContainer(includeCropHandler, addCrop){
     return pictureHTML
 }
 
-function loadImage(imageURL, addCrop){
+function loadImage(pictureID, imageURL, addCrop){
     //Load the image into html and display the crop select area
     var imageString = "";
     var newArea = {};
@@ -161,12 +188,12 @@ function loadImage(imageURL, addCrop){
     var pictureParentContainer = document.getElementById(pictureID + "Div");
     var pictureContainerString = null;
     if(pictureParentContainer != null){
-        if(!pictureExists){
+        if(!pictureExistsMap[pictureID]){
             // If there is an existing picture, create pic container with crop window
-            pictureContainerString = createPictureContainer(false, addCrop)
+            pictureContainerString = createPictureContainer(pictureID, false, addCrop)
         }else{
             // Otherwise, create pic container with offset for default image
-            pictureContainerString = createPictureContainer(true, addCrop)
+            pictureContainerString = createPictureContainer(pictureID, true, addCrop)
         }
         // Write the new picture container
         pictureParentContainer.innerHTML = pictureContainerString;
@@ -175,16 +202,19 @@ function loadImage(imageURL, addCrop){
     // Should have been created by the container
     var pictureContainer = document.getElementById(pictureID + "Image")
     if(pictureContainer != null){
-        if(newPictureHeight != null && newPictureWidth != null){
+        if(newPictureHeights[pictureID] != null && newPictureWidths[pictureID] != null){
             // Set highest dimension (h or w) to 300px
-            if(newPictureHeight > newPictureWidth){
+            if(!(pictureID in displayedPictures)){
+                displayedPictures[pictureID] = {};
+            }
+            if(newPictureHeights[pictureID] > newPictureWidths[pictureID]){
                 imageString = '<img id="' + pictureID + '" src="' + imageURL + '" style="left: 0; background: #ededed; max-width: 290px; max-height: 290px;"/>'
                 // height is bigger, so set display height to max (300)
-                displayedPicture.height = pictureDimension;
-                displayedPicture.width = (pictureDimension / newPictureHeight) * newPictureWidth
+                displayedPictures[pictureID].height = pictureDimension;
+                displayedPictures[pictureID].width = (pictureDimension / newPictureHeights[pictureID]) * newPictureWidths[pictureID]
 
                 //if pic height is bigger, area should have width of pic (with space above and below)
-                newArea.width = displayedPicture.width;
+                newArea.width = displayedPictures[pictureID].width;
 
                 // Special case causing errors for square photos
                 newArea.height = newArea.width / aspectRatio;
@@ -195,21 +225,21 @@ function loadImage(imageURL, addCrop){
                 imageString = '<img id="' + pictureID + '" src="' + imageURL + '" style="left: 0; background: #ededed; max-height: 290px; max-width: 290px;"/>'
 
                 //width is bigger, so set display width to max (300)
-                displayedPicture.width = pictureDimension;
-                displayedPicture.height = (pictureDimension / newPictureWidth) * newPictureHeight
+                displayedPictures[pictureID].width = pictureDimension;
+                displayedPictures[pictureID].height = (pictureDimension / newPictureWidths[pictureID]) * newPictureHeights[pictureID]
                 
                 //if pic width is bigger, area should have height of pic (with space on the sides)
-                newArea.height = displayedPicture.height;
+                newArea.height = displayedPictures[pictureID].height;
                 newArea.width = newArea.height * 0.9;
             }
             pictureContainer.innerHTML = imageString;
         }
     }
 
-    if(pictureExists && addCrop){
+    if(pictureExistsMap[pictureID] && addCrop){
         $("[id='" + pictureID + "']").selectAreas({
             minSize: [10, 10],
-            onLoaded: selectMainArea,
+            onLoaded: function(){selectMainArea(pictureID)},
             allowSelect: false,
             aspectRatio: aspectRatio,
             areas: [
@@ -218,20 +248,21 @@ function loadImage(imageURL, addCrop){
                     y: 0,
                     width: newArea.width,
                     height: newArea.height,
-                            }
-                        ]
-                    });
-        }
+                }
+            ]
+        });
     }
+}
 
-function addCropToPictureForm(formName, cropInputDivID){
+function addCropToPictureForm(formName, pictureID, cropInputDivID){
     var form = document.getElementById(formName)
     if(form != null){
-        updateCropArea();
-        var scaleFactorWidth = newPictureWidth / displayedPicture.width;
-        var scaleFactorHeight = newPictureHeight / displayedPicture.height;
+        updateCropArea(pictureID);
+        var scaleFactorWidth = newPictureWidths[pictureID] / displayedPictures[pictureID].width;
+        var scaleFactorHeight = newPictureHeights[pictureID] / displayedPictures[pictureID].height;
 
         // draw cropped image
+        var cropArea = cropAreas[pictureID];
         if(cropArea != null){
             var sourceX = cropArea.x * scaleFactorWidth;
             var sourceY = cropArea.y * scaleFactorHeight;
@@ -250,7 +281,7 @@ function addCropToPictureForm(formName, cropInputDivID){
     return form;
 }
 
-function submitPictureFormWithCrop(formName){
-    var form = addCropToPictureForm(formName, "cropInfoInputs")
+function submitPictureFormWithCrop(formName, pictureID){
+    var form = addCropToPictureForm(formName, pictureID, "cropInfoInputs")
     return form.submit();
 }
