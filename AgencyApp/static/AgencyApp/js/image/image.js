@@ -24,11 +24,14 @@ var pictureExistsMap = {}
 var imageLoadedMap = {}
 
 
-function checkIfPictureCanBeLoaded(pictureID){
+function checkIfPictureCanBeLoaded(pictureID, onload){
     // imageLoaded set in previewEditPicture
     if(imageLoadedMap[pictureID]){
         loadImage(pictureID, newPictures[pictureID].src)
         togglePictureLoadingGif(pictureID, "hide")
+        if(onload != null){
+            onload();
+        }
     }
 }
 
@@ -38,7 +41,7 @@ function previewEditPicture(pictureID, input, onload) {
         togglePictureLoadingGif(pictureID, "show")
 
         // In min 1 second, check if the image can be loaded (need min 1s so that gif doesn't load for a split second)
-        setTimeout(function(){checkIfPictureCanBeLoaded(pictureID)}, 1000);
+        setTimeout(function(){checkIfPictureCanBeLoaded(pictureID, onload)}, 1000);
 
         var reader = new FileReader();
         reader.onload = function (e) {
@@ -52,9 +55,9 @@ function previewEditPicture(pictureID, input, onload) {
                 
                 // Image is loaded and ready to be displayed
                 imageLoadedMap[pictureID] = true;
-                if(onload != null){
+                /*if(onload != null){
                     onload()
-                }
+                }*/
             }
         }
         reader.readAsDataURL(input.files[0]);

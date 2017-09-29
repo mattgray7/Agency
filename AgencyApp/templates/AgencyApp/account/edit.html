@@ -607,7 +607,14 @@ function loadPictureCropTool(){
     $("#id_profilePicture").change(function(){
         if(this.value != null && this.value.length > 0){
             pictureExistsMap[pictureID] = true;
-            previewEditPicture(pictureID, this, function(){});
+            previewEditPicture(pictureID, this, function(){
+                // Update the height of the pp panel so that if picture height shrinks, other panels will be raised to compensate
+                var pictureDiv = document.getElementById("profilePictureDiv");
+                var picturePanel = document.getElementById("profilePicturePanel");
+                if(pictureDiv != null && picturePanel != null){
+                    picturePanel.style.height = pictureDiv.offsetHeight + 100 + "px";
+                }
+            });
         }else{
             {% if not userAccount or not userAccount.profilePicture or not userAccount.profilePicture.url %}
                 pictureExistsMap[pictureID] = false;
@@ -883,7 +890,7 @@ function loadPictureCropTool(){
                     </form>
                 </div>
             </center>
-            <div style='height: 80px; background: #FFF;'></div>
+            <div style='height: 100px; background: #FFF;'></div>
             <div id='otherMediaPanel' style='background: #FFF; position: relative; height: 650px;'>
                 <h2> Other Media</h2>
                 <div id='photosPanel' style='position: absolute; left: 20px; right: 20px; top: 50px; height:550px; border: 1px solid rgba(0,0,0,0.1); border-radius: 3px; background: rgba(0,0,0,0.03'>

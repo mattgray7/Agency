@@ -331,9 +331,9 @@ class ProjectPost(AbstractPost):
     def year(self):
         if self._year is None:
             if self.endDate:
-                self._year = self.endDate.getYear()
+                self._year = self.endDate.year
             elif self.startDate:
-                self._year = self.startDate.getYear()
+                self._year = self.startDate.year
             else:
                 self._year = datetime.datetime.now().year
         return self._year
