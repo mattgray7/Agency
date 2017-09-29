@@ -436,7 +436,7 @@ function addOtherMediaPhoto(){
                     processData: false,
                     success : function(data) {
                         if(data["success"]){
-                            var displayImage = document.getElementById("otherMediaPhotoDisplayImg")
+                            var displayImage = document.getElementById("otherMediaPicture")
                             existingOtherMediaPictures.unshift({"id": data["pictureID"], "pictureURL": displayImage.src, "description": newPhotoDescription.value})
                             var photoList = document.getElementById("photosList");
                             if(photoList != null){
@@ -545,7 +545,7 @@ function previewMediaPicture(input, onload) {
     }
 }
 
-function addOtherMediaPhotoFileCallback(){
+/*function addOtherMediaPhotoFileCallback(){
     $("#newPhotoFile").change(function(){
         if(this.value != null && this.value.length > 0){
             pictureExists = true;
@@ -559,98 +559,60 @@ function addOtherMediaPhotoFileCallback(){
             }
         }
     });
-}
+}*/
 
 function loadMediaPictureCropTool(){
-    var pictureID = "newMediaPhoto";
+    var pictureID = "otherMediaPicture";
     var pictureURL = "{{images.noPicture}}";
-    /*setDoesPictureExist("")
-    setPictureID(pictureID);
-    setNewPictureObject(pictureURL)
-    addOtherMediaPhotoFileCallback();*/
+    setDoesPictureExist(pictureID, "")
+    setNewPictureObject(pictureID, pictureURL)
+
+    $("#newPhotoFile").change(function(){
+        if(this.value != null && this.value.length > 0){
+            pictureExistsMap[pictureID] = true;
+            previewEditPicture(pictureID, this, function(){});
+        }else{
+            /*{% if not userAccount or not userAccount.profilePicture or not userAccount.profilePicture.url %}
+                pictureExistsMap[pictureID] = false;
+            {% endif %}*/
+            if(pictureURL.length > 0){
+                setNewPictureObject(pictureID, pictureURL, true)
+                loadImage(pictureID, pictureURL)
+                selectMainArea(pictureID)
+            }
+        }
+    });
 }
 
-/*function addEditMediaPictureContent(containerID, isProject, pictureURL){
-        var pictureID = "editPostPicture";
-        setPictureID(pictureID);
-        setButtonLoadingGifURL("{{images.loading.mid}}");
-        setDefaultImageURL("{{images.loading.light}}")
-        setDefaultPicture("{{images.noPicture}}")
+function loadPictureCropTool(){
+    var pictureID = "profilePicture";
+    var pictureURL = "";
+    setDoesPictureExist(pictureID, "{{userAccount.profilePicture}}")
 
-        // Set the onclick to include isProject
+    {% if userAccount.profilePicture and userAccount.profilePicture.url %}
+        pictureURL = "{{userAccount.profilePicture.url}}"
+    {% else %}
+        pictureURL = "{{images.noProfilePicture}}"
+    {% endif %}
+    setNewPictureObject(pictureID, pictureURL)
 
-        // Set the pictureURL to display
-        var addCrop = true;
-        if(pictureURL == null || pictureURL.length === 0){
-            pictureURL = getPictureURL(isProject);
-        }
-
-        // Dont add crop on post picture
-        {% if post and post.postPicture and post.postPicture.url %}
-            // Do endswith as well as pictureURL may not be relative path (ie inludes localhost:8000)
-            if(pictureURL === "{{post.postPicture.url}}" || pictureURL.endsWith("{{post.postPicture.url}}")){
-                addCrop = false;
-            }
-        {% endif %}
-
-        // Dont add crop on noPicture image
-        var disableRemoveButton = false;
-        if(pictureURL === "{{images.noPicture}}"){
-            addCrop = false;
-            disableRemoveButton = true;
+    $("#id_profilePicture").change(function(){
+        if(this.value != null && this.value.length > 0){
+            pictureExistsMap[pictureID] = true;
+            previewEditPicture(pictureID, this, function(){});
         }else{
-            // Don't add crop for newly added photos
-            for(var postID in newPostPictureURLs){
-                if(pictureURL === newPostPictureURLs[postID]){
-                    addCrop = false;
-                }
+            {% if not userAccount or not userAccount.profilePicture or not userAccount.profilePicture.url %}
+                pictureExistsMap[pictureID] = false;
+            {% endif %}
+            if(pictureURL.length > 0){
+                setNewPictureObject(pictureID, pictureURL, true)
+                loadImage(pictureID, pictureURL)
+                selectMainArea(pictureID)
             }
         }
+    });
+}
 
-        // Set newPicture to pictureURL and update projectPicture/projectSubFormPicture
-        setNewPictureObject(pictureURL, addCrop)
-        updatePictureObjects(isProject);
-
-        imageInputDivID = pictureID + "Image";
-
-        // Reset picture input value and remove previous change callbacks
-        $("[id='" + imageInputDivID + "']").val("");
-        $("[id='" + imageInputDivID + "']").off('change');
-
-        var removeButton = document.getElementById("removeButton")
-        if(removeButton != null){
-            if(disableRemoveButton){
-                removeButton.className = "whiteButton disabledButton";
-                removeButton.onclick = "";
-            }else{
-                removeButton.className = "whiteButton blackHover";
-                removeButton.onclick = function(){
-                    removePicture(isProject);
-                }
-            }
-        }
-
-        // Add new callback for this window
-        $("[id='" + imageInputDivID + "']").change(function(){
-            if(this.value != null && this.value.length > 0){
-                pictureExists = true;
-                previewEditPicture(this, function(){
-                    updatePictureObjects(isProject)
-                });
-            }else{
-                var fallbackPictureURL = "";
-               {% if not post or not post.postPicture or not post.postPicture.url %}
-                    pictureExists = false;
-                {% endif %}
-                if(pictureURL.length > 0){
-                    setNewPictureObject(pictureURL, addCrop)
-                    updatePictureObjects(isProject);
-                    loadImage(pictureURL, addCrop)
-                    selectMainArea()
-                }
-            }
-        });
-    }*/
 
 /*******************************************************************/
 </script>
@@ -866,68 +828,6 @@ function loadMediaPictureCropTool(){
                 }
             });
         }
-
-        function loadPictureCropTool(){
-            var pictureID = "profilePicture";
-            var pictureURL = "";
-            setDoesPictureExist("{{userAccount.profilePicture}}")
-            setPictureID(pictureID);
-
-            {% if userAccount.profilePicture and userAccount.profilePicture.url %}
-                pictureURL = "{{userAccount.profilePicture.url}}"
-            {% else %}
-                pictureURL = "{{images.noProfilePicture}}"
-            {% endif %}
-            setNewPictureObject(pictureURL)
-
-            $("#id_profilePicture").change(function(){
-                if(this.value != null && this.value.length > 0){
-                    pictureExists = true;
-                    previewEditPicture(this);
-                }else{
-                   {% if not userAccount or not userAccount.profilePicture or not userAccount.profilePicture.url %}
-                        pictureExists = false;
-                    {% endif %}
-                    if(pictureURL.length > 0){
-                        setNewPictureObject(pictureURL)
-                        loadImage(pictureURL)
-                        selectMainArea()
-                    }
-                }
-            });
-        }
-
-        function loadPictureCropTool(){
-            var pictureID = "profilePicture";
-            var pictureURL = "";
-            setDoesPictureExist(pictureID, "{{userAccount.profilePicture}}")
-            //setPictureID(pictureID);
-
-            {% if userAccount.profilePicture and userAccount.profilePicture.url %}
-                pictureURL = "{{userAccount.profilePicture.url}}"
-            {% else %}
-                pictureURL = "{{images.noProfilePicture}}"
-            {% endif %}
-            setNewPictureObject(pictureID, pictureURL)
-
-            $("#id_profilePicture").change(function(){
-                if(this.value != null && this.value.length > 0){
-                    console.log("previewing profile picture")
-                    pictureExistsMap[pictureID] = true;
-                    previewEditPicture(pictureID, this, function(){});
-                }else{
-                   {% if not userAccount or not userAccount.profilePicture or not userAccount.profilePicture.url %}
-                        pictureExistsMap[pictureID] = false;
-                    {% endif %}
-                    if(pictureURL.length > 0){
-                        console.log("Falling back casue empty")
-                        setNewPictureObject(pictureID, pictureURL, true)
-                        loadImage(pictureID, pictureURL)
-                        selectMainArea(pictureID)//todo
-                    }
-                }
-            });
-        }
     </script>
     <div id='backgroundPanel' class='backgroundPanel' style='min-width: 634px; min-height: 100%;'>
         <div id="mainViewPanel" class="mainViewPanel" style="position: relative; min-width: 600px; max-width: 600px; background: rgba(0,0,0,0.05); border: none;">
@@ -1017,8 +917,13 @@ function loadMediaPictureCropTool(){
                                     </ul>
                                     
                                 </div>
-                                <div style='position: absolute; left: 61.3%; right: 10px; top: 10px; border: 1px solid rgba(0,0,0,0.1); background: #000; width: 207px; height: 230px; text-align: center;'>
-                                    <img src='{{images.noPicture}}' id='otherMediaPhotoDisplayImg' style='max-height: 230px; max-width: 207px; margin: 0 auto;'>
+                                <div style='position: absolute; left: 60%; right: 10px; top: 10px; border: 1px solid rgba(0,0,0,0.0); background: none; width: 207px; height: 230px; text-align: center; display: table;'>
+                                    <div style='display: table-cell; vertical-align: middle;'>
+                                        <div id="otherMediaPictureDiv" class="profilePictureDiv" style='width: 200px; max-width: 200px; text-align: left;'>
+                                            <!-- Image div created in loadImage() -->
+                                        </div>
+                                    </div>
+                                    <!--<img src='{{images.noPicture}}' id='otherMediaPhotoDisplayImg' style='max-height: 230px; max-width: 207px; margin: 0 auto;'>-->
                                 </div>
 
 

@@ -18,6 +18,7 @@ var newPictureWidths = {}
 var displayedPictures = {};
 var cropAreas = {};
 var areas = {}
+var pictureMaxDimension = {"profilePicture": 290, "otherMediaPicture": 200}
 
 var pictureExistsMap = {}
 var imageLoadedMap = {}
@@ -75,7 +76,7 @@ function togglePictureLoadingGif(pictureID, toggleType){
 
             // Reset left margin of overlay, as it could change if new pic has diff dimensions
             if(displayedPictures[pictureID].height > displayedPictures[pictureID].width){
-                var newLeftMargin =((290 - displayedPictures[pictureID].width)/2 + 5) +"px";
+                var newLeftMargin =((pictureMaxDimension[pictureID] - displayedPictures[pictureID].width)/2 + 5) +"px";
                 overlay.style.marginLeft = newLeftMargin;
             }else{
                 // 6px accounts for the wrapper border width
@@ -120,6 +121,7 @@ function setNewPictureObject(imageID, imageURL, addCrop){
         newPictureWidths[imageID] = this.width;
 
         // Once the js object is loaded, we can load the image into the page
+        console.log("About to load image " + imageID)
         loadImage(imageID, imageURL, addCrop)
         return true;
         }
@@ -179,7 +181,7 @@ function loadImage(pictureID, imageURL, addCrop){
     var imageString = "";
     var newArea = {};
     var aspectRatio = defaultAspectRatio;
-    var pictureDimension = 290;
+    var pictureDimension = pictureMaxDimension[pictureID]
     if(addCrop == null){
         addCrop = true;
     }
@@ -208,7 +210,7 @@ function loadImage(pictureID, imageURL, addCrop){
                 displayedPictures[pictureID] = {};
             }
             if(newPictureHeights[pictureID] > newPictureWidths[pictureID]){
-                imageString = '<img id="' + pictureID + '" src="' + imageURL + '" style="left: 0; background: #ededed; max-width: 290px; max-height: 290px;"/>'
+                imageString = '<img id="' + pictureID + '" src="' + imageURL + '" style="left: 0; background: #ededed; max-width: ' + pictureDimension + 'px; max-height: ' + pictureDimension + 'px;"/>'
                 // height is bigger, so set display height to max (300)
                 displayedPictures[pictureID].height = pictureDimension;
                 displayedPictures[pictureID].width = (pictureDimension / newPictureHeights[pictureID]) * newPictureWidths[pictureID]
@@ -222,7 +224,7 @@ function loadImage(pictureID, imageURL, addCrop){
                     newArea.height = pictureDimension
                 }
             }else{
-                imageString = '<img id="' + pictureID + '" src="' + imageURL + '" style="left: 0; background: #ededed; max-height: 290px; max-width: 290px;"/>'
+                imageString = '<img id="' + pictureID + '" src="' + imageURL + '" style="left: 0; background: #ededed; max-height: ' + pictureDimension + 'px; max-width: ' + pictureDimension + 'px;"/>'
 
                 //width is bigger, so set display width to max (300)
                 displayedPictures[pictureID].width = pictureDimension;
