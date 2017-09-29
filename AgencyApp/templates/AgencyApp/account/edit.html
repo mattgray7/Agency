@@ -438,9 +438,9 @@ function addOtherMediaPhoto(){
                     contentType: false,
                     processData: false,
                     success : function(data) {
-                        if(data["success"]){
+                        if(data["success"] && data["pictureURL"]){
                             var displayImage = document.getElementById(pictureID)
-                            existingOtherMediaPictures.unshift({"id": data["pictureID"], "pictureURL": displayImage.src, "description": newPhotoDescription.value})
+                            existingOtherMediaPictures.unshift({"id": data["pictureID"], "pictureURL": data["pictureURL"], "description": newPhotoDescription.value})
                             var photoList = document.getElementById("photosList");
                             if(photoList != null){
                                 photoList.innerHTML = getOtherMediaPhotosList();

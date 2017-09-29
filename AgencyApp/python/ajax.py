@@ -321,11 +321,14 @@ def getPostData(request):
 def saveProfileMediaPicture(request):
     success = False
     username = request.user.username
+    newPic = ""
     if username and request.FILES:
         pictureID = helpers.createUniqueID(models.ProfileMediaPicture, "pictureID")
         mediaPicture = models.ProfileMediaPicture(pictureID=pictureID, username=username, description=request.POST.get("newPhotoDescription"))
         success = helpers.savePostPictureInDatabase(request, "newPhotoFile", mediaPicture, _getCropInfo(request), "mediaPicture_{0}.jpg".format(pictureID))
-    return JsonResponse({"success": success, "pictureID": pictureID})
+        if success:
+            newPic = mediaPicture and mediaPicture.postPicture and mediaPicture.postPicture.url
+    return JsonResponse({"success": success, "pictureID": pictureID, "pictureURL": newPic})
 
 def deleteProfileMediaPicture(request):
     pictureID = request.POST.get("pictureID")
