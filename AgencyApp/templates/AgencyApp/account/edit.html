@@ -891,28 +891,32 @@ function loadPictureCropTool(){
                 </div>
             </center>
             <div style='height: 100px; background: #FFF;'></div>
-            <div id='otherMediaPanel' style='background: #FFF; position: relative; height: 650px;'>
+            <div id='otherMediaPanel' style='background: #FFF; position: relative; padding-bottom: 10px;'>
                 <h2> Other Media</h2>
-                <div id='photosPanel' style='position: absolute; left: 20px; right: 20px; top: 50px; height:550px; border: 1px solid rgba(0,0,0,0.1); border-radius: 3px; background: rgba(0,0,0,0.03'>
-                    <div style='position: relative; height: 100%; width: 100%;'>
-                        <h3 style='position: absolute; left: 5px; top: 5px; margin: 0;'>
+                <div id='photosPanel' style='margin-left: 20px; margin-right: 20px; margin-top: 5px; border: 1px solid rgba(0,0,0,0.1); border-radius: 3px; background: rgba(0,0,0,0.03)'>
+                        <h3 style='margin: 0px 5px; text-align: left;'>
                             Photos
                         </h3>
 
-                        <div id='otherMediaPictureListPanel' style='position: absolute; left: 0; right: 0; top: 40px; height: 230px; background: #FFF; overflow: scroll;'>
-                            {% if profileMediaPictures %}
-                                <div id='otherMediaPictureList' style='text-align: left; max-height: 230px; overflow-x: scroll; overflow-y: hidden; white-space: nowrap;'>
+                        <div id='otherMediaPictureListPanel' style='max-height: 230px;  overflow: scroll;'>
+                            <div id='otherMediaPictureList' style='text-align: left; max-height: 230px; overflow-x: scroll; overflow-y: hidden; white-space: nowrap;'>
+                                {% if profileMediaPictures %}
                                     <script>
                                         {% for picture in profileMediaPictures %}
                                             existingOtherMediaPictures.push({"pictureURL": "{{picture.url}}", "id": "{{picture.id}}", "description": "{{picture.description}}"})
                                         {% endfor %}
                                         document.write(getOtherMediaPictureList())
                                     </script>
-                                </div>
-                            {% endif %}
+                                {% else %}
+                                    <div style='height: 50px; width: 100%;'>
+                                        Add pictures to your profile
+                                    </div>
+
+                                {% endif %}
+                            </div>
                         </div>
 
-                        <div id='otherMediaPicturePanel' style='position: absolute; left: 0; right: 0; top: 280px; bottom: 0; text-align: left; background: #FFF; border: 1px solid rgba(0,0,0,0.1);'>
+                        <div id='otherMediaPicturePanel' style='position: relative: height: 270px; text-align: left; background: #FFF; border: 1px solid rgba(0,0,0,0.1);'>
                             <div style='position: relative; height: 100%;'>
                                 <form id='otherMediaPictureForm' method='post' enctype="multipart/form-data" class='form-style-7' style='width: 53%; margin-left: 0px; display:'>
                                     <ul>
@@ -931,10 +935,9 @@ function loadPictureCropTool(){
                                         </li>
                                     </ul>
                                     <div id="otherMediaPictureCropInfoInputs"></div>
-                                </form>
-                                    
+                                </form>        
                             </div>
-                            <div style='position: absolute; left: 60%; right: 10px; top: 10px; border: 1px solid rgba(0,0,0,0.0); background: none; width: 207px; height: 230px; text-align: center; display: table;'>
+                            <div style='position: absolute; left: 60%; right: 10px; bottom: 10px;  border: 1px solid rgba(0,0,0,0.0); background: none; width: 207px; height: 230px; text-align: center; display: table;'>
                                 <div style='display: table-cell; vertical-align: middle;'>
                                     <div style='position: relative; width: 300px;'>
                                         <div id="otherMediaPictureLoadingPictureGrayOverlay" class="hiddenGrayPopupOverlay" style="background: rgba(0,0,0,0); height:0%; width:0%; position: absolute; margin-left: -10px; margin-top: 11px; top:0; z-index: 3; text-align: center;">
