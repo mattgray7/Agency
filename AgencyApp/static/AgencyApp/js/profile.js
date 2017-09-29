@@ -234,7 +234,7 @@ function getProfileMediaPictureString(pictureID, pictureURL, description){
 }
 
 // On edit media page
-function getOtherMediaPhotoString(pictureID, pictureURL, description){
+function getOtherMediaPictureString(pictureID, pictureURL, description){
     var listString = "<div class='profileMediaPicturePanel'>"
 
     // Add picture panel
@@ -259,11 +259,11 @@ function getOtherMediaPhotoString(pictureID, pictureURL, description){
     return listString;
 }
 
-function getOtherMediaPhotosList(){
+function getOtherMediaPictureList(){
     var listString = "";
     if(existingOtherMediaPictures.length > 0){
         for(var i=0; i < existingOtherMediaPictures.length; i++){
-            listString += getOtherMediaPhotoString(existingOtherMediaPictures[i]["id"], existingOtherMediaPictures[i]["pictureURL"], existingOtherMediaPictures[i]["description"]);
+            listString += getOtherMediaPictureString(existingOtherMediaPictures[i]["id"], existingOtherMediaPictures[i]["pictureURL"], existingOtherMediaPictures[i]["description"]);
         }
     }
     return listString;

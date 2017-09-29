@@ -418,12 +418,12 @@ function removeRecord(projectID){
 /************************ EDIT_MEDIA ***************************/
 var existingOtherMediaPictures = [];
 
-function addOtherMediaPhoto(){
+function addOtherMediaPicture(){
     var pictureID = "otherMediaPicture";
     var formName = "otherMediaPictureForm";
     var newPhotoForm = document.getElementById(formName)
-    var newPhoto = document.getElementById("newPhotoFile");
-    var newPhotoDescription = document.getElementById("newPhotoDescription");
+    var newPhoto = document.getElementById("otherMediaPictureFile");
+    var newPhotoDescription = document.getElementById("otherMediaPictureDescription");
     if(newPhoto != null && newPhotoDescription != null && newPhotoForm != null){
         if(newPhoto.value != null && newPhoto.value != ""){
             newPhotoForm = addCropToPictureForm(formName, pictureID, pictureID + "CropInfoInputs");
@@ -441,9 +441,9 @@ function addOtherMediaPhoto(){
                         if(data["success"] && data["pictureURL"]){
                             var displayImage = document.getElementById(pictureID)
                             existingOtherMediaPictures.unshift({"id": data["pictureID"], "pictureURL": data["pictureURL"], "description": newPhotoDescription.value})
-                            var photoList = document.getElementById("photosList");
+                            var photoList = document.getElementById("otherMediaPictureList");
                             if(photoList != null){
-                                photoList.innerHTML = getOtherMediaPhotosList();
+                                photoList.innerHTML = getOtherMediaPictureList();
                             }
                             resetOtherMediaPictureForm();
                         }
@@ -470,9 +470,9 @@ function deleteOtherMediaPicture(pictureID){
                                 break;
                             }
                         }
-                        var photoList = document.getElementById("photosList");
+                        var photoList = document.getElementById("otherMediaPictureList");
                         if(photoList != null){
-                            photoList.innerHTML = getOtherMediaPhotosList();
+                            photoList.innerHTML = getOtherMediaPictureList();
                         }
                     }
                 }
@@ -480,9 +480,7 @@ function deleteOtherMediaPicture(pictureID){
 }
 
 function editOtherMediaPicture(pictureID){
-    var newPhotoDescription = document.getElementById("newPhotoDescription");
-    var displayImage = document.getElementById("otherMediaPhotoDisplayImg")
-
+    var newPhotoDescription = document.getElementById("otherMediaPictureDescription");
     for(var i=0; i < existingOtherMediaPictures.length; i++){
         if(existingOtherMediaPictures[i]["id"] === pictureID){
             displayFittedMediaPicture(existingOtherMediaPictures[i]["pictureURL"])
@@ -496,8 +494,8 @@ function resetOtherMediaPictureForm(){
     var pictureURL = "{{images.noPicture}}";
 
     // Reset form values
-    var newPhoto = document.getElementById("newPhotoFile");
-    var newPhotoDescription = document.getElementById("newPhotoDescription");
+    var newPhoto = document.getElementById("otherMediaPictureFile");
+    var newPhotoDescription = document.getElementById("otherMediaPictureDescription");
     newPhoto.value = '';
     newPhotoDescription.value = '';
 
@@ -510,7 +508,7 @@ function resetOtherMediaPictureForm(){
 
 var mediaPhotoHeight = 230;
 var mediaPhotoWidth = mediaPhotoHeight * defaultAspectRatio;
-function displayFittedMediaPicture(pictureURL){
+/*function displayFittedMediaPicture(pictureURL){
     if(pictureURL == null || pictureURL.length === 0){
         pictureURL = newMediaPicture.src
     }
@@ -522,12 +520,12 @@ function displayFittedMediaPicture(pictureURL){
             displayImage.style.marginTop = marginTop + "px";
         }
     }
-}
+}*/
 
 var newMediaPicture;
 var newMediaPictureHeight;
 var newMediaPictureWidth;
-function previewMediaPicture(input, onload) {
+/*function previewMediaPicture(input, onload) {
     if (input.files && input.files[0]) {
         // Add the loading gif
         togglePictureLoadingGif("show")
@@ -553,7 +551,7 @@ function previewMediaPicture(input, onload) {
         }
         reader.readAsDataURL(input.files[0]);
     }
-}
+}*/
 
 /*function addOtherMediaPhotoFileCallback(){
     $("#newPhotoFile").change(function(){
@@ -577,7 +575,7 @@ function loadMediaPictureCropTool(){
     setDoesPictureExist(pictureID, "")
     setNewPictureObject(pictureID, pictureURL)
 
-    $("#newPhotoFile").change(function(){
+    $("#otherMediaPictureFile").change(function(){
         if(this.value != null && this.value.length > 0){
             pictureExistsMap[pictureID] = true;
             previewEditPicture(pictureID, this, function(){});
@@ -894,33 +892,33 @@ function loadPictureCropTool(){
                             Photos
                         </h3>
 
-                        <div id='photosListPanel' style='position: absolute; left: 0; right: 0; top: 40px; height: 230px; background: #FFF; overflow: scroll;'>
+                        <div id='otherMediaPictureListPanel' style='position: absolute; left: 0; right: 0; top: 40px; height: 230px; background: #FFF; overflow: scroll;'>
                             {% if profileMediaPictures %}
-                                <div id='photosList' style='text-align: left; max-height: 230px; overflow-x: scroll; overflow-y: hidden; white-space: nowrap;'>
+                                <div id='otherMediaPictureList' style='text-align: left; max-height: 230px; overflow-x: scroll; overflow-y: hidden; white-space: nowrap;'>
                                     <script>
                                         {% for picture in profileMediaPictures %}
                                             existingOtherMediaPictures.push({"pictureURL": "{{picture.url}}", "id": "{{picture.id}}", "description": "{{picture.description}}"})
                                         {% endfor %}
-                                        document.write(getOtherMediaPhotosList())
+                                        document.write(getOtherMediaPictureList())
                                     </script>
                                 </div>
                             {% endif %}
                         </div>
 
-                        <div id='newPhotoPanel' style='position: absolute; left: 0; right: 0; top: 260px; bottom: 0; text-align: left; background: #FFF; border: 1px solid rgba(0,0,0,0.1);'>
+                        <div id='otherMediaPicturePanel' style='position: absolute; left: 0; right: 0; top: 260px; bottom: 0; text-align: left; background: #FFF; border: 1px solid rgba(0,0,0,0.1);'>
                             <div style='position: relative; height: 100%;'>
                                 <form id='otherMediaPictureForm' method='post' enctype="multipart/form-data" class='form-style-7' style='width: 53%; margin-left: 0px; display:'>
                                     <ul>
                                         <script>
-                                            var newPhotoFields = [{"label": "New File", "type": "file", "name": "newPhotoFile"},
-                                                                  {"label": "Caption", "type": "text", "name": "newPhotoDescription"}]
-                                            for(var i=0; i < newPhotoFields.length; i++){
-                                                var newString = "<li style='height: 30px;'><label for='name'>" + newPhotoFields[i]["label"] + "</label><input type='" + newPhotoFields[i]["type"] + "' name='" + newPhotoFields[i]["name"] + "' id='" + newPhotoFields[i]["name"] + "'></li>"
+                                            var newPictureFields = [{"label": "New File", "type": "file", "name": "otherMediaPictureFile"},
+                                                                  {"label": "Caption", "type": "text", "name": "otherMediaPictureDescription"}]
+                                            for(var i=0; i < newPictureFields.length; i++){
+                                                var newString = "<li style='height: 30px;'><label for='name'>" + newPictureFields[i]["label"] + "</label><input type='" + newPictureFields[i]["type"] + "' name='" + newPictureFields[i]["name"] + "' id='" + newPictureFields[i]["name"] + "'></li>"
                                                 document.write(newString)
                                             }
                                         </script>
                                         <li style='border: none; margin-top: 15px; padding: 0px 0px;'>
-                                            <div id="continueButton" class="whiteButton blackHover" style="display: block; height:28px; text-align: center; padding: 0.7em 3em;" onclick="addOtherMediaPhoto();">
+                                            <div id="continueButton" class="whiteButton blackHover" style="display: block; height:28px; text-align: center; padding: 0.7em 3em;" onclick="addOtherMediaPicture();">
                                                 Add photo
                                             </div>
                                         </li>
@@ -928,26 +926,21 @@ function loadPictureCropTool(){
                                     <div id="otherMediaPictureCropInfoInputs"></div>
                                 </form>
                                     
-                                </div>
-                                <div style='position: absolute; left: 60%; right: 10px; top: 10px; border: 1px solid rgba(0,0,0,0.0); background: none; width: 207px; height: 230px; text-align: center; display: table;'>
-                                    <div style='display: table-cell; vertical-align: middle;'>
-                                        <div id="otherMediaPictureDiv" class="profilePictureDiv" style='width: 200px; max-width: 200px; text-align: left;'>
-                                            <!-- Image div created in loadImage() -->
-                                        </div>
+                            </div>
+                            <div style='position: absolute; left: 60%; right: 10px; top: 10px; border: 1px solid rgba(0,0,0,0.0); background: none; width: 207px; height: 230px; text-align: center; display: table;'>
+                                <div style='display: table-cell; vertical-align: middle;'>
+                                    <div id="otherMediaPictureDiv" class="profilePictureDiv" style='width: 200px; max-width: 200px; text-align: left;'>
+                                        <!-- Image div created in loadImage() -->
                                     </div>
-                                    <!--<img src='{{images.noPicture}}' id='otherMediaPhotoDisplayImg' style='max-height: 230px; max-width: 207px; margin: 0 auto;'>-->
                                 </div>
-
-
+                            </div>
                         </div>
-
                     </div>
                 </div>
             </div>
 
             <script>
                 loadPictureCropTool();
-                //addOtherMediaPhotoFileCallback();
                 loadMediaPictureCropTool();
             </script>
         </div>

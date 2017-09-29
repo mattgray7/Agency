@@ -325,9 +325,9 @@ def saveProfileMediaPicture(request):
     if username and request.FILES:
         pictureID = helpers.createUniqueID(models.ProfileMediaPicture, "pictureID")
         mediaPicture = models.ProfileMediaPicture(pictureID=pictureID, username=username, description=request.POST.get("newPhotoDescription"))
-        success = helpers.savePostPictureInDatabase(request, "newPhotoFile", mediaPicture, _getCropInfo(request), "mediaPicture_{0}.jpg".format(pictureID))
+        success = helpers.savePostPictureInDatabase(request, "otherMediaPictureFile", mediaPicture, _getCropInfo(request), "mediaPicture_{0}.jpg".format(pictureID))
         if success:
-            newPic = mediaPicture and mediaPicture.postPicture and mediaPicture.postPicture.url
+            newPic = mediaPicture and mediaPicture.postPicture and mediaPicture.postPicture.url or None
     return JsonResponse({"success": success, "pictureID": pictureID, "pictureURL": newPic})
 
 def deleteProfileMediaPicture(request):
