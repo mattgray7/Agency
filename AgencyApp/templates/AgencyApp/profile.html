@@ -243,11 +243,16 @@
                 // Add title
                 feedString += "<h3>Posted by <a onclick='redirectToUser(" + '"' + endorsementList[i]["poster"]["username"] + '");' + "'>" + endorsementList[i]["poster"]["cleanName"] + "</a></h3>";
                 // Add date
-                feedString += "<h4 style='margin: 0; font-size: 0.9em; color: rgba(0,0,0,0.6);'>" + endorsementList[i]["createdAt"] + "</h4><div style='border-bottom: 1px solid rgba(0,0,0,0.7);'></div>"
+                feedString += "<h4 style='margin: 0; font-size: 0.9em; color: rgba(0,0,0,0.6);'>" + endorsementList[i]["createdAt"] + "</h4><div style='height: 6px; border-bottom: 1px solid rgba(0,0,0,0.7); margin-bottom: 3px;'></div>"
+                // Add edit button
+                if(endorsementList[i]["poster"]["username"] === "{{request.user.username}}"){
+                    feedString += "<div style='position: absolute; right: 0px; top: -5px; text-align: center;'><div class='editButton' onclick=''>Edit</div><div style='margin-top: 4px;' class='editButton' onclick=''>Delete</div></div>"
+                }
                 // Add description
+                var maxDescriptionLength = 250;
                 var description = endorsementList[i]["description"]
-                if(description.length > 200){
-                    description = description.substring(0, 200) + "... <a>See more</a>"
+                if(description.length > maxDescriptionLength){
+                    description = description.substring(0, maxDescriptionLength) + "... <a>See more</a>"
                 }
                 feedString += "<div style='font-size: 0.9em;'>" + description + "</div>"
 
