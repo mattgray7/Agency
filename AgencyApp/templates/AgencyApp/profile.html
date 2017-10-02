@@ -31,8 +31,13 @@
         }
 
         // Update main view panel height after tab content is changed
+        updateProfileContentPanelHeight();
+    }
+
+    function updateProfileContentPanelHeight(){
         var projectContentPanel = document.getElementById("profileContentPanel")
         if(projectContentPanel != null){
+            // All profile buttons are same height, so just use bio
             var tabButtonsHeight = document.getElementById("bioProfileButton").offsetHeight;
             var projectContentHeight = document.getElementById("profileTabContentPanelContainer").offsetHeight;
             projectContentPanel.style.height = tabButtonsHeight + projectContentHeight + "px";
@@ -209,6 +214,8 @@
                                     var feedContainer = document.getElementById("profileEndorsementFeedContainer");
                                     if(feedContainer != null){
                                         feedContainer.innerHTML = createEndorsementFeed();
+                                        updateProfileContentPanelHeight();
+                                        textArea.value = '';
                                     }
                                 }
                             }
