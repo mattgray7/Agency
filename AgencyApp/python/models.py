@@ -78,7 +78,24 @@ class UserAccount(models.Model):
     @property
     def profileEndorsements(self):
         if self._profileEndorsements is None:
-            self._profileEndorsements = ProfileEndorsement.objects.filter(username=self.username)
+            self._profileEndorsements = []
+            endorsements = ProfileEndorsement.objects.filter(username=self.username)
+            for endorsement in endorsements:
+                newEndorsement = {"postID": endorsement.postID,
+                                  "username": endorsement.username,
+                                  "description": endorsement.description,
+                                  "createdAt": endorsement.createdAt.isoformat(),
+                                  }
+                try:
+                    poster = UserAccount.objects.get(username=endorsement.poster)
+                except models.UserAccount.DoesNotExist:
+                    continue
+                else:
+                    newEndorsement["poster"] = {"username": poster.username,
+                                                "profession": poster.mainProfession,
+                                                "profilePictureURL": poster.profilePicture and poster.profilePicture.url or None,
+                                                }
+                    self._profileEndorsements.append(newEndorsement)
         return self._profileEndorsements
 
     @property
