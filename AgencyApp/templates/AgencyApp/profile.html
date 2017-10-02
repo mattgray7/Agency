@@ -231,17 +231,40 @@
             }
 
             if(professionList.length > 5){
-                panelString += "<li id='extraProfessionsRowElement'>" + (professionList.length-5) + " more jobs...</li>";
+                panelString += "<li><div id='extraProfessionsRowElement' style='cursor: pointer; width: 28%;'>" + (professionList.length-5) + " more jobs...</div></li><ul>";
+
+                // Add hover panel
+                panelString += "<div id='extraProfessionsHoverPanel' style='position: absolute; left: 100px; top: 84%; width: 200px; background: #FFF; border: 1px solid rgba(0,0,0,1); display: none; z-index: 5; padding: 5px; border-radius: 3px;'><ul>"
+                for(var i=5; i < professionList.length; i++){
+                    panelString += "<li>" + professionList[i] + "</li>"
+                }
+                panelString += "</ul></div>"
+
+                // Add hover callback for extra jobs
                 callbacks.push(function(){
                     // Add hover on extra professions string
-                    console.log("Adding hover callback")
                     $("#extraProfessionsRowElement").hover(function(){
-                        console.log("hovering");
-                    });
+                            // Just display the hover panel
+                            $("#extraProfessionsHoverPanel").css("display", "block");
+                        },
+                        function(){
+                            // If the mouse is hovering over the hover panel, want to keep it displayed
+                            var isHovered = $('#extraProfessionsHoverPanel').is(":hover");
+                            if(!isHovered){
+                                // Not hovering over hover panel, so can hide it
+                                $("#extraProfessionsHoverPanel").css("display", "none");
+                            }else{
+                                // Hovering over hover panel, so hide callback on unhovering hover panel
+                                $('#extraProfessionsHoverPanel').hover(function(){}, function(){
+                                    $("#extraProfessionsHoverPanel").css("display", "none");
+                                });
+                            }
+                        }
+                    );
                 })
+            }else{
+                panelString += "</ul>"
             }
-
-            panelString += "</ul>"
         {% endif %}
         panelString += "</div>"
         return {'html': panelString, 'callbacks': callbacks};
