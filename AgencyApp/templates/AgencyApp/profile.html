@@ -184,8 +184,54 @@
         }
     }
 
+    function addNewEndorsement(){
+        var textArea = document.getElementById('newEndorsementTextArea');
+        if(textArea != null){
+            {% if request.user.is_authenticated %}
+                if(textArea.value != null && textArea.value.length > 0){
+                    $.ajax({
+                        url : "/ajax/createProfileEndorsement/",
+                            data : {"username": "{{profileUserAccount.username}}", "description": textArea.value},
+                            type : 'POST',
+                            dataType: "json",
+                            success : function(data) {
+                                if(data["success"]){
+                                    console.log("success")
+                                }
+                            }
+                    });
+                }else{
+                    console.log("You must enter text")
+                }
+            {% else %}
+                console.log("You must be logged in to submit")
+            {% endif %}
+        }
+    }
+
     function displayEndorsements(){
-        console.log("endorsements")
+        var tabContent = document.getElementById("profileTabContentPanel")
+        if(tabContent != null){
+            //var tabString = "<div style='position: relative; min-height: 100px; width: 100%;'>";
+            var tabString = "<div style='text-align: left;'>";
+
+            // Add text panel
+            tabString += "<div style='position: relative; background:rgba(0,0,0,0.03); height: 155px; margin: 5px 10px; padding: 5px; border-radius: 3px'><h1 >Add an endorsement!</h1>"
+            tabString += "<textarea id='newEndorsementTextArea' class='formInputElement' style='font-size: 0.9em; min-height: 75px; resize: none; width: 100%; border-radius: 3px; border: 1px solid rgba(0,0,0,0.3);' placeholder='Matt was great to work with on The 4400, a true professional!'></textarea>";
+            tabString += "<div class='editButton' onclick='addNewEndorsement();' style='position: absolute; right: 5px; bottom: 5px; padding: 5px 10px;text-align: center;'>Submit</div>"
+            tabString += "</div>"
+
+            // Add endorsement feed
+            {% if profileUserAccount.profileEndorsements %}
+                tabString += "<div id='profileEndorsementFeed'><ul>"
+                {% for endorsement in profileUserAccount.profileEndorsements %}
+                    tabString += "<li>{{endorsement.description}} - {{endorsement.poster}}, {{endorsement.createdAt}}</li>"
+                {% endfor %}
+                tabString += "</ul></div>"
+            {% endif %}
+            tabString += "</div>";
+            tabContent.innerHTML = tabString;
+        }
     }
 
     function getProfessionList(){
@@ -305,7 +351,7 @@
 
     function getHireTextPanel(){
         var callbacks = [];
-        
+
         return {"html": "hiring", "callbacks": callbacks}
     }
 
@@ -608,6 +654,8 @@ if("{{source}}" === "EDIT_FILMOGRAPHY"){
     defaultTab = "media"
 }
 
+//for testing
+defaultTab = "endorsements"
 selectProfileTab(defaultTab)
 </script>
 

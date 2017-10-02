@@ -371,6 +371,18 @@ def updateProfileMediaPictureFeaturedStatus(request):
                 success = True
     return JsonResponse({"success": success, "errors": errors})
 
+def createProfileEndorsement(request):
+    success = False
+    postID = None
+    username = request.POST.get("username")
+    poster = request.user.username
+    description = request.POST.get("description")
+    if username and poster and description:
+        postID = helpers.createUniqueID(models.ProfileEndorsement, "postID")
+        endorsement = models.ProfileEndorsement(postID=postID, username=username, poster=poster, description=description)
+        endorsement.save()
+        success = True
+    return JsonResponse({"success": success, "postID": postID})
 
 def savePostParticipant(request):
     postID = request.POST.get("postID")

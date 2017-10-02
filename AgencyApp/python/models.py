@@ -68,11 +68,18 @@ class UserAccount(models.Model):
         self._projects = None
         self._profileProfessions = None
         self._profileMediaPictures = None
+        self._profileEndorsements = None
         self._mainProfession = None
         self._actorDescriptionEnabled = None
 
     def __str__(self):
         return self.username
+
+    @property
+    def profileEndorsements(self):
+        if self._profileEndorsements is None:
+            self._profileEndorsements = ProfileEndorsement.objects.filter(username=self.username)
+        return self._profileEndorsements
 
     @property
     def actorDescriptionEnabled(self):
@@ -279,6 +286,14 @@ class ProfileMediaPicture(models.Model):
     postPicture = models.ImageField(default=None, upload_to=image_directory_path, storage=imageStorage, blank=True, null=True)
     createdAt = models.DateTimeField(auto_now_add=True)
     featured = models.BooleanField(default=False)
+
+class ProfileEndorsement(models.Model):
+    postID = models.CharField(max_length=10)
+    username = models.CharField(max_length=100)
+    poster = models.CharField(max_length=100)
+    description = models.CharField(max_length=500, default=None, blank=True, null=True)
+    createdAt = models.DateTimeField(auto_now_add=True)
+    updatedAt = models.DateTimeField(auto_now=True)
 
 # Interest is being considered for roles in this position
 class Interest(models.Model):
