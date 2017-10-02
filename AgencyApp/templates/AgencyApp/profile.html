@@ -201,6 +201,7 @@
                                                           "description": textArea.value,
                                                           "createdAt": "2017-09-09",
                                                           "poster": {"username": "{{userAccount.username}}",
+                                                                     "cleanName": "{{userAccount.cleanName}}",
                                                                      "profilePictureURL": "{{userAccount.profilePicture}}",
                                                                      "profession": "{{userAccount.mainProfession}}"}
                                                           }
@@ -222,10 +223,31 @@
     }
 
     function createEndorsementFeed(){
-        var feedString = "<ul>"
+        var feedString = "<ul class='projectFeed'>"
         if(endorsementList.length > 0){
             for(var i=0; i < endorsementList.length; i++){
-                feedString += "<li>" + endorsementList[i]["description"] + "</li>"
+                feedString += "<li class='projectFeedElement' style='height: 150px; position: relative;'>"
+
+                // Add poster picture
+                feedString += "<div style='position: absolute; left: 10px; top: 10px; bottom: 10px; overflow: hidden;'><img src='" + endorsementList[i]["poster"]["profilePictureURL"] + "' style='height: 100%;' /></div>"
+
+                // Add text container
+                feedString += "<div style='position: absolute; left: 135px; top: 10px; right: 10px; bottom: 10px; text-align: left;'>"
+                // Add title
+                feedString += "<h3>Posted by <a onclick='redirectToUser(" + '"' + endorsementList[i]["poster"]["username"] + '");' + "'>" + endorsementList[i]["poster"]["cleanName"] + "</a></h3>";
+                // Add date
+                feedString += "<h4 style='margin: 0; font-size: 0.9em; color: rgba(0,0,0,0.6);'>" + endorsementList[i]["createdAt"] + "</h4><div style='border-bottom: 1px solid rgba(0,0,0,0.7);'></div>"
+                // Add description
+                var description = endorsementList[i]["description"]
+                if(description.length > 200){
+                    description = description.substring(0, 200) + "... <a>See more</a>"
+                }
+                feedString += "<div style='font-size: 0.9em;'>" + description + "</div>"
+
+                // Close text container
+                feedString += "</div>"
+
+                feedString += "</li>"
             }
         }
         feedString += "</ul>"

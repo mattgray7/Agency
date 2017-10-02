@@ -84,7 +84,7 @@ class UserAccount(models.Model):
                 newEndorsement = {"postID": endorsement.postID,
                                   "username": endorsement.username,
                                   "description": endorsement.description,
-                                  "createdAt": endorsement.createdAt.isoformat(),
+                                  "createdAt": endorsement.createdAt.isoformat()[0: 10]
                                   }
                 try:
                     poster = UserAccount.objects.get(username=endorsement.poster)
@@ -93,6 +93,7 @@ class UserAccount(models.Model):
                 else:
                     newEndorsement["poster"] = {"username": poster.username,
                                                 "profession": poster.mainProfession,
+                                                "cleanName": poster.cleanName,
                                                 "profilePictureURL": poster.profilePicture and poster.profilePicture.url or None,
                                                 }
                     self._profileEndorsements.append(newEndorsement)
