@@ -229,14 +229,32 @@
         }
     }
 
+    function expandEndorsementDescription(postID){
+        if(postID != null && postID.length > 0){
+            if(postID in fullEndorsementDescriptions){
+                var description = document.getElementById("endorsementDescription_" + postID);
+                var row = document.getElementById("endorsementElement_" + postID);
+                if(description != null && row != null){
+                    var currentDescriptionHeight = description.offsetHeight;
+                    description.innerHTML = fullEndorsementDescriptions[postID];
+                    var newDescriptionHeight = description.offsetHeight;
+
+                    row.style.height = parseInt(row.style.height.substring(0, row.style.height.length - 2)) + (newDescriptionHeight - currentDescriptionHeight) + "px";
+                    updateProfileContentPanelHeight();
+                }
+            }
+        }
+    }
+
+    var fullEndorsementDescriptions = {};
     function createEndorsementFeed(){
         var feedString = "<ul class='projectFeed'>"
         if(endorsementList.length > 0){
             for(var i=0; i < endorsementList.length; i++){
-                feedString += "<li class='projectFeedElement' style='height: 150px; position: relative;'>"
+                feedString += "<li id='endorsementElement_" + endorsementList[i]["postID"] + "' class='projectFeedElement' style='height: 150px; position: relative;'>"
 
                 // Add poster picture
-                feedString += "<div style='position: absolute; left: 10px; top: 10px; bottom: 10px; overflow: hidden;'><img src='" + endorsementList[i]["poster"]["profilePictureURL"] + "' style='height: 100%;' /></div>"
+                feedString += "<div style='position: absolute; left: 10px; top: 10px; height: 130px; overflow: hidden;'><img src='" + endorsementList[i]["poster"]["profilePictureURL"] + "' style='height: 100%;' /></div>"
 
                 // Add text container
                 feedString += "<div style='position: absolute; left: 135px; top: 10px; right: 10px; bottom: 10px; text-align: left;'>"
@@ -252,9 +270,10 @@
                 var maxDescriptionLength = 250;
                 var description = endorsementList[i]["description"]
                 if(description.length > maxDescriptionLength){
-                    description = description.substring(0, maxDescriptionLength) + "... <a>See more</a>"
+                    description = description.substring(0, maxDescriptionLength) + "... <a onclick='expandEndorsementDescription(" +'"' + endorsementList[i]["postID"] + '");' + "'>See more</a>"
                 }
-                feedString += "<div style='font-size: 0.9em;'>" + description + "</div>"
+                fullEndorsementDescriptions[endorsementList[i]["postID"]] = endorsementList[i]["description"]
+                feedString += "<div id='endorsementDescription_" + endorsementList[i]["postID"] + "' style='font-size: 0.9em;'>" + description + "</div>"
 
                 // Close text container
                 feedString += "</div>"
