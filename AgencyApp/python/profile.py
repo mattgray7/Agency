@@ -101,6 +101,7 @@ class ProfileView(views.GenericFormView):
 
     @property
     def pageContext(self):
+        self._pageContext = super(ProfileView, self).pageContext
         self._pageContext["displayName"] = self.displayName
         self._pageContext["viewingOwnProfile"] = self.userViewingOwnProfile
         self._pageContext["profileUserAccount"] = self.profileUserAccount

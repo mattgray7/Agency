@@ -55,6 +55,7 @@ class GenericView(object):
         self._pageContext["cancelButtonName"] = self.cancelButtonName
         self._pageContext["cancelSource"] = self.cancelSource
         self._pageContext["cancelDestination"] = self.cancelDestination
+        self._pageContext["userAccount"] = self.userAccount
 
     @property
     def cancelSource(self):
