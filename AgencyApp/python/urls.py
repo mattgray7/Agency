@@ -50,6 +50,7 @@ urlpatterns = [
     url(r'^ajax/saveTempPostPicture/$', ajax.saveTempPostPicture, name='saveTempPostPicture'),  #TODO find a way to secure this link
     url(r'^ajax/saveProfileMediaPicture/$', ajax.saveProfileMediaPicture, name='saveProfileMediaPicture'),
     url(r'^ajax/deleteProfileMediaPicture/$', ajax.deleteProfileMediaPicture, name='deleteProfileMediaPicture'),
+    url(r'^ajax/updateProfileMediaPictureFeaturedStatus/$', ajax.updateProfileMediaPictureFeaturedStatus, name='updateProfileMediaPictureFeaturedStatus'),
     url(r'^ajax/savePostParticipant/$', ajax.savePostParticipant, name='savePostParticipant'),  #TODO find a way to secure this link
     url(r'^ajax/saveProjectAdmin/$', ajax.saveProjectAdmin, name='saveProjectAdmin'),  #TODO find a way to secure this link
     url(r'^ajax/deleteProjectAdmin/$', ajax.deleteProjectAdmin, name='deleteProjectAdmin'),  #TODO find a way to secure this link

@@ -572,7 +572,30 @@ function loadPictureCropTool(){
 }
 
 function updateFeaturedPhotoStatus(input){
-    console.log("clicked")
+    var pictureID = input.id.replace("featuredCheckbox_", "");
+    var checked = input.checked;
+    $.ajax({
+        url : "/ajax/updateProfileMediaPictureFeaturedStatus/",
+        data : {"pictureID": pictureID, "isFeatured": checked},
+        type : 'POST',
+        dataType: "json",
+        success : function(data) {
+            if(data["success"]){
+                console.log("success")
+            }else{
+                if(data["errors"]){
+                    input.checked = !checked;
+                    var errorString = ""
+                    for(var i=0; i < data["errors"].length; i++){
+                        errorString += data["errors"][i]
+                    }
+
+                    // Alert breaks code execution, so need to use timeout so input checked has time to update before alerting
+                    setTimeout(function() { alert(errorString); }, 50);
+                }
+            }
+        }
+    });
 }
 
 

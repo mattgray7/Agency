@@ -344,6 +344,34 @@ def deleteProfileMediaPicture(request):
         success = True
     return JsonResponse({"success": success})
 
+def updateProfileMediaPictureFeaturedStatus(request):
+    success = False
+    errors = []
+    username = request.user.username
+    pictureID = request.POST.get("pictureID")
+    newFeaturedValue = request.POST.get("isFeatured") in [True, "true", "True"];
+    if pictureID and username:
+        skipUpdate = False
+
+        # Check if there are already 3 featured photos
+        if newFeaturedValue:
+            featuredPics = models.ProfileMediaPicture.objects.filter(username=username, featured=True)
+            if len(featuredPics) >= 3:
+                skipUpdate = True
+                errors.append("You can only feature 3 photos.")
+
+        if not skipUpdate:
+            try:
+                picture = models.ProfileMediaPicture.objects.get(pictureID=pictureID)
+            except models.ProfileMediaPicture.DoesNotExist:
+                pass
+            else:
+                picture.featured = newFeaturedValue
+                picture.save()
+                success = True
+    return JsonResponse({"success": success, "errors": errors})
+
+
 def savePostParticipant(request):
     postID = request.POST.get("postID")
     statusLabel = request.POST.get("status") or "Involved"
