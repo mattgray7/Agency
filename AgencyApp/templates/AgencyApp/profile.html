@@ -211,7 +211,40 @@
     }
 
     function getWorkTextPanel(){
-        return "working"
+        var panelString = "<div style='margin-left: 5px;'>";
+        var callbacks = []
+        panelString += "<h2 style='margin-top: 5px;'>Looking for work</h2>"
+        {% if profileInterests.work %}
+            panelString += ""
+
+            // Add sub title
+            panelString += "<h3 style='font-size: 0.9em; color: rgba(0,0,0,0.5);'>" + "{{profileUserAccount.cleanName}}".split(" ")[0] + " is interested in working as:</h3>"
+
+            var professionList = []
+            {% for interest in profileInterests.work %}
+                professionList.push("{{interest.professionName}}")
+            {% endfor %}
+
+            panelString += "<ul>"
+            for(var i=0; i < Math.min(5, professionList.length); i++){
+                panelString += "<li>" + professionList[i] + "</li>";
+            }
+
+            if(professionList.length > 5){
+                panelString += "<li id='extraProfessionsRowElement'>" + (professionList.length-5) + " more jobs...</li>";
+                callbacks.push(function(){
+                    // Add hover on extra professions string
+                    console.log("Adding hover callback")
+                    $("#extraProfessionsRowElement").hover(function(){
+                        console.log("hovering");
+                    });
+                })
+            }
+
+            panelString += "</ul>"
+        {% endif %}
+        panelString += "</div>"
+        return {'html': panelString, 'callbacks': callbacks};
     }
 
     function getHireTextPanel(){
@@ -223,24 +256,28 @@
     }
 
     function getProfileHeaderTextPanel(){
-        var panelString = "<div style='width: 100%; height: 100%; position: relative;'>"
-
+        var panelString = "<div style='width: 100%; height: 100%; position: relative; text-align: left;'>"
+        var callbacks = []
         // Add edit button
         {% if viewingOwnProfile %}
             panelString += "<div style='position: absolute; top: 5px; right: 5px;'><div class='editButton' onclick='redirect(" + '"{{ possibleDestinations.interests }}");' + "'>Edit</div></div>";
         {% endif %}
 
+        var newInfo
         {% if profileUserAccount.workInterest and profileUserAccount.hireInterest %}
-            panelString += getWorkHireTextPanel();
+            newInfo = getWorkHireTextPanel();
         {% elif profileUserAccount.workInterest %}
-            panelString += getWorkTextPanel();
+            newInfo = getWorkTextPanel();
         {% elif profileUserAccount.hireInterest %}
-            panelString += getHireTextPanel();
+            newInfo = getHireTextPanel();
         {% else %}
-            panelString += getDefaultTextPanel();
+            newInfo = getDefaultTextPanel();
         {% endif %}
+        panelString += newInfo['html']
         panelString += "</div>"
-        return panelString;
+
+        callbacks = callbacks.concat(newInfo["callbacks"])
+        return {"html": panelString, "callbacks": callbacks};
     }
 </script>
 
@@ -441,7 +478,15 @@
                             <div style='position: relative; height: 100%; border: 1px solid rgba(0,0,0,1);'>
                                 <div style='position: absolute; top: 0px; height: 190px; left: 0; right: 0; border: 0px solid #aea;'>
                                     <script>
-                                        document.write(getProfileHeaderTextPanel())
+                                        var headerTextInfo = getProfileHeaderTextPanel()
+                                        document.write(headerTextInfo['html'])
+                                        if(headerTextInfo['callbacks'].length > 0){
+                                            for(var i=0; i < headerTextInfo['callbacks'].length; i++){
+                                                if(headerTextInfo["callbacks"][i] != null){
+                                                    headerTextInfo["callbacks"][i]();
+                                                }
+                                            }
+                                        }
                                     </script>
                                 </div>
 

@@ -280,7 +280,7 @@ class ProfileMediaPicture(models.Model):
     createdAt = models.DateTimeField(auto_now_add=True)
     featured = models.BooleanField(default=False)
 
-# Interest in being considered for roles in this position
+# Interest is being considered for roles in this position
 class Interest(models.Model):
     username = models.CharField(max_length=100)
     mainInterest = models.CharField(max_length=100) #work/hire/other
