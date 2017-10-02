@@ -246,7 +246,11 @@
             for(var i=0; i < Math.min(5, professionList.length); i++){
                 panelString += "<li>" + professionList[i]["profession"]
                 if(professionList[i]["creditCount"] > 0){
-                    panelString += " (" + professionList[i]["creditCount"] + " credits)"
+                    panelString += " (" + professionList[i]["creditCount"] + " credit"
+                    if(creditCount > 1){
+                        panelString += "s"
+                    }
+                    panelString += ")"
                 }
                 panelString += "</li>";
             }
@@ -259,7 +263,11 @@
                 for(var i=5; i < professionList.length; i++){
                     panelString += "<li>" + professionList[i]["profession"]
                     if(professionList[i]["creditCount"] > 0){
-                        panelString += " (" + professionList[i]["creditCount"] + " credits)"
+                        panelString += " (" + professionList[i]["creditCount"] + " credit"
+                        if(creditCount > 1){
+                            panelString += "s"
+                        }
+                        panelString += ")"
                     }
                     panelString += "</li>";
                 }
@@ -296,7 +304,9 @@
     }
 
     function getHireTextPanel(){
-        return "hiring"
+        var callbacks = [];
+        
+        return {"html": "hiring", "callbacks": callbacks}
     }
 
     function getDefaultTextPanel(){

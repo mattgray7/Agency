@@ -170,65 +170,6 @@
 		margin-left: 50px;
 	}
 
-	.hireOptionTable
-	{
-		table-layout: fixed; 
-	}
-
-
-	.hireTableButton
-	{
-		height: 50px;
-	}
-
-	.hireTableColumn
-	{
-		height: 400px;
-		table-layout:fixed;
-		width: 200px;
-		border: 2px solid #000;
-		border-radius: 4px;
-		background: #efefef;
-		color: #000;
-		top:0 ;
-	}
-
-	.hireTableColumnActive
-	{
-		height: 400px;
-		table-layout:fixed;
-		width: 200px;
-		border: 2px solid #000;
-		border-radius: 4px;
-		background: #232323;
-		color: #000;
-	}
-
-	.hireTableColumnElement
-	{
-		border: none;
-		padding: 1em 1em 1em 1em;
-		background: #efefef;
-		color: #000;
-	}
-
-	.hireButtonWidth
-	{
-		width: 100%;
-	}
-
-	#interestsDiv
-	{
-		display: table-cell;
-	}
-
-	#interestsDiv a
-	{
-		display: inline-block;
-		vertical-align: bottom;
-		width: 75%;
-	}
-
 	.squareButtonTable table {
 	}	
 
@@ -288,57 +229,6 @@
 		vertical-align: middle;
 	}
 
-	.profession3ColumnsFullPanel {
-		width: 295px;
-		height: 460px;
-		margin: 5px auto 0px auto;
-		display: inline-block;
-		background: #c9cacc;
-		color: #fff;
-		letter-spacing: 1px;
-		text-decoration: none;
-		font-weight: 700;
-		font-size: 0.5em;
-		overflow: scroll;
-		border: 2px solid rgba(0,0,0,1);
-		border-radius: 6px;
-	}
-
-	.professionsSelectColumn{
-		width: 281px;
-		padding: 0em 0.5em;
-		letter-spacing: 1px;
-		text-decoration: none;
-		text-transform: uppercase;
-		font-size: 1.0em;
-		color: #000;
-		float: left;
-		background: #efefef;
-
-		border: 1px solid rgba(0,0,0,1);
-		border-radius: 6px;
-	}
-	
-	.professionsSelectColumn:hover{
-		color: rgba(255,255,255,1);
-		background: #414142;
-		cursor: pointer;
-	}
-
-	.professionsSelectColumn a:hover{
-		color: rgba(255,255,255,1);
-	}
-
-	.professionsSelectList td a, .professionsSelectList td span
-	{
-		padding: 0.5em 0.5em;
-		letter-spacing: 1px;
-		text-decoration: none;
-		text-transform: uppercase;
-		font-size: 1.5em;
-		color: rgba(0,0,0,1.0);
-		float: left;
-	}
 	
 /*********************************************************************************/
 /* Image Style                                                                   */
