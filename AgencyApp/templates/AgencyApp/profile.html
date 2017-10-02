@@ -95,21 +95,23 @@
                 currentLeftMargin = 0;
                 contentString += "<div style='position: relative; margin-top: -5px; height: 152px;'><h2>Links</h2><div style='height: 0px; width: 88%; border-top: 1px solid rgba(0,0,0,0.3);'></div>";
                 {% if profileUserAccount.imdbLink %}
-                    contentString += "<a href='{{profileUserAccount.imdbLink}}'><div class='profileSquareButton'  style='position: absolute; left: " + currentLeftMargin + "px; bottom: 10px;'><img src='{{icons.imdb}}' style='margin-top: 28px;width: 80px;'></div>"
+                    contentString += "<a href='{{profileUserAccount.imdbLink}}'><div class='profileSquareButton'  style='position: absolute; left: " + currentLeftMargin + "px; bottom: 10px;'><img src='{{icons.imdb}}' style='margin-top: 28px;width: 80px;'></div></a>"
                     currentLeftMargin += 110;
                 {% endif %}
 
                 {% if profileUserAccount.resume %}
-                    contentString += "<a href='/media/{{profileUserAccount.resume}}'><div class='profileSquareButton' style='position: absolute; left: " + currentLeftMargin + "px; bottom: 10px;'><img src='{{icons.resume}}' style='margin-top: 8px;width: 60px;'><div style='font-size: 0.9em;'>Resume</div></div>"
+                    contentString += "<a href='/media/{{profileUserAccount.resume}}'><div class='profileSquareButton' style='position: absolute; left: " + currentLeftMargin + "px; bottom: 10px;'><img src='{{icons.resume}}' style='margin-top: 8px;width: 60px;'><div style='font-size: 0.9em;'>Resume</div></div></a>"
                     currentLeftMargin += 110;
                 {% endif %}
                 contentString += "</div>"
             {% endif %}
             contentString += "</div>";
 
-            // Start with edit button
-            contentString += "<div style='position: absolute; top: -3px; right: 15px;'><div class='hoverButton'><a onclick='redirect(" + '"{{ possibleDestinations.background }}");' + "'>Edit</a></div></div>";
-
+            // Add edit button
+            {% if viewingOwnProfile %}
+                contentString += "<div style='position: absolute; top: 5px; right: 12px;'><div class='editButton' onclick='redirect(" + '"{{ possibleDestinations.background }}");' + "'>Edit</div></div>";
+            {% endif %}
+            
             // Add edit button
             tabContent.innerHTML = contentString;
         }
@@ -202,6 +204,43 @@
             returnString += '</ul></div>';
         {% endif %}
         return returnString;
+    }
+
+    function getWorkHireTextPanel(){
+        return "working and hiring"
+    }
+
+    function getWorkTextPanel(){
+        return "working"
+    }
+
+    function getHireTextPanel(){
+        return "hiring"
+    }
+
+    function getDefaultTextPanel(){
+        return "default"
+    }
+
+    function getProfileHeaderTextPanel(){
+        var panelString = "<div style='width: 100%; height: 100%; position: relative;'>"
+
+        // Add edit button
+        {% if viewingOwnProfile %}
+            panelString += "<div style='position: absolute; top: 5px; right: 5px;'><div class='editButton' onclick='redirect(" + '"{{ possibleDestinations.interests }}");' + "'>Edit</div></div>";
+        {% endif %}
+
+        {% if profileUserAccount.workInterest and profileUserAccount.hireInterest %}
+            panelString += getWorkHireTextPanel();
+        {% elif profileUserAccount.workInterest %}
+            panelString += getWorkTextPanel();
+        {% elif profileUserAccount.hireInterest %}
+            panelString += getHireTextPanel();
+        {% else %}
+            panelString += getDefaultTextPanel();
+        {% endif %}
+        panelString += "</div>"
+        return panelString;
     }
 </script>
 
@@ -398,14 +437,16 @@
                             <h1><a onclick='redirectToUser("{{profileUserAccount.username}}");' >{{profileUserAccount.cleanName}}</a></h1>
                             <script>document.write(getProfessionList())</script>
                         </div>
-                        <div style='position: absolute; left: 240px; right: 0px; top: 0; bottom: 0; margin: 15px;'>
+                        <div style='position: absolute; left: 240px; right: 0px; top: 0; bottom: 0; margin: 15px; background: rgba(0,0,0,0.04);'>
                             <div style='position: relative; height: 100%; border: 1px solid rgba(0,0,0,1);'>
-                                <div style='position: absolute; top: 0px; height: 150px; left: 0; right: 0; border: 0px solid #aea;'>
-
+                                <div style='position: absolute; top: 0px; height: 190px; left: 0; right: 0; border: 0px solid #aea;'>
+                                    <script>
+                                        document.write(getProfileHeaderTextPanel())
+                                    </script>
                                 </div>
 
                                 {% if profileUserAccount.hasFeaturedMediaPictures %}
-                                    <div style='position: absolute; bottom: 0px; height: 130px; left: 0; right: 0; border: 1px solid rgba(0,0,0,0.1); white-space: nowrap; overflow: hidden; text-align: left;'>
+                                    <div style='position: absolute; bottom: 0px; height: 130px; left: 0; right: 0; ; white-space: nowrap; overflow: hidden; text-align: left;'>
                                         {% for picture in profileUserAccount.profileMediaPictures %}
                                             {% if picture.featured %}
                                                 <div style='display: inline-block; margin-right: 5px; border: 1px solid rgba(0,0,0,0.1);'>
