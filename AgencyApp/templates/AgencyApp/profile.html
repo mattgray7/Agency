@@ -220,14 +220,35 @@
             // Add sub title
             panelString += "<h3 style='font-size: 0.9em; color: rgba(0,0,0,0.5);'>" + "{{profileUserAccount.cleanName}}".split(" ")[0] + " is interested in working as:</h3>"
 
+            var projects = {};
+            {% if filmography %}
+                projects = {{filmography|safe}};
+            {% endif %}
+
+            // Create a dict of professions, and how many projects in their filmography match the profession
             var professionList = []
             {% for interest in profileInterests.work %}
-                professionList.push("{{interest.professionName}}")
+                var creditCount = 0;
+                for(var projectID in projects){
+                    if(projects[projectID]["labels"].length > 0){
+                        for(var i=0; i < projects[projectID]["labels"].length; i++){
+                            if("{{interest.professionName}}" === projects[projectID]["labels"][i]["label"]){
+                                creditCount++;
+                            }
+                        }
+                    }
+                }
+                professionList.push({"profession": "{{interest.professionName}}", "creditCount": creditCount})
             {% endfor %}
+
 
             panelString += "<ul>"
             for(var i=0; i < Math.min(5, professionList.length); i++){
-                panelString += "<li>" + professionList[i] + "</li>";
+                panelString += "<li>" + professionList[i]["profession"]
+                if(professionList[i]["creditCount"] > 0){
+                    panelString += " (" + professionList[i]["creditCount"] + " credits)"
+                }
+                panelString += "</li>";
             }
 
             if(professionList.length > 5){
@@ -236,7 +257,11 @@
                 // Add hover panel
                 panelString += "<div id='extraProfessionsHoverPanel' style='position: absolute; left: 100px; top: 84%; width: 200px; background: #FFF; border: 1px solid rgba(0,0,0,1); display: none; z-index: 5; padding: 5px; border-radius: 3px;'><ul>"
                 for(var i=5; i < professionList.length; i++){
-                    panelString += "<li>" + professionList[i] + "</li>"
+                    panelString += "<li>" + professionList[i]["profession"]
+                    if(professionList[i]["creditCount"] > 0){
+                        panelString += " (" + professionList[i]["creditCount"] + " credits)"
+                    }
+                    panelString += "</li>";
                 }
                 panelString += "</ul></div>"
 
@@ -569,10 +594,10 @@
 var defaultTab = "bio";
 if("{{source}}" === "EDIT_FILMOGRAPHY"){
     defaultTab = "filmography";
+}else if("{{source}}" === "EDIT_PROFILE_PICTURE"){
+    defaultTab = "media"
 }
 
-//for testing
-defaultTab = "media";
 selectProfileTab(defaultTab)
 </script>
 
