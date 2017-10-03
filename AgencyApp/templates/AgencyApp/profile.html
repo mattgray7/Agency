@@ -258,18 +258,24 @@
         }
     }
 
-    function expandEndorsementDescription(postID){
+    function toggleExpandEndorsementDescription(toggleType, postID){
         if(postID != null && postID.length > 0){
-            if(postID in fullEndorsementDescriptions){
+            if(postID in endorsementDescriptionMap){
                 var description = document.getElementById("endorsementDescription_" + postID);
                 var row = document.getElementById("endorsementElement_" + postID);
                 if(description != null && row != null){
-                    var currentDescriptionHeight = description.offsetHeight;
-                    description.innerHTML = fullEndorsementDescriptions[postID];
-                    var newDescriptionHeight = description.offsetHeight;
+                    if(toggleType === "expand"){
+                        var currentDescriptionHeight = description.offsetHeight;
+                        description.innerHTML = endorsementDescriptionMap[postID]["full"] + "<a onclick='toggleExpandEndorsementDescription(" + '"shrink", "' + postID + '");' + "'>... See less</a>"
+                        var newDescriptionHeight = description.offsetHeight;
 
-                    row.style.height = parseInt(row.style.height.substring(0, row.style.height.length - 2)) + (newDescriptionHeight - currentDescriptionHeight) + "px";
-                    updateProfileContentPanelHeight();
+                        row.style.height = parseInt(row.style.height.substring(0, row.style.height.length - 2)) + (newDescriptionHeight - currentDescriptionHeight) + "px";
+                        updateProfileContentPanelHeight();
+                    }else{
+                        description.innerHTML = endorsementDescriptionMap[postID]["short"]
+                        row.style.height = "150px";
+                        updateProfileContentPanelHeight();
+                    }
                 }
             }
         }
@@ -284,7 +290,18 @@
         }
     }
 
-    var fullEndorsementDescriptions = {};
+    var maxDescriptionLength = 250;
+    function getEndorsementDescriptionString(expanded, fullDescription, postID){
+        // Add description
+        var description = fullDescription;
+        if(description.length > maxDescriptionLength){
+            description = description.substring(0, maxDescriptionLength) + "... <a onclick='toggleExpandEndorsementDescription(" + '"expand", "' + postID + '");' + "'>See more</a>"
+        }
+        endorsementDescriptionMap[postID] = {"full": fullDescription, "short": description}
+        return description
+    }
+
+    var endorsementDescriptionMap = {};
     function createEndorsementFeed(){
         var feedString = "<ul class='projectFeed'>"
         if(endorsementList.length > 0){
@@ -318,14 +335,7 @@
                 }
                 feedString += "</div>"
 
-                // Add description
-                var maxDescriptionLength = 250;
-                var description = endorsementList[i]["description"]
-                if(description.length > maxDescriptionLength){
-                    description = description.substring(0, maxDescriptionLength) + "... <a onclick='expandEndorsementDescription(" +'"' + endorsementList[i]["postID"] + '");' + "'>See more</a>"
-                }
-                fullEndorsementDescriptions[endorsementList[i]["postID"]] = endorsementList[i]["description"]
-                feedString += "<div id='endorsementDescription_" + endorsementList[i]["postID"] + "' style='font-size: 0.9em;'>" + description + "</div>"
+                feedString += "<div id='endorsementDescription_" + endorsementList[i]["postID"] + "' style='font-size: 0.9em;'>" + getEndorsementDescriptionString(true, endorsementList[i]["description"], endorsementList[i]["postID"]) + "</div>"
 
                 // Close text container
                 feedString += "</div>"
