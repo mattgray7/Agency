@@ -300,10 +300,24 @@
                 feedString += "<h3>Posted by <a onclick='redirectToUser(" + '"' + endorsementList[i]["poster"]["username"] + '");' + "'>" + endorsementList[i]["poster"]["cleanName"] + "</a></h3>";
                 // Add date
                 feedString += "<h4 style='margin: 0; font-size: 0.9em; color: rgba(0,0,0,0.6);'>" + endorsementList[i]["createdAt"] + "</h4><div style='height: 6px; border-bottom: 1px solid rgba(0,0,0,0.7); margin-bottom: 3px;'></div>"
-                // Add edit button
+
+                // Add edit button if user wrote the review
+                // Add edit button if user wrote the review or user is viewing his own progile
+                feedString += "<div style='position: absolute; right: 0px; top: -5px; text-align: center;'>";
+                var addDelete = false;
                 if(endorsementList[i]["poster"]["username"] === "{{request.user.username}}"){
-                    feedString += "<div style='position: absolute; right: 0px; top: -5px; text-align: center;'><div class='editButton' onclick=''>Edit</div><div style='margin-top: 4px;' class='editButton' onclick='deleteProfileEndorsement(" + '"' + endorsementList[i]["postID"] + '"' + ");'>Delete</div></div>"
+                    feedString += "<div class='editButton' onclick=''>Edit</div>";
+                    addDelete = true;
+                }else{
+                    {% if viewingOwnProfile %}
+                        addDelete = true;
+                    {% endif %}
                 }
+                if(addDelete){
+                    feedString += "<div style='margin-top: 4px;' class='editButton' onclick='deleteProfileEndorsement(" + '"' + endorsementList[i]["postID"] + '"' + ");'>Delete</div>";
+                }
+                feedString += "</div>"
+
                 // Add description
                 var maxDescriptionLength = 250;
                 var description = endorsementList[i]["description"]
