@@ -321,7 +321,7 @@
                         toggleEditProfileEndorsement("shrink", postID)
                     }
 
-                    var editString = "<textarea id='endorsementDescriptionText_" + postID + "' style='font-size: 0.9em; ; resize: none; min-height: 70px; width: 98.7%; border-radius: 3px; border: 1px solid rgba(0,0,0,0.3);'>" + endorsementDescriptionMap[postID]["short"] + "</textarea>";
+                    var editString = "<textarea id='endorsementDescriptionText_" + postID + "' style='font-family: Didact Gothic, sans-serif; font-size: 1.0em; ; resize: none; min-height: 70px; width: 98.7%; border-radius: 3px; border: 1px solid rgba(0,0,0,0.3);'>" + endorsementDescriptionMap[postID]["short"] + "</textarea>";
 
                     editString += "<div style='float: right; height: 40px; margin-top: 1px; text-align: center;'><div style='width: 50px; margin-right: 5px; display: inline-block; padding: 3px 5px;' class='editButton' onclick='deleteProfileEndorsement(" + '"' + postID + '"' + ");'>Delete</div><div class='editButton' onclick='updateProfileEndorsement(" + '"' + postID + '"' + ");' style='display: inline-block; width: 50px; padding: 3px 5px;'>Update</div></div>";
 
