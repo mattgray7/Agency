@@ -336,19 +336,15 @@
                 feedString += "<h4 style='margin: 0; font-size: 0.9em; color: rgba(0,0,0,0.6);'>" + endorsementList[i]["createdAt"] + "</h4><div style='height: 6px; border-bottom: 1px solid rgba(0,0,0,0.7); margin-bottom: 3px;'></div>"
 
                 // Add edit button if user wrote the review
-                // Add edit button if user wrote the review or user is viewing his own progile
+                // Add delete button if user is viewing his own progile
                 feedString += "<div style='position: absolute; right: 0px; top: -5px; text-align: center;'>";
                 var addDelete = false;
                 if(endorsementList[i]["poster"]["username"] === "{{request.user.username}}"){
                     feedString += "<div class='editButton' onclick='editProfileEndorsement(" + '"' + endorsementList[i]["postID"] + '"' + ");'>Edit</div>";
-                    addDelete = true;
                 }else{
                     {% if viewingOwnProfile %}
-                        addDelete = true;
+                        feedString += "<div style='margin-top: 4px;' class='editButton' onclick='deleteProfileEndorsement(" + '"' + endorsementList[i]["postID"] + '"' + ");'>Delete</div>";
                     {% endif %}
-                }
-                if(addDelete){
-                    //feedString += "<div style='margin-top: 4px;' class='editButton' onclick='deleteProfileEndorsement(" + '"' + endorsementList[i]["postID"] + '"' + ");'>Delete</div>";
                 }
                 feedString += "</div>"
 
