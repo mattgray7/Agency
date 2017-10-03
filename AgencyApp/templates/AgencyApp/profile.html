@@ -211,11 +211,9 @@
                                                                      "profession": "{{userAccount.mainProfession}}"}
                                                           }
                                     endorsementList.unshift(newEndorsement)
-                                    var feedContainer = document.getElementById("profileEndorsementFeedContainer");
-                                    if(feedContainer != null){
-                                        feedContainer.innerHTML = createEndorsementFeed();
-                                        updateProfileContentPanelHeight();
-                                        textArea.value = '';
+
+                                    if(displayEndorsementFeed()){
+                                        textArea.value = ""
                                     }
                                 }
                             }
@@ -226,6 +224,37 @@
             {% else %}
                 console.log("You must be logged in to submit")
             {% endif %}
+        }
+    }
+
+    function deleteProfileEndorsement(postID){
+        if(postID != null && postID.length > 0){
+            var postIndex;
+            for(var i=0; i < endorsementList.length; i++){
+                if(endorsementList[i]["postID"] === postID){
+                    postIndex = i;
+                    break;
+                }
+            }
+
+            if(postIndex != null){
+                {% if request.user.is_authenticated %}
+                    if("{{request.user.username}}" === endorsementList[postIndex]["username"]){
+                        $.ajax({
+                            url : "/ajax/deleteProfileEndorsement/",
+                            data : {"postID": postID},
+                            type : 'POST',
+                            dataType: "json",
+                            success : function(data) {
+                                if(data["success"]){
+                                    endorsementList.splice(postIndex, 1);
+                                    displayEndorsementFeed();
+                                }
+                            }
+                        });
+                    }
+                {% endif %}
+            }
         }
     }
 
@@ -243,6 +272,15 @@
                     updateProfileContentPanelHeight();
                 }
             }
+        }
+    }
+
+    function displayEndorsementFeed(){
+        var feedContainer = document.getElementById("profileEndorsementFeedContainer");
+        if(feedContainer != null){
+            feedContainer.innerHTML = createEndorsementFeed();
+            updateProfileContentPanelHeight();
+            return true;
         }
     }
 
@@ -264,7 +302,7 @@
                 feedString += "<h4 style='margin: 0; font-size: 0.9em; color: rgba(0,0,0,0.6);'>" + endorsementList[i]["createdAt"] + "</h4><div style='height: 6px; border-bottom: 1px solid rgba(0,0,0,0.7); margin-bottom: 3px;'></div>"
                 // Add edit button
                 if(endorsementList[i]["poster"]["username"] === "{{request.user.username}}"){
-                    feedString += "<div style='position: absolute; right: 0px; top: -5px; text-align: center;'><div class='editButton' onclick=''>Edit</div><div style='margin-top: 4px;' class='editButton' onclick=''>Delete</div></div>"
+                    feedString += "<div style='position: absolute; right: 0px; top: -5px; text-align: center;'><div class='editButton' onclick=''>Edit</div><div style='margin-top: 4px;' class='editButton' onclick='deleteProfileEndorsement(" + '"' + endorsementList[i]["postID"] + '"' + ");'>Delete</div></div>"
                 }
                 // Add description
                 var maxDescriptionLength = 250;
@@ -285,6 +323,7 @@
         return feedString
     }
 
+    // profile button
     var endorsementList = [];
     function displayEndorsements(){
         var tabContent = document.getElementById("profileTabContentPanel")
@@ -304,9 +343,7 @@
             tabString += "<div class='editButton' onclick='addNewEndorsement();' style='position: absolute; right: 5px; bottom: 5px; padding: 5px 10px;text-align: center;'>Submit</div>"
             tabString += "</div>"
 
-            if(endorsementList.length > 0){
-                tabString += "<div id='profileEndorsementFeedContainer'>" + createEndorsementFeed() + "</div>"
-            }
+            tabString += "<div id='profileEndorsementFeedContainer'>" + createEndorsementFeed() + "</div>"
             tabString += "</div>";
             tabContent.innerHTML = tabString;
         }

@@ -45,6 +45,7 @@ urlpatterns = [
     
 
     url(r'^ajax/createProfileEndorsement/$', ajax.createProfileEndorsement, name='createProfileEndorsement'),  #TODO find a way to secure this link
+    url(r'^ajax/deleteProfileEndorsement/$', ajax.deleteProfileEndorsement, name='deleteProfileEndorsement'),  #TODO find a way to secure this link
     url(r'^ajax/createUnregisteredProject/$', ajax.createUnregisteredProject, name='createUnregisteredProject'),  #TODO find a way to secure this link
     url(r'^ajax/deleteUnregisteredProject/$', ajax.deleteUnregisteredProject, name='deleteUnregisteredProject'),
     url(r'^ajax/editExistingPost/$', ajax.editExistingPost, name='editExistingPost'),
