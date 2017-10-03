@@ -128,7 +128,9 @@ class UserAccount(models.Model):
                 self._profileMediaPictures.append({"url": picture.postPicture and picture.postPicture.url or "",
                                                    "id": picture.pictureID,
                                                    "description": picture.description,
-                                                   "featured": picture.featured})
+                                                   "featured": picture.featured,
+                                                   "poster": self.username,
+                                                   "createdAt": picture.createdAt.isoformat()[0: 10]})
         return self._profileMediaPictures
 
     @property

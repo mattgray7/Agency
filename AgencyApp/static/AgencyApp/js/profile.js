@@ -226,7 +226,7 @@ function getProfileMediaPictureString(pictureID, pictureURL, description){
     var pictureString = "<div class='profileMediaPicturePanel' style='height: 250px; width: 225px'>"
 
     // Add picture panel
-    pictureString += "<div style='display: table; position: absolute; top: 0px; left: 0; right: 0; margin: 0 auto; background: rgba(0,0,0,0.9); border: 1px solid rgba(0,0,0,0.05); overflow: hidden; height: 250px; max-height: 250px; width: 225px;'><div style='display: table-cell; vertical-align: middle;'><img src='" + pictureURL + "' style='max-height: 248px; max-width: 223px; margin-bottom: -5px;' /></div></div>"
+    pictureString += "<img onclick='displayFullPagePicture(" + '"' + pictureID + '");' + "' style='height: 250px; width: 225px; cursor: pointer;' src='" + pictureURL + "' />";
 
     pictureString += "</div>"
     return pictureString

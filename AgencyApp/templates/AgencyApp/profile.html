@@ -189,6 +189,33 @@
         }
     }
 
+    function displayFullPagePicture(pictureID){
+        var picture;
+        if(pictureID === "profilePicture"){
+            {% if profileUserAccount.profilePicture and profileUserAccount.profilePicture.path %}
+                picture = {"url": "{{profileUserAccount.profilePicture.path}}",
+                           "id": "profilePicture"
+                          };
+            {% endif %}
+        }else{
+            {% if profileUserAccount.profileMediaPictures %}
+                {% for pictureDict in profileUserAccount.profileMediaPictures %}
+                    if("{{pictureDict.id}}" === pictureID){
+                        picture = {"url": "{{pictureDict.url}}",
+                                   "id": "{{pictureDict.id}}",
+                                   "description": "{{pictureDict.description}}",
+                                   "createdAt": "{{pictureDict.createdAt}}",
+                                   "poster": "{{pictureDict.poster}}"}
+                    }
+                {% endfor %}
+            {% endif %}
+        }
+        console.log(picture)
+        if(picture != null){
+            displayPicture(picture);
+        }
+    }
+
     function addNewEndorsement(){
         var textArea = document.getElementById('newEndorsementTextArea');
         if(textArea != null){
@@ -849,7 +876,7 @@ if("{{source}}" === "EDIT_FILMOGRAPHY"){
 }
 
 //for testing
-defaultTab = "endorsements"
+defaultTab = "media"
 selectProfileTab(defaultTab)
 </script>
 

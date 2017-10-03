@@ -196,6 +196,31 @@
                 formString += "</select>";
                 return formString
         }
+
+        function displayPicture(pictureDict){
+            var backgroundPanel = document.getElementById("backgroundPanel");
+            if(backgroundPanel != null){
+                var pictureString = "<div style='position: relative; height: 100%; width: 100%; text-align: center;'><div style='position: absolute; top: 3%; height: 80%; max-width: 400px; margin: 0 auto; left: 0; right: 0; border: 1px solid #000; border-bottom: none;'><img src='" + pictureDict["url"] + "' style='width: 100%;' />"
+
+                // Add text box below picture
+                pictureString += "<div style='position: relative; background: #FFF; margin: -9px -1px; height: 70px; text-align: left; color: #000; border: 1px solid #000; border-top: none;'>";
+                if(pictureDict["description"] != null && pictureDict["description"].length > 0){
+                    pictureString += "<div style='margin-left: 5px; margin-top: 5px;'>" + pictureDict["description"] + "</div>";
+                }
+                if(pictureDict["createdAt"]){
+                    pictureString += "<div style='position: absolute; top: 3px; right: 10px; font-size: 0.9em; color: rgba(0,0,0,0.7);'>Uploaded " + pictureDict["createdAt"] + "</div>"
+                }
+                pictureString += "</div>";
+
+                pictureString += "</div></div>"
+
+                var blocking = document.createElement("div")
+                blocking.id = "blockingPanel";
+                blocking.className = "blockingPanel";
+                backgroundPanel.appendChild(blocking)
+                blocking.innerHTML = pictureString
+            }
+        }
     </script>
 
 <!-- Post functions -->
