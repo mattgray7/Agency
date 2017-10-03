@@ -239,10 +239,10 @@
 
             if(postIndex != null){
                 {% if request.user.is_authenticated %}
-                    if("{{request.user.username}}" === endorsementList[postIndex]["username"]){
+                    if("{{request.user.username}}" === endorsementList[postIndex]["username"] || "{{request.user.username}}" === endorsementList[postIndex]["poster"]["username"]){
                         $.ajax({
                             url : "/ajax/deleteProfileEndorsement/",
-                            data : {"postID": postID},
+                            data : {"postID": postID, "profileUsername": "{{profileUserAccount.username}}"},
                             type : 'POST',
                             dataType: "json",
                             success : function(data) {

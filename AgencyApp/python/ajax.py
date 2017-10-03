@@ -387,13 +387,14 @@ def createProfileEndorsement(request):
 def deleteProfileEndorsement(request):
     success = False
     postID = request.POST.get("postID")
-    if postID and request.user.username:
+    profileUsername = request.POST.get("profileUsername")
+    if postID and profileUsername and request.user.username:
         try:
             endorsement = models.ProfileEndorsement.objects.get(postID=postID)
         except models.ProfileEndorsement.DoesNotExist:
             pass
         else:
-            if endorsement.poster == request.user.username:
+            if endorsement.poster == request.user.username or profileUsername == request.user.username:
                 models.ProfileEndorsement.objects.filter(postID=postID).delete()
                 success = True
     return JsonResponse({"success": success})
