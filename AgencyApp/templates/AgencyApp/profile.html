@@ -258,6 +258,22 @@
         }
     }
 
+    function editProfileEndorsement(postID){
+        if(postID != null && postID.length > 0){
+            var description = document.getElementById("endorsementDescription_" + postID);
+            var row = document.getElementById("endorsementElement_" + postID);
+            if(description != null && row != null){
+                var editString = "<textarea style='font-size: 0.9em; ; resize: none; min-height: 70px; width: 98.7%; border-radius: 3px; border: 1px solid rgba(0,0,0,0.3);'>" + endorsementDescriptionMap[postID]["short"] + "</textarea>";
+
+                editString += "<div style='float: right; height: 40px; margin-top: 1px; text-align: center;'><div style='width: 50px; margin-right: 5px; display: inline-block; padding: 3px 5px;' class='editButton' onclick='deleteProfileEndorsement(" + '"' + postID + '"' + ");'>Delete</div><div class='editButton' style='display: inline-block; width: 50px; padding: 3px 5px;'>Update</div></div>";
+
+                description.innerHTML = editString;
+                row.style.height = endorsementFeedElementHeight + 30 + "px";
+                updateProfileContentPanelHeight();
+            }
+        }
+    }
+
     function toggleExpandEndorsementDescription(toggleType, postID){
         if(postID != null && postID.length > 0){
             if(postID in endorsementDescriptionMap){
@@ -269,11 +285,11 @@
                         description.innerHTML = endorsementDescriptionMap[postID]["full"] + "<a onclick='toggleExpandEndorsementDescription(" + '"shrink", "' + postID + '");' + "'>... See less</a>"
                         var newDescriptionHeight = description.offsetHeight;
 
-                        row.style.height = parseInt(row.style.height.substring(0, row.style.height.length - 2)) + (newDescriptionHeight - currentDescriptionHeight) + "px";
+                        row.style.height = endorsementFeedElementHeight + (newDescriptionHeight - currentDescriptionHeight) + "px";
                         updateProfileContentPanelHeight();
                     }else{
                         description.innerHTML = endorsementDescriptionMap[postID]["short"]
-                        row.style.height = "150px";
+                        row.style.height = endorsementFeedElementHeight + "px";
                         updateProfileContentPanelHeight();
                     }
                 }
@@ -302,11 +318,12 @@
     }
 
     var endorsementDescriptionMap = {};
+    var endorsementFeedElementHeight = 150;
     function createEndorsementFeed(){
         var feedString = "<ul class='projectFeed'>"
         if(endorsementList.length > 0){
             for(var i=0; i < endorsementList.length; i++){
-                feedString += "<li id='endorsementElement_" + endorsementList[i]["postID"] + "' class='projectFeedElement' style='height: 150px; position: relative;'>"
+                feedString += "<li id='endorsementElement_" + endorsementList[i]["postID"] + "' class='projectFeedElement' style='height: " + endorsementFeedElementHeight + "px; position: relative;'>"
 
                 // Add poster picture
                 feedString += "<div style='position: absolute; left: 10px; top: 10px; height: 130px; overflow: hidden;'><img src='" + endorsementList[i]["poster"]["profilePictureURL"] + "' style='height: 100%;' /></div>"
@@ -323,7 +340,7 @@
                 feedString += "<div style='position: absolute; right: 0px; top: -5px; text-align: center;'>";
                 var addDelete = false;
                 if(endorsementList[i]["poster"]["username"] === "{{request.user.username}}"){
-                    feedString += "<div class='editButton' onclick=''>Edit</div>";
+                    feedString += "<div class='editButton' onclick='editProfileEndorsement(" + '"' + endorsementList[i]["postID"] + '"' + ");'>Edit</div>";
                     addDelete = true;
                 }else{
                     {% if viewingOwnProfile %}
@@ -331,7 +348,7 @@
                     {% endif %}
                 }
                 if(addDelete){
-                    feedString += "<div style='margin-top: 4px;' class='editButton' onclick='deleteProfileEndorsement(" + '"' + endorsementList[i]["postID"] + '"' + ");'>Delete</div>";
+                    //feedString += "<div style='margin-top: 4px;' class='editButton' onclick='deleteProfileEndorsement(" + '"' + endorsementList[i]["postID"] + '"' + ");'>Delete</div>";
                 }
                 feedString += "</div>"
 
