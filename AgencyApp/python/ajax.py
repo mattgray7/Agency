@@ -384,6 +384,22 @@ def createProfileEndorsement(request):
         success = True
     return JsonResponse({"success": success, "postID": postID})
 
+def updateProfileEndorsement(request):
+    success = False
+    postID = request.POST.get("postID")
+    description = request.POST.get("newDescription")
+    if postID and description and request.user.username:
+        try:
+            endorsement = models.ProfileEndorsement.objects.get(postID=postID)
+        except models.ProfileEndorsement.DoesNotExist:
+            pass
+        else:
+            if endorsement.poster == request.user.username:
+                endorsement.description = description
+                endorsement.save()
+                success = True
+    return JsonResponse({"success": success})
+
 def deleteProfileEndorsement(request):
     success = False
     postID = request.POST.get("postID")

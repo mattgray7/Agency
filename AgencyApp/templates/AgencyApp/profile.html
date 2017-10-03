@@ -258,6 +258,31 @@
         }
     }
 
+    function updateProfileEndorsement(postID){
+        if(postID != null && postID.length > 0){
+            var description = document.getElementById("endorsementDescriptionText_" + postID);
+            var container = document.getElementById("endorsementDescription_" + postID);
+            var row = document.getElementById("endorsementElement_" + postID);
+            if(container != null && row != null && description != null && description.value.length > 0){
+                $.ajax({
+                    url : "/ajax/updateProfileEndorsement/",
+                    data : {"postID": postID, "newDescription": description.value},
+                    type : 'POST',
+                    dataType: "json",
+                    success : function(data) {
+                        if(data["success"]){
+                            // Update the description values
+                            container.innerHTML = getEndorsementDescriptionString(false, description.value, postID)
+
+                            // Can cancel the edit, but since descriptions are updated, new value is displayed
+                            toggleEditProfileEndorsement("shrink", postID)
+                        }
+                    }
+                });
+            }
+        }
+    }
+
     function toggleEditProfileEndorsement(toggleType, postID){
         if(postID != null && postID.length > 0){
             var description = document.getElementById("endorsementDescription_" + postID);
@@ -270,9 +295,9 @@
                         toggleEditProfileEndorsement("shrink", postID)
                     }
 
-                    var editString = "<textarea style='font-size: 0.9em; ; resize: none; min-height: 70px; width: 98.7%; border-radius: 3px; border: 1px solid rgba(0,0,0,0.3);'>" + endorsementDescriptionMap[postID]["short"] + "</textarea>";
+                    var editString = "<textarea id='endorsementDescriptionText_" + postID + "' style='font-size: 0.9em; ; resize: none; min-height: 70px; width: 98.7%; border-radius: 3px; border: 1px solid rgba(0,0,0,0.3);'>" + endorsementDescriptionMap[postID]["short"] + "</textarea>";
 
-                    editString += "<div style='float: right; height: 40px; margin-top: 1px; text-align: center;'><div style='width: 50px; margin-right: 5px; display: inline-block; padding: 3px 5px;' class='editButton' onclick='deleteProfileEndorsement(" + '"' + postID + '"' + ");'>Delete</div><div class='editButton' style='display: inline-block; width: 50px; padding: 3px 5px;'>Update</div></div>";
+                    editString += "<div style='float: right; height: 40px; margin-top: 1px; text-align: center;'><div style='width: 50px; margin-right: 5px; display: inline-block; padding: 3px 5px;' class='editButton' onclick='deleteProfileEndorsement(" + '"' + postID + '"' + ");'>Delete</div><div class='editButton' onclick='updateProfileEndorsement(" + '"' + postID + '"' + ");' style='display: inline-block; width: 50px; padding: 3px 5px;'>Update</div></div>";
 
                     description.innerHTML = editString;
                     row.style.height = endorsementFeedElementHeight + 30 + "px";
