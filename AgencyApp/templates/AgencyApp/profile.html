@@ -258,18 +258,35 @@
         }
     }
 
-    function editProfileEndorsement(postID){
+    function toggleEditProfileEndorsement(toggleType, postID){
         if(postID != null && postID.length > 0){
             var description = document.getElementById("endorsementDescription_" + postID);
             var row = document.getElementById("endorsementElement_" + postID);
-            if(description != null && row != null){
-                var editString = "<textarea style='font-size: 0.9em; ; resize: none; min-height: 70px; width: 98.7%; border-radius: 3px; border: 1px solid rgba(0,0,0,0.3);'>" + endorsementDescriptionMap[postID]["short"] + "</textarea>";
+            var editButton = document.getElementById("endorsementEditButton_" + postID)
+            if(description != null && row != null && editButton != null){
+                if(toggleType === "expand"){
+                    editButton.innerHTML = "Cancel";
+                    editButton.onclick = function(){
+                        toggleEditProfileEndorsement("shrink", postID)
+                    }
 
-                editString += "<div style='float: right; height: 40px; margin-top: 1px; text-align: center;'><div style='width: 50px; margin-right: 5px; display: inline-block; padding: 3px 5px;' class='editButton' onclick='deleteProfileEndorsement(" + '"' + postID + '"' + ");'>Delete</div><div class='editButton' style='display: inline-block; width: 50px; padding: 3px 5px;'>Update</div></div>";
+                    var editString = "<textarea style='font-size: 0.9em; ; resize: none; min-height: 70px; width: 98.7%; border-radius: 3px; border: 1px solid rgba(0,0,0,0.3);'>" + endorsementDescriptionMap[postID]["short"] + "</textarea>";
 
-                description.innerHTML = editString;
-                row.style.height = endorsementFeedElementHeight + 30 + "px";
-                updateProfileContentPanelHeight();
+                    editString += "<div style='float: right; height: 40px; margin-top: 1px; text-align: center;'><div style='width: 50px; margin-right: 5px; display: inline-block; padding: 3px 5px;' class='editButton' onclick='deleteProfileEndorsement(" + '"' + postID + '"' + ");'>Delete</div><div class='editButton' style='display: inline-block; width: 50px; padding: 3px 5px;'>Update</div></div>";
+
+                    description.innerHTML = editString;
+                    row.style.height = endorsementFeedElementHeight + 30 + "px";
+                    updateProfileContentPanelHeight();
+                }else{
+                    editButton.innerHTML = "Edit";
+                    editButton.onclick = function(){
+                        toggleEditProfileEndorsement("expand", postID)
+                    }
+
+                    description.innerHTML = endorsementDescriptionMap[postID]["short"]
+                    row.style.height = endorsementFeedElementHeight + "px";
+                    updateProfileContentPanelHeight();
+                }
             }
         }
     }
@@ -340,7 +357,7 @@
                 feedString += "<div style='position: absolute; right: 0px; top: -5px; text-align: center;'>";
                 var addDelete = false;
                 if(endorsementList[i]["poster"]["username"] === "{{request.user.username}}"){
-                    feedString += "<div class='editButton' onclick='editProfileEndorsement(" + '"' + endorsementList[i]["postID"] + '"' + ");'>Edit</div>";
+                    feedString += "<div class='editButton' id='endorsementEditButton_" + endorsementList[i]["postID"] + "' onclick='toggleEditProfileEndorsement(" + '"expand", "' + endorsementList[i]["postID"] + '"' + ");'>Edit</div>";
                 }else{
                     {% if viewingOwnProfile %}
                         feedString += "<div style='margin-top: 4px;' class='editButton' onclick='deleteProfileEndorsement(" + '"' + endorsementList[i]["postID"] + '"' + ");'>Delete</div>";
