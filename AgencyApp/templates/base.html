@@ -208,15 +208,12 @@
                 // Add main panel
                 pictureString += "<div style='position: absolute; height: 85%; top: 3%; margin: 0 auto; left: 0; right: 0; '>";
 
-                // Add hide button
-                pictureString += "<div style='position: absolute; top: 5px; left: 5px; background: #e8e8e8;' class='editButton' onclick='hidePicture();'> X </div>"
-
                 // Add width container
                 // Add picture
-                pictureString += "<img id='fullPictureImg' src='" + pictureDict["url"] + "' style='height: 100%;' />"
+                pictureString += "<img id='fullPictureImg' src='" + pictureDict["url"] + "' style='height: 100%; border: 1px solid #FFF;' />"
 
                 // Add text box below picture
-                pictureString += "<div id='fullPictureCaptionPanel' style='position: relative; background: #000; margin: -9px auto; min-height: 30px; max-height: 10%; text-align: left; color: #FFF; border: 1px solid #FFF; overflow: scroll;'>";
+                pictureString += "<div id='fullPictureCaptionPanel' style='position: relative; background: #000; margin: -9px auto; min-height: 30px; max-height: 10%; text-align: left; color: #FFF; border: 1px solid #FFF; border-top: none;border-radius: 2px; overflow: scroll;'>";
                 if(pictureDict["description"] != null && pictureDict["description"].length > 0){
                     pictureString += "<div style='margin-left: 5px; margin-top: 5px; padding-bottom: 3px;'>" + pictureDict["description"] + "</div>";
                 }
@@ -232,6 +229,13 @@
                 blocking.className = "blockingPanel";
                 backgroundPanel.appendChild(blocking)
                 blocking.innerHTML = pictureString
+
+                // Add hide full picture onclick if user clicks outside of the image
+                blocking.onclick = function(){
+                    if(!($('#fullPictureImg').is(":hover") || $('#fullPictureCaptionPanel').is(":hover"))){
+                        hidePicture();
+                    }
+                }
 
                 // Resize caption panel to initial fullPicture Height
                 var fullPicture = document.getElementById("fullPictureImg");
