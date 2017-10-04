@@ -51,9 +51,6 @@
                                          {"label": "Professions", value: getProfessionList()},
                                          {"label": "Education", "value": "{{profileUserAccount.education}}"},
                                          {"label": "Bio", "value": "{{profileUserAccount.bio}}"}],
-                           "Contact": [{"label": "Email", "value": "{{profileUserAccount.email}}"},
-                                       {"label": "Phone #", "value": "{{profileUserAccount.phoneNumber}}"},
-                                       {"label": "Location", "value": "{{profileUserAccount.location}}"}],
                            "Physical": [{"label": "Date of Birth", "value": "{{profileUserAccount.dateOfBirth}}"},
                                         {"label": "Gender", "value": "{{profileUserAccount.gender}}"},
                                         {"label": "Hair Color", "value": "{{profileUserAccount.hairColor}}"},
@@ -458,7 +455,7 @@
         // TODO use 'mainProfessionList' or whatever its called instead of interested work professions
         var returnString = '';
         {% if profileProfessions %}
-            returnString += '<div class="profileProfessionList" style=""><ul>';
+            returnString += '<div class="profileProfessionList" style="margin-bottom: -10px;"><ul>';
             var elementEnding = "|&#160;</li>";
             {% for profession in profileProfessions %}
                 returnString += '<li>{{profession}} ' + elementEnding;
@@ -521,50 +518,6 @@
                 panelString += "</li>";
             }
             panelString += "</ul>"
-
-            /*if(professionList.length > 5){
-                panelString += "<li><div id='extraProfessionsRowElement' style='cursor: pointer; width: 28%;'>" + (professionList.length-5) + " more jobs...</div></li><ul>";
-
-                // Add hover panel
-                panelString += "<div id='extraProfessionsHoverPanel' style='position: absolute; left: 100px; top: 84%; width: 200px; background: #FFF; border: 1px solid rgba(0,0,0,1); display: none; z-index: 5; padding: 5px; border-radius: 3px;'><ul>"
-                for(var i=5; i < professionList.length; i++){
-                    panelString += "<li>" + professionList[i]["profession"]
-                    if(professionList[i]["creditCount"] > 0){
-                        panelString += " (" + professionList[i]["creditCount"] + " credit"
-                        if(professionList[i]["creditCount"] > 1){
-                            panelString += "s"
-                        }
-                        panelString += ")"
-                    }
-                    panelString += "</li>";
-                }
-                panelString += "</ul></div>"
-
-                // Add hover callback for extra jobs
-                callbacks.push(function(){
-                    // Add hover on extra professions string
-                    $("#extraProfessionsRowElement").hover(function(){
-                            // Just display the hover panel
-                            $("#extraProfessionsHoverPanel").css("display", "block");
-                        },
-                        function(){
-                            // If the mouse is hovering over the hover panel, want to keep it displayed
-                            var isHovered = $('#extraProfessionsHoverPanel').is(":hover");
-                            if(!isHovered){
-                                // Not hovering over hover panel, so can hide it
-                                $("#extraProfessionsHoverPanel").css("display", "none");
-                            }else{
-                                // Hovering over hover panel, so hide callback on unhovering hover panel
-                                $('#extraProfessionsHoverPanel').hover(function(){}, function(){
-                                    $("#extraProfessionsHoverPanel").css("display", "none");
-                                });
-                            }
-                        }
-                    );
-                })
-            }else{*/
-                //panelString += "</ul>"
-            //}
         {% endif %}
         panelString += "</div>"
         return {'html': panelString, 'callbacks': callbacks};
@@ -785,20 +738,22 @@
 <div id='backgroundPanel' class='backgroundPanel' style='min-width: 634px; min-height: 100%;'>
     <div id="mainViewPanel" class="mainViewPanel" style="position: relative; min-width: 620px; max-width: 675px; background: rgba(0,0,0,0.05); border: none;">
         {% if profileUserAccount %}
-            <div style='height: 350px; width: 100%; position: relative;'>
-                <div id='profileHeaderPanel' class='profileHeaderPanel' style='position: absolute; right: 2px; left: 0px; margin: 0 auto; top: 0; bottom: 0;'>
-                    <div style='position: relative; width: 100%; height: 100%;'>
-                        <div style='position: absolute; left: 15px; top: 15px; right: 15px; '>
-                            {% if profileUserAccount.profilePicture %}
-                                <img class="profilePicture" onclick='displayFullPagePicture("profilePicture");' src="{{ profileUserAccount.profilePicture.url }}" style='cursor: pointer;'/>
-                            {% else %}
-                                <img class="profilePicture" src="{{ images.noProfilePicture }}"/>
-                            {% endif %}
-                        </div>
-                        <div style='position: absolute; left: 15px; right: 15px; top: 275px;'>
-                            <h1><a onclick='redirectToUser("{{profileUserAccount.username}}");' >{{profileUserAccount.cleanName}}</a></h1>
-                            <script>document.write(getProfessionList())</script>
-                        </div>
+            <div id='profileHeaderPanel' class='profileHeaderPanel' style='margin: 0 auto; text-align: center;'>
+                <div style='margin-top: 10px;'>
+                    {% if profileUserAccount.profilePicture %}
+                        <img class="profilePicture" onclick='displayFullPagePicture("profilePicture");' src="{{ profileUserAccount.profilePicture.url }}" style='cursor: pointer;'/>
+                    {% else %}
+                        <img class="profilePicture" src="{{ images.noProfilePicture }}"/>
+                    {% endif %}
+                </div>
+                <div style=''>
+                    <h1><a onclick='redirectToUser("{{profileUserAccount.username}}");' >{{profileUserAccount.cleanName}}</a></h1>
+                    <script>document.write(getProfessionList())</script>
+                    {% if profileUserAccount.phoneNumber %}
+                        <div style='margin: -3px 5px 8px 5px; font-size: 0.9em; color: rgba(0,0,0,0.8);'>{{profileUserAccount.phoneNumber}}</div>
+                    {% endif %}
+                </div>
+            </div>
                         <!--<div style='position: absolute; left: 240px; right: 0px; top: 0; bottom: 0; margin: 15px; background: rgba(0,0,0,0.04);'>
                             <div style='position: relative; height: 100%; border: 1px solid rgba(0,0,0,1);'>
                                 <div style='position: absolute; top: 0px; height: 190px; left: 0; right: 0; border: 0px solid #aea;'>
@@ -832,9 +787,6 @@
                             <!--</div>
 
                         </div>-->
-                    </div>
-                </div>
-            </div>
             <div id='profileInterestPanel' style='position: relative; background: #FFF; width: 100%; margin-top: 12px; border-radius: 3px;'>
                 <script>
                     var headerTextInfo = getProfileHeaderTextPanel()
