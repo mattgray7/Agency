@@ -458,7 +458,7 @@
         // TODO use 'mainProfessionList' or whatever its called instead of interested work professions
         var returnString = '';
         {% if profileProfessions %}
-            returnString += '<div class="profileProfessionList"><ul>';
+            returnString += '<div class="profileProfessionList" style=""><ul>';
             var elementEnding = "|&#160;</li>";
             {% for profession in profileProfessions %}
                 returnString += '<li>{{profession}} ' + elementEnding;
@@ -794,7 +794,7 @@
                                 <img class="profilePicture" src="{{ images.noProfilePicture }}"/>
                             {% endif %}
                         </div>
-                        <div style='position: absolute; left: 15px; top: 275px; text-align: left;'>
+                        <div style='position: absolute; left: 15px; top: 275px; width: 225px; text-align: left;'>
                             <h1><a onclick='redirectToUser("{{profileUserAccount.username}}");' >{{profileUserAccount.cleanName}}</a></h1>
                             <script>document.write(getProfessionList())</script>
                         </div>
@@ -814,7 +814,7 @@
                                     </script>
                                 </div>
 
-                                {% if profileUserAccount.hasFeaturedMediaPictures %}
+                                <!--{% if profileUserAccount.hasFeaturedMediaPictures %}
                                     <div style='position: absolute; bottom: 0px; height: 130px; left: 0; right: 0; ; white-space: nowrap; overflow: hidden; text-align: left;'>
                                         {% for picture in profileUserAccount.profileMediaPictures %}
                                             {% if picture.featured %}
@@ -825,7 +825,7 @@
                                         {% endfor %}
 
                                     </div>
-                                {% endif %}
+                                {% endif %}-->
 
 
                             </div>

@@ -206,21 +206,22 @@
             if(backgroundPanel != null){
                 var pictureString = "<div style='position: relative; height: 100%; width: 100%; text-align: center;'>";
                 // Add main panel
-                pictureString += "<div style='position: absolute; top: 3%; height: 80%; max-width: 400px; margin: 0 auto; left: 0; right: 0; border: 1px solid #000; border-bottom: none;'>";
+                pictureString += "<div style='position: absolute; height: 90%; top: 3%; margin: 0 auto; left: 0; right: 0; '>";
 
                 // Add hide button
                 pictureString += "<div style='position: absolute; top: 5px; left: 5px; background: #e8e8e8;' class='editButton' onclick='hidePicture();'> X </div>"
 
+                // Add width container
                 // Add picture
-                pictureString += "<img src='" + pictureDict["url"] + "' style='width: 100%;' />"
+                pictureString += "<img id='fullPictureImg' src='" + pictureDict["url"] + "' style='height: 100%;' />"
 
                 // Add text box below picture
-                pictureString += "<div style='position: relative; background: #FFF; margin: -9px -1px; height: 40px; text-align: left; color: #000; border: 1px solid #000; border-top: 1px solid rgba(0,0,0,0.5);'>";
+                pictureString += "<div id='fullPictureCaptionPanel' style='position: relative; background: #000; margin: -9px auto; height: 40px; text-align: left; color: #FFF; border: 1px solid #000; border-top: 1px solid rgba(0,0,0,0.5);'>";
                 if(pictureDict["description"] != null && pictureDict["description"].length > 0){
                     pictureString += "<div style='margin-left: 5px; margin-top: 5px;'>" + pictureDict["description"] + "</div>";
                 }
                 if(pictureDict["createdAt"]){
-                    pictureString += "<div style='position: absolute; top: 3px; right: 10px; font-size: 0.9em; color: rgba(0,0,0,0.7);'>Uploaded " + pictureDict["createdAt"] + "</div>"
+                    pictureString += "<div style='position: absolute; top: 3px; right: 10px; font-size: 0.9em; color: #FFF;'>Uploaded " + pictureDict["createdAt"] + "</div>"
                 }
                 pictureString += "</div>";
 
@@ -231,6 +232,20 @@
                 blocking.className = "blockingPanel";
                 backgroundPanel.appendChild(blocking)
                 blocking.innerHTML = pictureString
+
+                // Resize caption panel to initial fullPicture Height
+                var fullPicture = document.getElementById("fullPictureImg");
+                var captionPanel = document.getElementById("fullPictureCaptionPanel");
+                if(fullPicture != null && captionPanel != null){
+                    captionPanel.style.width = fullPicture.offsetWidth + "px";
+
+                    // Add callback to resize caption panel when full picture is resized so that it stays aligned
+                    $(window).resize(function(){
+                        var fullPicture = document.getElementById("fullPictureImg");
+                        var captionPanel = document.getElementById("fullPictureCaptionPanel");
+                        captionPanel.style.width = fullPicture.offsetWidth + "px";
+                    })
+                }
             }
         }
     </script>
