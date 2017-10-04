@@ -230,7 +230,6 @@ function getProfileMediaPictureString(pictureID, pictureURL, description){
 
     pictureString += "</div>"
     return pictureString
-
 }
 
 // On edit media page

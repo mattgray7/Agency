@@ -192,8 +192,8 @@
     function displayFullPagePicture(pictureID){
         var picture;
         if(pictureID === "profilePicture"){
-            {% if profileUserAccount.profilePicture and profileUserAccount.profilePicture.path %}
-                picture = {"url": "{{profileUserAccount.profilePicture.path}}",
+            {% if profileUserAccount.profilePicture and profileUserAccount.profilePicture.url %}
+                picture = {"url": "{{profileUserAccount.profilePicture.url}}",
                            "id": "profilePicture"
                           };
             {% endif %}
@@ -789,7 +789,7 @@
                     <div style='position: relative; width: 100%; height: 100%;'>
                         <div style='position: absolute; left: 15px; top: 15px;'>
                             {% if profileUserAccount.profilePicture %}
-                                <img class="profilePicture" src="{{ profileUserAccount.profilePicture.url }}" />
+                                <img class="profilePicture" onclick='displayFullPagePicture("profilePicture");' src="{{ profileUserAccount.profilePicture.url }}" style='cursor: pointer;'/>
                             {% else %}
                                 <img class="profilePicture" src="{{ images.noProfilePicture }}"/>
                             {% endif %}

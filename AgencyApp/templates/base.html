@@ -212,15 +212,12 @@
                 // Add picture
                 pictureString += "<img id='fullPictureImg' src='" + pictureDict["url"] + "' style='height: 100%; border: 1px solid #FFF;' />"
 
-                // Add text box below picture
-                pictureString += "<div id='fullPictureCaptionPanel' style='position: relative; background: #000; margin: -9px auto; min-height: 30px; max-height: 10%; text-align: left; color: #FFF; border: 1px solid #FFF; border-top: none;border-radius: 2px; overflow: scroll;'>";
                 if(pictureDict["description"] != null && pictureDict["description"].length > 0){
-                    pictureString += "<div style='margin-left: 5px; margin-top: 5px; padding-bottom: 3px;'>" + pictureDict["description"] + "</div>";
+                    // Add text box below picture
+                    pictureString += "<div id='fullPictureCaptionPanel' style='position: relative; background: #000; margin: -9px auto; min-height: 30px; max-height: 10%; text-align: left; color: #FFF; border: 1px solid #FFF; border-top: none;border-radius: 2px; overflow: scroll;'>";
+                        pictureString += "<div style='margin-left: 5px; margin-top: 5px; padding-bottom: 3px;'>" + pictureDict["description"] + "</div>";
+                    pictureString += "</div>";
                 }
-                /*if(pictureDict["createdAt"]){
-                    pictureString += "<div style='float: right; font-size: 0.9em; color: #FFF;'>" + pictureDict["createdAt"] + "</div>"
-                }*/
-                pictureString += "</div>";
 
                 pictureString += "</div></div>"
 
@@ -232,8 +229,14 @@
 
                 // Add hide full picture onclick if user clicks outside of the image
                 blocking.onclick = function(){
-                    if(!($('#fullPictureImg').is(":hover") || $('#fullPictureCaptionPanel').is(":hover"))){
-                        hidePicture();
+                    if(!$('#fullPictureImg').is(":hover")){
+                        if(document.getElementById("fullPictureCaptionPanel") != null){
+                            if(!$('#fullPictureCaptionPanel').is(":hover")){
+                                hidePicture();
+                            }
+                        }else{
+                            hidePicture();
+                        }
                     }
                 }
 
