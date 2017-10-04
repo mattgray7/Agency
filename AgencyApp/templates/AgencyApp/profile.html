@@ -111,12 +111,40 @@
 
             // Add edit button
             {% if viewingOwnProfile %}
-                contentString += "<div style='position: absolute; top: 5px; right: 12px;'><div class='editButton' onclick='redirect(" + '"{{ possibleDestinations.background }}");' + "'>Edit</div></div>";
+                contentString += "<div style='position: absolute; top: 5px; right: 12px;'>" + getEditButtonString("{{possibleDestinations.background}}") + "</div>";
             {% endif %}
             
             // Add edit button
             tabContent.innerHTML = contentString;
         }
+    }
+
+    function getEditButtonString(destination, hoverContainerName){
+        if(hoverContainerName == null || hoverContainerName.length === 0){
+            hoverContainerName = "profileTabContentPanel"
+        }
+        var editButton = "";
+        {% if viewingOwnProfile %}
+            editButton += "<div class='editButton' id='profileTabEditButton' style='opacity: 0;' onclick='redirect(" + '"' + destination + '");' + "'>Edit</div>";
+            var container = document.getElementById(hoverContainerName);
+            if(container != null){
+                $("[id='" + hoverContainerName + "']").hover(
+                    function(){
+                        var button = document.getElementById("profileTabEditButton");
+                        if(button != null){
+                            button.style.opacity = 1;
+                        }
+                    },
+                    function(){
+                        var button = document.getElementById("profileTabEditButton");
+                        if(button != null){
+                            button.style.opacity = 0;
+                        }
+                    }
+                );
+            }
+        {% endif %}
+        return editButton
     }
 
     function displayFilmography(){
