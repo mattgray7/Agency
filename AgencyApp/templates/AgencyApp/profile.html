@@ -508,20 +508,21 @@
             {% endfor %}
 
 
-            panelString += "<ul>"
-            for(var i=0; i < Math.min(5, professionList.length); i++){
-                panelString += "<li>" + professionList[i]["profession"]
+            panelString += "<ul class='profileInterestedProfessionsList' style='display: inline-block;'>"
+            for(var i=0; i < professionList.length; i++){
+                panelString += "<li >" + professionList[i]["profession"]
                 if(professionList[i]["creditCount"] > 0){
                     panelString += " (" + professionList[i]["creditCount"] + " credit"
-                    if(creditCount > 1){
+                    if(professionList[i]["creditCount"] > 1){
                         panelString += "s"
                     }
                     panelString += ")"
                 }
                 panelString += "</li>";
             }
+            panelString += "</ul>"
 
-            if(professionList.length > 5){
+            /*if(professionList.length > 5){
                 panelString += "<li><div id='extraProfessionsRowElement' style='cursor: pointer; width: 28%;'>" + (professionList.length-5) + " more jobs...</div></li><ul>";
 
                 // Add hover panel
@@ -530,7 +531,7 @@
                     panelString += "<li>" + professionList[i]["profession"]
                     if(professionList[i]["creditCount"] > 0){
                         panelString += " (" + professionList[i]["creditCount"] + " credit"
-                        if(creditCount > 1){
+                        if(professionList[i]["creditCount"] > 1){
                             panelString += "s"
                         }
                         panelString += ")"
@@ -561,9 +562,9 @@
                         }
                     );
                 })
-            }else{
-                panelString += "</ul>"
-            }
+            }else{*/
+                //panelString += "</ul>"
+            //}
         {% endif %}
         panelString += "</div>"
         return {'html': panelString, 'callbacks': callbacks};
@@ -787,18 +788,18 @@
             <div style='height: 350px; width: 100%; position: relative;'>
                 <div id='profileHeaderPanel' class='profileHeaderPanel' style='position: absolute; right: 2px; left: 0px; margin: 0 auto; top: 0; bottom: 0;'>
                     <div style='position: relative; width: 100%; height: 100%;'>
-                        <div style='position: absolute; left: 15px; top: 15px;'>
+                        <div style='position: absolute; left: 15px; top: 15px; right: 15px; '>
                             {% if profileUserAccount.profilePicture %}
                                 <img class="profilePicture" onclick='displayFullPagePicture("profilePicture");' src="{{ profileUserAccount.profilePicture.url }}" style='cursor: pointer;'/>
                             {% else %}
                                 <img class="profilePicture" src="{{ images.noProfilePicture }}"/>
                             {% endif %}
                         </div>
-                        <div style='position: absolute; left: 15px; top: 275px; width: 225px; text-align: left;'>
+                        <div style='position: absolute; left: 15px; right: 15px; top: 275px;'>
                             <h1><a onclick='redirectToUser("{{profileUserAccount.username}}");' >{{profileUserAccount.cleanName}}</a></h1>
                             <script>document.write(getProfessionList())</script>
                         </div>
-                        <div style='position: absolute; left: 240px; right: 0px; top: 0; bottom: 0; margin: 15px; background: rgba(0,0,0,0.04);'>
+                        <!--<div style='position: absolute; left: 240px; right: 0px; top: 0; bottom: 0; margin: 15px; background: rgba(0,0,0,0.04);'>
                             <div style='position: relative; height: 100%; border: 1px solid rgba(0,0,0,1);'>
                                 <div style='position: absolute; top: 0px; height: 190px; left: 0; right: 0; border: 0px solid #aea;'>
                                     <script>
@@ -812,7 +813,7 @@
                                             }
                                         }
                                     </script>
-                                </div>
+                                </div>-->
 
                                 <!--{% if profileUserAccount.hasFeaturedMediaPictures %}
                                     <div style='position: absolute; bottom: 0px; height: 130px; left: 0; right: 0; ; white-space: nowrap; overflow: hidden; text-align: left;'>
@@ -828,11 +829,24 @@
                                 {% endif %}-->
 
 
-                            </div>
+                            <!--</div>
 
-                        </div>
+                        </div>-->
                     </div>
                 </div>
+            </div>
+            <div id='profileInterestPanel' style='position: relative; background: #FFF; width: 100%; margin-top: 12px; border-radius: 3px;'>
+                <script>
+                    var headerTextInfo = getProfileHeaderTextPanel()
+                    document.write(headerTextInfo['html'])
+                    if(headerTextInfo['callbacks'].length > 0){
+                        for(var i=0; i < headerTextInfo['callbacks'].length; i++){
+                            if(headerTextInfo["callbacks"][i] != null){
+                                headerTextInfo["callbacks"][i]();
+                            }
+                        }
+                    }
+                </script>
             </div>
             <div id='profileContentPanel' style='position: relative; width: 100%; min-height: 100px; margin-top: 10px;'>
                 <ul class='profileTabButtonList' id='profileTabButtonList' style=''>
@@ -875,7 +889,7 @@ if("{{source}}" === "EDIT_FILMOGRAPHY"){
 }
 
 //for testing
-defaultTab = "media"
+//defaultTab = "media"
 selectProfileTab(defaultTab)
 </script>
 
