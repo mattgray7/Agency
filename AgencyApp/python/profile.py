@@ -22,6 +22,7 @@ class ProfileView(views.GenericFormView):
         self._profileLinks = None
         self._displayName = None
         self._profileUserFilmography = None
+        self._profileHiringProjects = None
 
     @property
     def profileLinks(self):
@@ -100,17 +101,37 @@ class ProfileView(views.GenericFormView):
         return self._profileUserFilmography
 
     @property
+    def profileHiringProjects(self):
+        if not self._profileHiringProjects:
+            self._profileHiringProjects = []
+            adminProjects = [x.projectID for x in models.ProjectAdmin.objects.filter(username=self.profileUserAccount.username)]
+            #adminPosts = [x.postID for x in models.PostAdmin.objects.filter(username=self.profileUserAccount)]
+            if adminProjects:
+                for projectID in adminProjects:
+                    try:
+                        projectPost = models.ProjectPost.objects.get(projectID=projectID)
+                    except models.ProjectPost.DoesNotExist:
+                        pass
+                    else:
+                        if projectPost.openJobs:
+                            self._profileHiringProjects.append(projectPost)
+        return self._profileHiringProjects
+
+    @property
     def pageContext(self):
         self._pageContext = super(ProfileView, self).pageContext
         self._pageContext["displayName"] = self.displayName
         self._pageContext["viewingOwnProfile"] = self.userViewingOwnProfile
+
         self._pageContext["profileUserAccount"] = self.profileUserAccount
         self._pageContext["profileProfessions"] = self.profileProfessions
         self._pageContext["profileInterests"] = self.profileInterests
         self._pageContext["profilePosts"] = self.profilePosts
         self._pageContext["profileLinks"] = self.profileLinks
-        self._pageContext["filmography"] = json.dumps(self.profileUserFilmography)
+        self._pageContext["profileHiringProjects"] = self.profileHiringProjects
         self._pageContext["profileEndorsements"] = json.dumps(self.profileUserAccount.profileEndorsements)
+
+        self._pageContext["filmography"] = json.dumps(self.profileUserFilmography)
         self._pageContext["actorDescriptionEnabled"] = self.profileUserAccount.actorDescriptionEnabled
         self._pageContext["icons"] = {"imdb": constants.IMDB_LOGO_PATH,
                                       "resume": constants.RESUME_ICON_PATH}

@@ -411,22 +411,19 @@ class ProjectPost(AbstractPost):
     @property
     def openRoles(self):
         if self._openRoles is None:
-            #self._openRoles = CastingPost.objects.filter(projectID=self.postID, status="Open")
             self._openRoles = CastingPost.objects.filter(projectID=self.postID, status="Open")
         return self._openRoles
 
     @property
     def totalRoles(self):
         if self._totalRoles is None:
-            #self._totalRoles = CastingPost.objects.filter(projectID=self.postID)
             self._totalRoles = CastingPost.objects.filter(projectID=self.postID)
-            print self._totalRoles
         return self._totalRoles
 
     @property
     def openJobs(self):
         if self._openJobs is None:
-            self._openJobs = WorkPost.objects.filter(projectID=self.postID, status="Hiring")
+            self._openJobs = WorkPost.objects.filter(projectID=self.postID, status="Open")
         return self._openJobs
 
     @property
