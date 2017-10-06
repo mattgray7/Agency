@@ -554,9 +554,41 @@
     }
 
     function getHireTextPanel(){
-        var callbacks = [];
+        var panelString = "<div style='margin-left: 5px;'>";
+        var callbacks = []
+        {% if profileInterests.hire %}
+            var title;
+            var hiring = false;
+            var casting = false;
+            var collaborating = false;
+            {% for interest in profileInterests.hire %}
+                {% if interest.subInterest == "hiring" %}
+                    hiring = true
+                {% elif interest.subInterest == "collaborating" %}
+                    collaborating = true;
+                {% elif interest.subInterest == "casting" %}
+                    casting = true;
+                {% endif %}
+            {% endfor %}
 
-        return {"html": "hiring", "callbacks": callbacks}
+            if(hiring){
+                panelString += "<h2 style='margin-top: 5px;'>Hiring</h2>"
+            }else if(casting){
+                panelString += "<h2 style='margin-top: 5px;'>Casting</h2>"
+            }else if(collaborating){
+                panelString += "<h2 style='margin-top: 5px;'>Looking for collaborators</h2>"
+            }
+
+            // Add sub title
+            panelString += "<h3 style='font-size: 0.9em; color: rgba(0,0,0,0.5);'>" + "{{profileUserAccount.cleanName}}".split(" ")[0] + " is interested in working as:</h3>"
+
+            var projects = {};
+            {% if filmography %}
+                projects = {{filmography|safe}};
+            {% endif %}
+        {% endif %}
+        panelString += "</div>";
+        return {'html': panelString, 'callbacks': callbacks};
     }
 
     function getDefaultTextPanel(){
@@ -572,6 +604,7 @@
         {% endif %}
 
         var newInfo
+
         {% if profileUserAccount.workInterest and profileUserAccount.hireInterest %}
             newInfo = getWorkHireTextPanel();
         {% elif profileUserAccount.workInterest %}
