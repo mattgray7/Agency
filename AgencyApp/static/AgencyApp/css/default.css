@@ -420,7 +420,9 @@
 		border-radius: 3px;
 		color: rgba(0,0,0,0.7);
 		box-shadow: 0.5px 0.5px 0px 0px #888888;
-		transition: opacity .20s ease;
+		/*-webkit-transition: opacity .20s ease;
+		transition: opacity .20s ease;*/
+		/*-webkit-backface-visibility: hidden;*/
 
 	}
 
