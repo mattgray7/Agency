@@ -1147,7 +1147,7 @@ function updateFeaturedPhotoStatus(input){
         </div>
 
         <script>
-        var hireTypes = ["hireProject", "hirePermanent", "casting", "collaborating"];
+        var hireTypes = ["hiring", "casting", "collaborating"];
         var chosenHireTypes = [];
 
         function toggleHireType(hireType){
@@ -1268,16 +1268,16 @@ function updateFeaturedPhotoStatus(input){
                     </div>
                     <table class="hireOptionTable">
                         <tr>
-                            <td id="hireProjectPanelCell" class="hireTableColumn">
-                                <table id="hireProjectTable" style="height:100%">
+                            <td id="hiringPanelCell" class="hireTableColumn">
+                                <table id="hiringTable" style="height:100%">
                                     <tr style="height:30px; overflow:hidden;">
                                         <td class="hireTableColumnElement" style="padding: 0.3em 0em 0em 0.4em">
-                                            <input type="checkbox" name="hireProject" id="hireProjectCheckbox" onclick="toggleHireType('hireProject');" class="largeCheckbox" style="float:left"/>
+                                            <input type="checkbox" name="hireProject" id="hiringCheckbox" onclick="toggleHireType('hiring');" class="largeCheckbox" style="float:left"/>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td class="box1 hireTableColumnElement">
-                                            <h2>Hiring - Project</h2>
+                                            <h2>Hiring</h2>
                                         </td>
                                     </tr>
                                     <tr>
@@ -1294,40 +1294,8 @@ function updateFeaturedPhotoStatus(input){
                                     </tr>
                                     <tr >
                                         <td class="box1 hireTableColumnElement hireTableButton">
-                                            <a onclick="toggleHireType('hireProject');" class="whiteButton grayHover" id="hireProjectToggleButton">Enable</a>
+                                            <a onclick="toggleHireType('hiring');" class="whiteButton grayHover" id="hireProjectToggleButton">Enable</a>
                                         </td>
-                                    </tr>
-                                </table>
-                            </td>
-
-                            <td id="hirePermanentPanelCell" class="hireTableColumn">
-                                <table id="hirePermanentTable" style="height:100%">
-                                    <tr style="height:30px; overflow:hidden;">
-                                        <td class="hireTableColumnElement" style="padding: 0.3em 0em 0em 0.4em">
-                                            <input type="checkbox" name="hirePermanent" id="hirePermanentCheckbox" onclick="toggleHireType('hirePermanent');" class="largeCheckbox" style="float:left" />
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="box2 hireTableColumnElement">
-                                            <h2>Hiring - Permanent</h2>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="box1 hireTableColumnElement">
-                                            <span class="fa fa-cloud-download"></span>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="box2 hireTableColumnElement">
-                                            <div style="text-align:left;"> Are you recruiting for permanent or contract positions at a company?
-                                                Browse our database of amateur and professional filmmakers in Vancouver and be 
-                                                matched with potential candidates.
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="box2 hireTableColumnElement hireTableButton">
-                                            <a onclick="toggleHireType('hirePermanent');" class="whiteButton grayHover" id="hirePermanentToggleButton">Enable</a></td>
                                     </tr>
                                 </table>
                             </td>
