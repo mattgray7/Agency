@@ -574,17 +574,16 @@
 
 
             if(hiring){
-                console.log("{{profileHiringProjects}}")
-                {% if profileHiringProjects %}
+                {% if profileAdminProjects.hiring %}
                     var projectList = "<ul>";
-                    {% for project in profileHiringProjects %}
+                    {% for project in profileAdminProjects.hiring %}
                         projectList += "<li><a onclick='redirectToPost(" + '"{{project.postID}}"' + ");' >{{project.title}}</a> ({{project.openRoles|length}} open roles)</li>"
                     {% endfor %}
                     projectList += "</ul>"
                     panelString += "<h2 style='margin-top: 5px;'>Status: Hiring</h2>"
 
                     // Add sub title
-                    panelString += "<h3 style='font-size: 0.9em; color: rgba(0,0,0,0.5);'>" + "{{profileUserAccount.cleanName}}".split(" ")[0] + " is hiring for {{profileHiringProjects|length}} projects</h3>"
+                    panelString += "<h3 style='font-size: 0.9em; color: rgba(0,0,0,0.5);'>" + "{{profileUserAccount.cleanName}}".split(" ")[0] + " is hiring for {{profileAdminProjects.hiring|length}} projects</h3>"
 
                     panelString += projectList;
                 {% endif %}
