@@ -213,6 +213,27 @@
             return string;
         }
 
+        function displayBlockingPanel(innerHTML){
+            var backgroundPanel = document.getElementById("backgroundPanel");
+            var blocking;
+            if(backgroundPanel != null){
+                blocking = document.createElement("div")
+                blocking.id = "blockingPanel";
+                blocking.className = "blockingPanel";
+                backgroundPanel.appendChild(blocking)
+                blocking.innerHTML = innerHTML;
+            }
+            return blocking
+        }
+
+        function displayMessagePanel(){
+            console.log("Displaying message panel")
+        }
+
+        function hideMessagePanel(){
+
+        }
+
         function hidePicture(){
             $("#blockingPanel").remove();
         }
@@ -237,11 +258,7 @@
 
                 pictureString += "</div></div>"
 
-                var blocking = document.createElement("div")
-                blocking.id = "blockingPanel";
-                blocking.className = "blockingPanel";
-                backgroundPanel.appendChild(blocking)
-                blocking.innerHTML = pictureString
+                var blocking = displayBlockingPanel(pictureString);
 
                 // Add hide full picture onclick if user clicks outside of the image
                 blocking.onclick = function(){
