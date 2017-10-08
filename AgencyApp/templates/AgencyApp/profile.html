@@ -597,11 +597,11 @@
                         var hasJobs = projectDict[projectID]["numOpenJobs"] > 0;
                         var hasRoles = projectDict[projectID]["numOpenRoles"] > 0;
                         if(hasJobs && hasRoles){
-                            projectList += "(" + projectDict[projectID]["numOpenJobs"] + " open jobs, " + projectDict[projectID]["numOpenRoles"] + " open roles)";
+                            projectList += "(" + getSingularOrPlural(projectDict[projectID]["numOpenJobs"], "open job") + ", " + getSingularOrPlural(projectDict[projectID]["numOpenRoles"], "open role") + ")";
                         }else if(hasJobs){
-                            projectList += "(" + projectDict[projectID]["numOpenJobs"] + " open jobs)";
+                            projectList += "(" + getSingularOrPlural(projectDict[projectID]["numOpenJobs"], "open job") + ")";
                         }else if(hasRoles){
-                            projectList += "(" + projectDict[projectID]["numOpenRoles"] + " open roles)";
+                            projectList += "(" + getSingularOrPlural(projectDict[projectID]["numOpenRoles"], "open role") + ")";
                         }
                         projectList += "</li>";
                     }
@@ -609,7 +609,7 @@
                     panelString += "<h2 style='margin-top: 5px;'>Status: Hiring/casting</h2>"
 
                     // Add sub title
-                    panelString += "<h3 style='font-size: 0.9em; color: rgba(0,0,0,0.5);'>" + "{{profileUserAccount.cleanName}}".split(" ")[0] + " is hiring for {{profileAdminProjects.hiring|length}} projects</h3>"
+                    panelString += "<h3 style='font-size: 0.9em; color: rgba(0,0,0,0.5);'>" + "{{profileUserAccount.cleanName}}".split(" ")[0] + " is managing " + getSingularOrPlural("{{profileAdminProjects.hiring|length}}", "project") + "</h3>"
 
                     panelString += projectList;
                 {% endif %}
@@ -617,26 +617,26 @@
                 {% if profileAdminProjects.hiring %}
                     var projectList = "<ul>";
                     {% for project in profileAdminProjects.hiring %}
-                        projectList += "<li><a onclick='redirectToPost(" + '"{{project.postID}}"' + ");' >{{project.title}}</a> ({{project.openJobs|length}} open jobs)</li>"
+                        projectList += "<li><a onclick='redirectToPost(" + '"{{project.postID}}"' + ");' >{{project.title}}</a> (" + getSingularOrPlural("{{project.openJobs|length}}", "open job") + ")</li>"
                     {% endfor %}
                     projectList += "</ul>"
                     panelString += "<h2 style='margin-top: 5px;'>Status: Hiring</h2>"
 
                     // Add sub title
-                    panelString += "<h3 style='font-size: 0.9em; color: rgba(0,0,0,0.5);'>" + "{{profileUserAccount.cleanName}}".split(" ")[0] + " is hiring for {{profileAdminProjects.hiring|length}} projects</h3>"
+                    panelString += "<h3 style='font-size: 0.9em; color: rgba(0,0,0,0.5);'>" + "{{profileUserAccount.cleanName}}".split(" ")[0] + " is hiring for " + getSingularOrPlural("{{profileAdminProjects.hiring|length}}", "project") + "</h3>"
 
                     panelString += projectList;
                 {% endif %}
             }else if(casting){
                 var projectList = "<ul>";
                 {% for project in profileAdminProjects.casting %}
-                    projectList += "<li><a onclick='redirectToPost(" + '"{{project.postID}}"' + ");' >{{project.title}}</a> ({{project.openRoles|length}} open roles)</li>"
+                    projectList += "<li><a onclick='redirectToPost(" + '"{{project.postID}}"' + ");' >{{project.title}}</a> (" + getSingularOrPlural("{{project.openRoles|length}}", "open role") + ")</li>"
                 {% endfor %}
                 projectList += "</ul>"
                 panelString += "<h2 style='margin-top: 5px;'>Status: Casting</h2>"
 
                 // Add sub title
-                panelString += "<h3 style='font-size: 0.9em; color: rgba(0,0,0,0.5);'>" + "{{profileUserAccount.cleanName}}".split(" ")[0] + " is hiring for {{profileAdminProjects.casting|length}} projects</h3>"
+                panelString += "<h3 style='font-size: 0.9em; color: rgba(0,0,0,0.5);'>" + "{{profileUserAccount.cleanName}}".split(" ")[0] + " is casting for " + getSingularOrPlural("{{profileAdminProjects.casting|length}}", "project") + "</h3>"
 
                 panelString += projectList;
             }
