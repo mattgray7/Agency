@@ -573,11 +573,51 @@
 
 
 
-            if(hiring){
+            if(hiring && casting){
+                {% if profileAdminProjects.hiring or profileAdminProjects.casting %}
+                    var projectList = "<ul>";
+                    var projectDict = {};
+                    {% for project in profileAdminProjects.hiring %}
+                        if(!("{{project.postID}}" in projectDict)){
+                            projectDict["{{project.postID}}"] = {"title": "{{project.title}}",
+                                                                 "numOpenJobs": "{{project.openJobs|length}}",
+                                                                 "numOpenRoles": "{{project.openRoles|length}}"}
+                        }
+                    {% endfor %}
+                    {% for project in profileAdminProjects.casting %}
+                        if(!("{{project.postID}}" in projectDict)){
+                            projectDict["{{project.postID}}"] = {"title": "{{project.title}}",
+                                                                 "numOpenJobs": "{{project.openJobs|length}}",
+                                                                 "numOpenRoles": "{{project.openRoles|length}}"}
+                        }
+                    {% endfor %}
+                    for(projectID in projectDict){
+                        projectList += "<li><a onclick='redirectToPost(" + '"' + projectID + '"' + ");' >" + projectDict[projectID]["title"] + "</a> ";
+
+                        var hasJobs = projectDict[projectID]["numOpenJobs"] > 0;
+                        var hasRoles = projectDict[projectID]["numOpenRoles"] > 0;
+                        if(hasJobs && hasRoles){
+                            projectList += "(" + projectDict[projectID]["numOpenJobs"] + " open jobs, " + projectDict[projectID]["numOpenRoles"] + " open roles)";
+                        }else if(hasJobs){
+                            projectList += "(" + projectDict[projectID]["numOpenJobs"] + " open jobs)";
+                        }else if(hasRoles){
+                            projectList += "(" + projectDict[projectID]["numOpenRoles"] + " open roles)";
+                        }
+                        projectList += "</li>";
+                    }
+                    projectList += "</ul>"
+                    panelString += "<h2 style='margin-top: 5px;'>Status: Hiring/casting</h2>"
+
+                    // Add sub title
+                    panelString += "<h3 style='font-size: 0.9em; color: rgba(0,0,0,0.5);'>" + "{{profileUserAccount.cleanName}}".split(" ")[0] + " is hiring for {{profileAdminProjects.hiring|length}} projects</h3>"
+
+                    panelString += projectList;
+                {% endif %}
+            }else if(hiring){
                 {% if profileAdminProjects.hiring %}
                     var projectList = "<ul>";
                     {% for project in profileAdminProjects.hiring %}
-                        projectList += "<li><a onclick='redirectToPost(" + '"{{project.postID}}"' + ");' >{{project.title}}</a> ({{project.openRoles|length}} open roles)</li>"
+                        projectList += "<li><a onclick='redirectToPost(" + '"{{project.postID}}"' + ");' >{{project.title}}</a> ({{project.openJobs|length}} open jobs)</li>"
                     {% endfor %}
                     projectList += "</ul>"
                     panelString += "<h2 style='margin-top: 5px;'>Status: Hiring</h2>"
@@ -588,8 +628,20 @@
                     panelString += projectList;
                 {% endif %}
             }else if(casting){
-                panelString += "<h2 style='margin-top: 5px;'>Casting</h2>"
-            }else if(collaborating){
+                var projectList = "<ul>";
+                {% for project in profileAdminProjects.casting %}
+                    projectList += "<li><a onclick='redirectToPost(" + '"{{project.postID}}"' + ");' >{{project.title}}</a> ({{project.openRoles|length}} open roles)</li>"
+                {% endfor %}
+                projectList += "</ul>"
+                panelString += "<h2 style='margin-top: 5px;'>Status: Casting</h2>"
+
+                // Add sub title
+                panelString += "<h3 style='font-size: 0.9em; color: rgba(0,0,0,0.5);'>" + "{{profileUserAccount.cleanName}}".split(" ")[0] + " is hiring for {{profileAdminProjects.casting|length}} projects</h3>"
+
+                panelString += projectList;
+            }
+
+            if(collaborating){
                 panelString += "<h2 style='margin-top: 5px;'>Looking for collaborators</h2>"
             }
 
