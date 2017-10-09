@@ -227,11 +227,38 @@
             return blocking
         }
 
+        function hideBlockingPanel(){
+            $("#blockingPanel").remove();
+        }
+
+        function addCloseBlockingCallback(validHoverDivNames){
+            if(validHoverDivNames != null && validHoverDivNames.length > 0){
+                var blocking = document.getElementById("blockingPanel");
+                if(blocking != null){
+                    blocking.onclick = function(){
+                        var validHover = false
+                        for(var i=0; i < validHoverDivNames.length; i++){
+                            if(document.getElementById(validHoverDivNames[i]) != null){
+                                if($('[id="' + validHoverDivNames[i] + '"]').is(":hover")){
+                                    validHover = true;
+                                }
+                            }
+                        }
+                        if(!validHover){
+                            hideBlockingPanel();
+                        }
+                    }
+                }
+            }else{
+                hideBlockingPanel();
+            }
+        }
+
         function displayMessagePanel(destUsername, destCleanName){
            var panelString = "<div style='position: relative; height: 100%; width: 100%; text-align: center;'>";
 
             // Add main panel
-            panelString += "<div style='position: absolute; height: 415px; top: 15%; left: 10%; right: 10%; background: #FFF; text-align: left; color: #000;' class='form-style-7'>";
+            panelString += "<div id='messagePanel' style='position: absolute; height: 415px; top: 15%; left: 10%; right: 10%; background: #FFF; text-align: left; color: #000;' class='form-style-7'>";
 
             // Add panel title
             panelString += "<div style='position: relative; height: 30px;'><h2 style='margin-left: 15px;'><font style='background: #FFF; color: rgba(0,0,0,0.8); padding: 0px 5px; '>New Message</font></h2><div style='height: 0px; border-bottom: 1px solid #000; margin-top: -9px;'></div></div>"
@@ -243,19 +270,12 @@
             panelString += "<li style='height: 50%;'><label>Message</label><textarea id='messageTextArea' style='height: 150px;'></textarea></li>"
 
             // Add buttons
-            panelString += "<li style='border: none; margin: 10px 1px; padding: 0;'><div class='editButton' style='width: 42.3%; padding: 0.8em 1em; float: right; text-align: center;' onclick='sendMessage(" + '"{{request.user.username}}", "' + destUsername + '", "messageRecipientsTextInput", "messageSubjectTextInput", "messageTextArea");' + "'>Send</div><div class='editButton' style='width: 42.3%; margin-right: 6px; padding: 0.8em 1em; float: left; text-align: center;'>Cancel</div></li>"
+            panelString += "<li style='border: none; margin: 10px 1px; padding: 0;'><div class='editButton' style='width: 42.3%; padding: 0.8em 1em; float: right; text-align: center;' onclick='sendMessage(" + '"{{request.user.username}}", "' + destUsername + '", "messageRecipientsTextInput", "messageSubjectTextInput", "messageTextArea");' + "'>Send</div><div class='editButton' onclick='hideBlockingPanel();' style='width: 42.3%; margin-right: 6px; padding: 0.8em 1em; float: left; text-align: center;'>Cancel</div></li>"
 
             panelString += "</ul>"
             panelString += "</div></div>"
             var blocking = displayBlockingPanel(panelString);
-        }
-
-        function hideMessagePanel(){
-
-        }
-
-        function hidePicture(){
-            $("#blockingPanel").remove();
+            addCloseBlockingCallback(["messagePanel"])
         }
 
         function displayPicture(pictureDict){
@@ -279,19 +299,7 @@
                 pictureString += "</div></div>"
 
                 var blocking = displayBlockingPanel(pictureString);
-
-                // Add hide full picture onclick if user clicks outside of the image
-                blocking.onclick = function(){
-                    if(!$('#fullPictureImg').is(":hover")){
-                        if(document.getElementById("fullPictureCaptionPanel") != null){
-                            if(!$('#fullPictureCaptionPanel').is(":hover")){
-                                hidePicture();
-                            }
-                        }else{
-                            hidePicture();
-                        }
-                    }
-                }
+                addCloseBlockingCallback(["fullPictureImg", "fullPictureCaptionPanel"])
 
                 // Resize caption panel to initial fullPicture Height
                 var fullPicture = document.getElementById("fullPictureImg");
