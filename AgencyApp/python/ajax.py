@@ -644,3 +644,38 @@ def getSearchResults(request):
     return JsonResponse({"success": True, "results": results})
 
 
+def sendNewMessage(request):
+    success = False
+    messageID = None
+    sender = request.POST.get("sender")
+    recipient = request.POST.get("recipient")
+    subject = request.POST.get("subject")
+    content = request.POST.get("content")
+    if sender and sender == request.user.username:
+        if recipient:
+            try:
+                recipientUser = models.UserAccount.objects.get(username=recipient)
+            except models.UserAccount.DoesNotExist:
+                pass
+            else:
+                if content:
+                    messageID = helpers.createUniqueID(destDatabase=models.Message,
+                                                       idKey="messageID")
+                    message = models.Message(messageID=messageID,
+                                             sender=sender,
+                                             recipient=recipient,
+                                             subject=subject,
+                                             content=content)
+                    message.save()
+                    success = True
+    return JsonResponse({"success": success, "messageID": messageID})
+
+
+
+
+
+
+
+
+
+

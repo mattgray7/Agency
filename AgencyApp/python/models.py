@@ -326,10 +326,14 @@ class Interest(models.Model):
     def __str__(self):
         return self.professionName
 
-class TempPostPicture(models.Model):
-    tempID = models.CharField(max_length=10)
-    postPicture = models.ImageField(default=None, upload_to=image_directory_path, storage=imageStorage, blank=True, null=True)
-    username = models.CharField(max_length=200)
+
+class Message(models.Model):
+    messageID = models.CharField(max_length=10)
+    sender = models.CharField(max_length=100)
+    recipient = models.CharField(max_length=100)
+    recipientSeen = models.BooleanField(default=False)
+    subject = models.CharField(max_length=200, default=None, blank=True, null=True)
+    content = models.CharField(max_length=10000)
 
 
 class AbstractPost(models.Model):
@@ -342,9 +346,13 @@ class AbstractPost(models.Model):
     postPicture = models.ImageField(default=None, upload_to=image_directory_path, storage=imageStorage, blank=True, null=True)
     status = models.CharField(max_length=50, default="Open", blank=True, null=True)
     location = models.CharField(max_length=300, blank=True, null=True)
-
     createdAt = models.DateTimeField(auto_now_add=True)
     updatedAt = models.DateTimeField(auto_now=True)
+
+class TempPostPicture(models.Model):
+    tempID = models.CharField(max_length=10)
+    postPicture = models.ImageField(default=None, upload_to=image_directory_path, storage=imageStorage, blank=True, null=True)
+    username = models.CharField(max_length=200)
 
 class PostParticipant(models.Model):
     postID = models.CharField(max_length=10)
