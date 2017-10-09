@@ -226,8 +226,27 @@
             return blocking
         }
 
-        function displayMessagePanel(){
-            console.log("Displaying message panel")
+        function displayMessagePanel(destUsername, destCleanName){
+           var panelString = "<div style='position: relative; height: 100%; width: 100%; text-align: center;'>";
+
+            // Add main panel
+            panelString += "<div style='position: absolute; height: 415px; top: 15%; left: 10%; right: 10%; background: #FFF; text-align: left; color: #000;' class='form-style-7'>";
+
+            // Add panel title
+            panelString += "<div style='position: relative; height: 30px;'><h2 style='margin-left: 15px;'><font style='background: #FFF; color: rgba(0,0,0,0.8); padding: 0px 5px; '>New Message</font></h2><div style='height: 0px; border-bottom: 1px solid #000; margin-top: -9px;'></div></div>"
+
+            // Add message content
+            panelString += "<ul style=''>"
+            panelString += "<li><label>Send To</label><input type='text' name='messageRecipientsTextInput' value='" + destCleanName + "'></li>"
+            panelString += "<li><label>Subject</label><input type='text' name='messageSubjectTextInput'></li>"
+            panelString += "<li style='height: 50%;'><label>Message</label><textarea id='messageTextArea' style='height: 150px;'></textarea></li>"
+
+            // Add buttons
+            panelString += "<li style='border: none; margin: 10px 1px; padding: 0;'><div class='editButton' style='width: 42.3%; padding: 0.8em 1em; float: right; text-align: center;'>Send</div><div class='editButton' style='width: 42.3%; margin-right: 6px;padding: 0.8em 1em; float: left; text-align: center;'>Cancel</div></li>"
+
+            panelString += "</ul>"
+            panelString += "</div></div>"
+            var blocking = displayBlockingPanel(panelString);
         }
 
         function hideMessagePanel(){
