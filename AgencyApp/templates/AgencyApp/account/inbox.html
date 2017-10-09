@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block content %}
+<script>
+
+function getWideInboxFeed(){
+	var feedString = "<div style='width: 100%; height: 500px;'>"
+
+	// Add message choice panel
+	feedString += "<div style='display: inline-block; width: 30%; min-height: 100%; background: #aaa; '>"
+
+	feedString += "</div>"
+
+	// Add current message panel
+	feedString += "<div style='display:inline-block; height: 100%; width: 68%; background: #aba;'>"
+
+	feedString += "</div>"
+
+	feedString += "</div>";
+	return feedString
+
+}
+
+function getSlimInboxFeed(){
+
+}
+
+</script>
+
+
+<div id='backgroundPanel' class='backgroundPanel' style='min-width: 634px; min-height: 100%;'>
+    <div id="mainViewPanel" class="mainViewPanel" style="position: relative; min-width: 620px; max-width: 675px; background: rgba(0,0,0,0.05); border: none;">
+    	<div style='height: 100%; width: 100%; background: #FFF;'>
+    		<script>
+    			document.write(getWideInboxFeed())
+    		</script>
+    	</div>
+    </div>
+</div>
+{% endblock %}

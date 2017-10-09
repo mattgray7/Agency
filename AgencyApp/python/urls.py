@@ -18,6 +18,7 @@ urlpatterns = [
     url(r'^account/edit/background/$', views.handleURL, name=constants.EDIT_BACKGROUND),
     url(r'^account/edit/filmography/$', views.handleURL, name=constants.EDIT_FILMOGRAPHY),
     url(r'^account/edit/description/$', views.handleURL, name=constants.EDIT_ACTOR_DESCRIPTION),
+    url(r'^account/inbox/$', views.handleURL, name=constants.INBOX),
 
     # Create posts
     url(r'^post/$', views.handleURL, name=constants.CREATE_POST),

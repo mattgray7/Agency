@@ -28,6 +28,7 @@ LOGIN = "LOGIN"
 LOGOUT = "LOGOUT"
 CANCEL = "CANCEL"
 PROFILE = "PROFILE"
+INBOX = "INBOX"
 
 # Post types
 EVENT_POST = "EVENT_POST"
@@ -163,6 +164,7 @@ URL_MAP = {HOME: "/",
 		   EDIT_BACKGROUND: "/account/edit/background/",
 		   EDIT_FILMOGRAPHY: "/account/edit/filmography/",
 		   EDIT_ACTOR_DESCRIPTION: "/account/edit/description/",
+		   INBOX: "/account/inbox/",
 
 		   # Post creation
 		   CREATE_POST: "/post/",
@@ -176,7 +178,8 @@ URL_MAP = {HOME: "/",
 		   CREATE_CASTING_POST: "/post/create/casting/",
 		   
 		   # Browse
-		   BROWSE: "/browse/"
+		   BROWSE: "/browse/",
+
 		   }
 
 
@@ -185,6 +188,7 @@ DEFAULT_PAGE_MAP = {HOME: HOME,
 					PROFILE: PROFILE,
 					LOGIN: HOME,
 					LOGOUT: HOME,
+					INBOX: PROFILE,
 
 					# Account creations
 					CREATE_BASIC_ACCOUNT: CREATE_BASIC_ACCOUNT_FINISH,
@@ -241,6 +245,7 @@ VIEW_CLASS_MAP = {HOME: home.HomeView,
 				  LOGOUT: account.LogoutView,
 			   	  PROFILE: profile.ProfileView,
                   BROWSE: browse.BrowseView,
+                  INBOX: account.InboxView,
 
 			   	  # Create posts
 			   	  CREATE_POST: post.CreatePostTypesView,	# event, project, work, collab, casting
@@ -264,6 +269,7 @@ VIEW_CLASS_MAP = {HOME: home.HomeView,
 HTML_MAP = {HOME: 'AgencyApp/home.html',
 			LOGIN: 'AgencyApp/account/login.html',
 			PROFILE: 'AgencyApp/profile.html',
+			INBOX: 'AgencyApp/account/inbox.html',
 
 			# Account creation
 			CREATE_BASIC_ACCOUNT: 'AgencyApp/account/create.html',

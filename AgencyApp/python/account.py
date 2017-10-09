@@ -160,6 +160,11 @@ class CreateAccountFinishView(views.GenericFormView):
         return True
 
 
+class InboxView(views.GenericFormView):
+     def __init__(self, *args, **kwargs):
+        super(InboxView, self).__init__(*args, **kwargs)
+
+
 class GenericEditAccountView(views.GenericFormView):
     def __init__(self, *args, **kwargs):
         super(GenericEditAccountView, self).__init__(*args, **kwargs)

@@ -619,8 +619,6 @@ def getSearchSuggestions(request):
                                     "profession": x.mainProfession or "User"} for x in users]
     return JsonResponse({"success": True, "suggestions": suggestions})
 
-
-
 def getSearchResults(request):
     searchValue = request.POST.get("searchValue")
     categories = request.POST.getlist("categories[]")       # Need the brackets to convert js array to python list
