@@ -26,7 +26,7 @@ function getWideInboxFeed(){
         feedString += "</div></div>"
 
         // Add current message panel
-        feedString += "<div style='position: absolute; top: 0; bottom: 0; right: 0;width: 68%; background: #aba;'>"
+        feedString += "<div id='conversationPanel' style='position: absolute; top: 0px; bottom: 0; right: 0; width: 67.9%; background: rgba(0,0,0,0.05); border: 1px solid #000'></div>"
 
         feedString += "</div>"
     {% endif %}
@@ -108,6 +108,12 @@ function displayMessage(messageID){
                 elements[i].className = "";
             }
         }
+    }
+
+    var conversationPanel = document.getElementById("conversationPanel");
+    if(conversationPanel != null){
+        var conversationString = "Blah"
+        conversationPanel.innerHTML = conversationString;
     }
 }
 
