@@ -11,7 +11,9 @@ function sendMessage(senderUsername, destUsername, recipientsInput, subjectInput
                     type : 'POST',
                     dataType: "json",
                     success : function(data) {
-                        console.log(data)
+                        if(data["success"]){
+                            hideBlockingPanel();
+                        }
                     }
                 });
 

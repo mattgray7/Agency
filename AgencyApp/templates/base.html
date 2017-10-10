@@ -9,6 +9,7 @@
         <link href="{% static "/AgencyApp/css/font/DidactGothic/DidactGothic.css" %}" rel="stylesheet" type="text/css" media="all" />
         <link href="{% static "/AgencyApp/css/default.css" %}" rel="stylesheet" type="text/css" media="all" />
         <link href="{% static "/AgencyApp/css/profile.css" %}" rel="stylesheet" type="text/css" media="all" />
+        <link href="{% static "/AgencyApp/css/message.css" %}" rel="stylesheet" type="text/css" media="all" />
         <link href="{% static "/AgencyApp/css/fonts.css" %}" rel="stylesheet" type="text/css" media="all" />
         <link href="{% static "/AgencyApp/css/forms.css" %}" rel="stylesheet" type="text/css" media="all" />
         <link href="{% static "/AgencyApp/css/post.css" %}" rel="stylesheet" type="text/css" media="all" />
@@ -265,7 +266,7 @@
 
             // Add message content
             panelString += "<ul style=''>"
-            panelString += "<li><label>Send To</label><input type='text' id='messageRecipientsTextInput' value='" + destCleanName + "'></li>"
+            panelString += "<li style='height: 30px;'><label>Send To</label><div class='messageRecipient'>" + destCleanName + "</div></li>"
             panelString += "<li><label>Subject</label><input type='text' id='messageSubjectTextInput'></li>"
             panelString += "<li style='height: 50%;'><label>Message</label><textarea id='messageTextArea' style='height: 150px;'></textarea></li>"
 
