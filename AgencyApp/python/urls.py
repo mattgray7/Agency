@@ -69,7 +69,7 @@ urlpatterns = [
     url(r'^ajax/getSearchSuggestions/$', ajax.getSearchSuggestions, name='getSearchSuggestions'),  #TODO find a way to secure this link
 
     url(r'^ajax/sendNewMessage/$', ajax.sendNewMessage, name='sendNewMessage'),
-
+    url(r'^ajax/getConversation/$', ajax.getConversation, name='getConversation'),
 
     # Browse
     url(r'^browse/$', views.handleURL, name=constants.BROWSE),

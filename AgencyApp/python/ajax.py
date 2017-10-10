@@ -665,7 +665,7 @@ def sendNewMessage(request):
                         if conversations1 and len(conversations1) == 1:
                             conversationID = conversations1[0].conversationID
                         elif conversations2 and len(conversations2) == 1:
-                            conversationID = conversations2[0].coversationID
+                            conversationID = conversations2[0].conversationID
                     if not conversationID:
                         conversationID = helpers.createUniqueID(destDatabase=models.Conversation,
                                                                 idKey="conversationID")
@@ -685,12 +685,24 @@ def sendNewMessage(request):
                         success = True
     return JsonResponse({"success": success, "messageID": messageID})
 
-
-
-
-
-
-
+def getConversation(request):
+    success = False
+    conversationID = request.POST.get("conversationID")
+    conversationList = []
+    if conversationID:
+        try:
+            conversation = models.Conversation.objects.get(conversationID=conversationID)
+        except models.Conversation.DoesNotExist:
+            pass
+        else:
+            for message in conversation.messages:
+                conversationList.append({"messageID": message.messageID,
+                                         "sender": message.sender,
+                                         "recipient": message.recipient,
+                                         "content": message.content
+                                         })
+            success = True
+    return JsonResponse({"success": success, "conversation": conversationList})
 
 
 

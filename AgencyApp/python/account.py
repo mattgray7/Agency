@@ -190,6 +190,7 @@ def _getOrderedMessageList(queryset):
             pass
         else:
             messageDict = {"messageID": message.messageID,
+                           "conversationID": message.conversationID,
                            "sender": {"username": sender.username,
                                       "cleanName": sender.cleanName,
                                       "profilePictureURL": sender.profilePicture and sender.profilePicture.url or constants.NO_PROFILE_PICTURE_PATH},

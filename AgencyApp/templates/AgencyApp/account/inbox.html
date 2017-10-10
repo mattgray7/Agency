@@ -75,7 +75,7 @@ function getMessageListString(messageList, listType){
             if(listType === "sent"){
                 displayUser = messageList[i]["recipient"];
             }
-            listString += "<li id='messageFeedElement_" + messageList[i]["messageID"] + "' onclick='displayMessage(" + '"' + messageList[i]["messageID"] + '"' + ");'>"
+            listString += "<li id='messageFeedElement_" + messageList[i]["messageID"] + "' onclick='selectMessage(" + '"' + messageList[i]["messageID"] + '", "' + messageList[i]["conversationID"] + '"' + ");'>"
 
             // Add picture
             listString += "<div style='position: absolute; left: 5px; top: 5px; bottom: 5px;'><img style='max-height: 100%;' src='" + displayUser["profilePictureURL"] + "'></div>"
@@ -96,7 +96,7 @@ function getMessageListString(messageList, listType){
     return listString
 }
 
-function displayMessage(messageID){
+function selectMessage(messageID, conversationID){
     var messageFeed = document.getElementById("messageFeed")
     var messageElement = document.getElementById("messageFeedElement_" + messageID);
     if(messageFeed != null && messageElement != null){
@@ -110,10 +110,38 @@ function displayMessage(messageID){
         }
     }
 
+    displayConversation(conversationID)
+}
+
+function displayConversation(conversationID){
     var conversationPanel = document.getElementById("conversationPanel");
     if(conversationPanel != null){
-        var conversationString = "Blah"
-        conversationPanel.innerHTML = conversationString;
+        conversationPanel.innerHTML = "<div style='margin-top: 40%;'><img src='{{images.loading.dark}}' style='height: 100px; width: 100px;'></div>"
+        $.ajax({
+            url : "/ajax/getConversation/",
+            data : {"conversationID": conversationID},
+            type : 'POST',
+            dataType: "json",
+            success : function(data) {
+                if(data["success"]){
+                    if(data["conversation"] != null && data["conversation"].length > 0){
+                        var conversationString = "<div style='height: 100%; width: 100%; overflow: scroll; background: #FFF'><ul>"
+                        for(var i=0; i < data["conversation"].length; i++){
+                            if(data["conversation"][i]["sender"] === "{{request.user.username}}"){
+                                console.log(data["conversation"][i]["sender"])
+                                // display right
+                                conversationString += "<li style='text-align: right;'>" + data["conversation"][i]["content"] + "</li>"
+                            }else{
+                                // display left
+                                conversationString += "<div style='text-align: left;'>" + data["conversation"][i]["content"] + "</li>"
+                            }
+                        }
+                        conversationString += "</ul></div>"
+                        conversationPanel.innerHTML = conversationString
+                    }
+                }
+            }
+        });
     }
 }
 

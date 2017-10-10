@@ -333,7 +333,7 @@ class Conversation(models.Model):
 
     @property
     def messages(self):
-        return Message.objects.filter(conversationID=self.conversationID)
+        return Message.objects.filter(conversationID=self.conversationID).order_by("-sentTime")
 
 class Message(models.Model):
     messageID = models.CharField(max_length=10)
