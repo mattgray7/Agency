@@ -6,48 +6,48 @@
 <script>
 
 function getWideInboxFeed(){
-	var feedString = "<div style='width: 100%; height: 500px; position: relative;'>"
+    var feedString = "<div style='width: 100%; height: 500px; position: relative;'>"
 
-	{% if messages %}
-		// Add message choice panel
-		feedString += "<div style='position: absolute; left: 0; top: 0; bottom: 0; width: 32%; background: rgba(0,0,0,0.05);'><div style='position: relative; height: 100%; width: 100%';>"
+    {% if messages %}
+        // Add message choice panel
+        feedString += "<div style='position: absolute; left: 0; top: 0; bottom: 0; width: 32%; background: rgba(0,0,0,0.05);'><div style='position: relative; height: 100%; width: 100%';>"
 
-		// Add tabs at the top
-		feedString += "<ul class='profileTabButtonList' style='margin-top: 5px; z-index: 0; width: 100%;'>"
-		feedString += "<li id='inboxTabButton' style='width: 48%; margin-left: 0px;' onclick='selectMessageTab(" + '"inbox");' + "'>Inbox<div id='inboxTabButtonBorderCover' class='profileTabButtonBorderCover' style='margin-top: 10px;'></div></li>";
-		feedString += "<li id='sentTabButton' style='width: 48%; margin-left: 3.5px;' onclick='selectMessageTab(" + '"sent");' + "'>Sent<div id='sentTabButtonBorderCover' class='profileTabButtonBorderCover' style='margin-top: 10px;'></li>";
-		feedString += "</ul>"
+        // Add tabs at the top
+        feedString += "<ul class='profileTabButtonList' style='margin-top: 5px; z-index: 0; width: 100%;'>"
+        feedString += "<li id='inboxTabButton' style='width: 48%; margin-left: 0px;' onclick='selectMessageTab(" + '"inbox");' + "'>Inbox<div id='inboxTabButtonBorderCover' class='profileTabButtonBorderCover' style='margin-top: 10px;'></div></li>";
+        feedString += "<li id='sentTabButton' style='width: 48%; margin-left: 3.5px;' onclick='selectMessageTab(" + '"sent");' + "'>Sent<div id='sentTabButtonBorderCover' class='profileTabButtonBorderCover' style='margin-top: 10px;'></li>";
+        feedString += "</ul>"
 
-		// Add list container
-		feedString += "<div style='position: relative; background: #FFF; border: 1px solid #000; height: 457px; margin-top: -30px; z-index: 2;'>list</div>"
+        // Add list container
+        feedString += "<div style='position: relative; background: #FFF; border: 1px solid #000; height: 457px; margin-top: -30px; z-index: 2;'>list</div>"
 
-		feedString += "</div></div>"
+        feedString += "</div></div>"
 
-		// Add current message panel
-		feedString += "<div style='position: absolute; top: 0; bottom: 0; right: 0;width: 68%; background: #aba;'>"
+        // Add current message panel
+        feedString += "<div style='position: absolute; top: 0; bottom: 0; right: 0;width: 68%; background: #aba;'>"
 
-		feedString += "</div>"
-	{% endif %}
+        feedString += "</div>"
+    {% endif %}
 
-	feedString += "</div>";
-	return feedString
+    feedString += "</div>";
+    return feedString
 }
 
 var messageTabButtons = ["inbox", "sent"]
 function selectMessageTab(tabType){
-	for(var i=0; i < messageTabButtons.length; i++){
-		var button = document.getElementById(messageTabButtons[i] + "TabButton");
-		var borderCover = document.getElementById(messageTabButtons[i] + "TabButtonBorderCover");
-		if(button != null && borderCover != null){
-			if(messageTabButtons[i] === tabType){
-				button.className = "active";
-				borderCover.style.opacity = "1";
-			}else{
-				button.className = "";
-				borderCover.style.opacity = "0";
-			}
-		}
-	}
+    for(var i=0; i < messageTabButtons.length; i++){
+        var button = document.getElementById(messageTabButtons[i] + "TabButton");
+        var borderCover = document.getElementById(messageTabButtons[i] + "TabButtonBorderCover");
+        if(button != null && borderCover != null){
+            if(messageTabButtons[i] === tabType){
+                button.className = "active";
+                borderCover.style.opacity = "1";
+            }else{
+                button.className = "";
+                borderCover.style.opacity = "0";
+            }
+        }
+    }
 }
 
 function getSlimInboxFeed(){
@@ -59,12 +59,12 @@ function getSlimInboxFeed(){
 
 <div id='backgroundPanel' class='backgroundPanel' style='min-width: 634px; min-height: 100%;'>
     <div id="mainViewPanel" class="mainViewPanel" style="position: relative; min-width: 620px; max-width: 675px; background: rgba(0,0,0,0.05); border: none;">
-    	<div style='height: 100%; width: 100%; background: #FFF;'>
-    		<script>
-    			document.write(getWideInboxFeed())
-    			selectMessageTab("inbox")
-    		</script>
-    	</div>
+        <div style='height: 100%; width: 100%; background: #FFF;'>
+            <script>
+                document.write(getWideInboxFeed())
+                selectMessageTab("inbox")
+            </script>
+        </div>
     </div>
 </div>
 {% endblock %}
