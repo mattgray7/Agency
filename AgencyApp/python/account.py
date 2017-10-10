@@ -183,14 +183,24 @@ def _getOrderedMessageList(queryset):
     messageList = []
     orderedList = None
     for message in queryset:
-        messageDict = {"messageID": message.id,
-                       "sender": message.sender,
-                       "recipient": message.recipient,
-                       "subject": message.subject,
-                       "content": message.content,
-                       "sentTime": message.sentTime.isoformat()
-                       }
-        messageList.append(messageDict)
+        try:
+            sender = models.UserAccount.objects.get(username=message.sender)
+            recipient = models.UserAccount.objects.get(username=message.recipient)
+        except models.UserAccount.DoesNotExist:
+            pass
+        else:
+            messageDict = {"messageID": message.id,
+                           "sender": {"username": sender.username,
+                                      "cleanName": sender.cleanName,
+                                      "profilePictureURL": sender.profilePicture and sender.profilePicture.url or constants.NO_PROFILE_PICTURE_PATH},
+                           "recipient": {"username": recipient.username,
+                                         "cleanName": recipient.cleanName,
+                                         "profilePictureURL": recipient.profilePicture and recipient.profilePicture.url or constants.NO_PROFILE_PICTURE_PATH},
+                           "subject": message.subject,
+                           "content": message.content,
+                           "sentTime": message.sentTime.isoformat()
+                           }
+            messageList.append(messageDict)
     if messageList:
         orderedList = sorted(messageList, key=lambda k: k['sentTime'])
     return orderedList

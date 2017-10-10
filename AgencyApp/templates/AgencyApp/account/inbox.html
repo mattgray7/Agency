@@ -63,17 +63,33 @@ function selectMessageTab(tabType){
     if(messageList != null){
         var container = document.getElementById("messageListContainer");
         if(container != null){
-            container.innerHTML = getMessageListString(messageList);
+            container.innerHTML = getMessageListString(messageList, tabType);
         }
     }
 }
 
-function getMessageListString(messageList){
+function getMessageListString(messageList, listType){
     var listString = "<div style='width: 100%; height: 100%; border 0px solid #000; margin-top: 2px;'>"
     if(messageList != null && messageList.length > 0){
         listString += "<ul class='messageFeed'>"
         for(var i=0; i < messageList.length; i++){
-            listString += "<li>" + messageList[i]["content"] + "</li>"
+            var displayUser = messageList[i]["sender"];
+            if(listType === "sent"){
+                displayUser = messageList[i]["recipient"];
+            }
+
+            listString += "<li>"
+
+            // Add picture
+            listString += "<div style='position: absolute; left: 5px; top: 5px; bottom: 5px;'><img style='max-height: 100%;' src='" + displayUser["profilePictureURL"] + "'></div>"
+
+            // Add text container
+            listString += "<div style='position: absolute; left: 64px; top: 13px; bottom: 5px; right: 5px; text-align: left;'>"
+            listString += "<h4 style='margin: 0; font-size: 1.1em;'>" + displayUser["cleanName"] + "</h4>"
+            listString += "<div style='margin-top: -1px; font-size: 0.9em; font-weight: 100; color: rgba(0,0,0,0.6);  text-overflow: ellipsis; height: 60%; white-space: nowrap; overflow: hidden;'>" + messageList[i]["content"] + "</div>";
+            listString += "</div>"
+
+            listString +="</li>"
         }
         listString += "</ul>"
     }else{
