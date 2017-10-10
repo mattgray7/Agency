@@ -161,8 +161,23 @@ class CreateAccountFinishView(views.GenericFormView):
 
 
 class InboxView(views.GenericFormView):
-     def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs):
         super(InboxView, self).__init__(*args, **kwargs)
+        self._messages = None
+
+    @property
+    def messages(self):
+        if self._messages is None:
+            self._messages = {"incoming": models.Message.objects.filter(recipient=self.userAccount.username),
+                              "sent": models.Message.objects.filter(sender=self.userAccount.username)}
+        return self._messages
+
+    @property
+    def pageContext(self):
+        self._pageContext = super(InboxView, self).pageContext
+        self._pageContext["messages"] = self.messages
+        return self._pageContext
+
 
 
 class GenericEditAccountView(views.GenericFormView):
