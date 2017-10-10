@@ -189,7 +189,7 @@ def _getOrderedMessageList(queryset):
         except models.UserAccount.DoesNotExist:
             pass
         else:
-            messageDict = {"messageID": message.id,
+            messageDict = {"messageID": message.messageID,
                            "sender": {"username": sender.username,
                                       "cleanName": sender.cleanName,
                                       "profilePictureURL": sender.profilePicture and sender.profilePicture.url or constants.NO_PROFILE_PICTURE_PATH},

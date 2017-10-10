@@ -10,6 +10,10 @@
 	border-bottom: 1px solid rgba(0,0,0,0.5);
 }
 
+.messageFeed li.active{
+	background: rgba(0,0,0,0.07);
+}
+
 .messageFeed li:hover
 {
 	background: rgba(0,0,0,0.08);
