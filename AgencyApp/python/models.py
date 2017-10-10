@@ -334,6 +334,7 @@ class Message(models.Model):
     recipientSeen = models.BooleanField(default=False)
     subject = models.CharField(max_length=200, default=None, blank=True, null=True)
     content = models.CharField(max_length=10000)
+    sentTime = models.DateTimeField(auto_now_add=True)
 
 
 class AbstractPost(models.Model):

@@ -175,9 +175,25 @@ class InboxView(views.GenericFormView):
     @property
     def pageContext(self):
         self._pageContext = super(InboxView, self).pageContext
-        self._pageContext["messages"] = self.messages
+        self._pageContext["messages"] = json.dumps({"inbox": _getOrderedMessageList(models.Message.objects.filter(recipient=self.userAccount.username)),
+                                                    "sent": _getOrderedMessageList(models.Message.objects.filter(sender=self.userAccount.username))})
         return self._pageContext
 
+def _getOrderedMessageList(queryset):
+    messageList = []
+    orderedList = None
+    for message in queryset:
+        messageDict = {"messageID": message.id,
+                       "sender": message.sender,
+                       "recipient": message.recipient,
+                       "subject": message.subject,
+                       "content": message.content,
+                       "sentTime": message.sentTime.isoformat()
+                       }
+        messageList.append(messageDict)
+    if messageList:
+        orderedList = sorted(messageList, key=lambda k: k['sentTime'])
+    return orderedList
 
 
 class GenericEditAccountView(views.GenericFormView):
