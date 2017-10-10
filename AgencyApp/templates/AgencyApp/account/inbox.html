@@ -16,7 +16,7 @@ function getWideInboxFeed(){
 
         // Add tabs at the top
         feedString += "<ul class='profileTabButtonList' style='margin-top: 5px; z-index: 0; width: 100%;'>"
-        feedString += "<li id='inboxTabButton' style='width: 48%; margin-left: 0px;' onclick='selectMessageTab(" + '"inbox");' + "'>Inbox<div id='inboxTabButtonBorderCover' class='profileTabButtonBorderCover' style='margin-top: 10px;'></div></li>";
+        feedString += "<li id='inboxTabButton' style='width: 48%; margin-left: 0px;' onclick='selectMessageTab(" + '"inbox");' + "'>Inbox<div id='inboxTabButtonBorderCover' class='profileTabButtonBorderCover' style='margin-top: 10px; height: 2px;'></div></li>";
         feedString += "<li id='sentTabButton' style='width: 48%; margin-left: 3.5px;' onclick='selectMessageTab(" + '"sent");' + "'>Sent<div id='sentTabButtonBorderCover' class='profileTabButtonBorderCover' style='margin-top: 10px;'></li>";
         feedString += "</ul>"
 
@@ -69,7 +69,7 @@ function selectMessageTab(tabType){
 }
 
 function getMessageListString(messageList, listType){
-    var listString = "<div style='width: 100%; height: 100%; border 0px solid #000; margin-top: 2px;'>"
+    var listString = "<div style='width: 100%; height: 100%; border 0px solid #000; margin-top: 0px;'>"
     if(messageList != null && messageList.length > 0){
         listString += "<ul class='messageFeed'>"
         for(var i=0; i < messageList.length; i++){
