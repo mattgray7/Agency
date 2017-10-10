@@ -56,15 +56,13 @@ function selectMessageTab(tabType){
     var messageList;
     {% if messages %}
         var messages = {{messages|safe}}
-        if((tabType in messages) && (messages[tabType].length > 0)){
+        if(tabType in messages && messages[tabType] != null && messages[tabType].length > 0){
             messageList = messages[tabType]
         }
     {% endif %}
-    if(messageList != null){
-        var container = document.getElementById("messageListContainer");
-        if(container != null){
-            container.innerHTML = getMessageListString(messageList, tabType);
-        }
+    var container = document.getElementById("messageListContainer");
+    if(container != null){
+        container.innerHTML = getMessageListString(messageList, tabType);
     }
 }
 
@@ -92,7 +90,7 @@ function getMessageListString(messageList, listType){
         }
         listString += "</ul>"
     }else{
-        listString += "No messages to display"
+        listString += "<div style='margin-top: 10px; font-size: 0.9em; color: rgba(0,0,0,0.7);'>No messages</div>"
     }
     listString += "</div>"
     return listString
