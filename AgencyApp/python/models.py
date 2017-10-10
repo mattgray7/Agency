@@ -326,9 +326,18 @@ class Interest(models.Model):
     def __str__(self):
         return self.professionName
 
+class Conversation(models.Model):
+    conversationID = models.CharField(max_length=10)
+    user1 = models.CharField(max_length=100)
+    user2 = models.CharField(max_length=100)
+
+    @property
+    def messages(self):
+        return Message.objects.filter(conversationID=self.conversationID)
 
 class Message(models.Model):
     messageID = models.CharField(max_length=10)
+    conversationID = models.CharField(max_length=10)
     sender = models.CharField(max_length=100)
     recipient = models.CharField(max_length=100)
     recipientSeen = models.BooleanField(default=False)
