@@ -151,6 +151,15 @@ function getConversationString(conversation){
         listString += "</ul>"
 
         // Add title
+        var otherUser = null
+        for(username in conversation["users"]){
+            if(username != "{{request.user.username}}"){
+                otherUser = conversation["users"][username];
+            }
+        }
+        conversationString += "<div style='height: 60px; border-bottom: 1px solid rgba(0,0,0,0.1);'><h2><a onclick='redirectToUser(" + '"' + otherUser["username"] + '");' + "'>" + otherUser["cleanName"] + "</a></h2><div style='color: rgba(0,0,0,0.6);'>" + otherUser["profileProfessions"] + "</div></div>"
+
+
         conversationString += listString;
     }
 

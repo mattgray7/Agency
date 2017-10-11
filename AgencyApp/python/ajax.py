@@ -705,9 +705,11 @@ def getConversation(request):
             else:
                 userDict[user1.username] = {"username": user1.username,
                                             "cleanName": user1.cleanName,
+                                            "profileProfessions": user1.mainProfession,
                                             "profilePictureURL": user1.profilePicture and user1.profilePicture.url or constants.NO_PROFILE_PICTURE_PATH}
                 userDict[user2.username] = {"username": user2.username,
                                             "cleanName": user2.cleanName,
+                                            "profileProfessions": user2.mainProfession,
                                             "profilePictureURL": user2.profilePicture and user2.profilePicture.url or constants.NO_PROFILE_PICTURE_PATH}
 
                 for message in conversation.messages:

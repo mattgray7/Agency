@@ -171,6 +171,9 @@ class InboxView(views.GenericFormView):
 
     """
 
+    def cancelPage(self):
+        pass
+
     @property
     def messages(self):
         if self._messages is None:
@@ -210,9 +213,11 @@ class InboxView(views.GenericFormView):
                                "conversationID": message.conversationID,
                                "sender": {"username": sender.username,
                                           "cleanName": sender.cleanName,
+                                          "profileProfession": sender.mainProfession,
                                           "profilePictureURL": sender.profilePicture and sender.profilePicture.url or constants.NO_PROFILE_PICTURE_PATH},
                                "recipient": {"username": recipient.username,
                                              "cleanName": recipient.cleanName,
+                                             "profileProfessions": recipient.mainProfession,
                                              "profilePictureURL": recipient.profilePicture and recipient.profilePicture.url or constants.NO_PROFILE_PICTURE_PATH},
                                "subject": message.subject,
                                "content": message.content,
