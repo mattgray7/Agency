@@ -134,10 +134,19 @@ function displayConversation(conversationID){
 }
 
 function getConversationString(conversation){
-    var conversationString = "<div style='height: 100%; width: 100%; overflow: scroll; background: #FFF'>"
+    var conversationString = "<div style='height: 100%; width: 100%; overflow: scroll; position: relative; background: #FFF'>"
     var messages = conversation["messages"];
     if(messages.length > 0 && conversation["users"] != null){
-        var listString = "<ul class='conversationFeed'>"
+        // Add title
+        var otherUser = null
+        for(username in conversation["users"]){
+            if(username != "{{request.user.username}}"){
+                otherUser = conversation["users"][username];
+            }
+        }
+        conversationString += "<div style='height: 60px; border-bottom: 1px solid rgba(0,0,0,0.1);'><h2><a onclick='redirectToUser(" + '"' + otherUser["username"] + '");' + "'>" + otherUser["cleanName"] + "</a></h2><div style='color: rgba(0,0,0,0.6);'>" + otherUser["profileProfessions"] + "</div></div>";
+
+        var listString = "<ul class='conversationFeed' style='overflow: scroll;'>"
         for(var i=messages.length-1; i >= 0; i--){
             var sender = messages[i]["sender"]
             if(sender === "{{request.user.username}}"){
@@ -154,18 +163,10 @@ function getConversationString(conversation){
             }
         }
         listString += "</ul>"
-
-        // Add title
-        var otherUser = null
-        for(username in conversation["users"]){
-            if(username != "{{request.user.username}}"){
-                otherUser = conversation["users"][username];
-            }
-        }
-        conversationString += "<div style='height: 60px; border-bottom: 1px solid rgba(0,0,0,0.1);'><h2><a onclick='redirectToUser(" + '"' + otherUser["username"] + '");' + "'>" + otherUser["cleanName"] + "</a></h2><div style='color: rgba(0,0,0,0.6);'>" + otherUser["profileProfessions"] + "</div></div>"
-
-
         conversationString += listString;
+
+        // Add message box
+        conversationString += "<div style='height: 70px; border-top: 1px solid rgba(0,0,0,0.3); position: absolute; bottom: 0; left: 0; right: 0;'><textarea class='formInputElement' style='height: 100%; width: 100%; border: none; resize: none; font-size: 1.1em; font-family: Didact Gothic, sans-serif;' placeholder='New message...'></textarea></div>";
     }
 
     conversationString += "</div>"
