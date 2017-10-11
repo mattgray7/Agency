@@ -71,9 +71,24 @@ class UserAccount(models.Model):
         self._profileEndorsements = None
         self._mainProfession = None
         self._actorDescriptionEnabled = None
+        self._conversations = None
 
     def __str__(self):
         return self.username
+
+    @property
+    def conversations(self):
+        if self._conversations is None:
+            self._conversations = []
+            convoIDList = []
+            for conversation in Conversation.objects.filter(user1=self.username):
+                convoIDList.append(conversation.conversationID)
+                self._conversations.append(conversation)
+            for conversation in Conversation.objects.filter(user2=self.username):
+                if conversation.conversationID not in convoIDList:
+                    convoIDList.append(conversation.conversationID)
+                    self._conversations.append(conversation)
+        return self._conversations
 
     @property
     def profileEndorsements(self):
@@ -334,6 +349,11 @@ class Conversation(models.Model):
     @property
     def messages(self):
         return Message.objects.filter(conversationID=self.conversationID).order_by("-sentTime")
+
+    @property
+    def latestMessage(self):
+        if self.messages:
+            return self.messages[0]
 
 class Message(models.Model):
     messageID = models.CharField(max_length=10)

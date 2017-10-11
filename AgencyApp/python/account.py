@@ -168,43 +168,45 @@ class InboxView(views.GenericFormView):
     @property
     def messages(self):
         if self._messages is None:
-            self._messages = {"incoming": models.Message.objects.filter(recipient=self.userAccount.username),
-                              "sent": models.Message.objects.filter(sender=self.userAccount.username)}
+            messagesDict = {"inbox": [], "sent": []}
+            for conversation in self.userAccount.conversations:
+                message = conversation.latestMessage
+                if message.sender == self.userAccount.username:
+                    messagesDict["sent"].append(self._formatMessageDict(message))
+                else:
+                    messagesDict["inbox"].append(self._formatMessageDict(message))
+            self._messages = {"inbox": sorted(messagesDict["inbox"], key=lambda k: k['sentTime']),
+                              "sent": sorted(messagesDict["sent"], key=lambda k: k['sentTime'])}
         return self._messages
 
     @property
     def pageContext(self):
         self._pageContext = super(InboxView, self).pageContext
-        self._pageContext["messages"] = json.dumps({"inbox": _getOrderedMessageList(models.Message.objects.filter(recipient=self.userAccount.username)),
-                                                    "sent": _getOrderedMessageList(models.Message.objects.filter(sender=self.userAccount.username))})
+        self._pageContext["messages"] = json.dumps(self.messages)
         return self._pageContext
 
-def _getOrderedMessageList(queryset):
-    messageList = []
-    orderedList = None
-    for message in queryset:
-        try:
-            sender = models.UserAccount.objects.get(username=message.sender)
-            recipient = models.UserAccount.objects.get(username=message.recipient)
-        except models.UserAccount.DoesNotExist:
-            pass
-        else:
-            messageDict = {"messageID": message.messageID,
-                           "conversationID": message.conversationID,
-                           "sender": {"username": sender.username,
-                                      "cleanName": sender.cleanName,
-                                      "profilePictureURL": sender.profilePicture and sender.profilePicture.url or constants.NO_PROFILE_PICTURE_PATH},
-                           "recipient": {"username": recipient.username,
-                                         "cleanName": recipient.cleanName,
-                                         "profilePictureURL": recipient.profilePicture and recipient.profilePicture.url or constants.NO_PROFILE_PICTURE_PATH},
-                           "subject": message.subject,
-                           "content": message.content,
-                           "sentTime": message.sentTime.isoformat()
-                           }
-            messageList.append(messageDict)
-    if messageList:
-        orderedList = sorted(messageList, key=lambda k: k['sentTime'])
-    return orderedList
+    def _formatMessageDict(self, message):
+        messageDict = {}
+        if message:
+            try:
+                sender = models.UserAccount.objects.get(username=message.sender)
+                recipient = models.UserAccount.objects.get(username=message.recipient)
+            except models.UserAccount.DoesNotExist:
+                pass
+            else:
+                messageDict = {"messageID": message.messageID,
+                               "conversationID": message.conversationID,
+                               "sender": {"username": sender.username,
+                                          "cleanName": sender.cleanName,
+                                          "profilePictureURL": sender.profilePicture and sender.profilePicture.url or constants.NO_PROFILE_PICTURE_PATH},
+                               "recipient": {"username": recipient.username,
+                                             "cleanName": recipient.cleanName,
+                                             "profilePictureURL": recipient.profilePicture and recipient.profilePicture.url or constants.NO_PROFILE_PICTURE_PATH},
+                               "subject": message.subject,
+                               "content": message.content,
+                               "sentTime": message.sentTime.isoformat()
+                               }
+        return messageDict
 
 
 class GenericEditAccountView(views.GenericFormView):
