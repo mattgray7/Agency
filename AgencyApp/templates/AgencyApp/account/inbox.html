@@ -64,6 +64,10 @@ function selectMessageTab(tabType){
     if(container != null){
         container.innerHTML = getMessageListString(messageList, tabType);
     }
+
+    {% if messages %}
+        $("#messageFeed li:first").trigger('click')
+    {% endif %}
 }
 
 function getMessageListString(messageList, listType){
