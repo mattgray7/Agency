@@ -147,6 +147,11 @@ function getConversationString(conversation){
                 // display left
                 listString += "<li style='text-align: left;'><div style='float: left; margin-top: 1px;'><img src='" + conversation["users"][sender]["profilePictureURL"] + "' style='height: 30px; width: 27px; border-radius: 3px;'></div><div class='conversationFeedMessage' style='display: inline-block; margin-left: 3px;'>" + messages[i]["content"] + "</div></li>"
             }
+            if(i != messages.length - 1){
+                if(messages[i]["sender"] != messages[i+1]["sender"]){
+                    listString += "<div style='height: 10px;'></div>"
+                }
+            }
         }
         listString += "</ul>"
 
