@@ -686,7 +686,7 @@ function updateFeaturedPhotoStatus(input){
 
                             {% for field in form %}
                                 var lineString = '';
-                                if(!('{{field}}'.includes("hidden"))){
+                                if('{{field}}'.indexOf("hidden") === -1){
                                     lineString = "<li><label for='name'>{{field.label}}</label>";
                                     if("{{field.name}}" != "bio"){
                                         {% if selectFields and field.name in selectFields %}

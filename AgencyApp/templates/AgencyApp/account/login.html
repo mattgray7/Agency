@@ -32,9 +32,9 @@
                         <script>
                             {% for field in form %}
                                 var lineString = '';
-                                if(!('{{field}}'.includes("hidden"))){
+                                if('{{field}}'.indexOf("hidden") === -1){
                                     lineString = "<li><label for='name'>{{field.label}}</label>";
-                                    if('{{field}}'.includes("password")){
+                                    if('{{field}}'.indexOf("password") > -1){
                                         lineString += "<input id='{{field.name}}' type='password' name='password'>"
                                     }else{
                                         lineString += "<input id='{{field.name}}' type='text' name='{{field.name}}' maxlength='100'>";
