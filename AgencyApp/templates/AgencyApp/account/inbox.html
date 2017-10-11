@@ -130,6 +130,7 @@ function displayConversation(conversationID){
                 if(data["success"]){
                     if(data["conversation"] != null){
                         conversationPanel.innerHTML = getConversationString(data["conversation"])
+                        $("#conversationFeed").scrollTop($("#conversationFeed")[0].scrollHeight);
                     }
                 }
             }
@@ -138,7 +139,7 @@ function displayConversation(conversationID){
 }
 
 function getConversationString(conversation){
-    var conversationString = "<div style='height: 100%; width: 100%; overflow: scroll; position: relative; background: #FFF'>"
+    var conversationString = "<div style='height: 100%; width: 100%; position: relative; background: #FFF'>"
     var messages = conversation["messages"];
     if(messages.length > 0 && conversation["users"] != null){
         // Add title
@@ -150,7 +151,7 @@ function getConversationString(conversation){
         }
         conversationString += "<div style='height: 60px; border-bottom: 1px solid rgba(0,0,0,0.1);'><h2><a onclick='redirectToUser(" + '"' + otherUser["username"] + '");' + "'>" + otherUser["cleanName"] + "</a></h2><div style='color: rgba(0,0,0,0.6);'>" + otherUser["profileProfessions"] + "</div></div>";
 
-        var listString = "<ul class='conversationFeed' style='overflow: scroll;'>"
+        var listString = "<ul id='conversationFeed' class='conversationFeed' style='overflow: scroll; position: absolute; top: 60px; bottom: 70px; left: 0; right: 0;'>"
         for(var i=messages.length-1; i >= 0; i--){
             var sender = messages[i]["sender"]
             if(sender === "{{request.user.username}}"){
@@ -170,7 +171,7 @@ function getConversationString(conversation){
         conversationString += listString;
 
         // Add message box
-        conversationString += "<div style='height: 70px; border-top: 1px solid rgba(0,0,0,0.3); position: absolute; bottom: 0; left: 0; right: 0;'><textarea class='formInputElement' style='height: 100%; width: 100%; border: none; resize: none; font-size: 1.1em; font-family: Didact Gothic, sans-serif;' placeholder='New message...'></textarea></div>";
+        conversationString += "<div style='height: 70px; border-top: 1px solid rgba(0,0,0,0.3); border-bottom: 1px solid rgba(0,0,0,0.3); position: absolute; bottom: 2px; left: 0; right: 0;'><textarea class='formInputElement' style='height: 100%; width: 100%; border: none; resize: none; font-size: 1.1em; font-family: Didact Gothic, sans-serif;' placeholder='New message...'></textarea></div>";
     }
 
     conversationString += "</div>"

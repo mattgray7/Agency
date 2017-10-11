@@ -22,7 +22,7 @@
 
 .conversationFeed
 {
-
+	margin-bottom: 5px;
 }
 
 .conversationFeed li
@@ -36,6 +36,7 @@
 	background: rgba(0,0,0,0.05);
 	box-shadow: 0.5px 0.5px 0px 0px #888888;
 	border-radius: 4px;
+	max-width: 50%;
 }
 
 .messageRecipient
