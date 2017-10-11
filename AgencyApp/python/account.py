@@ -165,16 +165,28 @@ class InboxView(views.GenericFormView):
         super(InboxView, self).__init__(*args, **kwargs)
         self._messages = None
 
+    """
+    If user1 sends a message to user 2 --> user1: sent, user2: inbox
+    if user2 responds to messages --> user1: inbox (original message in sent), user2:inbox (response message in sent)
+
+    """
+
     @property
     def messages(self):
         if self._messages is None:
             messagesDict = {"inbox": [], "sent": []}
             for conversation in self.userAccount.conversations:
-                message = conversation.latestMessage
-                if message.sender == self.userAccount.username:
-                    messagesDict["sent"].append(self._formatMessageDict(message))
+                latestOwnMessage = conversation.getLatestOwnMessage(self.userAccount.username)
+                if latestOwnMessage:
+                    # If user has written a message, add his latest written message to sent list
+                    messagesDict["sent"].append(self._formatMessageDict(latestOwnMessage))
+                    if conversation.bothUsersResponded:
+                        # If other person responded (ie conversation started), put in inbox
+                        messagesDict["inbox"].append(self._formatMessageDict(conversation.latestMessage))
                 else:
-                    messagesDict["inbox"].append(self._formatMessageDict(message))
+                    # User hasn't written any messages, so just appear in inbox
+                    messagesDict["inbox"].append(self._formatMessageDict(conversation.latestMessage))
+            # Sort the message lists by sent time
             self._messages = {"inbox": sorted(messagesDict["inbox"], key=lambda k: k['sentTime']),
                               "sent": sorted(messagesDict["sent"], key=lambda k: k['sentTime'])}
         return self._messages

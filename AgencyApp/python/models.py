@@ -355,6 +355,24 @@ class Conversation(models.Model):
         if self.messages:
             return self.messages[0]
 
+    def getLatestOwnMessage(self, username):
+        if self.messages:
+            for message in self.messages:
+                if message.sender == username:
+                    return message
+
+    @property
+    def bothUsersResponded(self):
+        user1Wrote = False
+        user2Wrote = False
+        if self.messages:
+            for message in self.messages:
+                if message.sender == self.user1:
+                    user1Wrote = True
+                elif message.sender == self.user2:
+                    user2Wrote = True
+        return user1Wrote and user2Wrote
+
 class Message(models.Model):
     messageID = models.CharField(max_length=10)
     conversationID = models.CharField(max_length=10)
