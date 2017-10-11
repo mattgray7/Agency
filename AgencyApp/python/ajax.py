@@ -689,20 +689,35 @@ def getConversation(request):
     success = False
     conversationID = request.POST.get("conversationID")
     conversationList = []
+    userDict = {}
     if conversationID:
         try:
             conversation = models.Conversation.objects.get(conversationID=conversationID)
         except models.Conversation.DoesNotExist:
             pass
         else:
-            for message in conversation.messages:
-                conversationList.append({"messageID": message.messageID,
-                                         "sender": message.sender,
-                                         "recipient": message.recipient,
-                                         "content": message.content
-                                         })
+
+            try:
+                user1 = models.UserAccount.objects.get(username=conversation.user1)
+                user2 = models.UserAccount.objects.get(username=conversation.user2)
+            except models.UserAccount.DoesNotExist:
+                pass
+            else:
+                userDict[user1.username] = {"username": user1.username,
+                                            "cleanName": user1.cleanName,
+                                            "profilePictureURL": user1.profilePicture and user1.profilePicture.url or constants.NO_PROFILE_PICTURE_PATH}
+                userDict[user2.username] = {"username": user2.username,
+                                            "cleanName": user2.cleanName,
+                                            "profilePictureURL": user2.profilePicture and user2.profilePicture.url or constants.NO_PROFILE_PICTURE_PATH}
+
+                for message in conversation.messages:
+                    conversationList.append({"messageID": message.messageID,
+                                             "sender": message.sender,
+                                             "recipient": message.recipient,
+                                             "content": message.content
+                                             })
             success = True
-    return JsonResponse({"success": success, "conversation": conversationList})
+    return JsonResponse({"success": success, "conversation": {"users": userDict, "messages": conversationList}})
 
 
 

@@ -124,25 +124,38 @@ function displayConversation(conversationID){
             dataType: "json",
             success : function(data) {
                 if(data["success"]){
-                    if(data["conversation"] != null && data["conversation"].length > 0){
-                        var conversationString = "<div style='height: 100%; width: 100%; overflow: scroll; background: #FFF'><ul>"
-                        for(var i=0; i < data["conversation"].length; i++){
-                            if(data["conversation"][i]["sender"] === "{{request.user.username}}"){
-                                console.log(data["conversation"][i]["sender"])
-                                // display right
-                                conversationString += "<li style='text-align: right;'>" + data["conversation"][i]["content"] + "</li>"
-                            }else{
-                                // display left
-                                conversationString += "<div style='text-align: left;'>" + data["conversation"][i]["content"] + "</li>"
-                            }
-                        }
-                        conversationString += "</ul></div>"
-                        conversationPanel.innerHTML = conversationString
+                    if(data["conversation"] != null){
+                        conversationPanel.innerHTML = getConversationString(data["conversation"])
                     }
                 }
             }
         });
     }
+}
+
+function getConversationString(conversation){
+    var conversationString = "<div style='height: 100%; width: 100%; overflow: scroll; background: #FFF'>"
+    var messages = conversation["messages"];
+    if(messages.length > 0 && conversation["users"] != null){
+        var listString = "<ul class='conversationFeed'>"
+        for(var i=0; i < messages.length; i++){
+            var sender = messages[i]["sender"]
+            if(sender === "{{request.user.username}}"){
+                // display right
+                listString += "<li style='text-align: right;'><div class='conversationFeedMessage' style='display: inline-block; margin-right: 3px;'>" + messages[i]["content"] + "</div><div style='float: right; margin-top: 1px;'><img src='" + conversation["users"][sender]["profilePictureURL"] + "' style='height: 30px; width: 27px; border-radius: 3px;'></div></li>";
+            }else{
+                // display left
+                listString += "<li style='text-align: left;'><div style='float: left; margin-top: 1px;'><img src='" + conversation["users"][sender]["profilePictureURL"] + "' style='height: 30px; width: 27px; border-radius: 3px;'></div><div class='conversationFeedMessage' style='display: inline-block; margin-left: 3px;'>" + messages[i]["content"] + "</div></li>"
+            }
+        }
+        listString += "</ul>"
+
+        // Add title
+        conversationString += listString;
+    }
+
+    conversationString += "</div>"
+    return conversationString
 }
 
 function getSlimInboxFeed(){
