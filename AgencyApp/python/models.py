@@ -379,7 +379,6 @@ class Message(models.Model):
     sender = models.CharField(max_length=100)
     recipient = models.CharField(max_length=100)
     recipientSeen = models.BooleanField(default=False)
-    subject = models.CharField(max_length=200, default=None, blank=True, null=True)
     content = models.CharField(max_length=10000)
     sentTime = models.DateTimeField(auto_now_add=True)
 

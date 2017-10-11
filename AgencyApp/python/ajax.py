@@ -648,7 +648,6 @@ def sendNewMessage(request):
     conversationID = None
     sender = request.POST.get("sender")
     recipient = request.POST.get("recipient")
-    subject = request.POST.get("subject")
     content = request.POST.get("content")
     if sender and sender == request.user.username:
         if recipient:
@@ -679,7 +678,6 @@ def sendNewMessage(request):
                                                  conversationID=conversationID,
                                                  sender=sender,
                                                  recipient=recipient,
-                                                 subject=subject,
                                                  content=content)
                         message.save()
                         success = True

@@ -219,7 +219,6 @@ class InboxView(views.GenericFormView):
                                              "cleanName": recipient.cleanName,
                                              "profileProfessions": recipient.mainProfession,
                                              "profilePictureURL": recipient.profilePicture and recipient.profilePicture.url or constants.NO_PROFILE_PICTURE_PATH},
-                               "subject": message.subject,
                                "content": message.content,
                                "sentTime": message.sentTime.isoformat()
                                }
