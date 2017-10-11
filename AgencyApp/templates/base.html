@@ -17,6 +17,9 @@
     </head>
 
     <script>
+        String.prototype.endsWith = function(suffix) {
+            return this.indexOf(suffix, this.length - suffix.length) !== -1;
+        };
         // Deconstructor functions to run when a toolbar source is selected (eg deleting a newly created post when leaving the create post page)
         var toolbarDeconstructorFunctions = [];
 
