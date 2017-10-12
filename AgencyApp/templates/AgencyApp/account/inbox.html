@@ -134,11 +134,13 @@ function displayConversation(conversationID){
                         $("#conversationFeed").scrollTop($("#conversationFeed")[0].scrollHeight);
 
                         var otherUser = getOtherConversationUser("{{request.user.username}}", data["conversation"])
+
                         $("#newMessageTextarea").on("keyup", function(e){
                             if(e.keyCode === 13){
-                                sendMessage("{{request.user.username}}", otherUser["username"], null, this.id);
+                                e.preventDefault();
+                                sendMessage("{{request.user.username}}", otherUser["username"], this.id, true);
                             }
-                        })
+                        });
                     }
                 }
             }

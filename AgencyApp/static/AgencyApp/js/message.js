@@ -1,8 +1,11 @@
-function sendMessage(senderUsername, destUsername, recipientsInput, contentInput){
+function sendMessage(senderUsername, destUsername, contentInput, clearTextInput){
     var errors = []
     if(senderUsername != null && destUsername != null && senderUsername.length > 0 && destUsername.length > 0){
         var content = document.getElementById(contentInput);
         if(content != null && content.value.length > 0){
+            if(clearTextInput){
+                content.value= "";
+            }
             $.ajax({
                     url : "/ajax/sendNewMessage/",
                     data : {"sender": senderUsername, "recipient": destUsername,"content": content.value},
