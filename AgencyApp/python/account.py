@@ -190,8 +190,8 @@ class InboxView(views.GenericFormView):
                     # User hasn't written any messages, so just appear in inbox
                     messagesDict["inbox"].append(self._formatMessageDict(conversation.latestMessage))
             # Sort the message lists by sent time
-            self._messages = {"inbox": sorted(messagesDict["inbox"], key=lambda k: k['sentTime']),
-                              "sent": sorted(messagesDict["sent"], key=lambda k: k['sentTime'])}
+            self._messages = {"inbox": sorted(messagesDict["inbox"], key=lambda k: k['sentTime'], reverse=True),
+                              "sent": sorted(messagesDict["sent"], key=lambda k: k['sentTime'], reverse=True)}
         return self._messages
 
     @property
