@@ -279,6 +279,13 @@
             panelString += "</div></div>"
             var blocking = displayBlockingPanel(panelString);
             addCloseBlockingCallback(["messagePanel"])
+
+            $("#messageTextArea").on("keydown", function(e){
+                if(e.keyCode === 13 && !e.shiftKey){
+                    e.preventDefault();
+                        sendMessage("{{request.user.username}}", destUsername, "messageTextArea", true, null);
+                }
+            });
         }
 
         function displayPicture(pictureDict){
