@@ -714,7 +714,8 @@ def getConversation(request):
                     conversationList.append({"messageID": message.messageID,
                                              "sender": message.sender,
                                              "recipient": message.recipient,
-                                             "content": message.content
+                                             "content": message.content,
+                                             "sentTime": message.sentTime.strftime("%s"),
                                              })
             success = True
     return JsonResponse({"success": success, "conversation": {"users": userDict, "messages": conversationList}})
