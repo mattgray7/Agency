@@ -200,13 +200,13 @@
             row.innerHTML = professionString;
 
             // Special case: single profession needs to moved up 3px to look properly centered
-            var rowMarginTop = -1;
+            //var rowMarginTop = -1;
             var expandParentContainers = true;
             if(filteredProfessions[filterType].length <= 1){
-                rowMarginTop = -4;
+                //rowMarginTop = -4;
                 expandParentContainers = false
             }
-            $("[id='" + filterType + "ProfessionChoiceRow']").animate({marginTop: rowMarginTop + "px", height: Math.max(filteredProfessions[filterType].length * professionRowHeight, 4) + "px"}, browseAnimateSpeed, function(){});
+            $("[id='" + filterType + "ProfessionChoiceRow']").animate({marginTop: "-1px", height: Math.max(filteredProfessions[filterType].length * professionRowHeight, 4) + "px"}, browseAnimateSpeed, function(){});
             if(expandParentContainers || forceUpdate || filterType === "users"){
                 // Update the height of the container row so filter panels below this one will expand
                 $("[id='" + filterType + "FilterRow']").animate({marginTop: "0px", height: filterSectionHeights[filterType] + ((filteredProfessions[filterType].length-1) * professionRowHeight) + "px"}, browseAnimateSpeed, function(){});
