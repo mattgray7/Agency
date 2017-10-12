@@ -3,12 +3,13 @@ function sendMessage(senderUsername, destUsername, contentInput, clearTextInput)
     if(senderUsername != null && destUsername != null && senderUsername.length > 0 && destUsername.length > 0){
         var content = document.getElementById(contentInput);
         if(content != null && content.value.length > 0){
+            var contentValue = content.value;
             if(clearTextInput){
                 content.value= "";
             }
             $.ajax({
                     url : "/ajax/sendNewMessage/",
-                    data : {"sender": senderUsername, "recipient": destUsername,"content": content.value},
+                    data : {"sender": senderUsername, "recipient": destUsername,"content": contentValue},
                     type : 'POST',
                     dataType: "json",
                     success : function(data) {

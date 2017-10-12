@@ -136,7 +136,7 @@ function displayConversation(conversationID){
                         var otherUser = getOtherConversationUser("{{request.user.username}}", data["conversation"])
 
                         $("#newMessageTextarea").on("keyup", function(e){
-                            if(e.keyCode === 13){
+                            if(e.keyCode === 13 && !e.shiftKey){
                                 e.preventDefault();
                                 sendMessage("{{request.user.username}}", otherUser["username"], this.id, true);
                             }
