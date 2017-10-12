@@ -21,3 +21,15 @@ function sendMessage(senderUsername, destUsername, recipientsInput, contentInput
         errors.push("You must add a message recipient")
     }
 }
+
+function getMessageDate(epochTime){
+    // Initialize date with ms, epochTime is in s
+    var date = new Date(epochTime * 1000);
+    var hours = date.getHours()
+    var AMPMString = "AM";
+    if(hours > 12){
+        AMPMString = "PM";
+    }
+    //return date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
+    return (hours%12) + ":" + date.getMinutes() + " " + AMPMString;
+}
