@@ -132,6 +132,13 @@ function displayConversation(conversationID){
                     if(data["conversation"] != null){
                         conversationPanel.innerHTML = getConversationString(data["conversation"])
                         $("#conversationFeed").scrollTop($("#conversationFeed")[0].scrollHeight);
+
+                        var otherUser = getOtherConversationUser("{{request.user.username}}", data["conversation"])
+                        $("#newMessageTextarea").on("keyup", function(e){
+                            if(e.keyCode === 13){
+                                sendMessage("{{request.user.username}}", otherUser["username"], null, this.id);
+                            }
+                        })
                     }
                 }
             }
@@ -139,17 +146,22 @@ function displayConversation(conversationID){
     }
 }
 
+function getOtherConversationUser(firstUser, conversation){
+    var otherUser;
+    for(username in conversation["users"]){
+        if(username != firstUser){
+            otherUser = conversation["users"][username];
+        }
+    }
+    return otherUser
+}
+
 function getConversationString(conversation){
     var conversationString = "<div style='height: 100%; width: 100%; position: relative; background: #FFF'>"
     var messages = conversation["messages"];
     if(messages.length > 0 && conversation["users"] != null){
         // Add title
-        var otherUser = null
-        for(username in conversation["users"]){
-            if(username != "{{request.user.username}}"){
-                otherUser = conversation["users"][username];
-            }
-        }
+        var otherUser = getOtherConversationUser("{{request.user.username}}", conversation)
         conversationString += "<div style='height: 60px; border-bottom: 1px solid rgba(0,0,0,0.1);'><h2><a onclick='redirectToUser(" + '"' + otherUser["username"] + '");' + "'>" + otherUser["cleanName"] + "</a></h2><div style='color: rgba(0,0,0,0.6);'>" + otherUser["profileProfessions"] + "</div></div>";
 
         var listString = "<ul id='conversationFeed' class='conversationFeed' style='overflow: scroll; position: absolute; top: 60px; bottom: 70px; left: 0; right: 0;'>"
@@ -192,7 +204,7 @@ function getConversationString(conversation){
         conversationString += listString;
 
         // Add message box
-        conversationString += "<div style='height: 70px; border-top: 1px solid rgba(0,0,0,0.3); border-bottom: 1px solid rgba(0,0,0,0.3); position: absolute; bottom: 2px; left: 0; right: 0;'><textarea class='formInputElement' style='height: 100%; width: 100%; border: none; resize: none; font-size: 1.1em; font-family: Didact Gothic, sans-serif;' placeholder='New message...'></textarea></div>";
+        conversationString += "<div style='height: 70px; border-top: 1px solid rgba(0,0,0,0.3); border-bottom: 1px solid rgba(0,0,0,0.3); position: absolute; bottom: 2px; left: 0; right: 0;'><textarea class='formInputElement' id='newMessageTextarea' style='height: 100%; width: 100%; border: none; resize: none; font-size: 1.1em; font-family: Didact Gothic, sans-serif;' placeholder='New message...'></textarea></div>";
     }
 
     conversationString += "</div>"
