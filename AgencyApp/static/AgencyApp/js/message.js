@@ -56,7 +56,7 @@ function checkForNewDateWrite(lastWrittenDate, newDate){
                     if(lastWrittenDate.getMinutes() === newDate.getMinutes()){
                         write = false
                     }else{
-                        if(Math.abs(lastWrittenDate.getMinutes() - newDate.getMinutes()) > thresholds["minutes"]){
+                        if(Math.abs(lastWrittenDate.getMinutes() - newDate.getMinutes()) <= thresholds["minutes"]){
                             write = false
                         }
                     }
