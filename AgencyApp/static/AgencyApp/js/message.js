@@ -1,4 +1,4 @@
-function sendMessage(senderUsername, destUsername, contentInput, clearTextInput){
+function sendMessage(senderUsername, destUsername, contentInput, clearTextInput, callback){
     var errors = []
     if(senderUsername != null && destUsername != null && senderUsername.length > 0 && destUsername.length > 0){
         var content = document.getElementById(contentInput);
@@ -15,6 +15,9 @@ function sendMessage(senderUsername, destUsername, contentInput, clearTextInput)
                     success : function(data) {
                         if(data["success"]){
                             hideBlockingPanel();
+                            if(callback != null){
+                                callback();
+                            }
                         }
                     }
             });

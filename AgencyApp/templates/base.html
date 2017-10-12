@@ -273,7 +273,7 @@
             panelString += "<li style='height: 50%;'><label>Message</label><textarea id='messageTextArea' style='height: 150px;'></textarea></li>"
 
             // Add buttons
-            panelString += "<li style='border: none; margin: 10px 1px; padding: 0;'><div class='editButton' style='width: 42.3%; padding: 0.8em 1em; float: right; text-align: center;' onclick='sendMessage(" + '"{{request.user.username}}", "' + destUsername + '", "messageTextArea", false);' + "'>Send</div><div class='editButton' onclick='hideBlockingPanel();' style='width: 42.3%; margin-right: 6px; padding: 0.8em 1em; float: left; text-align: center;'>Cancel</div></li>"
+            panelString += "<li style='border: none; margin: 10px 1px; padding: 0;'><div class='editButton' style='width: 42.3%; padding: 0.8em 1em; float: right; text-align: center;' onclick='sendMessage(" + '"{{request.user.username}}", "' + destUsername + '", "messageTextArea", false, null);' + "'>Send</div><div class='editButton' onclick='hideBlockingPanel();' style='width: 42.3%; margin-right: 6px; padding: 0.8em 1em; float: left; text-align: center;'>Cancel</div></li>"
 
             panelString += "</ul>"
             panelString += "</div></div>"

@@ -115,13 +115,15 @@ function selectMessage(messageID, conversationID){
         }
     }
 
-    displayConversation(conversationID)
+    displayConversation(conversationID, true)
 }
 
-function displayConversation(conversationID){
+function displayConversation(conversationID, showLoadingGif){
     var conversationPanel = document.getElementById("conversationPanel");
     if(conversationPanel != null){
-        conversationPanel.innerHTML = "<div style='margin-top: 40%;'><img src='{{images.loading.dark}}' style='height: 100px; width: 100px;'></div>"
+        if(showLoadingGif){
+            conversationPanel.innerHTML = "<div style='margin-top: 40%;'><img src='{{images.loading.dark}}' style='height: 100px; width: 100px;'></div>"
+        }
         $.ajax({
             url : "/ajax/getConversation/",
             data : {"conversationID": conversationID},
@@ -131,14 +133,17 @@ function displayConversation(conversationID){
                 if(data["success"]){
                     if(data["conversation"] != null){
                         conversationPanel.innerHTML = getConversationString(data["conversation"])
+                        document.getElementById("newMessageTextarea").focus();
                         $("#conversationFeed").scrollTop($("#conversationFeed")[0].scrollHeight);
 
                         var otherUser = getOtherConversationUser("{{request.user.username}}", data["conversation"])
 
-                        $("#newMessageTextarea").on("keyup", function(e){
+                        $("#newMessageTextarea").on("keydown", function(e){
                             if(e.keyCode === 13 && !e.shiftKey){
                                 e.preventDefault();
-                                sendMessage("{{request.user.username}}", otherUser["username"], this.id, true);
+                                sendMessage("{{request.user.username}}", otherUser["username"], this.id, true, function(){
+                                    displayConversation(conversationID, false);
+                                });
                             }
                         });
                     }
