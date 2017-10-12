@@ -30,6 +30,32 @@ function getMessageDate(epochTime){
     if(hours > 12){
         AMPMString = "PM";
     }
+
+    var minutes = date.getMinutes()
+    if(minutes < 10){
+        minutes = "0" + minutes;
+    }
     //return date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
-    return (hours%12) + ":" + date.getMinutes() + " " + AMPMString;
+    return (hours%12) + ":" + minutes + " " + AMPMString;
+}
+
+function checkForNewDateWrite(lastWrittenDate, newDate){
+    var write = true;
+    var thresholds = {"minutes": 5}
+    if(lastWrittenDate.getYear() === newDate.getYear()){
+        if(lastWrittenDate.getMonth() === newDate.getMonth()){
+            if(lastWrittenDate.getDay() === newDate.getDay()){
+                if(lastWrittenDate.getHours() === newDate.getHours()){
+                    if(lastWrittenDate.getMinutes() === newDate.getMinutes()){
+                        write = false
+                    }else{
+                        if(Math.abs(lastWrittenDate.getMinutes() - newDate.getMinutes()) > thresholds["minutes"]){
+                            write = false
+                        }
+                    }
+                }
+            }
+        }
+    }
+    return write;
 }

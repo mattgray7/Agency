@@ -153,19 +153,34 @@ function getConversationString(conversation){
         conversationString += "<div style='height: 60px; border-bottom: 1px solid rgba(0,0,0,0.1);'><h2><a onclick='redirectToUser(" + '"' + otherUser["username"] + '");' + "'>" + otherUser["cleanName"] + "</a></h2><div style='color: rgba(0,0,0,0.6);'>" + otherUser["profileProfessions"] + "</div></div>";
 
         var listString = "<ul id='conversationFeed' class='conversationFeed' style='overflow: scroll; position: absolute; top: 60px; bottom: 70px; left: 0; right: 0;'>"
+
+        var lastWrittenDate;
         for(var i=messages.length-1; i >= 0; i--){
             var sender = messages[i]["sender"]
             var imageString = "<img src='" + conversation["users"][sender]["profilePictureURL"] + "' style='height: 30px; width: 27px; border-radius: 3px;'>";
-            var dateString = "<div style='font-size: 0.65em; color: rgba(0,0,0,0.5); width: 50px; '>" + getMessageDate(parseInt(messages[i]["sentTime"])) + "</div>";
 
-            console.log(messages[i]["sentTime"])
+            var dateString = null;
+            var newDate = new Date(parseInt(messages[i]["sentTime"]) * 1000);
+            if(lastWrittenDate == null || checkForNewDateWrite(lastWrittenDate, newDate)){
+                // Only write time/date if not within minute threshold of previous time written
+                dateString = "<div style='font-size: 0.65em; color: rgba(0,0,0,0.5); width: 50px; '>" + getMessageDate(parseInt(messages[i]["sentTime"])) + "</div>";
+                lastWrittenDate = newDate;
+            }
 
             if(sender === "{{request.user.username}}"){
                 // display right
-                listString += "<li style='text-align: right;'><div style='display: inline-block;'>" + dateString + "</div><div class='conversationFeedMessage' style='display: inline-block; margin-right: 3px;'>" + messages[i]["content"] + "</div><div style='float: right; margin-top: 1px;'>" + imageString + "</div></li>";
+                listString += "<li style='text-align: right;'>"
+                if(dateString != null){
+                    listString += "<div style='display: inline-block;'>" + dateString + "</div>";
+                }
+                listString += "<div class='conversationFeedMessage' style='display: inline-block; margin-right: 3px;'>" + messages[i]["content"] + "</div><div style='float: right; margin-top: 1px;'>" + imageString + "</div></li>";
             }else{
                 // display left
-                listString += "<li style='text-align: left;'><div style='float: left; margin-top: 1px;'>" + imageString + "</div><div class='conversationFeedMessage' style='display: inline-block; margin-left: 3px;'>" + messages[i]["content"] + "</div><div style='display: inline-block;'>" + dateString + "</div></li>"
+                listString += "<li style='text-align: left;'><div style='float: left; margin-top: 1px;'>" + imageString + "</div><div class='conversationFeedMessage' style='display: inline-block; margin-left: 3px;'>" + messages[i]["content"] + "</div>";
+                if(dateString != null){
+                    listString += "<div style='display: inline-block;'>" + dateString + "</div>";
+                }
+                listString += "</li>"
             }
             if(i != 0){
                 if(messages[i]["sender"] != messages[i-1]["sender"]){
