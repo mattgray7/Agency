@@ -486,6 +486,14 @@
                                         <a>Post</a>
                                     </form>
                                 </li>
+                                 <li>
+                                    <form action="/post/" method="post" onclick="submitToolbar(this);">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="source" value="{{ source }}">
+                                        <input type="hidden" name="next" value="{{ toolbarDestinations.inbox }}">
+                                        <a>Inbox</a>
+                                    </form>
+                                </li>
 
                                 <li>
                                     <form action="/user/{{ request.user.username }}/" method="post" onclick="submitToolbar(this);">
