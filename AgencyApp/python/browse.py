@@ -536,6 +536,20 @@ def getUserSearchResults(searchValue, numResults, filters):
     postParticipants = [x.username for x in models.PostParticipant.objects.filter(postID__in=projectIDs)]
     searchLists.append(models.UserAccount.objects.filter(username__in=postParticipants))
 
+    # If user typed in profession instead of using filter, need to handle that case as well
+    # TODO need to figure out if want to display interest profession users in user search (if it not their profile profession)
+    for profession in constants.PROFESSION_LIST:
+        if searchValue.lower() in profession.lower():
+            profileProfessionUsers = [x.username for x in models.ProfileProfession.objects.filter(profession=profession)]
+            if profileProfessionUsers:
+                searchLists.append(models.UserAccount.objects.filter(username__in=profileProfessionUsers))
+
+            interestUsers = [x.username for x in models.Interest.objects.filter(professionName=profession)]
+            if interestUsers:
+                searchLists.append(models.UserAccount.objects.filter(username__in=interestUsers))
+
+
+
     defaultList = models.UserAccount.objects.all()
     searchLists.append(defaultList)
     if filters:
@@ -587,6 +601,7 @@ def getUserSearchResults(searchValue, numResults, filters):
                 # Since professions are a property and not attribute of user, need to scan the ProfileProfession
                 # db for each user in the current search list
                 for user in searchLists[i]:
+                    # TODO add interests to filtered
                     profileProfessions = [x.profession for x in models.ProfileProfession.objects.filter(username=user.username)]
                     for filteredProfession in filters.get("professions"):
                         if filteredProfession in profileProfessions:
