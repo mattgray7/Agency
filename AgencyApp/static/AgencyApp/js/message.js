@@ -87,39 +87,45 @@ function checkForNewDateWrite(lastWrittenDate, newDate){
 }
 
 function getNextDateString(lastWrittenDate, newDate){
-    var dateString = null
+    var dateString = null;
     var dateContent = null;
-    if(lastWrittenDate == null){
-        // First message, write full date with year
-        dateContent = getYearDateString(newDate)
-    }else{
-        if(checkForNewDateWrite(lastWrittenDate, newDate)){
-            var timeOffset = Math.abs(lastWrittenDate.getTime() - newDate.getTime()) / 1000; // now in s
-            if(timeOffset < 24 * 60 * 60){
-                // Less than a day, check if same day
-                if(lastWrittenDate.getDate() === newDate.getDate()){
-                    // Same day, just need time
-                    dateContent = getMessageTime(newDate)
-                }else{
-                    // Adjacent days, use week day name
-                   dateContent = getWeekDateString(newDate)
-                }
-            }else if(timeOffset < 7 * 24 * 60 * 60){
-                // In same week, use week day
-                dateContent = getWeekDateString(newDate)
-            }else if(timeOffset > 365 * 24 * 60 * 60){
-                // In different years, display the year
-                dateContent = getYearDateString(newDate)
-            }
+    var first = false
+    if(lastWrittenDate == null || checkForNewDateWrite(lastWrittenDate, newDate)){
+        // If first date in message, use current date as comparison for which date string to use
+        if(lastWrittenDate == null){
+            lastWrittenDate = currentDate;
+            first = true;
+        }
 
-            // Otherwise, use month string
-            if(dateContent == null){
-                dateContent = getMonthDateString(newDate);
+        var timeOffset = Math.abs(lastWrittenDate.getTime() - newDate.getTime()) / 1000; // now in s
+        if(timeOffset < 24 * 60 * 60){
+            // Less than a day, check if same day
+            if(lastWrittenDate.getDate() === newDate.getDate()){
+                // Same day, just need time
+                dateContent = getMessageTime(newDate)
+            }else{
+                // Adjacent days, use week day name
+               dateContent = getWeekDateString(newDate)
             }
+        }else if(timeOffset < 7 * 24 * 60 * 60){
+            // In same week, use week day
+            dateContent = getWeekDateString(newDate)
+        }else if(timeOffset > 365 * 24 * 60 * 60){
+            // In different years, display the year
+            dateContent = getYearDateString(newDate)
+        }
+
+        // Otherwise, use month string
+        if(dateContent == null){
+            dateContent = getMonthDateString(newDate);
         }
     }
     if(dateContent != null){
-        dateString = "<div style='font-size: 0.65em; color: rgba(0,0,0,0.5); margin-top: 20px;'>" + dateContent + "</div>";
+        dateString = "<div style='font-size: 0.65em; color: rgba(0,0,0,0.5); "
+        if(!first){
+            dateString += " margin-top: 20px; "
+        }
+        dateString += "'>" + dateContent + "</div>";
     }
     return dateString;
 }
