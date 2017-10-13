@@ -86,20 +86,22 @@ function getMessageListString(messageList, listType){
             // Add picture
             listString += "<div style='position: absolute; left: 5px; top: 5px; bottom: 5px;'><img style='max-height: 100%;' src='" + displayUser["profilePictureURL"] + "'></div>"
 
-            // Add text container
-            listString += "<div style='position: absolute; left: 64px; top: 13px; bottom: 5px; right: 5px; text-align: left;'>"
-            // Add date
-            listString += "<div style='position: absolute; right: -2px; top: -10px; font-size: 0.8em; color: rgba(0,0,0,0.6);'>" + getMessageTime(new Date(parseInt(messageList[i]["sentTime"])*1000)) + "</div>";
-            // Add unread star
-            if(messageList[i]["unread"] == true && messageList[i]["sender"]["username"] != "{{request.user.username}}"){
-                listString += "<div id='unreadStar_" + messageList[i]["messageID"] + "' style='position: absolute; right: -3px; bottom: -3px;'>&#9734</div>"
+            if(inboxPanelExpanded){
+                console.log("expanded")
+                // Add text container
+                listString += "<div style='position: absolute; left: 64px; top: 13px; bottom: 5px; right: 5px; text-align: left;'>"
+                // Add date
+                listString += "<div style='position: absolute; right: -2px; top: -10px; font-size: 0.8em; color: rgba(0,0,0,0.6);'>" + getMessageTime(new Date(parseInt(messageList[i]["sentTime"])*1000)) + "</div>";
+                // Add unread star
+                if(messageList[i]["unread"] == true && messageList[i]["sender"]["username"] != "{{request.user.username}}"){
+                    listString += "<div id='unreadStar_" + messageList[i]["messageID"] + "' style='position: absolute; right: -3px; bottom: -3px;'>&#9734</div>"
+                }
+                // Add clean name
+                listString += "<h4 style='margin: 0; font-size: 1.1em;'>" + displayUser["cleanName"] + "</h4>"
+                // Add message content cutoff
+                listString += "<div style='margin-top: -1px; font-size: 0.9em; font-weight: 100; color: rgba(0,0,0,0.6);  text-overflow: ellipsis; height: 60%; white-space: nowrap; overflow: hidden;'>" + messageList[i]["content"] + "</div>";
+                listString += "</div>"
             }
-            // Add clean name
-            listString += "<h4 style='margin: 0; font-size: 1.1em;'>" + displayUser["cleanName"] + "</h4>"
-            // Add message content cutoff
-            listString += "<div style='margin-top: -1px; font-size: 0.9em; font-weight: 100; color: rgba(0,0,0,0.6);  text-overflow: ellipsis; height: 60%; white-space: nowrap; overflow: hidden;'>" + messageList[i]["content"] + "</div>";
-            listString += "</div>"
-
             listString +="</li>"
         }
         listString += "</ul>"
@@ -262,18 +264,70 @@ function getConversationString(conversation){
 }
 
 function getSlimInboxFeed(){
+    var feedString = "<div style='width: 100%; height: 85vh; position: relative;'>"
 
+    {% if messages %}
+        // Add message choice panel
+        feedString += "<div style='position: absolute; left: 0; top: 0; bottom: 0; width: 15%; background: rgba(0,0,0,0.05);'><div style='position: relative; height: 100%; width: 100%';>"
+
+        // Add tabs at the top
+        /*feedString += "<ul class='profileTabButtonList' style='margin-top: 5px; z-index: 0; width: 100%;'>"
+        feedString += "<li id='inboxTabButton' style='width: 48%; margin-left: 0px;' onclick='selectMessageTab(" + '"inbox");' + "'>Inbox<div id='inboxTabButtonBorderCover' class='profileTabButtonBorderCover' style='margin-top: 10px; height: 2px;'></div></li>";
+        feedString += "<li id='sentTabButton' style='width: 48%; margin-left: 3.5px;' onclick='selectMessageTab(" + '"sent");' + "'>Sent<div id='sentTabButtonBorderCover' class='profileTabButtonBorderCover' style='margin-top: 10px;'></li>";
+        feedString += "</ul>"*/
+
+        // Add list container
+        feedString += "<div style='position: absolute; top: 71px; left: 0; right: 0; bottom: 0; background: #FFF; border: 1px solid #000; margin-top: -30px; z-index: 2;'><div id='messageListContainer' style='position: relative; height: 100%; width: 100%;'></div></div>";
+
+        feedString += "</div></div>"
+
+        // Add current message panel
+        feedString += "<div id='conversationPanel' style='position: absolute; top: 0px; bottom: 0; right: 0; width: 85%; background: rgba(0,0,0,0.05); border: 1px solid #000'></div>"
+
+        feedString += "</div>"
+    {% endif %}
+
+    feedString += "</div>";
+    return feedString
+}
+
+var inboxPanelWidthThreshold = 650;
+var inboxPanelExpanded = true
+function resizeInboxPanel(){
+    if($(window).width() > inboxPanelWidthThreshold){
+        if(!inboxPanelExpanded){
+            document.getElementById("inboxPanel").innerHTML = getWideInboxFeed();
+            inboxPanelExpanded = true;
+            selectMessageTab("inbox")
+        }
+    }else{
+        if(inboxPanelExpanded){
+            document.getElementById("inboxPanel").innerHTML = getSlimInboxFeed();
+            inboxPanelExpanded = false;
+            selectMessageTab("inbox")   
+        }
+    }
 }
 
 </script>
 
 
-<div id='backgroundPanel' class='backgroundPanel' style='min-width: 634px; min-height: 100%;'>
-    <div id="mainViewPanel" class="mainViewPanel" style="position: relative; min-width: 620px; max-width: 675px; background: rgba(0,0,0,0.05); border: none;">
-        <div style='height: 100%; width: 100%; background: #FFF;'>
+<div id='backgroundPanel' class='backgroundPanel' style='min-width: 534px; min-height: 100%;'>
+    <div id="mainViewPanel" class="mainViewPanel" style="position: relative; width: 90%; min-width: 530px; max-width: 1000px; background: rgba(0,0,0,0.05); border: none;">
+        <div id='inboxPanel' style='height: 100%; width: 100%; background: #FFF;'>
             <script>
-                document.write(getWideInboxFeed())
+                if($(window).width() > inboxPanelWidthThreshold){
+                    inboxPanelExpanded = true;
+                    document.write(getWideInboxFeed());
+                }else{
+                    inboxPanelExpanded = false;
+                    document.write(getSlimInboxFeed());
+                }
                 selectMessageTab("inbox")
+                $(window).resize(function (){
+                    resizeInboxPanel();
+                });
+
             </script>
         </div>
     </div>
