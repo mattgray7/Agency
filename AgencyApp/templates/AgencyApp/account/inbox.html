@@ -75,8 +75,10 @@ function getMessageListString(messageList, listType){
     if(messageList != null && messageList.length > 0){
         listString += "<ul id='messageFeed' class='messageFeed'>"
         for(var i=0; i < messageList.length; i++){
-            var displayUser = messageList[i]["sender"];
-            if(listType === "sent"){
+            var displayUser;
+            if(messageList[i]["sender"]["username"] != "{{request.user.username}}"){
+                displayUser = messageList[i]["sender"];
+            }else{
                 displayUser = messageList[i]["recipient"];
             }
             listString += "<li id='messageFeedElement_" + messageList[i]["messageID"] + "' onclick='selectMessage(" + '"' + messageList[i]["messageID"] + '", "' + messageList[i]["conversationID"] + '"' + ");'>"
