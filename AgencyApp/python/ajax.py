@@ -714,6 +714,7 @@ def getConversation(request):
                     conversationList.append({"messageID": message.messageID,
                                              "sender": message.sender,
                                              "recipient": message.recipient,
+                                             "unread": not message.recipientSeen,
                                              "content": message.content,
                                              "sentTime": message.sentTime.strftime("%s"),
                                              })

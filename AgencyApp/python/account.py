@@ -220,7 +220,8 @@ class InboxView(views.GenericFormView):
                                              "profileProfessions": recipient.mainProfession,
                                              "profilePictureURL": recipient.profilePicture and recipient.profilePicture.url or constants.NO_PROFILE_PICTURE_PATH},
                                "content": message.content,
-                               "sentTime": message.sentTime.strftime('%s')
+                               "sentTime": message.sentTime.strftime('%s'),
+                               "unread": not message.recipientSeen,
                                }
         return messageDict
 

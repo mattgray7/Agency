@@ -86,8 +86,15 @@ function getMessageListString(messageList, listType){
 
             // Add text container
             listString += "<div style='position: absolute; left: 64px; top: 13px; bottom: 5px; right: 5px; text-align: left;'>"
+            // Add date
             listString += "<div style='position: absolute; right: -2px; top: -10px; font-size: 0.8em; color: rgba(0,0,0,0.6);'>" + getMessageTime(new Date(parseInt(messageList[i]["sentTime"])*1000)) + "</div>";
+            // Add unread star
+            if(messageList[i]["unread"] == true && messageList[i]["sender"]["username"] != "{{request.user.username}}"){
+                listString += "<div style='position: absolute; right: -3px; bottom: -3px;'>&#9734</div>"
+            }
+            // Add clean name
             listString += "<h4 style='margin: 0; font-size: 1.1em;'>" + displayUser["cleanName"] + "</h4>"
+            // Add message content cutoff
             listString += "<div style='margin-top: -1px; font-size: 0.9em; font-weight: 100; color: rgba(0,0,0,0.6);  text-overflow: ellipsis; height: 60%; white-space: nowrap; overflow: hidden;'>" + messageList[i]["content"] + "</div>";
             listString += "</div>"
 
@@ -180,16 +187,11 @@ function getConversationString(conversation){
 
             var dateString = null;
             var newDate = new Date(parseInt(messages[i]["sentTime"]) * 1000);
-            var nextDate = getNextDateString(lastWrittenDate, newDate);
-            if(nextDate){
-                dateString = nextDate;
-                lastWrittenDate = newDate
-            }
-            /*if(lastWrittenDate == null || checkForNewDateWrite(lastWrittenDate, newDate)){
-                // Only write time/date if not within minute threshold of previous time written
-                dateString = "<div style='font-size: 0.65em; color: rgba(0,0,0,0.5);margin-top: 20px;'>" + getMessageDate(parseInt(messages[i]["sentTime"])) + "</div>";
+            var nextDateString = getNextDateString(lastWrittenDate, newDate);
+            if(nextDateString){
+                dateString = nextDateString;
                 lastWrittenDate = newDate;
-            }*/
+            }
 
             if(sender === "{{request.user.username}}"){
                 // display right
