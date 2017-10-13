@@ -72,9 +72,27 @@ class UserAccount(models.Model):
         self._mainProfession = None
         self._actorDescriptionEnabled = None
         self._conversations = None
+        self._notifications = None
 
     def __str__(self):
         return self.username
+
+    @property
+    def notifications(self):
+        if self._notifications is None:
+            self._notifications = {}
+
+            # Get inbox messages
+            unseenMessages = Message.objects.filter(recipient=self.username, recipientSeen=False)
+            unseenConversationIDs = []
+            unseenMessageList = []
+            for message in unseenMessages:
+                if message.conversationID not in unseenConversationIDs:
+                    unseenConversationIDs.append(message.conversationID)
+                    unseenMessageList.append(message)
+
+            self._notifications["messages"] = unseenMessageList
+        return self._notifications
 
     @property
     def conversations(self):
@@ -381,7 +399,6 @@ class Message(models.Model):
     recipientSeen = models.BooleanField(default=False)
     content = models.CharField(max_length=10000)
     sentTime = models.DateTimeField(auto_now_add=True)
-
 
 class AbstractPost(models.Model):
     postID = models.CharField(max_length=10)
