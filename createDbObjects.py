@@ -452,3 +452,31 @@ picResult = urllib.urlretrieve("/Users/MattGray/Projects/Agency/Agency/scripts/m
 collabPost.postPicture = File(open(picResult[0]))
 collabPost.postPicture.name = "/collaboration_{0}.jpg".format(collabPostID)
 collabPost.save()
+
+
+def createMessage(sender, recipient, content,  date=None):
+	convo = None
+	convos = models.Conversation.objects.filter(user1=sender, user2=recipient)
+	if not convos:
+		convos = models.Conversation.objects.filter(user1=recipient, user2=sender)
+		if not convos:
+			convoID = helpers.createUniqueID(models.Conversation, "conversationID")
+			convo = models.Conversation(conversationID=convoID, user1=sender, user2=recipient)
+			convo.save()
+	if convos:
+		convo = convos[0]
+
+	if convo:
+		messageID = helpers.createUniqueID(models.Message, "messageID")
+		message = models.Message(messageID=messageID, conversationID=convo.conversationID, sender=sender, recipient=recipient, content=content)
+		message.save()
+
+		if date:
+			message.sentAt = date
+			message.save()
+	return message
+
+createMessage("mattgray", "amybolt", "Hey amy hows it going (sent Oct 3 2017 at 2:30am)", datetime.datetime(2017, 10, 3, 2, 30, 0))
+createMessage("amybolt", "mattgray", "Yo, sorry for taking so long, a week ago", datetime.datetime.now() - datetime.timedelta((7*24*60*60)))
+
+
