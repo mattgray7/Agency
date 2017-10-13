@@ -454,7 +454,7 @@ collabPost.postPicture.name = "/collaboration_{0}.jpg".format(collabPostID)
 collabPost.save()
 
 
-def createMessage(sender, recipient, content,  date=None):
+def createMessage(sender, recipient, content, date=None):
 	convo = None
 	convos = models.Conversation.objects.filter(user1=sender, user2=recipient)
 	if not convos:
@@ -472,11 +472,18 @@ def createMessage(sender, recipient, content,  date=None):
 		message.save()
 
 		if date:
-			message.sentAt = date
+			message.sentTime = date
 			message.save()
 	return message
 
-createMessage("mattgray", "amybolt", "Hey amy hows it going (sent Oct 3 2017 at 2:30am)", datetime.datetime(2017, 10, 3, 2, 30, 0))
-createMessage("amybolt", "mattgray", "Yo, sorry for taking so long, a week ago", datetime.datetime.now() - datetime.timedelta((7*24*60*60)))
+import pytz
+"""n = datetime.datetime(2017, 10, 3, 2, 30, 0)
+n = n.replace(tzinfo=pytz.utc)
+print n"""
+
+createMessage("amybolt", "mattgray", "Yo, sorry for taking so long, a week ago (sent april 2016)", datetime.datetime(2016, 04, 3, 19, 30, 0, tzinfo=pytz.timezone("America/Vancouver")))
+createMessage("mattgray", "amybolt", "Hey amy hows it going (sent sept 3 2017 at 2:30am)", datetime.datetime(2017, 9, 3, 14, 30, 0, tzinfo=pytz.timezone("America/Vancouver")))
+createMessage("amybolt", "mattgray", "Yo, sorry for taking so long, a week ago (oct 8)", datetime.datetime(2017, 10, 8, 16, 30, 0, tzinfo=pytz.timezone("America/Vancouver")))
+createMessage("mattgray", "amybolt", "Sending this now (sent now)")
 
 

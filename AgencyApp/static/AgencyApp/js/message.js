@@ -31,8 +31,13 @@ function sendMessage(senderUsername, destUsername, contentInput, clearTextInput,
 
 function getMessageTime(date){
     var hours = date.getHours()
+    var hourString = hours % 12
+    if(hourString === 0){
+        hourString = 12;
+    }
+
     var AMPMString = "AM";
-    if(hours > 12){
+    if(hours >= 12){
         AMPMString = "PM";
     }
 
@@ -41,28 +46,30 @@ function getMessageTime(date){
         minutes = "0" + minutes;
     }
     //return date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
-    return (hours%12) + ":" + minutes + " " + AMPMString;
+    return hourString + ":" + minutes + " " + AMPMString;
 }
 
+var daysOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
 function getWeekDateString(date){
-    return "Mon " + getMessageTime(date)
+    return daysOfWeek[date.getDay()] + " " + getMessageTime(date)
 }
 
+var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 function getMonthDateString(date){
-    return "October 13 " + getMessageTime(date);
+    return date.getDate() + " " + months[date.getMonth()] + " " + getMessageTime(date);
 }
 
 function getYearDateString(date){
-    return getMonthDateString(date) + "2016"
+    return date.getDate() + "/" + (date.getMonth()+1) + "/" + date.getFullYear() + " " + getMessageTime(date);
 }
 
 function checkForNewDateWrite(lastWrittenDate, newDate){
     var write = true;
     var thresholds = {"minutes": 5}
     if(lastWrittenDate != null){
-        if(lastWrittenDate.getYear() === newDate.getYear()){
+        if(lastWrittenDate.getFullYear() === newDate.getFullYear()){
             if(lastWrittenDate.getMonth() === newDate.getMonth()){
-                if(lastWrittenDate.getDay() === newDate.getDay()){
+                if(lastWrittenDate.getDate() === newDate.getDate()){
                     if(lastWrittenDate.getHours() === newDate.getHours()){
                         if(lastWrittenDate.getMinutes() === newDate.getMinutes()){
                             write = false
@@ -83,23 +90,29 @@ function getNextDateString(lastWrittenDate, newDate){
     var dateString = null
     var dateContent = null;
     if(lastWrittenDate == null){
-        dateContent = getMonthDateString(newDate)
+        // First message, write full date with year
+        dateContent = getYearDateString(newDate)
     }else{
         if(checkForNewDateWrite(lastWrittenDate, newDate)){
             var timeOffset = Math.abs(lastWrittenDate.getTime() - newDate.getTime()) / 1000; // now in s
             if(timeOffset < 24 * 60 * 60){
                 // Less than a day, check if same day
-                if(lastWrittenDate.getDay() === newDate.getDay()){
+                if(lastWrittenDate.getDate() === newDate.getDate()){
                     // Same day, just need time
                     dateContent = getMessageTime(newDate)
                 }else{
+                    // Adjacent days, use week day name
                    dateContent = getWeekDateString(newDate)
                 }
             }else if(timeOffset < 7 * 24 * 60 * 60){
+                // In same week, use week day
                 dateContent = getWeekDateString(newDate)
             }else if(timeOffset > 365 * 24 * 60 * 60){
+                // In different years, display the year
                 dateContent = getYearDateString(newDate)
             }
+
+            // Otherwise, use month string
             if(dateContent == null){
                 dateContent = getMonthDateString(newDate);
             }
