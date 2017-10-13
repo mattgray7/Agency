@@ -122,7 +122,18 @@ function selectMessage(messageID, conversationID){
         }
     }
 
+    updateUnreadStatus(messageID, false)
     displayConversation(conversationID, true)
+}
+
+function updateUnreadStatus(messageID, newUnreadValue){
+    $.ajax({
+        url : "/ajax/updateMessageUnread/",
+        data : {"messageID": messageID, "unread": newUnreadValue},
+        type : 'POST',
+        dataType: "json",
+        success : function(data) {}
+    });
 }
 
 function displayConversation(conversationID, showLoadingGif){

@@ -70,6 +70,7 @@ urlpatterns = [
 
     url(r'^ajax/sendNewMessage/$', ajax.sendNewMessage, name='sendNewMessage'),
     url(r'^ajax/getConversation/$', ajax.getConversation, name='getConversation'),
+    url(r'^ajax/updateMessageUnread/$', ajax.updateMessageUnread, name='updateMessageUnread'),
 
     # Browse
     url(r'^browse/$', views.handleURL, name=constants.BROWSE),

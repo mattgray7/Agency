@@ -721,5 +721,25 @@ def getConversation(request):
             success = True
     return JsonResponse({"success": success, "conversation": {"users": userDict, "messages": conversationList}})
 
-
+def updateMessageUnread(request):
+    success = False
+    messageID = request.POST.get("messageID")
+    unread = request.POST.get("unread") == "true"
+    if messageID:
+        try:
+            message = models.Message.objects.get(messageID=messageID)
+        except models.Message.DoesNotExist:
+            pass
+        else:
+            try:
+                convo = models.Conversation.objects.get(conversationID=message.conversationID)
+            except models.Conversation.DoesNotExist:
+                pass
+            else:
+                for convoMessage in convo.messages:
+                    if convoMessage.recipient == request.user.username:
+                        convoMessage.recipientSeen = not unread
+                        convoMessage.save()
+                success = True
+    return JsonResponse({"success": success})
 
