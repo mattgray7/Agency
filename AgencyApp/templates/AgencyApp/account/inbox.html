@@ -90,7 +90,7 @@ function getMessageListString(messageList, listType){
             listString += "<div style='position: absolute; right: -2px; top: -10px; font-size: 0.8em; color: rgba(0,0,0,0.6);'>" + getMessageTime(new Date(parseInt(messageList[i]["sentTime"])*1000)) + "</div>";
             // Add unread star
             if(messageList[i]["unread"] == true && messageList[i]["sender"]["username"] != "{{request.user.username}}"){
-                listString += "<div style='position: absolute; right: -3px; bottom: -3px;'>&#9734</div>"
+                listString += "<div id='unreadStar_" + messageList[i]["messageID"] + "' style='position: absolute; right: -3px; bottom: -3px;'>&#9734</div>"
             }
             // Add clean name
             listString += "<h4 style='margin: 0; font-size: 1.1em;'>" + displayUser["cleanName"] + "</h4>"
@@ -132,7 +132,29 @@ function updateUnreadStatus(messageID, newUnreadValue){
         data : {"messageID": messageID, "unread": newUnreadValue},
         type : 'POST',
         dataType: "json",
-        success : function(data) {}
+        success : function(data) {
+            if(data["success"]){
+                // Remove star from message
+                var star = document.getElementById("unreadStar_" + messageID);
+                if(star != null){
+                    star.innerHTML = "";
+                }
+
+                var inboxNotificationNumber = document.getElementById("toolbarInboxNotificationNumber")
+                if(inboxNotificationNumber != null){
+                    var bracketedNumber = inboxNotificationNumber.innerHTML;
+                    if(bracketedNumber.length > 1){
+                        var inboxNumber = parseInt(bracketedNumber.substring(1, bracketedNumber.length-1))
+                        var newNumber = inboxNumber - 1
+                        if(newNumber === 0){
+                            inboxNotificationNumber.innerHTML = "";
+                        }else{
+                            inboxNotificationNumber.innerHTML = "(" + newNumber + ")"
+                        }
+                    }
+                }
+            }
+        }
     });
 }
 

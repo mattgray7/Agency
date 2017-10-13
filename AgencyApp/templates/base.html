@@ -501,10 +501,7 @@
                                         <a>
                                             Inbox
                                             {% if userAccount and userAccount.notifications and userAccount.notifications.messages %}
-                                                <script>
-                                                    console.log("{{userAccount.notifications.messages}}")
-                                                </script>
-                                                ({{userAccount.notifications.messages|length}})
+                                                <font id='toolbarInboxNotificationNumber'>({{userAccount.notifications.messages|length}})</span>
                                             {% endif %}
                                         </a>
                                     </form>
