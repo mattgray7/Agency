@@ -182,7 +182,7 @@ function getConversationString(conversation){
             var newDate = new Date(parseInt(messages[i]["sentTime"]) * 1000);
             if(lastWrittenDate == null || checkForNewDateWrite(lastWrittenDate, newDate)){
                 // Only write time/date if not within minute threshold of previous time written
-                dateString = "<div style='font-size: 0.65em; color: rgba(0,0,0,0.5); width: 50px; '>" + getMessageDate(parseInt(messages[i]["sentTime"])) + "</div>";
+                dateString = "<div style='font-size: 0.65em; color: rgba(0,0,0,0.5);margin-top: 20px;'>" + getMessageDate(parseInt(messages[i]["sentTime"])) + "</div>";
                 lastWrittenDate = newDate;
             }
 
@@ -190,15 +190,16 @@ function getConversationString(conversation){
                 // display right
                 listString += "<li style='text-align: right;'>"
                 if(dateString != null){
-                    listString += "<div style='display: inline-block;'>" + dateString + "</div>";
+                    listString += dateString;
                 }
                 listString += "<div class='conversationFeedMessage' style='display: inline-block; margin-right: 3px;'>" + messages[i]["content"] + "</div><div style='float: right; margin-top: 1px;'>" + imageString + "</div></li>";
             }else{
                 // display left
-                listString += "<li style='text-align: left;'><div style='float: left; margin-top: 1px;'>" + imageString + "</div><div class='conversationFeedMessage' style='display: inline-block; margin-left: 3px;'>" + messages[i]["content"] + "</div>";
+                listString += "<li style='text-align: left;'>"
                 if(dateString != null){
-                    listString += "<div style='display: inline-block;'>" + dateString + "</div>";
+                    listString += dateString;
                 }
+                listString += "<div style='float: left; margin-top: 1px;'>" + imageString + "</div><div class='conversationFeedMessage' style='display: inline-block; margin-left: 3px;'>" + messages[i]["content"] + "</div>";
                 listString += "</li>"
             }
             if(i != 0){
