@@ -10,18 +10,22 @@ from django.core.files import File
 import AgencyApp.python.helpers as helpers
 import AgencyApp.python.models as models
 
+# HI BECKY
+basePath = "/Users/MattGray/Projects/Agency"
+#
+
 
 print "Flushing database..."
-os.system("python /Users/MattGray/Projects/Agency/Agency/manage.py flush")
+os.system("python {0}/Agency/manage.py flush".format(basePath))
 
 print "\nDeleting media..."
-os.system("rm -r /Users/MattGray/Projects/Agency/Agency/media/*")
+os.system("rm -r {0}/Agency/media/*".format(basePath))
 
 print "\nCopying default images to media"
-defaultImagesDir = "/Users/MattGray/Projects/Agency/Agency/media/default/"
+defaultImagesDir = "{0}/Agency/media/default/".format(basePath)
 if not os.path.exists(defaultImagesDir):
 	os.makedirs(defaultImagesDir)
-os.system("cp /Users/MattGray/Projects/Agency/Agency/AgencyApp/static/AgencyApp/css/images/default/* {0}".format(defaultImagesDir))
+os.system("cp {0}/Agency/AgencyApp/static/AgencyApp/css/images/default/* {1}".format(basePath, defaultImagesDir))
 
 print "\nCreating new user network.\n"
 
