@@ -63,10 +63,10 @@ def createUser(username, email, password, firstName, lastName, picURL=None, main
                                          height=height,
                                          dateOfBirth=None)
         userAccount.save()
-	userMediaDir = "/Users/MattGray/Projects/Agency/Agency/media/{0}/".format(username)
+	userMediaDir = "{0}/Agency/media/{1}/".format(basePath, username)
 	if not os.path.exists(userMediaDir):
 		os.makedirs(userMediaDir)
-	if picURL:
+	if picURL and os.path.exists(picURL):
 		picResult = urllib.urlretrieve(picURL)
 		userAccount.profilePicture = File(open(picResult[0]))
 		userAccount.profilePicture.name = "/profile.jpg"
@@ -76,21 +76,21 @@ def createUser(username, email, password, firstName, lastName, picURL=None, main
 	profession.save()
 
 project1UserAccount = createUser("mattgray", "matt.gray.1993@gmail.com", "m", "matt", "gray",
-				   picURL="/Users/MattGray/Projects/Agency/Agency/scripts/media/mattGrayProfile.jpg",
+				   picURL="{0}/Agency/scripts/media/mattGrayProfile.jpg".format(basePath),
 				   imdbLink="http://www.imdb.com/name/nm6547223/?ref_=ttfc_fc_cl_t47",
                    bio="I love dogs, films, and video games. And buttholes.",
                    mainProfession="Actor")
 user2 = createUser("amybolt", "amy.bolt@hotmail.com", "m", "amy", "bolt",
-				   "/Users/MattGray/Projects/Agency/Agency/scripts/media/amyBoltProfile.jpg",
+				   "{0}/Agency/scripts/media/amyBoltProfile.jpg".format(basePath),
 				   mainProfession="Actor")
 user3 = createUser("adamcramer", "adam.cramos@gmail.com", "m", "adam", "cramer",
-				   "/Users/MattGray/Projects/Agency/Agency/scripts/media/adamCramerProfile.jpg",
+				   "{0}/Agency/scripts/media/adamCramerProfile.jpg".format(basePath),
 				   mainProfession="SPFX Supervisor")
 user4 = createUser("johnstongray", "johnston.gray@gmail.com", "m", "johnston", "gray",
-				   "/Users/MattGray/Projects/Agency/Agency/scripts/media/johnstonGrayProfile.jpg",
+				   "{0}/Agency/scripts/media/johnstonGrayProfile.jpg".format(basePath),
 				   mainProfession="Screenwriter")
 user5 = createUser("sachahusband", "sasha.husband@gmail.com", "m", "sasha", "husband",
-				   "/Users/MattGray/Projects/Agency/Agency/scripts/media/sachaHusbandProfile.jpg",
+				   "{0}/Agency/scripts/media/sachaHusbandProfile.jpg".format(basePath),
 				   mainProfession="Director")
 user6 = createUser("liamcarson", "liam.carson@gmail.com", "m", "liam", "carson",
 				   mainProfession="Model")
@@ -152,7 +152,7 @@ project1ProjectPost = createProject(poster="mattgray",
 									title="The Great Gatsby",
 									description="The Great Gatsby follows Fitzgerald-like, would-be writer Nick Carraway (Tobey Maguire) as he leaves the Midwest and comes to New York City in the spring of 1922, an era of loosening morals, glittering jazz and bootleg kings. Chasing his own American Dream, Nick lands next door to a mysterious, party-giving millionaire, Jay Gatsby (Leonardo DiCaprio) and across the bay from his cousin, Daisy (Carey Mulligan) and her philandering, blue-blooded husband, Tom Buchanan (Joel Edgerton).",
 									status="In production",
-									picURL="/Users/MattGray/Projects/Agency/Agency/scripts/media/greatGatsby.jpg")
+									picURL="{0}/Agency/scripts/media/greatGatsby.jpg".format(basePath))
 project1ProjectID = project1ProjectPost.projectID
 project1Admin = createProjectAdmin(project1ProjectID, "mattgray")
 #project1Admin2 = createProjectAdmin(project1ProjectID, "amybolt")
@@ -162,36 +162,36 @@ project2ProjectPost = createProject(poster="mattgray",
 									title="The Kings of Summer",
 									description="Three kids build a house in the woods and run away from their families",
 									status="Completed",
-									picURL="/Users/MattGray/Projects/Agency/Agency/scripts/media/kingsOfSummer.jpg")
+									picURL="{0}/Agency/scripts/media/kingsOfSummer.jpg".format(basePath))
 project3ProjectPost = createProject(poster="mattgray",
 									title="Valerian",
 									description="A space opera from Luc Besson based on the legendary French comic books.",
 									status="Pre-production",
-									picURL="/Users/MattGray/Projects/Agency/Agency/scripts/media/valerian.jpg")
+									picURL="{0}/Agency/scripts/media/valerian.jpg".format(basePath))
 
 project4ProjectPost = createProject(poster="mattgray",
 									title="There Will Be Blood",
 									description="A study of a man obsessed with power during the oil boom.",
 									status="Completed",
-									picURL="/Users/MattGray/Projects/Agency/Agency/scripts/media/thereWillBeBlood.jpg")
+									picURL="{0}/Agency/scripts/media/thereWillBeBlood.jpg".format(basePath))
 
 project5ProjectPost = createProject(poster="mattgray",
 									title="Arrival",
 									description="As an alien ship appears on Earth, one cunning linguist may be our only hope of survival.",
 									status="Completed",
-									picURL="/Users/MattGray/Projects/Agency/Agency/scripts/media/arrival.jpg")
+									picURL="{0}/Agency/scripts/media/arrival.jpg".format(basePath))
 
 project6ProjectPost = createProject(poster="mattgray",
 									title="Fantastic Beasts and Where To Find Them",
 									description="Newt Scamander must wrangle mythical beasts in 1920s New York in this Harry Potter spinoff.",
 									status="Post production",
-									picURL="/Users/MattGray/Projects/Agency/Agency/scripts/media/fantasticBeasts.jpg")
+									picURL="{0}/Agency/scripts/media/fantasticBeasts.jpg".format(basePath))
 
 project7ProjectPost = createProject(poster="johnstongray",
 									title="Reel Adults",
 									description="James, a film school drop out and his best friend Tyson embark on a fucking crazy journey as they make their FIRST FEATURE FILM!!!",
 									status="Completed",
-									picURL="/Users/MattGray/Projects/Agency/Agency/scripts/media/reelAdults.jpg")
+									picURL="{0}/Agency/scripts/media/reelAdults.jpg".format(basePath))
 
 project2Admin = createProjectAdmin(project2ProjectPost.projectID, "mattgray")
 project3Admin = createProjectAdmin(project3ProjectPost.projectID, "mattgray")
@@ -278,7 +278,7 @@ project1WorkPost4JobId = createProjectJob(projectID=project1ProjectID,
 								 		  description="I need someone to shoot our set while filiming",
 								 		  profession="Photographer",
 								 		  status="Open",
-								 		  picURL="/Users/MattGray/Projects/Agency/Agency/scripts/media/photographer.jpg")
+								 		  picURL="{0}/Agency/scripts/media/photographer.jpg".format(basePath))
 project1WorkPost5JobId = createProjectJob(projectID=project1ProjectID,
 								 		  username="adamcramer",
 								 		  title="SFX Heavy show, need supervisor",
@@ -315,7 +315,7 @@ project1RoleId1 = createProjectRole(projectID=project1ProjectID,
 								 		    characterDescription="A guy that gets taken in by this rich guy and then some stuff happens idk I kind of forget the book it was so long ago. 24-30 innocent looking male, he should be soft spoken and calm",
 								 		    location="UBC Campus",
 								 		    status="Cast",
-								 		    picURL="/Users/MattGray/Projects/Agency/Agency/scripts/media/nickCarraway.png")
+								 		    picURL="{0}/Agency/scripts/media/nickCarraway.png".format(basePath))
 
 project1RoleId2 = createProjectRole(projectID=project1ProjectID,
 								 		    username="sachahusband",
@@ -325,7 +325,7 @@ project1RoleId2 = createProjectRole(projectID=project1ProjectID,
 								 		    location="UBC Campus",
 								 		    compensationType="Unpaid",
 								 		    status="Cast",
-								 		    picURL="/Users/MattGray/Projects/Agency/Agency/scripts/media/jayGatsby.jpg")
+								 		    picURL="{0}/Agency/scripts/media/jayGatsby.jpg".format(basePath))
 
 project1RoleId3 = createProjectRole(projectID=project1ProjectID,
 								 		    username="amybolt",
@@ -334,7 +334,7 @@ project1RoleId3 = createProjectRole(projectID=project1ProjectID,
 								 		    characterDescription=daisyBuchananDescription,
 								 		    location="UBC Campus",
 								 		    status="Cast",
-								 		    picURL="/Users/MattGray/Projects/Agency/Agency/scripts/media/daisyBuchanan.png")
+								 		    picURL="{0}/Agency/scripts/media/daisyBuchanan.png".format(basePath))
 
 project1RoleId4 = createProjectRole(projectID=project1ProjectID,
 								 		    title="Child lead - female",
@@ -368,7 +368,7 @@ project1RoleId7 = createProjectRole(projectID=project1ProjectID,
 								 	characterDescription = "She is the worst. It is unbelievable how bad she is. She is the brother of jean rakphio saperstein, so actress must look related.",
 								 	location="UBC Campus",
 								 	status="Open",
-								 	picURL="/Users/MattGray/Projects/Agency/Agency/scripts/media/randomChickDrawing.jpg")
+								 	picURL="{0}/Agency/scripts/media/randomChickDrawing.jpg".format(basePath))
 
 project2JobId1 = createProjectJob(projectID=project7ProjectPost.projectID,
 								 		    username="johnstongray",
@@ -399,7 +399,7 @@ project1EventPostID = createProjectEvent(projectID=project1ProjectID,
 								 endTime=tenPM,
 								 admissionInfo="Open to public",
 								 eventType="Open Audition",
-								 picURL="/Users/MattGray/Projects/Agency/Agency/scripts/media/castingCall.jpeg")
+								 picURL="{0}/Agency/scripts/media/castingCall.jpeg".format(basePath))
 project1EventPostID2 = createProjectEvent(projectID=project1ProjectID,
 								 poster="mattgray",
 								 host="ZOOM Film Festival",
@@ -452,7 +452,7 @@ collabPost = models.CollaborationPost(postID=collabPostID,
 								 title="The Yosemite Project",
 								 description="I wrote a sick screenplay and am looking for a director",
 								 collaboratorRole="Director")
-picResult = urllib.urlretrieve("/Users/MattGray/Projects/Agency/Agency/scripts/media/collabPost.jpg")
+picResult = urllib.urlretrieve("{0}/Agency/scripts/media/collabPost.jpg".format(basePath))
 collabPost.postPicture = File(open(picResult[0]))
 collabPost.postPicture.name = "/collaboration_{0}.jpg".format(collabPostID)
 collabPost.save()
