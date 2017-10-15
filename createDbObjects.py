@@ -132,7 +132,7 @@ def createProject(poster, title, description, status, picURL, projectType="Film 
 									 location=location,
 									 union=union,
 									 compensation=compensation)
-	if picURL:
+	if picURL and os.path.exists(picURL):
 		picResult = urllib.urlretrieve(picURL)
 		projectPost.postPicture = File(open(picResult[0]))
 		projectPost.postPicture.name = "/project_{0}.jpg".format(projectID)
@@ -206,7 +206,7 @@ def createProjectJob(projectID, status, profession, title, compensationType="Pai
 	admin = models.PostAdmin(postID=jobID, username=poster)
 	admin.save()
 
-	if picURL:
+	if picURL and os.path.exists(picURL):
 		picResult = urllib.urlretrieve(picURL)
 		jobPost.postPicture = File(open(picResult[0]))
 		jobPost.postPicture.name = "/work_{0}.jpg".format(jobID)
@@ -223,7 +223,7 @@ def createProjectRole(projectID, status, title, characterName, compensationType=
 
 	admin = models.PostAdmin(postID=roleID, username=poster)
 	admin.save()
-	if picURL:
+	if picURL and os.path.exists(picURL):
 		picResult = urllib.urlretrieve(picURL)
 		rolePost.postPicture = File(open(picResult[0]))
 		rolePost.postPicture.name = "/casting_{0}.jpg".format(roleID)
@@ -246,7 +246,7 @@ def createProjectEvent(projectID, title, location, startDate, endDate, startTime
 								 endDate=endDate,
 								 eventType=eventType)
 	post.save()
-	if picURL:
+	if picURL and os.path.exists(picURL):
 		picResult = urllib.urlretrieve(picURL)
 		post.postPicture = File(open(picResult[0]))
 		post.postPicture.name = "/event_{0}.jpg".format(postID)
