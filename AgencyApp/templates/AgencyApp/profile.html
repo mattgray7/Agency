@@ -245,9 +245,13 @@
                                                           "createdAt": currentDateString,
                                                           "poster": {"username": "{{userAccount.username}}",
                                                                      "cleanName": "{{userAccount.cleanName}}",
-                                                                     "profilePictureURL": "{{userAccount.profilePicture.url}}",
                                                                      "profession": "{{userAccount.mainProfession}}"}
                                                           }
+                                    var newPic = "{{images.noProfilePicture}}"
+                                    {% if userAccount.profilePicture and userAccount.profilePicture.url %}
+                                        newPic = "{{userAccount.profilePicture.url}}"
+                                    {% endif %}
+                                    newEndorsement["poster"]["profilePicture"] = newPic
                                     endorsementList.unshift(newEndorsement)
 
                                     if(displayEndorsementFeed()){
