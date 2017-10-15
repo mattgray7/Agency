@@ -452,10 +452,12 @@ collabPost = models.CollaborationPost(postID=collabPostID,
 								 title="The Yosemite Project",
 								 description="I wrote a sick screenplay and am looking for a director",
 								 collaboratorRole="Director")
-picResult = urllib.urlretrieve("{0}/Agency/scripts/media/collabPost.jpg".format(basePath))
-collabPost.postPicture = File(open(picResult[0]))
-collabPost.postPicture.name = "/collaboration_{0}.jpg".format(collabPostID)
-collabPost.save()
+picURL = "{0}/Agency/scripts/media/collabPost.jpg".format(basePath)
+if picURL and os.path.exists(picURL):
+	picResult = urllib.urlretrieve()
+	collabPost.postPicture = File(open(picResult[0]))
+	collabPost.postPicture.name = "/collaboration_{0}.jpg".format(collabPostID)
+	collabPost.save()
 
 
 def createMessage(sender, recipient, content, date=None):
