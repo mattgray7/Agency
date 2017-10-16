@@ -368,7 +368,9 @@ function createUserElement(dataDict){
     element += "<div style='color: rgba(0,0,0,0.8);'>"
 
     // Add message button
-    element += "<div class='editButton' onclick='displayMessagePanel(" + '"' + dataDict["username"] + '", "' + dataDict["cleanName"] + '");' + "' style='position: absolute; top: 0px; right: 0px;'>Message</div>";
+    if(loggedInUser != null && dataDict["username"] != loggedInUser){
+        element += "<div class='editButton' onclick='displayMessagePanel(" + '"' + dataDict["username"] + '", "' + dataDict["cleanName"] + '");' + "' style='position: absolute; top: 0px; right: 0px;'>Message</div>";
+    }
 
     // Add dates
     element += "<div>" + dataDict["profession"] + "</div>";

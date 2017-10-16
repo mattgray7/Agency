@@ -34,6 +34,12 @@
         var defaultStartTime = "18:00";
         var defaultEndTime = "22:00";
 
+        // Logged in user
+        var loggedInUser;
+        {% if request.user.is_authenticated %}
+            loggedInUser = "{{request.user.username}}"
+        {% endif %}
+
         // Load all the loading gifs so that they are stored in cache
         {% for key, value in images.loading.items %}
             var loadingGif = new Image();
