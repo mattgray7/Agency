@@ -700,7 +700,7 @@
                     {% endif %}
                 </div>
                 <div style='position: absolute; top: 17px; right: 15px;'>
-                    {% if not viewingOwnProfile %}
+                    {% if not viewingOwnProfile and request.user.is_authenticated %}
                         <div class='editButton' onclick='displayMessagePanel("{{profileUserAccount.username}}", "{{profileUserAccount.cleanName}}");'>Message</div>
                     {% endif %}
                 </div>
