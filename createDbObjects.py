@@ -454,7 +454,7 @@ collabPost = models.CollaborationPost(postID=collabPostID,
 								 collaboratorRole="Director")
 picURL = "{0}/Agency/scripts/media/collabPost.jpg".format(basePath)
 if picURL and os.path.exists(picURL):
-	picResult = urllib.urlretrieve()
+	picResult = urllib.urlretrieve(picURL)
 	collabPost.postPicture = File(open(picResult[0]))
 	collabPost.postPicture.name = "/collaboration_{0}.jpg".format(collabPostID)
 	collabPost.save()
