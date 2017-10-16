@@ -12,37 +12,42 @@
 {% endif %}-->
 
 {% if not request.user.is_authenticated %}
-	<div id="banner" class="container">
-		<div class="title">
-			<h2>Welcome to the VanFilmCollective</h2>
-				<span class="byline">A place for filmmakers, both amateur and professional, to connect and create.</span>
+	<div style='position: relative; height: 100%; width: 100%;'>
+		<div style='position: absolute; left: 0; right: 0; top: 0;'>
+			<!--<img src="{{images.stock}}" style='max-height: 100%; max-width: 100%;'>-->
 		</div>
-		<!--<ul class="actions">
-			<li><a href="/browse/" class="button">Browse</a></li>
-		</ul>-->
-	</div>
+		<div id="banner" class="container">
+			<div class="title">
+				<h2>Welcome to the VanFilmCollective</h2>
+					<span class="byline">A place for filmmakers, both amateur and professional, to connect and create.</span>
+			</div>
+			<!--<ul class="actions">
+				<li><a href="/browse/" class="button">Browse</a></li>
+			</ul>-->
+		</div>
 
-	<div id="wrapper">
-	<div id="three-column" class="container">
-		<div class="title">
-			<h2>Explore the Vancouver film world.</h2>
-			<span class="byline">Check out film work posts, events in your area, and more.</span>
-		</div>
-		<div class="boxA">
-			<!-- For the user side: someone looking to get a job-->
-			<span class="fa fa-cloud-download"></span>
-			<p>View posts seeking actors, on and off set workers, and collaborators</p>
-			<a href="/browse/" class="button button-alt">View posts</a>
-		</div>
-		<div class="boxB">
-			<span class="fa fa-cogs"></span>
-			<p>View profiles of registered filmmakers and industry professionals</p>
-			<a href="/browse/users/" class="button button-alt">View users</a>
-		</div>
-		<div class="boxC">
-			<span class="fa fa-wrench"></span>
-			<p> Create an account and get involved in the VanFilmCollective</p>
-			<a href="/account/create/basic/" class="button button-alt">Create account</a>
+		<div id="wrapper">
+		<div id="three-column" class="container">
+			<div class="title">
+				<h2>Explore the Vancouver film world.</h2>
+				<span class="byline">Check out film work posts, events in your area, and more.</span>
+			</div>
+			<div class="boxA">
+				<!-- For the user side: someone looking to get a job-->
+				<span class="fa fa-cloud-download"></span>
+				<p>View posts seeking actors, on and off set workers, and collaborators</p>
+				<a href="/browse/" class="button button-alt">View posts</a>
+			</div>
+			<div class="boxB">
+				<span class="fa fa-cogs"></span>
+				<p>View profiles of registered filmmakers and industry professionals</p>
+				<a href="/browse/users/" class="button button-alt">View users</a>
+			</div>
+			<div class="boxC">
+				<span class="fa fa-wrench"></span>
+				<p> Create an account and get involved in the VanFilmCollective</p>
+				<a href="/account/create/basic/" class="button button-alt">Create account</a>
+			</div>
 		</div>
 	</div>
 </div>

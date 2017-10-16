@@ -25,7 +25,7 @@ print "\nCopying default images to media"
 defaultImagesDir = "{0}/Agency/media/default/".format(basePath)
 if not os.path.exists(defaultImagesDir):
 	os.makedirs(defaultImagesDir)
-os.system("cp {0}/Agency/AgencyApp/static/AgencyApp/css/images/default/* {1}".format(basePath, defaultImagesDir))
+os.system("cp -r {0}/Agency/AgencyApp/static/AgencyApp/css/images/default/* {1}".format(basePath, defaultImagesDir))
 
 print "\nCreating new user network.\n"
 

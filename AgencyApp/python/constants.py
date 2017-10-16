@@ -21,6 +21,7 @@ IMDB_LOGO_PATH = "/media/default/imdbLogo.png"
 RESUME_ICON_PATH = "/media/default/resume.png"
 #LOGO_PATH = "/media/default/logo.png"
 LOGO_PATH = "/media/default/logo2_wide.png"
+STOCK_IMAGE_DIR = "/media/default/stockImages/"
 
 # Source page enums:
 HOME = "HOME"

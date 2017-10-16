@@ -1,6 +1,7 @@
 from django.contrib import messages
 
 from django.http import HttpResponseRedirect
+from django.conf import settings
 import constants
 import random, string
 import models
@@ -103,6 +104,17 @@ def getDestinationPage(request, currentPage, sourcePage, destPageKey=None):
         print "helpers.py: getDestinationURL: no currentPageMap found"
 
 
+def getStockImage():
+    imagePath = None
+    imageDir = os.path.join(settings.MEDIA_ROOT, "default", "stockImages")
+    if os.path.exists(imageDir) and os.path.isdir(imageDir):
+        imageList = os.listdir(imageDir)
+        imageIndex = random.randint(0, len(imageList)-1)
+        filename = imageList[imageIndex]
+        imagePath = os.path.join(settings.MEDIA_URL, "default", "stockImages", filename)
+    return imagePath
+        
+
 def getBaseContext(request):
     """Returns context required by the base template.
 
@@ -127,6 +139,7 @@ def getBaseContext(request):
                            "loadingGif": constants.LOADING_GIF,
                            "plus": constants.PLUS_SIGN_PATH,
                            "logo": constants.LOGO_PATH,
+                           "stock": getStockImage(),
                            "loading": {"light": constants.LOADING_GIF.replace("loading.gif", "loading_light.gif"),
                                        "mid": constants.LOADING_GIF.replace("loading.gif", "loading_mid.gif"),
                                        "dark": constants.LOADING_GIF.replace("loading.gif", "loading_dark.gif")}}
