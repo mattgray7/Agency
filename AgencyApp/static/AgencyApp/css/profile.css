@@ -89,7 +89,7 @@
 	width: 100%;
 	background: #FFF;
 	height: 3px;
-	margin-top: 12px;
+	margin-top: 11px;
 	z-index: 100;
 	opacity: 0;
 	transition: background .2s ease;

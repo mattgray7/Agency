@@ -171,32 +171,31 @@
     function displayMedia(){
         var tabContent = document.getElementById("profileTabContentPanel")
         if(tabContent != null){
-            var tabString = "<div style='position: relative; min-height: 100px; width: 100%;'>";
+            var tabString = "<div style='position: relative; min-height: 40px; width: 100%;'>";
 
             // Start with edit button
             {% if viewingOwnProfile %}
                 tabString += "<div style='position: absolute; top: 5px; right: 12px;'>" + getEditButtonString("{{possibleDestinations.media}}") + "</div>";
             {% endif %}
 
-            // Content container
-            tabString += "<div style='margin-left: 10px; margin-right: 10px; margin-top: 10px;'>";
-
-            // Photos container
-            tabString += "<div style='height: 299px;'><h2 style='text-align: left; margin-bottom: 1px;'>Photos</h2><div style='height: 0px; width: 100%; border-top: 1px solid #000; margin-bottom: 5px;'></div>";
-
             // Add picture list
             {% if profileUserAccount.profileMediaPictures %}
+                // Content container
+                tabString += "<div style='margin-left: 10px; margin-right: 10px; margin-top: 10px;'>";
+
+                // Photos container
+                tabString += "<div style='height: 299px;'><h2 style='text-align: left; margin-bottom: 1px;'>Photos</h2><div style='height: 0px; width: 100%; border-top: 1px solid #000; margin-bottom: 5px;'></div>";
+
                 tabString += "<div id='mediaPicturesListPanel' style='position: absolute; left: 10px; right: 10px; top: 40px; height: 255px; background: #FFF; overflow: hidden; '><div id='mediaPicturesList' style='text-align: left; max-height: 255px; overflow-x: scroll; overflow-y: hidden; white-space: nowrap; background: rgba(0,0,0,0.1);background: rgba(0,0,0,0.05); border: 1px solid rgba(158, 192, 247, 0.2);'>";
                 {% for picture in profileUserAccount.profileMediaPictures %}
                     tabString += getProfileMediaPictureString("{{picture.id}}", "{{picture.url}}", "{{picture.description}}");
                 {% endfor %}
-                tabString += "</div></div>";
+                tabString += "</div></div></div></div>";
+
+            {% else %}
+                tabString += "<div style='font-size: 1.1em; color: rgba(0,0,0,0.9);; margin-top: 15px;'>No media added</div>"
+
             {% endif %}
-            
-            tabString += "</div>"
-            tabString += "</div>"
-
-
             tabContent.innerHTML = tabString;
         }
     }
