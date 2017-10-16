@@ -131,7 +131,6 @@ function selectMessage(messageID, conversationID, initialUnread){
 }
 
 function updateUnreadStatus(messageID, newUnreadValue, initialUnread){
-    console.log(initialUnread);
     if(initialUnread){
         $.ajax({
             url : "/ajax/updateMessageUnread/",
@@ -146,18 +145,18 @@ function updateUnreadStatus(messageID, newUnreadValue, initialUnread){
                         star.innerHTML = "";
                     }
 
-                    var inboxNotificationNumber = document.getElementById("toolbarInboxNotificationNumber")
-                    if(inboxNotificationNumber != null){
-                        var bracketedNumber = inboxNotificationNumber.innerHTML;
+                    var inboxButton = document.getElementById("inboxToolbarButton")
+                    if(inboxButton != null){
+                        // Remove all whitespace and line breaks
+                        var bracketedNumber = inboxButton.innerHTML.replace("Inbox ", "").replace(/(\r\n|\n|\r| )/gm,"");;
                         if(bracketedNumber.length > 1){
                             // Remove brackets and decrement
                             var inboxNumber = parseInt(bracketedNumber.substring(1, bracketedNumber.length-1))
                             var newNumber = inboxNumber - 1;
                             if(newNumber === 0){
-                                inboxNotificationNumber.style.display = "none";
+                                inboxButton.innerHTML = "Inbox";
                             }else{
-                                inboxNotificationNumber.style.display = "inline-block";
-                                inboxNotificationNumber.innerHTML = "(" + newNumber + ")"
+                                inboxButton.innerHTML = "Inbox (" + newNumber + ")"
                             }
                         }
                     }

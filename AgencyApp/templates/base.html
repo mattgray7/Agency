@@ -498,10 +498,11 @@
                                         {% csrf_token %}
                                         <input type="hidden" name="source" value="{{ source }}">
                                         <input type="hidden" name="next" value="{{ toolbarDestinations.inbox }}">
-                                        <a>
-                                            Inbox
+                                        <a id="inboxToolbarButton" style=''>
                                             {% if userAccount and userAccount.notifications and userAccount.notifications.messages %}
-                                                <div id='toolbarInboxNotificationNumber' style='display:inline-block;'>({{userAccount.notifications.messages|length}})</div>
+                                                Inbox ({{userAccount.notifications.messages|length}})
+                                            {% else %}
+                                                Inbox
                                             {% endif %}
                                         </a>
                                     </form>
