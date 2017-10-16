@@ -79,7 +79,7 @@ PROFESSIONS = {"acting": ["Actor", "Dancer", "Extra", "Stand-in", "Model", "Voic
 			   					   "Electrician", "Grip", "Hair Stylist", "Key Grip", "Lighting Technician",
 			   					   "Location Manager", "Makeup Artist", "Photographer", "Production Assistant",
 			   					   "Prop Master", "Script Coordinator", "Set Coordinator", "Set Decorator",
-			   					   "Set Designer", "SFX Technician", "SFX Supervisor", "Stunt Coordinator",
+			   					   "Set Designer", "SPFX Technician", "SPFX Supervisor", "Stunt Coordinator",
 			   					   "Stunt Artist", "Wardrobe Supervisor"],
 			   "offSetProduction": ["Acting Coach", "Art Director", "Producer", "Production Coordinator",
 			   						"Production Designer", "Production Manager", "Voice Artist"],
