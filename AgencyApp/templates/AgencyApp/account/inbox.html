@@ -81,7 +81,7 @@ function getMessageListString(messageList, listType){
             }else{
                 displayUser = messageList[i]["recipient"];
             }
-            listString += "<li id='messageFeedElement_" + messageList[i]["messageID"] + "' onclick='selectMessage(" + '"' + messageList[i]["messageID"] + '", "' + messageList[i]["conversationID"] + '"' + ");'>"
+            listString += "<li id='messageFeedElement_" + messageList[i]["messageID"] + "' onclick='selectMessage(" + '"' + messageList[i]["messageID"] + '", "' + messageList[i]["conversationID"] + '", ' + messageList[i]["unread"] + ");'>"
 
             // Add picture
             listString += "<div style='position: absolute; left: 5px; top: 5px; bottom: 5px;'><img style='max-height: 100%;' src='" + displayUser["profilePictureURL"] + "'></div>"
@@ -112,7 +112,7 @@ function getMessageListString(messageList, listType){
     return listString
 }
 
-function selectMessage(messageID, conversationID){
+function selectMessage(messageID, conversationID, initialUnread){
     var messageFeed = document.getElementById("messageFeed")
     var messageElement = document.getElementById("messageFeedElement_" + messageID);
     if(messageFeed != null && messageElement != null){
@@ -126,41 +126,45 @@ function selectMessage(messageID, conversationID){
         }
     }
 
-    updateUnreadStatus(messageID, false)
+    updateUnreadStatus(messageID, false, initialUnread)
     displayConversation(conversationID, true)
 }
 
-function updateUnreadStatus(messageID, newUnreadValue){
-    $.ajax({
-        url : "/ajax/updateMessageUnread/",
-        data : {"messageID": messageID, "unread": newUnreadValue},
-        type : 'POST',
-        dataType: "json",
-        success : function(data) {
-            if(data["success"]){
-                // Remove star from message
-                var star = document.getElementById("unreadStar_" + messageID);
-                if(star != null){
-                    star.innerHTML = "";
-                }
+function updateUnreadStatus(messageID, newUnreadValue, initialUnread){
+    console.log(initialUnread);
+    if(initialUnread){
+        $.ajax({
+            url : "/ajax/updateMessageUnread/",
+            data : {"messageID": messageID, "unread": newUnreadValue},
+            type : 'POST',
+            dataType: "json",
+            success : function(data) {
+                if(data["success"]){
+                    // Remove star from message
+                    var star = document.getElementById("unreadStar_" + messageID);
+                    if(star != null){
+                        star.innerHTML = "";
+                    }
 
-                var inboxNotificationNumber = document.getElementById("toolbarInboxNotificationNumber")
-                if(inboxNotificationNumber != null){
-                    var bracketedNumber = inboxNotificationNumber.innerHTML;
-                    if(bracketedNumber.length > 1){
-                        var inboxNumber = parseInt(bracketedNumber.substring(1, bracketedNumber.length-1))
-                        var newNumber = inboxNumber - 1
-                        if(newNumber === 0){
-                            inboxNotificationNumber.style.display = "none";
-                        }else{
-                            inboxNotificationNumber.style.display = "block";
-                            inboxNotificationNumber.innerHTML = "(" + newNumber + ")"
+                    var inboxNotificationNumber = document.getElementById("toolbarInboxNotificationNumber")
+                    if(inboxNotificationNumber != null){
+                        var bracketedNumber = inboxNotificationNumber.innerHTML;
+                        if(bracketedNumber.length > 1){
+                            // Remove brackets and decrement
+                            var inboxNumber = parseInt(bracketedNumber.substring(1, bracketedNumber.length-1))
+                            var newNumber = inboxNumber - 1;
+                            if(newNumber === 0){
+                                inboxNotificationNumber.style.display = "none";
+                            }else{
+                                inboxNotificationNumber.style.display = "inline-block";
+                                inboxNotificationNumber.innerHTML = "(" + newNumber + ")"
+                            }
                         }
                     }
                 }
             }
-        }
-    });
+        });
+    }
 }
 
 function displayConversation(conversationID, showLoadingGif){
