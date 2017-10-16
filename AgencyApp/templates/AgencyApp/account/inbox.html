@@ -87,19 +87,24 @@ function getMessageListString(messageList, listType){
             listString += "<div style='position: absolute; left: 5px; top: 5px; bottom: 5px;'><img style='max-height: 100%;' src='" + displayUser["profilePictureURL"] + "'></div>"
 
             if(inboxPanelExpanded){
-                console.log("expanded")
                 // Add text container
                 listString += "<div style='position: absolute; left: 64px; top: 13px; bottom: 5px; right: 5px; text-align: left;'>"
                 // Add date
                 listString += "<div style='position: absolute; right: -2px; top: -10px; font-size: 0.8em; color: rgba(0,0,0,0.6);'>" + getMessageTime(new Date(parseInt(messageList[i]["sentTime"])*1000)) + "</div>";
                 // Add unread star
+                var boldText = false;
                 if(messageList[i]["unread"] == true && messageList[i]["sender"]["username"] != "{{request.user.username}}"){
                     listString += "<div id='unreadStar_" + messageList[i]["messageID"] + "' style='position: absolute; right: -3px; bottom: -3px;'>&#9734</div>"
+                    boldText = true;
                 }
                 // Add clean name
                 listString += "<h4 style='margin: 0; font-size: 1.1em;'>" + displayUser["cleanName"] + "</h4>"
                 // Add message content cutoff
-                listString += "<div style='margin-top: -1px; font-size: 0.9em; font-weight: 100; color: rgba(0,0,0,0.6);  text-overflow: ellipsis; height: 60%; white-space: nowrap; overflow: hidden;'>" + messageList[i]["content"] + "</div>";
+                listString += "<div style='margin-top: -1px; font-size: 0.9em; font-weight: 100; color: rgba(0,0,0,0.6);  text-overflow: ellipsis; height: 60%; white-space: nowrap; overflow: hidden; "
+                if(boldText){
+                    listString += "font-weight: 900;"
+                }
+                listString += "'>" + messageList[i]["content"] + "</div>";
                 listString += "</div>"
             }
             listString +="</li>"
