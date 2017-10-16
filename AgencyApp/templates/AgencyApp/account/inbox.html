@@ -151,8 +151,9 @@ function updateUnreadStatus(messageID, newUnreadValue){
                         var inboxNumber = parseInt(bracketedNumber.substring(1, bracketedNumber.length-1))
                         var newNumber = inboxNumber - 1
                         if(newNumber === 0){
-                            inboxNotificationNumber.innerHTML = "";
+                            inboxNotificationNumber.style.display = "none";
                         }else{
+                            inboxNotificationNumber.style.display = "block";
                             inboxNotificationNumber.innerHTML = "(" + newNumber + ")"
                         }
                     }
