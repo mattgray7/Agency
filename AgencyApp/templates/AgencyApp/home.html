@@ -12,19 +12,19 @@
 {% endif %}-->
 
 {% if not request.user.is_authenticated %}
-	<div style='position: relative; height: 100%; width: 100%;'>
+	<div style='position: relative; height: 295px; width: 100%;'>
 		<div style='position: absolute; left: 0; right: 0; top: 0;'>
-			<!--<img src="{{images.stock}}" style='max-height: 100%; max-width: 100%;'>-->
-		</div>
-		<div id="banner" class="container">
-			<div class="title">
-				<h2>Welcome to the VanFilmCollective</h2>
-					<span class="byline">A place for filmmakers, both amateur and professional, to connect and create.</span>
+			<div id="banner" class="container">
+				<div class="title">
+					<h2>Welcome to the VanFilmCollective</h2>
+						<span class="byline">A place for filmmakers, both amateur and professional, to connect and create.</span>
+				</div>
+				<!--<ul class="actions">
+					<li><a href="/browse/" class="button">Browse</a></li>
+				</ul>-->
 			</div>
-			<!--<ul class="actions">
-				<li><a href="/browse/" class="button">Browse</a></li>
-			</ul>-->
 		</div>
+	</div>
 
 		<div id="wrapper">
 		<div id="three-column" class="container">
@@ -50,7 +50,6 @@
 			</div>
 		</div>
 	</div>
-</div>
 {% else %}
 	<div id="mainChoice"></div>
 {% endif %}
