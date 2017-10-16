@@ -278,6 +278,7 @@
             panelString += "</ul>"
             panelString += "</div></div>"
             var blocking = displayBlockingPanel(panelString);
+            $("#messageTextArea").focus();
             addCloseBlockingCallback(["messagePanel"])
 
             $("#messageTextArea").on("keydown", function(e){
