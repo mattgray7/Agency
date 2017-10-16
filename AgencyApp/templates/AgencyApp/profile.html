@@ -489,11 +489,23 @@
     }
 
     function getWorkHireTextPanel(){
-        return "working and hiring"
+        var workPanel = getWorkTextPanel();
+        var hirePanel = getHireTextPanel();
+        var callbacks = []
+        if(workPanel["callbacks"].length > 0){
+            callbacks = callbacks.concat(workPanel["callbacks"]);
+        }
+        if(hirePanel["callbacks"].length > 0){
+            callbacks = callbacks.concat(hirePanel["callbacks"]);
+        }
+
+        var panelString = workPanel["html"] + "<div style='height: 5px;'></div>" + hirePanel["html"]
+
+        return {"html": panelString, "callbacks": callbacks}
     }
 
     function getWorkTextPanel(){
-        var panelString = "<div style='margin-left: 5px;'>";
+        var panelString = "<div style='padding-left: 5px; background: #FFF; border-radius: 3px;'>";
         var callbacks = []
         panelString += "<h2 style='margin-top: 5px;'>Looking for work</h2>"
         {% if profileInterests.work %}
@@ -543,7 +555,7 @@
     }
 
     function getHireTextPanel(){
-        var panelString = "<div style='margin-left: 5px;'>";
+        var panelString = "<div style='padding: 0px 0px 5px 5px; background: #FFF; border-radius: 3px;'>";
         var callbacks = []
         {% if profileInterests.hire %}
             var title;
@@ -562,9 +574,9 @@
 
 
 
+            var projectList = "<ul style='margin-bottom: 0px;'>"
             if(hiring && casting){
                 {% if profileAdminProjects.hiring or profileAdminProjects.casting %}
-                    var projectList = "<ul>";
                     var projectDict = {};
                     {% for project in profileAdminProjects.hiring %}
                         if(!("{{project.postID}}" in projectDict)){
@@ -604,7 +616,6 @@
                 {% endif %}
             }else if(hiring){
                 {% if profileAdminProjects.hiring %}
-                    var projectList = "<ul>";
                     {% for project in profileAdminProjects.hiring %}
                         projectList += "<li><a onclick='redirectToPost(" + '"{{project.postID}}"' + ");' >{{project.title}}</a> (" + getSingularOrPlural("{{project.openJobs|length}}", "open job") + ")</li>"
                     {% endfor %}
@@ -617,7 +628,6 @@
                     panelString += projectList;
                 {% endif %}
             }else if(casting){
-                var projectList = "<ul>";
                 {% for project in profileAdminProjects.casting %}
                     projectList += "<li><a onclick='redirectToPost(" + '"{{project.postID}}"' + ");' >{{project.title}}</a> (" + getSingularOrPlural("{{project.openRoles|length}}", "open role") + ")</li>"
                 {% endfor %}
@@ -634,8 +644,6 @@
                 panelString += "<h2 style='margin-top: 5px;'>Looking for collaborators</h2>"
             }
 
-            
-
             var projects = {};
             {% if filmography %}
                 projects = {{filmography|safe}};
@@ -643,10 +651,6 @@
         {% endif %}
         panelString += "</div>";
         return {'html': panelString, 'callbacks': callbacks};
-    }
-
-    function getDefaultTextPanel(){
-        return "default"
     }
 
     function getProfileHeaderTextPanel(){
@@ -666,7 +670,9 @@
         {% elif profileUserAccount.hireInterest %}
             newInfo = getHireTextPanel();
         {% else %}
-            newInfo = getDefaultTextPanel();
+            // For other or no interest, don't display anything
+            // TODO should I add something like add interested professions here if viewingOwnProfile?
+            newInfo = {"html": "", "callbacks": []}
         {% endif %}
         panelString += newInfo['html']
         panelString += "</div>"
@@ -733,7 +739,7 @@
                             <!--</div>
 
                         </div>-->
-            <div id='profileInterestPanel' style='position: relative; background: #FFF; width: 100%; margin-top: 12px; border-radius: 3px;'>
+            <div id='profileInterestPanel' style='position: relative; width: 100%; margin-top: 12px;'>
                 <script>
                     var headerTextInfo = getProfileHeaderTextPanel()
                     document.write(headerTextInfo['html'])
