@@ -38,12 +38,26 @@ function updateBrowseContentHeight(){
 }
 
 var expandedSectionHeights = {"jobs": 0, "roles": 0, "users": 0, "projects": 0, "events": 0}
-function saveExpandedBrowseSectionHeights(){
+function saveExpandedBrowseSectionHeights(results){
     for(section in expandedTabDict){
         if(expandedTabDict[section]){
             var container = document.getElementById(section + "BrowseResultsContainer")
             if(container != null){
                 expandedSectionHeights[section] = container.offsetHeight;
+            }
+        }else{
+            if(results != null){
+                if(section in results){
+                    var newHeight = 0;
+                    var numDisplayedResults = results[section]["results"].length;
+
+                    newHeight += numDisplayedResults * (browseTableElementHeight + 7)   // 7 is for padding between elements
+
+                    if(results[section]["moreResults"] == true){
+                        newHeight += 45;
+                    }
+                    expandedSectionHeights[section] = newHeight;
+                }
             }
         }
     }
