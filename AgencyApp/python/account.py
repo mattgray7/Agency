@@ -62,6 +62,7 @@ class LoginView(views.GenericFormView):
                     return True
                 else:
                     self._pageErrors.append("Email and password do not match.")
+        return False
  
 
 class LogoutView(views.GenericFormView):
@@ -73,7 +74,15 @@ class LogoutView(views.GenericFormView):
         return None
 
     def process(self):
+        username = self.username  # Need to access before using in filter
         logout(self.request)
+        try:
+            userAccount = models.UserAccount.objects.get(username=username)
+        except models.UserAccount.DoesNotExist:
+            pass
+        else:
+            userAccount.lastLogout = datetime.datetime.now()
+            userAccount.save()
         return helpers.redirect(request=self.request,
                                 currentPage=self.currentPage,
                                 destinationPage=self.destinationPage)

@@ -14,6 +14,9 @@ function createHomeFeed(){
 		// Add dashboard
 		feedString += getDashboardString() + "<div style='height: 10px;'></div>"
 
+		// Add featured projects
+		feedString += getFeaturedProjectsString() + "<div style='height: 10px;'></div>"
+
 		// Add followed posts
 		feedString += getFollowedFeedString()
 	{% else %}
@@ -34,6 +37,23 @@ function getDashboardString(){
 	return htmlString;
 }
 
+function getFeaturedProjectsString(){
+	var feedString = "";
+	{% if featuredProjects %}
+		var projects = {{featuredProjects|safe}}
+		if(projects.length > 0){
+			feedString += "<div class='browseSearchResults' style='background: none; border: 0px;'><div style='position: relative; width: 100%; height: 45px;'><h1 style='position: absolute; top: 0; left: 5px;'>Featured Project (" + projects.length + ")</h1></div>";
+
+			feedString += "<ul id='featureProjectPostFeed'>";
+		    for(var i=0; i < Math.min(projects.length, 3); i++){
+		        feedString += createBrowseListElement("projects", projects[i]);
+		    }
+		    feedString += "</ul></div>";
+		}
+	{% endif %}
+	return feedString;
+}
+
 function getFollowedFeedString(){
 	var feedString = "";
 	{% if followedPosts %}
@@ -41,12 +61,11 @@ function getFollowedFeedString(){
 		if(posts.length > 0){
 			feedString += "<div class='browseSearchResults' style='background: none; border: 0px;'><div style='position: relative; width: 100%; height: 45px;'><h1 style='position: absolute; top: 0; left: 5px;'>Followed Posts (" + posts.length + ")</h1></div>";
 
-
 			feedString += "<ul id='followedPostFeed'>";
 		    for(var i=0; i < Math.min(posts.length, 3); i++){
 		        feedString += createBrowseListElement(posts[i]["category"], posts[i]);
 		    }
-		    feedString += "</ul></div></div>";
+		    feedString += "</ul></div>";
 		}
 	{% endif %}
 	return feedString;

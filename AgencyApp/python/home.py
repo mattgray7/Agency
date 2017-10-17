@@ -17,6 +17,14 @@ class HomeView(views.GenericFormView):
     def __init__(self, *args, **kwargs):
         super(HomeView, self).__init__(*args, **kwargs)
         self._followedPosts = None
+        self._featuredProjects = None
+        self._featuredPosts = None
+        self._browseCategoryMap = {constants.WORK_POST: "jobs",
+                                     constants.CASTING_POST: "roles",
+                                     constants.PROJECT_POST: "projects",
+                                     constants.EVENT_POST: "events"
+                                     }
+        self._postDateFields = ["startDate", "endDate", "startTime", "endTime"]
 
     @property
     def pageContext(self):
@@ -32,29 +40,40 @@ class HomeView(views.GenericFormView):
                                                      "browse": constants.BROWSE
                                                      }
         self._pageContext["followedPosts"] = json.dumps(self.followedPosts)
+        self._pageContext["featuredProjects"] = json.dumps(self.featuredProjects)
+        if self.userAccount:
+            self._pageContext["lastLogout"] = self.userAccount.lastLogout
         return self._pageContext
+
+    @property
+    def featuredProjects(self):
+        if self._featuredProjects is None:
+            self._featuredProjects = []
+            if self.userAccount:
+                recentProjects = models.ProjectPost.objects.filter(createdAt__gte=self.userAccount.lastLogout)
+                if recentProjects:
+                    for project in recentProjects:
+                        self._featuredProjects.append(self._formatPost(project))
+        return self._featuredProjects
 
     @property
     def followedPosts(self):
         if self._followedPosts is None:
             self._followedPosts = []
             if self.userAccount and self.userAccount.followedPosts:
-                browseCategoryMap = {constants.WORK_POST: "jobs",
-                                     constants.CASTING_POST: "roles",
-                                     constants.PROJECT_POST: "projects",
-                                     constants.EVENT_POST: "events"
-                                     }
-                dateFields = ["startDate", "endDate", "startTime", "endTime"]
                 for followedPost in self.userAccount.followedPosts:
-                    postDict = browse._formatSearchPostResult(followedPost,
-                                                              browse.requiredFields[browseCategoryMap[followedPost.postType]],
-                                                              "postID")
-                    postDict["category"] = browseCategoryMap[followedPost.postType];
-                    for fieldName in dateFields:
-                        if postDict.get(fieldName):
-                            postDict[fieldName] = str(postDict[fieldName])
-                    self._followedPosts.append(postDict)
+                    self._followedPosts.append(self._formatPost(followedPost))
         return self._followedPosts
+
+    def _formatPost(self, postObj):
+        postDict = browse._formatSearchPostResult(postObj,
+                                                  browse.requiredFields[self._browseCategoryMap[postObj.postType]],
+                                                  "postID")
+        postDict["category"] = self._browseCategoryMap[postObj.postType];
+        for fieldName in self._postDateFields:
+            if postDict.get(fieldName):
+                postDict[fieldName] = str(postDict[fieldName])
+        return postDict
 
     def loginRequired(self):
         return not self.request.user.is_authenticated() and self.destinationPage in [constants.CREATE_EVENT_POST,

@@ -44,6 +44,7 @@ class UserAccount(models.Model):
     profilePicture = models.ImageField(default=None, upload_to=image_directory_path, storage=imageStorage)
     createdAt = models.DateTimeField(auto_now_add=True)
     updatedAt = models.DateTimeField(auto_now=True)
+    lastLogout = models.DateTimeField(auto_now_add=True)
 
     #reelLink = models.CharField(max_length=500, default='')
     imdbLink = models.CharField(max_length=500, default=None, blank=True, null=True)
