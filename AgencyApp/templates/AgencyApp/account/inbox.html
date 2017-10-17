@@ -171,7 +171,9 @@ function updateUnreadStatus(messageID, newUnreadValue, initialUnread){
     }
 }
 
-function displayConversation(conversationID, showLoadingGif){
+
+var firstConversation = true;
+function displayConversation(conversationID, showLoadingGif, forceResize){
     var conversationPanel = document.getElementById("conversationPanel");
     if(conversationPanel != null){
         if(showLoadingGif){
@@ -186,10 +188,18 @@ function displayConversation(conversationID, showLoadingGif){
                 if(data["success"]){
                     if(data["conversation"] != null){
                         conversationPanel.innerHTML = getConversationString(data["conversation"])
-                        document.getElementById("newMessageTextarea").focus();
+                        var textArea = document.getElementById("newMessageTextarea")
+                        if(textArea != null){
+                            textArea.focus();
+                        }
                         $("#conversationFeed").scrollTop($("#conversationFeed")[0].scrollHeight);
 
                         var otherUser = getOtherConversationUser("{{request.user.username}}", data["conversation"])
+
+                        if(firstConversation){
+                            resizeInboxPanel(true);
+                            firstConversation = false;
+                        }
 
                         $("#newMessageTextarea").on("keydown", function(e){
                             if(e.keyCode === 13 && !e.shiftKey){
@@ -302,16 +312,16 @@ function getSlimInboxFeed(){
 
 var inboxPanelWidthThreshold = 650;
 var inboxPanelExpanded = true
-function resizeInboxPanel(){
+function resizeInboxPanel(force){
     if($(window).width() > inboxPanelWidthThreshold){
-        if(!inboxPanelExpanded){
+        if(!inboxPanelExpanded || force == true){
             document.getElementById("inboxPanel").innerHTML = getWideInboxFeed();
             inboxPanelExpanded = true;
             selectMessageTab("inbox");
             document.getElementById("mainViewPanel").style.width = "90%";
         }
     }else{
-        if(inboxPanelExpanded){
+        if(inboxPanelExpanded || force == true){
             document.getElementById("inboxPanel").innerHTML = getSlimInboxFeed();
             inboxPanelExpanded = false;
             selectMessageTab("inbox");
@@ -334,13 +344,17 @@ function resizeInboxPanel(){
                     inboxPanelExpanded = false;
                     document.write(getSlimInboxFeed());
                 }
-                selectMessageTab("inbox")
-                $(window).resize(function (){
-                    resizeInboxPanel();
-                });
-
             </script>
         </div>
     </div>
 </div>
+
+<script>
+    selectMessageTab("inbox");
+
+    $(window).resize(function (){
+        resizeInboxPanel();
+    });
+
+</script>
 {% endblock %}
