@@ -49,6 +49,7 @@ class HomeView(views.GenericFormView):
                     postDict = browse._formatSearchPostResult(followedPost,
                                                               browse.requiredFields[browseCategoryMap[followedPost.postType]],
                                                               "postID")
+                    postDict["category"] = browseCategoryMap[followedPost.postType];
                     for fieldName in dateFields:
                         if postDict.get(fieldName):
                             postDict[fieldName] = str(postDict[fieldName])
