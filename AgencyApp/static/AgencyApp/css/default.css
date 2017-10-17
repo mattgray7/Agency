@@ -101,7 +101,7 @@
 	{
 		overflow: hidden;
 		margin: 0em auto;
-		/*width: 900px;*/
+		min-width: 900px;
 	}
 
 	#workInterestDiv {
@@ -413,7 +413,7 @@
 
 	.editButton
 	{
-		background: rgba(0,0,0,0.05);
+		background: #e8e8e8;
 		font-size: 0.9em;
 		padding: 1px 5px 1px 5px;
 		border: 1px solid rgba(0,0,0,0.1);

@@ -1,0 +1,29 @@
+.homeFeed
+{
+	background: #FFF;
+	padding: 10px;
+}
+
+.dashboard
+{
+	background: rgba(0,0,0,0.3);
+	border-radius: 3px;
+	padding: 2px;
+}
+
+.dashboard td
+{
+	height: 80px;
+	width: 20%;
+	background: #e8e8e8;
+	border: 1px solid rgba(0,0,0,0.8);
+	border-radius: 3px;
+	cursor: pointer;
+	text-transform: uppercase;
+	font-size: 0.9em;
+}
+
+.dashboard td:hover
+{
+	background: #FFF;
+}

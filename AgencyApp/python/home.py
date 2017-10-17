@@ -24,6 +24,9 @@ class HomeView(views.GenericFormView):
                                                 "home": constants.HOME,
                                                 "createAccount": constants.CREATE_BASIC_ACCOUNT
                                                 }
+        self._pageContext["possibleDestinations"] = {"createProjectPost": constants.CREATE_PROJECT_POST,
+                                                     "createPost": constants.CREATE_POST_CHOICE,
+                                                     "browse": constants.BROWSE}
         return self._pageContext
 
     def loginRequired(self):

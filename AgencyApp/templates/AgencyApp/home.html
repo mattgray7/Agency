@@ -1,15 +1,36 @@
 {% extends "base.html" %}
 
 {% block content %}
-<!--{% if request.user.is_authenticated %}
-	<script>userLoggedIn = true;</script>
-	{% if source == possibleSources.login %}
-		<h3> Welcome back {{ request.user.first_name }}!</h3>
+{% load static %}
+<link href="{% static "/AgencyApp/css/home.css" %}" rel="stylesheet" type="text/css" media="all" />
+
+<script>
+function createHomeFeed(){
+	var feedString = "<div class='homeFeed'>"
+	{% if request.user.is_authenticated %}
+		// Add dashboard
+		feedString += getDashboardString() + "<div style='height: 10px;'></div>"
+	{% else %}
+		feedString += "Please login."
 	{% endif %}
-	<h1>What to do you want to do?</h1>
-{% else %}
-	<h1>Welcome to The Agency! Let's get started, what are you looking for?</h1>
-{% endif %}-->
+	feedString += "</div>"
+	return feedString
+}
+
+function getDashboardString(){
+	var htmlString = "<div class='dashboard'><table style='width: 100%; height: 100%;'><tr>"
+
+	htmlString += "<td onclick='redirect(" + '"{{possibleDestinations.createProjectPost}}");' + "'>Create Project</td>"
+	htmlString += "<td onclick='redirect(" + '"{{possibleDestinations.createPost}}");' + "'>Create Post</td>"
+	htmlString += "<td onclick='redirect(" + '"{{possibleDestinations.browse}}");' + "'>Browse</td>"
+	htmlString += "</tr>"
+
+	htmlString += "</table></div>";
+	return htmlString;
+}
+
+</script>
+
 
 {% if not request.user.is_authenticated %}
 	<div style='position: relative; height: 295px; width: 100%;'>
@@ -19,21 +40,16 @@
 					<h2>Welcome to the VanFilmCollective</h2>
 						<span class="byline">A place for filmmakers, both amateur and professional, to connect and create.</span>
 				</div>
-				<!--<ul class="actions">
-					<li><a href="/browse/" class="button">Browse</a></li>
-				</ul>-->
 			</div>
 		</div>
 	</div>
-
-		<div id="wrapper">
+	<div id="wrapper">
 		<div id="three-column" class="container">
 			<div class="title">
 				<h2>Explore the Vancouver film world.</h2>
 				<span class="byline">Check out film work posts, events in your area, and more.</span>
 			</div>
 			<div class="boxA">
-				<!-- For the user side: someone looking to get a job-->
 				<span class="fa fa-cloud-download"></span>
 				<p>View posts seeking actors, on and off set workers, and collaborators</p>
 				<a href="/browse/" class="button button-alt">View posts</a>
@@ -51,94 +67,15 @@
 		</div>
 	</div>
 {% else %}
-	<div id="mainChoice"></div>
+	<div id='backgroundPanel' class='backgroundPanel' style='min-width: 534px; min-height: 100%;'>
+    	<div id="mainViewPanel" class="mainViewPanel" style="position: relative; width: 90%; min-width: 530px; max-width: 800px; background: rgba(0,0,0,0.05); border: none;">
+    		<div id='homeFeedPanel' style='height: 100%; width: 100%;'>
+    			<script>
+    				document.write(createHomeFeed())
+    			</script>
+			</div>
+		</div>
+	</div>
 {% endif %}
 
-
-<!--<script>
-function getWelcomeMsg(){ 
-	console.log("getting welcome msg")
-	$.ajax({
-		url : "/ajax/getWelcomeMsg/",
-		data : {"foo": "bar"},
-		type : 'POST',
-		dataType: "json",
-		success : function(data) {
-			console.log(data.response);
-		}
-	});
-}
-</script>-->
-
-<script>
-
-var mainChoice = "<button onclick='eventsChosen();' value='Events'>Events</button><br><button onclick='postsChosen();' value='Posts'>Posts</button><br><button onclick='projectsChosen();'> Projects</button><br>";
-
-var createAccountButton = "<button onclick='createAccount()'; value='Create account'>Create account</button>";
-
-var eventChoice = "<button onclick='viewEvents();'> View events in your community</button><br><button onclick='createEventPost();'>Create event</button><br><button onclick='displayMainChoice();'>Back</button>";
-
-var postChoice = "<button onclick='viewPosts();'> View posts</button><br><button onclick='createPost();'>Create post</button><br><button onclick='displayMainChoice();'>Back</button>";
-
-var projectChoice = "<button onclick='viewProjects();'> View current projects</button><br><button onclick='createProject();'>Create project</button><br><button onclick='displayMainChoice();'>Back</button>";
-
-window.onload = displayMainChoice();
-
-function displayMainChoice(){
-	{% if request.user.is_authenticated %}
-		document.getElementById('mainChoice').innerHTML = mainChoice;
-	{% endif %}
-	
-
-}
-
-function eventsChosen(){
-	document.getElementById('mainChoice').innerHTML = eventChoice;
-}
-
-function postsChosen(){
-	document.getElementById('mainChoice').innerHTML = postChoice;
-}
-
-function projectsChosen(){
-	document.getElementById('mainChoice').innerHTML = projectChoice;
-}
-
-function viewEvents(){
-	window.location = '/browse/events/';
-}
-
-function viewPosts(){
-	window.location = '/browse/posts/';
-}
-
-function viewProjects(){
-	window.location = '/browse/projects/';
-}
-
-function createAccount(){
-	var form = createPageRedirectForm("{{ possibleSources.home }}", "{{ possibleSources.home }}", "{{ possibleSources.createAccount }}", "/");
-	form.submit();
-}
-
-function createEventPost(){
-	//cannot call function createEvent, it is builtin
-	var form = createPageRedirectForm("{{ possibleSources.home }}", "{{ possibleSources.home }}", "{{ possibleSources.event }}", "/");
-	form.submit();
-}
-
-function createPost(){
-	var form = createPageRedirectForm("{{ possibleSources.home }}", "{{ possibleSources.home }}", "{{ possibleSources.post }}", "/");
-	form.submit();
-}
-
-function createProject(){
-	var form = createPageRedirectForm("{{ possibleSources.home }}", "{{ possibleSources.home }}", "{{ possibleSources.project }}", "/");
-	form.submit();
-}
-
-
-
-
-</script>
 {% endblock %}
