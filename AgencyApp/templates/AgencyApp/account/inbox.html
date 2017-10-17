@@ -307,13 +307,15 @@ function resizeInboxPanel(){
         if(!inboxPanelExpanded){
             document.getElementById("inboxPanel").innerHTML = getWideInboxFeed();
             inboxPanelExpanded = true;
-            selectMessageTab("inbox")
+            selectMessageTab("inbox");
+            document.getElementById("mainViewPanel").style.width = "90%";
         }
     }else{
         if(inboxPanelExpanded){
             document.getElementById("inboxPanel").innerHTML = getSlimInboxFeed();
             inboxPanelExpanded = false;
-            selectMessageTab("inbox")   
+            selectMessageTab("inbox");
+            document.getElementById("mainViewPanel").style.width = "95%";
         }
     }
 }
@@ -321,8 +323,8 @@ function resizeInboxPanel(){
 </script>
 
 
-<div id='backgroundPanel' class='backgroundPanel' style='min-width: 534px; min-height: 100%;'>
-    <div id="mainViewPanel" class="mainViewPanel" style="position: relative; width: 90%; min-width: 530px; max-width: 1000px; background: rgba(0,0,0,0.05); border: none;">
+<div id='backgroundPanel' class='backgroundPanel' style='min-width: 200px; min-height: 100%;'>
+    <div id="mainViewPanel" class="mainViewPanel" style="position: relative; width: 90%; min-width: 200px; max-width: 1000px; background: rgba(0,0,0,0.05); border: none;">
         <div id='inboxPanel' style='height: 100%; width: 100%; background: #FFF;'>
             <script>
                 if($(window).width() > inboxPanelWidthThreshold){
