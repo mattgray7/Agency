@@ -291,7 +291,8 @@ def _formatSearchPostResult(dbObject, extraFields, uniqueID):
                                 "postID": dbObject.postID,
                                 "postPictureURL": dbObject.postPicture and dbObject.postPicture.url or constants.NO_PICTURE_PATH,
                                 "poster": dbObject.poster,
-                                "description": dbObject.description}
+                                "description": dbObject.description,
+                                "postType": dbObject.postType}
             if dbObject.projectID:
                 try:
                     proj = models.ProjectPost.objects.get(postID=dbObject.projectID)

@@ -73,9 +73,22 @@ class UserAccount(models.Model):
         self._actorDescriptionEnabled = None
         self._conversations = None
         self._notifications = None
+        self._followedPosts = None
 
     def __str__(self):
         return self.username
+
+    @property
+    def followedPosts(self):
+        if self._followedPosts is None:
+            self._followedPosts = []
+            postIDs = [x.postID for x in PostFollow.objects.filter(username=self.username)]
+            if postIDs:
+                for postID in postIDs:
+                    followedPost = post.getPost(postID)
+                    if followedPost:
+                        self._followedPosts.append(followedPost)
+        return self._followedPosts
 
     @property
     def notifications(self):
@@ -455,6 +468,10 @@ class ProjectPost(AbstractPost):
             else:
                 self._year = datetime.datetime.now().year
         return self._year
+
+    @property
+    def postType(self):
+        return constants.PROJECT_POST
 
     @property
     def directors(self):

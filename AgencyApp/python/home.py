@@ -10,14 +10,17 @@ import constants
 import helpers
 import genericViews as views
 import models
+import browse
 
 
 class HomeView(views.GenericFormView):
     def __init__(self, *args, **kwargs):
         super(HomeView, self).__init__(*args, **kwargs)
+        self._followedPosts = None
 
     @property
     def pageContext(self):
+        self._pageContext = super(HomeView, self).pageContext
         self._pageContext["possibleSources"] = {"post": constants.CREATE_POST_CHOICE,
                                                 "project": constants.CREATE_PROJECT_POST,
                                                 "event": constants.CREATE_EVENT_POST,
@@ -26,8 +29,19 @@ class HomeView(views.GenericFormView):
                                                 }
         self._pageContext["possibleDestinations"] = {"createProjectPost": constants.CREATE_PROJECT_POST,
                                                      "createPost": constants.CREATE_POST_CHOICE,
-                                                     "browse": constants.BROWSE}
+                                                     "browse": constants.BROWSE
+                                                     }
+        self._pageContext["followedPosts"] = json.dumps(self.followedPosts)
         return self._pageContext
+
+    @property
+    def followedPosts(self):
+        if self._followedPosts is None:
+            self._followedPosts = []
+            if self.userAccount and self.userAccount.followedPosts:
+                for followedPost in self.userAccount.followedPosts:
+                    self._followedPosts.append(browse._formatSearchPostResult(followedPost, [], "postID"))
+        return self._followedPosts
 
     def loginRequired(self):
         return not self.request.user.is_authenticated() and self.destinationPage in [constants.CREATE_EVENT_POST,

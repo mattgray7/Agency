@@ -3,13 +3,17 @@
 {% block content %}
 {% load static %}
 <link href="{% static "/AgencyApp/css/home.css" %}" rel="stylesheet" type="text/css" media="all" />
+<script type="text/javascript" src="{% static "/AgencyApp/js/browse.js" %}"></script>
 
 <script>
 function createHomeFeed(){
 	var feedString = "<div class='homeFeed'>"
-	{% if request.user.is_authenticated %}
+	{% if request.user.is_authenticated and userAccount %}
 		// Add dashboard
 		feedString += getDashboardString() + "<div style='height: 10px;'></div>"
+
+		// Add followed posts
+		feedString += getFollowedFeedString()
 	{% else %}
 		feedString += "Please login."
 	{% endif %}
@@ -23,10 +27,20 @@ function getDashboardString(){
 	htmlString += "<td onclick='redirect(" + '"{{possibleDestinations.createProjectPost}}");' + "'>Create Project</td>"
 	htmlString += "<td onclick='redirect(" + '"{{possibleDestinations.createPost}}");' + "'>Create Post</td>"
 	htmlString += "<td onclick='redirect(" + '"{{possibleDestinations.browse}}");' + "'>Browse</td>"
-	htmlString += "</tr>"
 
-	htmlString += "</table></div>";
+	htmlString += "</tr></table></div>";
 	return htmlString;
+}
+
+function getFollowedFeedString(){
+	var feedString = "";
+	{% if followedPosts %}
+		var posts = {{followedPosts|safe}}
+		console.log(posts)
+
+
+	{% endif %}
+	return feedString;
 }
 
 </script>
