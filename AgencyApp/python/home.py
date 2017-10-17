@@ -39,8 +39,20 @@ class HomeView(views.GenericFormView):
         if self._followedPosts is None:
             self._followedPosts = []
             if self.userAccount and self.userAccount.followedPosts:
+                browseCategoryMap = {constants.WORK_POST: "jobs",
+                                     constants.CASTING_POST: "roles",
+                                     constants.PROJECT_POST: "projects",
+                                     constants.EVENT_POST: "events"
+                                     }
+                dateFields = ["startDate", "endDate", "startTime", "endTime"]
                 for followedPost in self.userAccount.followedPosts:
-                    self._followedPosts.append(browse._formatSearchPostResult(followedPost, [], "postID"))
+                    postDict = browse._formatSearchPostResult(followedPost,
+                                                              browse.requiredFields[browseCategoryMap[followedPost.postType]],
+                                                              "postID")
+                    for fieldName in dateFields:
+                        if postDict.get(fieldName):
+                            postDict[fieldName] = str(postDict[fieldName])
+                    self._followedPosts.append(postDict)
         return self._followedPosts
 
     def loginRequired(self):

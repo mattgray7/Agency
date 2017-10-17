@@ -368,6 +368,16 @@ def getPostSearchResults(searchValue, maxNumResults, requiredFields, defaultList
     resultInfo["numResults"] = totalNumResults
     return resultInfo
 
+
+
+requiredFields = {"jobs": ["compensationType", "compensationDescription", "startDate",
+                           "endDate", "location", "profession", "hoursPerWeek"],
+                  "roles": ["compensationType", "compensationDescription", "startDate",
+                            "endDate", "location", "characterName", "roleType"],
+                  "users": [],
+                  "projects": ["projectType", "openRoles", "openJobs"],
+                  "events": ["startDate", "endDate", "startTime", "endTime", "description"]
+                  }
 def getJobsSearchResults(searchValue, numResults, filters):
     projectIDs = [x.postID for x in models.ProjectPost.objects.filter(title__contains=searchValue)]
     searchLists = [models.WorkPost.objects.filter(profession__icontains=searchValue),
@@ -401,8 +411,7 @@ def getJobsSearchResults(searchValue, numResults, filters):
     defaultList = searchLists.pop()
     return getPostSearchResults(searchValue=searchValue,
                                 maxNumResults=numResults,
-                                requiredFields=["compensationType", "compensationDescription", "startDate",
-                                                "endDate", "location", "profession", "hoursPerWeek"],
+                                requiredFields=requiredFields["jobs"],
                                 defaultList=defaultList,
                                 searchLists=searchLists
                                 )
@@ -449,8 +458,7 @@ def getRolesSearchResults(searchValue, numResults, filters):
     defaultList = searchLists.pop()
     return getPostSearchResults(searchValue=searchValue,
                                 maxNumResults=numResults,
-                                requiredFields=["compensationType", "compensationDescription", "startDate",
-                                                "endDate", "location", "characterName", "roleType"],
+                                requiredFields=requiredFields["roles"],
                                 defaultList=defaultList,
                                 searchLists=searchLists
                                 )
@@ -485,7 +493,7 @@ def getProjectSearchResults(searchValue, numResults, filters):
 
     return getPostSearchResults(searchValue=searchValue,
                                 maxNumResults=numResults,
-                                requiredFields=["projectType", "openRoles", "openJobs"],
+                                requiredFields=requiredFields["projects"],
                                 defaultList=defaultList,
                                 searchLists=searchLists
                                 )
@@ -516,7 +524,7 @@ def getEventSearchResults(searchValue, numResults, filters):
 
     return getPostSearchResults(searchValue=searchValue,
                                 maxNumResults=numResults,
-                                requiredFields=["startDate", "endDate", "startTime", "endTime", "description"],
+                                requiredFields=requiredFields["events"],
                                 defaultList=defaultList,
                                 searchLists=searchLists
                                 )
