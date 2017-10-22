@@ -53,7 +53,7 @@ function getWideHomeFeed(){
 }
 
 function getSlimHomeFeed(){
-	var feedString = '<div id="mainViewPanel" class="mainViewPanel" style="position: relative; width: 95%; max-width: 940px; background: rgba(0,0,0,0.05); border: none;"><div id="homeFeedPanel" style="height: 100%; width: 100%;"><div class="homeFeed">';
+	var feedString = '<div id="mainViewPanel" class="mainViewPanel" style="position: relative; width: 95%; max-width: 600px; background: rgba(0,0,0,0.05); border: none;"><div id="homeFeedPanel" style="height: 100%; width: 100%;"><div class="homeFeed">';
 	{% if request.user.is_authenticated and userAccount %}
 		// Add dashboard
 		feedString += getDashboardString() + "<div style='height: 10px;'></div>"
