@@ -8,8 +8,52 @@
 <script type="text/javascript" src="{% static "/AgencyApp/js/browse.js" %}"></script>
 
 <script>
-function createHomeFeed(){
-	var feedString = "<div class='homeFeed'>"
+var homePageWidthThreshold = 820;
+var homePageExpanded = true;
+function resizeHomePage(force){
+    if($(window).width() > homePageWidthThreshold){
+        if(!homePageExpanded || force == true){
+            document.getElementById("backgroundPanel").innerHTML = getWideHomeFeed();
+            homePageExpanded = true;
+        }
+    }else{
+        if(homePageExpanded || force == true){
+            document.getElementById("backgroundPanel").innerHTML = getSlimHomeFeed();
+            homePageExpanded = false;
+        }
+    }
+}
+
+function getWideHomeFeed(){
+	var feedString = '<div id="mainViewPanel" class="mainViewPanel" style="position: relative; width: 70%; min-width: 800px; max-width: 940px; background: rgba(0,0,0,0.05); border: none;"><div id="homeFeedPanel" style="height: 100%; width: 100%;"><div class="homeFeed">';
+	{% if request.user.is_authenticated and userAccount %}
+
+		// Add container
+		feedString += '<div id="wrapper"><div id="three-column" class="container" style="min-width: 750px;">'
+
+		// Add title
+		feedString += '<div class="title"><h2>Explore the Vancouver film world.</h2><span class="byline">Check out film work posts, events in your area, and more.</span></div>'
+
+		// Add left panel
+		feedString += '<div class="boxA"><span class="fa fa-cloud-download"></span><p>View posts seeking actors, on and off set workers, and collaborators</p><a href="/browse/" class="button button-alt">View posts</a></div>'
+
+		// Add middle panel
+		feedString += '<div class="boxB"><span class="fa fa-cogs"></span><p>View profiles of registered filmmakers and industry professionals</p><a href="/browse/users/" class="button button-alt">View users</a></div>'
+
+		// Add right panel
+		feedString += '<div class="boxC"><span class="fa fa-wrench"></span><p> Create an account and get involved in the VanFilmCollective</p><a href="/account/create/basic/" class="button button-alt">Create account</a></div>'
+
+		// Close container
+		feedString += '</div></div>';
+	{% else %}
+		feedString += "Please login."
+	{% endif %}
+	feedString += "</div></div></div>"
+	return feedString
+}
+
+function getSlimHomeFeed(){
+	var feedString = '<div id="mainViewPanel" class="mainViewPanel" style="position: relative; width: 95%; max-width: 940px; background: rgba(0,0,0,0.05); border: none;"><div id="homeFeedPanel" style="height: 100%; width: 100%;"><div class="homeFeed">';
 	{% if request.user.is_authenticated and userAccount %}
 		// Add dashboard
 		feedString += getDashboardString() + "<div style='height: 10px;'></div>"
@@ -22,7 +66,7 @@ function createHomeFeed(){
 	{% else %}
 		feedString += "Please login."
 	{% endif %}
-	feedString += "</div>"
+	feedString += "</div></div></div>"
 	return feedString
 }
 
@@ -109,15 +153,22 @@ function getFollowedFeedString(){
 		</div>
 	</div>
 {% else %}
-	<div id='backgroundPanel' class='backgroundPanel' style='min-width: 534px; min-height: 100%;'>
-    	<div id="mainViewPanel" class="mainViewPanel" style="position: relative; width: 90%; min-width: 530px; max-width: 800px; background: rgba(0,0,0,0.05); border: none;">
-    		<div id='homeFeedPanel' style='height: 100%; width: 100%;'>
-    			<script>
-    				document.write(createHomeFeed())
-    			</script>
-			</div>
-		</div>
+	<div id='backgroundPanel' class='backgroundPanel' style='min-height: 100%;'>
+    	<script>
+	        if($(window).width() > homePageWidthThreshold){
+	            homePageExpanded = true;
+	            document.write(getWideHomeFeed());
+	        }else{
+	            homePageExpanded = false;
+	            document.write(getSlimHomeFeed());
+	        }
+	    </script>
 	</div>
+	<script>
+		$(window).resize(function (){
+	        resizeHomePage();
+	    });
+	</script>
 {% endif %}
 
 {% endblock %}

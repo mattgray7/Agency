@@ -101,7 +101,7 @@
 	{
 		overflow: hidden;
 		margin: 0em auto;
-		min-width: 900px;
+		/*min-width: 00px;*/
 	}
 
 	#workInterestDiv {
@@ -677,7 +677,7 @@
 	.boxB,
 	.boxC
 	{
-		width: 288px;
+		width: 240px;
 	}
 
 	.boxA,
