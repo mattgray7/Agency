@@ -11,6 +11,7 @@ import helpers
 import genericViews as views
 import models
 import browse
+import copy
 
 
 class HomeView(views.GenericFormView):
@@ -50,9 +51,15 @@ class HomeView(views.GenericFormView):
         if self._featuredProjects is None:
             self._featuredProjects = []
             if self.userAccount:
-                recentProjects = models.ProjectPost.objects.filter(createdAt__gte=self.userAccount.lastLogout)
-                if recentProjects:
-                    for project in recentProjects:
+                # First get recently created projects
+                projects = models.ProjectPost.objects.filter(createdAt__gte=self.userAccount.lastLogout)
+                if not projects:
+                    currentStatuses = copy.copy(constants.PROJECT_STATUS_LIST)
+                    currentStatuses.remove("Completed")
+                    projects = models.ProjectPost.objects.filter(status__in=currentStatuses)
+
+                if projects:
+                    for project in projects:
                         self._featuredProjects.append(self._formatPost(project))
         return self._featuredProjects
 
