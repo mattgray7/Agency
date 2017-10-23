@@ -20,6 +20,7 @@ class HomeView(views.GenericFormView):
         self._followedPosts = None
         self._featuredProjects = None
         self._featuredPosts = None
+        self._featuredJobs = None
         self._browseCategoryMap = {constants.WORK_POST: "jobs",
                                      constants.CASTING_POST: "roles",
                                      constants.PROJECT_POST: "projects",
@@ -43,9 +44,21 @@ class HomeView(views.GenericFormView):
                                                      }
         self._pageContext["followedPosts"] = json.dumps(self.followedPosts)
         self._pageContext["featuredProjects"] = json.dumps(self.featuredProjects)
+        self._pageContext["featuredJobs"] = json.dumps(self.featuredJobs)
         if self.userAccount:
             self._pageContext["lastLogout"] = self.userAccount.lastLogout
         return self._pageContext
+
+    @property
+    def featuredJobs(self):
+        if self._featuredJobs is None:
+            self._featuredJobs = []
+            if self.userAccount.workInterest:
+                jobs = models.WorkPost.objects.filter(status="Open")
+                if jobs:
+                    for job in jobs:
+                        self._featuredJobs.append(self._formatPost(job))
+        return self._featuredJobs
 
     @property
     def featuredProjects(self):

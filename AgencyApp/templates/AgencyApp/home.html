@@ -38,7 +38,11 @@ function getWideHomeFeed(){
 		feedString += '<div class="boxA"><div class="featuredPanel" style="background: rgba(71, 147, 35, 0.2);">' + getFeaturedProjectPanel(null) + '</div></div>'
 
 		// Add middle panel
-		feedString += '<div class="boxB"><div class="featuredPanel" style="background: rgba(77, 87, 198, 0.2);">New Jobs/Roles</div></div>'
+		feedString += '<div class="boxB"><div class="featuredPanel" style="background: rgba(77, 87, 198, 0.2);">'
+		{% if userAccount and userAccount.workInterest %}
+			feedString += getFeaturedJobPanel(null)
+		{% endif %}
+		feedString += '</div></div>'
 
 		// Add right panel
 		feedString += '<div class="boxC"><div class="featuredPanel" style="background: rgba(186, 50, 97, 0.2)">Events</div></div>'
@@ -72,7 +76,13 @@ function getSlimHomeFeed(){
 
 var browsePanelInfo = {"projects": {"title": "Featured Projects",
 									"directionOnclickFunction": "displayNextProject",
-									"contentFunction": getFeaturedProjectString}}
+									"contentFunction": _getFeaturedProjectString
+								   },
+					   "jobs": {"title": "Jobs for You",
+								"directionOnclickFunction": "displayNextProject",
+								"contentFunction": _getFeaturedJobString
+							   }
+					  }
 function createBrowsePanel(panelType, displayObj){
 	var feedString = "<div style='position: relative; height: 100%; width: 100%; '>";
 	if(displayObj != null && panelType in browsePanelInfo){
@@ -89,6 +99,45 @@ function createBrowsePanel(panelType, displayObj){
 	}
 	feedString += "</div>";
 	return feedString
+}
+
+var featuredJobs;
+function getFeaturedJobPanel(job){
+	if(job == null){
+		{% if featuredJobs %}
+			var jobs = {{featuredJobs|safe}}
+			if(jobs.length > 0){
+				job = jobs[0];
+				featuredJobs = jobs;
+			}
+		{% endif %}
+	}
+	if(job != null){
+		return createBrowsePanel("jobs", job)
+	}
+}
+
+function _getFeaturedJobString(job){
+	var feedString = "";
+	if(job != null){
+		// Add picture
+		feedString += "<div style='height: 50%; padding: 3% 0;'><img src='" + job["postPictureURL"] + "' style='max-height: 100%; max-width: 100%;' /></div>"
+
+		// Add content
+		feedString += "<div style=''>"
+		feedString += "<h2 class='postInfoTitle'><a onclick='redirectToPost(" +'"' + job["postID"] + '");' + "'>" + job["title"] + "</a></h2>"
+		feedString += "<div style='color: rgba(0,0,0,0.5);'>" + job["profession"] + " - " + job["status"] + "</div>"
+		/*feedString += "<ul style=''>"
+		if(project["openRoles"] != null && parseInt(project["openRoles"]) > 0){
+			feedString += "<li>" + project["openRoles"] + " open roles</li>";
+		}
+		if(project["openJobs"] != null && parseInt(project["openJobs"]) > 0){
+			feedString += "<li>" + project["openJobs"] + " open jobs</li>";
+		}
+		feedString += "</ul>"*/
+		feedString += "</div>"
+	}
+	return feedString;
 }
 
 var featuredProjects;
@@ -108,7 +157,7 @@ function getFeaturedProjectPanel(project){
 	}
 }
 
-function getFeaturedProjectString(project){
+function _getFeaturedProjectString(project){
 	var feedString = '';
 	if(project != null){
 		// Add picture
@@ -168,7 +217,7 @@ function displayNextProject(currentProjectID, direction){
 	if(nextProject != null){
 		var projectContainer = document.getElementById("featuredProjectContainer");
 		if(projectContainer != null){
-			projectContainer.innerHTML = getFeaturedProjectString(nextProject);
+			projectContainer.innerHTML = _getFeaturedProjectString(nextProject);
 
 			// Update left and right onclicks to use next project postID as the current
 			document.getElementById("nextProjectButtonLeft").onclick = function(){
