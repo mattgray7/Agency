@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.forms.models import model_to_dict
+from django.db.models.query import QuerySet
 
 # Create your views here.
 from django.http import HttpResponseRedirect
@@ -311,7 +312,9 @@ def _formatSearchPostResult(dbObject, extraFields, uniqueID):
 
         if extraFields:
             for fieldName in extraFields:
-                fieldValue = dbObject.__dict__.get(fieldName) or ""
+                fieldValue = getattr(dbObject, fieldName) or ""
+                if isinstance(fieldValue, QuerySet):
+                    fieldValue = len(fieldValue)
                 formattedResult[fieldName] = fieldValue
     return formattedResult
 
