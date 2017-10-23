@@ -29,19 +29,19 @@ function getWideHomeFeed(){
 	{% if request.user.is_authenticated and userAccount %}
 
 		// Add container
-		feedString += '<div id="wrapper"><div id="three-column" class="container" style="min-width: 750px;">'
+		feedString += '<div id="wrapper"><div id="three-column" class="container" style="width: 740px;">'
 
 		// Add title
 		feedString += '<div class="title"><h2>Explore the Vancouver film world.</h2><span class="byline">Check out film work posts, events in your area, and more.</span></div>'
 
 		// Add left panel
-		feedString += '<div class="boxA"><span class="fa fa-cloud-download"></span><p>View posts seeking actors, on and off set workers, and collaborators</p><a href="/browse/" class="button button-alt">View posts</a></div>'
+		feedString += '<div class="boxA"><div class="featuredPanel" style="background: rgba(71, 147, 35, 0.2);">Featured Project</div></div>'
 
 		// Add middle panel
-		feedString += '<div class="boxB"><span class="fa fa-cogs"></span><p>View profiles of registered filmmakers and industry professionals</p><a href="/browse/users/" class="button button-alt">View users</a></div>'
+		feedString += '<div class="boxB"><div class="featuredPanel" style="background: rgba(77, 87, 198, 0.2);">New Jobs/Roles</div></div>'
 
 		// Add right panel
-		feedString += '<div class="boxC"><span class="fa fa-wrench"></span><p> Create an account and get involved in the VanFilmCollective</p><a href="/account/create/basic/" class="button button-alt">Create account</a></div>'
+		feedString += '<div class="boxC"><div class="featuredPanel" style="background: rgba(186, 50, 97, 0.2)">Events</div></div>'
 
 		// Close container
 		feedString += '</div></div>';
