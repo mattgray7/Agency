@@ -43,11 +43,18 @@ class HomeView(views.GenericFormView):
                                                      "viewPost": constants.VIEW_POST
                                                      }
         self._pageContext["followedPosts"] = json.dumps(self.followedPosts)
-        self._pageContext["featuredProjects"] = json.dumps(self.featuredProjects)
-        self._pageContext["featuredJobs"] = json.dumps(self.featuredJobs)
+        self._pageContext["featuredPosts"] = json.dumps(self.featuredPosts)
         if self.userAccount:
             self._pageContext["lastLogout"] = self.userAccount.lastLogout
         return self._pageContext
+
+    @property
+    def featuredPosts(self):
+        if self._featuredPosts is None:
+            self._featuredPosts = {"projects": self.featuredProjects,
+                                   "jobs": self.featuredJobs
+                                   }
+        return self._featuredPosts
 
     @property
     def featuredJobs(self):

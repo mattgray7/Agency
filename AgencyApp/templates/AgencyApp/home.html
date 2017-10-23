@@ -75,11 +75,9 @@ function getSlimHomeFeed(){
 }
 
 var browsePanelInfo = {"projects": {"title": "Featured Projects",
-									"directionOnclickFunction": "displayNextProject",
 									"contentFunction": _getFeaturedProjectString
 								   },
 					   "jobs": {"title": "Jobs for You",
-								"directionOnclickFunction": "displayNextProject",
 								"contentFunction": _getFeaturedJobString
 							   }
 					  }
@@ -94,26 +92,35 @@ function createBrowsePanel(panelType, displayObj){
 		feedString += "</div>"
 
 		// Add next buttons
-		feedString += "<div style='position: absolute; left: -3px; top: 45%;'><a id='nextProjectButtonLeft' onclick='" + browsePanelInfo[panelType]["directionOnclickFunction"] + '("' + displayObj["postID"] + '", "left");' + "' style='font-weight: 200; font-size: 1.5em; user-select: none;'> < </a></div>"
-		feedString += "<div style='position: absolute; right: -3px; top: 45%;'><a id='nextProjectButtonRight' onclick='" + browsePanelInfo[panelType]["directionOnclickFunction"] + '("' + displayObj["postID"] + '", "right");' + "' style='font-weight: 200; font-size: 1.5em; user-select: none;'> > </a></div>"
+		feedString += "<div style='position: absolute; left: -3px; top: 45%;'><a id='nextProjectButtonLeft' onclick='displayNextPost(" + '"' + panelType + '", "' + displayObj["postID"] + '", "left");' + "' style='font-weight: 200; font-size: 1.5em; user-select: none;'> < </a></div>";
+		feedString += "<div style='position: absolute; right: -3px; top: 45%;'><a id='nextProjectButtonRight' onclick='displayNextPost(" + '"' + panelType + '", "' + displayObj["postID"] + '", "right");' + "' style='font-weight: 200; font-size: 1.5em; user-select: none;'> > </a></div>"
 	}
 	feedString += "</div>";
 	return feedString
 }
 
-var featuredJobs;
 function getFeaturedJobPanel(job){
 	if(job == null){
-		{% if featuredJobs %}
-			var jobs = {{featuredJobs|safe}}
-			if(jobs.length > 0){
-				job = jobs[0];
-				featuredJobs = jobs;
-			}
-		{% endif %}
+		var postList = getPostList("jobs");
+		if(postList != null && postList.length > 0){
+			job = postList[0];
+		}
 	}
 	if(job != null){
 		return createBrowsePanel("jobs", job)
+	}
+}
+
+function getFeaturedProjectPanel(project){
+	if(project == null){
+		var postList = getPostList("projects");
+		if(postList != null && postList.length > 0){
+			project = postList[0];
+		}
+	}
+
+	if(project != null){
+		return createBrowsePanel("projects", project);
 	}
 }
 
@@ -140,23 +147,6 @@ function _getFeaturedJobString(job){
 	return feedString;
 }
 
-var featuredProjects;
-function getFeaturedProjectPanel(project){
-	if(project == null){
-		{% if featuredProjects %}
-			var projects = {{featuredProjects|safe}}
-			if(projects.length > 0){
-				project = projects[0];
-				featuredProjects = projects;
-			}
-		{% endif %}
-	}
-
-	if(project != null){
-		return createBrowsePanel("projects", project);
-	}
-}
-
 function _getFeaturedProjectString(project){
 	var feedString = '';
 	if(project != null){
@@ -180,15 +170,26 @@ function _getFeaturedProjectString(project){
 	return feedString;
 }
 
-function displayNextProject(currentProjectID, direction){
-	if(featuredProjects == null){
-		{% if featuredProjects %}
-			var projects = {{featuredProjects|safe}};
-			if(projects.length > 0){
-				featuredProjects = projects
+var featuredPostLists = {"projects": [], "jobs": []}
+function getPostList(postType){
+	if(featuredPostLists[postType].length === 0){
+		var postList;
+		{% if featuredPosts %}
+			var featuredPosts = {{featuredPosts|safe}};
+			if(postType in featuredPosts){
+				postList = featuredPosts[postType]
 			}
 		{% endif %}
+		if(postList != null){
+			featuredPostLists[postType] = postList;
+		}
 	}
+	return featuredPostLists[postType]
+}
+
+
+function displayNextPost(postType, currentProjectID, direction){
+	var featuredProjects = getPostList(postType)
 
 	// Get the next project in featured project list
 	var nextProject;
@@ -221,10 +222,10 @@ function displayNextProject(currentProjectID, direction){
 
 			// Update left and right onclicks to use next project postID as the current
 			document.getElementById("nextProjectButtonLeft").onclick = function(){
-				displayNextProject(nextProject["postID"], "left");
+				displayNextPost(postType, nextProject["postID"], "left");
 			}
 			document.getElementById("nextProjectButtonRight").onclick = function(){
-				displayNextProject(nextProject["postID"], "right");
+				displayNextPost(postType, nextProject["postID"], "right");
 			}
 		}
 	}
@@ -243,8 +244,8 @@ function getDashboardString(){
 
 function getFeaturedProjectsFeed(){
 	var feedString = "";
-	{% if featuredProjects %}
-		var projects = {{featuredProjects|safe}}
+	{% if featuredPosts.projects %}
+		var projects = {{featuredPosts.projects|safe}}
 		if(projects.length > 0){
 			feedString += "<div class='browseSearchResults' style='background: none; border: 0px;'><div style='position: relative; width: 100%; height: 45px;'><h1 style='position: absolute; top: 0; left: 5px;'>Featured Project (" + projects.length + ")</h1></div>";
 
