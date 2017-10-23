@@ -120,7 +120,7 @@ project1UserAccount.profilePicture.name = "/profile.jpg"
 project1UserAccount.save()"""
 
 
-def createProject(poster, title, description, status, picURL, projectType="Film - Feature", location="Vancouver", union="UBCP", compensation="Paid"):
+def createProject(poster, title, description, status, picURL, projectType="Feature Film", location="Vancouver", union="UBCP", compensation="Paid"):
 	projectID = helpers.createUniqueID(models.ProjectPost, "postID")
 	projectPost = models.ProjectPost(postID=projectID,
 									 projectID=projectID,

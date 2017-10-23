@@ -139,7 +139,7 @@ ACTOR_ATTRIBUTE_DICT = [{"name": "gender",
 ACTOR_DESCRIPTION_PAGE_TYPES = {"castingPost": CASTING_POST,
 								"profile": PROFILE}
 
-PROJECT_TYPE_LIST = ["Film - Feature", "Film - Short", "Television", "Competition", "Commercial", "Promotional", "Student", "Web Series", "Other"]
+PROJECT_TYPE_LIST = ["Feature Flim", "Short Film", "Television", "Competition", "Commercial", "Promotional", "Student", "Web Series", "Other"]
 PROJECT_STATUS_LIST = ["Pre-production", "In production", "Post production", "Screening", "Completed"]
 CASTING_STATUS_LIST = ["Opening soon", "Open", "Cast"]
 WORK_STATUS_LIST = ["Opening soon", "Open", "Filled"]

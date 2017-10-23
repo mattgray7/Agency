@@ -35,7 +35,7 @@ function getWideHomeFeed(){
 		feedString += '<div class="title"><h2>Explore the Vancouver film world.</h2><span class="byline">Check out film work posts, events in your area, and more.</span></div>'
 
 		// Add left panel
-		feedString += '<div class="boxA"><div class="featuredPanel" style="background: rgba(71, 147, 35, 0.2);">Featured Project</div></div>'
+		feedString += '<div class="boxA"><div class="featuredPanel" style="background: rgba(71, 147, 35, 0.2);">' + getFeaturedProjectString(null) + '</div></div>'
 
 		// Add middle panel
 		feedString += '<div class="boxB"><div class="featuredPanel" style="background: rgba(77, 87, 198, 0.2);">New Jobs/Roles</div></div>'
@@ -68,6 +68,40 @@ function getSlimHomeFeed(){
 	{% endif %}
 	feedString += "</div></div></div>"
 	return feedString
+}
+
+function getFeaturedProjectString(project){
+	if(project == null){
+		{% if featuredProjects %}
+			var projects = {{featuredProjects|safe}}
+			if(projects.length > 0){
+				project = projects[0];
+			}
+		{% endif %}
+	}
+
+	var feedString = "<div style='position: relative; height: 100%; width: 100%; '>";
+	if(project != null){
+
+		feedString += "<div style='position: absolute; left: 0; right: 0; margin: 0 auto; top: 0px; color: rgba(0,0,0,0.3);'>Featured Project</div>"
+
+		// Add project container
+		feedString += "<div style='position: absolute; top: 28px; bottom: 30px; left: 10px; right: 10px; background: #f7f7f7; padding: 5px; border: 0.5px solid rgba(0,0,0,0.4); border-radius: 3px;'>"
+
+		// Add picture
+		feedString += "<div style='height: 45%;'><img src='" + project["postPictureURL"] + "' style='max-height: 100%; max-width: 100%;' /></div>"
+
+		// Add content
+		feedString += "<div style=''>"
+		feedString += "<h2 class='postInfoTitle'><a onclick='redirectToPost(" +'"' + project["postID"] + '");' + "'>" + project["title"] + "</a></h2>"
+		feedString += "<div style='color: rgba(0,0,0,0.5);'>" + project["projectType"] + " - " + project["status"] + "</div>"
+		console.log(project)
+		feedString += "</div>"
+
+		feedString += "</div>"
+	}
+	feedString += "</div>";
+	return feedString;
 }
 
 function getDashboardString(){

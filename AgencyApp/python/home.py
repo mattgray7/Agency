@@ -38,7 +38,8 @@ class HomeView(views.GenericFormView):
                                                 }
         self._pageContext["possibleDestinations"] = {"createProjectPost": constants.CREATE_PROJECT_POST,
                                                      "createPost": constants.CREATE_POST_CHOICE,
-                                                     "browse": constants.BROWSE
+                                                     "browse": constants.BROWSE,
+                                                     "viewPost": constants.VIEW_POST
                                                      }
         self._pageContext["followedPosts"] = json.dumps(self.followedPosts)
         self._pageContext["featuredProjects"] = json.dumps(self.featuredProjects)
