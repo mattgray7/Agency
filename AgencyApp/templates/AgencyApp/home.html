@@ -35,7 +35,7 @@ function getWideHomeFeed(){
 		feedString += '<div class="title"><h2>Explore the Vancouver film world.</h2><span class="byline">Check out film work posts, events in your area, and more.</span></div>'
 
 		// Add left panel
-		feedString += '<div class="boxA"><div class="featuredPanel" style="background: rgba(71, 147, 35, 0.2);">' + getFeaturedProjectString(null) + '</div></div>'
+		feedString += '<div class="boxA"><div class="featuredPanel" style="background: rgba(71, 147, 35, 0.2);">' + getFeaturedProjectPanel(null) + '</div></div>'
 
 		// Add middle panel
 		feedString += '<div class="boxB"><div class="featuredPanel" style="background: rgba(77, 87, 198, 0.2);">New Jobs/Roles</div></div>'
@@ -59,7 +59,7 @@ function getSlimHomeFeed(){
 		feedString += getDashboardString() + "<div style='height: 10px;'></div>"
 
 		// Add featured projects
-		feedString += getFeaturedProjectsString() + "<div style='height: 10px;'></div>"
+		feedString += getFeaturedProjectsFeed() + "<div style='height: 10px;'></div>"
 
 		// Add followed posts
 		feedString += getFollowedFeedString()
@@ -70,38 +70,107 @@ function getSlimHomeFeed(){
 	return feedString
 }
 
-function getFeaturedProjectString(project){
+var featuredProjects;
+function getFeaturedProjectPanel(project){
 	if(project == null){
 		{% if featuredProjects %}
 			var projects = {{featuredProjects|safe}}
 			if(projects.length > 0){
 				project = projects[0];
+				featuredProjects = projects;
 			}
 		{% endif %}
 	}
 
 	var feedString = "<div style='position: relative; height: 100%; width: 100%; '>";
 	if(project != null){
-
-		feedString += "<div style='position: absolute; left: 0; right: 0; margin: 0 auto; top: 0px; color: rgba(0,0,0,0.3);'>Featured Project</div>"
+		feedString += "<div style='position: absolute; left: 0; right: 0; margin: 0 auto; top: 0px; color: rgba(0,0,0,0.3);'>Featured Projects</div>"
 
 		// Add project container
-		feedString += "<div style='position: absolute; top: 28px; bottom: 30px; left: 10px; right: 10px; background: #f7f7f7; padding: 5px; border: 0.5px solid rgba(0,0,0,0.4); border-radius: 3px;'>"
+		feedString += "<div id='featuredProjectContainer' style='position: absolute; top: 28px; bottom: 10px; left: 10px; right: 10px; background: #f7f7f7; padding: 5px; border: 0.5px solid rgba(0,0,0,0.4); border-radius: 3px;'>"
+		feedString += getFeaturedProjectString(project);
+		feedString += "</div>"
 
+		// Add next buttons
+		
+		feedString += "<div style='position: absolute; left: -3px; top: 45%;'><a id='nextProjectButtonLeft' onclick='displayNextProject(" + '"' + project["postID"] + '", "left");' + "' style='font-weight: 200; font-size: 1.5em; user-select: none;'> < </a></div>"
+		feedString += "<div style='position: absolute; right: -3px; top: 45%;'><a id='nextProjectButtonRight' onclick='displayNextProject(" + '"' + project["postID"] + '", "right");' + "' style='font-weight: 200; font-size: 1.5em; user-select: none;'> > </a></div>"
+	}
+	feedString += "</div>";
+	return feedString;
+}
+
+function getFeaturedProjectString(project){
+	var feedString = '';
+	if(project != null){
 		// Add picture
-		feedString += "<div style='height: 45%;'><img src='" + project["postPictureURL"] + "' style='max-height: 100%; max-width: 100%;' /></div>"
+		feedString += "<div style='height: 50%; padding: 3% 0;'><img src='" + project["postPictureURL"] + "' style='max-height: 100%; max-width: 100%;' /></div>"
 
 		// Add content
 		feedString += "<div style=''>"
 		feedString += "<h2 class='postInfoTitle'><a onclick='redirectToPost(" +'"' + project["postID"] + '");' + "'>" + project["title"] + "</a></h2>"
 		feedString += "<div style='color: rgba(0,0,0,0.5);'>" + project["projectType"] + " - " + project["status"] + "</div>"
-		console.log(project)
-		feedString += "</div>"
-
+		feedString += "<ul style=''>"
+		if(project["openRoles"] != null && parseInt(project["openRoles"]) > 0){
+			feedString += "<li>" + project["openRoles"] + " open roles</li>";
+		}
+		if(project["openJobs"] != null && parseInt(project["openJobs"]) > 0){
+			feedString += "<li>" + project["openJobs"] + " open jobs</li>";
+		}
+		feedString += "</ul>"
 		feedString += "</div>"
 	}
-	feedString += "</div>";
 	return feedString;
+}
+
+function displayNextProject(currentProjectID, direction){
+	if(featuredProjects == null){
+		{% if featuredProjects %}
+			var projects = {{featuredProjects|safe}};
+			if(projects.length > 0){
+				featuredProjects = projects
+			}
+		{% endif %}
+	}
+
+	// Get the next project in featured project list
+	var nextProject;
+	if(featuredProjects != null && featuredProjects.length > 0){
+		for(var i=0; i < featuredProjects.length; i++){
+			if(featuredProjects[i]["postID"] === currentProjectID){
+				if(direction === "right"){
+					if(i < featuredProjects.length-1){
+						nextProject = featuredProjects[i+1]
+					}else{
+						nextProject = featuredProjects[0];
+					}
+				}else{
+					if(i > 0){
+						nextProject = featuredProjects[i-1];
+					}else{
+						nextProject = featuredProjects[featuredProjects.length-1];
+					}
+				}
+				break;
+			}
+		}
+	}
+	
+	// Update feature project container with next project
+	if(nextProject != null){
+		var projectContainer = document.getElementById("featuredProjectContainer");
+		if(projectContainer != null){
+			projectContainer.innerHTML = getFeaturedProjectString(nextProject);
+
+			// Update left and right onclicks to use next project postID as the current
+			document.getElementById("nextProjectButtonLeft").onclick = function(){
+				displayNextProject(nextProject["postID"], "left");
+			}
+			document.getElementById("nextProjectButtonRight").onclick = function(){
+				displayNextProject(nextProject["postID"], "right");
+			}
+		}
+	}
 }
 
 function getDashboardString(){
@@ -115,7 +184,7 @@ function getDashboardString(){
 	return htmlString;
 }
 
-function getFeaturedProjectsString(){
+function getFeaturedProjectsFeed(){
 	var feedString = "";
 	{% if featuredProjects %}
 		var projects = {{featuredProjects|safe}}
