@@ -70,6 +70,27 @@ function getSlimHomeFeed(){
 	return feedString
 }
 
+var browsePanelInfo = {"projects": {"title": "Featured Projects",
+									"directionOnclickFunction": "displayNextProject",
+									"contentFunction": getFeaturedProjectString}}
+function createBrowsePanel(panelType, displayObj){
+	var feedString = "<div style='position: relative; height: 100%; width: 100%; '>";
+	if(displayObj != null && panelType in browsePanelInfo){
+		feedString += "<div style='position: absolute; left: 0; right: 0; margin: 0 auto; top: 0px; color: rgba(0,0,0,0.3);'>" + browsePanelInfo[panelType]["title"] + "</div>"
+
+		// Add project container
+		feedString += "<div id='featuredProjectContainer' style='position: absolute; top: 28px; bottom: 10px; left: 10px; right: 10px; background: #FFF; padding: 5px; border: 0.5px solid rgba(0,0,0,0.4); border-radius: 3px;'>"
+		feedString += browsePanelInfo[panelType]["contentFunction"](displayObj)
+		feedString += "</div>"
+
+		// Add next buttons
+		feedString += "<div style='position: absolute; left: -3px; top: 45%;'><a id='nextProjectButtonLeft' onclick='" + browsePanelInfo[panelType]["directionOnclickFunction"] + '("' + displayObj["postID"] + '", "left");' + "' style='font-weight: 200; font-size: 1.5em; user-select: none;'> < </a></div>"
+		feedString += "<div style='position: absolute; right: -3px; top: 45%;'><a id='nextProjectButtonRight' onclick='" + browsePanelInfo[panelType]["directionOnclickFunction"] + '("' + displayObj["postID"] + '", "right");' + "' style='font-weight: 200; font-size: 1.5em; user-select: none;'> > </a></div>"
+	}
+	feedString += "</div>";
+	return feedString
+}
+
 var featuredProjects;
 function getFeaturedProjectPanel(project){
 	if(project == null){
@@ -82,22 +103,9 @@ function getFeaturedProjectPanel(project){
 		{% endif %}
 	}
 
-	var feedString = "<div style='position: relative; height: 100%; width: 100%; '>";
 	if(project != null){
-		feedString += "<div style='position: absolute; left: 0; right: 0; margin: 0 auto; top: 0px; color: rgba(0,0,0,0.3);'>Featured Projects</div>"
-
-		// Add project container
-		feedString += "<div id='featuredProjectContainer' style='position: absolute; top: 28px; bottom: 10px; left: 10px; right: 10px; background: #f7f7f7; padding: 5px; border: 0.5px solid rgba(0,0,0,0.4); border-radius: 3px;'>"
-		feedString += getFeaturedProjectString(project);
-		feedString += "</div>"
-
-		// Add next buttons
-		
-		feedString += "<div style='position: absolute; left: -3px; top: 45%;'><a id='nextProjectButtonLeft' onclick='displayNextProject(" + '"' + project["postID"] + '", "left");' + "' style='font-weight: 200; font-size: 1.5em; user-select: none;'> < </a></div>"
-		feedString += "<div style='position: absolute; right: -3px; top: 45%;'><a id='nextProjectButtonRight' onclick='displayNextProject(" + '"' + project["postID"] + '", "right");' + "' style='font-weight: 200; font-size: 1.5em; user-select: none;'> > </a></div>"
+		return createBrowsePanel("projects", project);
 	}
-	feedString += "</div>";
-	return feedString;
 }
 
 function getFeaturedProjectString(project){
