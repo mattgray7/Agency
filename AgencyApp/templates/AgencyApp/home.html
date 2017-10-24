@@ -35,12 +35,12 @@ function getWideHomeFeed(){
 		feedString += '<div class="title"><h2>Explore the Vancouver film world.</h2><span class="byline">Check out film work posts, events in your area, and more.</span></div>'
 
 		// Add left panel
-		feedString += '<div class="boxA"><div class="featuredPanel" style="background: rgba(71, 147, 35, 0.2);">' + getFeaturedProjectPanel(null) + '</div></div>'
+		feedString += '<div class="boxA"><div class="featuredPanel" style="background: rgba(71, 147, 35, 0.2);">' + getFeaturedPanel("projects", null) + '</div></div>'
 
 		// Add middle panel
 		feedString += '<div class="boxB"><div class="featuredPanel" style="background: rgba(77, 87, 198, 0.2);">'
 		{% if userAccount and userAccount.workInterest %}
-			feedString += getFeaturedJobPanel(null)
+			feedString += getFeaturedPanel("jobs", null)
 		{% endif %}
 		feedString += '</div></div>'
 
@@ -75,10 +75,12 @@ function getSlimHomeFeed(){
 }
 
 var browsePanelInfo = {"projects": {"title": "Featured Projects",
-									"contentFunction": _getFeaturedProjectString
+									"contentFunction": _getFeaturedProjectString,
+									"containerID": "featuredProjectContainer"
 								   },
 					   "jobs": {"title": "Jobs for You",
-								"contentFunction": _getFeaturedJobString
+								"contentFunction": _getFeaturedJobString,
+								"containerID": "featuredJobContainer"
 							   }
 					  }
 function createBrowsePanel(panelType, displayObj){
@@ -87,40 +89,45 @@ function createBrowsePanel(panelType, displayObj){
 		feedString += "<div style='position: absolute; left: 0; right: 0; margin: 0 auto; top: 0px; color: rgba(0,0,0,0.3);'>" + browsePanelInfo[panelType]["title"] + "</div>"
 
 		// Add project container
-		feedString += "<div id='featuredProjectContainer' style='position: absolute; top: 28px; bottom: 10px; left: 10px; right: 10px; background: #FFF; padding: 5px; border: 0.5px solid rgba(0,0,0,0.4); border-radius: 3px;'>"
+		var containerID = browsePanelInfo[panelType]["containerID"];
+		feedString += "<div id='" + containerID + "' style='position: absolute; top: 28px; bottom: 10px; left: 10px; right: 10px; background: #FFF; padding: 5px; border: 0.5px solid rgba(0,0,0,0.4); border-radius: 3px;'>"
 		feedString += browsePanelInfo[panelType]["contentFunction"](displayObj)
 		feedString += "</div>"
 
 		// Add next buttons
-		feedString += "<div style='position: absolute; left: -3px; top: 45%;'><a id='nextProjectButtonLeft' onclick='displayNextPost(" + '"' + panelType + '", "' + displayObj["postID"] + '", "left");' + "' style='font-weight: 200; font-size: 1.5em; user-select: none;'> < </a></div>";
-		feedString += "<div style='position: absolute; right: -3px; top: 45%;'><a id='nextProjectButtonRight' onclick='displayNextPost(" + '"' + panelType + '", "' + displayObj["postID"] + '", "right");' + "' style='font-weight: 200; font-size: 1.5em; user-select: none;'> > </a></div>"
+		feedString += "<div style='position: absolute; left: -3px; top: 45%;'><a id='" + containerID + "NextButtonLeft' onclick='displayNextPost(" + '"' + panelType + '", "' + displayObj["postID"] + '", "left");' + "' style='font-weight: 200; font-size: 1.5em; user-select: none;'> < </a></div>";
+		feedString += "<div style='position: absolute; right: -3px; top: 45%;'><a id='" + containerID + "NextButtonRight' onclick='displayNextPost(" + '"' + panelType + '", "' + displayObj["postID"] + '", "right");' + "' style='font-weight: 200; font-size: 1.5em; user-select: none;'> > </a></div>"
 	}
 	feedString += "</div>";
 	return feedString
 }
 
-function getFeaturedJobPanel(job){
-	if(job == null){
-		var postList = getPostList("jobs");
-		if(postList != null && postList.length > 0){
-			job = postList[0];
+var featuredPostLists = {"projects": [], "jobs": []}
+function getFeaturedPostList(postType){
+	if(featuredPostLists[postType].length === 0){
+		var postList;
+		{% if featuredPosts %}
+			var featuredPosts = {{featuredPosts|safe}};
+			if(postType in featuredPosts){
+				postList = featuredPosts[postType]
+			}
+		{% endif %}
+		if(postList != null){
+			featuredPostLists[postType] = postList;
 		}
 	}
-	if(job != null){
-		return createBrowsePanel("jobs", job)
-	}
+	return featuredPostLists[postType]
 }
 
-function getFeaturedProjectPanel(project){
-	if(project == null){
-		var postList = getPostList("projects");
+function getFeaturedPanel(panelType, displayPost){
+	if(displayPost == null){
+		var postList = getFeaturedPostList(panelType);
 		if(postList != null && postList.length > 0){
-			project = postList[0];
+			displayPost = postList[0];
 		}
 	}
-
-	if(project != null){
-		return createBrowsePanel("projects", project);
+	if(displayPost != null){
+		return createBrowsePanel(panelType, displayPost)
 	}
 }
 
@@ -134,14 +141,6 @@ function _getFeaturedJobString(job){
 		feedString += "<div style=''>"
 		feedString += "<h2 class='postInfoTitle'><a onclick='redirectToPost(" +'"' + job["postID"] + '");' + "'>" + job["title"] + "</a></h2>"
 		feedString += "<div style='color: rgba(0,0,0,0.5);'>" + job["profession"] + " - " + job["status"] + "</div>"
-		/*feedString += "<ul style=''>"
-		if(project["openRoles"] != null && parseInt(project["openRoles"]) > 0){
-			feedString += "<li>" + project["openRoles"] + " open roles</li>";
-		}
-		if(project["openJobs"] != null && parseInt(project["openJobs"]) > 0){
-			feedString += "<li>" + project["openJobs"] + " open jobs</li>";
-		}
-		feedString += "</ul>"*/
 		feedString += "</div>"
 	}
 	return feedString;
@@ -170,43 +169,25 @@ function _getFeaturedProjectString(project){
 	return feedString;
 }
 
-var featuredPostLists = {"projects": [], "jobs": []}
-function getPostList(postType){
-	if(featuredPostLists[postType].length === 0){
-		var postList;
-		{% if featuredPosts %}
-			var featuredPosts = {{featuredPosts|safe}};
-			if(postType in featuredPosts){
-				postList = featuredPosts[postType]
-			}
-		{% endif %}
-		if(postList != null){
-			featuredPostLists[postType] = postList;
-		}
-	}
-	return featuredPostLists[postType]
-}
-
-
-function displayNextPost(postType, currentProjectID, direction){
-	var featuredProjects = getPostList(postType)
+function displayNextPost(postType, currentPostID, direction){
+	var featuredPosts = getFeaturedPostList(postType)
 
 	// Get the next project in featured project list
-	var nextProject;
-	if(featuredProjects != null && featuredProjects.length > 0){
-		for(var i=0; i < featuredProjects.length; i++){
-			if(featuredProjects[i]["postID"] === currentProjectID){
+	var nextPost;
+	if(featuredPosts != null && featuredPosts.length > 0){
+		for(var i=0; i < featuredPosts.length; i++){
+			if(featuredPosts[i]["postID"] === currentPostID){
 				if(direction === "right"){
-					if(i < featuredProjects.length-1){
-						nextProject = featuredProjects[i+1]
+					if(i < featuredPosts.length-1){
+						nextPost = featuredPosts[i+1]
 					}else{
-						nextProject = featuredProjects[0];
+						nextPost = featuredPosts[0];
 					}
 				}else{
 					if(i > 0){
-						nextProject = featuredProjects[i-1];
+						nextPost = featuredPosts[i-1];
 					}else{
-						nextProject = featuredProjects[featuredProjects.length-1];
+						nextPost = featuredPosts[featuredPosts.length-1];
 					}
 				}
 				break;
@@ -214,18 +195,18 @@ function displayNextPost(postType, currentProjectID, direction){
 		}
 	}
 	
-	// Update feature project container with next project
-	if(nextProject != null){
-		var projectContainer = document.getElementById("featuredProjectContainer");
-		if(projectContainer != null){
-			projectContainer.innerHTML = _getFeaturedProjectString(nextProject);
+	// Update featured container with next object to display
+	if(nextPost != null){
+		var container = document.getElementById(browsePanelInfo[postType]["containerID"]);
+		if(container != null){
+			container.innerHTML = browsePanelInfo[postType]["contentFunction"](nextPost);
 
 			// Update left and right onclicks to use next project postID as the current
-			document.getElementById("nextProjectButtonLeft").onclick = function(){
-				displayNextPost(postType, nextProject["postID"], "left");
+			document.getElementById(browsePanelInfo[postType]["containerID"] + "NextButtonLeft").onclick = function(){
+				displayNextPost(postType, nextPost["postID"], "left");
 			}
-			document.getElementById("nextProjectButtonRight").onclick = function(){
-				displayNextPost(postType, nextProject["postID"], "right");
+			document.getElementById(browsePanelInfo[postType]["containerID"] + "NextButtonRight").onclick = function(){
+				displayNextPost(postType, nextPost["postID"], "right");
 			}
 		}
 	}
