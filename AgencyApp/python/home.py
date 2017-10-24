@@ -73,7 +73,7 @@ class HomeView(views.GenericFormView):
     def featuredJobs(self):
         if self._featuredJobs is None:
             self._featuredJobs = []
-            if self.userAccount.workInterest:
+            if self.userAccount and self.userAccount.workInterest:
                 jobs = models.WorkPost.objects.filter(status="Open")
                 if jobs:
                     for job in jobs:

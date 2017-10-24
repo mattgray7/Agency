@@ -47,8 +47,14 @@ function getWideHomeFeed(){
 		// Add right panel
 		feedString += '<div class="boxC"><div class="featuredPanel" style="background: rgba(186, 50, 97, 0.2)">' + getFeaturedPanel("events", null) + '</div></div>'
 
-		// Close container
-		feedString += '</div></div>';
+		// Close three-column container
+		feedString += '</div>';
+
+		// Add followed posts
+		feedString += "<div style='margin-top: 50px; margin-left: 4px; margin-right: 4px;'>" + getFollowedFeedString() + "</div>"
+
+		// Close wrapper container
+		feedString += "</div>"
 	{% else %}
 		feedString += "Please login."
 	{% endif %}
@@ -263,7 +269,7 @@ function getFollowedFeedString(){
 	{% if followedPosts %}
 		var posts = {{followedPosts|safe}}
 		if(posts.length > 0){
-			feedString += "<div class='browseSearchResults' style='background: none; border: 0px;'><div style='position: relative; width: 100%; height: 45px;'><h1 style='position: absolute; top: 0; left: 5px;'>Followed Posts (" + posts.length + ")</h1></div>";
+			feedString += "<div class='browseSearchResults' style='background: none; border: 0px;'><div style='position: relative; width: 100%; height: 55px;'><h1 style='position: absolute; top: 0; left: 0; right: 0; margin: 0 auto; rgba(0,0,0,0.8);'>Followed Posts (" + posts.length + ")</h1></div>";
 
 			feedString += "<ul id='followedPostFeed'>";
 		    for(var i=0; i < Math.min(posts.length, 3); i++){
