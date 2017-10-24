@@ -379,7 +379,7 @@ requiredFields = {"jobs": ["compensationType", "compensationDescription", "start
                             "endDate", "location", "characterName", "roleType"],
                   "users": [],
                   "projects": ["projectType", "openRoles", "openJobs"],
-                  "events": ["startDate", "endDate", "startTime", "endTime", "description"]
+                  "events": ["startDate", "endDate", "startTime", "endTime", "description", "dateString"]
                   }
 def getJobsSearchResults(searchValue, numResults, filters):
     projectIDs = [x.postID for x in models.ProjectPost.objects.filter(title__contains=searchValue)]

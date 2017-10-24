@@ -12,15 +12,17 @@ import genericViews as views
 import models
 import browse
 import copy
+import datetime
 
 
 class HomeView(views.GenericFormView):
     def __init__(self, *args, **kwargs):
         super(HomeView, self).__init__(*args, **kwargs)
         self._followedPosts = None
-        self._featuredProjects = None
         self._featuredPosts = None
+        self._featuredProjects = None
         self._featuredJobs = None
+        self._featuredEvents = None
         self._browseCategoryMap = {constants.WORK_POST: "jobs",
                                      constants.CASTING_POST: "roles",
                                      constants.PROJECT_POST: "projects",
@@ -52,9 +54,20 @@ class HomeView(views.GenericFormView):
     def featuredPosts(self):
         if self._featuredPosts is None:
             self._featuredPosts = {"projects": self.featuredProjects,
-                                   "jobs": self.featuredJobs
+                                   "jobs": self.featuredJobs,
+                                   "events": self.featuredEvents,
                                    }
         return self._featuredPosts
+
+    @property
+    def featuredEvents(self):
+        if self._featuredEvents is None:
+            self._featuredEvents = []
+            events = models.EventPost.objects.filter(startDate__gte=datetime.datetime.now())
+            if events:
+                for event in events:
+                    self._featuredEvents.append(self._formatPost(event))
+        return self._featuredEvents
 
     @property
     def featuredJobs(self):
