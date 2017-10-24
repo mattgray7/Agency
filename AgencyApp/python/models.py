@@ -62,6 +62,7 @@ class UserAccount(models.Model):
     height = models.CharField(max_length=100, default=None, blank=True, null=True)
     def __init__(self, *args, **kwargs):
         super(UserAccount, self).__init__(*args, **kwargs)
+        self._interestList = None
         self._actorInterest = None
         self._workInterest = None
         self._hireInterest = None
@@ -209,13 +210,16 @@ class UserAccount(models.Model):
         return helpers.capitalizeName("{0} {1}".format(self.firstName, self.lastName))
 
     @property
+    def interestList(self):
+        if self._interestList is None:
+            self._interestList = Interest.objects.filter(username=self.username)
+        return self._interestList
+
+    @property
     def actorInterest(self):
         if self._actorInterest is None:
-            try:
-                actorInterest = Interest.objects.get(username=self.username, mainInterest="work", subInterest="acting", professionName="Actor")
-            except Interest.DoesNotExist:
-                self._actorInterest = False
-            else:
+            actorInterest = Interest.objects.filter(username=self.username, mainInterest="work", subInterest="acting")
+            if actorInterest:
                 self._actorInterest = True
         return self._actorInterest
 
@@ -366,7 +370,7 @@ class ProfileEndorsement(models.Model):
 class Interest(models.Model):
     username = models.CharField(max_length=100)
     mainInterest = models.CharField(max_length=100) #work/hire/other
-    subInterest = models.CharField(max_length=100) #acting/onset/offset/preprod/creative/postprod or #hiring/hiring_permanent/casting/collaborating
+    subInterest = models.CharField(max_length=100) #acting/onset/offset/preprod/creative/postprod or #hiring/casting/collaborating
     professionName = models.CharField(max_length=100)   # only for work interest
     actingDescriptionEnabled = models.BooleanField(default=False)      #only for acting interests
 

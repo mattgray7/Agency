@@ -82,7 +82,6 @@ class HomeView(views.GenericFormView):
                                                               profession=interest.professionName).order_by("-createdAt")
                         if jobs:
                             for job in jobs:
-                                print job.title
                                 self._featuredJobs.append(self._formatPost(job))
         return self._featuredJobs
 
