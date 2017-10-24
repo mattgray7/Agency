@@ -55,7 +55,7 @@ class HomeView(views.GenericFormView):
         if self._featuredPosts is None:
             self._featuredPosts = {"projects": self.featuredProjects,
                                    "jobs": self.featuredJobs,
-                                   "events": self.featuredEvents,
+                                   "events": self.featuredEvents
                                    }
         return self._featuredPosts
 
@@ -74,10 +74,16 @@ class HomeView(views.GenericFormView):
         if self._featuredJobs is None:
             self._featuredJobs = []
             if self.userAccount and self.userAccount.workInterest:
-                jobs = models.WorkPost.objects.filter(status="Open")
-                if jobs:
-                    for job in jobs:
-                        self._featuredJobs.append(self._formatPost(job))
+                # Get interested professions
+                interests = Interest.objects.filter(username=self.userAccount.username, mainInterest="work")
+                if interests:
+                    for interest in interests:
+                        jobs = models.WorkPost.objects.filter(status__in=["Open", "Opening soon"],
+                                                              profession=interest.professionName).order_by("-createdAt")
+                        if jobs:
+                            for job in jobs:
+                                print job.title
+                                self._featuredJobs.append(self._formatPost(job))
         return self._featuredJobs
 
     @property
