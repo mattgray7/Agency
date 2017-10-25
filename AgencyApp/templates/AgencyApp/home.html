@@ -87,15 +87,15 @@ function getWideHomeFeed(){
 		feedString += '<div class="title"><h2>Explore the Vancouver film world.</h2><span class="byline">Check out film work posts, events in your area, and more.</span></div>'
 
 		// Add left panel
-		feedString += '<div class="boxA"><div class="featuredPanel" style="background: rgba(71, 147, 35, 0.2);">' + getFeaturedPanel("projects", null) + '</div></div>'
+		feedString += '<div class="boxA"><div class="featuredPanel" style="background: rgba(71, 147, 35, 0.2);">' + getFeaturedPanel(panelList[0], null) + '</div></div>'
 
 		// Add middle panel
 		feedString += '<div class="boxB"><div class="featuredPanel" style="background: rgba(77, 87, 198, 0.2);">'
-			feedString += getFeaturedPanel("professionals", null)
+			feedString += getFeaturedPanel(panelList[1], null)
 		feedString += '</div></div>'
 
 		// Add right panel
-		feedString += '<div class="boxC"><div class="featuredPanel" style="background: rgba(186, 50, 97, 0.2)">' + getFeaturedPanel("events", null) + '</div></div>'
+		feedString += '<div class="boxC"><div class="featuredPanel" style="background: rgba(186, 50, 97, 0.2)">' + getFeaturedPanel(panelList[2], null) + '</div></div>'
 
 		// Close three-column container
 		feedString += '</div>';
