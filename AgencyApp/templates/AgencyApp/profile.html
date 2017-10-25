@@ -250,7 +250,7 @@
                                     {% if userAccount.profilePicture and userAccount.profilePicture.url %}
                                         newPic = "{{userAccount.profilePicture.url}}"
                                     {% endif %}
-                                    newEndorsement["poster"]["profilePicture"] = newPic
+                                    newEndorsement["poster"]["profilePictureURL"] = newPic
                                     endorsementList.unshift(newEndorsement)
 
                                     if(displayEndorsementFeed()){
