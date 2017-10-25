@@ -79,7 +79,6 @@ function getWideHomeFeed(){
 		}else if(panelList.length > 3){
 			panelList = panelList.slice(0, 3);
 		}
-		console.log(panelList)
 
 		// Add container
 		feedString += '<div id="wrapper"><div id="three-column" class="container" style="width: 740px;">'
@@ -92,9 +91,7 @@ function getWideHomeFeed(){
 
 		// Add middle panel
 		feedString += '<div class="boxB"><div class="featuredPanel" style="background: rgba(77, 87, 198, 0.2);">'
-		{% if userAccount and userAccount.workInterest %}
-			feedString += getFeaturedPanel("jobs", null)
-		{% endif %}
+			feedString += getFeaturedPanel("roles", null)
 		feedString += '</div></div>'
 
 		// Add right panel
@@ -133,6 +130,8 @@ function getSlimHomeFeed(){
 	return feedString
 }
 
+var featuredPostLists = {"projects": [], "jobs": [], "events": [], "roles": []}
+
 var browsePanelInfo = {"projects": {"title": "Featured Projects",
 									"contentFunction": _getFeaturedProjectString,
 									"containerID": "featuredProjectContainer"
@@ -143,7 +142,12 @@ var browsePanelInfo = {"projects": {"title": "Featured Projects",
 							   },
 					   "events": {"title": "Upcoming Events",
 								  "contentFunction": _getFeaturedEventString,
-								  "containerID": "featuredEventContainer"}
+								  "containerID": "featuredEventContainer"
+								},
+					   "roles": {"title": "Open Roles",
+								 "contentFunction": _getFeaturedRoleString,
+								 "containerID": "featuredRoleContainer"
+								}
 					  }
 function createBrowsePanel(panelType, displayObj){
 	var feedString = "<div style='position: relative; height: 100%; width: 100%; '>";
@@ -164,7 +168,6 @@ function createBrowsePanel(panelType, displayObj){
 	return feedString
 }
 
-var featuredPostLists = {"projects": [], "jobs": [], "events": []}
 function getFeaturedPostList(postType){
 	if(featuredPostLists[postType].length === 0){
 		var postList;
@@ -191,6 +194,21 @@ function getFeaturedPanel(panelType, displayPost){
 	if(displayPost != null){
 		return createBrowsePanel(panelType, displayPost)
 	}
+}
+
+function _getFeaturedRoleString(role){
+	var feedString = "";
+	if(role != null){
+		// Add picture
+		feedString += "<div style='height: 50%; padding: 3% 0;'><img src='" + role["postPictureURL"] + "' style='max-height: 100%; max-width: 100%;' /></div>"
+
+		// Add content
+		feedString += "<div style=''>"
+		feedString += "<h2 class='postInfoTitle'><a onclick='redirectToPost(" +'"' + role["postID"] + '");' + "'>" + role["characterName"] + "</a></h2>"
+		feedString += "<div style='color: rgba(0,0,0,0.5);'>" + role["projectName"] + " - " + role["status"] + "</div>"
+		feedString += "</div>"
+	}
+	return feedString;
 }
 
 function _getFeaturedEventString(event){

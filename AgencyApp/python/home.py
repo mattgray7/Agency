@@ -19,10 +19,13 @@ class HomeView(views.GenericFormView):
     def __init__(self, *args, **kwargs):
         super(HomeView, self).__init__(*args, **kwargs)
         self._followedPosts = None
+
         self._featuredPosts = None
         self._featuredProjects = None
         self._featuredJobs = None
         self._featuredEvents = None
+        self._featuredRoles = None
+
         self._browseCategoryMap = {constants.WORK_POST: "jobs",
                                      constants.CASTING_POST: "roles",
                                      constants.PROJECT_POST: "projects",
@@ -55,9 +58,20 @@ class HomeView(views.GenericFormView):
         if self._featuredPosts is None:
             self._featuredPosts = {"projects": self.featuredProjects,
                                    "jobs": self.featuredJobs,
-                                   "events": self.featuredEvents
+                                   "events": self.featuredEvents,
+                                   "roles": self.featuredRoles,
                                    }
         return self._featuredPosts
+
+    @property
+    def featuredRoles(self):
+        if self._featuredRoles is None:
+            self._featuredRoles = []
+            roles = models.CastingPost.objects.filter(status__in=["Open", "Opening soon"]).order_by("-createdAt")
+            if roles:
+                for role in roles:
+                    self._featuredRoles.append(self._formatPost(role))
+        return self._featuredRoles
 
     @property
     def featuredEvents(self):
