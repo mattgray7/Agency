@@ -23,8 +23,10 @@ class HomeView(views.GenericFormView):
         self._featuredPosts = None
         self._featuredProjects = None
         self._featuredJobs = None
-        self._featuredEvents = None
         self._featuredRoles = None
+        self._featuredActors = None
+        self._featuredProfessionals = None
+        self._featuredEvents = None
 
         self._browseCategoryMap = {constants.WORK_POST: "jobs",
                                      constants.CASTING_POST: "roles",
@@ -58,10 +60,28 @@ class HomeView(views.GenericFormView):
         if self._featuredPosts is None:
             self._featuredPosts = {"projects": self.featuredProjects,
                                    "jobs": self.featuredJobs,
-                                   "events": self.featuredEvents,
                                    "roles": self.featuredRoles,
+                                   "actors": self.featuredActors,
+                                   "professionals": self.featuredProfessionals,
+                                   "events": self.featuredEvents,
                                    }
         return self._featuredPosts
+
+    @property
+    def featuredActors(self):
+        if self._featuredActors is None:
+            self._featuredActors = []
+            actors = [x.username for x in models.Interest.objects.filter(mainInterest="work", professionName="Actor")]
+            if actors:
+                actorObjects = models.UserAccount.objects.filter(username__in=actors)
+                if actorObjects:
+                    for actorObj in actorObjects:
+                        self._featuredActors.append(self._formatUser(actorObj))
+        return self._featuredActors
+
+    @property
+    def featuredProfessionals(self):
+        return None
 
     @property
     def featuredRoles(self):
@@ -124,6 +144,10 @@ class HomeView(views.GenericFormView):
                 for followedPost in self.userAccount.followedPosts:
                     self._followedPosts.append(self._formatPost(followedPost))
         return self._followedPosts
+
+    def _formatUser(self, user):
+        userDict = browse._formatSearchPostResult(user, [], "username")
+        return userDict
 
     def _formatPost(self, postObj):
         postDict = browse._formatSearchPostResult(postObj,

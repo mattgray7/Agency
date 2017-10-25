@@ -91,7 +91,7 @@ function getWideHomeFeed(){
 
 		// Add middle panel
 		feedString += '<div class="boxB"><div class="featuredPanel" style="background: rgba(77, 87, 198, 0.2);">'
-			feedString += getFeaturedPanel("roles", null)
+			feedString += getFeaturedPanel("actors", null)
 		feedString += '</div></div>'
 
 		// Add right panel
@@ -130,7 +130,7 @@ function getSlimHomeFeed(){
 	return feedString
 }
 
-var featuredPostLists = {"projects": [], "jobs": [], "events": [], "roles": []}
+var featuredPostLists = {"projects": [], "jobs": [], "events": [], "roles": [], "actors": []}
 
 var browsePanelInfo = {"projects": {"title": "Featured Projects",
 									"contentFunction": _getFeaturedProjectString,
@@ -147,7 +147,11 @@ var browsePanelInfo = {"projects": {"title": "Featured Projects",
 					   "roles": {"title": "Open Roles",
 								 "contentFunction": _getFeaturedRoleString,
 								 "containerID": "featuredRoleContainer"
-								}
+								},
+					   "actors": {"title": "Featured Actors",
+								  "contentFunction": _getFeaturedActorString,
+								  "containerID": "featuredActorContainer"
+								},
 					  }
 function createBrowsePanel(panelType, displayObj){
 	var feedString = "<div style='position: relative; height: 100%; width: 100%; '>";
@@ -259,6 +263,21 @@ function _getFeaturedProjectString(project){
 			feedString += "<li>" + project["openJobs"] + " open jobs</li>";
 		}
 		feedString += "</ul>"
+		feedString += "</div>"
+	}
+	return feedString;
+}
+
+function _getFeaturedActorString(actor){
+	var feedString = "";
+	if(actor != null){
+		// Add picture
+		feedString += "<div style='height: 50%; padding: 3% 0;'><img src='" + actor["postPictureURL"] + "' style='max-height: 100%; max-width: 100%;' /></div>"
+
+		// Add content
+		feedString += "<div style=''>"
+		feedString += "<h2 class='postInfoTitle'><a onclick='redirectToUser(" +'"' + actor["username"] + '");' + "'>" + actor["cleanName"] + "</a></h2>"
+		feedString += "<div style='color: rgba(0,0,0,0.5);'>" + actor["profession"] + "</div>"
 		feedString += "</div>"
 	}
 	return feedString;
