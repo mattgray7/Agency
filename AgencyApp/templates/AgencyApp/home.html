@@ -91,7 +91,7 @@ function getWideHomeFeed(){
 
 		// Add middle panel
 		feedString += '<div class="boxB"><div class="featuredPanel" style="background: rgba(77, 87, 198, 0.2);">'
-			feedString += getFeaturedPanel("actors", null)
+			feedString += getFeaturedPanel("professionals", null)
 		feedString += '</div></div>'
 
 		// Add right panel
@@ -130,7 +130,7 @@ function getSlimHomeFeed(){
 	return feedString
 }
 
-var featuredPostLists = {"projects": [], "jobs": [], "events": [], "roles": [], "actors": []}
+var featuredPostLists = {"projects": [], "jobs": [], "events": [], "roles": [], "actors": [], "professionals": []}
 
 var browsePanelInfo = {"projects": {"title": "Featured Projects",
 									"contentFunction": _getFeaturedProjectString,

@@ -73,15 +73,42 @@ class HomeView(views.GenericFormView):
             self._featuredActors = []
             actors = [x.username for x in models.Interest.objects.filter(mainInterest="work", professionName="Actor")]
             if actors:
-                actorObjects = models.UserAccount.objects.filter(username__in=actors)
-                if actorObjects:
-                    for actorObj in actorObjects:
-                        self._featuredActors.append(self._formatUser(actorObj))
+                self._featuredActors = self._featuredActors + self._getUserObjectList(actors)
         return self._featuredActors
 
     @property
     def featuredProfessionals(self):
-        return None
+        if self._featuredProfessionals is None:
+            self._featuredProfessionals = []
+
+            # First check if user is hiring and for what positions
+            hiringProfessions = []
+            if self.userAccount and self.userAccount.adminPosts:
+                for adminPost in self.userAccount.adminPosts:
+                    if adminPost.postType == constants.WORK_POST:
+                        if adminPost.status in ["Open", "Opening soon"]:
+                            if adminPost.profession not in hiringProfessions:
+                                hiringProfessions.append(adminPost.profession)
+
+            if hiringProfessions:
+                for profession in hiringProfessions:
+                    interestUsers = [x.username for x in models.Interest.objects.filter(mainInterest="work", professionName=profession)]
+                    if interestUsers:
+                        self._featuredProfessionals = self._featuredProfessionals + self._getUserObjectList(interestUsers)
+            if not self._featuredProfessionals:
+                # Get all people looking for work
+                workInterestUsers = [x.username for x in models.Interest.objects.filter(mainInterest="work")]
+                if workInterestUsers:
+                    self._featuredProfessionals = self._featuredProfessionals + self._getUserObjectList(workInterestUsers)
+        return self._featuredProfessionals
+
+    def _getUserObjectList(self, usernameList):
+        userList = []
+        userObjects = models.UserAccount.objects.filter(username__in=usernameList).order_by("-createdAt")
+        if userObjects:
+            for userObj in userObjects:
+                userList.append(self._formatUser(userObj))
+        return userList
 
     @property
     def featuredRoles(self):
