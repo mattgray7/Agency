@@ -152,8 +152,12 @@ var browsePanelInfo = {"projects": {"title": "Featured Projects",
 								  "contentFunction": _getFeaturedActorString,
 								  "containerID": "featuredActorContainer"
 								},
+					   "professionals": {"title": "Featured Professionals",
+										 "contentFunction": _getFeaturedActorString,
+										 "containerID": "featuredProfessionalContainer"
+										},
 					  }
-function createBrowsePanel(panelType, displayObj){
+function createBrowsePanel(panelType, displayObj, uniqueID){
 	var feedString = "<div style='position: relative; height: 100%; width: 100%; '>";
 	if(displayObj != null && panelType in browsePanelInfo){
 		feedString += "<div style='position: absolute; left: 0; right: 0; margin: 0 auto; top: 0px; color: rgba(0,0,0,0.3);'>" + browsePanelInfo[panelType]["title"] + "</div>"
@@ -165,8 +169,8 @@ function createBrowsePanel(panelType, displayObj){
 		feedString += "</div>"
 
 		// Add next buttons
-		feedString += "<div style='position: absolute; left: -3px; top: 45%;'><a id='" + containerID + "NextButtonLeft' onclick='displayNextPost(" + '"' + panelType + '", "' + displayObj["postID"] + '", "left");' + "' style='font-weight: 200; font-size: 1.5em; user-select: none;'> < </a></div>";
-		feedString += "<div style='position: absolute; right: -3px; top: 45%;'><a id='" + containerID + "NextButtonRight' onclick='displayNextPost(" + '"' + panelType + '", "' + displayObj["postID"] + '", "right");' + "' style='font-weight: 200; font-size: 1.5em; user-select: none;'> > </a></div>"
+		feedString += "<div style='position: absolute; left: -3px; top: 45%;'><a id='" + containerID + "NextButtonLeft' onclick='displayNextPost(" + '"' + panelType + '", "' + displayObj[uniqueID] + '", "left", "' + uniqueID + '");' + "' style='font-weight: 200; font-size: 1.5em; user-select: none;'> < </a></div>";
+		feedString += "<div style='position: absolute; right: -3px; top: 45%;'><a id='" + containerID + "NextButtonRight' onclick='displayNextPost(" + '"' + panelType + '", "' + displayObj[uniqueID] + '", "right", "' + uniqueID + '");' + "' style='font-weight: 200; font-size: 1.5em; user-select: none;'> > </a></div>"
 	}
 	feedString += "</div>";
 	return feedString
@@ -195,8 +199,14 @@ function getFeaturedPanel(panelType, displayPost){
 			displayPost = postList[0];
 		}
 	}
+
+	var uniqueID = "postID";
+	if(["professionals", "actors"].indexOf(panelType) > -1){
+		uniqueID = "username";
+	}
+
 	if(displayPost != null){
-		return createBrowsePanel(panelType, displayPost)
+		return createBrowsePanel(panelType, displayPost, uniqueID)
 	}
 }
 
@@ -283,14 +293,14 @@ function _getFeaturedActorString(actor){
 	return feedString;
 }
 
-function displayNextPost(postType, currentPostID, direction){
+function displayNextPost(postType, currentPostID, direction, uniqueID){
 	var featuredPosts = getFeaturedPostList(postType)
 
 	// Get the next project in featured project list
 	var nextPost;
 	if(featuredPosts != null && featuredPosts.length > 0){
 		for(var i=0; i < featuredPosts.length; i++){
-			if(featuredPosts[i]["postID"] === currentPostID){
+			if(featuredPosts[i][uniqueID] === currentPostID){
 				if(direction === "right"){
 					if(i < featuredPosts.length-1){
 						nextPost = featuredPosts[i+1]
@@ -317,10 +327,10 @@ function displayNextPost(postType, currentPostID, direction){
 
 			// Update left and right onclicks to use next project postID as the current
 			document.getElementById(browsePanelInfo[postType]["containerID"] + "NextButtonLeft").onclick = function(){
-				displayNextPost(postType, nextPost["postID"], "left");
+				displayNextPost(postType, nextPost[uniqueID], "left", uniqueID);
 			}
 			document.getElementById(browsePanelInfo[postType]["containerID"] + "NextButtonRight").onclick = function(){
-				displayNextPost(postType, nextPost["postID"], "right");
+				displayNextPost(postType, nextPost[uniqueID], "right", uniqueID);
 			}
 		}
 	}
