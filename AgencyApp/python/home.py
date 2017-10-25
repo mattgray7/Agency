@@ -144,6 +144,17 @@ class HomeView(views.GenericFormView):
                         if jobs:
                             for job in jobs:
                                 self._featuredJobs.append(self._formatPost(job))
+                        else:
+                            relatedProfessions = []
+                            for field, professionList in constants.PROFESSIONS.iteritems():
+                                if interest.professionName in professionList:
+                                    relatedProfessions = professionList
+                            if relatedProfessions:
+                                jobs = models.WorkPost.objects.filter(status__in=["Open", "Opening soon"],
+                                                                      profession__in=relatedProfessions).order_by("createdAt")
+                                if jobs:
+                                    for job in jobs:
+                                        self._featuredJobs.append(self._formatPost(job))
         return self._featuredJobs
 
     @property
