@@ -76,9 +76,21 @@ class UserAccount(models.Model):
         self._conversations = None
         self._notifications = None
         self._followedPosts = None
+        self._adminPosts = None
 
     def __str__(self):
         return self.username
+
+    @property
+    def adminPosts(self):
+        if self._adminPosts is None:
+            self._adminPosts = []
+            postIDs = [x.postID for x in PostAdmin.objects.filter(username=self.username)]
+            for postID in postIDs:
+                adminPost = post.getPost(postID)
+                if adminPost:
+                    self._adminPosts.append(adminPost)
+        return self._adminPosts
 
     @property
     def followedPosts(self):
