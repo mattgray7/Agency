@@ -24,61 +24,65 @@ function resizeHomePage(force){
     }
 }
 
-function getWideHomeFeed(){
-	var feedString = '<div id="mainViewPanel" class="mainViewPanel" style="position: relative; width: 70%; min-width: 800px; max-width: 940px; background: rgba(0,0,0,0.05); border: none;"><div id="homeFeedPanel" style="height: 100%; width: 100%;"><div class="homeFeed">';
-	{% if request.user.is_authenticated and userAccount %}
-
-		// Determine which panels to include
-		var panels = {"projects": false,
+function getFeaturedPanelTypeList(){
+	var panels = {"projects": false,
 					  "jobs": false,
 					  "roles": false,
 					  "actors": false,
 					  "professionals": false,
 					  "events": false}
 
-		{% for interest in userAccount.interestList %}
-			{% if userAccount.workInterest %}
-				if("{{interest.mainInterest}}" === "work"){
-					if("{{interest.subInterest}}" === "acting"){
-						panels["roles"] = true;
-					}else{
-						panels["jobs"] = true;
-					}
+	{% for interest in userAccount.interestList %}
+		{% if userAccount.workInterest %}
+			if("{{interest.mainInterest}}" === "work"){
+				if("{{interest.subInterest}}" === "acting"){
+					panels["roles"] = true;
+				}else{
+					panels["jobs"] = true;
 				}
-			{% endif %}
-
-			{% if userAccount.hireInterest %}
-				if("{{interest.mainInterest}}" === "hire"){
-					if("{{interest.subInterest}}" === "hiring"){
-						panels["professionals"] = true;
-					}else if("{{interest.subInterest}}" === "casting"){
-						panels["actors"] = true;
-					}
+			}
+		{% endif %}
+		{% if userAccount.hireInterest %}
+			if("{{interest.mainInterest}}" === "hire"){
+				if("{{interest.subInterest}}" === "hiring"){
+					panels["professionals"] = true;
+				}else if("{{interest.subInterest}}" === "casting"){
+					panels["actors"] = true;
 				}
-			{% endif %}
-		{% endfor %}
-
-		var panelList = []
-		for(panelType in panels){
-			if(panels[panelType] == true){
-				panelList.push(panelType)
 			}
-		}
+		{% endif %}
+	{% endfor %}
 
-		if(panelList.length < 3){
-			if(panelList.length === 0){
-				panelList.push("projects")
-				panelList.push("events")
-				panelList.push("jobs")
-			}else if(panelList.length === 1){
-				panelList.push("projects")
-				panelList.push("events")
-			}else if(panelList.length === 2){
-				panelList.push("projects")
-			}
-		}else if(panelList.length > 3){
-			panelList = panelList.slice(0, 3);
+	var panelList = []
+	for(panelType in panels){
+		if(panels[panelType] == true){
+			panelList.push(panelType)
 		}
+	}
+
+	if(panelList.length < 3){
+		if(panelList.length === 0){
+			panelList.push("projects")
+			panelList.push("events")
+			panelList.push("jobs")
+		}else if(panelList.length === 1){
+			panelList.push("projects")
+			panelList.push("events")
+		}else if(panelList.length === 2){
+			panelList.push("projects")
+		}
+	}else if(panelList.length > 3){
+		panelList = panelList.slice(0, 3);
+	}
+	return panelList;
+}
+
+function getWideHomeFeed(){
+	var feedString = '<div id="mainViewPanel" class="mainViewPanel" style="position: relative; width: 70%; min-width: 800px; max-width: 940px; background: rgba(0,0,0,0.05); border: none;"><div id="homeFeedPanel" style="height: 100%; width: 100%;"><div class="homeFeed">';
+	{% if request.user.is_authenticated and userAccount %}
+
+		// Determine which panels to include
+		var panelList = getFeaturedPanelTypeList();
 
 		// Add container
 		feedString += '<div id="wrapper"><div id="three-column" class="container" style="width: 740px;">'
@@ -115,11 +119,16 @@ function getWideHomeFeed(){
 function getSlimHomeFeed(){
 	var feedString = '<div id="mainViewPanel" class="mainViewPanel" style="position: relative; width: 95%; max-width: 600px; background: rgba(0,0,0,0.05); border: none;"><div id="homeFeedPanel" style="height: 100%; width: 100%;"><div class="homeFeed">';
 	{% if request.user.is_authenticated and userAccount %}
+
+		var panelList = getFeaturedPanelTypeList();
+		for(var i=0; i < panelList.length; i++){
+			feedString += '<div class="featuredPanel" style="background: rgba(77, 87, 198, 0.2); margin: 20px 0px;">' + getFeaturedPanel(panelList[i], null) + '</div>'
+		}
 		// Add dashboard
-		feedString += getDashboardString() + "<div style='height: 10px;'></div>"
+		//feedString += getDashboardString() + "<div style='height: 10px;'></div>"
 
 		// Add featured projects
-		feedString += getFeaturedProjectsFeed() + "<div style='height: 10px;'></div>"
+		//feedString += getFeaturedProjectsFeed() + "<div style='height: 10px;'></div>"
 
 		// Add followed posts
 		feedString += getFollowedFeedString()
