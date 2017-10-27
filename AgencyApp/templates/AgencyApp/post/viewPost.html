@@ -123,29 +123,26 @@
 
         //postString += "<div align='right' style='width: 268px;'>" + getPostPicturePanel("div", "postPicturePanel", pictureURL, null, "postPictureImg", false, null, null, null, "right") + "</div>";
 
-        postString += "<img src='" + pictureURL + "' style='height: 300px; width: 270px; margin-right: -10px; margin-top: 0px;' align='right' hspace='20' vspace='20'>"
+        // Add image panel
+        postString += "<div style='margin: 10px -10px 5px 20px; float: right; z-index: 10; position: relative;' align='right' hspace='20' vspace='20'><img src='" + pictureURL + "' style='height: 300px; width: 270px; border: 1px solid rgba(0,0,0,0.2);'>"
+
+        // Add buttons under image panel
+        {% if userIsAdmin %}
+            postString += "<div class='editButton' onclick='redirectToEditPost(" + '"{{post.postID}}"' + ");' style='height: 25px; padding-top: 5px; text-align: center;'>Edit Post</div>";
+        {% elif user.is_authenticated %}
+            postString += "<div class='editButton' onclick='updatePostFollow();' style='height: 25px; padding-top: 5px; text-align: center;'><div id='followButtonText'>"
+            {% if following %}
+                postString += 'Following &#10004;'
+            {% else %}
+                postString += 'Follow'
+            {% endif %}
+            postString += "</div></div>"
+        {% endif %}
+        postString += "</div>"
 
         // Add title
         {% if viewPostData %}
             postString += '<h1 class="postInfoTitle"><a onclick="' + "redirectToPost('{{post.postID}}');" + '"> {{ viewPostData.title }}</a></h1>';
-
-            // Add top right button
-            {% if userIsAdmin or user.is_authenticated %}
-                postString += '<div style="position: relative;"><div class="whiteButton blackHover" style="position: absolute; right: 0; top: -35px; padding: 0.25em 0.5em 0.25em 0.5em; font-weight: 400; font-size: 1em;" ';
-                {% if userIsAdmin %}
-                    postString += 'onclick="redirectToEditPost(' + "'{{post.postID}}'" + ');">Edit</div>';
-                {% elif user.is_authenticated %}
-                    postString += 'onclick="updatePostFollow();"><div id="followButtonText">';
-                    {% if following %}
-                        postString += 'Following &#10004;'
-                    {% else %}
-                        postString += 'Follow'
-                    {% endif %}
-                    postString += "</div></div>";
-                {% endif %}
-                postString += "</div>"
-            {% endif %}
-
             {% if viewPostData.subTitles %}
                 {% for subTitle in viewPostData.subTitles %}
                     postString += '<div class="postInfoSubTitle">{{subTitle}}</div>';
@@ -177,7 +174,7 @@
     function getViewPostBody(){
         var postString = '';
         {% if viewPostData and viewPostData.fields and viewPostData.fields.body %}
-            postString += "<div style='position: relative; min-height: 100px;'><div style='text-align: left; margin-left: 1px; margin-right: 20px; margin-bottom: 20px;'>"
+            postString += "<div style='position: relative; min-height: 100px;'><div style='text-align: left; margin-left: 1px; margin-right: 20px; margin-bottom: 20px; z-index: 0; position: relative;'>"
             postString += "<div style='margin-left: 20px; text-align: left;'>";
             // Add description right under photo
             {% if viewPostData.fields.body.Description %}
