@@ -656,32 +656,37 @@ def sendNewMessage(request):
             except models.UserAccount.DoesNotExist:
                 pass
             else:
-                if content:
-                    # Message is valid, check if there is a conversation already started between 2 users
-                    conversations1 = models.Conversation.objects.filter(user1=sender, user2=recipient)
-                    conversations2 = models.Conversation.objects.filter(user1=recipient, user2=sender)
-                    if conversations1 or conversations2:
-                        if conversations1 and len(conversations1) == 1:
-                            conversationID = conversations1[0].conversationID
-                        elif conversations2 and len(conversations2) == 1:
-                            conversationID = conversations2[0].conversationID
-                    if not conversationID:
-                        conversationID = helpers.createUniqueID(destDatabase=models.Conversation,
-                                                                idKey="conversationID")
-                        conversation = models.Conversation(conversationID=conversationID, user1=sender, user2=recipient)
-                        conversation.save()
-
-                    if conversationID:
-                        messageID = helpers.createUniqueID(destDatabase=models.Message,
-                                                           idKey="messageID")
-                        message = models.Message(messageID=messageID,
-                                                 conversationID=conversationID,
-                                                 sender=sender,
-                                                 recipient=recipient,
-                                                 content=content)
-                        message.save()
-                        success = True
+                success = _sendMessage(sender, recipient, content)
     return JsonResponse({"success": success, "messageID": messageID})
+
+def _sendMessage(sender, recipient, content):
+    success = False
+    if content:
+        # Message is valid, check if there is a conversation already started between 2 users
+        conversations1 = models.Conversation.objects.filter(user1=sender, user2=recipient)
+        conversations2 = models.Conversation.objects.filter(user1=recipient, user2=sender)
+        if conversations1 or conversations2:
+            if conversations1 and len(conversations1) == 1:
+                conversationID = conversations1[0].conversationID
+            elif conversations2 and len(conversations2) == 1:
+                conversationID = conversations2[0].conversationID
+        if not conversationID:
+            conversationID = helpers.createUniqueID(destDatabase=models.Conversation,
+                                                    idKey="conversationID")
+            conversation = models.Conversation(conversationID=conversationID, user1=sender, user2=recipient)
+            conversation.save()
+
+        if conversationID:
+            messageID = helpers.createUniqueID(destDatabase=models.Message,
+                                               idKey="messageID")
+            message = models.Message(messageID=messageID,
+                                     conversationID=conversationID,
+                                     sender=sender,
+                                     recipient=recipient,
+                                     content=content)
+            message.save()
+            success = True
+        return success
 
 def getConversation(request):
     success = False

@@ -290,7 +290,10 @@
             $("#messageTextArea").on("keydown", function(e){
                 if(e.keyCode === 13 && !e.shiftKey){
                     e.preventDefault();
-                        sendMessage("{{request.user.username}}", destUsername, "messageTextArea", true, null);
+                    var sendButton = document.getElementById("messageSendButton");
+                    if(sendButton != null){
+                        sendButton.click();
+                    }
                 }
             });
         }
