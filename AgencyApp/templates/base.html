@@ -264,22 +264,53 @@
             }
         }
 
-        function displayMessagePanel(destUsername, destCleanName){
-           var panelString = "<div style='position: relative; height: 100%; width: 100%; text-align: center;'>";
+        function displayMessagePanel(destUsername, destCleanName, extraInputs){
+            var panelString = "<div style='position: relative; height: 100%; width: 100%; text-align: center;'>";
+
+            // Determine if message is a post application or not
+            var application  = false;
+            if(extraInputs != null){
+                if("application" in extraInputs && "postID" in extraInputs){
+                    application = true;
+                }
+            }
+
+            var title = "New Message"
+            var enterButtonText = "Send"
+            var height = 350;
+            if(application == true){
+                title = "Apply for Position";
+                enterButtonText = "Apply"
+                height = 330;
+            }
 
             // Add main panel
-            panelString += "<div id='messagePanel' style='position: absolute; height: 350px; top: 15%; left: 10%; right: 10%; max-width: 500px; background: #FFF; text-align: left; color: #000;' class='form-style-7'>";
+            panelString += "<div id='messagePanel' style='position: absolute; height: " + height + "px; top: 15%; left: 10%; right: 10%; max-width: 500px; background: #FFF; text-align: left; color: #000;' class='form-style-7'>";
 
             // Add panel title
-            panelString += "<div style='position: relative; height: 30px;'><h2 style='margin-left: 15px;'><font style='background: #FFF; color: rgba(0,0,0,0.8); padding: 0px 5px; '>New Message</font></h2><div style='height: 0px; border-bottom: 1px solid #000; margin-top: -9px;'></div></div>"
+            panelString += "<div style='position: relative; height: 30px;'><h2 style='margin-left: 15px;'><font style='background: #FFF; color: rgba(0,0,0,0.8); padding: 0px 5px;'>" + title + "</font></h2><div style='height: 0px; border-bottom: 1px solid #000; margin-top: -9px;'></div></div>"
+
+            if(application == true){
+                panelString += "<div style='text-align: center; margin: 5px 8px;'><h3 style='font-weight: 300; color: rgba(0,0,0,0.5); '>Add a personalized message to your application, your resume and other important info will be submitted for you!</h3></div>"
+            }
 
             // Add message content
             panelString += "<ul style=''>"
-            panelString += "<li style='height: 30px;'><label>Send To</label><div class='messageRecipient'>" + destCleanName + "</div></li>"
-            panelString += "<li style='height: 50%;'><label>Message</label><textarea id='messageTextArea' style='height: 150px;'></textarea></li>"
+            if(application == true){
+                panelString += "<li style='height: 50%;'><label>Message</label><textarea id='messageTextArea' style='height: 150px;'></textarea></li>"
+            }else{
+                panelString += "<li style='height: 30px;'><label>Send To</label><div class='messageRecipient'>" + destCleanName + "</div></li>"
+                panelString += "<li style='height: 50%;'><label>Message</label><textarea id='messageTextArea' style='height: 150px;'></textarea></li>"
+            }
 
             // Add buttons
-            panelString += "<li style='border: none; margin: 10px 1px; padding: 0;'><div class='editButton' style='width: 42.3%; padding: 0.8em 1em; float: right; text-align: center;' onclick='sendMessage(" + '"{{request.user.username}}", "' + destUsername + '", "messageTextArea", false, null);' + "'>Send</div><div class='editButton' onclick='hideBlockingPanel();' style='width: 42.3%; margin-right: 6px; padding: 0.8em 1em; float: left; text-align: center;'>Cancel</div></li>"
+            panelString += "<li style='border: none; margin: 10px 1px; padding: 0;'><div class='editButton' style='width: 42.3%; padding: 0.8em 1em; float: right; text-align: center;' id='messageSendButton' "
+            if(application == true){
+                panelString += "onclick='submitApplication(" + '"{{request.user.username}}", "' + extraInputs["postID"] + '", "messageTextArea", null);' + "' ";
+            }else{
+                panelString += "onclick='sendMessage(" + '"{{request.user.username}}", "' + destUsername + '", "messageTextArea", false, null);' + "' ";
+            }
+            panelString += ">" + enterButtonText + "</div><div class='editButton' onclick='hideBlockingPanel();' style='width: 42.3%; margin-right: 6px; padding: 0.8em 1em; float: left; text-align: center;'>Cancel</div></li>"
 
             panelString += "</ul>"
             panelString += "</div></div>"

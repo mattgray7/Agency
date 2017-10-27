@@ -124,12 +124,13 @@
         //postString += "<div align='right' style='width: 268px;'>" + getPostPicturePanel("div", "postPicturePanel", pictureURL, null, "postPictureImg", false, null, null, null, "right") + "</div>";
 
         // Add image panel
-        postString += "<div style='margin: 10px -10px 5px 20px; float: right; z-index: 10; position: relative;' align='right' hspace='20' vspace='20'><img src='" + pictureURL + "' style='height: 300px; width: 270px; border: 1px solid rgba(0,0,0,0.2);'>"
+        postString += "<div style='margin: 10px -10px 5px 20px; float: right; z-index: 10; position: relative;' align='right' hspace='20' vspace='10'><img src='" + pictureURL + "' style='height: 300px; width: 270px; border: 1px solid rgba(0,0,0,0.2);'>"
 
         // Add buttons under image panel
         {% if userIsAdmin %}
             postString += "<div class='editButton' onclick='redirectToEditPost(" + '"{{post.postID}}"' + ");' style='height: 25px; padding-top: 5px; text-align: center;'>Edit Post</div>";
         {% elif user.is_authenticated %}
+            // Add follow button
             postString += "<div class='editButton' onclick='updatePostFollow();' style='height: 25px; padding-top: 5px; text-align: center;'><div id='followButtonText'>"
             {% if following %}
                 postString += 'Following &#10004;'
@@ -137,8 +138,16 @@
                 postString += 'Follow'
             {% endif %}
             postString += "</div></div>"
+
+            // Add message button
+            var messageText = "Message"
+            {% if post.postType == "WORK_POST" or post.postType == "CASTING_POST" %}
+                messageText = "Apply";
+            {% endif %}
+            postString += "<div class='editButton' onclick='openApplicationForm();' style='margin-top: 5px; height: 25px; padding-top: 5px; text-align: center;'>" + messageText + "</div>";
+
         {% endif %}
-        postString += "</div>"
+        postString += "<div style='height: 20px;'></div></div>"
 
         // Add title
         {% if viewPostData %}
@@ -234,6 +243,10 @@
 
         {% endif %}
         return postString;
+    }
+
+    function openApplicationForm(){
+        displayMessagePanel("{{post.poster}}", null, {"application": true, "postID": "{{post.postID}}"});
     }
 </script>
 

@@ -29,6 +29,30 @@ function sendMessage(senderUsername, destUsername, contentInput, clearTextInput,
     }
 }
 
+function submitApplication(applicantUsername, postID, contentInput, callback){
+    if(applicantUsername != null && postID != null){
+        var contentValue;
+        var contentDiv = document.getElementById(contentInput)
+        if(contentDiv != null){
+            contentValue = contentDiv.value;
+        }
+        $.ajax({
+                    url : "/ajax/submitNewApplication/",
+                    data : {"applicant": applicantUsername, "postID": postID, "content": contentValue},
+                    type : 'POST',
+                    dataType: "json",
+                    success : function(data) {
+                        if(data["success"]){
+                            hideBlockingPanel();
+                            if(callback != null){
+                                callback();
+                            }
+                        }
+                    }
+            });
+    }
+}
+
 function getMessageTime(date){
     var hours = date.getHours()
     var hourString = hours % 12

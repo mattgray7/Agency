@@ -748,3 +748,22 @@ def updateMessageUnread(request):
                 success = True
     return JsonResponse({"success": success})
 
+def submitNewApplication(request):
+    success = False
+    applicantUsername = request.POST.get("applicant")
+    postID = request.POST.get("postID")
+    if applicantUsername and postID:
+        try:
+            applicant = models.UserAccount.objects.get(username=applicantUsername)
+        except models.UserAccount.DoesNotExist:
+            pass
+        else:
+            destPost = post.getPost(postID)
+            if destPost:
+                messageContent = "{0} submitted an application for your post {1}".format(applicant.cleanName, postID)
+                if request.POST.get("content"):
+                    messageContent = messageContent + "\n\n{0} added this message:\n{1}".format(applicant.firstName, request.POST.get("content"))
+                success = _sendMessage(applicantUsername, destPost.poster, messageContent)
+    return JsonResponse({"success": success})
+
+
