@@ -652,6 +652,18 @@
         return {'html': panelString, 'callbacks': callbacks};
     }
 
+    function getOtherTextPanel(){
+        var panelString = "<div style='padding: 10px; padding-top: 2px; background: #FFF; border-radius: 3px;'>";
+        var callbacks = []
+        panelString += "<h2 style='margin-top: 5px;'>No interests selected</h2>"
+        
+        // Add sub title
+        panelString += "<h3 style='font-size: 0.9em; color: rgba(0,0,0,0.5);'>Choose an interest to let people know what you're looking for!</h3>"
+
+        panelString += "</div>"
+        return {'html': panelString, 'callbacks': callbacks};
+    }
+
     function getProfileHeaderTextPanel(){
         var panelString = "<div style='width: 100%; height: 100%; position: relative; text-align: left;'>"
         var callbacks = []
@@ -670,8 +682,11 @@
             newInfo = getHireTextPanel();
         {% else %}
             // For other or no interest, don't display anything
-            // TODO should I add something like add interested professions here if viewingOwnProfile?
-            newInfo = {"html": "", "callbacks": []}
+            {% if viewingOwnProfile %}
+                newInfo = getOtherTextPanel();
+            {% else %}
+                newInfo = {"html": "", "callbacks": []}
+            {% endif %}
         {% endif %}
         panelString += newInfo['html']
         panelString += "</div>"
