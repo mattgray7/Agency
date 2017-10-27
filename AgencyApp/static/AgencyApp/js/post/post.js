@@ -729,7 +729,7 @@ function addCreateProjectPost(formDict, formURL, formName){
     return formString;
 }
 
-function getPostPicturePanel(parentTagType, panelName, pictureURL, editOnclick, pictureName, allowEdit, hiddenPictureInput, hiddenPictureInputName, pictureContainerMarginData){
+function getPostPicturePanel(parentTagType, panelName, pictureURL, editOnclick, pictureName, allowEdit, hiddenPictureInput, hiddenPictureInputName, pictureContainerMarginData, imageAlignValue){
     var postString = '';
     var container = document.getElementById("editPostPanel")
     var pictureSizeInfo = resizePicture("expand");
@@ -743,7 +743,11 @@ function getPostPicturePanel(parentTagType, panelName, pictureURL, editOnclick, 
         pictureContainerMarginData = '';
     }
 
-    postString += '<' + parentTagType + ' class="postPictureContainer" style="position: relative; height: ' + pictureSizeInfo.container.height + '; min-width: ' + pictureSizeInfo.columnMinWidth + ';"><div style="position:absolute; width: ' + pictureSizeInfo.container.width + '; top: 0;"><div id="' + panelName + '" class="postPictureContainer" style="height: ' + pictureSizeInfo.container.height + '; width: ' + pictureSizeInfo.container.width + '; ' + pictureContainerMarginData + '"><img id="' + pictureName + '" src="' + pictureURL + '" style="max-width:100%; max-height:100%; border: 1px solid #000;"/></div>';
+    postString += '<' + parentTagType + ' class="postPictureContainer" style="position: relative; height: ' + pictureSizeInfo.container.height + '; min-width: ' + pictureSizeInfo.columnMinWidth + ';"><div style="position:absolute; width: ' + pictureSizeInfo.container.width + '; top: 0;"><div id="' + panelName + '" class="postPictureContainer" style="height: ' + pictureSizeInfo.container.height + '; width: ' + pictureSizeInfo.container.width + '; ' + pictureContainerMarginData + '"><img id="' + pictureName + '" src="' + pictureURL + '" style="max-width:100%; max-height:100%; border: 1px solid #000;"'
+    if(imageAlignValue){
+        postString += "align='" + imageAlignValue + "' ";
+    }
+    postString += '/></div>';
 
     if(allowEdit){
         postString += '<div class="formEditPictureButtonContainer" style="width: ' + pictureSizeInfo.container.width + ';"><a id="' + panelName + 'EditButton" onclick="' + editOnclick + '">Edit</a></div><div id="' + hiddenPictureInputName + '" style="display: none;">' + hiddenPictureInput + '</div>';

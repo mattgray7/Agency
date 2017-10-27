@@ -118,8 +118,12 @@
         });
     }
 
-    function getViewPostHeader(){
-        var postString = "<div style='position: relative; min-height: 300px; margin-top: 10px;'><div style='margin-left: 310px; margin-right: 20px; text-align: left;'>"
+    function getViewPostHeader(pictureURL){
+        var postString = "<div style='position: relative; margin-top: 10px;'><div style='margin-left: 20px; margin-right: 20px; text-align: left;'>"
+
+        //postString += "<div align='right' style='width: 268px;'>" + getPostPicturePanel("div", "postPicturePanel", pictureURL, null, "postPictureImg", false, null, null, null, "right") + "</div>";
+
+        postString += "<img src='" + pictureURL + "' style='height: 300px; width: 270px; margin-right: -10px; margin-top: 0px;' align='right' hspace='20' vspace='20'>"
 
         // Add title
         {% if viewPostData %}
@@ -209,7 +213,7 @@
             {% endfor %}
             postString += "</div></div>";
         {% else %}
-            postString += "<div style='height: 50px;'></div>"
+            postString += "<div style='height: 20px;'></div>"
         {% endif %}
         return postString;
     }
@@ -226,9 +230,8 @@
             {% else %}
                 pictureURL = '{{images.noPicture}}';
             {% endif %}
-            postString += "<div style='position:absolute; top: 7px; margin-left: 15px; '>" + getPostPicturePanel("div", "postPicturePanel", pictureURL, null, "postPictureImg", false, null, null) + "</div>";
 
-            postString += getViewPostHeader();
+            postString += getViewPostHeader(pictureURL);
             postString += getViewPostBody();
             postString += "</div>"
 
@@ -422,7 +425,7 @@
             <!-- Just display the data and -->
             <div id="backgroundPanel" class="backgroundPanel">
                 <center>
-                <div id="mainViewPanel" class="mainViewPanel" style='background: #FFF'>
+                <div id="mainViewPanel" class="mainViewPanel" style='background: #FFF; max-width: 675px;'>
                     {% if post %}
                         <div id='viewPostPanel'>
                             <script>

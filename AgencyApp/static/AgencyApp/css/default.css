@@ -419,7 +419,10 @@
 		border: 1px solid rgba(0,0,0,0.1);
 		border-radius: 3px;
 		color: rgba(0,0,0,0.7);
+
 		box-shadow: 0.7px 0.7px 0.1px 0.1px #888888;
+		/*-webkit-appearance: none;
+		-webkit-box-shadow: 1px 1px 1px 1px #afafaf; Need these 2 lines to add box shadow in safari, but looks bad*/
 		transition: box-shadow .01s hidden;
 		/*-webkit-transition: opacity .20s ease;
 		-webkit-backface-visibility: hidden;*/
