@@ -586,7 +586,7 @@ class GenericViewPostView(views.GenericFormView):
     @property
     def cancelDestination(self):
         if self._cancelDestination is None:
-            self._cancelDestination = constants.BROWSE
+            self._cancelDestination = constants.VIEW_POST
         return self._cancelDestination
 
     @property
