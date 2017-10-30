@@ -659,7 +659,7 @@ def sendNewMessage(request):
                 success = _sendMessage(sender, recipient, content)
     return JsonResponse({"success": success, "messageID": messageID})
 
-def _sendMessage(sender, recipient, content):
+def _sendMessage(sender, recipient, content, application=False):
     success = False
     if content:
         # Message is valid, check if there is a conversation already started between 2 users
@@ -683,7 +683,8 @@ def _sendMessage(sender, recipient, content):
                                      conversationID=conversationID,
                                      sender=sender,
                                      recipient=recipient,
-                                     content=content)
+                                     content=content,
+                                     applicationMessage=application)
             message.save()
             success = True
         return success
@@ -716,12 +717,18 @@ def getConversation(request):
                                             "profilePictureURL": user2.profilePicture and user2.profilePicture.url or constants.NO_PROFILE_PICTURE_PATH}
 
                 for message in conversation.messages:
+                    if message.applicationMessage:
+                        if message.sender == request.user.username:
+                            # Don't display user's applications in message thread
+                            continue
+
                     conversationList.append({"messageID": message.messageID,
                                              "sender": message.sender,
                                              "recipient": message.recipient,
                                              "unread": not message.recipientSeen,
                                              "content": message.content,
                                              "sentTime": message.sentTime.strftime("%s"),
+                                             "applicationMessage": message.applicationMessage
                                              })
             success = True
     return JsonResponse({"success": success, "conversation": {"users": userDict, "messages": conversationList}})
@@ -768,7 +775,7 @@ def submitNewApplication(request):
                 if applicant.resume:
                     messageContent = messageContent + "\n\nView {0}'s <a onclick='redirectToUser(\"{1}\");'>profile</a>, or go straight to the <a href='/media/{2}'>resume</a>.".format(applicant.firstName, applicantUsername, applicant.resume)
 
-                success = _sendMessage(applicantUsername, destPost.poster, messageContent)
+                success = _sendMessage(applicantUsername, destPost.poster, messageContent, application=True)
     return JsonResponse({"success": success})
 
 

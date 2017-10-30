@@ -407,7 +407,8 @@ class Conversation(models.Model):
         if self.messages:
             for message in self.messages:
                 if message.sender == username:
-                    return message
+                    if not message.applicationMessage:
+                        return message
 
     @property
     def bothUsersResponded(self):
@@ -429,6 +430,7 @@ class Message(models.Model):
     recipientSeen = models.BooleanField(default=False)
     content = models.CharField(max_length=10000)
     sentTime = models.DateTimeField(auto_now_add=True)
+    applicationMessage = models.BooleanField(default=False)
 
 class AbstractPost(models.Model):
     postID = models.CharField(max_length=10)

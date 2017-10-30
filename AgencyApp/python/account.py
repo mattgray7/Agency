@@ -233,6 +233,7 @@ class InboxView(views.GenericFormView):
                                "content": message.content,
                                "sentTime": message.sentTime.strftime('%s'),
                                "unread": not message.recipientSeen,
+                               "applicationMessage": message.applicationMessage,
                                }
         return messageDict
 
