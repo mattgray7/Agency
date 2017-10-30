@@ -701,43 +701,44 @@
 
     var filtersExpanded = false
     function toggleExpandBrowseFiltersPanel(expandType){
-        var filterPanelHeight = filterSectionHeights[expandType] * activeTabs.length;
-        var browseResultsHeight = getBrowseResultsTableHeight()
-        if(firstSearch){
-            // Special case when first loading filters
-            browseResultsHeight -= 58;
-        }
-
-        var searchPanel = document.getElementById("searchPanel");
-        var filterContent = document.getElementById("browseFiltersPanelContent")
-        var addFiltersButton = document.getElementById("addFiltersButton");
-        var updateSearchButton = document.getElementById("updateSearchButton");
-        if(searchPanel != null && filterContent != null && addFiltersButton != null && updateSearchButton != null){
-            if(expandType === "expand"){
-                filterContent.style.display = "block";
-                updateSearchButton.style.display = "block";
-                var filterPanelInfo = createFilterPanel();
-                filterContent.innerHTML = filterPanelInfo["html"]
-                if(filterPanelInfo["callbacks"].length > 0){
-                    for(var i=0; i < filterPanelInfo["callbacks"].length; i++){
-                        filterPanelInfo["callbacks"][i]();
+        if(expandType === "shrink" || activeTabs.length > 0){
+            var filterPanelHeight = filterSectionHeights[expandType] * activeTabs.length;
+            var browseResultsHeight = getBrowseResultsTableHeight()
+            if(firstSearch){
+                // Special case when first loading filters
+                browseResultsHeight -= 58;
+            }
+            var searchPanel = document.getElementById("searchPanel");
+            var filterContent = document.getElementById("browseFiltersPanelContent")
+            var addFiltersButton = document.getElementById("addFiltersButton");
+            var updateSearchButton = document.getElementById("updateSearchButton");
+            if(searchPanel != null && filterContent != null && addFiltersButton != null && updateSearchButton != null){
+                if(expandType === "expand"){
+                    filterContent.style.display = "block";
+                    updateSearchButton.style.display = "block";
+                    var filterPanelInfo = createFilterPanel();
+                    filterContent.innerHTML = filterPanelInfo["html"]
+                    if(filterPanelInfo["callbacks"].length > 0){
+                        for(var i=0; i < filterPanelInfo["callbacks"].length; i++){
+                            filterPanelInfo["callbacks"][i]();
+                        }
                     }
+                    addFiltersButton.innerHTML = "Hide filters"
+                    addFiltersButton.onclick = function(){toggleExpandBrowseFiltersPanel("shrink")}
+                    animateBrowsePanelHeights(true, false, {});
+                    filtersExpanded = true;
+                }else if(expandType === "shrink"){
+                    addFiltersButton.innerHTML = "Advanced search"
+                    addFiltersButton.onclick = function(){toggleExpandBrowseFiltersPanel("expand");}
+                    var finishCallback = function(){
+                        updateSearchButton.style.display = "none";
+                        filterContent.style.display = "none";
+                        filterContent.innerHTML = '';
+                        filteredProfessions = {"jobs": [], "users": []};
+                    }
+                    animateBrowsePanelHeights(false, false, {"browseFiltersPanel": finishCallback})
+                    filtersExpanded = false;
                 }
-                addFiltersButton.innerHTML = "Hide"
-                addFiltersButton.onclick = function(){toggleExpandBrowseFiltersPanel("shrink")}
-                animateBrowsePanelHeights(true, false, {});
-                filtersExpanded = true;
-            }else if(expandType === "shrink"){
-                addFiltersButton.innerHTML = "Advanced search"
-                addFiltersButton.onclick = function(){toggleExpandBrowseFiltersPanel("expand");}
-                var finishCallback = function(){
-                    updateSearchButton.style.display = "none";
-                    filterContent.style.display = "none";
-                    filterContent.innerHTML = '';
-                    filteredProfessions = {"jobs": [], "users": []};
-                }
-                animateBrowsePanelHeights(false, false, {"browseFiltersPanel": finishCallback})
-                filtersExpanded = false;
             }
         }
     }
@@ -829,7 +830,7 @@ if (('localStorage' in window) && window['localStorage'] !== null) {
 }
 
 if(clickDefaultCategory){
-    $("#jobsBrowseCategoryButton").click();
+    //$("#jobsBrowseCategoryButton").click();
 }
 
 // Save the search result table when leaving the page.
