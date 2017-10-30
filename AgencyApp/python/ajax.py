@@ -760,9 +760,14 @@ def submitNewApplication(request):
         else:
             destPost = post.getPost(postID)
             if destPost:
-                messageContent = "{0} submitted an application for your post {1}".format(applicant.cleanName, postID)
+                messageContent = "<a onclick='redirectToUser(\"{0}\");'>{1}</a> submitted an application for your post <a onclick='redirectToPost(\"{2}\");'>{3}</a>.".format(applicantUsername, applicant.cleanName, postID, destPost.title)
+
                 if request.POST.get("content"):
                     messageContent = messageContent + "\n\n{0} added this message:\n{1}".format(applicant.firstName, request.POST.get("content"))
+
+                if applicant.resume:
+                    messageContent = messageContent + "\n\nView {0}'s <a onclick='redirectToUser(\"{1}\");'>profile</a>, or go straight to the <a href='/media/{2}'>resume</a>.".format(applicant.firstName, applicantUsername, applicant.resume)
+
                 success = _sendMessage(applicantUsername, destPost.poster, messageContent)
     return JsonResponse({"success": success})
 

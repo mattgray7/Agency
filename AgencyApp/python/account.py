@@ -207,6 +207,8 @@ class InboxView(views.GenericFormView):
     def pageContext(self):
         self._pageContext = super(InboxView, self).pageContext
         self._pageContext["messages"] = json.dumps(self.messages)
+        self._pageContext["possibleDestinations"] = {"viewPost": constants.VIEW_POST,
+                                                     "profile": constants.PROFILE}
         return self._pageContext
 
     def _formatMessageDict(self, message):
