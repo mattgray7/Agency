@@ -1,6 +1,7 @@
 .browseSearchPanel{
-	background: #ededed;
+	background: rgba(255,255,255,0.9);
 	border: 1px solid #000;
+	border-radius: 2px;
 }
 
 .browseCategoriesList ul
@@ -143,6 +144,7 @@
     font-size: 1.0em;
     font-family: 'Didact Gothic', sans-serif;
     display: inline;
+    background: rgba(0,0,0,0.05);
 }
 .browseFilterList select{
 	background: rgba(0,0,0,0.05);
