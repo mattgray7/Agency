@@ -153,7 +153,7 @@ function updateUnreadStatus(messageID, newUnreadValue, initialUnread){
                     var inboxButton = document.getElementById("inboxToolbarButton")
                     if(inboxButton != null){
                         // Remove all whitespace and line breaks
-                        var bracketedNumber = inboxButton.innerHTML.replace("Inbox ", "").replace(/(\r\n|\n|\r| )/gm,"");;
+                        var bracketedNumber = inboxButton.innerHTML.replace("Inbox", "").replace(/(\r\n|\n|\r| )/gm,"");
                         if(bracketedNumber.length > 1){
                             // Remove brackets and decrement
                             var inboxNumber = parseInt(bracketedNumber.substring(1, bracketedNumber.length-1))
