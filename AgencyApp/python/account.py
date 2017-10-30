@@ -194,7 +194,10 @@ class InboxView(views.GenericFormView):
                     messagesDict["sent"].append(self._formatMessageDict(latestOwnMessage))
                     if conversation.bothUsersResponded:
                         # If other person responded (ie conversation started), put in inbox
-                        messagesDict["inbox"].append(self._formatMessageDict(conversation.latestMessage))
+                        if conversation.latestMessage.sender == self.userAccount.username and conversation.latestMessage.applicationMessage:
+                            messagesDict["inbox"].append(self._formatMessageDict(latestOwnMessage))
+                        else:
+                            messagesDict["inbox"].append(self._formatMessageDict(conversation.latestMessage))
                 else:
                     # User hasn't written any messages, so just appear in inbox
                     messagesDict["inbox"].append(self._formatMessageDict(conversation.latestMessage))
