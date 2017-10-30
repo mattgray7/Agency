@@ -663,6 +663,7 @@ def _sendMessage(sender, recipient, content, application=False):
     success = False
     if content:
         # Message is valid, check if there is a conversation already started between 2 users
+        conversationID = None
         conversations1 = models.Conversation.objects.filter(user1=sender, user2=recipient)
         conversations2 = models.Conversation.objects.filter(user1=recipient, user2=sender)
         if conversations1 or conversations2:

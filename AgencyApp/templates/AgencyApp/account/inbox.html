@@ -135,6 +135,7 @@ function selectMessage(messageID, conversationID, initialUnread){
     displayConversation(conversationID, true)
 }
 
+var readMessageIDs = [];
 function updateUnreadStatus(messageID, newUnreadValue, initialUnread){
     if(initialUnread){
         $.ajax({
@@ -150,18 +151,24 @@ function updateUnreadStatus(messageID, newUnreadValue, initialUnread){
                         star.innerHTML = "";
                     }
 
-                    var inboxButton = document.getElementById("inboxToolbarButton")
-                    if(inboxButton != null){
-                        // Remove all whitespace and line breaks
-                        var bracketedNumber = inboxButton.innerHTML.replace("Inbox", "").replace(/(\r\n|\n|\r| )/gm,"");
-                        if(bracketedNumber.length > 1){
-                            // Remove brackets and decrement
-                            var inboxNumber = parseInt(bracketedNumber.substring(1, bracketedNumber.length-1))
-                            var newNumber = inboxNumber - 1;
-                            if(newNumber === 0){
-                                inboxButton.innerHTML = "Inbox";
-                            }else{
-                                inboxButton.innerHTML = "Inbox (" + newNumber + ")"
+                    if(readMessageIDs.indexOf(messageID) > -1){
+                        // Don't decrement inbox number if it has already been done for this messageID
+                        return;
+                    }else{
+                        readMessageIDs.push(messageID);
+                        var inboxButton = document.getElementById("inboxToolbarButton")
+                        if(inboxButton != null){
+                            // Remove all whitespace and line breaks
+                            var bracketedNumber = inboxButton.innerHTML.replace("Inbox ", "").replace("Inbox", "").replace(/(\r\n|\n|\r| )/gm,"");
+                            if(bracketedNumber.length > 1){
+                                // Remove brackets and decrement
+                                var inboxNumber = parseInt(bracketedNumber.substring(1, bracketedNumber.length-1))
+                                var newNumber = inboxNumber - 1;
+                                if(newNumber === 0){
+                                    inboxButton.innerHTML = "Inbox";
+                                }else{
+                                    inboxButton.innerHTML = "Inbox (" + newNumber + ")"
+                                }
                             }
                         }
                     }
