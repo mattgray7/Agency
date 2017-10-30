@@ -1,6 +1,9 @@
 
 //var categoryFunctionMap = {"jobs": createJobElemement, "roles": createRoleElement, "users": createUserElement,}
 
+
+var searchPanelBaseHeight = 200;
+
 function getSectionExpandButtonContent(direction){
     if(direction === "expand"){
         return "<div style='margin-top: -7px; margin-left: 1px;'>+</div>"
@@ -27,7 +30,7 @@ function getSearchPanelHeight(){
     if(searchPanel != null){
         height += searchPanel.offsetHeight ;
     }else{
-        height += 180;      // No filter height of searchPanel
+        height += searchPanelHeight;      // No filter height of searchPanel
     }
     return height;
 }
