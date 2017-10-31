@@ -606,7 +606,7 @@
             filterString += "<div style='position: absolute; top: 27px; left: 48%; right: 0;'><ul class='browseFilterList' id='physicalAttributesFilterList'>"
 
             // Add gender
-            filterString += "<li><div class='browseFilterListLabel right'>Gender: </div>"
+            filterString += "<li><div style='position: absolute; top: -20px; right: 0; font-size: 0.8em; text-align: right; color: rgba(0,0,0,0.7);'>*Only applicable to actors</div><div class='browseFilterListLabel right'>Gender: </div>"
             {% if browseFilters.users.genderList %}
                 var genderList = {{browseFilters.roles.genderList|safe}}
                 filterString += "<div class='browseFilterListElement right'>" + createSelectForm("usersFiltersForm", "usersGenderSelect", genderList, defaultSelectValues["gender"]) + "</div>"
