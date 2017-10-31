@@ -263,14 +263,14 @@ function createSearchResultsDisplay(resultList, activeTab){
     displayString += "<div style='position: relative; width: 100%; min-height: 200px;'>"
 
     // Add results container
-    if(resultList[activeTab]["results"].length > 0 && expandedTabDict[activeTab]){
-        displayString += "<div id='" + activeTab + "BrowseResultsContainer' style='overflow: hidden; border: 1px solid #000; background: #FFF'>";
+    if(resultList[activeTab]["results"].length > 0){
+        displayString += "<div id='" + activeTab + "BrowseResultsContainer' style='overflow: hidden; border: 1px solid #000; background: #FFF;'>";
+        displayString += getBrowseResultsList(activeTab, resultList[activeTab]["results"])
+        if(resultList[activeTab]["moreResults"]){
+            displayString += "<div style='text-align: center; height: 30px; margin-top: -4px;'><a style='font-weight: 300; font-size: 1.1em;' onclick='addResultsToSection(" + '"' + activeTab + '");' + "'>Show More</a></div>"
+        }
     }else{
-        displayString += "<div id='" + activeTab + "BrowseResultsContainer' style='height: 0px; overflow: hidden;'>";
-    }
-    displayString += getBrowseResultsList(activeTab, resultList[activeTab]["results"])
-    if(resultList[activeTab]["moreResults"]){
-        displayString += "<div style='text-align: center; height: 30px; margin-top: -4px;'><a style='font-weight: 300; font-size: 1.1em;' onclick='addResultsToSection(" + '"' + activeTab + '");' + "'>Show More</a></div>"
+        displayString += "<div id='" + activeTab + "BrowseResultsContainer' style='height: 30px; overflow: hidden; border: 1px solid #000; background: #FFF; text-align: center; padding: 15px 0px 10px 0px;'>No results matching search.";
     }
 
     /*for(section in resultList){
