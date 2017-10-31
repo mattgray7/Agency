@@ -260,11 +260,11 @@ function createSearchResultsDisplay(resultList, activeTab){
 
     displayString += getSearchResultsSectionTab(resultList, activeTab);
 
-    displayString += "<div style='position: relative; width: 100%; height: 200px; background: #FFF;'>"
+    displayString += "<div style='position: relative; width: 100%; min-height: 200px;'>"
 
     // Add results container
     if(resultList[activeTab]["results"].length > 0 && expandedTabDict[activeTab]){
-        displayString += "<div id='" + activeTab + "BrowseResultsContainer' style='overflow: hidden; border: 1px solid #000;'>";
+        displayString += "<div id='" + activeTab + "BrowseResultsContainer' style='overflow: hidden; border: 1px solid #000; background: #FFF'>";
     }else{
         displayString += "<div id='" + activeTab + "BrowseResultsContainer' style='height: 0px; overflow: hidden;'>";
     }

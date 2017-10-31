@@ -64,11 +64,18 @@
                 }
             }
         }
+
+        if(!$.isEmptyObject(currentSearchResults)){
+            updateBrowseResults(currentSearchResults, browseType);
+        }
     }
 
-    function updateBrowseResults(results){
+    function updateBrowseResults(results, section){
+        if(section == null){
+            section = activeTabs[0];
+        }
         var resultsPanel = document.getElementById("searchResultsPanel")
-        var browseResultsTableString = createSearchResultsDisplay(results, activeTabs[0])
+        var browseResultsTableString = createSearchResultsDisplay(results, section)
         if(browseResultsTableString != null && browseResultsTableString.length > 0){
             // Add results content, can now access height of elements
             resultsPanel.innerHTML = browseResultsTableString;
@@ -110,7 +117,7 @@
                             if(resultsPanel != null){
                                 // Update global dict with new results
                                 currentSearchResults = data["results"]
-                                updateBrowseResults(data["results"])
+                                updateBrowseResults(data["results"], activeTabs[0])
                                 if(firstSearch){
                                     firstSearch = false;
                                     $("#mainViewPanel").animate({marginTop: "0px"}, 500, function(){});
