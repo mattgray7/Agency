@@ -480,11 +480,7 @@ function getPreviewBrowseSuggestionsString(suggestions){
 
 function searchPreviewBrowseSuggestions(textValue, container, extraInputs){
     if(container != null){
-        // TODO get the data
-        //container.innerHTML = "<img src='" + buttonLoadingGifURL + "' style='height: 100px; width: 100px;'>";
-        
         if(textValue.length != 0){
-            container.style.display = "block";
             var suggestions;
             $.ajax({
                 url : "/ajax/getSearchSuggestions/",
@@ -499,8 +495,14 @@ function searchPreviewBrowseSuggestions(textValue, container, extraInputs){
                     }else{
                         container.innerHTML = "No user found with name " + textValue
                     }
-                    var suggestionsString = getPreviewBrowseSuggestionsString(suggestions)
-                    container.innerHTML = suggestionsString;
+                    if($.isEmptyObject(suggestions)){
+                        container.innerHTML = "";
+                        container.style.display = "none";
+                    }else{
+                        var suggestionsString = getPreviewBrowseSuggestionsString(suggestions)
+                        container.innerHTML = suggestionsString;
+                        container.style.display = "block";
+                    }
                 }
             });
         }else{
