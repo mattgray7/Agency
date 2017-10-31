@@ -50,6 +50,7 @@
         }
     }
 
+    var activeResultTab;
     function selectBrowseResultTab(browseType){
         for(var i=0; i < activeTabs.length; i++){
             var button = document.getElementById(activeTabs[i] + "ResultsButton");
@@ -57,6 +58,7 @@
             if(button != null && borderCover != null){
                 if(activeTabs[i] === browseType){
                     button.className = "active"
+                    activeResultTab = browseType
                     borderCover.style.opacity = 1;
                 }else{
                     button.className = "";
@@ -82,7 +84,7 @@
             resultsPanel.style.display = 'block';
 
             // Save expanded section heights
-            saveExpandedBrowseSectionHeights(results);
+            //saveExpandedBrowseSectionHeights(results, section);
 
             // Update browse content container
             updateBrowseContentHeight();
@@ -117,7 +119,8 @@
                             if(resultsPanel != null){
                                 // Update global dict with new results
                                 currentSearchResults = data["results"]
-                                updateBrowseResults(data["results"], activeTabs[0])
+                                activeResultTab = activeTabs[0]
+                                updateBrowseResults(data["results"], activeResultTab)
                                 if(firstSearch){
                                     firstSearch = false;
                                     $("#mainViewPanel").animate({marginTop: "0px"}, 500, function(){});

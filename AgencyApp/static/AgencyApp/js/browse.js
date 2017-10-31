@@ -13,12 +13,11 @@ function getSectionExpandButtonContent(direction){
 }
 
 function getBrowseResultsTableHeight(){
-    var tableHeight = activeTabs.length * 45 + 5;
-    for(section in expandedTabDict){
-        if(expandedTabDict[section]){
-            if(section in expandedSectionHeights && expandedSectionHeights[section] != 0 && activeTabs.indexOf(section) > -1){
-                tableHeight += expandedSectionHeights[section];
-            }
+    var tableHeight;
+    if(activeResultTab != null){
+        var container = document.getElementById(activeResultTab + "BrowseResultsContainer")
+        if(container != null){
+            tableHeight = container.offsetHeight + 45;
         }
     }
     return tableHeight
@@ -39,33 +38,15 @@ function updateBrowseContentHeight(){
     var newBrowseContentHeight = getBrowseResultsTableHeight() + getSearchPanelHeight();   // 180 is for search panel height
     $("#browseContent").animate({marginTop: "0px", height: newBrowseContentHeight + "px"}, browseAnimateSpeed, function(){});
 }
-
-var expandedSectionHeights = {"jobs": 0, "roles": 0, "users": 0, "projects": 0, "events": 0}
-function saveExpandedBrowseSectionHeights(results){
-    for(section in expandedTabDict){
-        if(expandedTabDict[section]){
-            var container = document.getElementById(section + "BrowseResultsContainer")
-            if(container != null){
-                expandedSectionHeights[section] = container.offsetHeight;
-            }
-        }else{
-            if(results != null){
-                if(section in results){
-                    var newHeight = 0;
-                    var numDisplayedResults = results[section]["results"].length;
-
-                    newHeight += numDisplayedResults * (browseTableElementHeight + 7)   // 7 is for padding between elements
-
-                    if(results[section]["moreResults"] == true){
-                        newHeight += 45;
-                    }
-                    expandedSectionHeights[section] = newHeight;
-                }
-            }
-        }
+var browseAnimateSpeed = 400;
+/*var expandedSectionHeights = {"jobs": 0, "roles": 0, "users": 0, "projects": 0, "events": 0}
+function saveExpandedBrowseSectionHeights(results, section){
+    var container = document.getElementById(section + "BrowseResultsContainer")
+    if(container != null){
+        expandedSectionHeights[section] = container.offsetHeight + 45;
     }
-}
-
+}*/
+/*
 var browseAnimateSpeed = 400;
 function toggleExpandBrowseSection(direction, section){
     var resultsContainer = document.getElementById(section + "BrowseResultsContainer");
@@ -95,7 +76,7 @@ function toggleExpandBrowseSection(direction, section){
         updateBrowseContentHeight();
     }
 }
-
+*/
 var getFiltersMap = {"jobs": getJobsFilterValues, "roles": getRolesFilterValues, "users": getUsersFilterValues, "projects": getProjectsFilterValues, "events": getEventsFilterValues}
 function getSearchFilterValues(){
     var filterDict = {}
@@ -206,7 +187,7 @@ function addResultsToSection(section){
             if(data["success"]){
                 // Update the search results just for this section
                 currentSearchResults[section] = data["results"][section]
-                updateBrowseResults(currentSearchResults)
+                updateBrowseResults(currentSearchResults, section)
             }
         }
     });
