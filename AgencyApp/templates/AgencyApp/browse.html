@@ -117,7 +117,10 @@
                             if(resultsPanel != null){
                                 // Update global dict with new results
                                 currentSearchResults = data["results"]
-                                activeResultTab = activeTabs[0]
+                                if(activeResultTab == null || activeTabs.indexOf(activeResultTab) === -1){
+                                    // Only reset the active tab on first search and if previous selection not included in this search
+                                    activeResultTab = activeTabs[0];
+                                }
                                 updateBrowseResults(data["results"], activeResultTab)
                                 if(firstSearch){
                                     firstSearch = false;
