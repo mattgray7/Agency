@@ -930,12 +930,60 @@ function updateFeaturedPhotoStatus(input){
         </div>
     </div>
 {% elif next == possibleDestinations.interests %}
-    <div id='backgroundPanel' class='backgroundPanel' style='min-width: 1020px; min-height: 100%;'>
+<script>
+var interestPanelWidthThreshold = 820;
+var interestPanelExpanded = true;
+
+function getWideInterestPanel(){
+    return "Im wide"
+}
+
+function getSlimInterestPanel(){
+    return "Im slim"
+}
+
+function resizeInterestPanel(force){
+    if($(window).width() > interestPanelWidthThreshold){
+        if(!interestPanelExpanded || force == true){
+            document.getElementById("backgroundPanel").innerHTML = getWideInterestPanel();
+            interestPanelExpanded = true;
+        }
+    }else{
+        if(interestPanelExpanded || force == true){
+            document.getElementById("backgroundPanel").innerHTML = getSlimInterestPanel();
+            interestPanelExpanded = false;
+        }
+    }
+}
+
+</script>
+
+
+    <div id='backgroundPanel' class='backgroundPanel' style='min-height: 100%;'>
+        <script>
+            if($(window).width() > interestPanelWidthThreshold){
+                //homePageExpanded = true;
+                document.write(getWideInterestPanel());
+            }else{
+                //homePageExpanded = false;
+                document.write(getSlimInterestPanel());
+            }
+        </script>
+    </div>
+    <script>
+        $(window).resize(function (){
+            resizeInterestPanel();
+        });
+    </script>
+
+
+
+    <!--<div id='backgroundPanel' class='backgroundPanel' style='min-width: 1020px; min-height: 100%;'>
      <div id="mainViewPanel" class="mainViewPanel" style="position: relative; min-width: 1000px; max-width: 1000px; background: rgba(0,0,0,0.05); border: none;">
         <script>
             document.write(createEditAccountButtonHeader("Interests"))
         </script>
-        <div id="mainDiv"></div>
+        <div id="mainDiv"></div>-->
 
         <script>
         var chosenProfessionList = []
@@ -1081,7 +1129,7 @@ function updateFeaturedPhotoStatus(input){
         }
         </script>
 
-        <div id="workInterestDiv" style="display:none;">
+        <!--<div id="workInterestDiv" style="display:none;">
             <h2>What kind of jobs are you looking for?</h2>
             <div id="wrapper">
                 <table id="workInterestPanel">
@@ -1117,12 +1165,12 @@ function updateFeaturedPhotoStatus(input){
                         </td>
                         <td width="33%">
                             <div id="professionChoicePanel" class="profession3ColumnsFullPanel">
-                                <!--<div id="professionChoiceSubPanel" class="profession3ColumnsFullPanel_1"></div>-->
+                                
                             </div>
                         </td>
                         <td width="33%">
                             <div id="chosenProfessionChoicePanel" class="profession3ColumnsFullPanel">
-                                <!--<div id="chosenProfessionChoiceSubPanel" class="profession3ColumnsFullPanel_1">-->
+                                
                                     <table id="chosenProfessionTable" class="professionsSelectList">
                                     </table>
                                 
@@ -1144,7 +1192,7 @@ function updateFeaturedPhotoStatus(input){
                     </tr>
                 </table>
             </div>
-        </div>
+        </div>-->
 
         <script>
         var hireTypes = ["hiring", "casting", "collaborating"];
@@ -1259,7 +1307,7 @@ function updateFeaturedPhotoStatus(input){
         }
         </script>
 
-        <div id="hiringInterestDiv" style="display:none;">
+        <!--<div id="hiringInterestDiv" style="display:none;">
             <div id="wrapper" width="900px;">
                 <div id="four-column" class="container">
                     <div class="title">
@@ -1378,7 +1426,7 @@ function updateFeaturedPhotoStatus(input){
                     </table>
                 </div>
             </div>
-        </div>
+        </div>-->
 
         <script>
         var mainDiv = document.getElementById("mainDiv");
@@ -1426,15 +1474,14 @@ function updateFeaturedPhotoStatus(input){
             submitFormWithExtraParameters("other");
         }
 
-        $(document).ready(function(){
+        /*$(document).ready(function(){
             selectInterestChoice();
-        })
+        })*/
 
         </script>
-        <div id="interestChoiceDiv" style="display: none;">
+        <!--<div id="interestChoiceDiv" style="display: none;">
             <div id="wrapper" width="980px;">
                 <div id="three-column" class="container">
-                    <!-- Back to profile button -->
                     {% if cancelDestination == possibleDestinations.profile %}
                         <div id="backToProfileButton" style="width:170px;padding: 1em 0em 0em 0em;"><a onclick="returnToProfile();" class="profileButton blackHover" style="float:left">Back to profile</a></div><br><br>
                     {% endif %}
@@ -1508,28 +1555,6 @@ function updateFeaturedPhotoStatus(input){
             </div>
         </div>
     </div>
-</div>
+</div>-->
 {% endif %}
-
-
-    <!--{% if userAccount %}
-        {% if userAccount.profilePicture %}
-            <div id="profilePicture">
-                <img src="{{ userAccount.profilePicture.url }}" height="150px" width="175px"/>
-            </div>
-        {% endif %}
-    {% endif %}
-
-    {% if next != possibleDestinations.interests %}
-        {% if currentPageURL == "/account/edit/picture/" %}
-            <form method='post' action="{{ currentPageURL }}" enctype="multipart/form-data">
-        {% else %}
-            <form method='post' action="{{ currentPageURL }}">
-        {% endif %}
-            {% csrf_token %}
-            {{ form.as_p }}
-            <input type="submit" value="{{ nextButtonString }}" />
-        </form>
-    {% endif %}-->
-
 {% endblock %}
