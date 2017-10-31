@@ -241,10 +241,12 @@ function getSearchResultsSectionTab(resultList, activeTab){
         }
 
         var tabButton = '<li style="width: 19%; height: 40px;' + styleString + '" '
+        var borderCoverOpacity = 0
         if(activeTabs[i] === activeTab){
             tabButton += 'class="active" ';
+            borderCoverOpacity = 1;
         }
-        tabButton += ' id="' + activeTabs[i] + 'ResultsButton" onclick="selectBrowseResultTab(' + "'" + activeTabs[i] + "');" + '"><div style="margin-top: 5px;">' + activeTabs[i] + '</div><div id="' + activeTabs[i] + 'BorderCover" class="profileTabButtonBorderCover"></div></li>';
+        tabButton += ' id="' + activeTabs[i] + 'ResultsButton" onclick="selectBrowseResultTab(' + "'" + activeTabs[i] + "');" + '"><div style="margin-top: 5px;">' + activeTabs[i] + '</div><div id="' + activeTabs[i] + 'BorderCover" class="profileTabButtonBorderCover" style="margin-top: 8px; opacity: ' + borderCoverOpacity + ';"></div></li>';
         displayString += tabButton;
     }
 
@@ -262,7 +264,7 @@ function createSearchResultsDisplay(resultList, activeTab){
 
     // Add results container
     if(resultList[activeTab]["results"].length > 0 && expandedTabDict[activeTab]){
-        displayString += "<div id='" + activeTab + "BrowseResultsContainer' style='overflow: hidden;'>";
+        displayString += "<div id='" + activeTab + "BrowseResultsContainer' style='overflow: hidden; border: 1px solid #000;'>";
     }else{
         displayString += "<div id='" + activeTab + "BrowseResultsContainer' style='height: 0px; overflow: hidden;'>";
     }

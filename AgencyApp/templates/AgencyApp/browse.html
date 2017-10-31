@@ -53,11 +53,14 @@
     function selectBrowseResultTab(browseType){
         for(var i=0; i < activeTabs.length; i++){
             var button = document.getElementById(activeTabs[i] + "ResultsButton");
-            if(button != null){
+            var borderCover = document.getElementById(activeTabs[i] + "BorderCover");
+            if(button != null && borderCover != null){
                 if(activeTabs[i] === browseType){
                     button.className = "active"
+                    borderCover.style.opacity = 1;
                 }else{
                     button.className = "";
+                    borderCover.style.opacity = 0;
                 }
             }
         }
@@ -72,10 +75,10 @@
             resultsPanel.style.display = 'block';
 
             // Save expanded section heights
-            //saveExpandedBrowseSectionHeights(results);
+            saveExpandedBrowseSectionHeights(results);
 
             // Update browse content container
-            //updateBrowseContentHeight();
+            updateBrowseContentHeight();
         }
     }
 
