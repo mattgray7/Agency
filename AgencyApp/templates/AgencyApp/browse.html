@@ -37,6 +37,10 @@
         // If filters are expanded, add filters for new browse tab
         if(filtersExpanded){
             if(activeTabs.length > 0){
+                // Special case: clear all saved professions so filter panel won't remember them
+                if(browseType === "jobs" || browseType === "users"){
+                    filteredProfessions[browseType] = []
+                }
                 updateExpandedFiltersPanel()
             }else{
                 toggleExpandBrowseFiltersPanel("shrink")
