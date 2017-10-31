@@ -50,6 +50,19 @@
         }
     }
 
+    function selectBrowseResultTab(browseType){
+        for(var i=0; i < activeTabs.length; i++){
+            var button = document.getElementById(activeTabs[i] + "ResultsButton");
+            if(button != null){
+                if(activeTabs[i] === browseType){
+                    button.className = "active"
+                }else{
+                    button.className = "";
+                }
+            }
+        }
+    }
+
     function updateBrowseResults(results){
         var resultsPanel = document.getElementById("searchResultsPanel")
         var browseResultsTableString = createSearchResultsDisplay(results, activeTabs[0])

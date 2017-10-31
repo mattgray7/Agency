@@ -244,7 +244,7 @@ function getSearchResultsSectionTab(resultList, activeTab){
         if(activeTabs[i] === activeTab){
             tabButton += 'class="active" ';
         }
-        tabButton += ' id="' + activeTabs[i] + 'ProfileButton" onclick="selectBrowseResultTab(' + "'" + activeTabs[i] + "');" + '"><div style="margin-top: 5px;">' + activeTabs[i] + '</div><div id="' + activeTabs[i] + 'BorderCover" class="profileTabButtonBorderCover"></div></li>';
+        tabButton += ' id="' + activeTabs[i] + 'ResultsButton" onclick="selectBrowseResultTab(' + "'" + activeTabs[i] + "');" + '"><div style="margin-top: 5px;">' + activeTabs[i] + '</div><div id="' + activeTabs[i] + 'BorderCover" class="profileTabButtonBorderCover"></div></li>';
         displayString += tabButton;
     }
 
