@@ -37,7 +37,7 @@
         // If filters are expanded, add filters for new browse tab
         if(filtersExpanded){
             if(activeTabs.length > 0){
-                toggleExpandBrowseFiltersPanel("expand")
+                updateExpandedFiltersPanel()
             }else{
                 toggleExpandBrowseFiltersPanel("shrink")
             }
@@ -219,8 +219,10 @@
         for(var i=0; i < panelList.length; i++){
             $("[id='" + panelList[i] + "']").animate({marginTop: "0px", height: heights[panelList[i]] + "px"}, browseAnimateSpeed, function(){
                 var panelName = $(this).attr('id')
-                if(panelName in animationFinishCallbacks && animationFinishCallbacks[panelName] != null){
-                    animationFinishCallbacks[panelName]();
+                if(panelName in animationFinishCallbacks && animationFinishCallbacks[panelName] != null && animationFinishCallbacks[panelName].length > 0){
+                    for(var j=0; j < animationFinishCallbacks[panelName].length; j++){
+                        animationFinishCallbacks[panelName][j]();
+                    }
                 }
             });
 
@@ -756,65 +758,62 @@
         return {"html": filterString, "callbacks": filterCallbacks}
     }
 
-    function updateExpandedFiltersPanel(expandType){
+    function updateExpandedFiltersPanel(){
         var newFilterAddition;
         var newFilterRemoval;
         for(var i=0; i < browseTabs.length; i++){
-                    if(activeTabs.indexOf(browseTabs[i]) > -1){
-                        if(document.getElementById(browseTabs[i] + "FilterRow") == null){
-                            newFilterAddition = browseTabs[i];
-                        }
-                    }else{
-                        if(document.getElementById(browseTabs[i] + "FilterRow") != null){
-                            newFilterRemoval = browseTabs[i];
-                        }
-                    }
+            if(activeTabs.indexOf(browseTabs[i]) > -1){
+                if(document.getElementById(browseTabs[i] + "FilterRow") == null){
+                    newFilterAddition = browseTabs[i];
+                }
+            }else{
+                if(document.getElementById(browseTabs[i] + "FilterRow") != null){
+                    newFilterRemoval = browseTabs[i];
+                }
+            }
         }
 
         if(newFilterAddition != null){
-                    var newFilterIndex = browseTabs.indexOf(newFilterAddition);
-                    var nextFilterType;
-                    var previousFilterType;
-                    // Check if next filter row exists
-                    for(var i=newFilterIndex; i < browseTabs.length-1; i++){
-                        if(activeTabs.indexOf(browseTabs[i+1]) > -1){
-                            nextFilterType = browseTabs[i+1];
-                            break;
-                        }
+            var newFilterIndex = browseTabs.indexOf(newFilterAddition);
+            var nextFilterType;
+            var previousFilterType;
+            // Check if next filter row exists
+            for(var i=newFilterIndex; i < browseTabs.length-1; i++){
+                if(activeTabs.indexOf(browseTabs[i+1]) > -1){
+                    nextFilterType = browseTabs[i+1];
+                    break;
+                }
+            }
+            if(nextFilterType == null){
+                // Check if previous filter row exists
+                for(var i=newFilterIndex; i > 0; i--){
+                    if(activeTabs.indexOf(browseTabs[i-1]) > -1){
+                        previousFilterType = browseTabs[i-1];
+                        break;
                     }
-                    if(nextFilterType == null){
-                        // Check if previous filter row exists
-                        for(var i=newFilterIndex; i > 0; i--){
-                            if(activeTabs.indexOf(browseTabs[i-1]) > -1){
-                                previousFilterType = browseTabs[i-1];
-                                break;
-                            }
-                        }
-                    }
+                }
+            }
 
             var newFilterPanel = createFilterPanelRow(newFilterAddition);
             if(nextFilterType){
                 var filterRow = document.getElementById(nextFilterType + "FilterRow");
                 if(filterRow != null){
                     $("[id='" + nextFilterType + "FilterRow']").before(newFilterPanel["html"])
-                    animateBrowsePanelHeights(true, false, {});
                 }
             }else if(previousFilterType){
                 var filterRow = document.getElementById(previousFilterType + "FilterRow");
                 if(filterRow != null){
                     $("[id='" + previousFilterType + "FilterRow']").after(newFilterPanel["html"])
-                    animateBrowsePanelHeights(true, false, {});
                 }
             }
-
+            animateBrowsePanelHeights(true, true, {"browseFiltersPanel": newFilterPanel["callbacks"]});
 
         }else if(newFilterRemoval != null){
             // Remove
             var filterRow = document.getElementById(newFilterRemoval + "FilterRow");
             if(filterRow != null){
                 $("[id='" + newFilterRemoval + "FilterRow']").remove();
-                animateBrowsePanelHeights(true, false, {});
-                return;
+                animateBrowsePanelHeights(true, true, {});
             }
         }
     }
@@ -822,14 +821,6 @@
     var filtersExpanded = false
     function toggleExpandBrowseFiltersPanel(expandType){
         if(expandType === "shrink" || activeTabs.length > 0){
-            
-            // Add/Remove filter panel if
-            if(filtersExpanded && expandType === "expand"){
-                updateExpandedFiltersPanel(expandType)
-                return;
-            }
-
-
             var filterPanelHeight = filterSectionHeights[expandType] * activeTabs.length;
             var browseResultsHeight = getBrowseResultsTableHeight()
             if(firstSearch){
@@ -864,7 +855,7 @@
                         filterContent.innerHTML = '';
                         filteredProfessions = {"jobs": [], "users": []};
                     }
-                    animateBrowsePanelHeights(false, false, {"browseFiltersPanel": finishCallback})
+                    animateBrowsePanelHeights(false, false, {"browseFiltersPanel": [finishCallback]})
                     filtersExpanded = false;
                 }
             }
