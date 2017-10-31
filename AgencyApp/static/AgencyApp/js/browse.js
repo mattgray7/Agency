@@ -221,10 +221,52 @@ function getBrowseResultsList(section, results){
     return listString;
 }
 
-var browseTableElementHeight = 165;
-function createSearchResultsDisplay(resultList){
+function getSearchResultsSectionTab(resultList, activeTab){
     var displayString = '';
-    for(section in resultList){
+
+    displayString += "<div style='position: relative; width: 100%; height: 45px;'><ul class='profileTabButtonList' id='browseResultTabButtonList' style=''>"
+    for(var i=0; i < activeTabs.length; i++){
+        // Specify margin for each button in order (TODO create a functino to create a 4 tab list)
+        var styleString = "position: absolute;"
+        if(i === 0){
+            styleString += "left: -4px;"
+        }else if(i === 1){
+            styleString += "left: 20%;"
+        }else if(i === 2){
+            styleString += "left: 40%;"
+        }else if(i === 3){
+            styleString += "left: 60%;"
+        } else if(i === 4){
+            styleString += "right: 2px;"
+        }
+        var tabButton = '<li style="width: 19%; background: rgba(0,0,0,0.1); height: 40px;' + styleString + '" id="' + activeTabs[i] + 'ProfileButton" onclick="selectBrowseResultTab(' + "'" + activeTabs[i] + "');" + '"><div style="margin-top: 5px;">' + activeTabs[i] + '</div><div id="' + activeTabs[i] + 'BorderCover" class="profileTabButtonBorderCover"></div></li>';
+        displayString += tabButton;
+    }
+
+    displayString += "</ul></div>"
+    return displayString
+}
+
+var browseTableElementHeight = 165;
+function createSearchResultsDisplay(resultList, activeTab){
+    var displayString = '<div>';
+
+    displayString += getSearchResultsSectionTab(resultList, activeTab);
+
+    displayString += "<div style='position: relative; width: 100%; height: 200px; background: #FFF;'>"
+
+    // Add results container
+    if(resultList[activeTab]["results"].length > 0 && expandedTabDict[activeTab]){
+        displayString += "<div id='" + activeTab + "BrowseResultsContainer' style='overflow: hidden;'>";
+    }else{
+        displayString += "<div id='" + activeTab + "BrowseResultsContainer' style='height: 0px; overflow: hidden;'>";
+    }
+    displayString += getBrowseResultsList(activeTab, resultList[activeTab]["results"])
+    if(resultList[activeTab]["moreResults"]){
+        displayString += "<div style='text-align: center; height: 30px; margin-top: -4px;'><a style='font-weight: 300; font-size: 1.1em;' onclick='addResultsToSection(" + '"' + activeTab + '");' + "'>Show More</a></div>"
+    }
+
+    /*for(section in resultList){
         // Add section header container
         displayString += "<div style='position: relative; width: 100%; height: 45px;'>"
 
@@ -252,7 +294,8 @@ function createSearchResultsDisplay(resultList){
             displayString += "<div style='text-align: center; height: 30px; margin-top: -4px;'><a style='font-weight: 300; font-size: 1.1em;' onclick='addResultsToSection(" + '"' + section + '");' + "'>Show More</a></div>"
         }
         displayString += "</div>"
-    }
+    }*/
+    displayString += "</div></div>"
     return displayString
 }
 

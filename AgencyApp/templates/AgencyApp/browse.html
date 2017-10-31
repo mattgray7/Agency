@@ -52,17 +52,17 @@
 
     function updateBrowseResults(results){
         var resultsPanel = document.getElementById("searchResultsPanel")
-        var browseResultsTableString = createSearchResultsDisplay(results)
+        var browseResultsTableString = createSearchResultsDisplay(results, activeTabs[0])
         if(browseResultsTableString != null && browseResultsTableString.length > 0){
             // Add results content, can now access height of elements
             resultsPanel.innerHTML = browseResultsTableString;
             resultsPanel.style.display = 'block';
 
             // Save expanded section heights
-            saveExpandedBrowseSectionHeights(results);
+            //saveExpandedBrowseSectionHeights(results);
 
             // Update browse content container
-            updateBrowseContentHeight();
+            //updateBrowseContentHeight();
         }
     }
 
