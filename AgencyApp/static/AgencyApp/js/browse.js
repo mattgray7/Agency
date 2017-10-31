@@ -189,7 +189,7 @@ function getSearchResultsSectionTab(resultList, activeTab){
             tabButton += 'class="active" ';
             borderCoverOpacity = 1;
         }
-        tabButton += ' id="' + activeTabs[i] + 'ResultsButton" onclick="selectBrowseResultTab(' + "'" + activeTabs[i] + "');" + '"><div style="margin-top: 5px;">' + activeTabs[i] + '</div><div id="' + activeTabs[i] + 'BorderCover" class="profileTabButtonBorderCover" style="margin-top: 8px; opacity: ' + borderCoverOpacity + ';"></div></li>';
+        tabButton += ' id="' + activeTabs[i] + 'ResultsButton" onclick="selectBrowseResultTab(' + "'" + activeTabs[i] + "');" + '"><div style="margin-top: 5px;">' + activeTabs[i] + ' (' + resultList[activeTabs[i]]["numResults"] + ')</div><div id="' + activeTabs[i] + 'BorderCover" class="profileTabButtonBorderCover" style="margin-top: 8px; opacity: ' + borderCoverOpacity + ';"></div></li>';
         displayString += tabButton;
     }
 
