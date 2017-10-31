@@ -107,7 +107,7 @@
         if(activeTabs.length != 0){
             $.ajax({
                 url : "/ajax/getSearchResults/",
-                data : {"categories": activeTabs, "searchValue": searchValue, "filters": JSON.stringify(getSearchFilterValues())},
+                data : {"categories": activeTabs, "searchValue": searchValue, "numResults":defaultNumResults, "filters": JSON.stringify(getSearchFilterValues())},
                 type : 'POST',
                 dataType: "json",
                 success : function(data) {

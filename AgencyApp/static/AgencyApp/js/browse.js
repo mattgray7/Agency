@@ -139,7 +139,7 @@ function addResultsToSection(section){
         searchValue = searchInput.value;
     }
 
-    currentMaxNumResults[section] += 6;
+    currentMaxNumResults[section] += defaultNumResults;
     $.ajax({
         url : "/ajax/getSearchResults/",
         data : {"categories": [section], "searchValue": searchValue, "numResults": currentMaxNumResults[section], "filters": JSON.stringify(getSearchFilterValues())},
