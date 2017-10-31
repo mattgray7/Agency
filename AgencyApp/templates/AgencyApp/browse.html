@@ -140,10 +140,20 @@
         var panelString = "<ul>"
         var callbacks = []
         for(var i=0; i < activeTabs.length; i++){
-            var filterPanel = filterPanelMap[activeTabs[i]]()
-            panelString += "<li id='" + activeTabs[i] + "FilterRow' style='height: " + filterSectionHeights[activeTabs[i]] + "px;'>" + filterPanel["html"] + "</li>";
-            if(filterPanel["callbacks"].length > 0){
-                callbacks = callbacks.concat(filterPanel["callbacks"])
+            var filterRow = filterPanelMap[activeTabs[i]]()
+            var existingFilterRow = document.getElementById(activeTabs[i] + "FilterRow")
+            if(existingFilterRow != null){
+                // Filter panel exists, just copy innerHTML and update the height
+                // This will keep chosen professions etc when updating filter panel
+                filterRow = {"html": existingFilterRow.innerHTML, "callbacks": filterRow["callbacks"]}
+                filterSectionHeights[activeTabs[i]] = existingFilterRow.offsetHeight
+            }
+
+            var filterRowHeight = filterSectionHeights[activeTabs[i]]
+
+            panelString += "<li id='" + activeTabs[i] + "FilterRow' style='height: " + filterRowHeight + "px;'>" + filterRow["html"] + "</li>";
+            if(filterRow["callbacks"].length > 0){
+                callbacks = callbacks.concat(filterRow["callbacks"])
             }
         }
         panelString += "</ul>";
@@ -156,7 +166,6 @@
         if(addFilterPanelHeight){
             searchPanelHeight += 40;
         }
-
 
         var browseResultsHeight = getBrowseResultsTableHeight()
 
