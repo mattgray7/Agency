@@ -134,6 +134,18 @@
         }
     }
 
+    function createFilterPanelRow(filterType){
+        var panelString = "";
+        var callbacks = [];
+        var filterRow = filterPanelMap[filterType]()
+        panelString += "<li id='" + filterType + "FilterRow' style='height: " + filterSectionHeights[filterType] + "px;'>" + filterRow["html"] + "</li>";
+        if(filterRow["callbacks"].length > 0){
+            callbacks = callbacks.concat(filterRow["callbacks"])
+        }
+        return {"html": panelString, "callbacks": callbacks}
+
+    }
+
     var filterSectionHeights = {"jobs": 125, "roles": 210, "projects": 125, "events": 100, "users": 230};
     var filterPanelMap = {"jobs": getJobsFilters, "roles": getRolesFiltersString, "users": getUsersFiltersString, "projects": getProjectsFiltersString, "events": getEventsFiltersString}
     function createFilterPanel(){
@@ -744,9 +756,80 @@
         return {"html": filterString, "callbacks": filterCallbacks}
     }
 
+    function updateExpandedFiltersPanel(expandType){
+        var newFilterAddition;
+        var newFilterRemoval;
+        for(var i=0; i < browseTabs.length; i++){
+                    if(activeTabs.indexOf(browseTabs[i]) > -1){
+                        if(document.getElementById(browseTabs[i] + "FilterRow") == null){
+                            newFilterAddition = browseTabs[i];
+                        }
+                    }else{
+                        if(document.getElementById(browseTabs[i] + "FilterRow") != null){
+                            newFilterRemoval = browseTabs[i];
+                        }
+                    }
+        }
+
+        if(newFilterAddition != null){
+                    var newFilterIndex = browseTabs.indexOf(newFilterAddition);
+                    var nextFilterType;
+                    var previousFilterType;
+                    // Check if next filter row exists
+                    for(var i=newFilterIndex; i < browseTabs.length-1; i++){
+                        if(activeTabs.indexOf(browseTabs[i+1]) > -1){
+                            nextFilterType = browseTabs[i+1];
+                            break;
+                        }
+                    }
+                    if(nextFilterType == null){
+                        // Check if previous filter row exists
+                        for(var i=newFilterIndex; i > 0; i--){
+                            if(activeTabs.indexOf(browseTabs[i-1]) > -1){
+                                previousFilterType = browseTabs[i-1];
+                                break;
+                            }
+                        }
+                    }
+
+            var newFilterPanel = createFilterPanelRow(newFilterAddition);
+            if(nextFilterType){
+                var filterRow = document.getElementById(nextFilterType + "FilterRow");
+                if(filterRow != null){
+                    $("[id='" + nextFilterType + "FilterRow']").before(newFilterPanel["html"])
+                    animateBrowsePanelHeights(true, false, {});
+                }
+            }else if(previousFilterType){
+                var filterRow = document.getElementById(previousFilterType + "FilterRow");
+                if(filterRow != null){
+                    $("[id='" + previousFilterType + "FilterRow']").after(newFilterPanel["html"])
+                    animateBrowsePanelHeights(true, false, {});
+                }
+            }
+
+
+        }else if(newFilterRemoval != null){
+            // Remove
+            var filterRow = document.getElementById(newFilterRemoval + "FilterRow");
+            if(filterRow != null){
+                $("[id='" + newFilterRemoval + "FilterRow']").remove();
+                animateBrowsePanelHeights(true, false, {});
+                return;
+            }
+        }
+    }
+
     var filtersExpanded = false
     function toggleExpandBrowseFiltersPanel(expandType){
         if(expandType === "shrink" || activeTabs.length > 0){
+            
+            // Add/Remove filter panel if
+            if(filtersExpanded && expandType === "expand"){
+                updateExpandedFiltersPanel(expandType)
+                return;
+            }
+
+
             var filterPanelHeight = filterSectionHeights[expandType] * activeTabs.length;
             var browseResultsHeight = getBrowseResultsTableHeight()
             if(firstSearch){
