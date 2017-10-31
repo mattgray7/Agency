@@ -200,7 +200,10 @@
 
         heightsDict["searchResultsPanel"] = searchPanelHeight;  // Top, not height
 
-        heightsDict["browseFiltersPanel"] = 40;
+        heightsDict["browseFiltersPanel"] = 0;
+        if(filtersExpanded){
+            heightsDict["browseFiltersPanel"] += 40;
+        }
 
         for(divID in heightsDict){
             if(addFilterPanelHeight){
@@ -848,8 +851,8 @@
                     }
                     addFiltersButton.innerHTML = "Hide filters"
                     addFiltersButton.onclick = function(){toggleExpandBrowseFiltersPanel("shrink")}
-                    animateBrowsePanelHeights(true, false, {});
                     filtersExpanded = true;
+                    animateBrowsePanelHeights(true, false, {});
                 }else if(expandType === "shrink"){
                     addFiltersButton.innerHTML = "Advanced search"
                     addFiltersButton.onclick = function(){toggleExpandBrowseFiltersPanel("expand");}
@@ -859,8 +862,8 @@
                         filterContent.innerHTML = '';
                         filteredProfessions = {"jobs": [], "users": []};
                     }
-                    animateBrowsePanelHeights(false, false, {"browseFiltersPanel": [finishCallback]})
                     filtersExpanded = false;
+                    animateBrowsePanelHeights(false, false, {"browseFiltersPanel": [finishCallback]})
                 }
             }
         }
