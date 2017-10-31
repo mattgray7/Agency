@@ -239,7 +239,12 @@ function getSearchResultsSectionTab(resultList, activeTab){
         } else if(i === 4){
             styleString += "right: 2px;"
         }
-        var tabButton = '<li style="width: 19%; background: rgba(0,0,0,0.1); height: 40px;' + styleString + '" id="' + activeTabs[i] + 'ProfileButton" onclick="selectBrowseResultTab(' + "'" + activeTabs[i] + "');" + '"><div style="margin-top: 5px;">' + activeTabs[i] + '</div><div id="' + activeTabs[i] + 'BorderCover" class="profileTabButtonBorderCover"></div></li>';
+
+        var tabButton = '<li style="width: 19%; height: 40px;' + styleString + '" '
+        if(activeTabs[i] === activeTab){
+            tabButton += 'class="active" ';
+        }
+        tabButton += ' id="' + activeTabs[i] + 'ProfileButton" onclick="selectBrowseResultTab(' + "'" + activeTabs[i] + "');" + '"><div style="margin-top: 5px;">' + activeTabs[i] + '</div><div id="' + activeTabs[i] + 'BorderCover" class="profileTabButtonBorderCover"></div></li>';
         displayString += tabButton;
     }
 
@@ -301,7 +306,7 @@ function createSearchResultsDisplay(resultList, activeTab){
 
 var createBrowseListElementFunctionMap = {"jobs": createJobElement, "roles": createRoleElement, "projects": createProjectElement, "events": createEventElement, "users": createUserElement}
 function createBrowseListElement(elementType, dataDict){
-    var element = "<li style='height: " + browseTableElementHeight + "px; position: relative; overflow: hidden;'>"
+    var element = "<li style='height: " + browseTableElementHeight + "px; position: relative; overflow: hidden; background: #FFF;'>"
     
     // Add picture
     element += "<div style='position: absolute; left: 0; right: 75%; height: 100%; text-align: left;'><img src='" + dataDict["postPictureURL"] + "' style='margin-top: 8px; margin-left: 10px; max-height: 90%; max-width: 100%;'/></div>"
