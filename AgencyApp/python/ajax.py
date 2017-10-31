@@ -601,8 +601,8 @@ def getSearchSuggestions(request):
             suggestions["Profession"] = list(set(professionList))      # Remove duplicates
 
         # Get projects
-        projects = ([x.title for x in models.ProjectPost.objects.filter(title__startswith=searchValue)] +
-                    [x.title for x in models.ProjectPost.objects.filter(title__startswith="The {0}".format(searchValue))])
+        projects = ([x.title for x in models.ProjectPost.objects.filter(title__contains=searchValue)] +
+                    [x.title for x in models.ProjectPost.objects.filter(title__contains="The {0}".format(searchValue))])
         if projects:
             suggestions["Project"] = list(set(projects))
 

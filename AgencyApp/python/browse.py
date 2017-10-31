@@ -467,8 +467,8 @@ def getRolesSearchResults(searchValue, numResults, filters):
                                 )
 
 def getProjectSearchResults(searchValue, numResults, filters):
-    searchLists = [models.ProjectPost.objects.filter(title__startswith=searchValue),
-                   models.ProjectPost.objects.filter(title__startswith="The {0}".format(searchValue))]
+    searchLists = [models.ProjectPost.objects.filter(title__contains=searchValue),
+                   models.ProjectPost.objects.filter(title__contains="The {0}".format(searchValue))]
     defaultList = models.ProjectPost.objects.all().order_by("-status", "-updatedAt")
     searchLists.append(defaultList)
     if filters:
