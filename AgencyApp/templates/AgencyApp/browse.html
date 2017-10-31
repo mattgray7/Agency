@@ -19,7 +19,8 @@
                 activeTabs.splice(activeTabListIndex, 1)
                 browseButton.className = "";
             }else{
-                activeTabs.push(browseType);
+                var tabIndex = browseTabs.indexOf(browseType)
+                activeTabs.splice(tabIndex, 0, browseType)  // delete 0, add at tab index
                 browseButton.className = "active";
             }
         }
