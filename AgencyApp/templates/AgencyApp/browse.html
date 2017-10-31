@@ -760,7 +760,7 @@
             <div id='searchPanel' class='browseSearchPanel' style='position: absolute; height: 200px; left: 0; right: 0; z-index: 1;'>
                 <div id='searchPanelContent' style='position: relative; height: 100%; width: 100%;'>
                     <h1 style='margin-top: 10px;'>Explore</h1>
-                    <div class='browseSearchTextBoxContainer' style='position:absolute; top: 50px; width: 420px; margin: 0 auto; left: 0; right: 0;'>
+                    <div class='browseSearchTextBoxContainer' style='position:absolute; top: 50px; width: 413px; margin: 0 auto; left: -7px; right: 0;'>
                         <div style='position: relative;'>
                             <div style='position: absolute; left: 0; right: 80px;'>
                                 <input type='text' id='searchTextInput' placeholder='Add search keywords'>
@@ -771,7 +771,7 @@
                                     addBrowseDropdownCallback("searchPreviewBrowseSuggestions", "submitSearchButton", {})
                                 </script>
                             </div>
-                            <div onclick='submitSearch();' id='submitSearchButton' style='position: absolute; right: -4px; padding: 5px 10px; margin-top: 7px; font-size: 0.9em;' class='whiteButton blackHover'>
+                            <div class='editButton' style='position: absolute; right: -10px; top: 6px; height: 23px; padding-top: 5px; width: 68px;' onclick='submitSearch();' id='submitSearchButton'>
                                 Search
                             </div>
                         </div>
@@ -798,7 +798,7 @@
                         <div style='position: relative; height: 100%;'>
                             <div id='browseFiltersPanelContent' style='display: none;'>
                             </div>
-                            <div id='updateSearchButton' style='position: absolute; right: 10px; bottom: 10px; padding: 5px 10px; font-size: 0.85em; display: none;' class='whiteButton blackHover' onclick='submitSearch();'>Update search</div>
+                            <div id='updateSearchButton' class='editButton' style='position: absolute; right: 10px; bottom: 10px; padding: 6px 10px 4px 10px; height: 22px; width: 100px; font-size: 0.85em; display: none;' onclick='submitSearch();'>Update search</div>
                         </div>
                     </div>
 

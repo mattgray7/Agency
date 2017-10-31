@@ -440,7 +440,7 @@
 	.editButton.disabled{
 		background: rgba(0,0,0,0.1);
 		color: rgba(0,0,0,0.7);
-		cursor: default;
+		cursor: not-allowed;
 	}
 
 	.editButton.disabled hover{
