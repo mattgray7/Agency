@@ -39,44 +39,6 @@ function updateBrowseContentHeight(){
     $("#browseContent").animate({marginTop: "0px", height: newBrowseContentHeight + "px"}, browseAnimateSpeed, function(){});
 }
 var browseAnimateSpeed = 400;
-/*var expandedSectionHeights = {"jobs": 0, "roles": 0, "users": 0, "projects": 0, "events": 0}
-function saveExpandedBrowseSectionHeights(results, section){
-    var container = document.getElementById(section + "BrowseResultsContainer")
-    if(container != null){
-        expandedSectionHeights[section] = container.offsetHeight + 45;
-    }
-}*/
-/*
-var browseAnimateSpeed = 400;
-function toggleExpandBrowseSection(direction, section){
-    var resultsContainer = document.getElementById(section + "BrowseResultsContainer");
-    var expandButton = document.getElementById(section + "BrowseExpandButton");
-
-    if(direction === "expand"){
-        expandedTabDict[section] = true;
-        if(expandButton != null){
-            expandButton.innerHTML = getSectionExpandButtonContent("shrink")
-            expandButton.onclick = function(){toggleExpandBrowseSection("shrink", section)}
-        }
-        if(resultsContainer != null){
-            $("[id='" + section + "BrowseResultsContainer']").animate({marginTop: "0px", height: expandedSectionHeights[section] + "px"}, browseAnimateSpeed, function(){});
-        }
-    }else{
-        expandedTabDict[section] = false;
-        currentMaxNumResults[section] = defaultNumResults;      // Why is it still showing 9 results after toggle?
-        if(expandButton != null){
-            expandButton.innerHTML = getSectionExpandButtonContent("expand")
-            expandButton.onclick = function(){toggleExpandBrowseSection("expand", section)}
-        }
-        if(resultsContainer != null){
-            $("[id='" + section + "BrowseResultsContainer']").animate({marginTop: "0px", height: "0px"}, browseAnimateSpeed, function(){});
-        }
-    }
-    if(resultsContainer != null){
-        updateBrowseContentHeight();
-    }
-}
-*/
 var getFiltersMap = {"jobs": getJobsFilterValues, "roles": getRolesFilterValues, "users": getUsersFilterValues, "projects": getProjectsFilterValues, "events": getEventsFilterValues}
 function getSearchFilterValues(){
     var filterDict = {}
@@ -168,7 +130,7 @@ function getEventsFilterValues(){
 }
 
 // Number of results to display for each section
-var defaultNumResults = 3;
+var defaultNumResults = 6;
 var currentMaxNumResults = {"jobs": defaultNumResults, "roles": defaultNumResults, "users": defaultNumResults, "projects": defaultNumResults, "events": defaultNumResults}
 function addResultsToSection(section){
     var searchValue = ''
@@ -177,7 +139,7 @@ function addResultsToSection(section){
         searchValue = searchInput.value;
     }
 
-    currentMaxNumResults[section] += 3;
+    currentMaxNumResults[section] += 6;
     $.ajax({
         url : "/ajax/getSearchResults/",
         data : {"categories": [section], "searchValue": searchValue, "numResults": currentMaxNumResults[section], "filters": JSON.stringify(getSearchFilterValues())},
@@ -253,36 +215,6 @@ function createSearchResultsDisplay(resultList, activeTab){
     }else{
         displayString += "<div id='" + activeTab + "BrowseResultsContainer' style='height: 30px; overflow: hidden; border: 1px solid #000; background: #FFF; text-align: center; padding: 15px 0px 10px 0px;'>No results matching search.";
     }
-
-    /*for(section in resultList){
-        // Add section header container
-        displayString += "<div style='position: relative; width: 100%; height: 45px;'>"
-
-        var onclickDirection;
-        if(expandedTabDict[section]){
-            onclickDirection = "shrink";
-        }else{
-            onclickDirection = "expand"
-        }
-
-        displayString += "<div id='" + section + "BrowseExpandButton' class='browseTableExpandSectionButton' onclick='toggleExpandBrowseSection(" + '"' + onclickDirection + '", "' + section + '");' + "' style='position: absolute; top: 20px; left: 5px;'>" + getSectionExpandButtonContent(onclickDirection) + "</div>";
-
-        displayString += "<h1 style='position: absolute; top: 0; left: 25px;'>" + section + " (" + resultList[section]["numResults"] + ")</h1>";
-        displayString += "</div>"
-
-        // Add results container
-        if(resultList[section]["results"].length > 0 && expandedTabDict[section]){
-            displayString += "<div id='" + section + "BrowseResultsContainer' style='overflow: hidden;'>";
-        }else{
-            displayString += "<div id='" + section + "BrowseResultsContainer' style='height: 0px; overflow: hidden;'>";
-        }
-        displayString += getBrowseResultsList(section, resultList[section]["results"])
-
-        if(resultList[section]["moreResults"]){
-            displayString += "<div style='text-align: center; height: 30px; margin-top: -4px;'><a style='font-weight: 300; font-size: 1.1em;' onclick='addResultsToSection(" + '"' + section + '");' + "'>Show More</a></div>"
-        }
-        displayString += "</div>"
-    }*/
     displayString += "</div></div>"
     return displayString
 }
