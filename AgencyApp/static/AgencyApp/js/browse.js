@@ -174,13 +174,13 @@ function getSearchResultsSectionTab(resultList, activeTab){
         if(i === 0){
             styleString += "left: -4px;"
         }else if(i === 1){
-            styleString += "left: 20%;"
+            styleString += "left: 19.5%;"
         }else if(i === 2){
-            styleString += "left: 40%;"
+            styleString += "left: 39.7%;"
         }else if(i === 3){
             styleString += "left: 60%;"
         } else if(i === 4){
-            styleString += "right: 2px;"
+            styleString += "right: 0px;"
         }
 
         var tabButton = '<li style="width: 19%; height: 40px;' + styleString + '" '
@@ -199,7 +199,7 @@ function getSearchResultsSectionTab(resultList, activeTab){
 
 var browseTableElementHeight = 165;
 function createSearchResultsDisplay(resultList, activeTab){
-    var displayString = '<div>';
+    var displayString = '<div style="margin-left: 0px; margin-right: 2px;">';
 
     displayString += getSearchResultsSectionTab(resultList, activeTab);
 
@@ -207,13 +207,13 @@ function createSearchResultsDisplay(resultList, activeTab){
 
     // Add results container
     if(resultList[activeTab]["results"].length > 0){
-        displayString += "<div id='" + activeTab + "BrowseResultsContainer' style='overflow: hidden; border: 1px solid #000; background: #FFF;'>";
+        displayString += "<div id='" + activeTab + "BrowseResultsContainer' style='overflow: hidden; border: 1px solid #000; background: #FFF; border-radius: 2px;'>";
         displayString += getBrowseResultsList(activeTab, resultList[activeTab]["results"])
         if(resultList[activeTab]["moreResults"]){
             displayString += "<div style='text-align: center; height: 30px; margin-top: -4px;'><a style='font-weight: 300; font-size: 1.1em;' onclick='addResultsToSection(" + '"' + activeTab + '");' + "'>Show More</a></div>"
         }
     }else{
-        displayString += "<div id='" + activeTab + "BrowseResultsContainer' style='height: 30px; overflow: hidden; border: 1px solid #000; background: #FFF; text-align: center; padding: 15px 0px 10px 0px;'>No results matching search.";
+        displayString += "<div id='" + activeTab + "BrowseResultsContainer' style='height: 30px; overflow: hidden; border: 1px solid #000; border-radius: 2px; background: #FFF; text-align: center; padding: 15px 0px 10px 0px;'>No results matching search.";
     }
     displayString += "</div></div>"
     return displayString
