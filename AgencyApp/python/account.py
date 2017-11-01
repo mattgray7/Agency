@@ -381,7 +381,7 @@ class EditInterestsView(GenericEditAccountView):
                 if formInput.startswith("hireType."):
                     hireType = formInput.split(".")[1]
                     newHireInterests = models.Interest.objects.filter(username=self.username, mainInterest=interestType,
-                                                                     subInterest=hireType)
+                                                                      subInterest=hireType)
                     if not newHireInterests:
                         newHireInterest = models.Interest(username=self.username, mainInterest=interestType,
                                                           subInterest=hireType)
