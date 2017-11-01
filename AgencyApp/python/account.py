@@ -349,7 +349,6 @@ class EditInterestsView(GenericEditAccountView):
         for interest in constants.PROFESSIONS:
             if profession in constants.PROFESSIONS[interest]:
                 return interest
-        print "ERROR GETTING INTEREST FOR PROFESSION {0}".format(profession)
 
     def processForm(self):
         """Overriding asbtract method"""

@@ -982,14 +982,8 @@ function getWideInterestPanel(){
     return panelString
 }
 
-function selectWorkInterest(firstTimeDisplay){
-    var secondLevel = document.getElementById("secondLevelViewPanel")
-    if(secondLevel != null){
-        $("#secondLevelViewPanel").animate({marginTop: "0px", height: "400px"}, 500, function(){});
-        $('html,body').animate({scrollTop: "1000px"},500);
-    }
-
-            /*var workInterestDiv = document.getElementById("workInterestDiv");
+function getWorkInterestPicker(){
+    /*var workInterestDiv = document.getElementById("workInterestDiv");
             if(workInterestDiv != null){
                 mainDiv.innerHTML = workInterestDiv.innerHTML;
                 {% if existingProfessions %}
@@ -1007,13 +1001,43 @@ function selectWorkInterest(firstTimeDisplay){
                 {% endif %}
                 filterProfessions("acting");
             }*/
+    return "Work picker"
+}
+
+function getHiringInterestPicker(){
+    var pickerString = '<div id="hiringInterestContainer"><div id="wrapper"><div id="three-column" class="container" style="width: 740px;"><div class="title"><h2>Who are you looking for?</h2><span class="byline">Specify your hiring needs</span></div>'
+
+    var buttonTexts = {"left": "Hiring", "center": "Casting", "right": "Collaborating"}
+    // Add left panel
+    pickerString += '<div class="boxA"><h2>Hiring</h2><span class="fa fa-cloud-download"></span><p style="height: 160px; padding-top: 8px;">Are you gearing up for production and looking for crew members? Find available professionals seeking work for any field from pre to post production.</p><div class="editButton" style="height: 40px; padding-top: 20px; margin: 40px 5px 10px 5px;" onclick="toggleHireType(' + "'hiring'" + ');">' + buttonTexts["left"] + '</div></div>'
+
+    // Add center panel
+    pickerString += '<div class="boxB"><h2>Casting</h2><span class="fa fa-cogs"></span><p style="height: 153px; padding-top: 15px;">Are you casting roles for an upcoming project? Search our Actor database to find available actors in your area.</p><div class="editButton" style="height: 40px; padding-top: 20px; margin: 40px 5px 10px 5px;" onclick="toggleHireType(' + "'casting'" + ');">' + buttonTexts["center"] + '</div></div>'
+
+    // Add right panel
+    pickerString += '<div class="boxC"><h2>Collaborating</h2><span class="fa fa-wrench"></span><p>Are looking for filmmakers to collaborate on a project with? Whether you are looking for a partner, or just someone to bounce ideas off of, find others looking to collaborate.</p><div class="editButton" style="height: 40px; padding-top: 20px; margin: 40px 5px 10px 5px;" onclick="toggleHireType(' + "'casting'" + ');">' + buttonTexts["right"] + '</div></div>'
+
+    pickerString += "</div></div>"
+    return pickerString
+}
+
+function selectWorkInterest(firstTimeDisplay){
+    var secondLevel = document.getElementById("secondLevelViewPanel")
+    if(secondLevel != null){
+        secondLevel.innerHTML = getWorkInterestPicker();
+        $("#secondLevelViewPanel").animate({marginTop: "0px", height: "400px"}, 300, function(){});
+        $('html,body').animate({scrollTop: "1000px"},500);
+    }
 }
 
 function selectHiringInterest(firstTimeDisplay){
     var secondLevel = document.getElementById("secondLevelViewPanel")
     if(secondLevel != null){
-        $("#secondLevelViewPanel").animate({marginTop: "0px", height: "400px"}, 500, function(){});
-        $('html,body').animate({scrollTop: "1000px"},500);
+        secondLevel.innerHTML = getHiringInterestPicker();
+
+        var interestContainer = document.getElementById("hiringInterestContainer")
+        $("#secondLevelViewPanel").animate({marginTop: "0px", height: interestContainer.offsetHeight + "px"}, 300, function(){});
+        $('html,body').animate({scrollTop: "650px"},500);
     }
 }
 
@@ -1212,7 +1236,7 @@ function resizeInterestPanel(force){
         }
         </script>
 
-        <!--<div id="workInterestDiv" style="display:none;">
+        <div id="workInterestDiv" style="display:none;">
             <h2>What kind of jobs are you looking for?</h2>
             <div id="wrapper">
                 <table id="workInterestPanel">
