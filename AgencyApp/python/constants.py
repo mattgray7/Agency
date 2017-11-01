@@ -20,7 +20,8 @@ PLUS_SIGN_PATH = "/media/default/plus.png"
 IMDB_LOGO_PATH = "/media/default/imdbLogo.png"
 RESUME_ICON_PATH = "/media/default/resume.png"
 #LOGO_PATH = "/media/default/logo.png"
-LOGO_PATH = "/media/default/logo2_wide.png"
+#LOGO_PATH = "/media/default/logo2_wide.png"
+LOGO_PATH = "/media/default/logos/FCLogoWhite.png"
 STOCK_IMAGE_DIR = "/media/default/stockImages/"
 
 # Source page enums:
