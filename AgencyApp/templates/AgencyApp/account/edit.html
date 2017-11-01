@@ -982,6 +982,48 @@ function getWideInterestPanel(){
     return panelString
 }
 
+function getSlimInterestPanel(){
+    return "Im slim"
+}
+
+function resizeInterestPanel(force){
+    if($(window).width() > interestPanelWidthThreshold){
+        if(!interestPanelExpanded || force == true){
+            document.getElementById("backgroundPanel").innerHTML = getWideInterestPanel();
+            interestPanelExpanded = true;
+        }
+    }else{
+        if(interestPanelExpanded || force == true){
+            document.getElementById("backgroundPanel").innerHTML = getSlimInterestPanel();
+            interestPanelExpanded = false;
+        }
+    }
+}
+
+function selectWorkInterest(firstTimeDisplay){
+    var secondLevel = document.getElementById("secondLevelViewPanel")
+    if(secondLevel != null){
+        secondLevel.innerHTML = getWorkInterestPicker();
+        $("#secondLevelViewPanel").animate({marginTop: "0px", height: "400px"}, 300, function(){});
+        $('html,body').animate({scrollTop: "1000px"},500);
+    }
+}
+
+function selectHiringInterest(firstTimeDisplay){
+    var secondLevel = document.getElementById("secondLevelViewPanel")
+    if(secondLevel != null){
+        secondLevel.innerHTML = getHiringInterestPicker();
+
+        var interestContainer = document.getElementById("hiringInterestContainer")
+        $("#secondLevelViewPanel").animate({marginTop: "0px", height: interestContainer.offsetHeight + "px"}, 300, function(){});
+        $('html,body').animate({scrollTop: "650px"},500);
+    }
+}
+
+function selectOtherInterest(){
+    submitFormWithExtraParameters("other");
+}
+
 function getWorkInterestPicker(){
     /*var workInterestDiv = document.getElementById("workInterestDiv");
             if(workInterestDiv != null){
