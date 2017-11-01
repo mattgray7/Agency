@@ -1051,56 +1051,32 @@ function getHiringInterestPicker(){
 
     var buttonTexts = {"left": "Hiring", "center": "Casting", "right": "Collaborating"}
     // Add left panel
-    pickerString += '<div class="boxA"><h2>Hiring</h2><span class="fa fa-cloud-download"></span><p style="height: 160px; padding-top: 8px;">Are you gearing up for production and looking for crew members? Find available professionals seeking work for any field from pre to post production.</p><div class="editButton" style="height: 40px; padding-top: 20px; margin: 40px 5px 10px 5px;" onclick="toggleHireType(' + "'hiring'" + ');">' + buttonTexts["left"] + '</div></div>'
+    pickerString += '<div class="boxA"><h2>Hiring</h2><span class="fa fa-cloud-download"></span><p style="height: 160px; padding-top: 8px;">Are you gearing up for production and looking for crew members? Find available professionals seeking work for any field from pre to post production.</p><div id="hiringToggleButton" class="toggleButton" style="height: 40px; width: 92%; padding-top: 20px; margin: 20px 5px 10px 5px;" onclick="toggleHireType(' + "'hiring'" + ');">Enable</div></div>'
 
     // Add center panel
-    pickerString += '<div class="boxB"><h2>Casting</h2><span class="fa fa-cogs"></span><p style="height: 153px; padding-top: 15px;">Are you casting roles for an upcoming project? Search our Actor database to find available actors in your area.</p><div class="editButton" style="height: 40px; padding-top: 20px; margin: 40px 5px 10px 5px;" onclick="toggleHireType(' + "'casting'" + ');">' + buttonTexts["center"] + '</div></div>'
+    pickerString += '<div class="boxB"><h2>Casting</h2><span class="fa fa-cogs"></span><p style="height: 153px; padding-top: 15px;">Are you casting roles for an upcoming project? Search our Actor database to find available actors in your area.</p><div id="castingToggleButton" class="toggleButton" style="height: 40px; width: 92%; padding-top: 20px; margin: 20px 5px 10px 5px;" onclick="toggleHireType(' + "'casting'" + ');">Enable</div></div>'
 
     // Add right panel
-    pickerString += '<div class="boxC"><h2>Collaborating</h2><span class="fa fa-wrench"></span><p>Are looking for filmmakers to collaborate on a project with? Whether you are looking for a partner, or just someone to bounce ideas off of, find others looking to collaborate.</p><div class="editButton" style="height: 40px; padding-top: 20px; margin: 40px 5px 10px 5px;" onclick="toggleHireType(' + "'casting'" + ');">' + buttonTexts["right"] + '</div></div>'
+    pickerString += '<div class="boxC"><h2>Collaborating</h2><span class="fa fa-wrench"></span><p>Are looking for filmmakers to collaborate on a project with? Whether you are looking for a partner, or just someone to bounce ideas off of, find others looking to collaborate.</p><div id="collaboratingToggleButton" class="toggleButton" style="height: 40px; width: 92%; padding-top: 20px; margin: 20px 5px 10px 5px;" onclick="toggleHireType(' + "'collaborating'" + ');">Enable</div></div>'
 
     pickerString += "</div></div>"
     return pickerString
 }
 
-function selectWorkInterest(firstTimeDisplay){
-    var secondLevel = document.getElementById("secondLevelViewPanel")
-    if(secondLevel != null){
-        secondLevel.innerHTML = getWorkInterestPicker();
-        $("#secondLevelViewPanel").animate({marginTop: "0px", height: "400px"}, 300, function(){});
-        $('html,body').animate({scrollTop: "1000px"},500);
-    }
-}
+var hireTypes = ["hiring", "casting", "collaborating"];
+var chosenHireTypes = {"hiring": false, "casting": false, "collaborating": false};
 
-function selectHiringInterest(firstTimeDisplay){
-    var secondLevel = document.getElementById("secondLevelViewPanel")
-    if(secondLevel != null){
-        secondLevel.innerHTML = getHiringInterestPicker();
-
-        var interestContainer = document.getElementById("hiringInterestContainer")
-        $("#secondLevelViewPanel").animate({marginTop: "0px", height: interestContainer.offsetHeight + "px"}, 300, function(){});
-        $('html,body').animate({scrollTop: "650px"},500);
-    }
-}
-
-function selectOtherInterest(){
-    submitFormWithExtraParameters("other");
-}
-
-function getSlimInterestPanel(){
-    return "Im slim"
-}
-
-function resizeInterestPanel(force){
-    if($(window).width() > interestPanelWidthThreshold){
-        if(!interestPanelExpanded || force == true){
-            document.getElementById("backgroundPanel").innerHTML = getWideInterestPanel();
-            interestPanelExpanded = true;
-        }
-    }else{
-        if(interestPanelExpanded || force == true){
-            document.getElementById("backgroundPanel").innerHTML = getSlimInterestPanel();
-            interestPanelExpanded = false;
+function toggleHireType(hireType){
+    var button = document.getElementById(hireType + "ToggleButton");
+    if(button != null){
+        if(chosenHireTypes[hireType] == true){
+            button.innerHTML = "Disabled"
+            button.className = "toggleButton"
+            chosenHireTypes[hireType] = false;
+        }else{
+            button.innerHTML = "Enabled  &#10004;"
+            button.className = "toggleButton enabled"
+            chosenHireTypes[hireType] = true;
         }
     }
 }
@@ -1344,7 +1320,7 @@ function resizeInterestPanel(force){
         </div>-->
 
         <script>
-        var hireTypes = ["hiring", "casting", "collaborating"];
+        /*var hireTypes = ["hiring", "casting", "collaborating"];
         var chosenHireTypes = [];
 
         function toggleHireType(hireType){
@@ -1409,7 +1385,7 @@ function resizeInterestPanel(force){
                     childrenButtons[i].text = "Enable";
                 }
             }
-        }
+        }*/
 
         function addPanelHover(panelType){
             var panelId = panelType + "PanelCell";

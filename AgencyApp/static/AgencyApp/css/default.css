@@ -462,7 +462,17 @@
 	}
 
 	.toggleButton:hover{
+		background: rgba(0,0,0,0.1);
+		color: #000;
+	}
+
+	.toggleButton.enabled{
 		background: rgba(0,0,0,0.8);
+		color: #FFF;
+	}
+
+	.toggleButton.enabled:hover{
+		background: rgba(0,0,0,0.7);
 		color: #FFF;
 	}
 
