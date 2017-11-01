@@ -323,11 +323,18 @@ class EditInterestsView(GenericEditAccountView):
         if self._nextButtonString is None:
             if self.sourcePage == constants.PROFILE:
                 self._nextButtonString = "Update interests"
-
             else:
                 self._nextButtonString = "Add interests"
         return self._nextButtonString
 
+    @property
+    def destinationPage(self):
+        if self._destinationPage is None:
+            if self.sourcePage == constants.EDIT_INTERESTS:
+                self._destinationPage = constants.EDIT_PROFILE_PICTURE
+            else:
+                self._destinationPage = constants.PROFILE
+        return self._destinationPage
     @property
     def cancelDestination(self):
         """Override to continue the profile setup process"""
