@@ -945,25 +945,29 @@ function getWideInterestPanel(){
 
     // Get button texts
     var buttonTexts = {"left": "Looking for a job", "center": "Hiring, casting, or collaborating", "right": "Other"}
+    var buttonClasses = {"left": "toggleButton", "center": "toggleButton", "right": "toggleButton"}
     {% if existingProfessions or existingHireInterests %}
         {% if existingProfessions %}
-            buttonTexts["left"] += " &#10004;" 
+            buttonTexts["left"] += " &#10004;"
+            buttonClasses["left"] += " enabled"
         {% endif %}
         {% if existingHireInterests %}
             buttonTexts["center"] += " &#10004;"
+            buttonClasses["center"] += " enabled"
         {% endif %}
     {% else %}
         buttonTexts["right"] += " &#10004;";
+        buttonClasses["right"] += " enabled"
     {% endif %}
 
     // Add left panel
-    panelString += '<div class="boxA"><h2>Job Seeking</h2><span class="fa fa-cloud-download"></span><p>Look for a job in the Vancouver film industry in anything from acting to set work to post production. Your profile will be public to casting agents and those looking to hire.</p><div class="editButton" style="height: 40px; padding-top: 20px; margin: 40px 5px 10px 5px;" onclick="selectWorkInterest();">' + buttonTexts["left"] + '</div></div>'
+    panelString += '<div class="boxA"><h2>Job Seeking</h2><span class="fa fa-cloud-download"></span><p>Look for a job in the Vancouver film industry in anything from acting to set work to post production. Your profile will be public to casting agents and those looking to hire.</p><div id="workInterestButton" class="' + buttonClasses["left"] + '" style="height: 40px; padding-top: 20px; margin: 40px 5px 10px 5px;" onclick="selectInterest(' + "'work'" +  ');">' + buttonTexts["left"] + '</div></div>'
 
     // Add center panel
-    panelString += '<div class="boxB"><h2>Casting and Hiring</h2><span class="fa fa-cogs"></span><p>Create casting posts and job posts for both permanent and project-specific positions. You can also post in search of collaborators for a new project.</p><div class="editButton" style="height: 40px; padding-top: 20px; margin: 40px 5px 10px 5px;" onclick="selectHiringInterest();">' + buttonTexts["center"] + '</div></div>'
+    panelString += '<div class="boxB"><h2>Casting and Hiring</h2><span class="fa fa-cogs"></span><p>Create casting posts and job posts for both permanent and project-specific positions. You can also post in search of collaborators for a new project.</p><div id="hiringInterestButton" class="' + buttonClasses["center"] + '" style="height: 40px; padding-top: 20px; margin: 40px 5px 10px 5px;" onclick="selectInterest(' + "'hiring'" + ');">' + buttonTexts["center"] + '</div></div>'
 
     // Add right panel
-    panelString += '<div class="boxC"><h2> Explore </h2><span class="fa fa-wrench"></span><p> Explore the film industry around you. Check out local events, view projects that are currently being shot in Vancouver, and find your next project!</p><div class="editButton" style="height: 40px; padding-top: 20px; margin: 40px 5px 10px 5px;" onclick="selectOtherInterest();">' + buttonTexts["right"] + '</div></div>'
+    panelString += '<div class="boxC"><h2> Explore </h2><span class="fa fa-wrench"></span><p> Explore the film industry around you. Check out local events, view projects that are currently being shot in Vancouver, and find your next project!</p><div id="otherInterestButton" class="' + buttonClasses["right"] + '" style="height: 40px; padding-top: 20px; margin: 40px 5px 10px 5px;" onclick="selectInterest(' + "'other'" + ');">' + buttonTexts["right"] + '</div></div>'
 
     // Close three-column container
     panelString += '</div>';
@@ -1000,28 +1004,35 @@ function resizeInterestPanel(force){
     }
 }
 
-function selectWorkInterest(firstTimeDisplay){
-    var secondLevel = document.getElementById("secondLevelViewPanel")
-    if(secondLevel != null){
-        secondLevel.innerHTML = getWorkInterestPicker();
-        $("#secondLevelViewPanel").animate({marginTop: "0px", height: "400px"}, 300, function(){});
-        $('html,body').animate({scrollTop: "1000px"},500);
+var mainInterests = ["work", "hiring", "other"]
+var interestContentMap = {"work": getWorkInterestPicker, "hiring": getHiringInterestPicker, "other": null}
+function selectInterest(interestType){
+    if(interestType === "other"){
+        return submitFormWithExtraParameters("other");
+    }else{
+        var button = document.getElementById(interestType + "InterestButton");
+        if(button != null){
+            button.className = "toggleButton enabled";
+            button.innerHTML += " &#10004;"
+        }
+
+        var interestContentFunction = interestContentMap[interestType];
+        if(interestContentFunction != null){
+            var interestContent = interestContentFunction();
+            var secondLevel = document.getElementById("secondLevelViewPanel")
+            if(secondLevel != null){
+                secondLevel.innerHTML = interestContent;
+
+                var interestContainer = document.getElementById(interestType + "InterestContainer")
+                if(interestContainer != null){
+                    $("#secondLevelViewPanel").animate({marginTop: "0px", height: interestContainer.offsetHeight + "px"}, 300, function(){});
+                    $('html,body').animate({scrollTop: "650px"}, 500);
+                }
+            }
+        }
+
+        
     }
-}
-
-function selectHiringInterest(firstTimeDisplay){
-    var secondLevel = document.getElementById("secondLevelViewPanel")
-    if(secondLevel != null){
-        secondLevel.innerHTML = getHiringInterestPicker();
-
-        var interestContainer = document.getElementById("hiringInterestContainer")
-        $("#secondLevelViewPanel").animate({marginTop: "0px", height: interestContainer.offsetHeight + "px"}, 300, function(){});
-        $('html,body').animate({scrollTop: "650px"},500);
-    }
-}
-
-function selectOtherInterest(){
-    submitFormWithExtraParameters("other");
 }
 
 function getWorkInterestPicker(){
