@@ -971,8 +971,54 @@ function getWideInterestPanel(){
     // Close wrapper container
     panelString += "</div>"
 
-    panelString += "</div></div>"
+    // Close interests container
+    panelString += "</div>";
+
+    // Add second level
+    panelString += "<div id='secondLevelViewPanel' style='height: 0px; width: 100%; background: #FFF; overflow: hidden;'>Hi ther buddy</div>"
+
+    // Close main view panel
+    panelString += "</div>"
     return panelString
+}
+
+function selectWorkInterest(firstTimeDisplay){
+    var secondLevel = document.getElementById("secondLevelViewPanel")
+    if(secondLevel != null){
+        $("#secondLevelViewPanel").animate({marginTop: "0px", height: "400px"}, 500, function(){});
+        $('html,body').animate({scrollTop: "1000px"},500);
+    }
+
+            /*var workInterestDiv = document.getElementById("workInterestDiv");
+            if(workInterestDiv != null){
+                mainDiv.innerHTML = workInterestDiv.innerHTML;
+                {% if existingProfessions %}
+                    chosenProfessionList = [];
+                    if(workInterestLoaded){
+                        {% for profession in existingProfessions %}
+                            addProfessionToSelectedTable("{{profession}}", "{{profession}}_selectedRowID");
+                        {% endfor %}
+                    }else{
+                        workInterestLoaded = true;
+                        {% for profession in existingProfessions %}
+                            toggleProfession("{{profession}}");
+                        {% endfor %}
+                    }
+                {% endif %}
+                filterProfessions("acting");
+            }*/
+}
+
+function selectHiringInterest(firstTimeDisplay){
+    var secondLevel = document.getElementById("secondLevelViewPanel")
+    if(secondLevel != null){
+        $("#secondLevelViewPanel").animate({marginTop: "0px", height: "400px"}, 500, function(){});
+        $('html,body').animate({scrollTop: "1000px"},500);
+    }
+}
+
+function selectOtherInterest(){
+    submitFormWithExtraParameters("other");
 }
 
 function getSlimInterestPanel(){
@@ -1466,13 +1512,13 @@ function resizeInterestPanel(force){
         </div>-->
 
         <script>
-        var mainDiv = document.getElementById("mainDiv");
+        var mainDiv = document.getElementById("mainViewPanel");
         function selectInterestChoice(){
             var interestChoiceDiv = document.getElementById("interestChoiceDiv");
             mainDiv.innerHTML = interestChoiceDiv.innerHTML;
         }
 
-        var workInterestLoaded = false;
+        /*var workInterestLoaded = false;
         function selectWorkInterest(firstTimeDisplay){
             var workInterestDiv = document.getElementById("workInterestDiv");
             if(workInterestDiv != null){
@@ -1509,7 +1555,7 @@ function resizeInterestPanel(force){
 
         function selectOtherInterest(){
             submitFormWithExtraParameters("other");
-        }
+        }*/
 
         /*$(document).ready(function(){
             selectInterestChoice();
