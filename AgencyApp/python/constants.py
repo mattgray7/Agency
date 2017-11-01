@@ -26,7 +26,11 @@ STOCK_IMAGE_DIR = "/media/default/stockImages/"
 
 ICON_PATHS_DICT = {"explore": "/media/default/icons/Explore.png",
 				   "jobSeeking": "/media/default/icons/JobSeeking.png",
-				   "hiringCasting": "/media/default/icons/HiringCasting.png"}
+				   "hiring": "/media/default/icons/HiringCasting.png",
+				   "hiringCasting": "/media/default/icons/Hiring.png",		# swap hiring and hiringCasting, makes more sense
+				   "casting": "/media/default/icons/Casting.png",
+				   "collaborating": "/media/default/icons/Collab.png",
+				   }
 
 # Source page enums:
 HOME = "HOME"
