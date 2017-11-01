@@ -24,6 +24,10 @@ RESUME_ICON_PATH = "/media/default/resume.png"
 LOGO_PATH = "/media/default/logos/FCLogoWhite.png"
 STOCK_IMAGE_DIR = "/media/default/stockImages/"
 
+ICON_PATHS_DICT = {"explore": "/media/default/icons/Explore.png",
+				   "jobSeeking": "/media/default/icons/JobSeeking.png",
+				   "hiringCasting": "/media/default/icons/HiringCasting.png"}
+
 # Source page enums:
 HOME = "HOME"
 LOGIN = "LOGIN"

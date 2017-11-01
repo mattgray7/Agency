@@ -139,6 +139,7 @@ def getBaseContext(request):
                            "loadingGif": constants.LOADING_GIF,
                            "plus": constants.PLUS_SIGN_PATH,
                            "logo": constants.LOGO_PATH,
+                           "icons": constants.ICON_PATHS_DICT,
                            "stock": getStockImage(),
                            "loading": {"light": constants.LOADING_GIF.replace("loading.gif", "loading_light.gif"),
                                        "mid": constants.LOADING_GIF.replace("loading.gif", "loading_mid.gif"),
