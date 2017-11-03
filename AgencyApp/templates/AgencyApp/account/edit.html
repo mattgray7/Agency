@@ -1206,7 +1206,7 @@ function toggleHireType(hireType){
 
         function addSquareButtonColumn(label, onclickString, idName){
             // Writes a table cell containing a square button
-            var squareButtonString = '<td id="' + idName + '_cell" onclick="' + onclickString + '" ><div class="squareButton" id="' + idName + '"><h1>' + label + '</h1></div></td>';
+            var squareButtonString = '<td id="' + idName + '" onclick="' + onclickString + '" >' + label + '</td>';
             //document.write(squareButtonString);
             return squareButtonString
             //addSquareButtonHover(idName + "_cell")
