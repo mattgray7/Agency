@@ -1083,12 +1083,12 @@ function getWorkInterestPicker(){
 
 
     // Add square button column
-    pickerString += '<div class="boxA"><h3 style="margin-bottom: 15px;">1. Choose your field</h3><table  class="squareButtonTable" id="squareButtonTable"><tr>' + addSquareButtonColumn("Acting &amp; Performing", "filterProfessions('acting');", 'actingSquareButton') + addSquareButtonColumn("Creative Positions", "filterProfessions('creative');", 'creativeSquareButton') + '</tr><tr>' + addSquareButtonColumn("Production - On set", "filterProfessions('onSetProduction');", 'onSetProductionSquareButton') + addSquareButtonColumn("Production - Off set", "filterProfessions('offSetProduction');", 'offSetProductionSquareButton') + '</tr><tr>' + addSquareButtonColumn("Pre Production", "filterProfessions('preProduction');", 'preProductionSquareButton') + addSquareButtonColumn("Post Production", "filterProfessions('postProduction');", 'postProductionSquareButton') + '</tr></table></div>';
+    pickerString += '<div class="boxA"><h3 style="margin-bottom: 15px;">1. Choose your field</h3><table  class="squareButtonTable" id="squareButtonTable" style="margin-left: 5px; margin-top: 18px; margin-right: -5px;"><tr>' + addSquareButtonColumn("Acting &amp; Performing", "filterProfessions('acting');", 'actingSquareButton') + addSquareButtonColumn("Creative Positions", "filterProfessions('creative');", 'creativeSquareButton') + '</tr><tr>' + addSquareButtonColumn("Production - On set", "filterProfessions('onSetProduction');", 'onSetProductionSquareButton') + addSquareButtonColumn("Production - Off set", "filterProfessions('offSetProduction');", 'offSetProductionSquareButton') + '</tr><tr>' + addSquareButtonColumn("Pre Production", "filterProfessions('preProduction');", 'preProductionSquareButton') + addSquareButtonColumn("Post Production", "filterProfessions('postProduction');", 'postProductionSquareButton') + '</tr></table></div>';
 
     // Add professionList
-    pickerString += '<div class="boxB"><h3 style="margin-bottom: 15px;">2. Add professions</h3><div id="professionChoicePanel" class="profession3ColumnsFullPanel"></div></div>'
+    pickerString += '<div class="boxB"><h3 style="margin-bottom: 15px;">2. Add professions</h3><div id="professionChoicePanel" class="profession3ColumnsFullPanel" style="margin-left: -1px;"></div></div>'
 
-    pickerString += '<div class="boxC"><h3 style="margin-bottom: 15px;">3. Confirm selections</h3><div id="chosenProfessionChoicePanel" class="profession3ColumnsFullPanel"><table id="chosenProfessionTable" class="professionsSelectList"></table></div></div>'
+    pickerString += '<div class="boxC" ><h3 style="margin-bottom: 15px;">3. Confirm selections</h3><div id="chosenProfessionChoicePanel" class="profession3ColumnsFullPanel" style="margin-left: -5px;"><table id="chosenProfessionTable" class="professionsSelectList"></table></div></div>'
 
     pickerString += "</div></div></div>"
     /*var pickerString = '<div id="workInterestContainer"><h2>What kind of jobs are you looking for?</h2><div id="wrapper"><table id="workInterestPanel">'
