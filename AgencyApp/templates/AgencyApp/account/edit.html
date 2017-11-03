@@ -936,18 +936,11 @@ function updateFeaturedPhotoStatus(input){
 var interestPanelWidthThreshold = 820;
 var interestPanelExpanded = true;
 
-function getWideInterestPanel(){
-    var panelString = '<div id="mainViewPanel" class="mainViewPanel" style="position: relative; width: 70%; min-width: 800px; max-width: 940px; background: rgba(0,0,0,0.05); border: none;"><div id="interestPanel" style="height: 100%; width: 100%;">';
-
-    // Add container
-    panelString += '<div id="wrapper"><div id="three-column" class="container" style="width: 740px; margin-bottom: 20px;">'
-
-    // Add title
-    panelString += '<div class="title"><h2>What are you interested in?</h2><span class="byline">Let others know what you are looking for</span></div>'
-
-    // Get button texts
+function getInterestButtonInfo(){
+     // Get button texts
     var buttonTexts = {"left": "Looking for a job", "center": "Hiring, casting, or collaborating", "right": "Other"}
     var buttonClasses = {"left": "toggleButton", "center": "toggleButton", "right": "toggleButton"}
+    var buttonDescriptions = {"left": "Look for a job in the Vancouver film industry in anything from acting to set work to post production. Your profile will be public to casting agents and those looking to hire.", "center": "Create casting posts and job posts for both permanent and project-specific positions. You can also post in search of collaborators for a new project.", "right": "Explore the film industry around you. Check out local events, view projects that are currently being shot in Vancouver, and find your next project!"}
     {% if existingProfessions or existingHiringInterests %}
         {% if existingProfessions %}
             buttonTexts["left"] += " &#10004;"
@@ -962,14 +955,28 @@ function getWideInterestPanel(){
         buttonClasses["right"] += " enabled"
     {% endif %}
 
+    return {"text": buttonTexts, "class": buttonClasses, "description": buttonDescriptions}
+}
+
+
+function getWideInterestPanel(){
+    var panelString = '<div id="mainViewPanel" class="mainViewPanel" style="position: relative; width: 70%; min-width: 800px; max-width: 940px; background: rgba(0,0,0,0.05); border: none;"><div id="interestPanel" style="height: 100%; width: 100%;">';
+
+    // Add container
+    panelString += '<div id="wrapper"><div id="three-column" class="container" style="width: 740px; margin-bottom: 20px;">'
+
+    // Add title
+    panelString += '<div class="title"><h2>What are you interested in?</h2><span class="byline">Let others know what you are looking for</span></div>'
+
+    var buttonInfo = getInterestButtonInfo();
     // Add left panel
-    panelString += '<div class="boxA"><h2>Job Seeking</h2><div style="height: 110px;"><img src="{{images.icons.jobSeeking}}" style="max-height: 60px; max-width: 60px; margin-top: 30px;" /></div><p>Look for a job in the Vancouver film industry in anything from acting to set work to post production. Your profile will be public to casting agents and those looking to hire.</p><div id="workInterestButton" class="' + buttonClasses["left"] + '" style="height: 40px; padding-top: 20px; margin: 40px 5px 10px 5px;" onclick="selectInterest(' + "'work'" +  ');">' + buttonTexts["left"] + '</div></div>'
+    panelString += '<div class="boxA"><h2>Job Seeking</h2><div style="height: 110px;"><img src="{{images.icons.jobSeeking}}" style="max-height: 60px; max-width: 60px; margin-top: 30px;" /></div><p>' + buttonInfo["description"]["left"] + '</p><div id="workInterestButton" class="' + buttonInfo["class"]["left"] + '" style="height: 40px; padding-top: 20px; margin: 40px 5px 10px 5px;" onclick="selectInterest(' + "'work'" +  ');">' + buttonInfo["text"]["left"] + '</div></div>'
 
     // Add center panel
-    panelString += '<div class="boxB"><h2>Casting and Hiring</h2><div style="height: 110px;"><img src="{{images.icons.hiringCasting}}" style="max-height: 60px; max-width: 60px; margin-top: 25px;" /></div><p>Create casting posts and job posts for both permanent and project-specific positions. You can also post in search of collaborators for a new project.</p><div id="hiringInterestButton" class="' + buttonClasses["center"] + '" style="height: 40px; padding-top: 20px; margin: 40px 5px 10px 5px;" onclick="selectInterest(' + "'hiring'" + ');">' + buttonTexts["center"] + '</div></div>'
+    panelString += '<div class="boxB"><h2>Casting and Hiring</h2><div style="height: 110px;"><img src="{{images.icons.hiringCasting}}" style="max-height: 60px; max-width: 60px; margin-top: 25px;" /></div><p>' + buttonInfo["description"]["center"] + '</p><div id="hiringInterestButton" class="' + buttonInfo["class"]["center"] + '" style="height: 40px; padding-top: 20px; margin: 40px 5px 10px 5px;" onclick="selectInterest(' + "'hiring'" + ');">' + buttonInfo["text"]["center"] + '</div></div>'
 
     // Add right panel
-    panelString += '<div class="boxC"><h2> Explore </h2><div style="height: 110px;"><img src="{{images.icons.explore}}" style="max-height: 55px; max-width: 60px; margin-top: 25px;" /></div><p> Explore the film industry around you. Check out local events, view projects that are currently being shot in Vancouver, and find your next project!</p><div id="otherInterestButton" class="' + buttonClasses["right"] + '" style="height: 40px; padding-top: 20px; margin: 40px 5px 10px 5px;" onclick="selectInterest(' + "'other'" + ');">' + buttonTexts["right"] + '</div></div>'
+    panelString += '<div class="boxC"><h2> Explore </h2><div style="height: 110px;"><img src="{{images.icons.explore}}" style="max-height: 55px; max-width: 60px; margin-top: 25px;" /></div><p>' + buttonInfo["description"]["right"] + '</p><div id="otherInterestButton" class="' + buttonInfo["class"]["right"] + '" style="height: 40px; padding-top: 20px; margin: 40px 5px 10px 5px;" onclick="selectInterest(' + "'other'" + ');">' + buttonInfo["text"]["right"] + '</div></div>'
 
     // Close three-column container
     panelString += '</div>';
@@ -992,16 +999,19 @@ function getSlimInterestPanel(){
     var panelString = '<div id="mainViewPanel" class="mainViewPanel" style="position: relative; width: 95%; max-width: 600px; background: rgba(0,0,0,0.05); border: none;"><div id="interestPanel" style="height: 100%; width: 100%; color: rgba(0,0,0,0.6);" class="three-column">';
 
     // Title panel
-    panelString += "<div style='height: 80px; background: #FFF; margin-bottom: 0; padding-bottom: 20px;' class='title'><h2>What are you interested in?</h2><span class='byline' style='color: rgba(0,0,0,0.6);'>Let others know what you are looking for</span></div>";
+    panelString += "<div style='height: 80px; background: #FFF; margin-bottom: 0; padding-bottom: 20px;' class='title'><h2 style='color: rgba(0,0,0,0.7);'>What are you interested in?</h2><span class='byline' style='color: rgba(0,0,0,0.6);'>Let others know what you are looking for</span></div>";
+
+    var buttonInfo = getInterestButtonInfo()
 
     // Top panel
-    panelString += "<div style='height: 250px; width: 100%; background: rgba(255,255,255,0.7); position: relative;'><div style='position: absolute; left: 50px; top: 30%;'><img src='{{images.icons.jobSeeking}}' style='max-height: 100px; max-width: 100px;' /></div><div style='position: absolute; right: 20px; left: 200px; top: 8%;'><h2 style='margin-bottom: 10px;'>Job Seeking</h2><p>Look for a job in the Vancouver film industry in anything from acting to set work to post production. Your profile will be public to casting agents and those looking to hire.</p>" + '<div id="workInterestButton" class="toggleButton" style="height: 30px; padding-top: 10px; margin: -5px auto 0 auto; width: 60%; left: 0; right: 0; " onclick="selectInterest(' + "'work'" +  ');">Looking for a job</div></div></div>';
+    panelString += "<div style='height: 250px; width: 100%; background: rgba(255,255,255,0.7); position: relative;'><div style='position: absolute; left: 50px; top: 30%;'><img src='{{images.icons.jobSeeking}}' style='max-height: 100px; max-width: 100px;' /></div><div style='position: absolute; right: 20px; left: 200px; top: 8%;'><h2 style='margin-bottom: 10px;'>Job Seeking</h2><p>" + buttonInfo["description"]["left"] + "</p>" + '<div id="workInterestButton" class="' + buttonInfo["class"]["left"] + '" style="height: 30px; padding-top: 10px; margin: -5px auto 0 auto; width: 60%; left: 0; right: 0; " onclick="selectInterest(' + "'work'" +  ');">' + buttonInfo["text"]["left"] + '</div></div></div>';
 
-    // middle panel
-    panelString += "<div style='height: 200px; width: 100%; background: rgba(255,255,255,1); position: relative; text-align: right'>Hi there</div>";
+    // Middle panel
+    panelString += "<div style='height: 250px; width: 100%; background: rgba(255,255,255,1); position: relative;'><div style='position: absolute; right: 50px; top: 30%;'><img src='{{images.icons.hiringCasting}}' style='max-height: 100px; max-width: 100px;' /></div><div style='position: absolute; left: 20px; right: 200px; top: 8%;'><h2 style='margin-bottom: 10px;'>Hiring and Casting</h2><p>" + buttonInfo["description"]["center"] + "</p>" + '<div id="hiringInterestButton" class="' + buttonInfo["class"]["center"] + '" style="height: 30px; padding-top: 10px; margin: -5px auto 0 auto; width: 60%; left: 0; right: 0; " onclick="selectInterest(' + "'hiring'" +  ');">' + buttonInfo["text"]["center"] + '</div></div></div>';
 
-    // bottom panel
-    panelString += "<div style='height: 200px; width: 100%; background: rgba(255,255,255,0.7); position: relative; '>Hi there</div>";
+    // Bottom panel
+    panelString += "<div style='height: 250px; width: 100%; background: rgba(255,255,255,0.7); position: relative;'><div style='position: absolute; left: 50px; top: 30%;'><img src='{{images.icons.explore}}' style='max-height: 100px; max-width: 100px;' /></div><div style='position: absolute; right: 20px; left: 200px; top: 8%;'><h2 style='margin-bottom: 10px;'>Explore</h2><p>" + buttonInfo["description"]["right"] + "</p>" + '<div id="workInterestButton" class="' + buttonInfo["class"]["right"] + '" style="height: 30px; padding-top: 10px; margin: -5px auto 0 auto; width: 60%; left: 0; right: 0; " onclick="selectInterest(' + "'other'" +  ');">' + buttonInfo["text"]["right"] + '</div></div></div>';
+
 
     panelString += "</div></div>"
     return panelString;
