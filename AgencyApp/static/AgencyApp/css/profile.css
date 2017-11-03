@@ -136,23 +136,23 @@
 }
 
 .profession3ColumnsFullPanel {
-	width: 295px;
-	height: 460px;
+	width: 225px;
+	height: 380px;
 	margin: 5px auto 0px auto;
 	display: inline-block;
-	background: #c9cacc;
+	background: rgba(0,0,0,0.05);
 	color: #fff;
 	letter-spacing: 1px;
 	text-decoration: none;
 	font-weight: 700;
 	font-size: 0.5em;
 	overflow: scroll;
-	border: 2px solid rgba(0,0,0,1);
+	/*border: 1px solid rgba(0,0,0,1);*/
 	border-radius: 6px;
 }
 
 .professionsSelectColumn{
-	width: 281px;
+	width: 210px;
 	padding: 0em 0.5em;
 	letter-spacing: 1px;
 	text-decoration: none;
@@ -185,6 +185,7 @@
 	font-size: 1.5em;
 	color: rgba(0,0,0,1.0);
 	float: left;
+	white-space: nowrap;
 }
 
 .hireOptionTable

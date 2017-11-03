@@ -1029,9 +1029,11 @@ function selectInterest(interestType){
 
         var interestContentFunction = interestContentMap[interestType];
         if(interestContentFunction != null){
+            console.log("Have content function")
             var interestContent = interestContentFunction();
             var secondLevel = document.getElementById("secondLevelViewPanel")
             if(secondLevel != null){
+                console.log("Setting")
                 secondLevel.innerHTML = interestContent["html"];
 
                 var interestContainer = document.getElementById(interestType + "InterestContainer")
@@ -1077,8 +1079,44 @@ function getWorkInterestPicker(){
                 {% endif %}
                 filterProfessions("acting");
             }*/
-    return {"html": "Work picker", "callbacks": []}
+    var pickerString = '<div id="workInterestContainer"><h2>What kind of jobs are you looking for?</h2><div id="wrapper"><table id="workInterestPanel">'
+
+    // Add title row
+    pickerString += '<tr><td width="34%"><font color="black">1. Choose your field</font></td><td width="33%"><font color="black">2. Add your professions</font></td><td width="33%"><font color="black">3. Confirm your selections</font></td></tr>'
+
+    // Add square button panel
+    pickerString += '<tr><td width="34%"><table class="squareButtonTable" id="squareButtonTable"><tr>' + addSquareButtonColumn("Acting &amp; Performing", "filterProfessions('acting');", 'actingSquareButton') + addSquareButtonColumn("Creative Positions", "filterProfessions('creative');", 'creativeSquareButton') + '</tr><tr>' + addSquareButtonColumn("Production - On set", "filterProfessions('onSetProduction');", 'onSetProductionSquareButton') + addSquareButtonColumn("Production - Off set", "filterProfessions('offSetProduction');", 'offSetProductionSquareButton') + '</tr><tr>' + addSquareButtonColumn("Pre Production", "filterProfessions('preProduction');", 'preProductionSquareButton') + addSquareButtonColumn("Post Production", "filterProfessions('postProduction');", 'postProductionSquareButton') + '</tr></table></td>';
+
+    // Add profession list column
+    pickerString += '<td width="33%"><div id="professionChoicePanel" class="profession3ColumnsFullPanel"></div></td>'
+
+    // Add chosen profession list column
+    pickerString += '<td width="33%"><div id="chosenProfessionChoicePanel" class="profession3ColumnsFullPanel"><table id="chosenProfessionTable" class="professionsSelectList"></table></div></td>'
+
+    // Add buttons
+   /*pickerString += '<tr>
+                        <td colspan="3" style="height:100px; width:100%;">
+                            <center>
+                                <div id="backButton" class="whiteButton blackHover" style="width:38.6%; float:left;" onclick="selectInterestChoice();">
+                                    <br>Back<br><br>
+                                </div>
+                                <div id="continueButton" class="whiteButton blackHover" style="width:38.4%; float:right; margin: 0px 4px 0px 0px" onclick="submitFormWithExtraParameters('work')">
+                                    <br>Continue<br><br>
+                                </div>
+                            </center>
+                        </td>
+                    </tr>'*/
+    pickerString += '</tr></table></div>'
+
+
+
+    var workInterestDiv = document.getElementById("workInterestDiv");
+    if(workInterestDiv != null){
+        pickerString += workInterestDiv.innerHTML
+    }
+    return {"html": pickerString, "callbacks": []}
 }
+
 
 function getHiringInterestPicker(){
     var callbacks = []
@@ -1168,8 +1206,9 @@ function toggleHireType(hireType){
         function addSquareButtonColumn(label, onclickString, idName){
             // Writes a table cell containing a square button
             var squareButtonString = '<td id="' + idName + '_cell" onclick="' + onclickString + '" ><div class="squareButton" id="' + idName + '"><h1>' + label + '</h1></div></td>';
-            document.write(squareButtonString);
-            addSquareButtonHover(idName + "_cell")
+            //document.write(squareButtonString);
+            return squareButtonString
+            //addSquareButtonHover(idName + "_cell")
         }
 
         function addSquareButtonHover(idName){
@@ -1284,7 +1323,7 @@ function toggleHireType(hireType){
                     var buttonDivId = key + "SquareButton";
                     var professionFilterButtonDiv = document.getElementById(buttonDivId);
                     if(professionFilterButtonDiv != null){
-                        professionFilterButtonDiv.className = "squareButtonActive";
+                        professionFilterButtonDiv.className = "squareButton active";
 
                         // Set the active squre button text to black
                         setChildColor(buttonDivId, "h1", "#000");
@@ -1303,7 +1342,7 @@ function toggleHireType(hireType){
             }
         }
         </script>
-
+        <!--
         <div id="workInterestDiv" style="display:none;">
             <h2>What kind of jobs are you looking for?</h2>
             <div id="wrapper">
