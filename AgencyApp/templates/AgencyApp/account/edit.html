@@ -989,7 +989,19 @@ function getWideInterestPanel(){
 }
 
 function getSlimInterestPanel(){
-    return "Im slim"
+    var panelString = '<div id="mainViewPanel" class="mainViewPanel" style="position: relative; width: 95%; max-width: 600px; background: rgba(0,0,0,0.05); border: none;"><div id="interestPanel" style="height: 100%; width: 100%; color: rgba(0,0,0,0.6);">';
+
+    // Top panel
+    panelString += "<div style='height: 250px; width: 100%; background: #FFF; position: relative;'><div style='position: absolute; left: 50px; top: 30%;'><img src='{{images.icons.jobSeeking}}' style='max-height: 100px; max-width: 100px;' /></div><div style='position: absolute; right: 20px; left: 200px; top: 8%;'><h2 style='margin-bottom: 10px;'>Job Seeking</h2><p>Look for a job in the Vancouver film industry in anything from acting to set work to post production. Your profile will be public to casting agents and those looking to hire.</p>" + '<div id="workInterestButton" class="toggleButton" style="height: 30px; padding-top: 10px; margin: -5px auto 0 auto; width: 60%; left: 0; right: 0; " onclick="selectInterest(' + "'work'" +  ');">Looking for a job</div></div></div>';
+
+    // middle panel
+    panelString += "<div style='height: 200px; width: 100%; background: rgba(255,255,255,0.7); position: relative; text-align: right'>Hi there</div>";
+
+    // bottom panel
+    panelString += "<div style='height: 200px; width: 100%; background: rgba(255,255,255,1); position: relative; '>Hi there</div>";
+
+    panelString += "</div></div>"
+    return panelString;
 }
 
 function resizeInterestPanel(force){
@@ -1029,11 +1041,9 @@ function selectInterest(interestType){
 
         var interestContentFunction = interestContentMap[interestType];
         if(interestContentFunction != null){
-            console.log("Have content function")
             var interestContent = interestContentFunction();
             var secondLevel = document.getElementById("secondLevelViewPanel")
             if(secondLevel != null){
-                console.log("Setting")
                 secondLevel.innerHTML = interestContent["html"];
 
                 var interestContainer = document.getElementById(interestType + "InterestContainer")
