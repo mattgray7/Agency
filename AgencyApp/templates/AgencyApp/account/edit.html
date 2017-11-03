@@ -960,7 +960,7 @@ function getInterestButtonInfo(){
 
 
 function getWideInterestPanel(){
-    var panelString = '<div id="mainViewPanel" class="mainViewPanel" style="position: relative; width: 70%; min-width: 800px; max-width: 940px; background: rgba(0,0,0,0.05); border: none;"><div id="interestPanel" style="height: 100%; width: 100%;">';
+    var panelString = '<div id="mainViewPanel" class="mainViewPanel" style="position: relative; width: 70%; min-width: 800px; max-width: 940px; background: rgba(0,0,0,0.05); border: none;">' + createEditAccountButtonHeader("Interests") + '<div id="interestPanel" style="height: 100%; width: 100%;">';
 
     // Add container
     panelString += '<div id="wrapper"><div id="three-column" class="container" style="width: 740px; margin-bottom: 20px;">'
@@ -996,10 +996,10 @@ function getWideInterestPanel(){
 }
 
 function getSlimInterestPanel(){
-    var panelString = '<div id="mainViewPanel" class="mainViewPanel" style="position: relative; width: 95%; max-width: 600px; background: rgba(0,0,0,0.05); border: none;"><div id="interestPanel" style="height: 100%; width: 100%; color: rgba(0,0,0,0.6);" class="three-column">';
+    var panelString = '<div id="mainViewPanel" class="mainViewPanel" style="position: relative; width: 95%; max-width: 600px; background: rgba(0,0,0,0.05); border: none;">' + createEditAccountButtonHeader("Interests") + '<div id="interestPanel" style="height: 100%; width: 100%; color: rgba(0,0,0,0.6);" class="three-column">';
 
     // Title panel
-    panelString += "<div style='height: 80px; background: #FFF; margin-bottom: 0; padding-bottom: 20px;' class='title'><h2 style='color: rgba(0,0,0,0.7);'>What are you interested in?</h2><span class='byline' style='color: rgba(0,0,0,0.6);'>Let others know what you are looking for</span></div>";
+    panelString += "<div style='height: 80px; background: #FFF; margin-bottom: 0; padding-top: 20px; padding-bottom: 20px;' class='title'><h2 style='color: rgba(0,0,0,0.7);'>What are you interested in?</h2><span class='byline' style='color: rgba(0,0,0,0.6);'>Let others know what you are looking for</span></div>";
 
     var buttonInfo = getInterestButtonInfo()
 
