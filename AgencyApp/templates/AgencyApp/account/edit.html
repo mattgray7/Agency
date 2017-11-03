@@ -948,7 +948,7 @@ function getWideInterestPanel(){
     // Get button texts
     var buttonTexts = {"left": "Looking for a job", "center": "Hiring, casting, or collaborating", "right": "Other"}
     var buttonClasses = {"left": "toggleButton", "center": "toggleButton", "right": "toggleButton"}
-    {% if existingProfessions or existingHireInterests %}
+    {% if existingProfessions or existingHiringInterests %}
         {% if existingProfessions %}
             buttonTexts["left"] += " &#10004;"
             buttonClasses["left"] += " enabled"
@@ -1012,6 +1012,13 @@ function selectInterest(interestType){
     if(interestType === "other"){
         return submitFormWithExtraParameters("other");
     }else{
+        // Disable other button
+        var otherButton = document.getElementById("otherInterestButton");
+        if(otherButton != null){
+            otherButton.className = "toggleButton"
+            otherButton.innerHTML = "Other"
+        }
+
         var button = document.getElementById(interestType + "InterestButton");
         if(button != null){
             button.className = "toggleButton enabled";
@@ -1023,12 +1030,18 @@ function selectInterest(interestType){
             var interestContent = interestContentFunction();
             var secondLevel = document.getElementById("secondLevelViewPanel")
             if(secondLevel != null){
-                secondLevel.innerHTML = interestContent;
+                secondLevel.innerHTML = interestContent["html"];
 
                 var interestContainer = document.getElementById(interestType + "InterestContainer")
                 if(interestContainer != null){
                     $("#secondLevelViewPanel").animate({marginTop: "0px", height: interestContainer.offsetHeight + "px"}, 300, function(){});
                     $('html,body').animate({scrollTop: "650px"}, 500);
+                }
+
+                if(interestContent["callbacks"] != null && interestContent["callbacks"].length > 0){
+                    for(var i=0; i < interestContent["callbacks"].length; i++){
+                        interestContent["callbacks"][i]();
+                    }
                 }
             }
         }
@@ -1056,13 +1069,20 @@ function getWorkInterestPicker(){
                 {% endif %}
                 filterProfessions("acting");
             }*/
-    return "Work picker"
+    return {"html": "Work picker", "callbacks": []}
 }
 
 function getHiringInterestPicker(){
+    var callbacks = []
     var pickerString = '<div id="hiringInterestContainer"><div id="wrapper"><div id="three-column" class="container" style="width: 740px;"><div class="title"><h2>Who are you looking for?</h2><span class="byline">Specify your hiring needs</span></div>'
 
     var buttonTexts = {"left": "Hiring", "center": "Casting", "right": "Collaborating"}
+    {% if existingHiringInterests %}
+        {% for interest in existingHiringInterests %}
+            callbacks.push(function(){toggleHireType("{{interest.subInterest}}")});
+        {% endfor %}
+    {% endif %}
+
     // Add left panel
     pickerString += '<div class="boxA"><h2>Hiring</h2><div style="height: 110px;"><img src="{{images.icons.hiring}}" style="max-height: 55px; max-width: 60px; margin-top: 25px;" /></div><p style="height: 160px; padding-top: 8px;">Are you gearing up for production and looking for crew members? Find available professionals seeking work for any field from pre to post production.</p><div id="hiringToggleButton" class="toggleButton" style="height: 40px; width: 92%; padding-top: 20px; margin: 20px 5px 10px 5px;" onclick="toggleHireType(' + "'hiring'" + ');">Enable</div></div>'
 
@@ -1076,7 +1096,7 @@ function getHiringInterestPicker(){
     pickerString += '<div style="width: 100%; height: 60px;"><div id="backButton" class="editButton" style="height: 40px; width: 45%; padding-top: 20px; float: left; margin-left: 19px;" onclick="">Back</div><div id="continueButton" class="editButton" style="height: 40px; width: 45%; padding-top: 20px; float: right; margin-right: 16px;" onclick="submitFormWithExtraParameters(' + "'hire'" + ');">Continue</div></div>';
 
     pickerString += "</div>"
-    return pickerString
+    return {"html": pickerString, "callbacks": callbacks}
 }
 
 var hireTypes = ["hiring", "casting", "collaborating"];
@@ -1098,8 +1118,6 @@ function toggleHireType(hireType){
 }
 
 </script>
-
-
     <div id='backgroundPanel' class='backgroundPanel' style='min-height: 100%;'>
         <script>
             if($(window).width() > interestPanelWidthThreshold){
@@ -1112,6 +1130,12 @@ function toggleHireType(hireType){
         </script>
     </div>
     <script>
+        {% if existingHiringInterests %}
+            var hireButton = document.getElementById("hiringInterestButton")
+            hireButton.className = "toggleButton enabled";
+            hireButton.innerHTML += " &#10004;"
+        {% endif %}
+
         $(window).resize(function (){
             resizeInterestPanel();
         });
