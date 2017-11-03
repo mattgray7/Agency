@@ -1061,24 +1061,6 @@ function shrinkSecondLevel(){
 }
 
 function getWorkInterestPicker(){
-    /*var workInterestDiv = document.getElementById("workInterestDiv");
-            if(workInterestDiv != null){
-                mainDiv.innerHTML = workInterestDiv.innerHTML;
-                {% if existingProfessions %}
-                    chosenProfessionList = [];
-                    if(workInterestLoaded){
-                        {% for profession in existingProfessions %}
-                            addProfessionToSelectedTable("{{profession}}", "{{profession}}_selectedRowID");
-                        {% endfor %}
-                    }else{
-                        workInterestLoaded = true;
-                        {% for profession in existingProfessions %}
-                            toggleProfession("{{profession}}");
-                        {% endfor %}
-                    }
-                {% endif %}
-                filterProfessions("acting");
-            }*/
     var callbacks = [];
     var pickerString = '<div id="workInterestContainer"><div id="wrapper"><div id="three-column" class="container" style="width: 740px;"><div class="title"><h2>What jobs are you looking for?</h2><span class="byline">Let people know what types of jobs you\'re willing to work</div>'
 
@@ -1092,7 +1074,7 @@ function getWorkInterestPicker(){
     pickerString += '<div class="boxC" ><h3 style="margin-bottom: 15px;">3. Confirm selections</h3><div id="chosenProfessionChoicePanel" class="profession3ColumnsFullPanel" style="margin-left: -5px;"><table id="chosenProfessionTable" class="professionsSelectList"></table></div></div>'
 
     pickerString += "</div></div>";
-    pickerString += getSecondLevelButtons("work")
+    pickerString += "<div style='height: 100px;'>" + getSecondLevelButtons("work") + "</div>"
 
     pickerString += "</div>"
 
