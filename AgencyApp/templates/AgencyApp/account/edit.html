@@ -1140,6 +1140,130 @@ function toggleHireType(hireType){
     }
 }
 
+var chosenProfessionList = []
+var activeFilter = "acting"
+var professionInterests = ["acting", "creative", "preProduction", "postProduction", "onSetProduction", "offSetProduction"];
+
+function addSquareButtonColumn(label, onclickString, idName){
+    // Writes a table cell containing a square button
+    var squareButtonString = '<td id="' + idName + '" onclick="' + onclickString + '" >' + label + '</td>';
+    return squareButtonString
+}
+
+function toggleProfession(profession){
+     // If profession is in chosenProfessionList, remove from the list, otherwise, add it (and do all relevant front end changes)
+    var professionCheckbox = document.getElementById(profession + "_checkbox");
+    var professionRowID = profession + "_selectedRowID";
+    if(chosenProfessionList.indexOf(profession) >= 0){
+        if(professionCheckbox != null){
+            professionCheckbox.checked = false;
+        }
+        removeProfession(profession, professionRowID)
+    }else{
+        if(professionCheckbox != null){
+            professionCheckbox.checked = "checked";
+        }
+        addProfessionToSelectedTable(profession, professionRowID)
+    }
+}
+
+function addProfessionToSelectedTable(profession, professionRowID){
+    // Adds a profession to the chosenProfessionTable displayed on the right
+    var table = document.getElementById("chosenProfessionTable");
+    if(table != null && chosenProfessionList.indexOf(profession) < 0){
+        chosenProfessionList.push(profession);
+        var newProfessionRow = table.insertRow(-1);
+        newProfessionRow.id = professionRowID;
+        var newProfessionCell = newProfessionRow.insertCell(0);
+        newProfessionCell.className = "professionsSelectColumn"
+        newProfessionCell.onclick = '"toggleProfession(' + "'" + profession + "'" + ');"';
+        newProfessionCell.innerHTML = "<a> " + profession + "</a><a onclick='toggleProfession(" + '"' + profession + '"' + ");' style='float:right; margin: 0px 5px 0px 0px;' /> X</a>";
+        $("[id='" + professionRowID + "']").hover(function(){
+                // On row hover, set the a text to white
+                setChildColor(this.id, "a", "#fff");
+            },
+            function(){
+                // On row unhover, set the a text back to black
+                setChildColor(this.id, "a", "#000");
+        });
+    }
+}
+
+function removeProfession(profession, professionRowID){
+    // Removes a profession from the chosenProfessionList, and fron the selected list displayed in the chosenProfessionTable
+    var professionIndex = chosenProfessionList.indexOf(profession);
+    if(professionIndex >= 0){
+        chosenProfessionList.splice(professionIndex, 1);        // Second argument is # of elements to cutout
+        var professionRow = document.getElementById(professionRowID);
+        professionRow.parentNode.removeChild(professionRow);
+    }
+}
+
+function setChildColor(parentID, tag, color){
+    // Sets all children of parentID of element type tag to color
+    var parent = document.getElementById(parentID);
+    var children = parent.getElementsByTagName(tag);
+    for(var i=0; i < children.length; i++){
+        children[i].style.color = color;
+    }
+}
+
+function filterProfessions(key){
+    // When square button pressed, filter the possible professions displayed. Key is the field of the profession (acting, creative, etc)
+    for(var i=0; i < professionInterests.length; i++){
+        var interestDiv = document.getElementById(professionInterests[i] + "SquareButton");
+        if(interestDiv != null){
+            interestDiv.className = "squareButton";
+        }
+    }
+
+    var professionChoiceDiv = document.getElementById("professionChoicePanel")
+    if(professionChoiceDiv != null){
+        {% if professions %}
+            // Add possible profession choices to panel
+            var professionListString = "<table class='professionsSelectList'>";
+            var professions = {{ professions|safe }};
+            var professionRows = [];
+            var professionCols = [];
+            for(var i=0; i < professions[key].length; i++){
+                var checkedValue = "";
+                if(chosenProfessionList.indexOf(professions[key][i]) >= 0){
+                    checkedValue = "checked";
+                }
+                var rowID = professions[key][i] + "_rowID";     //put the hover on the row element
+                professionRows.push(rowID);
+                var colID = professions[key][i] + "_colID";     //change the 
+                professionListString += "<tr id='" + rowID + "'><td class='professionsSelectColumn' id='" + colID + "'onclick='toggleProfession(" + '"' + professions[key][i] + '");' + "'><a> " + professions[key][i] + "</a><input type='checkbox' id='" + professions[key][i] + "_checkbox' " + checkedValue + " style='float:right; margin: 8px 5px 0px 0px;' /></td></tr>";
+            }
+            professionListString += "</table>";
+            document.getElementById("professionChoicePanel").innerHTML = professionListString;
+
+            // On filter, set all square button text to white
+            setChildColor("squareButtonTable", "h1", "#fff");
+
+            // Add active class to square buttons
+            var buttonDivId = key + "SquareButton";
+            var professionFilterButtonDiv = document.getElementById(buttonDivId);
+            if(professionFilterButtonDiv != null){
+                professionFilterButtonDiv.className = "squareButton active";
+
+                // Set the active squre button text to black
+                setChildColor(buttonDivId, "h1", "#000");
+            }
+
+            // Add hover to each of the rows
+            for(var i=0; i < professionRows.length; i++){
+                $("[id='" + professionRows[i] + "']").hover(function(){
+                    setChildColor(this.id, "a", "#fff");
+                },
+                function(){
+                    setChildColor(this.id, "a", "#000");
+                });
+            }
+        {% endif %}
+    }
+}
+
 </script>
     <div id='backgroundPanel' class='backgroundPanel' style='min-height: 100%;'>
         <script>
@@ -1161,591 +1285,15 @@ function toggleHireType(hireType){
             chosenInterests["hiring"] = true;
         {% endif %}
 
+        {% if existingProfessions %}
+            var workButton = document.getElementById("workInterestButton")
+            workButton.className = "toggleButton enabled";
+            chosenInterests["work"] = true;
+        {% endif %}
+
         $(window).resize(function (){
             resizeInterestPanel();
         });
     </script>
-
-
-
-    <!--<div id='backgroundPanel' class='backgroundPanel' style='min-width: 1020px; min-height: 100%;'>
-     <div id="mainViewPanel" class="mainViewPanel" style="position: relative; min-width: 1000px; max-width: 1000px; background: rgba(0,0,0,0.05); border: none;">
-        <script>
-            document.write(createEditAccountButtonHeader("Interests"))
-        </script>
-        <div id="mainDiv"></div>-->
-
-        <script>
-        var chosenProfessionList = []
-        var activeFilter = "acting"
-        var professionInterests = ["acting", "creative", "preProduction", "postProduction", "onSetProduction", "offSetProduction"];
-
-        function addSquareButtonColumn(label, onclickString, idName){
-            // Writes a table cell containing a square button
-            var squareButtonString = '<td id="' + idName + '" onclick="' + onclickString + '" >' + label + '</td>';
-            //document.write(squareButtonString);
-            return squareButtonString
-            //addSquareButtonHover(idName + "_cell")
-        }
-
-        function addSquareButtonHover(idName){
-            var buttonDiv = document.getElementById(idName);
-            $("[id='" + idName + "_cell']").hover(function(){
-                setChildColor(this.id, "h1", "#000");
-            },
-            function(){
-                if(buttonDiv.className === "squareButtonActive"){
-                    setChildColor(this.id, "h1", "#000");
-                }else{
-                    setChildColor(this.id, "h1", "#fff");
-                }
-            });
-        }
-
-        function toggleProfession(profession){
-            // If profession is in chosenProfessionList, remove from the list, otherwise, add it (and do all relevant front end changes)
-            var professionCheckbox = document.getElementById(profession + "_checkbox");
-            var professionRowID = profession + "_selectedRowID";
-            if(chosenProfessionList.indexOf(profession) >= 0){
-                if(professionCheckbox != null){
-                    professionCheckbox.checked = false;
-                }
-                removeProfession(profession, professionRowID)
-            }else{
-                if(professionCheckbox != null){
-                    professionCheckbox.checked = "checked";
-                }
-                addProfessionToSelectedTable(profession, professionRowID)
-            }
-        }
-
-        function addProfessionToSelectedTable(profession, professionRowID){
-            // Adds a profession to the chosenProfessionTable displayed on the right
-            var table = document.getElementById("chosenProfessionTable");
-            if(table != null && chosenProfessionList.indexOf(profession) < 0){
-                chosenProfessionList.push(profession);
-                var newProfessionRow = table.insertRow(-1);
-                newProfessionRow.id = professionRowID;
-                var newProfessionCell = newProfessionRow.insertCell(0);
-                newProfessionCell.className = "professionsSelectColumn"
-                newProfessionCell.onclick = '"toggleProfession(' + "'" + profession + "'" + ');"';
-                newProfessionCell.innerHTML = "<a> " + profession + "</a><a onclick='toggleProfession(" + '"' + profession + '"' + ");' style='float:right; margin: 0px 5px 0px 0px;' /> X</a>";
-                $("[id='" + professionRowID + "']").hover(function(){
-                        // On row hover, set the a text to white
-                        setChildColor(this.id, "a", "#fff");
-                    },
-                    function(){
-                        // On row unhover, set the a text back to black
-                        setChildColor(this.id, "a", "#000");
-                });
-            }
-        }
-
-        function removeProfession(profession, professionRowID){
-            // Removes a profession from the chosenProfessionList, and fron the selected list displayed in the chosenProfessionTable
-            var professionIndex = chosenProfessionList.indexOf(profession);
-            if(professionIndex >= 0){
-                chosenProfessionList.splice(professionIndex, 1);        // Second argument is # of elements to cutout
-                var professionRow = document.getElementById(professionRowID);
-                professionRow.parentNode.removeChild(professionRow);
-            }
-        }
-
-        function setChildColor(parentID, tag, color){
-            // Sets all children of parentID of element type tag to color
-            var parent = document.getElementById(parentID);
-            var children = parent.getElementsByTagName(tag);
-            for(var i=0; i < children.length; i++){
-                children[i].style.color = color;
-            }
-        }
-
-        function filterProfessions(key){
-            // When square button pressed, filter the possible professions displayed. Key is the field of the profession (acting, creative, etc)
-            for(var i=0; i < professionInterests.length; i++){
-                var interestDiv = document.getElementById(professionInterests[i] + "SquareButton");
-                if(interestDiv != null){
-                    interestDiv.className = "squareButton";
-
-                    //Re-add hover listener after the div has been made visible
-                    addSquareButtonHover(interestDiv.id)
-                }
-            }
-
-            var professionChoiceDiv = document.getElementById("professionChoicePanel")
-            if(professionChoiceDiv != null){
-                {% if professions %}
-                    // Add possible profession choices to panel
-                    var professionListString = "<table class='professionsSelectList'>";
-                    var professions = {{ professions|safe }};
-                    var professionRows = [];
-                    var professionCols = [];
-                    for(var i=0; i < professions[key].length; i++){
-                        var checkedValue = "";
-                        if(chosenProfessionList.indexOf(professions[key][i]) >= 0){
-                            checkedValue = "checked";
-                        }
-                        var rowID = professions[key][i] + "_rowID";     //put the hover on the row element
-                        professionRows.push(rowID);
-                        var colID = professions[key][i] + "_colID";     //change the 
-                        professionListString += "<tr id='" + rowID + "'><td class='professionsSelectColumn' id='" + colID + "'onclick='toggleProfession(" + '"' + professions[key][i] + '");' + "'><a> " + professions[key][i] + "</a><input type='checkbox' id='" + professions[key][i] + "_checkbox' " + checkedValue + " style='float:right; margin: 8px 5px 0px 0px;' /></td></tr>";
-                    }
-                    professionListString += "</table>";
-                    document.getElementById("professionChoicePanel").innerHTML = professionListString;
-
-                    // On filter, set all square button text to white
-                    setChildColor("squareButtonTable", "h1", "#fff");
-
-                    // Add active class to square buttons
-                    var buttonDivId = key + "SquareButton";
-                    var professionFilterButtonDiv = document.getElementById(buttonDivId);
-                    if(professionFilterButtonDiv != null){
-                        professionFilterButtonDiv.className = "squareButton active";
-
-                        // Set the active squre button text to black
-                        setChildColor(buttonDivId, "h1", "#000");
-                    }
-
-                    // Add hover to each of the rows
-                    for(var i=0; i < professionRows.length; i++){
-                        $("[id='" + professionRows[i] + "']").hover(function(){
-                            setChildColor(this.id, "a", "#fff");
-                        },
-                        function(){
-                            setChildColor(this.id, "a", "#000");
-                        });
-                    }
-                {% endif %}
-            }
-        }
-        </script>
-        <!--
-        <div id="workInterestDiv" style="display:none;">
-            <h2>What kind of jobs are you looking for?</h2>
-            <div id="wrapper">
-                <table id="workInterestPanel">
-                    <tr>
-                        <td width="34%"><center><font color="black">1. Choose your field</font></center></td>
-                        <td width="33%"><center><font color="black">2. Add your professions</font></center></td>
-                        <td width="33%"><center><font color="black">3. Confirm your selections</font></center></td>
-                    </tr>
-                    <tr>
-                        <td width="34%">
-                            <table class="squareButtonTable" id="squareButtonTable">
-                                <thead>
-                                </thead>
-                                <tr>
-                                    <script>
-                                    addSquareButtonColumn("Acting &amp; Performing", "filterProfessions('acting');", 'actingSquareButton');
-                                    addSquareButtonColumn("Creative Positions", "filterProfessions('creative');", 'creativeSquareButton');
-                                    </script>
-                                </tr>
-                                <tr>
-                                    <script>
-                                    addSquareButtonColumn("Production - On set", "filterProfessions('onSetProduction');", 'onSetProductionSquareButton');
-                                    addSquareButtonColumn("Production - Off set", "filterProfessions('offSetProduction');", 'offSetProductionSquareButton');
-                                    </script>
-                                </tr>
-                                <tr>
-                                    <script>
-                                    addSquareButtonColumn("Pre Production", "filterProfessions('preProduction');", 'preProductionSquareButton');
-                                    addSquareButtonColumn("Post Production", "filterProfessions('postProduction');", 'postProductionSquareButton');
-                                    </script>
-                                </tr>
-                            </table>
-                        </td>
-                        <td width="33%">
-                            <div id="professionChoicePanel" class="profession3ColumnsFullPanel">
-                                
-                            </div>
-                        </td>
-                        <td width="33%">
-                            <div id="chosenProfessionChoicePanel" class="profession3ColumnsFullPanel">
-                                
-                                    <table id="chosenProfessionTable" class="professionsSelectList">
-                                    </table>
-                                
-                            </div>
-                        </td>
-
-                    </tr>
-                    <tr>
-                        <td colspan="3" style="height:100px; width:100%;">
-                            <center>
-                                <div id="backButton" class="whiteButton blackHover" style="width:38.6%; float:left;" onclick="selectInterestChoice();">
-                                    <br>Back<br><br>
-                                </div>
-                                <div id="continueButton" class="whiteButton blackHover" style="width:38.4%; float:right; margin: 0px 4px 0px 0px" onclick="submitFormWithExtraParameters('work')">
-                                    <br>Continue<br><br>
-                                </div>
-                            </center>
-                        </td>
-                    </tr>
-                </table>
-            </div>
-        </div>-->
-
-        <script>
-        /*var hireTypes = ["hiring", "casting", "collaborating"];
-        var chosenHireTypes = [];
-
-        function toggleHireType(hireType){
-            if(chosenHireTypes.indexOf(hireType) < 0){
-                activateHireType(hireType);
-            }else{
-                deactivateHireType(hireType);
-            }
-        }
-
-        function activateHireType(hireType){
-            if(chosenHireTypes.indexOf(hireType) < 0){
-                chosenHireTypes.push(hireType);
-            }
-            var checkbox = document.getElementById(hireType + "Checkbox");
-            if(checkbox != null){
-                checkbox.checked = "checked"
-            }
-            var panel = document.getElementById(hireType + "PanelCell")
-            if(panel != null){
-                panel.className = "hireTableColumnActive";
-                panel.style.background = "#232323";
-                var children = panel.getElementsByTagName("td");
-                for(var i=0; i < children.length; i++){
-                    children[i].style.background = "#232323";
-                    children[i].style.color = "#FFF";
-                    children[i].cursor = "pointer";
-                }
-
-                // Change hover on activation
-                var childrenButtons = panel.getElementsByTagName("a");
-                for (var i=0; i < childrenButtons.length; i++){
-                    //childrenButtons[i].className = "whiteButton redHover";
-                    childrenButtons[i].text = "Disable";
-                }
-            }
-        }
-
-        function deactivateHireType(hireType){
-            var hireTypeIndex = chosenHireTypes.indexOf(hireType);
-            if(hireTypeIndex >= 0){
-                chosenHireTypes.splice(hireTypeIndex, 1);       // Second argument is # of elements to cutout
-            }
-            var checkbox = document.getElementById(hireType + "Checkbox");
-            if(checkbox != null){
-                checkbox.checked = false;
-            }
-            var panel = document.getElementById(hireType + "PanelCell")
-            if(panel != null){
-                panel.className = "hireTableColumn";
-                panel.style.background = "#e0dede";
-                var children = panel.getElementsByTagName("td");
-                for(var i=0; i < children.length; i++){
-                    children[i].style.background = "#e0dede";
-                    children[i].style.color = "#000";
-                    children[i].cursor = "pointer";
-                }
-
-                // Change hover on activation
-                var childrenButtons = panel.getElementsByTagName("a");
-                for (var i=0; i < childrenButtons.length; i++){
-                    childrenButtons[i].text = "Enable";
-                }
-            }
-        }*/
-
-        function addPanelHover(panelType){
-            var panelId = panelType + "PanelCell";
-            var panel = document.getElementById(panelId);
-            var buttonId = panelType + "ToggleButton";
-            $("[id='" + panelId + "']").hover(function(){
-                if(panel.className.endsWith("Active")){
-                    /*panel.style.background = "#232323";
-                    var children = panel.getElementsByTagName("td");
-                    for(var i=0; i < children.length; i++){
-                        children[i].style.background = "##232323";
-                        children[i].style.color = "#FFF";
-                        children[i].cursor = "pointer";
-                    }*/
-                }else{
-                    panel.style.background = "#e0dede";
-                    var children = panel.getElementsByTagName("td");
-                    for(var i=0; i < children.length; i++){
-                        children[i].style.background = "#e0dede";
-                        children[i].style.color = "#000";
-                        children[i].cursor = "pointer";
-                    }
-                }
-            },
-            function(){
-                if(panel.className.endsWith("Active")){
-                    setChildColor(panel.id, "h1", "#FFF");
-                    panel.style.background = "#232323";
-                    var children = panel.getElementsByTagName("td");
-                    for(var i=0; i < children.length; i++){
-                        children[i].style.background = "#232323";
-                        children[i].style.color = "#FFF";
-                    }
-                }else{
-                    setChildColor(panel.id, "h1", "#000");
-                    panel.style.background = "#efefef";
-                    var children = panel.getElementsByTagName("td");
-                    for(var i=0; i < children.length; i++){
-                        children[i].style.background = "#efefef";
-                        children[i].style.color = "#000";
-                    }
-                }
-            });
-        }
-        </script>
-
-        <!--<div id="hiringInterestDiv" style="display:none;">
-            <div id="wrapper" width="900px;">
-                <div id="four-column" class="container">
-                    <div class="title">
-                        <h2>What are your interests?</h2>
-                        <span class="byline">Specify your hiring needs</span>
-                    </div>
-                    <table class="hireOptionTable">
-                        <tr>
-                            <td id="hiringPanelCell" class="hireTableColumn">
-                                <table id="hiringTable" style="height:100%">
-                                    <tr style="height:30px; overflow:hidden;">
-                                        <td class="hireTableColumnElement" style="padding: 0.3em 0em 0em 0.4em">
-                                            <input type="checkbox" name="hireProject" id="hiringCheckbox" onclick="toggleHireType('hiring');" class="largeCheckbox" style="float:left"/>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="box1 hireTableColumnElement">
-                                            <h2>Hiring</h2>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="box1 hireTableColumnElement">
-                                            <span class="fa fa-cloud-download"></span>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="box1 hireTableColumnElement">
-                                            <div style="text-align:left;">Are you gearing up for production and looking for crew members?
-                                                Find available professionals seeking work for any field from pre to post production.
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr >
-                                        <td class="box1 hireTableColumnElement hireTableButton">
-                                            <a onclick="toggleHireType('hiring');" class="whiteButton grayHover" id="hireProjectToggleButton">Enable</a>
-                                        </td>
-                                    </tr>
-                                </table>
-                            </td>
-
-                            <td id="castingPanelCell" class="hireTableColumn">
-                                <table id="castingTable" style="height:100%">
-                                    <tr style="height:15px; overflow:hidden;">
-                                        <td class="hireTableColumnElement" style="padding: 0.4em 0em 0em 0.4em">
-                                            <input type="checkbox" name="casting" id="castingCheckbox" onclick="toggleHireType('casting');" class="largeCheckbox" style="float:left"/>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="box3 hireTableColumnElement">
-                                            <h2>Casting</h2>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="box1 hireTableColumnElement">
-                                            <span class="fa fa-cloud-download"></span>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="box3 hireTableColumnElement">
-                                            <div style="text-align: left;">Are you casting roles for an upcoming project? Search our Actor
-                                            database to find actors available in the Vancouver area.</div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="box3 hireTableColumnElement hireTableButton">
-                                            <a onclick="toggleHireType('casting');" class="whiteButton grayHover" id="castingToggleButton">Enable</a>
-                                        </td>
-                                    </tr>
-                                </table>
-                            </td>
-
-                            <td id="collaboratingPanelCell" class="hireTableColumn">
-                                <table id="collaboratingTable" style="height:100%">
-                                    <tr style="height:15px; overflow:hidden;">
-                                        <td class="hireTableColumnElement" style="padding: 0.4em 0em 0em 0.4em">
-                                            <input type="checkbox" name="collaborating" id="collaboratingCheckbox" onclick="toggleHireType('collaborating');" class="largeCheckbox" style="float:left"/>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="box4 hireTableColumnElement">
-                                            <h2>Collaboration</h2>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="box1 hireTableColumnElement">
-                                            <span class="fa fa-cloud-download"></span>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="box4 hireTableColumnElement">
-                                            <div style="text-align:left;">Are looking for filmmakers to collaborate on a project with?
-                                                Whether you are looking for a partner, or just someone to bounce ideas off of, find others
-                                                looking to collaborate.</div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="box4 hireTableColumnElement hireTableButton">
-                                            <a onclick="toggleHireType('collaborating');" class="whiteButton grayHover" id="collaboratingToggleButton">Enable</a>
-                                        </td>
-                                    </tr>
-                                </table>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td colspan="2" style="position:relative; height:100px" onclick="selectInterestChoice();">
-                                <div id="backButton" class="whiteButton blackHover" style="width:328px; position:absolute; top:0; left:0;">
-                                    <br>Back<br><br>
-                                </div>'
-                            </td>
-                            <td colspan="2" style="position:relative; height:100px;">
-                                <div id="continueButton" class="whiteButton blackHover" style="width:328px; position:absolute; top:0; left:0;" onclick="submitFormWithExtraParameters('hire')">
-                                    <br>Continue<br><br>
-                                </div>
-                            </td>
-                        </tr>
-                    </table>
-                </div>
-            </div>
-        </div>-->
-
-        <script>
-        var mainDiv = document.getElementById("mainViewPanel");
-        function selectInterestChoice(){
-            var interestChoiceDiv = document.getElementById("interestChoiceDiv");
-            mainDiv.innerHTML = interestChoiceDiv.innerHTML;
-        }
-
-        /*var workInterestLoaded = false;
-        function selectWorkInterest(firstTimeDisplay){
-            var workInterestDiv = document.getElementById("workInterestDiv");
-            if(workInterestDiv != null){
-                mainDiv.innerHTML = workInterestDiv.innerHTML;
-                {% if existingProfessions %}
-                    chosenProfessionList = [];
-                    if(workInterestLoaded){
-                        {% for profession in existingProfessions %}
-                            addProfessionToSelectedTable("{{profession}}", "{{profession}}_selectedRowID");
-                        {% endfor %}
-                    }else{
-                        workInterestLoaded = true;
-                        {% for profession in existingProfessions %}
-                            toggleProfession("{{profession}}");
-                        {% endfor %}
-                    }
-                {% endif %}
-                filterProfessions("acting");
-            }
-        }
-
-        function selectHiringInterest(){
-            var hiringInterestDiv = document.getElementById("hiringInterestDiv");
-            mainDiv.innerHTML = hiringInterestDiv.innerHTML
-            {% if existingHiringInterests %}
-                {% for hiringInterest in existingHiringInterests %}
-                    activateHireType("{{hiringInterest.subInterest}}")
-                {% endfor %}
-            {% endif %}
-            for(var i=0; i < hireTypes.length; i++){
-                addPanelHover(hireTypes[i]);
-            };
-        }
-
-        function selectOtherInterest(){
-            submitFormWithExtraParameters("other");
-        }*/
-
-        /*$(document).ready(function(){
-            selectInterestChoice();
-        })*/
-
-        </script>
-        <!--<div id="interestChoiceDiv" style="display: none;">
-            <div id="wrapper" width="980px;">
-                <div id="three-column" class="container">
-                    {% if cancelDestination == possibleDestinations.profile %}
-                        <div id="backToProfileButton" style="width:170px;padding: 1em 0em 0em 0em;"><a onclick="returnToProfile();" class="profileButton blackHover" style="float:left">Back to profile</a></div><br><br>
-                    {% endif %}
-                    <div class="title">
-                        <h2>What are your interests?</h2>
-                        <span class="byline">Specify what you are looking for.</span>
-                    </div>
-                    <table>
-                        <tr>
-                            <td class="boxA">
-                                <h2>Job Seeking</h2>
-                                <span class="fa fa-cloud-download"></span>
-                            </td>
-                            <td class="boxB">
-                                <h2>Casting and Hiring</h2>
-                                <span class="fa fa-cogs"></span>
-                            </td>
-                            <td class="boxC">
-                                <h2> Explore </h2>
-                                <span class="fa fa-wrench"></span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="boxA">
-                                <p>Look for a job in the Vancouver film industry in anything from acting to set work to post production. Your profile will be public to casting agents and those looking to hire.</p>
-                            </td>
-                            <td class="boxB">
-                                <p>Create casting posts and job posts for both permanent and project-specific positions. You can also post in search of collaborators for a new project.</p><br>
-                            </td>
-                            <td class="boxC">
-                                <p> Explore the film industry around you. Check out local events, view projects that are currently being shot in Vancouver, and find your next project!</p><br><br><br>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="boxA">
-                                {% if existingProfessions %}
-                                    <div class="blackButton whiteHover interestChoiceButton" onclick="selectWorkInterest()">
-                                        <br>Looking for a job &#10004;<br>
-                                    </div>
-                                {% else %}
-                                    <div class="whiteButton blackHover interestChoiceButton" onclick="selectWorkInterest()">
-                                        <br>Looking for a job<br>
-                                    </div>
-                                {% endif %}
-                            </td>
-                            <td class="boxB" style="position:relative;">
-                                {% if existingHiringInterests %}
-                                    <div class="blackButton whiteHover interestChoiceButton" style="margin: 0em 0em 2em 0em" onclick="selectHiringInterest()">
-                                        Looking to hire, collaborate, or cast a role &#10004;
-                                    </div>
-                                {% else %}
-                                    <div class="whiteButton blackHover interestChoiceButton" onclick="selectHiringInterest()">
-                                        Looking to hire, collaborate, or cast a role
-                                    </div>
-                                {% endif %}
-                            </td>
-                            <td class="boxC">
-                                {% if not existingProfessions and not existingHiringInterests %}
-                                    <div class="blackButton whiteHover interestChoiceButton" onclick="selectOtherInterest()">
-                                        <br>Other &#10004;<br>
-                                    </div>
-                                {% else %}
-                                    <div class="whiteButton blackHover interestChoiceButton" onclick="selectOtherInterest()">
-                                        <br>Other<br>
-                                    </div>
-                                {% endif %}
-                            </td>
-                        </tr>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>-->
 {% endif %}
 {% endblock %}
