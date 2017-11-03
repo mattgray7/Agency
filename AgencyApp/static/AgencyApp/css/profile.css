@@ -137,17 +137,17 @@
 
 .profession3ColumnsFullPanel {
 	width: 225px;
-	height: 380px;
+	height: 350px;
 	margin: 5px auto 0px auto;
 	display: inline-block;
-	background: rgba(0,0,0,0.05);
+	background: rgba(0,0,0,0.1);
 	color: #fff;
 	letter-spacing: 1px;
 	text-decoration: none;
 	font-weight: 700;
 	font-size: 0.5em;
 	overflow: scroll;
-	/*border: 1px solid rgba(0,0,0,1);*/
+	border: 1px solid rgba(0,0,0,0.5);
 	border-radius: 6px;
 }
 
@@ -160,7 +160,7 @@
 	font-size: 1.0em;
 	color: #000;
 	float: left;
-	background: #efefef;
+	background: #FFF;
 
 	border: 1px solid rgba(0,0,0,1);
 	border-radius: 6px;

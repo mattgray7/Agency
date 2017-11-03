@@ -1079,7 +1079,19 @@ function getWorkInterestPicker(){
                 {% endif %}
                 filterProfessions("acting");
             }*/
-    var pickerString = '<div id="workInterestContainer"><h2>What kind of jobs are you looking for?</h2><div id="wrapper"><table id="workInterestPanel">'
+    var pickerString = '<div id="workInterestContainer"><div id="wrapper"><div id="three-column" class="container" style="width: 740px;"><div class="title"><span class="byline">What jobs are you looking for?</span></div>'
+
+
+    // Add square button column
+    pickerString += '<div class="boxA"><h3 style="margin-bottom: 15px;">1. Choose your field</h3><table  class="squareButtonTable" id="squareButtonTable"><tr>' + addSquareButtonColumn("Acting &amp; Performing", "filterProfessions('acting');", 'actingSquareButton') + addSquareButtonColumn("Creative Positions", "filterProfessions('creative');", 'creativeSquareButton') + '</tr><tr>' + addSquareButtonColumn("Production - On set", "filterProfessions('onSetProduction');", 'onSetProductionSquareButton') + addSquareButtonColumn("Production - Off set", "filterProfessions('offSetProduction');", 'offSetProductionSquareButton') + '</tr><tr>' + addSquareButtonColumn("Pre Production", "filterProfessions('preProduction');", 'preProductionSquareButton') + addSquareButtonColumn("Post Production", "filterProfessions('postProduction');", 'postProductionSquareButton') + '</tr></table></div>';
+
+    // Add professionList
+    pickerString += '<div class="boxB"><h3 style="margin-bottom: 15px;">2. Add professions</h3><div id="professionChoicePanel" class="profession3ColumnsFullPanel"></div></div>'
+
+    pickerString += '<div class="boxC"><h3 style="margin-bottom: 15px;">3. Confirm selections</h3><div id="chosenProfessionChoicePanel" class="profession3ColumnsFullPanel"><table id="chosenProfessionTable" class="professionsSelectList"></table></div></div>'
+
+    pickerString += "</div></div></div>"
+    /*var pickerString = '<div id="workInterestContainer"><h2>What kind of jobs are you looking for?</h2><div id="wrapper"><table id="workInterestPanel">'
 
     // Add title row
     pickerString += '<tr><td width="34%"><font color="black">1. Choose your field</font></td><td width="33%"><font color="black">2. Add your professions</font></td><td width="33%"><font color="black">3. Confirm your selections</font></td></tr>'
@@ -1094,19 +1106,8 @@ function getWorkInterestPicker(){
     pickerString += '<td width="33%"><div id="chosenProfessionChoicePanel" class="profession3ColumnsFullPanel"><table id="chosenProfessionTable" class="professionsSelectList"></table></div></td>'
 
     // Add buttons
-   /*pickerString += '<tr>
-                        <td colspan="3" style="height:100px; width:100%;">
-                            <center>
-                                <div id="backButton" class="whiteButton blackHover" style="width:38.6%; float:left;" onclick="selectInterestChoice();">
-                                    <br>Back<br><br>
-                                </div>
-                                <div id="continueButton" class="whiteButton blackHover" style="width:38.4%; float:right; margin: 0px 4px 0px 0px" onclick="submitFormWithExtraParameters('work')">
-                                    <br>Continue<br><br>
-                                </div>
-                            </center>
-                        </td>
-                    </tr>'*/
-    pickerString += '</tr></table></div>'
+
+    pickerString += '</tr></table></div>'*/
 
 
 
