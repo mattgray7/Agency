@@ -1007,6 +1007,7 @@ function resizeInterestPanel(force){
 }
 
 var mainInterests = ["work", "hiring", "other"]
+var chosenInterests = {"work": false, "hiring": false, "other": false}
 var interestContentMap = {"work": getWorkInterestPicker, "hiring": getHiringInterestPicker, "other": null}
 function selectInterest(interestType){
     if(interestType === "other"){
@@ -1020,10 +1021,11 @@ function selectInterest(interestType){
         }
 
         var button = document.getElementById(interestType + "InterestButton");
-        if(button != null){
+        if(button != null && !chosenInterests[interestType]){
             button.className = "toggleButton enabled";
             button.innerHTML += " &#10004;"
         }
+        chosenInterests[interestType] = true;
 
         var interestContentFunction = interestContentMap[interestType];
         if(interestContentFunction != null){
@@ -1137,9 +1139,11 @@ function toggleHireType(hireType){
     </div>
     <script>
         {% if existingHiringInterests %}
+            // Don't want to call selectInterest as that will expand hiring interests (which we dont want initially)
             var hireButton = document.getElementById("hiringInterestButton")
             hireButton.className = "toggleButton enabled";
             hireButton.innerHTML += " &#10004;"
+            chosenInterests["hiring"] = true;
         {% endif %}
 
         $(window).resize(function (){
