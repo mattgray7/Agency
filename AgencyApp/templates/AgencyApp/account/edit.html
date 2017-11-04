@@ -15,13 +15,14 @@
 <!--<script type="text/javascript" src="{% static "/AgencyApp/js/profile.js" %}"></script>-->
 
 <script>
-var accountButtons = [{"label": "Background", "destination": "{{possibleDestinations.background}}"},
+var accountButtons = [{"label": "Profile", "destination": "{{possibleDestinations.profile}}"},
+                      {"label": "Background", "destination": "{{possibleDestinations.background}}"},
                       {"label": "Filmography", "destination": "{{possibleDestinations.filmography}}"},
                       {"label": "Media", "destination": "{{possibleDestinations.picture}}"},
                       {"label": "Interests", "destination": "{{possibleDestinations.interests}}"}
                      ]
 function createEditAccountButtonHeader(activeLabel){
-    var headerString = "<div id='editAccountTypeButtons' style='width: 100%; text-align: center; height: 120px; background: #FFF; position: relative; margin-bottom: -5px;'>";
+    /*var headerString = "<div id='editAccountTypeButtons' style='width: 100%; text-align: center; height: 120px; background: #FFF; position: relative; margin-bottom: -5px;'>";
 
     // Add back to profile button
     headerString += "<div class='editButton' style='position: absolute; left: 10px; top: 10px; z-index: 5;' onclick='redirectToUser(" + '"{{request.user.username}}");' + "'>&lt; {{userAccount.cleanName}}</div>";
@@ -29,6 +30,20 @@ function createEditAccountButtonHeader(activeLabel){
     // Add edit account buttons
     headerString += "<div style='position: absolute; left: 0; right: 0; top: 20px;'><div style=''><h1 style='margin-bottom: 10px;'>Edit Account</h1></div>"
     headerString += "<ul class='browseCategoriesList' style='display: inline-block; margin: 0px auto 0px auto; width: 440px;'>";
+    for(var i=0; i < accountButtons.length; i++){
+        headerString += "<li ";
+        if(accountButtons[i]["label"] === activeLabel){
+            headerString += "class='active' "
+        }
+        headerString += " style='width: 100px;' onclick='redirect(" +'"' + accountButtons[i]["destination"] +'");' + "'>" + accountButtons[i]["label"]  + "</li>";
+    }
+    headerString += "</ul></div></div>";
+    return headerString;*/
+
+    var headerString = "<div id='editAccountTypeButtons' style='width: 100%; text-align: center; height: 55px; background: #FFF; position: relative; margin-bottom: -5px;'>";
+
+    // Add edit account buttons
+    headerString += "<div style='width: 100%; margin: 0px auto 0px auto;'><ul class='browseCategoriesList' style='display: inline-block; margin-top: 10px; margin-left: 10px; width: 550px;'>";
     for(var i=0; i < accountButtons.length; i++){
         headerString += "<li ";
         if(accountButtons[i]["label"] === activeLabel){
