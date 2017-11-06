@@ -1019,13 +1019,13 @@ function getSlimInterestPanel(){
     var buttonInfo = getInterestButtonInfo()
 
     // Top panel
-    panelString += "<div id='workInterestSlimContainer' style='height: 250px; width: 100%; background: rgba(255,255,255,0.7); position: relative;'><div style='position: absolute; left: 50px; top: 80px;'><img src='{{images.icons.jobSeeking}}' style='max-height: 100px; max-width: 100px;' /></div><div style='position: absolute; right: 20px; left: 200px; top: 20px;'><h2 style='margin-bottom: 10px;'>Job Seeking</h2><p>" + buttonInfo["description"]["left"] + "</p>" + '<div id="workInterestButton" class="' + buttonInfo["class"]["left"] + '" style="height: 30px; padding-top: 10px; margin: -5px auto 0 auto; width: 60%; left: 0; right: 0; " onclick="selectInterest(' + "'work'" +  ');">' + buttonInfo["text"]["left"] + '</div></div><div id="workInterestExpandPanel" style="position: absolute; top: 250px;"></div></div>';
+    panelString += "<div id='workInterestSlimContainer' style='height: 250px; width: 100%; background: rgba(255,255,255,0.7); position: relative;'><div style='position: absolute; left: 50px; top: 80px;'><img src='{{images.icons.jobSeeking}}' style='max-height: 100px; max-width: 100px;' /></div><div style='position: absolute; right: 20px; left: 200px; top: 20px;'><h2 style='margin-bottom: 10px;'>Job Seeking</h2><p>" + buttonInfo["description"]["left"] + "</p>" + '<div id="workInterestButton" class="' + buttonInfo["class"]["left"] + '" style="height: 30px; padding-top: 10px; margin: -5px auto 0 auto; width: 60%; left: 0; right: 0; " onclick="selectInterest(' + "'work'" +  ');">' + buttonInfo["text"]["left"] + '</div></div><div id="workInterestExpandPanel" style="position: absolute; top: 250px; width: 100%;"></div></div>';
 
     // Middle panel
-    panelString += "<div id='hiringInterestSlimContainer' style='height: 250px; width: 100%; background: rgba(255,255,255,1); position: relative;'><div style='position: absolute; right: 50px; top: 80px;'><img src='{{images.icons.hiringCasting}}' style='max-height: 100px; max-width: 100px;' /></div><div style='position: absolute; left: 20px; right: 200px; top: 20px;'><h2 style='margin-bottom: 10px;'>Hiring and Casting</h2><p>" + buttonInfo["description"]["center"] + "</p>" + '<div id="hiringInterestButton" class="' + buttonInfo["class"]["center"] + '" style="height: 30px; padding-top: 10px; margin: -5px auto 0 auto; width: 60%; left: 0; right: 0; " onclick="selectInterest(' + "'hiring'" +  ');">' + buttonInfo["text"]["center"] + '</div></div><div id="hiringInterestExpandPanel" style="position: absolute; top: 250px;"></div></div>';
+    panelString += "<div id='hiringInterestSlimContainer' style='height: 250px; width: 100%; background: rgba(255,255,255,1); position: relative;'><div style='position: absolute; right: 50px; top: 80px;'><img src='{{images.icons.hiringCasting}}' style='max-height: 100px; max-width: 100px;' /></div><div style='position: absolute; left: 20px; right: 200px; top: 20px;'><h2 style='margin-bottom: 10px;'>Hiring and Casting</h2><p>" + buttonInfo["description"]["center"] + "</p>" + '<div id="hiringInterestButton" class="' + buttonInfo["class"]["center"] + '" style="height: 30px; padding-top: 10px; margin: -5px auto 0 auto; width: 60%; left: 0; right: 0; " onclick="selectInterest(' + "'hiring'" +  ');">' + buttonInfo["text"]["center"] + '</div></div><div id="hiringInterestExpandPanel" style="position: absolute; top: 250px; width: 100%;"></div></div>';
 
     // Bottom panel
-    panelString += "<div id='otherInterestSlimContainer' style='height: 250px; width: 100%; background: rgba(255,255,255,0.7); position: relative;'><div style='position: absolute; left: 50px; top: 80px;'><img src='{{images.icons.explore}}' style='max-height: 100px; max-width: 100px;' /></div><div style='position: absolute; right: 20px; left: 200px; top: 20px;'><h2 style='margin-bottom: 10px;'>Explore</h2><p>" + buttonInfo["description"]["right"] + "</p>" + '<div id="workInterestButton" class="' + buttonInfo["class"]["right"] + '" style="height: 30px; padding-top: 10px; margin: -5px auto 0 auto; width: 60%; left: 0; right: 0; " onclick="selectInterest(' + "'other'" +  ');">' + buttonInfo["text"]["right"] + '</div></div></div>';
+    panelString += "<div id='otherInterestSlimContainer' style='height: 250px; width: 100%; background: rgba(255,255,255,0.7); position: relative;'><div style='position: absolute; left: 50px; top: 80px;'><img src='{{images.icons.explore}}' style='max-height: 100px; max-width: 100px;' /></div><div style='position: absolute; right: 20px; left: 200px; top: 20px;'><h2 style='margin-bottom: 10px;'>Explore</h2><p>" + buttonInfo["description"]["right"] + "</p>" + '<div id="otherInterestButton" class="' + buttonInfo["class"]["right"] + '" style="height: 30px; padding-top: 10px; margin: -5px auto 0 auto; width: 60%; left: 0; right: 0; " onclick="selectInterest(' + "'other'" +  ');">' + buttonInfo["text"]["right"] + '</div></div></div>';
 
 
     panelString += "</div></div>"
@@ -1083,7 +1083,7 @@ function selectInterest(interestType){
                 var interestContainer = document.getElementById(interestType + "InterestSlimContainer")
                 if(expandPanel != null && interestContainer != null){
                     expandPanel.innerHTML = interestContent["html"];
-                    $("[id='" + interestType + "InterestSlimContainer']").animate({marginTop: "0px", height: "900px"}, 300, function(){});  // 250 for interest container, 650 for panel
+                    $("[id='" + interestType + "InterestSlimContainer']").animate({marginTop: "0px", height: "950px"}, 300, function(){});  // 250 for interest container, 650 for panel
                 }
             }
 
@@ -1160,7 +1160,18 @@ function getSecondLevelButtons(interestType){
 }
 
 function getSlimHiringInterestPicker(){
-    return {"html": "hi", "callbacks": []}
+    var callbacks = [];
+    var pickerString = '<div id="hiringInterestContainer">'
+
+    // Add top option
+    pickerString += "<div style='height: 200px; width: 100%; border-top: 1px solid rgba(0,0,0,0.3); background: rgba(255,255,255,0.7); position: relative;'><div style='position: absolute; left: 50px; top: 60px;'><img src='{{images.icons.hiring}}' style='max-height: 100px; max-width: 100px;' /></div><div style='position: absolute; right: 20px; left: 200px; top: 20px;'><h2 style='margin-bottom: 10px;'>Hiring</h2><p>Are you gearing up for production and looking for crew members? Find available professionals seeking work for any field from pre to post production.</p>" + '<div id="hiringToggleButton" class="toggleButton" style="height: 30px; padding-top: 10px; margin: -5px auto 0 auto; width: 60%; left: 0; right: 0; " onclick="toggleHireType(' + "'hiring'" +  ');">Select</div></div></div>';
+
+    pickerString += "<div style='height: 200px; margin-top: 30px; border-top: 1px solid rgba(0,0,0,0.3); width: 100%; background: rgba(255,255,255,0.7); position: relative;'><div style='position: absolute; left: 50px; top: 60px;'><img src='{{images.icons.casting}}' style='max-height: 100px; max-width: 100px;' /></div><div style='position: absolute; right: 20px; left: 200px; top: 20px;'><h2 style='margin-bottom: 10px;'>Casting</h2><p>Are you casting roles for an upcoming project? Search our Actor database to find available actors in your area.</p>" + '<div id="castingToggleButton" class="toggleButton" style="height: 30px; padding-top: 10px; margin: -5px auto 0 auto; width: 60%; left: 0; right: 0; " onclick="toggleHireType(' + "'casting'" +  ');">Select</div></div></div>';
+
+    pickerString += "<div style='height: 255px; width: 100%; border-top: 1px solid rgba(0,0,0,0.3); border-bottom: 1px solid rgba(0,0,0,0.3); background: rgba(255,255,255,0.7); position: relative;'><div style='position: absolute; left: 50px; top: 60px;'><img src='{{images.icons.collaborating}}' style='max-height: 100px; max-width: 100px;' /></div><div style='position: absolute; right: 20px; left: 200px; top: 20px;'><h2 style='margin-bottom: 10px;'>Collaborating</h2><p>Are looking for filmmakers to collaborate on a project with? Whether you are looking for a partner, or just someone to bounce ideas off of, find others looking to collaborate.</p>" + '<div id="collaboratingToggleButton" class="toggleButton" style="height: 30px; padding-top: 10px; margin: -5px auto 0 auto; width: 60%; left: 0; right: 0; " onclick="toggleHireType(' + "'collaborating'" +  ');">Select</div></div></div>';
+
+    pickerString += "</div>";
+    return {"html": pickerString, "callbacks": []}
 }
 
 function getWideHiringInterestPicker(){
