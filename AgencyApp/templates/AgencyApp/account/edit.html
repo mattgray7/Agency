@@ -1019,13 +1019,13 @@ function getSlimInterestPanel(){
     var buttonInfo = getInterestButtonInfo()
 
     // Top panel
-    panelString += "<div style='height: 250px; width: 100%; background: rgba(255,255,255,0.7); position: relative;'><div style='position: absolute; left: 50px; top: 30%;'><img src='{{images.icons.jobSeeking}}' style='max-height: 100px; max-width: 100px;' /></div><div style='position: absolute; right: 20px; left: 200px; top: 8%;'><h2 style='margin-bottom: 10px;'>Job Seeking</h2><p>" + buttonInfo["description"]["left"] + "</p>" + '<div id="workInterestButton" class="' + buttonInfo["class"]["left"] + '" style="height: 30px; padding-top: 10px; margin: -5px auto 0 auto; width: 60%; left: 0; right: 0; " onclick="selectInterest(' + "'work'" +  ');">' + buttonInfo["text"]["left"] + '</div></div></div>';
+    panelString += "<div id='workInterestSlimContainer' style='height: 250px; width: 100%; background: rgba(255,255,255,0.7); position: relative;'><div style='position: absolute; left: 50px; top: 80px;'><img src='{{images.icons.jobSeeking}}' style='max-height: 100px; max-width: 100px;' /></div><div style='position: absolute; right: 20px; left: 200px; top: 20px;'><h2 style='margin-bottom: 10px;'>Job Seeking</h2><p>" + buttonInfo["description"]["left"] + "</p>" + '<div id="workInterestButton" class="' + buttonInfo["class"]["left"] + '" style="height: 30px; padding-top: 10px; margin: -5px auto 0 auto; width: 60%; left: 0; right: 0; " onclick="selectInterest(' + "'work'" +  ');">' + buttonInfo["text"]["left"] + '</div></div><div id="workInterestExpandPanel" style="position: absolute; top: 250px;"></div></div>';
 
     // Middle panel
-    panelString += "<div style='height: 250px; width: 100%; background: rgba(255,255,255,1); position: relative;'><div style='position: absolute; right: 50px; top: 30%;'><img src='{{images.icons.hiringCasting}}' style='max-height: 100px; max-width: 100px;' /></div><div style='position: absolute; left: 20px; right: 200px; top: 8%;'><h2 style='margin-bottom: 10px;'>Hiring and Casting</h2><p>" + buttonInfo["description"]["center"] + "</p>" + '<div id="hiringInterestButton" class="' + buttonInfo["class"]["center"] + '" style="height: 30px; padding-top: 10px; margin: -5px auto 0 auto; width: 60%; left: 0; right: 0; " onclick="selectInterest(' + "'hiring'" +  ');">' + buttonInfo["text"]["center"] + '</div></div></div>';
+    panelString += "<div id='hiringInterestSlimContainer' style='height: 250px; width: 100%; background: rgba(255,255,255,1); position: relative;'><div style='position: absolute; right: 50px; top: 30%;'><img src='{{images.icons.hiringCasting}}' style='max-height: 100px; max-width: 100px;' /></div><div style='position: absolute; left: 20px; right: 200px; top: 8%;'><h2 style='margin-bottom: 10px;'>Hiring and Casting</h2><p>" + buttonInfo["description"]["center"] + "</p>" + '<div id="hiringInterestButton" class="' + buttonInfo["class"]["center"] + '" style="height: 30px; padding-top: 10px; margin: -5px auto 0 auto; width: 60%; left: 0; right: 0; " onclick="selectInterest(' + "'hiring'" +  ');">' + buttonInfo["text"]["center"] + '</div></div><div id="hiringInterestExpandPanel" style="height: 0px;"></div></div>';
 
     // Bottom panel
-    panelString += "<div style='height: 250px; width: 100%; background: rgba(255,255,255,0.7); position: relative;'><div style='position: absolute; left: 50px; top: 30%;'><img src='{{images.icons.explore}}' style='max-height: 100px; max-width: 100px;' /></div><div style='position: absolute; right: 20px; left: 200px; top: 8%;'><h2 style='margin-bottom: 10px;'>Explore</h2><p>" + buttonInfo["description"]["right"] + "</p>" + '<div id="workInterestButton" class="' + buttonInfo["class"]["right"] + '" style="height: 30px; padding-top: 10px; margin: -5px auto 0 auto; width: 60%; left: 0; right: 0; " onclick="selectInterest(' + "'other'" +  ');">' + buttonInfo["text"]["right"] + '</div></div></div>';
+    panelString += "<div id='otherInterestSlimContainer' style='height: 250px; width: 100%; background: rgba(255,255,255,0.7); position: relative;'><div style='position: absolute; left: 50px; top: 30%;'><img src='{{images.icons.explore}}' style='max-height: 100px; max-width: 100px;' /></div><div style='position: absolute; right: 20px; left: 200px; top: 8%;'><h2 style='margin-bottom: 10px;'>Explore</h2><p>" + buttonInfo["description"]["right"] + "</p>" + '<div id="workInterestButton" class="' + buttonInfo["class"]["right"] + '" style="height: 30px; padding-top: 10px; margin: -5px auto 0 auto; width: 60%; left: 0; right: 0; " onclick="selectInterest(' + "'other'" +  ');">' + buttonInfo["text"]["right"] + '</div></div></div>';
 
 
     panelString += "</div></div>"
@@ -1070,20 +1070,36 @@ function selectInterest(interestType){
         var interestContentFunction = interestContentMap[interestType];
         if(interestContentFunction != null){
             var interestContent = interestContentFunction();
-            var secondLevel = document.getElementById("secondLevelViewPanel")
-            if(secondLevel != null){
-                secondLevel.innerHTML = interestContent["html"];
-
-                var interestContainer = document.getElementById(interestType + "InterestContainer")
-                if(interestContainer != null){
-                    $("#secondLevelViewPanel").animate({marginTop: "0px", height: interestContainer.offsetHeight + "px"}, 300, function(){});
-                    $('html,body').animate({scrollTop: "650px"}, 500);
-                }
-
-                if(interestContent["callbacks"] != null && interestContent["callbacks"].length > 0){
-                    for(var i=0; i < interestContent["callbacks"].length; i++){
-                        interestContent["callbacks"][i]();
+            var interestContainer = document.getElementById(interestType + "InterestContainer")
+            //if(interestContainer != null){
+                if(interestPanelExpanded){
+                    var secondLevel = document.getElementById("secondLevelViewPanel")
+                    if(secondLevel != null){
+                        secondLevel.innerHTML = interestContent["html"];
+                        $("#secondLevelViewPanel").animate({marginTop: "0px", height: interestContainer.offsetHeight + "px"}, 300, function(){});
+                        $('html,body').animate({scrollTop: "650px"}, 500);
                     }
+                }else{
+                    var expandPanel = document.getElementById(interestType + "InterestExpandPanel")
+                    var interestContainer = document.getElementById(interestType + "InterestSlimContainer")
+
+                    if(expandPanel != null){
+                        expandPanel.innerHTML = interestContent["html"];
+                        $("[id='" + interestType + "InterestSlimContainer']").animate({marginTop: "0px", height: "900px"}, 300, function(){});
+                    }
+                    /*var interestExpandPanel = document.createElement("div");
+                    interestExpandPanel.id = "interestExpandPanel"
+                    interestExpandPanel.style.height = "0px"
+                    interestExpandPanel.style.marginTop = interestContainer.offsetHeight + "px"
+                    interestExpandPanel.innerHTML = "Hey buds"
+                    interestContainer.appendChild(interestExpandPanel);
+                    $("#interestExpandPanel").animate({marginTop: interestExpandPanel.style.marginTop + "px", height: interestContainer.offsetHeight + "px"}, 300, function(){});*/
+                }
+            //}
+
+            if(interestContent["callbacks"] != null && interestContent["callbacks"].length > 0){
+                for(var i=0; i < interestContent["callbacks"].length; i++){
+                    interestContent["callbacks"][i]();
                 }
             }
         }
@@ -1306,10 +1322,10 @@ function filterProfessions(key){
     <div id='backgroundPanel' class='backgroundPanel' style='min-height: 100%;'>
         <script>
             if($(window).width() > interestPanelWidthThreshold){
-                //homePageExpanded = true;
+                interestPanelExpanded = true;
                 document.write(getWideInterestPanel());
             }else{
-                //homePageExpanded = false;
+                interestPanelExpanded = false;
                 document.write(getSlimInterestPanel());
             }
         </script>
