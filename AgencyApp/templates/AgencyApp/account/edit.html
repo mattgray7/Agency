@@ -1048,6 +1048,7 @@ function resizeInterestPanel(force){
 
 var mainInterests = ["work", "hiring", "other"]
 var chosenInterests = {"work": false, "hiring": false, "other": false}
+var expandedInterests = {"work": false, "hiring": false, "other": false}
 function selectInterest(interestType){
     if(interestType === "other"){
         return submitFormWithExtraParameters("other");
@@ -1063,6 +1064,14 @@ function selectInterest(interestType){
         if(button != null && !chosenInterests[interestType]){
             button.className = "toggleButton enabled";
             button.innerHTML += " &#10004;"
+        }else if(chosenInterests[interestType] == true && expandedInterests[interestType] == true){
+            // If it is already chosen and expanded, shrink the panel
+            if(interestPanelExpanded){
+                shrinkSecondLevel();
+            }else{
+                shrinkExpandedPanel();
+            }
+            return;
         }
         chosenInterests[interestType] = true;
 
@@ -1086,6 +1095,7 @@ function selectInterest(interestType){
                     $("[id='" + interestType + "InterestSlimContainer']").animate({marginTop: "0px", height: "1040px"}, 300, function(){});  // 250 for interest container, 650 for panel
                 }
             }
+            expandedInterests[interestType] = true;
 
             if(interestContent["callbacks"] != null && interestContent["callbacks"].length > 0){
                 for(var i=0; i < interestContent["callbacks"].length; i++){
@@ -1097,10 +1107,19 @@ function selectInterest(interestType){
 }
 
 function shrinkSecondLevel(){
+    var interestType;
+    for(type in chosenInterests){
+        if(chosenInterests[type] == true){
+            interestType = type;
+            break;
+        }
+    }
+
     var secondLevel = document.getElementById("secondLevelViewPanel")
     if(secondLevel != null){
         $("#secondLevelViewPanel").animate({marginTop: "0px", height: "0px"}, 300, function(){secondLevel.innerHTML='';});
         $('html,body').animate({scrollTop: "0px"}, 300);
+        expandedInterests[interestType] = false;
     }
 }
 
@@ -1117,9 +1136,9 @@ function shrinkExpandedPanel(){
         var expandPanel = document.getElementById(interestType + "InterestExpandPanel")
         var interestContainer = document.getElementById(interestType + "InterestSlimContainer")
         if(expandPanel != null && interestContainer != null){
-                    expandPanel.innerHTML = "";
-                    $("[id='" + interestType + "InterestSlimContainer']").animate({marginTop: "0px", height: "250px"}, 300, function(){});  // 250 for interest container, 650 for panel
-                }
+            $("[id='" + interestType + "InterestSlimContainer']").animate({marginTop: "0px", height: "250px"}, 300, function(){expandPanel.innerHTML = "";});  // 250 for interest container, 650 for panel
+            expandedInterests[interestType] = false;
+        }
     }
 }
 
