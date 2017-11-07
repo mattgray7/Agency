@@ -1040,11 +1040,11 @@ function resizeInterestPanel(force){
     if($(window).width() > interestPanelWidthThreshold){
         if(!interestPanelExpanded || force == true){
             interestPanelExpanded = true;
-            chosenInterests = {"work": false, "hiring": false, "other": false}
-            /*expandedInterests = {"work": false, "hiring": false, "other": false}
-            chosenHireTypes = {"hiring": false, "casting": false, "collaborating": false};
-            chosenProfessionList = []*/
+
             var previousExpanded = expandedInterests;
+            expandedInterests = {"work": false, "hiring": false, "other": false}
+            chosenInterests = {"work": false, "hiring": false, "other": false}
+
             document.getElementById("backgroundPanel").innerHTML = getWideInterestPanel();
             for(interest in previousExpanded){
                 if(previousExpanded[interest] == true){
@@ -1055,11 +1055,11 @@ function resizeInterestPanel(force){
     }else{
         if(interestPanelExpanded || force == true){
             interestPanelExpanded = false;
-            chosenInterests = {"work": false, "hiring": false, "other": false}
-            /*expandedInterests = {"work": false, "hiring": false, "other": false}
-            chosenHireTypes = {"hiring": false, "casting": false, "collaborating": false};
-            chosenProfessionList = []*/
+
             var previousExpanded = expandedInterests;
+            expandedInterests = {"work": false, "hiring": false, "other": false}
+            chosenInterests = {"work": false, "hiring": false, "other": false}
+
             document.getElementById("backgroundPanel").innerHTML = getSlimInterestPanel();
             for(interest in previousExpanded){
                 if(previousExpanded[interest] == true){
@@ -1115,11 +1115,10 @@ function selectInterest(interestType){
 
                     // Shrink any other open panels
                     for(interest in expandedInterests){
-                        if(expandedInterests[interest] == true){
+                        if(expandedInterests[interest] == true && interestType != interest){
                             shrinkExpandedPanel();
                         }
                     }
-
 
                     expandPanel.innerHTML = interestContent["html"];
                     $("[id='" + interestType + "InterestSlimContainer']").animate({marginTop: "0px", height: slimExpandedPanelHeights[interestType] + "px"}, 300, function(){});  // 250 for interest container, 650 for panel
@@ -1218,12 +1217,20 @@ function getSlimWorkInterestPicker(){
     // Toggle selected professions
     callbacks.push(function(){
         filterProfessions("acting");
+        
+        var recentlyChosenProfessions = chosenProfessionList;
+        chosenProfessionList = [];
         {% if existingProfessions %}
-            chosenProfessionList = [];
             {% for profession in existingProfessions %}
                 addProfessionToSelectedTable("{{profession}}", "{{profession}}_selectedRowID");
             {% endfor %}
         {% endif %}
+        // Add any professions that were selected but haven't been saved yet
+        for(var i=0; i < recentlyChosenProfessions.length; i++){
+            if(chosenProfessionList.indexOf(recentlyChosenProfessions[i]) < 0){
+                addProfessionToSelectedTable(recentlyChosenProfessions[i], recentlyChosenProfessions[i] + "_selectedRowID");
+            }
+        }
     });
 
     pickerString += "</div></div>"
@@ -1249,13 +1256,20 @@ function getWideWorkInterestPicker(){
 
     callbacks.push(function(){
         filterProfessions("acting");
+        
+        var recentlyChosenProfessions = chosenProfessionList;
+        chosenProfessionList = [];
         {% if existingProfessions %}
-            chosenProfessionList = [];
             {% for profession in existingProfessions %}
                 addProfessionToSelectedTable("{{profession}}", "{{profession}}_selectedRowID");
             {% endfor %}
         {% endif %}
-
+        // Add any professions that were selected but haven't been saved yet
+        for(var i=0; i < recentlyChosenProfessions.length; i++){
+            if(chosenProfessionList.indexOf(recentlyChosenProfessions[i]) < 0){
+                addProfessionToSelectedTable(recentlyChosenProfessions[i], recentlyChosenProfessions[i] + "_selectedRowID");
+            }
+        }
     });
     return {"html": pickerString, "callbacks": callbacks}
 }
