@@ -960,14 +960,17 @@ function getInterestButtonInfo(){
         {% if existingProfessions %}
             buttonTexts["left"] += " &#10004;"
             buttonClasses["left"] += " enabled"
+            chosenInterests["work"] = true;
         {% endif %}
-        {% if existingHireInterests %}
+        {% if existingHiringInterests %}
             buttonTexts["center"] += " &#10004;"
             buttonClasses["center"] += " enabled"
+            chosenInterests["hiring"] = true;
         {% endif %}
     {% else %}
         buttonTexts["right"] += " &#10004;";
         buttonClasses["right"] += " enabled"
+        chosenInterests["other"] = true;
     {% endif %}
 
     return {"text": buttonTexts, "class": buttonClasses, "description": buttonDescriptions}
@@ -1037,11 +1040,19 @@ function resizeInterestPanel(force){
     if($(window).width() > interestPanelWidthThreshold){
         if(!interestPanelExpanded || force == true){
             interestPanelExpanded = true;
+            chosenInterests = {"work": false, "hiring": false, "other": false}
+            expandedInterests = {"work": false, "hiring": false, "other": false}
+            chosenHireTypes = {"hiring": false, "casting": false, "collaborating": false};
+            chosenProfessionList = []
             document.getElementById("backgroundPanel").innerHTML = getWideInterestPanel();
         }
     }else{
         if(interestPanelExpanded || force == true){
             interestPanelExpanded = false;
+            chosenInterests = {"work": false, "hiring": false, "other": false}
+            expandedInterests = {"work": false, "hiring": false, "other": false}
+            chosenHireTypes = {"hiring": false, "casting": false, "collaborating": false};
+            chosenProfessionList = []
             document.getElementById("backgroundPanel").innerHTML = getSlimInterestPanel();
         }
     }
@@ -1423,20 +1434,6 @@ function filterProfessions(key){
         </script>
     </div>
     <script>
-        {% if existingHiringInterests %}
-            // Don't want to call selectInterest as that will expand hiring interests (which we dont want initially)
-            var hireButton = document.getElementById("hiringInterestButton")
-            hireButton.className = "toggleButton enabled";
-            hireButton.innerHTML += " &#10004;"
-            chosenInterests["hiring"] = true;
-        {% endif %}
-
-        {% if existingProfessions %}
-            var workButton = document.getElementById("workInterestButton")
-            workButton.className = "toggleButton enabled";
-            chosenInterests["work"] = true;
-        {% endif %}
-
         $(window).resize(function (){
             resizeInterestPanel();
         });
