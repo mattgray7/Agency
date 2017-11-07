@@ -152,7 +152,7 @@
 }
 
 .professionsSelectColumn{
-	width: 226px;
+	width: 95.8%;
 	padding: 0em 0.5em;
 	letter-spacing: 1px;
 	text-decoration: none;
@@ -174,6 +174,11 @@
 
 .professionsSelectColumn a:hover{
 	color: rgba(255,255,255,1);
+}
+
+.professionsSelectList
+{
+	width: 100%;
 }
 
 .professionsSelectList td a, .professionsSelectList td span

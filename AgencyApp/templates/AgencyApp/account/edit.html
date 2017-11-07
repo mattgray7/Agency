@@ -1061,6 +1061,7 @@ function resizeInterestPanel(force){
 var mainInterests = ["work", "hiring", "other"]
 var chosenInterests = {"work": false, "hiring": false, "other": false}
 var expandedInterests = {"work": false, "hiring": false, "other": false}
+var slimExpandedPanelHeights = {"work": 750, "hiring": 938, "other": 0}
 function selectInterest(interestType){
     if(interestType === "other"){
         return submitFormWithExtraParameters("other");
@@ -1100,7 +1101,7 @@ function selectInterest(interestType){
                 var interestContainer = document.getElementById(interestType + "InterestSlimContainer")
                 if(expandPanel != null && interestContainer != null){
                     expandPanel.innerHTML = interestContent["html"];
-                    $("[id='" + interestType + "InterestSlimContainer']").animate({marginTop: "0px", height: "938px"}, 300, function(){});  // 250 for interest container, 650 for panel
+                    $("[id='" + interestType + "InterestSlimContainer']").animate({marginTop: "0px", height: slimExpandedPanelHeights[interestType] + "px"}, 300, function(){});  // 250 for interest container, 650 for panel
                 }
 
             }
@@ -1158,14 +1159,50 @@ function getInterestPicker(interestType){
     }
 }
 
+professionCategoryTitles = ["Acting &amp; Performing", "Creative Positions", "Production - On set", "Production - Off set", "Pre Production", "Post Production"]
 function getSlimWorkInterestPicker(){
-    return {"html": "hi", "callbacks": []}
+    var callbacks = [];
+    var pickerString = '<div id="workInterestContainer"><div style="text-align: center;">'
+
+    pickerString += "<h3 style='margin-bottom: 15px; float: left;'>1. Choose your field</h3><div class='form-style-7' style='background: none;'>" + createSelectForm("", "professionCategorySelect", professionCategoryTitles, professionCategoryTitles[0]) + "</div>";
+
+    pickerString += "<div style='position: relative; width: 100%; height: 400px;'>"
+    pickerString += '<div style="position: absolute; left: 20px; top: 0px;"><h3 style="margin-bottom: 15px;">2. Add professions</h3><div id="professionChoicePanel" class="profession3ColumnsFullPanel" style="margin-left: -1px; width: 270px;"></div></div>';
+
+    pickerString += '<div style="position: absolute; right: 20px; top: 0px;"><h3 style="margin-bottom: 15px;">3. Confirm selections</h3><div id="chosenProfessionChoicePanel" class="profession3ColumnsFullPanel" style="margin-left: -5px; width: 270px;"><table id="chosenProfessionTable" class="professionsSelectList"></table></div></div>'
+    pickerString += "</div>"
+
+    callbacks.push(function(){filterProfessions('onSetProduction');})
+    // Add square button column
+    //pickerString += '<h3 style="margin-bottom: 15px;">1. Choose your field</h3><table  class="squareButtonTable" id="squareButtonTable" style="left: 0; right: 0; margin: 0 auto;"><tr>' + addSquareButtonColumn("Acting &amp; Performing", "filterProfessions('acting');", 'actingSquareButton') + addSquareButtonColumn("Creative Positions", "filterProfessions('creative');", 'creativeSquareButton') + addSquareButtonColumn("Production - On set", "filterProfessions('onSetProduction');", 'onSetProductionSquareButton') + "</tr><tr>" + addSquareButtonColumn("Production - Off set", "filterProfessions('offSetProduction');", 'offSetProductionSquareButton') + addSquareButtonColumn("Pre Production", "filterProfessions('preProduction');", 'preProductionSquareButton') + addSquareButtonColumn("Post Production", "filterProfessions('postProduction');", 'postProductionSquareButton') + '</tr></table>';
+
+    // Add professionList
+   /* pickerString += '<div class="boxB"><h3 style="margin-bottom: 15px;">2. Add professions</h3><div id="professionChoicePanel" class="profession3ColumnsFullPanel" style="margin-left: -1px;"></div></div>'
+
+    pickerString += '<div class="boxC" ><h3 style="margin-bottom: 15px;">3. Confirm selections</h3><div id="chosenProfessionChoicePanel" class="profession3ColumnsFullPanel" style="margin-left: -5px;"><table id="chosenProfessionTable" class="professionsSelectList"></table></div></div>'
+
+    pickerString += "</div></div>";
+    pickerString += "<div style='height: 100px;'>" + getSecondLevelButtons("work") + "</div>"
+
+    pickerString += "</div>"
+
+    callbacks.push(function(){
+        filterProfessions("acting");
+        {% if existingProfessions %}
+            chosenProfessionList = [];
+            {% for profession in existingProfessions %}
+                addProfessionToSelectedTable("{{profession}}", "{{profession}}_selectedRowID");
+            {% endfor %}
+        {% endif %}
+
+    });*/
+    pickerString += "</div></div>"
+    return {"html": pickerString, "callbacks": callbacks}
 }
 
 function getWideWorkInterestPicker(){
     var callbacks = [];
     var pickerString = '<div id="workInterestContainer"><div id="wrapper"><div id="three-column" class="container" style="width: 740px;"><div class="title"><h2>What jobs are you looking for?</h2><span class="byline">Let people know what types of jobs you\'re willing to work</div>'
-
 
     // Add square button column
     pickerString += '<div class="boxA"><h3 style="margin-bottom: 15px;">1. Choose your field</h3><table  class="squareButtonTable" id="squareButtonTable" style="margin-left: 5px; margin-top: 18px; margin-right: -5px;"><tr>' + addSquareButtonColumn("Acting &amp; Performing", "filterProfessions('acting');", 'actingSquareButton') + addSquareButtonColumn("Creative Positions", "filterProfessions('creative');", 'creativeSquareButton') + '</tr><tr>' + addSquareButtonColumn("Production - On set", "filterProfessions('onSetProduction');", 'onSetProductionSquareButton') + addSquareButtonColumn("Production - Off set", "filterProfessions('offSetProduction');", 'offSetProductionSquareButton') + '</tr><tr>' + addSquareButtonColumn("Pre Production", "filterProfessions('preProduction');", 'preProductionSquareButton') + addSquareButtonColumn("Post Production", "filterProfessions('postProduction');", 'postProductionSquareButton') + '</tr></table></div>';
@@ -1359,9 +1396,11 @@ function removeProfession(profession, professionRowID){
 function setChildColor(parentID, tag, color){
     // Sets all children of parentID of element type tag to color
     var parent = document.getElementById(parentID);
-    var children = parent.getElementsByTagName(tag);
-    for(var i=0; i < children.length; i++){
-        children[i].style.color = color;
+    if(parent != null){
+        var children = parent.getElementsByTagName(tag);
+        for(var i=0; i < children.length; i++){
+            children[i].style.color = color;
+        }
     }
 }
 
