@@ -1159,7 +1159,15 @@ function getInterestPicker(interestType){
     }
 }
 
-professionCategoryTitles = ["Acting &amp; Performing", "Creative Positions", "Production - On set", "Production - Off set", "Pre Production", "Post Production"]
+var chosenProfessionList = []
+var activeFilter = "acting"
+var professionInterests = ["acting", "creative", "preProduction", "postProduction", "onSetProduction", "offSetProduction"];
+var professionCategoryTitles = ["Acting &amp; Performing", "Creative Positions", "Production - On set", "Production - Off set", "Pre Production", "Post Production"]
+var professionInterestMap = {};
+for(var i=0; i < professionInterests.length; i++){
+    professionInterestMap[professionInterests[i]] = professionCategoryTitles[i];
+}
+
 function getSlimWorkInterestPicker(){
     var callbacks = [];
     var pickerString = '<div id="workInterestContainer"><div style="text-align: center; background: #FFF; padding-top: 10px;">'
@@ -1172,20 +1180,24 @@ function getSlimWorkInterestPicker(){
     pickerString += '<div style="position: absolute; right: 20px; top: 0px;"><h3 style="margin-bottom: 5px;">3. Confirm selections</h3><div id="chosenProfessionChoicePanel" class="profession3ColumnsFullPanel" style="margin-left: -5px; width: 270px;"><table id="chosenProfessionTable" class="professionsSelectList"></table></div></div>'
     pickerString += "</div>"
 
-    callbacks.push(function(){filterProfessions('onSetProduction');})
-    // Add square button column
-    //pickerString += '<h3 style="margin-bottom: 15px;">1. Choose your field</h3><table  class="squareButtonTable" id="squareButtonTable" style="left: 0; right: 0; margin: 0 auto;"><tr>' + addSquareButtonColumn("Acting &amp; Performing", "filterProfessions('acting');", 'actingSquareButton') + addSquareButtonColumn("Creative Positions", "filterProfessions('creative');", 'creativeSquareButton') + addSquareButtonColumn("Production - On set", "filterProfessions('onSetProduction');", 'onSetProductionSquareButton') + "</tr><tr>" + addSquareButtonColumn("Production - Off set", "filterProfessions('offSetProduction');", 'offSetProductionSquareButton') + addSquareButtonColumn("Pre Production", "filterProfessions('preProduction');", 'preProductionSquareButton') + addSquareButtonColumn("Post Production", "filterProfessions('postProduction');", 'postProductionSquareButton') + '</tr></table>';
+    //callbacks.push(function(){filterProfessions('onSetProduction');})
 
-    // Add professionList
-   /* pickerString += '<div class="boxB"><h3 style="margin-bottom: 15px;">2. Add professions</h3><div id="professionChoicePanel" class="profession3ColumnsFullPanel" style="margin-left: -1px;"></div></div>'
 
-    pickerString += '<div class="boxC" ><h3 style="margin-bottom: 15px;">3. Confirm selections</h3><div id="chosenProfessionChoicePanel" class="profession3ColumnsFullPanel" style="margin-left: -5px;"><table id="chosenProfessionTable" class="professionsSelectList"></table></div></div>'
+    // Add callback to filter the professions when select changes
+    callbacks.push(function(){
+        var professionSelect = document.getElementById("professionCategorySelect");
+        if(professionSelect != null){
+            $("#professionCategorySelect").on("change", function(){
+                for(category in professionInterestMap){
+                    if(professionInterestMap[category] === this.value){
+                        filterProfessions(category);
+                    }
+                }
+            })
+        }
+    })
 
-    pickerString += "</div></div>";
-    pickerString += "<div style='height: 100px;'>" + getSecondLevelButtons("work") + "</div>"
-
-    pickerString += "</div>"
-
+    // Toggle selected professions
     callbacks.push(function(){
         filterProfessions("acting");
         {% if existingProfessions %}
@@ -1194,8 +1206,8 @@ function getSlimWorkInterestPicker(){
                 addProfessionToSelectedTable("{{profession}}", "{{profession}}_selectedRowID");
             {% endfor %}
         {% endif %}
+    });
 
-    });*/
     pickerString += "</div></div>"
     return {"html": pickerString, "callbacks": callbacks}
 }
@@ -1333,10 +1345,6 @@ function toggleHireType(hireType){
         }
     }
 }
-
-var chosenProfessionList = []
-var activeFilter = "acting"
-var professionInterests = ["acting", "creative", "preProduction", "postProduction", "onSetProduction", "offSetProduction"];
 
 function addSquareButtonColumn(label, onclickString, idName){
     // Writes a table cell containing a square button
