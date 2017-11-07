@@ -1100,6 +1100,15 @@ function selectInterest(interestType){
                 var expandPanel = document.getElementById(interestType + "InterestExpandPanel")
                 var interestContainer = document.getElementById(interestType + "InterestSlimContainer")
                 if(expandPanel != null && interestContainer != null){
+
+                    // Shrink any other open panels
+                    for(interest in expandedInterests){
+                        if(expandedInterests[interest] == true){
+                            shrinkExpandedPanel();
+                        }
+                    }
+
+
                     expandPanel.innerHTML = interestContent["html"];
                     $("[id='" + interestType + "InterestSlimContainer']").animate({marginTop: "0px", height: slimExpandedPanelHeights[interestType] + "px"}, 300, function(){});  // 250 for interest container, 650 for panel
                 }
@@ -1179,9 +1188,6 @@ function getSlimWorkInterestPicker(){
 
     pickerString += '<div style="position: absolute; right: 20px; top: 0px;"><h3 style="margin-bottom: 5px;">3. Confirm selections</h3><div id="chosenProfessionChoicePanel" class="profession3ColumnsFullPanel" style="margin-left: -5px; width: 270px;"><table id="chosenProfessionTable" class="professionsSelectList"></table></div></div>'
     pickerString += "</div>"
-
-    //callbacks.push(function(){filterProfessions('onSetProduction');})
-
 
     // Add callback to filter the professions when select changes
     callbacks.push(function(){
