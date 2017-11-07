@@ -1041,19 +1041,31 @@ function resizeInterestPanel(force){
         if(!interestPanelExpanded || force == true){
             interestPanelExpanded = true;
             chosenInterests = {"work": false, "hiring": false, "other": false}
-            expandedInterests = {"work": false, "hiring": false, "other": false}
+            /*expandedInterests = {"work": false, "hiring": false, "other": false}
             chosenHireTypes = {"hiring": false, "casting": false, "collaborating": false};
-            chosenProfessionList = []
+            chosenProfessionList = []*/
+            var previousExpanded = expandedInterests;
             document.getElementById("backgroundPanel").innerHTML = getWideInterestPanel();
+            for(interest in previousExpanded){
+                if(previousExpanded[interest] == true){
+                    selectInterest(interest)
+                }
+            }
         }
     }else{
         if(interestPanelExpanded || force == true){
             interestPanelExpanded = false;
             chosenInterests = {"work": false, "hiring": false, "other": false}
-            expandedInterests = {"work": false, "hiring": false, "other": false}
+            /*expandedInterests = {"work": false, "hiring": false, "other": false}
             chosenHireTypes = {"hiring": false, "casting": false, "collaborating": false};
-            chosenProfessionList = []
+            chosenProfessionList = []*/
+            var previousExpanded = expandedInterests;
             document.getElementById("backgroundPanel").innerHTML = getSlimInterestPanel();
+            for(interest in previousExpanded){
+                if(previousExpanded[interest] == true){
+                    selectInterest(interest)
+                }
+            }
         }
     }
 }
