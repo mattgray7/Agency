@@ -1139,8 +1139,24 @@ function selectInterest(interestType){
     }
 }
 
+var selectedAvailableWeekdays = []
+function toggleAvailabilityWeekday(weekday){
+    var toggleButton = document.getElementById("availability" + weekday + "ToggleButton");
+    if(toggleButton != null){
+        var weekdayIndex = selectedAvailableWeekdays.indexOf(weekday);
+        if(weekdayIndex < 0){
+            selectedAvailableWeekdays.push(weekday)
+            toggleButton.className = "active";
+        }else{
+            selectedAvailableWeekdays.splice(weekdayIndex, 1)
+            toggleButton.className = "";
+        }
+    }
+}
+
 var weekdays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
 var weekdayRepeatOptions = ["For 1 week", "For 2 weeks", "For 1 month", "For 3 months", "For 6 months", "Forever"]
+
 function getDaysOfWeekPicker(){
     var pickerString = "<div id='availabilityContent' style='width: 100%; height: 200px; position: relative; padding-top: 50px;'>"
 
@@ -1149,7 +1165,7 @@ function getDaysOfWeekPicker(){
     pickerString += "<div class='form-style-7' style='padding: 0; margin-bottom: 15px;'> Repeat this schedule every week <div style='display: inline-block; width: 130px;'>" + createSelectForm("", "weekdayRepeatSelect", weekdayRepeatOptions, weekdayRepeatOptions[0]) + "</div></div>"
     pickerString += "<ul class='browseCategoriesList' style='display: inline-block; width: 750px; margin-left: 25px;'>"
     for(var i=0; i < weekdays.length; i++){
-        pickerString += "<li style='width: 92px;'>" + weekdays[i] + "</li>";
+        pickerString += "<li id='availability" + weekdays[i] + "ToggleButton' style='width: 92px;' onclick='toggleAvailabilityWeekday(" + '"' + weekdays[i] + '");' + "'>" + weekdays[i] + "</li>";
     }
     pickerString += "</ul>"
 
