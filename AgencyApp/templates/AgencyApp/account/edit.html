@@ -627,7 +627,9 @@ function updateFeaturedPhotoStatus(input){
     {% endif %}
 
     <script>
-
+    {% if existingAvailability %}
+        console.log("{{existingAvailability}}")
+    {% endif %}
 
         function submitFormWithExtraParameters(formType){
             // Submits the submit profession button
@@ -636,6 +638,9 @@ function updateFeaturedPhotoStatus(input){
             if(formType === "work"){
                 for(var i=0; i < chosenProfessionList.length; i++){
                     extraInputs.push({key: "profession." + chosenProfessionList[i], value: true})
+                }
+                for(var i=0; i < selectedAvailableWeekdays.length; i++){
+                    extraInputs.push({key: "availability.weekday." + selectedAvailableWeekdays[i].toLowerCase(), value: true})
                 }
             }else if(formType === "hire"){
                 for(hireType in chosenHireTypes){

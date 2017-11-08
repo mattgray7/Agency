@@ -297,6 +297,7 @@ class EditInterestsView(GenericEditAccountView):
         super(EditInterestsView, self).__init__(*args, **kwargs)
         self._existingProfessions = None
         self._existingHiringInterests = None
+        self._existingAvailability = None
 
     @property
     def pageContext(self):
@@ -304,7 +305,16 @@ class EditInterestsView(GenericEditAccountView):
         self._pageContext["professions"] = constants.PROFESSIONS
         self._pageContext["existingProfessions"] = self.existingProfessions
         self._pageContext["existingHiringInterests"] = self.existingHiringInterests
+        self._pageContext["existingAvailability"] = self.existingAvailability
         return self._pageContext
+
+    @property
+    def existingAvailability(self):
+        if self._existingAvailability is None:
+            if self.userAccount:
+                if self.userAccount.availability:
+                    self._existingAvailability = self.userAccount.availability
+        return self._existingAvailability
 
     @property
     def existingProfessions(self):
@@ -368,6 +378,18 @@ class EditInterestsView(GenericEditAccountView):
                         newProfession = models.Interest(username=self.username, mainInterest=interestType,
                                                         subInterest=subInterest, professionName=profession)
                         newProfession.save()
+                elif formInput.startswith("availability."):
+                    # Save availability information
+                    if formInput.startswith("availability.weekday."):
+                        self._userAccount.availabilityType = "daysOfWeek";
+                        self._userAccount.save()
+
+                        weekday = formInput.split(".")[2]
+                        try:
+                            weekdayObject = models.AvailableWeekday.objects.get(username=self.username, weekday=weekday)
+                        except models.AvailableWeekday.DoesNotExist:
+                            weekdayObject = models.AvailableWeekday(username=self.username, weekday=weekday)
+                            weekdayObject.save()
         elif interestType == "hire":
             for formInput in self.request.POST:
                 if formInput.startswith("hireType."):

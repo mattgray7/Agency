@@ -46,6 +46,8 @@ class UserAccount(models.Model):
     updatedAt = models.DateTimeField(auto_now=True)
     lastLogout = models.DateTimeField(auto_now_add=True)
 
+    availabilityType = models.CharField(max_length=50, default=None, blank=True, null=True)
+
     #reelLink = models.CharField(max_length=500, default='')
     imdbLink = models.CharField(max_length=500, default=None, blank=True, null=True)
     bio = models.CharField(max_length=1000, default='')
@@ -77,6 +79,7 @@ class UserAccount(models.Model):
         self._notifications = None
         self._followedPosts = None
         self._adminPosts = None
+        self._availability = None
 
     def __str__(self):
         return self.username
@@ -347,6 +350,41 @@ class UserAccount(models.Model):
                 for projectID in removeProjectIDList:
                     del self._projects[projectID]
         return self._projects
+
+    @property
+    def availability(self):
+        if not self._availability:
+            self._availability = {}
+            if self.availabilityType == "daysOfWeek":
+                weekdays = [x.weekday for x in AvailableWeekday.objects.filter(username=self.username)]
+                if weekdays:
+                    self._availability["daysOfWeek"] = weekdays
+        return self._availability
+
+
+"""class UserAvailability(models.Model):
+    username = models.CharField(max_length=100)
+    availabilityType = models.CharField(max_length=30)  #openAvailability/daysOfWeek/specifyDates
+
+    def __init__(self, *args, **kwargs):
+        super(UserAvailability, self).__init__(*args, **kwargs)
+        self._availableWeekdays = None
+
+    @property
+    def dates(self):
+        # Return list of dates
+        return []
+
+    @property
+    def availableWeekdays(self):
+        if not self._availableWeekdays:
+            self._availableWeekdays = [x.weekday for x in AvailableWeekday.objects.filter(username=self.username)]
+        return self._availableWeekdays"""
+
+
+class AvailableWeekday(models.Model):
+    username = models.CharField(max_length=100)
+    weekday = models.CharField(max_length=20)
 
 class UnregisteredProject(models.Model):
     postID = models.CharField(max_length=10)
