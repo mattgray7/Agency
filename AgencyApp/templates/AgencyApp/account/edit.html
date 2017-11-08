@@ -1006,7 +1006,10 @@ function getWideInterestPanel(){
     panelString += "</div>";
 
     // Add second level
-    panelString += "<div id='secondLevelViewPanel' style='height: 0px; width: 100%; background: #FFF; overflow: hidden;'>Hi ther buddy</div>"
+    panelString += "<div id='secondLevelViewPanel' style='height: 0px; width: 100%; background: #FFF; overflow: hidden;'></div>"
+
+    // Add third level
+    panelString += "<div id='thirdLevelViewPanel' style='height: 0px; width: 100%; background: #FFF; overflow: hidden;'></div>"
 
     // Close main view panel
     panelString += "</div>"
@@ -1105,7 +1108,7 @@ function selectInterest(interestType){
                     var interestContainer = document.getElementById(interestType + "InterestContainer")
                     if(interestContainer != null){
                         $("#secondLevelViewPanel").animate({marginTop: "0px", height: interestContainer.offsetHeight + "px"}, 300, function(){});
-                        $('html,body').animate({scrollTop: "650px"}, 500);
+                        $('html,body').animate({scrollTop: "720px"}, 500);
                     }
                 }
             }else{
@@ -1133,6 +1136,48 @@ function selectInterest(interestType){
                 }
             }
         }
+    }
+}
+
+function getWideAvailabilityPanel(){
+    var panelString = "<div style='height: 100px;'>HEy ther</div>"
+    return panelString
+}
+
+function displayThirdLevel(interestType){
+    if(interestPanelExpanded){
+        var thirdLevel = document.getElementById("thirdLevelViewPanel")
+        if(thirdLevel != null){
+            thirdLevel.innerHTML = getWideAvailabilityPanel();
+            var interestContainer = document.getElementById(interestType + "InterestContainer")
+            if(interestContainer != null){
+                $("#thirdLevelViewPanel").animate({marginTop: "0px", height: interestContainer.offsetHeight + "px"}, 300, function(){});
+                $('html,body').animate({scrollTop: "1300px"}, 500);
+            }
+        }/*else{
+                var expandPanel = document.getElementById(interestType + "InterestExpandPanel")
+                var interestContainer = document.getElementById(interestType + "InterestSlimContainer")
+                if(expandPanel != null && interestContainer != null){
+
+                    // Shrink any other open panels
+                    for(interest in expandedInterests){
+                        if(expandedInterests[interest] == true && interestType != interest){
+                            shrinkExpandedPanel();
+                        }
+                    }
+
+                    expandPanel.innerHTML = interestContent["html"];
+                    $("[id='" + interestType + "InterestSlimContainer']").animate({marginTop: "0px", height: slimExpandedPanelHeights[interestType] + "px"}, 300, function(){});  // 250 for interest container, 650 for panel
+                }
+
+            }
+            expandedInterests[interestType] = true;
+
+            if(interestContent["callbacks"] != null && interestContent["callbacks"].length > 0){
+                for(var i=0; i < interestContent["callbacks"].length; i++){
+                    interestContent["callbacks"][i]();
+                }
+            }*/
     }
 }
 
@@ -1239,7 +1284,7 @@ function getSlimWorkInterestPicker(){
 
 function getWideWorkInterestPicker(){
     var callbacks = [];
-    var pickerString = '<div id="workInterestContainer"><div id="wrapper"><div id="three-column" class="container" style="width: 740px;"><div class="title"><h2>What jobs are you looking for?</h2><span class="byline">Let people know what types of jobs you\'re willing to work</div>'
+    var pickerString = '<div id="workInterestContainer"><div id="wrapper"><div id="three-column" class="container" style="width: 740px;"><div class="title" style="margin-bottom: 2em;"><h2>What jobs are you looking for?</h2><span class="byline">Let people know what types of jobs you\'re willing to work</div>'
 
     // Add square button column
     pickerString += '<div class="boxA"><h3 style="margin-bottom: 15px;">1. Choose your field</h3><table  class="squareButtonTable" id="squareButtonTable" style="margin-left: 5px; margin-top: 18px; margin-right: -5px;"><tr>' + addSquareButtonColumn("Acting &amp; Performing", "filterProfessions('acting');", 'actingSquareButton') + addSquareButtonColumn("Creative Positions", "filterProfessions('creative');", 'creativeSquareButton') + '</tr><tr>' + addSquareButtonColumn("Production - On set", "filterProfessions('onSetProduction');", 'onSetProductionSquareButton') + addSquareButtonColumn("Production - Off set", "filterProfessions('offSetProduction');", 'offSetProductionSquareButton') + '</tr><tr>' + addSquareButtonColumn("Pre Production", "filterProfessions('preProduction');", 'preProductionSquareButton') + addSquareButtonColumn("Post Production", "filterProfessions('postProduction');", 'postProductionSquareButton') + '</tr></table></div>';
@@ -1250,7 +1295,8 @@ function getWideWorkInterestPicker(){
     pickerString += '<div class="boxC" ><h3 style="margin-bottom: 15px;">3. Confirm selections</h3><div id="chosenProfessionChoicePanel" class="profession3ColumnsFullPanel" style="margin-left: -5px;"><table id="chosenProfessionTable" class="professionsSelectList"></table></div></div>'
 
     pickerString += "</div></div>";
-    pickerString += "<div style='height: 100px;'>" + getSecondLevelButtons("work") + "</div>"
+    //pickerString += "<div style='height: 100px;'>" + getSecondLevelButtons("work") + "</div>"
+    pickerString += "<div style='height: 70px; width: 100%; position: relative;'><div style='position: absolute; right: 35px; top: -10px;'><div class='editButton' onclick='displayThirdLevel(" + '"work"' + ");' style='height: 40px; width: 150px; padding-top: 20px; margin-left: 19px;'>Next</div>" 
 
     pickerString += "</div>"
 
