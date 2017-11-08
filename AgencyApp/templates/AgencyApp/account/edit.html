@@ -1146,17 +1146,18 @@ function getDaysOfWeekPicker(){
 
     // Add days of week
     pickerString += "<h3 style='margin-bottom: 5px;'> 1. Pick which days you are free</h3>"
-    pickerString += "<ul class='browseCategoriesList' style='display: inline-block; width: 750px; margin-left: -3px;'>"
+    pickerString += "<div class='form-style-7' style='padding: 0; margin-bottom: 15px;'> Repeat this schedule every week <div style='display: inline-block; width: 130px;'>" + createSelectForm("", "weekdayRepeatSelect", weekdayRepeatOptions, weekdayRepeatOptions[0]) + "</div></div>"
+    pickerString += "<ul class='browseCategoriesList' style='display: inline-block; width: 750px; margin-left: 25px;'>"
     for(var i=0; i < weekdays.length; i++){
-        pickerString += "<li style='width: 100px;'>" + weekdays[i] + "</li>";
+        pickerString += "<li style='width: 92px;'>" + weekdays[i] + "</li>";
     }
     pickerString += "</ul>"
 
     // Add repeat values
     //pickerString += "<h3> 2. Specify how long to use this schedule</h3>"
-    pickerString += "<div class='form-style-7' style='padding: 0;'> Repeat this schedule every week <div style='display: inline-block; width: 150px;'>" + createSelectForm("", "weekdayRepeatSelect", weekdayRepeatOptions, weekdayRepeatOptions[0]) + "</div></div>"
+    //pickerString += "<div class='form-style-7' style='padding: 0;'> Repeat this schedule every week <div style='display: inline-block; width: 150px;'>" + createSelectForm("", "weekdayRepeatSelect", weekdayRepeatOptions, weekdayRepeatOptions[0]) + "</div></div>"
 
-    pickerString += "<div style='height: 80px; margin-top: 20px; padding-bottom: 5px;'>" + getSecondLevelButtons("work") + "</div>"
+    pickerString += "<div style='height: 80px; adding-bottom: 5px;'>" + getSecondLevelButtons("work") + "</div>"
     pickerString += "</div>"
     return pickerString;
 }
@@ -1192,7 +1193,7 @@ function selectAvailabilityOption(option){
                 contentPanel.innerHTML = contentString;
                 var content = document.getElementById("availabilityContent");
                 if(content != null){
-                    var height = $("#thirdLevelViewPanel").height() + content.offsetHeight + "px"
+                    var height = $("#thirdLevelViewPanel").height() + content.offsetHeight - 20 + "px"
                     $("#thirdLevelViewPanel").animate({marginTop: "0px", height: height}, 300, function(){});
                 }
             }
