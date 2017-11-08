@@ -1211,6 +1211,7 @@ function selectAvailabilityOption(option){
                 if(content != null){
                     var height = $("#thirdLevelViewPanel").height() + content.offsetHeight - 20 + "px"
                     $("#thirdLevelViewPanel").animate({marginTop: "0px", height: height}, 300, function(){});
+                    $('html,body').animate({scrollTop: "1350px"}, 500);
                 }
             }
         }
@@ -1243,7 +1244,7 @@ function displayThirdLevel(interestType){
             var interestContainer = document.getElementById(interestType + "InterestContainer")
             if(interestContainer != null){
                 $("#thirdLevelViewPanel").animate({marginTop: "0px", height: "400px"}, 300, function(){});
-                $('html,body').animate({scrollTop: "1300px"}, 500);
+                $('html,body').animate({scrollTop: "1100px"}, 500);
             }
         }/*else{
                 var expandPanel = document.getElementById(interestType + "InterestExpandPanel")
