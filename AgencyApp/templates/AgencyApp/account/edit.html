@@ -1161,11 +1161,11 @@ function getDaysOfWeekPicker(){
     var pickerString = "<div id='availabilityContent' style='width: 100%; height: 200px; position: relative; padding-top: 50px;'>"
 
     // Add days of week
-    pickerString += "<h3 style='margin-bottom: 5px;'> 1. Pick which days you are free</h3>"
-    pickerString += "<div class='form-style-7' style='padding: 0; margin-bottom: 15px;'> Repeat this schedule every week <div style='display: inline-block; width: 130px;'>" + createSelectForm("", "weekdayRepeatSelect", weekdayRepeatOptions, weekdayRepeatOptions[0]) + "</div></div>"
-    pickerString += "<ul class='browseCategoriesList' style='display: inline-block; width: 750px; margin-left: 25px;'>"
+    pickerString += "<h1 style='margin-bottom: 5px; font-weight: bold; color: rgba(0,0,0,0.8);'> Select which days you are able to work.</h1>"
+    pickerString += "<div class='form-style-7' style='padding: 0; margin-bottom: 10px;  margin-top: -5px; font-size: 1.2em; color: rgba(0,0,0,0.5);'> Repeat this schedule every week <div style='display: inline-block; width: 130px; font-size: 0.8em'>" + createSelectForm("", "weekdayRepeatSelect", weekdayRepeatOptions, weekdayRepeatOptions[0]) + "</div></div>"
+    pickerString += "<ul class='browseCategoriesList' style='display: inline-block; width: 750px; margin-left: 17px; margin-bottom: 15px;'>"
     for(var i=0; i < weekdays.length; i++){
-        pickerString += "<li id='availability" + weekdays[i] + "ToggleButton' style='width: 92px;' onclick='toggleAvailabilityWeekday(" + '"' + weekdays[i] + '");' + "'>" + weekdays[i] + "</li>";
+        pickerString += "<li id='availability" + weekdays[i] + "ToggleButton' style='width: 95px;' onclick='toggleAvailabilityWeekday(" + '"' + weekdays[i] + '");' + "'>" + weekdays[i] + "</li>";
     }
     pickerString += "</ul>"
 
@@ -1220,7 +1220,7 @@ function selectAvailabilityOption(option){
 
 var availabilityOptions = ["openAvailability", "daysOfWeek", "specifyDates"]
 function getWideAvailabilityPanel(){
-    var panelString = '<div id="availabilityContainer"><div id="wrapper"><div id="three-column" class="container" style="width: 740px; padding-bottom: 5px;"><div class="title" style="margin-bottom: 2em;"><h2>When are you free?</h2><span class="byline">Specify your availability to increase your visibility to recruiters.</span></div>';
+    var panelString = '<div id="availabilityContainer"><div id="wrapper"><div id="three-column" class="container" style="width: 740px; padding-bottom: 5px;"><div class="title" style="margin-bottom: 2em;"><h2>When are you available?</h2><span class="byline">Specify your availability to increase your visibility to recruiters.</span></div>';
 
     //panelString += "<h2>Pick an option</h2>"
 
