@@ -1078,6 +1078,7 @@ var mainInterests = ["work", "hiring", "other"]
 var chosenInterests = {"work": false, "hiring": false, "other": false}
 var expandedInterests = {"work": false, "hiring": false, "other": false}
 var slimExpandedPanelHeights = {"work": 750, "hiring": 938, "other": 0}
+var wideExpandedPanelHeights = {"interests": 720, "hiring": 626, "work": 620, "availability": 330}
 function selectInterest(interestType){
     if(interestType === "other"){
         return submitFormWithExtraParameters("other");
@@ -1109,7 +1110,7 @@ function selectInterest(interestType){
                     var interestContainer = document.getElementById(interestType + "InterestContainer")
                     if(interestContainer != null){
                         $("#secondLevelViewPanel").animate({marginTop: "0px", height: interestContainer.offsetHeight + "px"}, 300, function(){});
-                        $('html,body').animate({scrollTop: "720px"}, 500);
+                        $('html,body').animate({scrollTop: wideExpandedPanelHeights["interests"]}, 500);
                     }
                 }
             }else{
@@ -1189,6 +1190,23 @@ function getSpecifyDatesPicker(){
     return "dates picker"
 }
 
+function displayThirdLevel(interestType){
+    if(interestPanelExpanded){
+        var thirdLevel = document.getElementById("thirdLevelViewPanel")
+        if(thirdLevel != null){
+            thirdLevel.innerHTML = getWideAvailabilityPanel();
+            var interestContainer = document.getElementById(interestType + "InterestContainer")
+            if(interestContainer != null){
+                var topMargin = -60
+                var thirdLevelHeight = wideExpandedPanelHeights["availability"] - topMargin + 10
+                $("#nextButtonRow").animate({marginTop: "0px", height: "0px"}, 300, function(){});
+                $("#thirdLevelViewPanel").animate({marginTop: topMargin + "px", height: thirdLevelHeight + "px"}, 300, function(){});
+                $('html,body').animate({scrollTop: wideExpandedPanelHeights["interests"] + wideExpandedPanelHeights["work"] - 300 + "px"}, 500);
+            }
+        }
+    }
+}
+
 function selectAvailabilityOption(option){
     for(var i=0; i < availabilityOptions.length; i++){
         var optionButton = document.getElementById(availabilityOptions[i] + "ToggleButton");
@@ -1217,9 +1235,10 @@ function selectAvailabilityOption(option){
                 contentPanel.innerHTML = content["html"];
                 var contentContainer = document.getElementById("availabilityContent");
                 if(contentContainer != null){
-                    var height = $("#thirdLevelViewPanel").height() + contentContainer.offsetHeight - 20 + "px"
+                    //var height = $("#thirdLevelViewPanel").height() + contentContainer.offsetHeight - 20 + "px"
+                    var height = wideExpandedPanelHeights["availability"] + contentContainer.offsetHeight + 30 + "px"
                     $("#thirdLevelViewPanel").animate({marginTop: $(this).marginTop + "px", height: height}, 300, function(){});
-                    $('html,body').animate({scrollTop: "1350px"}, 500);
+                    $('html,body').animate({scrollTop: wideExpandedPanelHeights["interests"] + wideExpandedPanelHeights["work"] + wideExpandedPanelHeights["availability"] - 400 + "px"}, 500);
                 }
 
                 if(content["callbacks"] != null && content["callbacks"].length > 0){
@@ -1247,44 +1266,6 @@ function getWideAvailabilityPanel(){
 
     panelString += "</div></div></div>";
     return panelString
-}
-
-function displayThirdLevel(interestType){
-    if(interestPanelExpanded){
-        var thirdLevel = document.getElementById("thirdLevelViewPanel")
-        if(thirdLevel != null){
-            thirdLevel.innerHTML = getWideAvailabilityPanel();
-            var interestContainer = document.getElementById(interestType + "InterestContainer")
-            if(interestContainer != null){
-                $("#nextButtonRow").animate({marginTop: "0px", height: "0px"}, 300, function(){});
-                $("#thirdLevelViewPanel").animate({marginTop: "-60px", height: "400px"}, 300, function(){});
-                $('html,body').animate({scrollTop: "1050px"}, 500);
-            }
-        }/*else{
-                var expandPanel = document.getElementById(interestType + "InterestExpandPanel")
-                var interestContainer = document.getElementById(interestType + "InterestSlimContainer")
-                if(expandPanel != null && interestContainer != null){
-
-                    // Shrink any other open panels
-                    for(interest in expandedInterests){
-                        if(expandedInterests[interest] == true && interestType != interest){
-                            shrinkExpandedPanel();
-                        }
-                    }
-
-                    expandPanel.innerHTML = interestContent["html"];
-                    $("[id='" + interestType + "InterestSlimContainer']").animate({marginTop: "0px", height: slimExpandedPanelHeights[interestType] + "px"}, 300, function(){});  // 250 for interest container, 650 for panel
-                }
-
-            }
-            expandedInterests[interestType] = true;
-
-            if(interestContent["callbacks"] != null && interestContent["callbacks"].length > 0){
-                for(var i=0; i < interestContent["callbacks"].length; i++){
-                    interestContent["callbacks"][i]();
-                }
-            }*/
-    }
 }
 
 function shrinkExpandedPanel(){
