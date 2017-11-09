@@ -1157,20 +1157,19 @@ function toggleAvailabilityWeekday(weekday){
 
 var weekdays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
 var weekdayRepeatOptions = ["For 1 week", "For 2 weeks", "For 1 month", "For 3 months", "For 6 months", "Forever"]
-
 function getDaysOfWeekPicker(){
     var callbacks = [];
-    var pickerString = "<div id='availabilityContent' style='width: 100%; height: 200px; position: relative; padding-top: 50px;'>"
+    var pickerString = "<div id='availabilityContent' style='height: 200px; position: relative; padding-top: 50px; margin-left: -18px; margin-right: -8px;'>"
 
     // Add days of week
     pickerString += "<h1 style='margin-bottom: 5px; font-weight: bold; color: rgba(0,0,0,0.8);'> Select which days you are able to work.</h1>"
     pickerString += "<div class='form-style-7' style='padding: 0; margin-bottom: 10px;  margin-top: -5px; font-size: 1.2em; color: rgba(0,0,0,0.5);'> Repeat this schedule every week <div style='display: inline-block; width: 130px; font-size: 0.8em'>" + createSelectForm("", "weekdayRepeatSelect", weekdayRepeatOptions, weekdayRepeatOptions[0]) + "</div></div>"
-    pickerString += "<ul class='browseCategoriesList' style='display: inline-block; width: 750px; margin-left: 17px; margin-bottom: 15px;'>"
+    pickerString += "<ul class='browseCategoriesList' style='display: inline-block; width: 750px; margin-left: 15px; margin-bottom: 15px;'>"
     for(var i=0; i < weekdays.length; i++){
-        pickerString += "<li id='availability" + weekdays[i] + "ToggleButton' style='width: 95px;' onclick='toggleAvailabilityWeekday(" + '"' + weekdays[i] + '");' + "'>" + weekdays[i] + "</li>";
+        pickerString += "<li id='availability" + weekdays[i] + "ToggleButton' style='width: 99px;' onclick='toggleAvailabilityWeekday(" + '"' + weekdays[i] + '");' + "'>" + weekdays[i] + "</li>";
     }
     pickerString += "</ul>"
-    pickerString += "<div style='height: 80px; adding-bottom: 5px;'>" + getSecondLevelButtons("work") + "</div>"
+    pickerString += "<div style='height: 80px; padding-bottom: 5px;'>" + getSecondLevelButtons("work") + "</div>"
     pickerString += "</div>"
 
     {% if existingAvailability and existingAvailability.daysOfWeek %}
@@ -1179,6 +1178,11 @@ function getDaysOfWeekPicker(){
         {% endfor %}
     {% endif %}
     return {"html": pickerString, "callbacks": callbacks};
+}
+
+function getOpenAvailabilityPicker(){
+    var pickerString = "<div id='availabilityContent' style='height: 80px; margin-left: -18px; margin-right: -8px; padding-bottom: 5px; margin-top: 20px;'>" + getSecondLevelButtons("work") + "</div>"
+    return {"html": pickerString, "callbacks": []};
 }
 
 function getSpecifyDatesPicker(){
@@ -1199,14 +1203,15 @@ function selectAvailabilityOption(option){
         }
     }
 
-    if(option != "openAvailability"){
-        var contentPanel = document.getElementById("availabilityContentPanel");
-        if(contentPanel != null){
+    var contentPanel = document.getElementById("availabilityContentPanel");
+    if(contentPanel != null){
             var content;
             if(option === "daysOfWeek"){
                 content= getDaysOfWeekPicker()
             }else if(option === "specifyDates"){
                 content = getSpecifyDatesPicker();
+            }else if(option === "openAvailability"){
+                content = getOpenAvailabilityPicker();
             }
             if(content != null){
                 contentPanel.innerHTML = content["html"];
@@ -1223,7 +1228,6 @@ function selectAvailabilityOption(option){
                     }
                 }
             }
-        }
     }
 }
 
@@ -1233,11 +1237,11 @@ function getWideAvailabilityPanel(){
 
     //panelString += "<h2>Pick an option</h2>"
 
-    panelString += "<div class='boxA'><h3 style='margin-bottom: 5px;'>Open Availability</h3><p style='height: 110px; padding-top: 10px;'>Your schedule is open for any position. Recruiters mays contact you for day calls or future positions.</p><div id='openAvailabilityToggleButton' class='toggleButton' onclick='selectAvailabilityOption(" + '"openAvailability"' + ");' style='height: 30px; padding-top: 10px;'>Select</div></div>"
+    panelString += "<div class='boxA'><h3 style='margin-bottom: 5px;'>Open Availability</h3><p style='height: 110px; padding-top: 10px;'>Your schedule is open for any position. Recruiters mays contact you for day calls or future positions.</p><div id='openAvailabilityToggleButton' class='toggleButton' onclick='selectAvailabilityOption(" + '"openAvailability"' + ");' style='height: 30px; width: 92%; padding-top: 10px;'>Select</div></div>"
 
-    panelString += "<div class='boxB'><h3 style='margin-bottom: 5px;'>Choose days of week</h3><p style='height: 120px;'>Select days of the week that you are free to work, recruiters will contact you for jobs only on that day of the week.</p><div id='daysOfWeekToggleButton' class='toggleButton' onclick='selectAvailabilityOption(" + '"daysOfWeek"' + ");' style='height: 30px; padding-top: 10px;'>Select</div></div>"
+    panelString += "<div class='boxB'><h3 style='margin-bottom: 5px;'>Choose days of week</h3><p style='height: 120px;'>Select days of the week that you are free to work, recruiters will contact you for jobs only on that day of the week.</p><div id='daysOfWeekToggleButton' class='toggleButton' onclick='selectAvailabilityOption(" + '"daysOfWeek"' + ");' style='height: 30px; width: 92%; padding-top: 10px;'>Select</div></div>"
 
-    panelString += "<div class='boxC'><h3 style='margin-bottom: 5px;'>Specify dates</h3><p style='height: 105px; padding-top: 15px;'>Indicate which days you are free or busy in the coming weeks.</p><div id='specifyDatesToggleButton' class='toggleButton' onclick='selectAvailabilityOption(" + '"specifyDates"' + ");' style='height: 30px; padding-top: 10px;'>Select</div></div>"
+    panelString += "<div class='boxC'><h3 style='margin-bottom: 5px;'>Specify dates</h3><p style='height: 105px; padding-top: 15px;'>Indicate which days you are free or busy in the coming weeks.</p><div id='specifyDatesToggleButton' class='toggleButton' onclick='selectAvailabilityOption(" + '"specifyDates"' + ");' style='height: 30px; width: 92%; padding-top: 10px;'>Select</div></div>"
 
     panelString += "<div id='availabilityContentPanel' style='width: 100%; overflow: hidden;'></div>"
 
