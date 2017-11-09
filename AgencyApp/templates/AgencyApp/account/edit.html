@@ -627,10 +627,6 @@ function updateFeaturedPhotoStatus(input){
     {% endif %}
 
     <script>
-    {% if existingAvailability %}
-        console.log("{{existingAvailability}}")
-    {% endif %}
-
         function submitFormWithExtraParameters(formType){
             // Submits the submit profession button
             var extraInputs = []
@@ -640,7 +636,7 @@ function updateFeaturedPhotoStatus(input){
                     extraInputs.push({key: "profession." + chosenProfessionList[i], value: true})
                 }
                 for(var i=0; i < selectedAvailableWeekdays.length; i++){
-                    extraInputs.push({key: "availability.weekday." + selectedAvailableWeekdays[i].toLowerCase(), value: true})
+                    extraInputs.push({key: "availability.weekday." + selectedAvailableWeekdays[i], value: true})
                 }
             }else if(formType === "hire"){
                 for(hireType in chosenHireTypes){
@@ -1163,6 +1159,7 @@ var weekdays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday"
 var weekdayRepeatOptions = ["For 1 week", "For 2 weeks", "For 1 month", "For 3 months", "For 6 months", "Forever"]
 
 function getDaysOfWeekPicker(){
+    var callbacks = [];
     var pickerString = "<div id='availabilityContent' style='width: 100%; height: 200px; position: relative; padding-top: 50px;'>"
 
     // Add days of week
@@ -1173,14 +1170,15 @@ function getDaysOfWeekPicker(){
         pickerString += "<li id='availability" + weekdays[i] + "ToggleButton' style='width: 95px;' onclick='toggleAvailabilityWeekday(" + '"' + weekdays[i] + '");' + "'>" + weekdays[i] + "</li>";
     }
     pickerString += "</ul>"
-
-    // Add repeat values
-    //pickerString += "<h3> 2. Specify how long to use this schedule</h3>"
-    //pickerString += "<div class='form-style-7' style='padding: 0;'> Repeat this schedule every week <div style='display: inline-block; width: 150px;'>" + createSelectForm("", "weekdayRepeatSelect", weekdayRepeatOptions, weekdayRepeatOptions[0]) + "</div></div>"
-
     pickerString += "<div style='height: 80px; adding-bottom: 5px;'>" + getSecondLevelButtons("work") + "</div>"
     pickerString += "</div>"
-    return pickerString;
+
+    {% if existingAvailability and existingAvailability.daysOfWeek %}
+        {% for day in existingAvailability.daysOfWeek %}
+            callbacks.push(function(){toggleAvailabilityWeekday("{{day}}")})
+        {% endfor %}
+    {% endif %}
+    return {"html": pickerString, "callbacks": callbacks};
 }
 
 function getSpecifyDatesPicker(){
@@ -1204,19 +1202,25 @@ function selectAvailabilityOption(option){
     if(option != "openAvailability"){
         var contentPanel = document.getElementById("availabilityContentPanel");
         if(contentPanel != null){
-            var contentString;
+            var content;
             if(option === "daysOfWeek"){
-                contentString = getDaysOfWeekPicker()
+                content= getDaysOfWeekPicker()
             }else if(option === "specifyDates"){
-                contentString = getSpecifyDatesPicker();
+                content = getSpecifyDatesPicker();
             }
-            if(contentString != null){
-                contentPanel.innerHTML = contentString;
-                var content = document.getElementById("availabilityContent");
-                if(content != null){
-                    var height = $("#thirdLevelViewPanel").height() + content.offsetHeight - 20 + "px"
+            if(content != null){
+                contentPanel.innerHTML = content["html"];
+                var contentContainer = document.getElementById("availabilityContent");
+                if(contentContainer != null){
+                    var height = $("#thirdLevelViewPanel").height() + contentContainer.offsetHeight - 20 + "px"
                     $("#thirdLevelViewPanel").animate({marginTop: "0px", height: height}, 300, function(){});
                     $('html,body').animate({scrollTop: "1350px"}, 500);
+                }
+
+                if(content["callbacks"] != null && content["callbacks"].length > 0){
+                    for(var i=0; i < content["callbacks"].length; i++){
+                        content["callbacks"][i]();
+                    }
                 }
             }
         }
