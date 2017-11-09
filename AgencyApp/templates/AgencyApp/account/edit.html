@@ -1213,7 +1213,7 @@ function selectAvailabilityOption(option){
                 var contentContainer = document.getElementById("availabilityContent");
                 if(contentContainer != null){
                     var height = $("#thirdLevelViewPanel").height() + contentContainer.offsetHeight - 20 + "px"
-                    $("#thirdLevelViewPanel").animate({marginTop: "0px", height: height}, 300, function(){});
+                    $("#thirdLevelViewPanel").animate({marginTop: $(this).marginTop + "px", height: height}, 300, function(){});
                     $('html,body').animate({scrollTop: "1350px"}, 500);
                 }
 
@@ -1252,8 +1252,9 @@ function displayThirdLevel(interestType){
             thirdLevel.innerHTML = getWideAvailabilityPanel();
             var interestContainer = document.getElementById(interestType + "InterestContainer")
             if(interestContainer != null){
-                $("#thirdLevelViewPanel").animate({marginTop: "0px", height: "400px"}, 300, function(){});
-                $('html,body').animate({scrollTop: "1100px"}, 500);
+                $("#nextButtonRow").animate({marginTop: "0px", height: "0px"}, 300, function(){});
+                $("#thirdLevelViewPanel").animate({marginTop: "-60px", height: "400px"}, 300, function(){});
+                $('html,body').animate({scrollTop: "1050px"}, 500);
             }
         }/*else{
                 var expandPanel = document.getElementById(interestType + "InterestExpandPanel")
@@ -1397,7 +1398,7 @@ function getWideWorkInterestPicker(){
 
     pickerString += "</div></div>";
     //pickerString += "<div style='height: 100px;'>" + getSecondLevelButtons("work") + "</div>"
-    pickerString += "<div style='height: 70px; width: 100%; position: relative;'><div style='position: absolute; right: 35px; top: -10px;'><div class='editButton' onclick='displayThirdLevel(" + '"work"' + ");' style='height: 40px; width: 150px; padding-top: 20px; margin-left: 19px;'>Next</div>" 
+    pickerString += "<div id='nextButtonRow' style='height: 80px; width: 100%; position: relative; overflow: hidden; margin-top: -10px;'><div style='position: absolute; right: 35px; top: 0px;'><div class='editButton' onclick='displayThirdLevel(" + '"work"' + ");' style='height: 40px; width: 150px; padding-top: 20px; margin-left: 19px;'>Next</div>" 
 
     pickerString += "</div>"
 
