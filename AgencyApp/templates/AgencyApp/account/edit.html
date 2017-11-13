@@ -948,6 +948,9 @@ function updateFeaturedPhotoStatus(input){
         </div>
     </div>
 {% elif next == possibleDestinations.interests %}
+<script type="text/javascript" src="{% static "/AgencyApp/js/calendar.js" %}"></script>
+<link href="{% static "/AgencyApp/css/calendar.css" %}" rel="stylesheet" type="text/css" media="all" />
+
 <script>
 var interestPanelWidthThreshold = 820;
 var interestPanelExpanded = true;
@@ -1196,7 +1199,88 @@ function getOpenAvailabilityPicker(){
 }
 
 function getSpecifyDatesPicker(){
-    return "dates picker"
+    var callbacks = [loadCalendar];
+    callbacks.push(function(){
+        $('.calendar-header').click();
+    });
+    var pickerString = '<div id="availabilityContent"><div class="calendar-container"><div class="calendar-wrapper"><div class="calendar-base">'
+
+    // Add header
+    pickerString += '<div class="calendar-header"><div class="month-wrapper"><div class="header-prev-month"></div><div class="header-current-month">September</div><div class="header-next-month"></div></div><div class="header-current-day-number">, 23</div><div class="year-wrapper"><div class="header-prev-year"></div><div class="header-current-year">2014</div><div class="header-next-year"></div></div>'
+
+        pickerString += `</div>
+            <div class="small-wrapper">
+            <div class="calendar">
+                <div class="column">
+                    <div class="column-item weekday">Su</div>
+                    <div class="column-item prev-month">29</div>
+                    <div class="column-item">5</div>
+                    <div class="column-item">12</div>
+                    <div class="column-item">19</div>
+                    <div class="column-item">26</div>
+                </div>
+
+                <div class="column">
+                    <div class="column-item weekday">Mo</div>
+                    <div class="column-item prev-month">30</div>
+                    <div class="column-item">6</div>
+                    <div class="column-item">13</div>
+                    <div class="column-item">20</div>
+                    <div class="column-item">27</div>
+                </div>
+
+                <div class="column">
+                    <div class="column-item weekday">Tu</div>
+                    <div class="column-item prev-month">31</div>
+                    <div class="column-item">7</div>
+                    <div class="column-item">14</div>
+                    <div class="column-item">21</div>
+                    <div class="column-item">28</div>
+                </div>
+
+                <div class="column">
+                    <div class="column-item weekday">We</div>
+                    <div class="column-item">1</div>
+                    <div class="column-item">8</div>
+                    <div class="column-item">15</div>
+                    <div class="column-item">22</div>
+                    <div class="column-item">29</div>
+                </div>
+
+                <div class="column">
+                    <div class="column-item weekday">Th</div>
+                    <div class="column-item">2</div>
+                    <div class="column-item">9</div>
+                    <div class="column-item">16</div>
+                    <div class="column-item">23</div>
+                    <div class="column-item">30</div>
+                </div>
+
+                <div class="column">
+                    <div class="column-item weekday">Fr</div>
+                    <div class="column-item">3</div>
+                    <div class="column-item">10</div>
+                    <div class="column-item">17</div>
+                    <div class="column-item">24</div>
+                    <div class="column-item next-month">1</div>
+                </div>
+
+                <div class="column">
+                    <div class="column-item weekday">Sa</div>
+                    <div class="column-item">4</div>
+                    <div class="column-item">11</div>
+                    <div class="column-item">18</div>
+                    <div class="column-item">25</div>
+                    <div class="column-item next-month">2</div>
+                </div>
+            </div>
+            </div>
+
+ </div>
+ </div>
+</div></div>`;
+
+    return {"html": pickerString, "callbacks": callbacks}
 }
 
 var thirdLevelExpanded = false;
