@@ -1278,7 +1278,7 @@ function getSpecifyDatesPicker(){
         $('#availableCalendar .calendar-header').click();
         $('#unavailableCalendar .calendar-header').click();
     });
-    var pickerString = '<div id="availabilityContent" style=" width: 100%; position: relative; height: 530px; margin-left: -18px; margin-right: -8px; margin-top: 40px;"><h1> Select your dates</h1>';
+    var pickerString = '<div id="availabilityContent" style=" width: 100%; position: relative; height: 600px; margin-left: -18px; margin-right: -8px; margin-top: 40px;"><h1> Select your dates</h1>';
 
     // Add left option
     pickerString += '<div style="position: absolute; top: 65px; left: 5px; width: 49%; text-align: left;"><div class="calendar-container" id="availableCalendar">'
@@ -1299,7 +1299,7 @@ function getSpecifyDatesPicker(){
     pickerString += '<div class="small-wrapper">' + getCalendarString() + '</div>'
     pickerString += "</div></div></div></div>"
 
-    pickerString += "</div>";
+    pickerString += "<div style='position: absolute; top: 490px; left: 0; right: -25px;'>" + getSecondLevelButtons("work") + "</div></div>";
 
     return {"html": pickerString, "callbacks": callbacks}
 }
