@@ -1266,17 +1266,21 @@ function getCalendarString(){
     return calendarString;
 }
 
+function toggleAvailabilityCalendar(calendarType){
+    console.log(calendarType)
+}
+
 function getSpecifyDatesPicker(){
     var callbacks = [loadCalendar];
     callbacks.push(function(){
         $('.calendar-header').click();
     });
-    var pickerString = '<div id="availabilityContent" style=" width: 100%; position: relative; height: 500px; margin-left: -18px; margin-right: -8px; margin-top: 40px;"><h1> Select your dates</h1>';
+    var pickerString = '<div id="availabilityContent" style=" width: 100%; position: relative; height: 530px; margin-left: -18px; margin-right: -8px; margin-top: 40px;"><h1> Select your dates</h1>';
 
     // Add left option
     pickerString += '<div style="position: absolute; top: 65px; left: 5px; width: 49%; text-align: left;"><div class="calendar-container">'
     // Add text
-    pickerString += '<div style="text-align: center; width: 320px; margin-left: 15px;"><h3 style="margin-bottom: 5px; font-weight: bold; color: rgba(0,0,0,0.8);"> Option 1: Select available days</h3><p>Choose what days you are busy. All unchecked dates will be considered available.</p></div>'
+    pickerString += '<div style="text-align: center; width: 320px; margin-left: 15px;"><h3 style="margin-bottom: 5px; font-weight: bold; color: rgba(0,0,0,0.8);"> Option 1: Select available days</h3><p>Choose what days you are busy. All unchecked dates will be considered available.</p><div id="availableCalendarToggleButton" class="toggleButton" onclick="toggleAvailabilityCalendar(' + "'available'" + ');" style="height: 30px; margin-right: 3px; padding-top: 10px; margin-bottom: 15px;">Select</div></div>'
 
     pickerString += '<div class="calendar-wrapper" style="padding-left: 15px;"><div class="calendar-base"><div class="calendar-header"><div class="month-wrapper"><div class="header-prev-month"></div><div class="header-current-month">September</div><div class="header-next-month"></div></div><div class="header-current-day-number">, 23</div><div class="year-wrapper"><div class="header-prev-year"></div><div class="header-current-year">2014</div><div class="header-next-year"></div></div></div>'
     pickerString += '<div class="small-wrapper">' + getCalendarString() + '</div>'
@@ -1286,7 +1290,7 @@ function getSpecifyDatesPicker(){
     // Add right option
     pickerString += '<div style="position: absolute; top: 65px; right: 5px; width: 49%; text-align: right;"><div class="calendar-container">'
     // Add text
-    pickerString += '<div style="text-align: center; width: 320px; margin-left: 60px;"><h3 style="margin-bottom: 5px; font-weight: bold; color: rgba(0,0,0,0.8);"> Option 2: Select unavailable days</h3><p>Choose what days you are busy. All unchecked dates will be considered available.</p></div>'
+    pickerString += '<div style="text-align: center; width: 320px; margin-left: 60px;"><h3 style="margin-bottom: 5px; font-weight: bold; color: rgba(0,0,0,0.8);"> Option 2: Select unavailable days</h3><p>Choose what days you are busy. All unchecked dates will be considered available.</p><div id="unavailableCalendarToggleButton" class="toggleButton" onclick="toggleAvailabilityCalendar(' + "'unavailable'" + ');" style="height: 30px; margin-right: 3px; padding-top: 10px; margin-bottom: 15px;">Select</div></div>'
     //Add calendar
     pickerString += '<div class="calendar-wrapper" style="padding-right: 13px;"><div class="calendar-base" style="margin-right: 10px;"><div class="calendar-header"><div class="month-wrapper"><div class="header-prev-month"></div><div class="header-current-month">September</div><div class="header-next-month"></div></div><div class="header-current-day-number">, 23</div><div class="year-wrapper"><div class="header-prev-year"></div><div class="header-current-year">2014</div><div class="header-next-year"></div></div></div>'
     pickerString += '<div class="small-wrapper">' + getCalendarString() + '</div>'
