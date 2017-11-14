@@ -6,7 +6,7 @@ body{
   /* margin: 0 auto; */
   display: block;
   font-family: sans-serif;
-  text-align: right;
+  /*text-align: right;*/
 }
 
 .calendar{
@@ -57,7 +57,7 @@ body{
 }
 
 .gotcha{
-  background-color: #20C4C8;
+  background-color: rgba(0,0,0,0.1);
   color: white;
   position: absolute;
   

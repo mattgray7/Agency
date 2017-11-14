@@ -5,7 +5,7 @@ function loadCalendar(){
 		$(document).keyup(function(e) {
 			if (e.keyCode == 27) {
           $dayNumber.text(', ' + $('.gotcha').text());
-				$('.gotcha').animate({'top':'-50px', 'opacity': '0'},300, function(){});
+				$//('.gotcha').animate({'top':'-50px', 'opacity': '0'},300, function(){});
 				$('.small-wrapper').slideUp(300);
 				$('.header-current-day-number').animate({'top':'0'}, 500, 'easeInOutBack', function(){
 				$(this).animate({'right':'0'});
@@ -13,11 +13,11 @@ function loadCalendar(){
 				$('.month-wrapper').animate({'margin-right':'0'}, 500, 'easeInOutBack');
 				$('.header-prev-month, .header-next-month, .header-prev-year, .header-next-year').animate({'width':'0'});
 
-				$('.gotcha').parent().animate({'color':'#808080'});
-				$('.gotcha').remove();
+				//$('.gotcha').parent().animate({'color':'#808080'});
+				//$('.gotcha').remove();
 			});
 
-				$('.gotcha').animate({});
+				//$('.gotcha').animate({});
 				$('.calendar-header').on('click',function(e){
 					clickCalendar(e);
 					$dayNumber.text(', ' + getRandomArbitrary(1,30));//
@@ -52,7 +52,7 @@ function loadCalendar(){
 
 		
     function findItem(val){
-				$('.gotcha').remove();
+				//$('.gotcha').remove();
 		    $('.column-item').not('.weekday, .prev-month, .next-month').each( function() {
 		        if($(this).text() == val){
 								$(this).append('<div class="gotcha"></div>');
@@ -82,7 +82,7 @@ function loadCalendar(){
 			  //$(this).find('.gotcha').remove();
 				$(this).css({'color':'white'});
 				$('.gotcha').parent().animate({'color':'#808080'}, 250);
-			  $('.gotcha').remove();
+			  //$('.gotcha').remove();
         $(this).prepend('<div class="gotcha"></div>');
         var block = $(this).find('.gotcha').first();
 				block.text($(this).text());

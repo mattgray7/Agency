@@ -1198,19 +1198,8 @@ function getOpenAvailabilityPicker(){
     return {"html": pickerString, "callbacks": []};
 }
 
-function getSpecifyDatesPicker(){
-    var callbacks = [loadCalendar];
-    callbacks.push(function(){
-        $('.calendar-header').click();
-    });
-    var pickerString = '<div id="availabilityContent"><div class="calendar-container"><div class="calendar-wrapper"><div class="calendar-base">'
-
-    // Add header
-    pickerString += '<div class="calendar-header"><div class="month-wrapper"><div class="header-prev-month"></div><div class="header-current-month">September</div><div class="header-next-month"></div></div><div class="header-current-day-number">, 23</div><div class="year-wrapper"><div class="header-prev-year"></div><div class="header-current-year">2014</div><div class="header-next-year"></div></div>'
-
-        pickerString += `</div>
-            <div class="small-wrapper">
-            <div class="calendar">
+function getCalendarString(){
+    var calendarString = `<div class="calendar">
                 <div class="column">
                     <div class="column-item weekday">Su</div>
                     <div class="column-item prev-month">29</div>
@@ -1273,12 +1262,37 @@ function getSpecifyDatesPicker(){
                     <div class="column-item">25</div>
                     <div class="column-item next-month">2</div>
                 </div>
-            </div>
-            </div>
+            </div>`
+    return calendarString;
+}
 
- </div>
- </div>
-</div></div>`;
+function getSpecifyDatesPicker(){
+    var callbacks = [loadCalendar];
+    callbacks.push(function(){
+        $('.calendar-header').click();
+    });
+    var pickerString = '<div id="availabilityContent" style=" width: 100%; position: relative; height: 500px; margin-left: -18px; margin-right: -8px; margin-top: 40px;"><h1> Select your dates</h1>';
+
+    // Add left option
+    pickerString += '<div style="position: absolute; top: 65px; left: 5px; width: 49%; text-align: left;"><div class="calendar-container">'
+    // Add text
+    pickerString += '<div style="text-align: center; width: 320px; margin-left: 15px;"><h3 style="margin-bottom: 5px; font-weight: bold; color: rgba(0,0,0,0.8);"> Option 1: Select available days</h3><p>Choose what days you are busy. All unchecked dates will be considered available.</p></div>'
+
+    pickerString += '<div class="calendar-wrapper" style="padding-left: 15px;"><div class="calendar-base"><div class="calendar-header"><div class="month-wrapper"><div class="header-prev-month"></div><div class="header-current-month">September</div><div class="header-next-month"></div></div><div class="header-current-day-number">, 23</div><div class="year-wrapper"><div class="header-prev-year"></div><div class="header-current-year">2014</div><div class="header-next-year"></div></div></div>'
+    pickerString += '<div class="small-wrapper">' + getCalendarString() + '</div>'
+    pickerString += "</div></div></div></div>"
+
+
+    // Add right option
+    pickerString += '<div style="position: absolute; top: 65px; right: 5px; width: 49%; text-align: right;"><div class="calendar-container">'
+    // Add text
+    pickerString += '<div style="text-align: center; width: 320px; margin-left: 60px;"><h3 style="margin-bottom: 5px; font-weight: bold; color: rgba(0,0,0,0.8);"> Option 2: Select unavailable days</h3><p>Choose what days you are busy. All unchecked dates will be considered available.</p></div>'
+    //Add calendar
+    pickerString += '<div class="calendar-wrapper" style="padding-right: 13px;"><div class="calendar-base" style="margin-right: 10px;"><div class="calendar-header"><div class="month-wrapper"><div class="header-prev-month"></div><div class="header-current-month">September</div><div class="header-next-month"></div></div><div class="header-current-day-number">, 23</div><div class="year-wrapper"><div class="header-prev-year"></div><div class="header-current-year">2014</div><div class="header-next-year"></div></div></div>'
+    pickerString += '<div class="small-wrapper">' + getCalendarString() + '</div>'
+    pickerString += "</div></div></div></div>"
+
+    pickerString += "</div>";
 
     return {"html": pickerString, "callbacks": callbacks}
 }
