@@ -1339,13 +1339,17 @@ function selectAvailabilityOption(option){
 
     var contentPanel = document.getElementById("availabilityContentPanel");
     if(contentPanel != null){
+            var scrollTop = wideExpandedPanelHeights["interests"] + wideExpandedPanelHeights["work"] + wideExpandedPanelHeights["availability"];
             var content;
             if(option === "daysOfWeek"){
                 content= getDaysOfWeekPicker()
+                scrollTop -= 390
             }else if(option === "specifyDates"){
                 content = getSpecifyDatesPicker();
+                scrollTop -= 50
             }else if(option === "openAvailability"){
                 content = getOpenAvailabilityPicker();
+                scrollTop -= 550
             }
             if(content != null){
                 contentPanel.innerHTML = content["html"];
@@ -1354,7 +1358,7 @@ function selectAvailabilityOption(option){
                     //var height = $("#thirdLevelViewPanel").height() + contentContainer.offsetHeight - 20 + "px"
                     var height = wideExpandedPanelHeights["availability"] + contentContainer.offsetHeight + 30 + "px"
                     $("#thirdLevelViewPanel").animate({marginTop: $(this).marginTop + "px", height: height}, 300, function(){});
-                    $('html,body').animate({scrollTop: wideExpandedPanelHeights["interests"] + wideExpandedPanelHeights["work"] + wideExpandedPanelHeights["availability"] - 400 + "px"}, 500);
+                    $('html,body').animate({scrollTop: scrollTop + "px"}, 500);
                 }
 
                 if(content["callbacks"] != null && content["callbacks"].length > 0){

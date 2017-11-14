@@ -1,7 +1,5 @@
 'use strict';
 function loadCalendar(calendarID){
-	console.log("loading " + calendarID)
-		
 		var $dayNumber = $('#' + calendarID + ' .header-current-day-number');
 		$(document).keyup(function(e) {
 			if (e.keyCode == 27) {
@@ -30,7 +28,7 @@ function loadCalendar(calendarID){
 
 		function clickCalendar(e){
 			e.stopPropagation();
-			$('#' + calendarID + ' .calendar-header').animate({'color':'#20c4c8'});
+			$('#' + calendarID + ' .calendar-header').animate({'color':'#808080'});
 			var t = $('#' + calendarID + ' .header-current-month').text();
 			$('#' + calendarID + ' .header-current-month').text(t.replace(',',''));
 			$('#' + calendarID + ' .header-prev-month, ' + '#' + calendarID + ' .header-next-month, ' + '#' + calendarID + ' .header-prev-year, ' + '#' + calendarID + ' .header-next-year').animate({'width':'12px'},400, 'easeInOutBack');
@@ -96,7 +94,9 @@ function loadCalendar(calendarID){
     });
   
   	$('#' + calendarID + ' .calendar-base').on('click', function(e){
-      e.stopPropogation();
+  		if(e.stopPropogation){
+      		e.stopPropogation();
+      	}
     });
 		
 };
