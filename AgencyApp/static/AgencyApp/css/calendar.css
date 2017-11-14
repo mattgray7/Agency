@@ -32,7 +32,7 @@ body{
 .column-item{
   color: #808080;
   text-align: right;
-  width: 36px;
+  width: 41px;
   height: 30px;
   /* border: 1px solid black; */
   padding: 8px;
@@ -107,9 +107,14 @@ body{
 .calendar-base {
     display: inline-block;
     border: 1px solid #bbb;
+    border-radius: 2px;
     padding: 10px;
     font-size: 0;
     text-align: center;
+}
+
+.calendar-base.disabled{
+    background: rgba(0,0,0,0.1);
 }
 
 

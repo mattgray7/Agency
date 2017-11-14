@@ -1266,8 +1266,24 @@ function getCalendarString(){
     return calendarString;
 }
 
+var calendarTypes = ["available", "unavailable"]
 function toggleAvailabilityCalendar(calendarType){
-    console.log(calendarType)
+    for(var i=0; i < calendarTypes.length; i++){
+        var optionButton = document.getElementById(calendarTypes[i] + "CalendarToggleButton");
+        var calendar = document.getElementById(calendarTypes[i] + "Calendar")
+        if(optionButton != null){
+            if(calendarTypes[i] === calendarType){
+                optionButton.className = "toggleButton enabled"
+                optionButton.innerHTML = "Selected &#10004;";
+                $('#' + calendarTypes[i] + 'Calendar .calendar-base').css("background", "rgba(255,255,255,1)")
+            }else{
+                optionButton.className = "toggleButton";
+                optionButton.innerHTML = "Select"
+                //calendar.className = "calendar-container disabled";
+                $('#' + calendarTypes[i] + 'Calendar .calendar-base').css("background", "rgba(0,0,0,0.1)")
+            }
+        }
+    }
 }
 
 function getSpecifyDatesPicker(){
@@ -1283,9 +1299,9 @@ function getSpecifyDatesPicker(){
     // Add left option
     pickerString += '<div style="position: absolute; top: 65px; left: 5px; width: 49%; text-align: left;"><div class="calendar-container" id="availableCalendar">'
     // Add text
-    pickerString += '<div style="text-align: center; width: 320px; margin-left: 34px;"><h3 style="margin-bottom: 5px; font-weight: bold; color: rgba(0,0,0,0.8);"> Option 1: Select available days</h3><p>Choose what days you are busy. All unchecked dates will be considered available.</p><div id="availableCalendarToggleButton" class="toggleButton" onclick="toggleAvailabilityCalendar(' + "'available'" + ');" style="height: 30px; margin-right: 3px; padding-top: 10px; margin-bottom: 15px;">Select</div></div>'
+    pickerString += '<div style="text-align: center; width: 354px; margin-left: 20px;"><h3 style="margin-bottom: 5px; font-weight: bold; color: rgba(0,0,0,0.8);"> Option 1: Select available days</h3><p>Choose what days you are busy. All unchecked dates will be considered available.</p><div id="availableCalendarToggleButton" class="toggleButton" onclick="toggleAvailabilityCalendar(' + "'available'" + ');" style="height: 30px; margin-right: 3px; padding-top: 10px; margin-bottom: 15px;">Select</div></div>'
     // Add calendar
-    pickerString += '<div class="calendar-wrapper" style="padding-left: 34px;"><div class="calendar-base"><div class="calendar-header"><div class="month-wrapper"><div class="header-prev-month"></div><div class="header-current-month">September</div><div class="header-next-month"></div></div><div class="header-current-day-number">, 23</div><div class="year-wrapper"><div class="header-prev-year"></div><div class="header-current-year">2014</div><div class="header-next-year"></div></div></div>'
+    pickerString += '<div class="calendar-wrapper" style="padding-left: 20px;"><div class="calendar-base"><div class="calendar-header"><div class="month-wrapper"><div class="header-prev-month"></div><div class="header-current-month">September</div><div class="header-next-month"></div></div><div class="header-current-day-number">, 23</div><div class="year-wrapper"><div class="header-prev-year"></div><div class="header-current-year">2014</div><div class="header-next-year"></div></div></div>'
     pickerString += '<div class="small-wrapper">' + getCalendarString() + '</div>'
     pickerString += "</div></div></div></div>"
 
@@ -1293,13 +1309,13 @@ function getSpecifyDatesPicker(){
     // Add right option
     pickerString += '<div style="position: absolute; top: 65px; right: 5px; width: 49%; text-align: right;"><div class="calendar-container" id="unavailableCalendar">'
     // Add text
-    pickerString += '<div style="text-align: center; width: 320px; margin-left: 38px;"><h3 style="margin-bottom: 5px; font-weight: bold; color: rgba(0,0,0,0.8);"> Option 2: Select unavailable days</h3><p>Choose what days you are busy. All unchecked dates will be considered available.</p><div id="unavailableCalendarToggleButton" class="toggleButton" onclick="toggleAvailabilityCalendar(' + "'unavailable'" + ');" style="height: 30px; margin-right: 3px; padding-top: 10px; margin-bottom: 15px;">Select</div></div>'
+    pickerString += '<div style="text-align: center; width: 354px; margin-left: 20px;"><h3 style="margin-bottom: 5px; font-weight: bold; color: rgba(0,0,0,0.8);"> Option 2: Select unavailable days</h3><p>Choose what days you are busy. All unchecked dates will be considered available.</p><div id="unavailableCalendarToggleButton" class="toggleButton" onclick="toggleAvailabilityCalendar(' + "'unavailable'" + ');" style="height: 30px; margin-right: 3px; padding-top: 10px; margin-bottom: 15px;">Select</div></div>'
     //Add calendar
-    pickerString += '<div class="calendar-wrapper" style="padding-right: 34px;"><div class="calendar-base" style="margin-right: 10px;"><div class="calendar-header"><div class="month-wrapper"><div class="header-prev-month"></div><div class="header-current-month">September</div><div class="header-next-month"></div></div><div class="header-current-day-number">, 23</div><div class="year-wrapper"><div class="header-prev-year"></div><div class="header-current-year">2014</div><div class="header-next-year"></div></div></div>'
+    pickerString += '<div class="calendar-wrapper" style="padding-right: 18px;"><div class="calendar-base" style="margin-right: 10px;"><div class="calendar-header"><div class="month-wrapper"><div class="header-prev-month"></div><div class="header-current-month">September</div><div class="header-next-month"></div></div><div class="header-current-day-number">, 23</div><div class="year-wrapper"><div class="header-prev-year"></div><div class="header-current-year">2014</div><div class="header-next-year"></div></div></div>'
     pickerString += '<div class="small-wrapper">' + getCalendarString() + '</div>'
     pickerString += "</div></div></div></div>"
 
-    pickerString += "<div style='position: absolute; top: 490px; left: 0; right: -25px;'>" + getSecondLevelButtons("work") + "</div></div>";
+    pickerString += "<div style='position: absolute; top: 485px; left: 5px; right: -20px;'>" + getSecondLevelButtons("work") + "</div></div>";
 
     return {"html": pickerString, "callbacks": callbacks}
 }
