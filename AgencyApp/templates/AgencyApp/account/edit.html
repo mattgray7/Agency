@@ -1275,15 +1275,23 @@ function toggleAvailabilityCalendar(calendarType){
             if(calendarTypes[i] === calendarType){
                 optionButton.className = "toggleButton enabled"
                 optionButton.innerHTML = "Selected &#10004;";
-                $('#' + calendarTypes[i] + 'Calendar .calendar-base').css("background", "rgba(255,255,255,1)")
+                $('#' + calendarTypes[i] + 'Calendar .calendar-base').css("cursor", "default")
+                $('#' + calendarTypes[i] + 'Calendar .column-item').css("cursor", "pointer")
+
             }else{
                 optionButton.className = "toggleButton";
                 optionButton.innerHTML = "Select"
                 //calendar.className = "calendar-container disabled";
-                $('#' + calendarTypes[i] + 'Calendar .calendar-base').css("background", "rgba(0,0,0,0.1)")
+                disableCalendar()
             }
         }
     }
+}
+
+function disableCalendar(calendarType){
+    $('#' + calendarType + 'Calendar .calendar-base').css("cursor", "not-allowed")
+    $('#' + calendarType + 'Calendar .column-item').css("cursor", "not-allowed")
+    $('#' + calendarType + 'Calendar .gotcha').remove();
 }
 
 function getSpecifyDatesPicker(){
@@ -1293,6 +1301,8 @@ function getSpecifyDatesPicker(){
         loadCalendar("unavailableCalendar")
         $('#availableCalendar .calendar-header').click();
         $('#unavailableCalendar .calendar-header').click();
+        disableCalendar("available")
+        disableCalendar("unavailable")
     });
     var pickerString = '<div id="availabilityContent" style=" width: 100%; position: relative; height: 600px; margin-left: -18px; margin-right: -8px; margin-top: 40px;"><h1> Select your dates</h1>';
 
@@ -1301,7 +1311,7 @@ function getSpecifyDatesPicker(){
     // Add text
     pickerString += '<div style="text-align: center; width: 354px; margin-left: 20px;"><h3 style="margin-bottom: 5px; font-weight: bold; color: rgba(0,0,0,0.8);"> Option 1: Select available days</h3><p>Choose what days you are busy. All unchecked dates will be considered available.</p><div id="availableCalendarToggleButton" class="toggleButton" onclick="toggleAvailabilityCalendar(' + "'available'" + ');" style="height: 30px; margin-right: 3px; padding-top: 10px; margin-bottom: 15px;">Select</div></div>'
     // Add calendar
-    pickerString += '<div class="calendar-wrapper" style="padding-left: 20px;"><div class="calendar-base"><div class="calendar-header"><div class="month-wrapper"><div class="header-prev-month"></div><div class="header-current-month">September</div><div class="header-next-month"></div></div><div class="header-current-day-number">, 23</div><div class="year-wrapper"><div class="header-prev-year"></div><div class="header-current-year">2014</div><div class="header-next-year"></div></div></div>'
+    pickerString += '<div class="calendar-wrapper" style="padding-left: 20px;"><div class="calendar-base" style=""><div class="calendar-header"><div class="month-wrapper"><div class="header-prev-month"></div><div class="header-current-month">September</div><div class="header-next-month"></div></div><div class="header-current-day-number">, 23</div><div class="year-wrapper"><div class="header-prev-year"></div><div class="header-current-year">2014</div><div class="header-next-year"></div></div></div>'
     pickerString += '<div class="small-wrapper">' + getCalendarString() + '</div>'
     pickerString += "</div></div></div></div>"
 
