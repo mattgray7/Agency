@@ -103,4 +103,51 @@ function loadCalendar(calendarID){
 			}
 		});
 };
+//var days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+//var months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+function _daysInMonth(month,year) {
+    return new Date(year, month+1, 0).getDate();
+}
+
+function getCurrentMonthCalendarData(){
+	console.log(getCalendarData(currentDate.getMonth(), currentDate.getFullYear()))
+}
+
+function getCalendarData(month, year){
+	var calendarData = []
+	var daysInMonth = _daysInMonth(month, year)
+	var firstDay = new Date(year, month, 1);
+	var lastDay = new Date(year, month + 1, 0);
+
+	var previousMonth = month-1;
+	if(previousMonth < 0){
+		previousMonth = 11
+	}
+	var daysInPreviousMonth = _daysInMonth(previousMonth, year)
+
+	var dateList = []
+	// Prepend previous month days
+	for(var i=0; i < firstDay.getDay(); i++){
+		dateList.push(daysInPreviousMonth + i - firstDay.getDay() + 1)
+	}
+	// Add current month days
+	for(var i=1; i < daysInMonth + 1; i++){
+		dateList.push(i)
+	}
+	// Add next month days
+	for(var i=1; i < (7-lastDay.getDay()); i++){
+		dateList.push(i)
+	}
+
+	for(var i=0; i < Math.ceil(dateList.length / 7); i++){
+		var week = [];
+		var firstDayOfWeekIndex = i*7
+		for(var j=firstDayOfWeekIndex; j < firstDayOfWeekIndex + 7; j++){
+			week.push(dateList[j])
+		}
+		calendarData.push(week)
+	}
+	return calendarData
+}
+getCurrentMonthCalendarData()
  
