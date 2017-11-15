@@ -1267,29 +1267,35 @@ function getCalendarString(){
 }
 
 var calendarTypes = ["available", "unavailable"]
+var activeCalendar;
 function toggleAvailabilityCalendar(calendarType){
     for(var i=0; i < calendarTypes.length; i++){
         var optionButton = document.getElementById(calendarTypes[i] + "CalendarToggleButton");
         var calendar = document.getElementById(calendarTypes[i] + "Calendar")
         if(optionButton != null){
             if(calendarTypes[i] === calendarType){
+                activeCalendar = calendarType + "Calendar";
                 optionButton.className = "toggleButton enabled"
                 optionButton.innerHTML = "Selected &#10004;";
-                $('#' + calendarTypes[i] + 'Calendar .calendar-base').css("cursor", "default")
-                $('#' + calendarTypes[i] + 'Calendar .column-item').css("cursor", "pointer")
-
+                enableCalendar(calendarTypes[i])
             }else{
                 optionButton.className = "toggleButton";
                 optionButton.innerHTML = "Select"
-                //calendar.className = "calendar-container disabled";
-                disableCalendar()
+                disableCalendar(calendarTypes[i])
             }
         }
     }
 }
 
+function enableCalendar(calendarType){
+    $('#' + calendarType + 'Calendar .calendar-base').css("cursor", "default")
+    $('#' + calendarType + 'Calendar .column-item').css("cursor", "pointer")
+    $('#' + calendarType + 'Calendar .calendar-base').css("background", "#FFF")
+}
+
 function disableCalendar(calendarType){
     $('#' + calendarType + 'Calendar .calendar-base').css("cursor", "not-allowed")
+    $('#' + calendarType + 'Calendar .calendar-base').css("background", "rgba(0,0,0,0.02)")
     $('#' + calendarType + 'Calendar .column-item').css("cursor", "not-allowed")
     $('#' + calendarType + 'Calendar .gotcha').remove();
 }
