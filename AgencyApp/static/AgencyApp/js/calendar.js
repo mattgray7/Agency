@@ -145,6 +145,24 @@ function toggleCalendarMonth(direction, calendarID){
     }
 }
 
+function toggleCalendarYear(direction, calendarID){
+	var calendarType = calendarID.replace("Calendar", "")
+    if(calendarMonths[calendarType] != null){
+        var currentMonth = calendarMonths[calendarType]["month"]
+        var currentYear = calendarMonths[calendarType]["year"]
+        if(currentMonth != null && currentYear != null){
+        	if(direction === "next"){
+	            var nextYear = currentYear + 1
+	        }else{
+	            var nextYear = currentYear - 1
+	        }
+            $('#' + calendarID + ' .small-wrapper').html(getCalendarString(calendarType, currentMonth, nextYear))
+            $('#' + calendarID + ' .header-current-year').html(nextYear)
+            loadCalendar(calendarID)
+        }
+    }
+}
+
 var weekdays = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
 var months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
 function _daysInMonth(month,year) {
