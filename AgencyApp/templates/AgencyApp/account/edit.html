@@ -1251,60 +1251,6 @@ function toggleAvailabilityCalendar(calendarType){
     }
 }
 
-function enableCalendar(calendarType){
-    $('#' + calendarType + 'Calendar .calendar-base').css("cursor", "default")
-    $('#' + calendarType + 'Calendar .column-item').css("cursor", "pointer")
-    $('#' + calendarType + 'Calendar .calendar-base').css("background", "#FFF")
-}
-
-function disableCalendar(calendarType){
-    $('#' + calendarType + 'Calendar .calendar-base').css("cursor", "not-allowed")
-    $('#' + calendarType + 'Calendar .calendar-base').css("background", "rgba(0,0,0,0.02)")
-    $('#' + calendarType + 'Calendar .column-item').css("cursor", "not-allowed")
-    $('#' + calendarType + 'Calendar .column-item').not('.prev-month').not('.next-month').css("color", "#808080")
-    $('#' + calendarType + 'Calendar .gotcha').remove();
-}
-
-function displayNextMonth(calendarID){
-    var calendarType = calendarID.replace("Calendar", "")
-    if(calendarMonths[calendarType] != null){
-        var currentMonth = calendarMonths[calendarType]["month"]
-        var currentYear = calendarMonths[calendarType]["year"]
-        if(currentMonth != null && currentYear != null){
-            var nextMonth = currentMonth + 1;
-            var nextYear = currentYear
-            if(currentMonth === 11){
-                nextMonth = 0
-                nextYear += 1;
-            }
-            $('#' + calendarID + ' .small-wrapper').html(getCalendarString(calendarType, nextMonth, nextYear))
-            $('#' + calendarID + ' .header-current-month').html(months[nextMonth])
-            $('#' + calendarID + ' .header-current-year').html(nextYear)
-            loadCalendar(calendarID)
-        }
-    }
-}
-
-function displayPreviousMonth(calendarID){
-    var calendarType = calendarID.replace("Calendar", "")
-    if(calendarMonths[calendarType] != null){
-        var currentMonth = calendarMonths[calendarType]["month"]
-        var currentYear = calendarMonths[calendarType]["year"]
-        if(currentMonth != null && currentYear != null){
-            var nextMonth = currentMonth - 1;
-            var nextYear = currentYear
-            if(currentMonth === 0){
-                nextMonth = 11
-                nextYear -= 1;
-            }
-            $('#' + calendarID + ' .small-wrapper').html(getCalendarString(calendarType, nextMonth, nextYear))
-            $('#' + calendarID + ' .header-current-month').html(months[nextMonth])
-            $('#' + calendarID + ' .header-current-year').html(nextYear)
-            loadCalendar(calendarID)
-        }
-    }
-}
-
 function getSpecifyDatesPicker(){
     var callbacks = [];
     callbacks.push(function(){
@@ -1322,7 +1268,7 @@ function getSpecifyDatesPicker(){
     // Add text
     pickerString += '<div style="text-align: center; width: 354px; margin-left: 20px;"><h3 style="margin-bottom: 5px; font-weight: bold; color: rgba(0,0,0,0.8);"> Option 1: Select available days</h3><p>Choose what days you are busy. All unchecked dates will be considered available.</p><div id="availableCalendarToggleButton" class="toggleButton" onclick="toggleAvailabilityCalendar(' + "'available'" + ');" style="height: 30px; margin-right: 3px; padding-top: 10px; margin-bottom: 15px;">Select</div></div>'
     // Add calendar
-    pickerString += '<div class="calendar-wrapper" style="padding-left: 20px;"><div class="calendar-base" style=""><div class="calendar-header"><div class="month-wrapper"><div class="header-prev-month" onclick="displayPreviousMonth(' + "'availableCalendar'" + ');"></div><div class="header-current-month">' + months[currentDate.getMonth()] + '</div><div class="header-next-month" onclick="displayNextMonth(' + "'availableCalendar'" + ');" ></div></div><div class="header-current-day-number">, 23</div><div class="year-wrapper"><div class="header-prev-year"></div><div class="header-current-year">' + currentDate.getFullYear() + '</div><div class="header-next-year"></div></div></div>'
+    pickerString += '<div class="calendar-wrapper" style="padding-left: 20px;"><div class="calendar-base" style=""><div class="calendar-header"><div class="month-wrapper"><div class="header-prev-month" onclick="toggleCalendarMonth(' + "'previous', 'availableCalendar'" + ');"></div><div class="header-current-month">' + months[currentDate.getMonth()] + '</div><div class="header-next-month" onclick="toggleCalendarMonth(' + "'next', 'availableCalendar'" + ');" ></div></div><div class="header-current-day-number">, 23</div><div class="year-wrapper"><div class="header-prev-year"></div><div class="header-current-year">' + currentDate.getFullYear() + '</div><div class="header-next-year"></div></div></div>'
     pickerString += '<div class="small-wrapper">' + getCalendarString("available") + '</div>'
     pickerString += "</div></div></div></div>"
 
@@ -1332,7 +1278,7 @@ function getSpecifyDatesPicker(){
     // Add text
     pickerString += '<div style="text-align: center; width: 354px; margin-left: 20px;"><h3 style="margin-bottom: 5px; font-weight: bold; color: rgba(0,0,0,0.8);"> Option 2: Select unavailable days</h3><p>Choose what days you are busy. All unchecked dates will be considered available.</p><div id="unavailableCalendarToggleButton" class="toggleButton" onclick="toggleAvailabilityCalendar(' + "'unavailable'" + ');" style="height: 30px; margin-right: 3px; padding-top: 10px; margin-bottom: 15px;">Select</div></div>'
     //Add calendar
-    pickerString += '<div class="calendar-wrapper" style="padding-right: 18px;"><div class="calendar-base" style="margin-right: 10px;"><div class="calendar-header"><div class="month-wrapper"><div class="header-prev-month" onclick="displayPreviousMonth(' + "'unavailableCalendar'" + ');"></div><div class="header-current-month">' + months[currentDate.getMonth()] + '</div><div class="header-next-month" onclick="displayNextMonth(' + "'unavailableCalendar'" + ');"></div></div><div class="header-current-day-number">, 23</div><div class="year-wrapper"><div class="header-prev-year"></div><div class="header-current-year">' + currentDate.getFullYear() + '</div><div class="header-next-year"></div></div></div>'
+    pickerString += '<div class="calendar-wrapper" style="padding-right: 18px;"><div class="calendar-base" style="margin-right: 10px;"><div class="calendar-header"><div class="month-wrapper"><div class="header-prev-month" onclick="toggleCalendarMonth(' + "'previous', 'unavailableCalendar'" + ');"></div><div class="header-current-month">' + months[currentDate.getMonth()] + '</div><div class="header-next-month" onclick="toggleCalendarMonth(' + "'next', 'unavailableCalendar'" + ');"></div></div><div class="header-current-day-number">, 23</div><div class="year-wrapper"><div class="header-prev-year"></div><div class="header-current-year">' + currentDate.getFullYear() + '</div><div class="header-next-year"></div></div></div>'
     pickerString += '<div class="small-wrapper">' + getCalendarString("unavailable") + '</div>'
     pickerString += "</div></div></div></div>"
 

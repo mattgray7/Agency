@@ -18,7 +18,6 @@ function loadCalendar(calendarID){
 
 				//$('.gotcha').animate({});
 				$('#' + calendarID + '.calendar-header').on('click',function(e){
-					console.log("header clicked")
 					if(activeCalendar === calendarID){
 						clickCalendar(e);
 						$dayNumber.text(', ' + getRandomArbitrary(1,30));//
@@ -30,7 +29,6 @@ function loadCalendar(calendarID){
 	
 
 		function clickCalendar(e){
-			console.log("Calendar clicked")
 			e.stopPropagation();
 			$('#' + calendarID + ' .calendar-header').animate({'color':'#808080'});
 			var t = $('#' + calendarID + ' .header-current-month').text();
@@ -76,7 +74,6 @@ function loadCalendar(calendarID){
 	
 
     $('#' + calendarID + ' .column-item').not('.weekday').on('click', function(){
-    	console.log(calendarID + ", " + activeCalendar)
     		if(calendarID === activeCalendar){
 				/*$('.gotcha').fadeOut(300,function(){
 						$(this).remove();
@@ -103,6 +100,51 @@ function loadCalendar(calendarID){
 			}
 		});
 };
+
+
+function enableCalendar(calendarType){
+    $('#' + calendarType + 'Calendar .calendar-base').css("cursor", "default")
+    $('#' + calendarType + 'Calendar .column-item').css("cursor", "pointer")
+    $('#' + calendarType + 'Calendar .calendar-base').css("background", "#FFF")
+}
+
+function disableCalendar(calendarType){
+    $('#' + calendarType + 'Calendar .calendar-base').css("cursor", "not-allowed")
+    $('#' + calendarType + 'Calendar .calendar-base').css("background", "rgba(0,0,0,0.02)")
+    $('#' + calendarType + 'Calendar .column-item').css("cursor", "not-allowed")
+    $('#' + calendarType + 'Calendar .column-item').not('.prev-month').not('.next-month').css("color", "#808080")
+    $('#' + calendarType + 'Calendar .gotcha').remove();
+}
+
+function toggleCalendarMonth(direction, calendarID){
+	var calendarType = calendarID.replace("Calendar", "")
+    if(calendarMonths[calendarType] != null){
+        var currentMonth = calendarMonths[calendarType]["month"]
+        var currentYear = calendarMonths[calendarType]["year"]
+        if(currentMonth != null && currentYear != null){
+        	if(direction === "next"){
+	            var nextMonth = currentMonth + 1;
+	            var nextYear = currentYear
+	            if(currentMonth === 11){
+	                nextMonth = 0
+	                nextYear += 1;
+	            }
+	        }else{
+	        	var nextMonth = currentMonth - 1;
+	            var nextYear = currentYear
+	            if(currentMonth === 0){
+	                nextMonth = 11
+	                nextYear -= 1;
+	            }
+	        }
+            $('#' + calendarID + ' .small-wrapper').html(getCalendarString(calendarType, nextMonth, nextYear))
+            $('#' + calendarID + ' .header-current-month').html(months[nextMonth])
+            $('#' + calendarID + ' .header-current-year').html(nextYear)
+            loadCalendar(calendarID)
+        }
+    }
+}
+
 var weekdays = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
 var months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
 function _daysInMonth(month,year) {
