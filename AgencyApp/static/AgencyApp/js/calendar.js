@@ -118,49 +118,53 @@ function disableCalendar(calendarType){
 
 function toggleCalendarMonth(direction, calendarID){
 	var calendarType = calendarID.replace("Calendar", "")
-    if(calendarMonths[calendarType] != null){
-        var currentMonth = calendarMonths[calendarType]["month"]
-        var currentYear = calendarMonths[calendarType]["year"]
-        if(currentMonth != null && currentYear != null){
-        	if(direction === "next"){
-	            var nextMonth = currentMonth + 1;
-	            var nextYear = currentYear
-	            if(currentMonth === 11){
-	                nextMonth = 0
-	                nextYear += 1;
-	            }
-	        }else{
-	        	var nextMonth = currentMonth - 1;
-	            var nextYear = currentYear
-	            if(currentMonth === 0){
-	                nextMonth = 11
-	                nextYear -= 1;
-	            }
+	if(calendarID === activeCalendar){
+	    if(calendarMonths[calendarType] != null){
+	        var currentMonth = calendarMonths[calendarType]["month"]
+	        var currentYear = calendarMonths[calendarType]["year"]
+	        if(currentMonth != null && currentYear != null){
+	        	if(direction === "next"){
+		            var nextMonth = currentMonth + 1;
+		            var nextYear = currentYear
+		            if(currentMonth === 11){
+		                nextMonth = 0
+		                nextYear += 1;
+		            }
+		        }else{
+		        	var nextMonth = currentMonth - 1;
+		            var nextYear = currentYear
+		            if(currentMonth === 0){
+		                nextMonth = 11
+		                nextYear -= 1;
+		            }
+		        }
+	            $('#' + calendarID + ' .small-wrapper').html(getCalendarString(calendarType, nextMonth, nextYear))
+	            $('#' + calendarID + ' .header-current-month').html(months[nextMonth])
+	            $('#' + calendarID + ' .header-current-year').html(nextYear)
+	            loadCalendar(calendarID)
 	        }
-            $('#' + calendarID + ' .small-wrapper').html(getCalendarString(calendarType, nextMonth, nextYear))
-            $('#' + calendarID + ' .header-current-month').html(months[nextMonth])
-            $('#' + calendarID + ' .header-current-year').html(nextYear)
-            loadCalendar(calendarID)
-        }
-    }
+	    }
+	}
 }
 
 function toggleCalendarYear(direction, calendarID){
 	var calendarType = calendarID.replace("Calendar", "")
-    if(calendarMonths[calendarType] != null){
-        var currentMonth = calendarMonths[calendarType]["month"]
-        var currentYear = calendarMonths[calendarType]["year"]
-        if(currentMonth != null && currentYear != null){
-        	if(direction === "next"){
-	            var nextYear = currentYear + 1
-	        }else{
-	            var nextYear = currentYear - 1
+	if(calendarID === activeCalendar){
+	    if(calendarMonths[calendarType] != null){
+	        var currentMonth = calendarMonths[calendarType]["month"]
+	        var currentYear = calendarMonths[calendarType]["year"]
+	        if(currentMonth != null && currentYear != null){
+	        	if(direction === "next"){
+		            var nextYear = currentYear + 1
+		        }else{
+		            var nextYear = currentYear - 1
+		        }
+	            $('#' + calendarID + ' .small-wrapper').html(getCalendarString(calendarType, currentMonth, nextYear))
+	            $('#' + calendarID + ' .header-current-year').html(nextYear)
+	            loadCalendar(calendarID)
 	        }
-            $('#' + calendarID + ' .small-wrapper').html(getCalendarString(calendarType, currentMonth, nextYear))
-            $('#' + calendarID + ' .header-current-year').html(nextYear)
-            loadCalendar(calendarID)
-        }
-    }
+	    }
+	}
 }
 
 var weekdays = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
