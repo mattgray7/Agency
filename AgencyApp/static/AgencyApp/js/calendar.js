@@ -103,14 +103,10 @@ function loadCalendar(calendarID){
 			}
 		});
 };
-//var days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+var weekdays = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
 //var months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
 function _daysInMonth(month,year) {
     return new Date(year, month+1, 0).getDate();
-}
-
-function getCurrentMonthCalendarData(){
-	console.log(getCalendarData(currentDate.getMonth(), currentDate.getFullYear()))
 }
 
 function getCalendarData(month, year){
@@ -149,5 +145,4 @@ function getCalendarData(month, year){
 	}
 	return calendarData
 }
-getCurrentMonthCalendarData()
  

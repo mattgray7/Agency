@@ -1200,70 +1200,27 @@ function getOpenAvailabilityPicker(){
 
 function getCalendarString(){
     //getCalendarData()
-    var calendarString = `<div class="calendar">
-                <div class="column">
-                    <div class="column-item weekday">Su</div>
-                    <div class="column-item prev-month">29</div>
-                    <div class="column-item">5</div>
-                    <div class="column-item">12</div>
-                    <div class="column-item">19</div>
-                    <div class="column-item">26</div>
-                </div>
+    var calendarData = getCalendarData(currentDate.getMonth(), currentDate.getFullYear())
 
-                <div class="column">
-                    <div class="column-item weekday">Mo</div>
-                    <div class="column-item prev-month">30</div>
-                    <div class="column-item">6</div>
-                    <div class="column-item">13</div>
-                    <div class="column-item">20</div>
-                    <div class="column-item">27</div>
-                </div>
+    var calendarString = '<div class="calendar">'
+    var columnHeight = Math.ceil(calendarData.length / 7);
 
-                <div class="column">
-                    <div class="column-item weekday">Tu</div>
-                    <div class="column-item prev-month">31</div>
-                    <div class="column-item">7</div>
-                    <div class="column-item">14</div>
-                    <div class="column-item">21</div>
-                    <div class="column-item">28</div>
-                </div>
-
-                <div class="column">
-                    <div class="column-item weekday">We</div>
-                    <div class="column-item">1</div>
-                    <div class="column-item">8</div>
-                    <div class="column-item">15</div>
-                    <div class="column-item">22</div>
-                    <div class="column-item">29</div>
-                </div>
-
-                <div class="column">
-                    <div class="column-item weekday">Th</div>
-                    <div class="column-item">2</div>
-                    <div class="column-item">9</div>
-                    <div class="column-item">16</div>
-                    <div class="column-item">23</div>
-                    <div class="column-item">30</div>
-                </div>
-
-                <div class="column">
-                    <div class="column-item weekday">Fr</div>
-                    <div class="column-item">3</div>
-                    <div class="column-item">10</div>
-                    <div class="column-item">17</div>
-                    <div class="column-item">24</div>
-                    <div class="column-item next-month">1</div>
-                </div>
-
-                <div class="column">
-                    <div class="column-item weekday">Sa</div>
-                    <div class="column-item">4</div>
-                    <div class="column-item">11</div>
-                    <div class="column-item">18</div>
-                    <div class="column-item">25</div>
-                    <div class="column-item next-month">2</div>
-                </div>
-            </div>`
+    // Since calendar is divided by columns, iterate 2d list by columns first
+    for(var i=0; i < 7; i++){
+        calendarString += '<div class="column"><div class="column-item weekday">' + weekdays[i].substring(0, 2) + '</div>'
+        for(var j=0; j < calendarData.length; j++){
+            var columnClass = 'column-item'
+            if(j === 0 && calendarData[j][i] > 6){
+                columnClass += ' prev-month'
+            }
+            if(j === calendarData.length - 1 && calendarData[j][i] < 7){
+                columnClass += ' next-month'
+            }
+            calendarString += '<div class="' + columnClass + '">' + calendarData[j][i] + '</div>'
+        }
+        calendarString += '</div>'
+    }
+    calendarString += '</div>'
     return calendarString;
 }
 
@@ -1298,7 +1255,7 @@ function disableCalendar(calendarType){
     $('#' + calendarType + 'Calendar .calendar-base').css("cursor", "not-allowed")
     $('#' + calendarType + 'Calendar .calendar-base').css("background", "rgba(0,0,0,0.02)")
     $('#' + calendarType + 'Calendar .column-item').css("cursor", "not-allowed")
-    $('#' + calendarType + 'Calendar .column-item').css("color", "#808080")
+    $('#' + calendarType + 'Calendar .column-item').not('.prev-month').not('.next-month').css("color", "#808080")
     $('#' + calendarType + 'Calendar .gotcha').remove();
 }
 
