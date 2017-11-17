@@ -63,7 +63,6 @@ body{
   box-sizing: border-box;
   border: 1px solid rgba(0,0,0,0.2);
   padding: 8px;
-  padding-bottom: 14px;
 }
 
 .gotcha{
@@ -76,7 +75,7 @@ body{
   height: 30px;
   box-sizing: border-box;
   padding: 8px;
-  /* border: 1px solid black; */
+  
   /* padding: 8px 4px 2px; */
   /* margin-bottom: 2px; */
   
@@ -89,7 +88,8 @@ body{
 }
 
 #availableCalendar .gotcha{
-  background-color: rgb(22, 142, 52)
+  background-color: rgb(22, 142, 52);
+  border: 1px solid rgb(22, 142, 52);
 }
 
 #unavailableCalendar .gotcha{

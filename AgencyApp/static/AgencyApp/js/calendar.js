@@ -75,6 +75,22 @@ function loadCalendar(calendarID){
 
     $('#' + calendarID + ' .column-item').not('.weekday').on('click', function(){
     		if(calendarID === activeCalendar){
+    			var clickedNumber = parseInt($(this).text())
+
+    			// Prevent user from clicking invalid date shown in calendar (ie before previous date, last month, etc)
+    			if(clickedNumber < currentDate.getDate()){
+    				if(!$(this).hasClass("next-month")){
+    					// Can't select previous
+    					return;
+    				}
+    			}else if(clickedNumber > currentDate.getDate()){
+    				if($(this).hasClass("prev-month")){
+    					return;
+    				}
+    			}else{
+    				$('#' + calendarID + ' .today').removeClass("today")
+    			}
+
 				/*$('.gotcha').fadeOut(300,function(){
 						$(this).remove();
 				});*/
