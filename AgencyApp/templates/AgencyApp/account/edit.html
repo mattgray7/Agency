@@ -1221,10 +1221,14 @@ function getCalendarString(calendarType, month, year){
             if(j === calendarData.length - 1 && calendarData[j][i] < 7){
                 columnClass += ' next-month'
             }
-            if(calendarData[j][i] < currentDate.getDate()){
-                columnClass += ' prev-month';
-            }else if(calendarData[j][i] === currentDate.getDate()){
-                columnClass += ' today'
+            
+            // if current month, add today border and disable days past in the current month
+            if(month === currentDate.getMonth() && year === currentDate.getFullYear()){
+                if(calendarData[j][i] < currentDate.getDate()){
+                    columnClass += ' prev-month';
+                }else if(calendarData[j][i] === currentDate.getDate()){
+                    columnClass += ' today'
+                }
             }
             calendarString += '<div class="' + columnClass + '">' + calendarData[j][i] + '</div>'
         }
