@@ -638,6 +638,11 @@ function updateFeaturedPhotoStatus(input){
                 for(var i=0; i < selectedAvailableWeekdays.length; i++){
                     extraInputs.push({key: "availability.weekday." + selectedAvailableWeekdays[i], value: true})
                 }
+                var formattedDatesList = []
+                for(var i=0; i < selectedDates.length; i++){
+                    formattedDatesList.push(selectedDates[i]["year"] + "-" + selectedDates[i]["month"] + "-" + selectedDates[i]["day"])
+                }
+                extraInputs.push({key: "availability.datesList" + JSON.stringify(formattedDatesList), value: true})
             }else if(formType === "hire"){
                 for(hireType in chosenHireTypes){
                     if(chosenHireTypes[hireType] == true){
@@ -1200,6 +1205,7 @@ function getOpenAvailabilityPicker(){
 
 var calendarMonths = {"available": {"month": null, "year": null},
                       "unavailable": {"month": null, "year": null}}
+var selectedDates = []
 function getCalendarString(calendarType, month, year){
     if(month == null || month.length === 0){
         month = currentDate.getMonth();
@@ -1225,7 +1231,9 @@ function getCalendarString(calendarType, month, year){
             // if current month, add today border and disable days past in the current month
             if(month === currentDate.getMonth() && year === currentDate.getFullYear()){
                 if(calendarData[j][i] < currentDate.getDate()){
-                    columnClass += ' prev-month';
+                    if(columnClass.indexOf('prev-month') < 0 && columnClass.indexOf('next-month') < -1){
+                        columnClass += ' prev-month';
+                    }
                 }else if(calendarData[j][i] === currentDate.getDate()){
                     columnClass += ' today'
                 }

@@ -94,6 +94,24 @@ function loadCalendar(calendarID){
 	    			}
 	    		}
 
+	    		var clickedNumberMonth = calendarMonths[calendarType]["month"]
+	    		var clickedNumberYear = calendarMonths[calendarType]["year"]
+	    		if($(this).hasClass("prev-month")){
+	    			clickedNumberMonth -= 1;
+	    			if(clickedNumberMonth < 0){
+	    				clickedNumberMonth = 11;
+	    				clickedNumberYear -= 1;
+	    			}
+	    		}else if($(this).hasClass("next-month")){
+	    			clickedNumberMonth += 1
+	    			if(clickedNumberMonth > 11){
+	    				clickedNumberMonth = 0;
+	    				clickedNumberYear += 1
+	    			}
+	    		}
+
+	    		selectedDates.push({"day": clickedNumber, "month": clickedNumberMonth, "year": clickedNumberYear})
+
 				/*$('.gotcha').fadeOut(300,function(){
 						$(this).remove();
 				});*/

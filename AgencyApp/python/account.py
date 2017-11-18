@@ -390,6 +390,8 @@ class EditInterestsView(GenericEditAccountView):
                         except models.AvailableWeekday.DoesNotExist:
                             weekdayObject = models.AvailableWeekday(username=self.username, weekday=weekday)
                             weekdayObject.save()
+                    elif formInput.startswith("availability.datesList"):
+                        print formInput
         elif interestType == "hire":
             for formInput in self.request.POST:
                 if formInput.startswith("hireType."):
