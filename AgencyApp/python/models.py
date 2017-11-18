@@ -359,32 +359,19 @@ class UserAccount(models.Model):
                 weekdays = [x.weekday for x in AvailableWeekday.objects.filter(username=self.username)]
                 if weekdays:
                     self._availability["daysOfWeek"] = weekdays
+            elif self.availabilityType == "specifyDates":
+                dates = [x.date.strftime("%Y-%m-%d") for x in AvailableDate.objects.filter(username=self.username)]
+                if dates:
+                    self._availability["specifyDates"] = dates
         return self._availability
-
-
-"""class UserAvailability(models.Model):
-    username = models.CharField(max_length=100)
-    availabilityType = models.CharField(max_length=30)  #openAvailability/daysOfWeek/specifyDates
-
-    def __init__(self, *args, **kwargs):
-        super(UserAvailability, self).__init__(*args, **kwargs)
-        self._availableWeekdays = None
-
-    @property
-    def dates(self):
-        # Return list of dates
-        return []
-
-    @property
-    def availableWeekdays(self):
-        if not self._availableWeekdays:
-            self._availableWeekdays = [x.weekday for x in AvailableWeekday.objects.filter(username=self.username)]
-        return self._availableWeekdays"""
-
 
 class AvailableWeekday(models.Model):
     username = models.CharField(max_length=100)
     weekday = models.CharField(max_length=20)
+
+class AvailableDate(models.Model):
+    username = models.CharField(max_length=100)
+    date = models.DateField(default=None, blank=True, null=True)
 
 class UnregisteredProject(models.Model):
     postID = models.CharField(max_length=10)
