@@ -198,6 +198,7 @@ function toggleCalendarMonth(direction, calendarID){
 	            $('#' + calendarID + ' .header-current-month').html(months[nextMonth])
 	            $('#' + calendarID + ' .header-current-year').html(nextYear)
 	            loadCalendar(calendarID)
+	            selectSavedAvailabilityDates(calendarType)
 	        }
 	    }
 	}
