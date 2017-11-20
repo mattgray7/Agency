@@ -219,6 +219,7 @@ function toggleCalendarYear(direction, calendarID){
 	            $('#' + calendarID + ' .small-wrapper').html(getCalendarString(calendarType, currentMonth, nextYear))
 	            $('#' + calendarID + ' .header-current-year').html(nextYear)
 	            loadCalendar(calendarID)
+	            selectSavedAvailabilityDates(calendarType)
 	        }
 	    }
 	}
