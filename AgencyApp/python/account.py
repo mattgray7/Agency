@@ -397,7 +397,10 @@ class EditInterestsView(GenericEditAccountView):
                             self._userAccount.availabilityType = "specifyDates_{0}".format(datesType);
                             self._userAccount.save()
 
+                            # Delete existing availability dates
+                            models.AvailabilityDate.objects.filter(username=self.username).delete()
                             dateList = json.loads(formInput.replace("availability.datesList.{0}.".format(datesType), ""))
+
                             for date in dateList:
                                 dateObject = datetime.datetime.strptime(date, "%Y-%m-%d").date()
                                 try:

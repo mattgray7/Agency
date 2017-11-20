@@ -76,7 +76,12 @@ function loadCalendar(calendarID){
     $('#' + calendarID + ' .column-item').not('.weekday').on('click', function(){
     		if(calendarID === activeCalendar){
     			var calendarType = calendarID.replace("Calendar", "")
+    			
+    			// Weird bug where if gotcha exists in class, .text() will return double value (eg 2323 for mnumber 23)
     			var clickedNumber = parseInt($(this).text())
+    			if($(this).find('.gotcha').length > 0){
+    				clickedNumber = $(this).find('.gotcha').first().text()
+    			}
 
     			// Prevent user from clicking invalid date shown in calendar (ie before previous date, last month, etc)
     			if(calendarMonths[calendarType]["month"] === currentDate.getMonth() && calendarMonths[calendarType]["year"] === currentDate.getFullYear()){
@@ -110,30 +115,46 @@ function loadCalendar(calendarID){
 	    			}
 	    		}
 
-	    		selectedDates.push({"day": clickedNumber, "month": clickedNumberMonth, "year": clickedNumberYear})
+	    		// Check if date is already selected
+	    		var formattedDate = clickedNumberYear + "-" + clickedNumberMonth + "-" + clickedNumber;
+	    		var existingDateIndex = -1;
+	    		for(var i=0; i < selectedDates[calendarType].length; i++){
+	    			if(selectedDates[calendarType][i] === formattedDate){
+	    				existingDateIndex = i;
+	    				break;
+	    			}
+	    		}
 
-				/*$('.gotcha').fadeOut(300,function(){
-						$(this).remove();
-				});*/
-			    //$(this).find('.gotcha').remove();
-				$(this).css({'color':'white'});
-				$('#' + calendarID + ' .gotcha').parent().animate({'color':'#808080'}, 250);
-			    //$('.gotcha').remove();
-        		$(this).prepend('<div class="gotcha"></div>');
-        		var block = $(this).find('.gotcha').first();
-				block.text($(this).text());
-        		var pos = $(this).position();
-        		block.css({'top': 0, 
-						   'left': pos.left, 
-						   'opacity': 0}).animate({'top':pos.top,
-												   'opacity': '1'}, 350, 'easeInOutBack');
-    			//});
-  
-			  	$('#' + calendarID + ' .calendar-base').on('click', function(e){
-			  		if(e.stopPropogation){
-			      		e.stopPropogation();
-			      	}
-			    });
+	    		if(existingDateIndex > -1){
+	    			console.log("date is selected, so removing")
+	    			// Check if it has gotcha class, if so remove it
+	    			selectedDates[calendarType].splice(existingDateIndex, 1)
+	    			if($(this).find('.gotcha').length > 0){
+		    			$(this).find('.gotcha').fadeOut(300,function(){
+		    				$(this).parent().animate({'color':'#808080'}, 250);
+							$(this).remove();
+						});
+						return;
+					}
+		    	}
+		    		// Otherwise, add gotcha class
+		    		selectedDates[calendarType].push(formattedDate)
+		    		$(this).css({'color':'white'});
+					$('#' + calendarID + ' .gotcha').parent().animate({'color':'#808080'}, 250);
+		        	$(this).prepend('<div class="gotcha"></div>');
+		        	var block = $(this).find('.gotcha').first();
+					block.text($(this).text());
+		       		var pos = $(this).position();
+		     		block.css({'top': 0, 
+							   'left': pos.left, 
+							   'opacity': 0}).animate({'top':pos.top,
+													   'opacity': '1'}, 350, 'easeInOutBack');
+		    	
+				$('#' + calendarID + ' .calendar-base').on('click', function(e){
+				  	if(e.stopPropogation){
+				      	e.stopPropogation();
+				    }
+				});
 			}
 		});
 };
