@@ -1358,7 +1358,7 @@ function getSpecifyDatesPicker(){
             setTimeout(function(){toggleAvailabilityCalendar("unavailable")}, 400);
         {% endif %}
     });
-    var pickerString = '<div id="availabilityContent" style=" width: 100%; position: relative; height: 600px; margin-left: -18px; margin-right: -8px; margin-top: 40px;"><h1> Select your dates</h1>';
+    var pickerString = '<div id="availabilityContent" style=" width: 100%; position: relative; height: 630px; margin-left: -18px; margin-right: -8px; margin-top: 40px;"><h1> Select your dates</h1>';
 
     // Add left option
     pickerString += '<div style="position: absolute; top: 65px; left: 5px; width: 49%; text-align: left;"><div class="calendar-container" id="availableCalendar">'
@@ -1379,7 +1379,7 @@ function getSpecifyDatesPicker(){
     pickerString += '<div class="small-wrapper">' + getCalendarString("unavailable") + '</div>'
     pickerString += "</div></div></div></div>"
 
-    pickerString += "<div style='position: absolute; top: 485px; left: 5px; right: -20px;'>" + getSecondLevelButtons("work") + "</div></div>";
+    pickerString += "<div style='position: absolute; top: 520px; left: 5px; right: -20px;'>" + getSecondLevelButtons("work") + "</div></div>";
 
     return {"html": pickerString, "callbacks": callbacks}
 }
@@ -1426,7 +1426,7 @@ function selectAvailabilityOption(option){
                 scrollTop -= 390
             }else if(option === "specifyDates"){
                 content = getSpecifyDatesPicker();
-                scrollTop -= 50
+                scrollTop -= 25
             }else if(option === "openAvailability"){
                 content = getOpenAvailabilityPicker();
                 scrollTop -= 550
