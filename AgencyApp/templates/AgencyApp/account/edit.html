@@ -642,7 +642,7 @@ function updateFeaturedPhotoStatus(input){
                 for(var i=0; i < selectedDates.length; i++){
                     formattedDatesList.push(selectedDates[i]["year"] + "-" + selectedDates[i]["month"] + "-" + selectedDates[i]["day"])
                 }
-                extraInputs.push({key: "availability.datesList." + JSON.stringify(formattedDatesList), value: true})
+                extraInputs.push({key: "availability.datesList." + activeCalendar.replace("Calendar", "") + '.' + JSON.stringify(formattedDatesList), value: true})
             }else if(formType === "hire"){
                 for(hireType in chosenHireTypes){
                     if(chosenHireTypes[hireType] == true){
@@ -1280,10 +1280,19 @@ function getSpecifyDatesPicker(){
         disableCalendar("unavailable")
 
         setTimeout(function(){
-            {% if existingAvailability and existingAvailability.specifyDates %}
+            {% if existingAvailability and existingAvailability.specifyDates_available %}
                 toggleAvailabilityCalendar("available");
-                {% for day in existingAvailability.specifyDates %}
+                {% for day in existingAvailability.specifyDates_available %}
                     var calendarDay = document.getElementById("availableDate_{{day}}")
+                    if(calendarDay != null){
+                        calendarDay.click()
+                    }
+                {% endfor %}        
+            {% endif %}
+            {% if existingAvailability and existingAvailability.specifyDates_unavailable %}
+                toggleAvailabilityCalendar("unavailable");
+                {% for day in existingAvailability.specifyDates_unavailable %}
+                    var calendarDay = document.getElementById("unavailableDate_{{day}}")
                     if(calendarDay != null){
                         calendarDay.click()
                     }

@@ -391,17 +391,20 @@ class EditInterestsView(GenericEditAccountView):
                             weekdayObject = models.AvailableWeekday(username=self.username, weekday=weekday)
                             weekdayObject.save()
                     elif formInput.startswith("availability.datesList."):
-                        self._userAccount.availabilityType = "specifyDates";
-                        self._userAccount.save()
+                        splitted = formInput.split(".")
+                        if len(splitted) > 2:
+                            datesType = splitted[2]
+                            self._userAccount.availabilityType = "specifyDates_{0}".format(datesType);
+                            self._userAccount.save()
 
-                        dateList = json.loads(formInput.replace("availability.datesList.", ""))
-                        for date in dateList:
-                            dateObject = datetime.datetime.strptime(date, "%Y-%m-%d").date()
-                            try:
-                                newDay = models.AvailableDate.objects.get(username=self.username, date=dateObject)
-                            except models.AvailableDate.DoesNotExist:
-                                newDay = models.AvailableDate(username=self.username, date=dateObject)
-                                newDay.save()
+                            dateList = json.loads(formInput.replace("availability.datesList.{0}.".format(datesType), ""))
+                            for date in dateList:
+                                dateObject = datetime.datetime.strptime(date, "%Y-%m-%d").date()
+                                try:
+                                    newDay = models.AvailabilityDate.objects.get(username=self.username, date=dateObject)
+                                except models.AvailabilityDate.DoesNotExist:
+                                    newDay = models.AvailabilityDate(username=self.username, date=dateObject)
+                                    newDay.save()
         elif interestType == "hire":
             for formInput in self.request.POST:
                 if formInput.startswith("hireType."):

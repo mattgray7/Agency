@@ -359,17 +359,17 @@ class UserAccount(models.Model):
                 weekdays = [x.weekday for x in AvailableWeekday.objects.filter(username=self.username)]
                 if weekdays:
                     self._availability["daysOfWeek"] = weekdays
-            elif self.availabilityType == "specifyDates":
-                dates = [x.date.strftime("%Y-%m-%d") for x in AvailableDate.objects.filter(username=self.username)]
+            elif self.availabilityType.startswith("specifyDates_"):                
+                dates = [x.date.strftime("%Y-%m-%d") for x in AvailabilityDate.objects.filter(username=self.username)]
                 if dates:
-                    self._availability["specifyDates"] = dates
+                    self._availability[self.availabilityType] = dates
         return self._availability
 
 class AvailableWeekday(models.Model):
     username = models.CharField(max_length=100)
     weekday = models.CharField(max_length=20)
 
-class AvailableDate(models.Model):
+class AvailabilityDate(models.Model):
     username = models.CharField(max_length=100)
     date = models.DateField(default=None, blank=True, null=True)
 
