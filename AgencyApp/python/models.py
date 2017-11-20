@@ -361,9 +361,18 @@ class UserAccount(models.Model):
                     if weekdays:
                         self._availability["daysOfWeek"] = weekdays
                 elif self.availabilityType.startswith("specifyDates_"):                
-                    dates = [x.date.strftime("%Y-%m-%d") for x in AvailabilityDate.objects.filter(username=self.username)]
+                    dates = AvailabilityDate.objects.filter(username=self.username)
                     if dates:
-                        self._availability[self.availabilityType] = dates
+                        # Using 0 index dates for JS, so decrement month by 1
+                        availabilityDates = []
+                        for dateObj in dates:
+                            newMonth = dateObj.date.month - 1
+                            newYear = dateObj.date.year
+                            if newMonth < 0:
+                                newMonth = 11
+                                newYear = newYear - 1
+                            availabilityDates.append("{0}-{1}-{2}".format(newYear, newMonth, dateObj.date.day))
+                        self._availability[self.availabilityType] = availabilityDates
         return self._availability
 
 class AvailableWeekday(models.Model):

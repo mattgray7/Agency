@@ -641,7 +641,15 @@ function updateFeaturedPhotoStatus(input){
 
 
                 var formattedDatesList = []
-                var availabilityDates = selectedDates[activeCalendar.replace("Calendar", "")]
+                var availabilityDates = selectedDates[activeCalendar.replace("Calendar", "")].slice()
+                // Need to increment month values by 1, since python saves them from 1 index
+                for(var i=0; i < availabilityDates.length; i++){
+                    var splitted = availabilityDates[i].split("-")
+                    if(splitted.length > 2){
+                        var newMonth = parseInt(splitted[1]) + 1;
+                        availabilityDates[i] = splitted[0] + "-" + newMonth + "-" + splitted[2]
+                    }
+                }
                 extraInputs.push({key: "availability.datesList." + activeCalendar.replace("Calendar", "") + '.' + JSON.stringify(availabilityDates), value: true})
             }else if(formType === "hire"){
                 for(hireType in chosenHireTypes){
