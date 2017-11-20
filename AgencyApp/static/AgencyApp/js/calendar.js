@@ -169,6 +169,8 @@ function disableCalendar(calendarType){
     $('#' + calendarType + 'Calendar .calendar-base').css("background", "rgba(0,0,0,0.02)")
     $('#' + calendarType + 'Calendar .column-item').css("cursor", "not-allowed")
     $('#' + calendarType + 'Calendar .column-item').not('.prev-month').not('.next-month').css("color", "#808080")
+    $('#' + calendarType + 'Calendar .prev-month').css("color", "#ddd")
+    $('#' + calendarType + 'Calendar .next-month').css("color", "#ddd")
     $('#' + calendarType + 'Calendar .gotcha').remove();
 }
 
