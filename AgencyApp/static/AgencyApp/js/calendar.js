@@ -98,7 +98,6 @@ function loadCalendar(calendarID){
 	    				$('#' + calendarID + ' .today').removeClass("today")
 	    			}
 	    		}
-
 	    		var clickedNumberMonth = calendarMonths[calendarType]["month"]
 	    		var clickedNumberYear = calendarMonths[calendarType]["year"]
 	    		if($(this).hasClass("prev-month")){
@@ -124,9 +123,7 @@ function loadCalendar(calendarID){
 	    				break;
 	    			}
 	    		}
-
 	    		if(existingDateIndex > -1){
-	    			console.log("date is selected, so removing")
 	    			// Check if it has gotcha class, if so remove it
 	    			selectedDates[calendarType].splice(existingDateIndex, 1)
 	    			if($(this).find('.gotcha').length > 0){
@@ -137,18 +134,19 @@ function loadCalendar(calendarID){
 						return;
 					}
 		    	}
-		    		// Otherwise, add gotcha class
-		    		selectedDates[calendarType].push(formattedDate)
-		    		$(this).css({'color':'white'});
-					$('#' + calendarID + ' .gotcha').parent().animate({'color':'#808080'}, 250);
-		        	$(this).prepend('<div class="gotcha"></div>');
-		        	var block = $(this).find('.gotcha').first();
-					block.text($(this).text());
-		       		var pos = $(this).position();
-		     		block.css({'top': 0, 
-							   'left': pos.left, 
-							   'opacity': 0}).animate({'top':pos.top,
-													   'opacity': '1'}, 350, 'easeInOutBack');
+
+		    	// Otherwise, add gotcha class
+		    	selectedDates[calendarType].push(formattedDate)
+		   		$(this).css({'color':'white'});
+				$('#' + calendarID + ' .gotcha').parent().animate({'color':'#808080'}, 250);
+		       	$(this).prepend('<div class="gotcha"></div>');
+		       	var block = $(this).find('.gotcha').first();
+				block.text($(this).text());
+		       	var pos = $(this).position();
+		     	block.css({'top': 0, 
+						   'left': pos.left, 
+						   'opacity': 0}).animate({'top':pos.top,
+												   'opacity': '1'}, 350, 'easeInOutBack');
 		    	
 				$('#' + calendarID + ' .calendar-base').on('click', function(e){
 				  	if(e.stopPropogation){

@@ -1214,6 +1214,17 @@ function getCalendarString(calendarType, month, year){
         year = currentDate.getFullYear();
     }
 
+    var nextMonth = month + 1
+    var previousMonth = month - 1;
+    var nextYear = year + 1;
+    var previousYear = year - 1;
+    if(nextMonth > 11){
+        nextMonth = 0
+    }
+    if(previousMonth < 0){
+        previousMonth = 11;
+    }
+
     var calendarData = getCalendarData(month, year)
     var calendarString = '<div class="calendar">'
     // Since calendar is divided by columns, iterate 2d list by columns first
@@ -1224,9 +1235,23 @@ function getCalendarString(calendarType, month, year){
             var columnClass = 'column-item'
             if(j === 0 && calendarData[j][i] > 6){
                 columnClass += ' prev-month'
+                
+                // Need to change month and maybe year for previous month dates
+                if(month === 0){
+                    dateString = previousYear + "-" + previousMonth + "-" + calendarData[j][i]
+                }else{
+                    dateString = year + "-" + previousMonth + "-" + calendarData[j][i]
+                }
             }
             if(j === calendarData.length - 1 && calendarData[j][i] < 7){
                 columnClass += ' next-month'
+
+                // Update date string since default will have incorrect month (and maybe year)
+                if(month === 11){
+                    dateString = nextYear + "-" + nextMonth + "-" + calendarData[j][i]
+                }else{
+                    dateString = year + "-" + nextMonth + "-" + calendarData[j][i]
+                }
             }
             
             // if current month, add today border and disable days past in the current month
@@ -1272,29 +1297,41 @@ function toggleAvailabilityCalendar(calendarType){
     selectSavedAvailabilityDates(calendarType)
 }
 
-function selectSavedAvailabilityDates(calendarType){
+datesLoaded = false
+function loadAvailabilityDates(){
     {% if existingAvailability and existingAvailability.specifyDates_available %}
-        if(calendarType == null && activeCalendar != "availableCalendar"){
-            toggleAvailabilityCalendar("available");
-        }
         {% for day in existingAvailability.specifyDates_available %}
-            var calendarDay = document.getElementById("availableDate_{{day}}")
-            if(calendarDay != null){
-                calendarDay.click()
+            if(selectedDates["available"].indexOf("{{day}}") < 0){
+                selectedDates["available"].push("{{day}}")
             }
         {% endfor %}        
     {% endif %}
     {% if existingAvailability and existingAvailability.specifyDates_unavailable %}
-        if(calendarType == null && activeCalendar != "unavailableCalendar"){
-            toggleAvailabilityCalendar("unavailable");
-        }
         {% for day in existingAvailability.specifyDates_unavailable %}
-            var calendarDay = document.getElementById("unavailableDate_{{day}}")
-            if(calendarDay != null){
-                calendarDay.click()
+            if(selectedDates["unavailable"].indexOf("{{day}}") < 0){
+                selectedDates["unavailable"].push("{{day}}")
             }
-        {% endfor %}        
+        {% endfor %}
     {% endif %}
+}
+
+function selectSavedAvailabilityDates(calendarType){
+    if(calendarType == null){
+        calendarType = activeCalender.replace("Calendar")
+    }
+
+    if(!datesLoaded){
+        loadAvailabilityDates()
+        datesLoaded = true;
+    }
+
+    var dates = selectedDates[calendarType].slice()
+    for(var i=0; i < dates.length; i++){
+        var calendarDay = document.getElementById(calendarType + "Date_" + dates[i])
+        if(calendarDay != null){
+            calendarDay.click()
+        }
+    }
 }
 
 function getSpecifyDatesPicker(){
@@ -1310,7 +1347,7 @@ function getSpecifyDatesPicker(){
         {% if existingAvailability and existingAvailability.specifyDates_available %}
             setTimeout(function(){toggleAvailabilityCalendar("available")}, 400);
         {% elif existingAvailability and existingAvailability.specifyDates_unavailable %}
-            setTimeout(function(){toggleAvailabilityCalendar("available")}, 400);
+            setTimeout(function(){toggleAvailabilityCalendar("unavailable")}, 400);
         {% endif %}
     });
     var pickerString = '<div id="availabilityContent" style=" width: 100%; position: relative; height: 600px; margin-left: -18px; margin-right: -8px; margin-top: 40px;"><h1> Select your dates</h1>';
