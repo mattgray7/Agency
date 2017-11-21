@@ -487,6 +487,19 @@
         return returnString;
     }
 
+    function getAvailabilityCalendar(){
+        var calendarString = '';
+        {% if userAccount.availability %}
+            calendarString += "<div id='availabilityPanel'>"
+            {% if userAccount.availability.openAvailability %}
+                calendarString += "<div style='background: #ddd; padding: 15px;'><h1> Availabile Now</h1></div>"
+            {% elif userAccount.availability.daysOfWeek %}
+                calendarString += "<div style='background: #ddd; padding: 15px;'><h1> Days Of Week</h1></div>"
+            {% endif %}
+        {% endif %}
+        return calendarString;
+    }
+
     function getWorkHireTextPanel(){
         var workPanel = getWorkTextPanel();
         var hirePanel = getHireTextPanel();
@@ -534,7 +547,12 @@
                 professionList.push({"profession": "{{interest.professionName}}", "creditCount": creditCount})
             {% endfor %}
 
-
+            panelString += "<div style='position: relative;'>"
+            {% if userAccount.availability %}
+                panelString += "<div style='width: 50%; min-height: 30px;'>";
+            {% else %}
+                panelString += "<div>";
+            {% endif %}
             panelString += "<ul class='profileInterestedProfessionsList' style='display: inline-block;'>"
             for(var i=0; i < professionList.length; i++){
                 panelString += "<li >" + professionList[i]["profession"]
@@ -547,7 +565,11 @@
                 }
                 panelString += "</li>";
             }
-            panelString += "</ul>"
+            panelString += "</ul></div>"
+
+            {% if userAccount.availability %}
+                panelString += "<div style='position: absolute; top: -15px; right: 0; left: 50%; bottom: 0; margin-right: 5px;'>" + getAvailabilityCalendar() + "</div>"
+            {% endif %}
         {% endif %}
         panelString += "</div>"
         return {'html': panelString, 'callbacks': callbacks};
