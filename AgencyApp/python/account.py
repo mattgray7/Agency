@@ -380,9 +380,21 @@ class EditInterestsView(GenericEditAccountView):
                         newProfession.save()
                 elif formInput.startswith("availability."):
                     # Save availability information
-                    if formInput.startswith("availability.weekday."):
+                    if formInput.startswith("availability.openAvailability"):
+                        self._userAccount.availabilityType = "openAvailability";
+                        self._userAccount.save()
+
+                        # Delete existing weekdays
+                        models.AvailableWeekday.objects.filter(username=self.username).delete()
+
+                        # Delete existing availability dates
+                        models.AvailabilityDate.objects.filter(username=self.username).delete()
+                    elif formInput.startswith("availability.weekday."):
                         self._userAccount.availabilityType = "daysOfWeek";
                         self._userAccount.save()
+
+                        # Delete existing weekdays
+                        models.AvailableWeekday.objects.filter(username=self.username).delete()
 
                         weekday = formInput.split(".")[2]
                         try:
