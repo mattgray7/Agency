@@ -1880,6 +1880,7 @@ function filterProfessions(key){
             if($(window).width() > interestPanelWidthThreshold){
                 interestPanelExpanded = true;
                 document.write(getWideInterestPanel());
+                $('html,body').animate({scrollTop: 100}, 500);
             }else{
                 interestPanelExpanded = false;
                 document.write(getSlimInterestPanel());
