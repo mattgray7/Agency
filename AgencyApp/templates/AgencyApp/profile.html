@@ -490,7 +490,20 @@
         return returnString;
     }
 
+    function selectCalendarDates(){
+        {% if profileAvailability and profileAvailability.dates %}
+                        {% for date in profileAvailability.dates %}
+                            var calendarDay = document.getElementById("availabilityDate_{{date}}")
+                            if(calendarDay != null){
+                                calendarDay.click()
+                            }
+                        {% endfor %}
+                    {% endif %}
+    }
+
     var calendarMonths = {"availability": {"month": null, "year": null}}
+    var selectedDates = {"availability": []}
+    var activeCalendar = "availabilityCalendar"
     function getAvailabilityCalendar(){
         var callbacks = []
         var calendarString = '';
@@ -502,6 +515,8 @@
                 callbacks.push(function(){
                     loadCalendar("availabilityCalendar")
                     $('#availabilityCalendar .calendar-header').click();
+                    setTimeout(selectCalendarDates, 400)
+                    
                 });
                 calendarString += "<div id='availabilityCalendar'><h2 style='margin-left: 58px;'>Availability</h2><h3 style='font-size: 0.9em; color: rgba(0,0,0,0.5); margin-left: 58px;'>" + "{{profileUserAccount.cleanName}}".split(" ")[0] + "'s availability is indicated below.</h3>"
 

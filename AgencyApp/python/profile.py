@@ -3,6 +3,8 @@ from forms import *
 
 from django.contrib import messages
 
+import datetime
+
 import constants
 import models
 import helpers
@@ -23,6 +25,7 @@ class ProfileView(views.GenericFormView):
         self._displayName = None
         self._profileUserFilmography = None
         self._profileAdminProjects = None
+        self._profileAvailability = None
 
     @property
     def profileLinks(self):
@@ -120,6 +123,32 @@ class ProfileView(views.GenericFormView):
         return self._profileAdminProjects
 
     @property
+    def profileAvailability(self):
+        if self._profileAvailability is None:
+            if self.profileUserAccount and self.profileUserAccount.availability:
+                self._profileAvailability = {"object": self.profileUserAccount.availability,
+                                             "dates": []}
+                if self.profileUserAccount.availabilityType == "openAvailability":
+                    pass
+                elif self.profileUserAccount.availabilityType == "daysOfWeek":
+                    """weekdays = models.AvailableWeekday.objects.filter(username=self.profileUserAccount.username)
+                    if weekdays:
+                        for weekday in weekdays:
+
+                    """
+                    pass
+                elif self.profileUserAccount.availabilityType == "specifyDates_available":
+                    dates = models.AvailabilityDate.objects.filter(username=self.profileUserAccount.username)
+                    if dates:
+                        for date in dates:
+                            self._profileAvailability["dates"].append(models.convertPythonDateStringToJS(date.date))
+                elif self.profileUserAccount.availabilityType == "specifyDates_unavailable":
+                    pass
+                else:
+                    self._profileAvailability = None
+        return self._profileAvailability
+
+    @property
     def pageContext(self):
         self._pageContext = super(ProfileView, self).pageContext
         self._pageContext["displayName"] = self.displayName
@@ -132,6 +161,7 @@ class ProfileView(views.GenericFormView):
         self._pageContext["profileLinks"] = self.profileLinks
         self._pageContext["profileAdminProjects"] = self.profileAdminProjects
         self._pageContext["profileEndorsements"] = json.dumps(self.profileUserAccount.profileEndorsements)
+        self._pageContext["profileAvailability"] = self.profileAvailability
 
         self._pageContext["filmography"] = json.dumps(self.profileUserFilmography)
         self._pageContext["actorDescriptionEnabled"] = self.profileUserAccount.actorDescriptionEnabled

@@ -98,6 +98,7 @@ function loadCalendar(calendarID){
 	    				$('#' + calendarID + ' .today').removeClass("today")
 	    			}
 	    		}
+
 	    		var clickedNumberMonth = calendarMonths[calendarType]["month"]
 	    		var clickedNumberYear = calendarMonths[calendarType]["year"]
 	    		if($(this).hasClass("prev-month")){
