@@ -389,6 +389,7 @@ def convertPythonDateStringToJS(date):
 class AvailableWeekday(models.Model):
     username = models.CharField(max_length=100)
     weekday = models.CharField(max_length=20)
+    repeatWeeks = models.IntegerField(blank=True, null=True)
 
 class AvailabilityDate(models.Model):
     username = models.CharField(max_length=100)

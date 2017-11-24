@@ -131,11 +131,16 @@ class ProfileView(views.GenericFormView):
                 if self.profileUserAccount.availabilityType == "openAvailability":
                     pass
                 elif self.profileUserAccount.availabilityType == "daysOfWeek":
-                    """weekdays = models.AvailableWeekday.objects.filter(username=self.profileUserAccount.username)
+                    weekdays = models.AvailableWeekday.objects.filter(username=self.profileUserAccount.username)
                     if weekdays:
+                        repeatWeeks = weekdays[0].repeatWeeks
                         for weekday in weekdays:
-
-                    """
+                            currentDate = datetime.date.today() + datetime.timedelta(days = 6 - weekdayNumber)
+                            weekdayNumber = constants.WEEKDAYS.index(weekday.weekday)
+                            self._profileAvailability["dates"].append(models.convertPythonDateStringToJS(currentDate))
+                            for week in range(1, repeatWeeks):
+                                currentDate += datetime.timedelta(days = 7)
+                                self._profileAvailability["dates"].append(models.convertPythonDateStringToJS(currentDate))                    
                     pass
                 elif self.profileUserAccount.availabilityType == "specifyDates_available":
                     dates = models.AvailabilityDate.objects.filter(username=self.profileUserAccount.username)
@@ -146,6 +151,9 @@ class ProfileView(views.GenericFormView):
                     pass
                 else:
                     self._profileAvailability = None
+
+                # Remove duplicates
+                self._profileAvailability["dates"] = list(set(self._profileAvailability["dates"]))
         return self._profileAvailability
 
     @property

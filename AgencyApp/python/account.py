@@ -392,16 +392,23 @@ class EditInterestsView(GenericEditAccountView):
                     elif formInput.startswith("availability.weekday."):
                         self._userAccount.availabilityType = "daysOfWeek";
                         self._userAccount.save()
-
-                        # Delete existing weekdays
-                        models.AvailableWeekday.objects.filter(username=self.username).delete()
-
                         weekday = formInput.split(".")[2]
-                        try:
-                            weekdayObject = models.AvailableWeekday.objects.get(username=self.username, weekday=weekday)
-                        except models.AvailableWeekday.DoesNotExist:
-                            weekdayObject = models.AvailableWeekday(username=self.username, weekday=weekday)
-                            weekdayObject.save()
+                        repeatValue = self.request.POST.get("availabilityWeekdayRepeat")
+                        if repeatValue:
+                            if repeatValue in constants.AVAILABILITY_REPEAT_WEEK_VALUES:
+                                repeatWeeks = constants.AVAILABILITY_REPEAT_WEEK_VALUES.get(repeatValue)
+                                createNew = False
+                                try:
+                                    weekdayObject = models.AvailableWeekday.objects.get(username=self.username, weekday=weekday)
+                                    if weekdayObject.repeatWeeks == repeatWeeks:
+                                        weekdayObject.delete()
+                                        createNew = True
+                                except models.AvailableWeekday.DoesNotExist:
+                                    createNew = True
+
+                                if createNew:
+                                    weekdayObject = models.AvailableWeekday(username=self.username, weekday=weekday, repeatWeeks=repeatWeeks)
+                                    weekdayObject.save()
                     elif formInput.startswith("availability.datesList."):
                         splitted = formInput.split(".")
                         if len(splitted) > 2:

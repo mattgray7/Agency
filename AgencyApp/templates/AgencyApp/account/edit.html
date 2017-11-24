@@ -641,6 +641,10 @@ function updateFeaturedPhotoStatus(input){
                         for(var i=0; i < selectedAvailableWeekdays.length; i++){
                             extraInputs.push({key: "availability.weekday." + selectedAvailableWeekdays[i], value: true})
                         }
+                        var weekdayRepeatSelect = document.getElementById("weekdayRepeatSelect")
+                        if(weekdayRepeatSelect != null){
+                            extraInputs.push({key: "availabilityWeekdayRepeat", value: weekdayRepeatSelect.value})
+                        }
                     }else if(selectedAvailabilityOption === "openAvailability"){
                         extraInputs.push({key: "availability.openAvailability" + selectedAvailableWeekdays[i], value: true})
                     }else if(selectedAvailabilityOption === "specifyDates" && activeCalendar != null){

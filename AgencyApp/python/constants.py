@@ -106,6 +106,14 @@ for category in PROFESSIONS:
 		PROFESSION_LIST.append(profession)
 PROFESSION_LIST = sorted(list(set(PROFESSION_LIST)))
 
+WEEKDAYS = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+AVAILABILITY_REPEAT_WEEK_VALUES = {"For 1 week": 1,
+								   "For 2 weeks": 2,
+								   "For 1 month": 4,
+								   "For 3 months": 13,
+								   "For 6 months": 26,
+								   "Forever": -1
+								  }
 
 HIRE_TYPES = ["hireProject", "hirePermanent", "casting", "collaborating"]
 COLLABORATOR_OPTIONS = ["Director", "Director of photography", "Musical artist", "Screenwriter", "Story writer", "Other"]

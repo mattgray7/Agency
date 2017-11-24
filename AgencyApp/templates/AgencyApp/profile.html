@@ -490,15 +490,15 @@
         return returnString;
     }
 
-    function selectCalendarDates(){
+    function selectSavedAvailabilityDates(){
         {% if profileAvailability and profileAvailability.dates %}
-                        {% for date in profileAvailability.dates %}
-                            var calendarDay = document.getElementById("availabilityDate_{{date}}")
-                            if(calendarDay != null){
-                                calendarDay.click()
-                            }
-                        {% endfor %}
-                    {% endif %}
+            {% for date in profileAvailability.dates %}
+                var calendarDay = document.getElementById("availabilityDate_{{date}}")
+                if(calendarDay != null){
+                    calendarDay.click()
+                }
+            {% endfor %}
+        {% endif %}
     }
 
     var calendarMonths = {"availability": {"month": null, "year": null}}
@@ -515,7 +515,7 @@
                 callbacks.push(function(){
                     loadCalendar("availabilityCalendar")
                     $('#availabilityCalendar .calendar-header').click();
-                    setTimeout(selectCalendarDates, 400)
+                    setTimeout(selectSavedAvailabilityDates, 400)
                     
                 });
                 calendarString += "<div id='availabilityCalendar'><h2 style='margin-left: 58px;'>Availability</h2><h3 style='font-size: 0.9em; color: rgba(0,0,0,0.5); margin-left: 58px;'>" + "{{profileUserAccount.cleanName}}".split(" ")[0] + "'s availability is indicated below.</h3>"
@@ -577,7 +577,7 @@
                 professionList.push({"profession": "{{interest.professionName}}", "creditCount": creditCount})
             {% endfor %}
 
-            panelString += "<div style='position: relative; min-height: 250px;'>"
+            panelString += "<div style='position: relative; min-height: 280px;'>"
             {% if profileUserAccount.availability %}
                 panelString += "<div style='width: 37%; min-height: 30px;'>";
             {% else %}
